@@ -1,0 +1,152 @@
+#include "CorrelationWidget.h"
+
+CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
+    QWidget(parent, flags)
+{
+
+    _bandwidth = 0;
+    _pointCount = 0;
+    _isComplex = false;
+
+    _settings = new QSettings("settings.ini",QSettings::IniFormat,this);
+
+    QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+
+    _correlationWidget = new Q_MG_SpectrumInterface(this,_settings,"Correlations");
+//    _correlationWidget->setContextMenu(_graphicsContextMenu);
+
+    _correlationWidget->setMinimumSize(100, 100);
+    _correlationWidget->SetZoomOutMaxOnDataSet(true);
+    _correlationWidget->SetAlign(2);
+
+//    float* spectrum = new float[1];
+//    spectrum[0] = 0;
+////    _correlationWidget->Setup(true,0,"",NULL,0, 0, 0);
+
+//    QString fileNameSpec = "1.pcm";
+
+//    QFile fl(fileNameSpec);
+//    if (fl.open(QIODevice::ReadOnly))
+//    {
+//        unsigned int PointCount = (fl.size()/sizeof(float));
+//        if (PointCount < 5) {QMessageBox::critical(this,"File error","Very small file or file not found"); return;}
+//        float* spectrum = new float[PointCount];
+//        fl.read((char*)spectrum,PointCount*sizeof(float));
+//        fl.close();
+
+
+//        _correlationWidget->Setup(true,9000,"",spectrum,PointCount, 0, 0);
+
+//        _correlationWidget->ZoomOutFull();
+
+//        delete[] spectrum;
+//    }
+
+    mainLayout->addWidget(_correlationWidget, 0, 0/*, Qt::AlignLeft | Qt::AlignTop*/);
+
+
+    this->setLayout(mainLayout);
+    this->installEventFilter(this);
+
+    connect(this, SIGNAL(signalSetSignalSetup(float*,float*)), this, SLOT(_slotSetSignalSetup(float*,float*)), Qt::QueuedConnection);
+    connect(this, SIGNAL(signalSetSignal(float*, float*)), this, SLOT(_slotSetSignal(float*, float*)), Qt::QueuedConnection);
+//    connect(this, SIGNAL(signalSetDefModulation(QString)), this, SLOT(_slotSetDefModulation(QString)), Qt::QueuedConnection);
+
+
+    connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
+    _correlationWidget->SetHorizontalLabel("m");
+
+}
+
+CorrelationWidget::~CorrelationWidget()
+{
+    delete _settings;
+    delete _correlationWidget;
+}
+
+void CorrelationWidget::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
+{
+    _mux.lock();
+    _bandwidth = bandwidth;
+    _pointCount = PointCount;
+    _isComplex = isComplex;
+    _mux.unlock();
+    emit signalSetSignalSetup(spectrum, spectrum_peak_hold);
+}
+
+void CorrelationWidget::setSignal(float *spectrum, float *spectrum_peak_hold)
+{
+    emit signalSetSignal(spectrum, spectrum_peak_hold);
+}
+
+bool CorrelationWidget::isGraphicVisible()
+{
+    return isVisible();
+}
+
+void CorrelationWidget::setDefModulation(QString modulation)
+{
+//        emit signalSetDefModulation(modulation);
+}
+
+void CorrelationWidget::setLabelName(QString base, QString second)
+{
+    emit signalSetLabelName(base, second);
+}
+
+void CorrelationWidget::clear()
+{
+//    _correlationWidget->SetSpectrumVisible(1, false);
+//    _correlationWidget->Setup(false, 0, "", NULL, 0, NULL, 0, 0,0,0,0);
+//    _correlationWidget->Reset();
+//    _correlationWidget->SetLabel(0, "No Signal");
+}
+
+void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_peak_hold)
+{
+    _mux.lock();
+
+       float maxv = 1.0;
+       float minv = 0.0;
+
+        _correlationWidget->SetAutoscaleY(false);
+//        spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
+        _correlationWidget->SetAlign(3);
+
+
+    _correlationWidget->SetHorizontalLabel("m");
+
+    _correlationWidget->Setup(true,_bandwidth,"Уровень", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+    _correlationWidget->SetSpectrumVisible(1, true);
+    _mux.unlock();
+}
+
+void CorrelationWidget::_slotSetSignal(float *spectrum, float *spectrum_peak_hold)
+{
+    _mux.lock();
+
+       float maxv = 1.0;
+       float minv = 0.0;
+
+//        _correlationWidget->SetAutoscaleY(false);
+//        spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
+//        _correlationWidget->SetAlign(3);
+
+    _mux.unlock();
+    _correlationWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+}
+
+void CorrelationWidget::_slotSetLabelName(QString base, QString second)
+{
+
+    QString name = base + " - " + second;
+    if(_label_name != name)
+    {
+        _label_name = name;
+        _correlationWidget->ClearAllLabels();
+        _correlationWidget->SetLabel(0, _label_name);
+    }
+}
