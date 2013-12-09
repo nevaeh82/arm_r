@@ -12,18 +12,9 @@ call %PRODUCT_PLATFORM%\activate.cmd msvc
 
 set MAKE_COMMAND=mingw32-make -r
 
-qtx make clean
+qtx make clean msvc-release mkrel
 
-echo start build msvc
-
-qtx make msvc-release
 if errorlevel 1 exit /B 1 
-
-echo end build msvc
-
-
-qtx make mkrel
-
 
 popd
 exit /B 0 
