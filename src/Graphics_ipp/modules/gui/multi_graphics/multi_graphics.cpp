@@ -2098,7 +2098,7 @@ void Q_MG_MouseCursor::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
 	if (event->button() == Qt::MidButton) 
 	{
-		SetCursorPos(screenStartPosScaleX,screenStartPosScaleY);
+        SetCursorPos(screenStartPosScaleX,screenStartPosScaleY);
 		event->accept();
 		return;
 	}
