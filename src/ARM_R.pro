@@ -1,5 +1,6 @@
 
 TEMPLATE = subdirs
+BUILD_ALL = $$(BUILD_ALL)
 
 include( ARM_R_UI.pri )
 include( ARM_R_Server.pri )
