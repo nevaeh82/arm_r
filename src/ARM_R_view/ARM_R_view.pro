@@ -14,10 +14,10 @@ include(../../specs/tbb.pri)
 include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
 
-applyReferences()
-
 RESOURCES += \
         rc.qrc
 
 DEFINES += UNICODE
 DEFINES += _UNICODE
+
+applyReferences()
