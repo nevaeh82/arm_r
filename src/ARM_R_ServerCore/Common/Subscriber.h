@@ -16,6 +16,9 @@
 
 #include "ISubscriber.h"
 
+#include <PwLogger/PwLogger.h>
+
+
 typedef QSharedPointer<IMessage> rpc_flakon_msg;
 
 class Subscriber : public QObject, public ISubscriber
@@ -40,6 +43,8 @@ private:
     QMap<int, QVector<IClient *> >  _map_subscribe;
 
     QMutex          _mux;
+
+    static Pw::Logger::ILogger*    m_logger;
 
 signals:
     void signalGetData(int type, rpc_flakon_msg msg_ptr);

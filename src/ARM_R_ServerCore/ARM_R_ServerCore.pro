@@ -10,6 +10,7 @@ include(../../specs/project.pri)
 include(../../specs/qxt.pri)
 include(../../specs/Solver.pri)
 include(../../specs/protobuf.pri)
+include(../../specs/logger.pri)
 
 SOURCES += \
 	RPC/RPCServer.cpp \
@@ -35,7 +36,7 @@ SOURCES += \
 	Flakon/Correction/ZCorrector.cpp \
 	Flakon/Correction/ZCoord.cpp \
 	Flakon/Server/PServer.cpp \
-	IBDB/DBIBController.cpp
+	IBDB/DBIBController.cpp \
 
 HEADERS += \
 	RPC/RPCServer.h \
@@ -72,4 +73,4 @@ HEADERS += \
 	Flakon/Correction/ZCoord.h \
 	Flakon/Server/PServer.h \
 	IBDB/nodb_exports.h \
-	IBDB/DBIBController.h
+	IBDB/DBIBController.h \

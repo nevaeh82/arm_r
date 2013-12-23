@@ -1,6 +1,9 @@
 #include "DBController.h"
 #include <QDebug>
 
+Pw::Logger::ILogger* DBController::_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(DBController));
+
+
 DBController::DBController()
 {
     _sdb = QSqlDatabase::addDatabase("QSQLITE");
@@ -27,7 +30,8 @@ int DBController::_set_db()
     if(!_sdb.open())
     {
         QMessageBox::warning(NULL, tr("¬Õ»Ã¿Õ»≈"), _sdb.lastError().text(),QMessageBox::Cancel, QMessageBox::Ok);
-        qDebug() << _sdb.lastError().text();
+//        qDebug() << _sdb.lastError().text();
+        _logger->info(_sdb.lastError().text());
     }
 }
 
@@ -44,7 +48,9 @@ void DBController::_set_table(QString name)
 
     if(!err)
     {
-        qDebug() << query.lastError().text();
+//        qDebug() << query.lastError().text();
+//        _logger->info(query.lastError().text());
+
     }
 //    _cur_table_name = name;
 }

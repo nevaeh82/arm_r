@@ -6,6 +6,8 @@
 
 #include <QMetaType>
 
+#include <PwLogger/PwLogger.h>
+
 #include "RPC/RPCServer.h"
 #include "TCP/TCPController.h"
 
@@ -45,6 +47,8 @@ private:
     QMap<int, StationProperty* >*    _map_station_property;
 
     PServer*                        _pserver;
+
+    static Pw::Logger::ILogger*            _logger;
 
 private:
     void _read_settings();

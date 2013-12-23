@@ -10,6 +10,7 @@ include(../Graphics_ipp/reference.pri)
 include(../../specs/tbb.pri)
 include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
+include(../../specs/logger.pri)
 
 SOURCES += \
         CorrelationWidget.cpp \
@@ -38,7 +39,9 @@ SOURCES += \
 	Controls/ControlPanelWidgets.cpp \
 	Controls/ButtonShowPanel.cpp \
 	ControlPanel.cpp \
-	ControlPanel.cpp
+	ControlPanel.cpp \
+    Common/ServiceHandler/ServiceHandler.cpp \
+    Common/ServiceHandler/CommonCodes.cpp
 
 HEADERS += \
         CorrelationWidget.h \
@@ -81,7 +84,15 @@ HEADERS += \
 	Controls/ControlPanelWidgets.h \
 	Controls/ButtonShowPanel.h \
 	ControlPanel.h \
-	ControlPanel.h
+	ControlPanel.h \
+    Common/ServiceHandler/ServiceTerminateCauseEnumsToString.h \
+    Common/ServiceHandler/ServiceTerminateCause.h \
+    Common/ServiceHandler/ServiceHandler.h \
+    Common/ServiceHandler/ProcessStateEnumsToString.h \
+    Common/ServiceHandler/ProcessState.h \
+    Common/ServiceHandler/IServiceHandler.h \
+    Common/ServiceHandler/CommonCodesEnumsToString.h \
+    Common/ServiceHandler/CommonCodes.h
 
 FORMS += \
 	arm_r_view.ui

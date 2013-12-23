@@ -1,6 +1,9 @@
 #include "ARM_R_Srv.h"
 #include <QTextStream>
 
+Pw::Logger::ILogger* ARM_R_Srv::_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_Srv));
+
+
 ARM_R_Srv::ARM_R_Srv()
 {
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
@@ -103,7 +106,8 @@ void ARM_R_Srv::_read_settings()
     QStringList childKeys = m_settings.childGroups();
     foreach (const QString &childKey, childKeys)
     {
-        QTextStream(stdout) << "m_settings = " << childKey.toLatin1() << endl;
+//        QTextStream(stdout) << "m_settings = " << childKey.toLatin1() << endl;
+        _logger->info(QString("m_settings = %1").arg(childKey));
         m_settings.beginGroup(childKey);
 
         ip = m_settings.value("ip", "127.0.0.1").toString();

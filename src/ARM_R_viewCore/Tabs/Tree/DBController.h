@@ -11,6 +11,8 @@
 #include <QMap>
 #include <QVariant>
 
+#include <PwLogger/PwLogger.h>
+
 #include "IDBController.h"
 
 class DBController : public QObject, public IDBController
@@ -33,6 +35,7 @@ private slots:
 private:
     QSqlDatabase _sdb;
     QString     _db_name;
+    static Pw::Logger::ILogger*    _logger;
 
 private:
      int _read_settings(QString path_to_ini_file);

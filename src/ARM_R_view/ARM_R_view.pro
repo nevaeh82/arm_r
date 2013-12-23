@@ -13,6 +13,7 @@ include(../Graphics_ipp/reference.pri)
 include(../../specs/tbb.pri)
 include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
+include(../../specs/logger.pri)
 
 RESOURCES += \
         rc.qrc

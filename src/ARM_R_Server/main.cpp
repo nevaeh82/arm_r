@@ -1,13 +1,19 @@
 #include <QtCore/QCoreApplication>
 #include <QObject>
 #include <QMetaType>
+#include <PwLogger/PwLogger.h>
+
 
 #include "ARM_R_Application.h"
 
 #include "ARM_R_Srv.h"
 
+#define PWLOGGERINIT_AGENTCONFNAME ("ARM_R_view.log4qt")
+
 int main(int argc, char *argv[])
 {
+    Pw::Logger::PwLoggerFactory::Instance()->Configure(PWLOGGERINIT_AGENTCONFNAME);
+
 
     ARM_R_Application a(argc, argv);
     qRegisterMetaType<rpc_flakon_msg> ("rpc_flakon_msg");

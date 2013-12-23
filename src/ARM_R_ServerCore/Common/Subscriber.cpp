@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+Pw::Logger::ILogger* Subscriber::m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_Server));
+
 Subscriber::Subscriber()
 {
     qRegisterMetaType<rpc_flakon_msg> ("rpc_flakon_msg");
@@ -20,7 +22,7 @@ void Subscriber::add_subscription(int type, IClient *client)
 
 void Subscriber::_slotAddSubscription(int type, IClient *client)
 {
-    qDebug() <<"ADD subsription" << type;
+    m_logger->info(QString("ADD subsription type = %1").arg(type));
     QVector<IClient *> clients;
     if(!_map_subscribe.contains(type))
     {

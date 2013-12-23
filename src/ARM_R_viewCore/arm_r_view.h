@@ -7,10 +7,13 @@
 
 #include <QMenu>
 #include <QAction>
+#include <QList>
 
 #include "Tabs/TabManager.h"
 
 #include "ControlPanel.h"
+
+#include "Common/ServiceHandler/ServiceHandler.h"
 
 typedef QVector<QPointF>         rpc_send_points_vector;
 typedef QByteArray               rpc_send_atlant_data;
@@ -19,6 +22,8 @@ typedef QByteArray               rpc_send_atlant_data;
 namespace Ui {
 class ARM_R_view;
 }
+
+using namespace Pw::Common::ServiceControl;
 
 class ARM_R_view : public QMainWindow
 {
@@ -33,18 +38,28 @@ private:
     TabManager*         _tab_manager;
     QGridLayout*        _layout;
 
-    QMenu   *fileMenu;
-    QAction *newAct;
-    QAction *exitAct;
-    QAction *diagPelengatorAct;
+    QMenu               *fileMenu;
+    QAction             *newAct;
+    QAction             *exitAct;
+    QAction             *diagPelengatorAct;
 
-    QMenu   *settingsMenu;
+    QMenu               *settingsMenu;
 
-    ControlPanel*           _control_panel;
+    ControlPanel*       _control_panel;
+
+    /// start server
+    QList<ServiceHandler*>  _serviceList;
+    QStringList             _serviceNames;
+
+
+    /// logger
+    static Pw::Logger::ILogger* m_logger;
+
 
 private:
     void _create_actions();
     void _create_menu();
+    void _start_services();
 };
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(rpc_send_points_vector)

@@ -9,6 +9,7 @@ include src/ARM_R_projects.pri
 
 include scripts/common.mak
 
+
 ifeq "$(OS)" "Windows_NT"
 	main-targets = msvc-release
 	mkrel-targets = mkrel

@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+Pw::Logger::ILogger* ARM_R_Application::m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_Server));
+
 ARM_R_Application::ARM_R_Application(int& argc, char** argv) :
     QCoreApplication(argc, argv)
 {
@@ -22,7 +24,8 @@ bool ARM_R_Application::notify(QObject* receiver, QEvent* event)
 
   } catch (...)
   {
-      qDebug() << "catch2";
+      m_logger->fatal(QString("Terminated by fatal error!"));
+
   }
   return done;
 }

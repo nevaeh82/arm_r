@@ -3,11 +3,15 @@
 
 #include <QDebug>
 
+Pw::Logger::ILogger* ARM_R_view::m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_view));
+
 ARM_R_view::ARM_R_view(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ARM_R_view)
 {
     ui->setupUi(this);
+
+    m_logger->info(QString("Started"));
 
     qRegisterMetaType<QVector<QPointF> >("rpc_send_points_vector");
     qRegisterMetaTypeStreamOperators<QVector<QPointF> >("QVector<QPointF>");
@@ -31,8 +35,6 @@ ARM_R_view::ARM_R_view(QWidget *parent) :
     _tab_manager = new TabManager(this);
     _layout->addWidget(_tab_manager);
 
-
-
     ui->centralwidget->setLayout(_layout);
 
     QString tabs_setting_file = QCoreApplication::applicationDirPath();
@@ -46,6 +48,9 @@ ARM_R_view::ARM_R_view(QWidget *parent) :
     _create_actions();
     _create_menu();
 
+    _serviceNames.append("./ARM_R_Server");
+
+    _start_services();
 }
 
 ARM_R_view::~ARM_R_view()
@@ -62,6 +67,17 @@ void ARM_R_view::_create_menu()
 
     settingsMenu = menuBar()->addMenu(tr("&Настройки"));
     settingsMenu->addAction(diagPelengatorAct);
+}
+
+void ARM_R_view::_start_services()
+{
+    m_logger->debug("onStartServices >>>");
+
+    foreach (QString serviceName, _serviceNames)
+    {
+        _serviceList.append(new ServiceHandler(serviceName, QStringList(), NULL, this));
+    }
+
 }
 
 void ARM_R_view::_create_actions()

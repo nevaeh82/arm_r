@@ -17,6 +17,8 @@
 
 #include <QMutexLocker>
 
+#include <PwLogger/PwLogger.h>
+
 #include "ITCPClient.h"
 #include "ITCPParser.h"
 #include "../Common/IRouter.h"
@@ -83,6 +85,8 @@ private:
   bool                  _is_connected;
 
   FlakonCoordinateCounter*  _flakon_coordinator;
+
+  static Pw::Logger::ILogger*      _logger;
 
 
 private:

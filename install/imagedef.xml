@@ -2,7 +2,7 @@
 <imagedef>
 	<product name="Zaviruha" version="1.0.0.0" code="zaviruha"/>
 	<files path="build\tmprel\bin\*.*"/>
-	<link  name="$DESKTOP\Завируха-Р" target="$INSTDIR\ARM_R_view.exe"/>
+	<link  name="$DESKTOP\Завируха-АРМ-Р" target="$INSTDIR\ARM_R_view.exe"/>
 	<imagefile path="build\tmprel\image\ARM_R_Setup.exe"/>
 	<installdir path="c:\Zaviruha\ARM-R\"/>
 </imagedef>

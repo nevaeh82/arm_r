@@ -1,6 +1,8 @@
 #include "TCPClient.h"
 #include "assert.h"
 
+Pw::Logger::ILogger* TCPClient::_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TCPClient));
+
 
 TCPClient::TCPClient(QString host, quint16 port, IRouter *router)
     : _should_stop(false),
@@ -745,7 +747,9 @@ void TCPClient::_read_settings()
     QStringList childKeys = m_settings.childGroups();
     foreach (const QString &childKey, childKeys)
     {
-        QTextStream(stdout) << "m_settings = " << childKey.toLatin1() << endl;
+//        QTextStream(stdout) << "m_settings = " << childKey.toLatin1() << endl;
+        _logger->info(QString("m_settings = %1").arg(childKey));
+
         m_settings.beginGroup(childKey);
 
         ip = m_settings.value("ip", "127.0.0.1").toString();

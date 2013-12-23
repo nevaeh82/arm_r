@@ -2,7 +2,7 @@ include makeimage-win32-common.mak
 
 .NOTPARALLEL:
 
-DEPLOY = *.exe *.dll *.conf
+DEPLOY = *.exe *.dll *.conf *.log4qt
 
 TmpRel = $(SolutionDir)/build/tmprel
 BinDir = $(SolutionDir)/build/bin/msvc
@@ -31,6 +31,9 @@ copy-bin:
 	$(cp) -rudf $(BinDir)/plugins $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/DB $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/Tabs $(TmpRel)/bin
+	$(cp) -rudf $(BinDir)/RDS $(TmpRel)/bin
+	$(cp) -rudf $(BinDir)/TCP $(TmpRel)/bin
+
 
 move-components:
 
