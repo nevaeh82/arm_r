@@ -11,7 +11,9 @@ Qt = Gui Core Network Sql
 
 all: makeimage
 
-makeimage: create-dirs copy-qt-msvc copy-bin  move-components
+makeimage: create-dirs copy-qt-msvc copy-bin
+	$(call mknsisimage, imagedef.xml)
+
 
 create-dirs:
 	$(mkdir) $(TmpRel)
