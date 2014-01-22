@@ -25,7 +25,7 @@ class Subscriber : public QObject, public ISubscriber
 {
     Q_OBJECT
 public:
-    Subscriber();
+	Subscriber(QObject* parent = 0);
     ~Subscriber();
 
 public:

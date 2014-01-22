@@ -7,6 +7,9 @@ QT     -= gui
 CONFIG += console
 CONFIG += qtestlib
 
+INCLUDEPATH += ../../tools/cxxtest
+
+
 ProjectDir=$$PWD
 
 HEADERS += testDBIB.h
@@ -18,3 +21,4 @@ include(../../specs/Solver.pri)
 include(../../specs/protobuf.pri)
 include(../TestShared/mksuite.pri)
 
+applyReferences()

@@ -4,7 +4,8 @@
 
 Pw::Logger::ILogger* Subscriber::m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_Server));
 
-Subscriber::Subscriber()
+Subscriber::Subscriber(QObject* parent):
+	QObject(parent)
 {
     qRegisterMetaType<rpc_flakon_msg> ("rpc_flakon_msg");
     connect(this, SIGNAL(signalGetData(int,rpc_flakon_msg)), this, SLOT(_slotGetData(int,rpc_flakon_msg)));

@@ -1,6 +1,7 @@
 #include "Router.h"
 
-Router::Router()
+Router::Router(QObject* parent):
+	QObject(parent)
 {
     _map_station_property = NULL;
 }

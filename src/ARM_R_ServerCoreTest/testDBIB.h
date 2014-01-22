@@ -1,10 +1,8 @@
 #ifndef TESTDBIB_H
 #define TESTDBIB_H
 
-
-
 #include <cxxtest/TestSuite.h>
-#include <IBDB/DBIBController.h>
+//#include <IBDB/DBIBController.h>
 #include <QDebug>
 
 class testDBIB : public CxxTest::TestSuite

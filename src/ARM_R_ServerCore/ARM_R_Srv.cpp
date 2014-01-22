@@ -28,13 +28,13 @@ ARM_R_Srv::ARM_R_Srv()
     _map_station_property = new QMap<int, StationProperty* >;
 
 
-    _router = new Router();
+	_router = new Router(this);
 
 
-    _subscriber_up = new Subscriber();
+	_subscriber_up = new Subscriber(this);
 
     _router->set_subscriber(_subscriber_up);
-    _tcp_controller = new TCPController(_router);
+	_tcp_controller = new TCPController(this, _router);
 
     _router->set_tcp_controller(_tcp_controller);
 
@@ -77,9 +77,9 @@ ARM_R_Srv::~ARM_R_Srv()
     delete _map_station_property;
     delete _atlant_controller;
     delete _rpc_server;
-    delete _router;
-    delete _subscriber_up;
-    delete _tcp_controller;
+//    delete _router;
+//    delete _subscriber_up;
+//    delete _tcp_controller;
 }
 
 /// read settings from ini file
@@ -106,7 +106,6 @@ void ARM_R_Srv::_read_settings()
     QStringList childKeys = m_settings.childGroups();
     foreach (const QString &childKey, childKeys)
     {
-//        QTextStream(stdout) << "m_settings = " << childKey.toLatin1() << endl;
         _logger->info(QString("m_settings = %1").arg(childKey));
         m_settings.beginGroup(childKey);
 
@@ -115,8 +114,6 @@ void ARM_R_Srv::_read_settings()
         type = m_settings.value("type", -1).toInt();
 
         id = m_settings.value("id", -1).toInt();
-
-
 
         if(id == -1)
         {

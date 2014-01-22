@@ -16,7 +16,7 @@ class Router : public QObject, public IRouter
 {
     Q_OBJECT
 public:
-    Router();
+	Router(QObject* parent = 0);
     ~Router();
 
 public:

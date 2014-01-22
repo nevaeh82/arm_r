@@ -14,7 +14,7 @@ class TCPController : public QObject, public ITCPController
 {
     Q_OBJECT
 public:
-    TCPController(IRouter *router);
+	TCPController(QObject* parent = 0, IRouter *router = 0);
     ~TCPController();
 
 public:

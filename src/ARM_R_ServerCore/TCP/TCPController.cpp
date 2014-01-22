@@ -1,7 +1,8 @@
 #include "TCPController.h"
 
-TCPController::TCPController(IRouter *router)
-    : _is_started(false)
+TCPController::TCPController(QObject* parent, IRouter *router):
+	QObject(parent),
+	_is_started(false)
 {
     _router = router;
 }
