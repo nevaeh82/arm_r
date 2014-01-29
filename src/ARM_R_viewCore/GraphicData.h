@@ -12,9 +12,14 @@
 
 #include "Common/CommonCorrelations.h"
 
+//class GraphicsDataTest;
+
 class GraphicData : public QObject
 {
     Q_OBJECT
+
+	friend class GraphicsDataTest;
+
 public:
     GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id);
     ~GraphicData();
@@ -23,7 +28,9 @@ public:
     void set_data(QVector<QPointF> points, bool isComplex);
     void set_data(quint32 point2, QVector<QPointF> points, bool isComplex);
     void set_def_modulation(QString modulation);
+	void set_bandwidth(double bandwidth);
 
+	int _find_index(qreal startx);
 private:
     ICommonComponents*      _common_correlations;
     ITabManager*            _tab_manager;
@@ -40,6 +47,12 @@ private:
     QMap<int, float*>               _map_spectrum_corelation;
     QMap<int, double>               _map_bandwidth_corelation;
 
+	QList<qreal>					_list_startx;
+
+	QMap<qreal, QList<qreal> >			_map_spectrum;
+	int								_PointCount;
+	int								_pointCountWhole;
+
 
 signals:
     void signalFinished();
@@ -52,11 +65,14 @@ signals:
 
     void signalData(float*,float*);
 
+	void signalSetBandwidth(double);
+
 
 private slots:
     void _slotSetData(QVector<QPointF> vecFFT, bool isComplex);
     void _slotSetCorData(quint32 point2,QVector<QPointF> vecFFT, bool isComplex);
     void _slotSetDefModulation(QString modulation);
+	void _slotSetBandwidth(double bandwidth);
 };
 
 #endif // GRAPHICDATA_H

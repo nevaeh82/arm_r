@@ -215,7 +215,7 @@ void GraphicWidget::set_coontrolPRM_state(bool state)
 void GraphicWidget::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
 {
     _mux.lock();
-    _bandwidth = bandwidth;
+	_bandwidth = bandwidth;
     _pointCount = PointCount;
     _isComplex = isComplex;
     _mux.unlock();

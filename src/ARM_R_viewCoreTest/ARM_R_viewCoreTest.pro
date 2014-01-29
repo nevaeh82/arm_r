@@ -3,13 +3,13 @@ TARGET   = ARM_R_viewCoreTest
 TEMPLATE = app
 
 QT     +=  core network
-QT     -= gui
+QT     += gui
 CONFIG += console
 CONFIG += qtestlib
 
 ProjectDir=$$PWD
 
-#INCLUDEPATH += ../../tools/cxxtest
+INCLUDEPATH += ../../tools/cxxtest
 
 HEADERS = teststreaming.h
 
@@ -23,4 +23,6 @@ include(../TestShared/mksuite.pri)
 
 applyReferences()
 
-
+#LIBS += -luser32
+#DEFINES += UNICODE
+#DEFINES += _UNICODE

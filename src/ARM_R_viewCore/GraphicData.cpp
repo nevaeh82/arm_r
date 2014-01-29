@@ -4,6 +4,8 @@
 
 GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id)
 {
+	_PointCount = 0;
+	_pointCountWhole = 0;
     _common_correlations = common_correlations;
     _id = id;
     _tab_manager = tab_manager;
@@ -18,6 +20,7 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 
     connect(this, SIGNAL(signalSetCorData(quint32,QVector<QPointF>,bool)), this, SLOT(_slotSetCorData(quint32,QVector<QPointF>,bool)));
 
+	connect(this, SIGNAL(signalSetBandwidth(double)), this, SLOT(_slotSetBandwidth(double)));
 //    QMap<int, IGraphicWidget *>::iterator it;
 //    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
 //    {
@@ -28,6 +31,12 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 //        _map_spectrum_corelation.insert(it.key(), sp);
 //        _map_bandwidth_corelation.insert(it.key(), b);
 //    }
+
+	/// TODO need to correct architecture
+	if(common_correlations == NULL)
+	{
+		return;
+	}
 
     for(int i = 0; i < common_correlations->count(0); i++)
     {
@@ -57,41 +66,106 @@ void GraphicData::set_data(quint32 point2, QVector<QPointF> points, bool isCompl
 
 void GraphicData::set_def_modulation(QString modulation)
 {
-    emit signalSetDefModulation(modulation);
+	emit signalSetDefModulation(modulation);
+}
+
+void GraphicData::set_bandwidth(double bandwidth)
+{
+	emit signalSetBandwidth(bandwidth);
+}
+
+int GraphicData::_find_index(qreal startx)
+{
+	int list_count = _list_startx.size();
+	int index = -1;
+	if(_list_startx.isEmpty())
+	{
+		_list_startx.push_back(startx);
+		return 0;
+	}
+	else
+	{
+		if(startx < _list_startx.front() - 1)
+		{
+			_list_startx.push_front(startx);
+			return 0;
+		}
+		if(startx > _list_startx.back() + 1)
+		{
+			_list_startx.push_back(startx);
+			return _list_startx.size();
+		}
+	}
+
+//	qDebug() << _list_startx.size();
+	if(_list_startx.size() == list_count)
+	{
+		QList<qreal>::iterator it;
+		for(it = _list_startx.begin(); it != _list_startx.end(); ++it)
+		{
+			/// startx is in E interval
+			if((*it+1 > startx) && (*it-1 < startx))
+			{
+				index = _list_startx.indexOf(*it);
+				_list_startx.replace(index, startx);
+				break;
+			}
+		}
+	}
+
+	return index;
 }
 
 void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 {
     if(!_gr_widget->isGraphicVisible())
         return;
-    int PointCount = vecFFT.size();
+	if(_bandwidth == 0)
+		return;
+
+	if(_pointCountWhole == 0)
+		return;
+
+	_PointCount = vecFFT.size();
 //    float* spectrum = new float[PointCount];
 
     qreal startx = vecFFT.at(0).x();
     qreal endx = vecFFT.at(vecFFT.size() - 1).x();
-    double bandwidth = (endx - startx)*1000;
+	//double bandwidth = (endx - startx)*1000;
 
-    if(_bandwidth != bandwidth)
-    {
-        _bandwidth = bandwidth;
-        delete[] _spectrum;
-        _spectrum = new float[PointCount];
+//    if(_bandwidth != bandwidth)
+//    {
+//        _bandwidth = bandwidth;
+//        delete[] _spectrum;
+//        _spectrum = new float[PointCount];
 
-        delete[] _spectrum_peak_hold;
-        _spectrum_peak_hold = new float[PointCount];
-        _needSetup = true;
-    }
+//        delete[] _spectrum_peak_hold;
+//        _spectrum_peak_hold = new float[PointCount];
+//        _needSetup = true;
+//    }
 
 
-    for(int i = 0; i < vecFFT.size(); i++)
-    {
-        _spectrum[i] = vecFFT.at(i).y();
+//	QMap<qreal, QList<qreal> >::iterator it = _map_spectrum.lowerBound(startx);
 
-        if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]))
-        {
-            _spectrum_peak_hold[i] = _spectrum[i];
-        }
-    }
+	int index = _find_index(startx);
+
+
+//	QList<qreal> list_alt;
+	for(int i = 0; i < vecFFT.size(); i++)
+	{
+		_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
+//		list_alt.append(vecFFT.at(i).y());
+
+		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]))
+		{
+			_spectrum_peak_hold[i] = _spectrum[i];
+		}
+	}
+
+//	_map_spectrum.remove(it.key());
+//	_map_spectrum.insert(startx, list_alt);
+
+
 
     if(_startx != startx)
     {
@@ -101,7 +175,7 @@ void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
     if(_needSetup)
     {
 //        emit signalDataS(_spectrum, _spectrum_peak_hold);
-        _gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, PointCount, _bandwidth, isComplex);
+		_gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, vecFFT.size(), _bandwidth, isComplex);
         _needSetup = false;
     }
     else
@@ -194,5 +268,21 @@ void GraphicData::_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool 
 
 void GraphicData::_slotSetDefModulation(QString modulation)
 {
-    _gr_widget->setDefModulation(modulation);
+	_gr_widget->setDefModulation(modulation);
+}
+
+void GraphicData::_slotSetBandwidth(double bandwidth)
+{
+	if(_bandwidth != bandwidth)
+	{
+		_bandwidth = bandwidth;
+		double div = _bandwidth/20000;
+		double _pointCountWhole = _PointCount*div;
+		delete[] _spectrum;
+		_spectrum = new float[_pointCountWhole] ();
+
+		delete[] _spectrum_peak_hold;
+		_spectrum_peak_hold = new float[_pointCountWhole] ();
+		_needSetup = true;
+	}
 }

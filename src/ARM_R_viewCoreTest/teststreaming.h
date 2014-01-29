@@ -4,7 +4,9 @@
 //#include "../ARM_R_view/Tabs/Tree/DBController.h"
 //#include "../ARM_R_view/Tabs/Tree/DBController.cpp"
 
-class TestStreaming: public CxxTest::TestSuite
+#include "GraphicData.h"
+
+class GraphicsDataTest: public CxxTest::TestSuite
 {
 
 public:
@@ -21,6 +23,28 @@ public:
 //        db_controller->set_data(data);
         TS_ASSERT_EQUALS(1, 1);/* expected, receiver.data);*/
     }
+
+//	GraphicsDataTest()
+//	{
+//	}
+
+	void testGraphicsList()
+	{
+		GraphicData* grData = new GraphicData(0,0,0,0);
+		grData->_list_startx.append(1.23);
+		grData->_list_startx.append(8.97);
+
+		qDebug() << grData->_list_startx.size() << grData->_list_startx.at(1);
+
+		TS_ASSERT_EQUALS(1, grData->_find_index(8.97));
+
+		TS_ASSERT_EQUALS(1, grData->_find_index(8));
+
+		TS_ASSERT_EQUALS(0, grData->_find_index(0.99));
+		delete grData;
+	}
+
+
 };
 
 #endif // TESTSTREAMING_H
