@@ -189,7 +189,7 @@ bool Q_MG_SpectrumInterface::Setup(bool is_complex, double bandwidth_hz, QString
     float minv_2;float maxv_2;
 
 
-//        qDebug() << ippsMinMax_32f(spectrum_1,static_cast<int>(items_count_1),&minv_1,&maxv_1);
+	ippsMinMax_32f(spectrum_1,static_cast<int>(items_count_1),&minv_1,&maxv_1);
 
 
 	if (!inline_memory_1)

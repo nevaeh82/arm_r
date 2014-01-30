@@ -5,7 +5,7 @@
 GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id)
 {
 	_PointCount = 0;
-	_pointCountWhole = 0;
+	m_pointCountWhole = 0;
     _common_correlations = common_correlations;
     _id = id;
     _tab_manager = tab_manager;
@@ -14,14 +14,20 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
     _spectrum = new float[1];
     _spectrum_peak_hold = new float[1];
     _bandwidth = 0;
+	m_bandwidthSingleSample = 0;
+	m_isPanaramaStart = false;
     _needSetup = true;
-    connect(this, SIGNAL(signalSetData(QVector<QPointF>,bool)), this, SLOT(_slotSetData(QVector<QPointF>,bool)));
-    connect(this, SIGNAL(signalSetDefModulation(QString)), this, SLOT(_slotSetDefModulation(QString)));
+	m_needSetupSpectrum = true;
+	connect(this, SIGNAL(signalSetData(QVector<QPointF>,bool)), this, SLOT(m_slotSetData(QVector<QPointF>,bool)));
+	connect(this, SIGNAL(signalSetDefModulation(QString)), this, SLOT(m_slotSetDefModulation(QString)));
 
-    connect(this, SIGNAL(signalSetCorData(quint32,QVector<QPointF>,bool)), this, SLOT(_slotSetCorData(quint32,QVector<QPointF>,bool)));
+	connect(this, SIGNAL(signalSetCorData(quint32,QVector<QPointF>,bool)), this, SLOT(m_slotSetCorData(quint32,QVector<QPointF>,bool)));
 
-	connect(this, SIGNAL(signalSetBandwidth(double)), this, SLOT(_slotSetBandwidth(double)));
-//    QMap<int, IGraphicWidget *>::iterator it;
+	connect(this, SIGNAL(signalSetBandwidth(double)), this, SLOT(m_slotSetBandwidth(double)));
+
+	connect(this, SIGNAL(signalPanoramaStart(double,double)), this, SLOT(m_slotPanoramaStart(double,double)));
+	connect(this, SIGNAL(signalPanoramaStop()), this, SLOT(m_slotPanoramaStop()));
+	//    QMap<int, IGraphicWidget *>::iterator it;
 //    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
 //    {
 //        float *sp = new float[1];
@@ -74,6 +80,16 @@ void GraphicData::set_bandwidth(double bandwidth)
 	emit signalSetBandwidth(bandwidth);
 }
 
+void GraphicData::set_panorama(double start, double end)
+{
+	emit signalPanoramaStart(start, end);
+}
+
+void GraphicData::set_panorama_stop()
+{
+	emit signalPanoramaStop();
+}
+
 int GraphicData::_find_index(qreal startx)
 {
 	int list_count = _list_startx.size();
@@ -116,22 +132,31 @@ int GraphicData::_find_index(qreal startx)
 	return index;
 }
 
-void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 {
     if(!_gr_widget->isGraphicVisible())
         return;
-	if(_bandwidth == 0)
-		return;
+//	if(_bandwidth == 0)
+//		return;
 
-	if(_pointCountWhole == 0)
-		return;
+//	if(_pointCountWhole == 0)
+//		return;
 
 	_PointCount = vecFFT.size();
 //    float* spectrum = new float[PointCount];
 
     qreal startx = vecFFT.at(0).x();
     qreal endx = vecFFT.at(vecFFT.size() - 1).x();
-	//double bandwidth = (endx - startx)*1000;
+	double bandwidth = (endx - startx)*1000;
+//	m_slotSetBandwidth(bandwidth);
+
+	if(m_bandwidthSingleSample != bandwidth && m_isPanaramaStart == false)
+	{
+		m_slotSetBandwidth(bandwidth);
+		m_bandwidthSingleSample = bandwidth;
+		_needSetup = true;
+	}
+
 
 //    if(_bandwidth != bandwidth)
 //    {
@@ -172,11 +197,12 @@ void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
         _startx = startx;
     }
 
-    if(_needSetup)
+	if(m_needSetupSpectrum)
     {
 //        emit signalDataS(_spectrum, _spectrum_peak_hold);
-		_gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, vecFFT.size(), _bandwidth, isComplex);
-        _needSetup = false;
+		qDebug() << _spectrum[8000];
+		_gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, m_pointCountWhole/*vecFFT.size()*/, _bandwidth, isComplex);
+		m_needSetupSpectrum = false;
     }
     else
     {
@@ -186,7 +212,7 @@ void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
     }
 }
 
-void GraphicData::_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool isComplex)
 {
     int cor_id = point2;
     if(point2 > _id)
@@ -266,23 +292,52 @@ void GraphicData::_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool 
 
 }
 
-void GraphicData::_slotSetDefModulation(QString modulation)
+void GraphicData::m_slotSetDefModulation(QString modulation)
 {
 	_gr_widget->setDefModulation(modulation);
 }
 
-void GraphicData::_slotSetBandwidth(double bandwidth)
+void GraphicData::m_slotSetBandwidth(double bandwidth)
 {
 	if(_bandwidth != bandwidth)
 	{
 		_bandwidth = bandwidth;
-		double div = _bandwidth/20000;
-		double _pointCountWhole = _PointCount*div;
+		int div = _bandwidth/20000000;
+		m_pointCountWhole = _PointCount*div;
 		delete[] _spectrum;
-		_spectrum = new float[_pointCountWhole] ();
+		_spectrum = new float[m_pointCountWhole] ();
 
 		delete[] _spectrum_peak_hold;
-		_spectrum_peak_hold = new float[_pointCountWhole] ();
-		_needSetup = true;
+		_spectrum_peak_hold = new float[m_pointCountWhole] ();
+		m_needSetupSpectrum = true;
 	}
+}
+
+void GraphicData::m_slotPanoramaStart(double start, double end)
+{
+	qDebug() << "panorama started = " << start << end;
+
+	if(start > end)
+		return;
+
+	double bandwidth = end - start;
+	if(bandwidth < 20)
+	{
+		bandwidth = 20;
+	}
+
+	bandwidth *= 1000000;
+
+	m_isPanaramaStart = true;
+	set_bandwidth(bandwidth);
+
+
+}
+
+void GraphicData::m_slotPanoramaStop()
+{
+	qDebug() << "panorama stopped";
+	m_isPanaramaStart = false;
+
+	set_bandwidth(m_bandwidthSingleSample);
 }

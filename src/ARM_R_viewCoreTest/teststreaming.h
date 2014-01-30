@@ -43,8 +43,6 @@ public:
 		TS_ASSERT_EQUALS(0, grData->_find_index(0.99));
 		delete grData;
 	}
-
-
 };
 
 #endif // TESTSTREAMING_H

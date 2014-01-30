@@ -249,6 +249,7 @@ void GraphicWidget::_slotSetDefModulation(QString modulation)
 
 void GraphicWidget::_slotSetEnablePanorama(bool state)
 {
+	_tab->set_panorama(state);
     /// set panorama
 }
 
@@ -500,7 +501,7 @@ void GraphicWidget::_slotRecognizeSignal()
 {
     _center_freq_def_modulation = _center_freq_sel_temp;
     CommandMessage *msg = new CommandMessage(COMMAND_RECOGNIZESIGNAL, QVariant());
-    _tab->set_command(msg);
+	_tab->set_command(1, msg);
 }
 
 /// signal for flakon to recognize signal
@@ -508,7 +509,7 @@ void GraphicWidget::_slotSSCorrelation()
 {
     _enable_correlation = !_enable_correlation;
     CommandMessage *msg = new CommandMessage(COMMAND_KM, _enable_correlation);
-    _tab->set_command(msg);
+	_tab->set_command(1, msg);
     if(_enable_correlation)
         _graphicsContextMenu->actions().at(3)->setText("ќтключить коррел€цию");
     else
