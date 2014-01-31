@@ -77,8 +77,7 @@ ServiceHandler::ServiceHandler(const QString& servicePath, const QStringList& ar
 	connect(_process, SIGNAL(readyReadStandardOutput()), SLOT(onReadProcessOutput()));
 	connect(_process, SIGNAL(readyReadStandardError()), SLOT(onReadProcessError()));
 	connect(_process, SIGNAL(started()), this, SLOT(onProcessStarted()));
-
-	startService();
+	connect(_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onProcessStartFailed(QProcess::ProcessError)));
 }
 
 ServiceHandler::~ServiceHandler()
@@ -89,7 +88,7 @@ ServiceHandler::~ServiceHandler()
 		return;
 	}
 
-    _process->disconnect(this);
+	_process->disconnect(this);
 
 	_process->kill();
 	_process->waitForFinished(c_terminateTimeout);
@@ -133,6 +132,17 @@ void ServiceHandler::onProcessStarted()
 	AssignProcessToJobObject(_childCloseJob, _process->pid()->hProcess);
 
 #endif
+
+	emit processStartedSignal();
+}
+
+void ServiceHandler::onProcessStartFailed(QProcess::ProcessError error)
+{
+	if (QProcess::FailedToStart != error) {
+		return;
+	}
+
+	emit processStartFailedSignal();
 }
 
 void ServiceHandler::onProcessDestroyed(int code, QProcess::ExitStatus status)
@@ -232,7 +242,7 @@ int ServiceHandler::terminate()
 		return ServiceTerminateCause::NotRunned;
 	}
 
-    _process->disconnect(this);
+	_process->disconnect(this);
 
 	//Try shutdown correctly.
 	if (m_agentRpcController == NULL) {
@@ -269,10 +279,18 @@ void ServiceHandler::kill()
 	if ( !_process ) {
 		return;
 	}
-    _process->disconnect(this);
+	_process->disconnect(this);
 
+#ifdef Q_OS_WIN
+	_process->kill();
+	_process->close();
+	delete _process;
+	_process = NULL;
+#else
 	_process->terminate();
 	_process->waitForFinished(c_terminateTimeout);
+#endif
+
 
 	//_process->deleteLater();
 	//_process = NULL;
@@ -281,6 +299,11 @@ void ServiceHandler::kill()
 bool ServiceHandler::isServiceAvailable()
 {
 	return _process ? _process->isOpen() : false;
+}
+
+void ServiceHandler::start()
+{
+	startService();
 }
 
 bool ServiceHandler::waitService(int timeout)

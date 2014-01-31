@@ -3,10 +3,9 @@
 
 #include <QObject>
 #include <QProcess>
-
 #include <QThread>
 
-#include "../Interfaces/ITerminateRpcController.h"
+#include "Interfaces/ITerminateRpcController.h"
 
 #include <PwLogger/PwLogger.h>
 
@@ -53,12 +52,12 @@ protected:
 	ProcessState::Enum _state;
 	Pw::Common::ServiceControl::ServiceErrorCodes::Enum _lastServiceError;
 
-	void startService();
-
 	Pw::Logger::ILogger* _logger;
 	QMutex _syncRoot;
 
 	ITerminateRpcController* m_agentRpcController;
+
+	void startService();
 
 public:
 
@@ -68,7 +67,7 @@ public:
 protected:
 	QString getCommandLine();
 
-    virtual void errorCodesProcessing(int code);
+	virtual void errorCodesProcessing(int code);
 
 public:
 	void kill();
@@ -94,6 +93,12 @@ public:
 	/// @brief Indicates whether service available
 	///
 	bool isServiceAvailable();
+
+	void start();
+
+signals:
+	void processStartedSignal();
+	void processStartFailedSignal();
 
 public slots:
 
@@ -135,6 +140,7 @@ protected slots:
 	void onReadProcessOutput();
 	void onReadProcessError();
 	void onProcessStarted();
+	void onProcessStartFailed(QProcess::ProcessError);
 };
 
 } // namespace ServiceControl

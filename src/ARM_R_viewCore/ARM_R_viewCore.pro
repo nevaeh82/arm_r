@@ -7,6 +7,7 @@ CONFIG += staticlib
 
 include(../../specs/project.pri)
 include(../Graphics_ipp/reference.pri)
+include(../ARM_R_Common/reference.pri)
 include(../../specs/tbb.pri)
 include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
@@ -16,8 +17,6 @@ SOURCES += \
         CorrelationWidget.cpp \
         GraphicData.cpp \
         GraphicWidget.cpp \
-	core.cpp\
-	arm_r_view.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
 	Tabs/TabSpectrum.cpp \
@@ -28,7 +27,6 @@ SOURCES += \
 	Tabs/Tree/DBController.cpp \
 	Tabs/Tree/TreeView.cpp \
 	Tabs/Tree/TreeWidgetDelegate.cpp \
-	Tabs/Tree/TreeWidgetDelegate.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
 	Tabs/Tree/DBCache.cpp \
@@ -38,10 +36,11 @@ SOURCES += \
 	Tabs/RPC/RPCAtlant.cpp \
 	Controls/ControlPanelWidgets.cpp \
 	Controls/ButtonShowPanel.cpp \
-	ControlPanel.cpp \
-	ControlPanel.cpp \
     Common/ServiceHandler/ServiceHandler.cpp \
-    Common/ServiceHandler/CommonCodes.cpp
+    Common/ServiceHandler/CommonCodes.cpp \
+    MainWindow.cpp \
+    MainWindowController.cpp \
+    ControlPanelWidget.cpp
 
 HEADERS += \
         CorrelationWidget.h \
@@ -50,7 +49,6 @@ HEADERS += \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \
-	arm_r_view.h \
 	Abstracts/IModuleController.h \
 	Abstracts/ISubModule.h \
 	Abstracts/ICommonComponents.h \
@@ -65,7 +63,6 @@ HEADERS += \
 	Tabs/Tree/IDBController.h \
 	Tabs/Tree/DBController.h \
 	Tabs/Tree/TreeView.h \
-	Tabs/Tree/TreeWidgetDelegate.h \
 	Tabs/Tree/TreeWidgetDelegate.h \
 	Common/IMessage.h \
 	Common/CommandMessage.h \
@@ -83,8 +80,6 @@ HEADERS += \
 	Tabs/ITabAtlant.h \
 	Controls/ControlPanelWidgets.h \
 	Controls/ButtonShowPanel.h \
-	ControlPanel.h \
-	ControlPanel.h \
     Common/ServiceHandler/ServiceTerminateCauseEnumsToString.h \
     Common/ServiceHandler/ServiceTerminateCause.h \
     Common/ServiceHandler/ServiceHandler.h \
@@ -92,10 +87,14 @@ HEADERS += \
     Common/ServiceHandler/ProcessState.h \
     Common/ServiceHandler/IServiceHandler.h \
     Common/ServiceHandler/CommonCodesEnumsToString.h \
-    Common/ServiceHandler/CommonCodes.h
+    Common/ServiceHandler/CommonCodes.h \
+    MainWindow.h \
+    MainWindowController.h \
+    ControlPanelWidget.h
 
 FORMS += \
-	arm_r_view.ui
+    ControlPanel.ui \
+    MainWindow.ui
 	
 LIBS += -luser32
 
