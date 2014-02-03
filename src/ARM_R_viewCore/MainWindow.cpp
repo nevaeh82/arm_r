@@ -40,7 +40,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+	delete ui;
+}
+
+ControlPanelWidget *MainWindow::getControlPanelWidget() const
+{
+	return ui->controlWidget;
+}
+
+QTabWidget *MainWindow::getWorkTabsWidget() const
+{
+	return ui->worlTabsWidget;
 }
 
 

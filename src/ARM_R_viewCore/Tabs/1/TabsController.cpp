@@ -12,12 +12,12 @@ TabsController::~TabsController()
 /// create common components from ini faile [CommonComponents]
 int TabsController::createCommonComponents()
 {
-    QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
+	//QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
     QString app_dir = QCoreApplication::applicationDirPath();
     app_dir.append("/CommonComponents.ini");
     QSettings m_settings(app_dir, QSettings::IniFormat);
 
-    m_settings.setIniCodec(codec);
+   // m_settings.setIniCodec(codec);
 
     QStringList childKeys = m_settings.childGroups();
     foreach (const QString &childKey, childKeys)

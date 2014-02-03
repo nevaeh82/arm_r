@@ -40,7 +40,8 @@ SOURCES += \
     Common/ServiceHandler/CommonCodes.cpp \
     MainWindow.cpp \
     MainWindowController.cpp \
-    ControlPanelWidget.cpp
+    ControlPanel/ControlPanelWidget.cpp \
+    ControlPanel/ControlPanelController.cpp
 
 HEADERS += \
         CorrelationWidget.h \
@@ -90,11 +91,14 @@ HEADERS += \
     Common/ServiceHandler/CommonCodes.h \
     MainWindow.h \
     MainWindowController.h \
-    ControlPanelWidget.h
+     ControlPanel/ControlPanelWidget.h \
+    ControlPanel/ControlPanelController.h
 
 FORMS += \
     ControlPanel.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    CorrelationWidget.ui \
+    GraphicsWidget.ui
 	
 LIBS += -luser32
 

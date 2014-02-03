@@ -12,13 +12,21 @@
 
 #include "IGraphicWidget.h"
 
+namespace Ui {
+class CorrelationWidget;
+}
 
 class CorrelationWidget : public QWidget, public IGraphicWidget
 {
+
+
+private:
+	Ui::CorrelationWidget*     ui;
+
     Q_OBJECT
 public:
     CorrelationWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
-    ~CorrelationWidget();
+	virtual ~CorrelationWidget();
 
 public:
     virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
@@ -33,8 +41,7 @@ public:
 
 
 private:
-    Q_MG_SpectrumInterface  *_correlationWidget;
-    QSettings               *_settings;
+	//Q_MG_SpectrumInterface  *_correlationWidget;
     double                  _bandwidth;
     int                     _pointCount;
     bool                    _isComplex;

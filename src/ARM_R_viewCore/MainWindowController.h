@@ -10,6 +10,8 @@
 
 #include "Common/ServiceHandler/ServiceHandler.h"
 
+#include "Tabs/TabManager.h"
+
 class MainWindowController : public QObject, public IController<MainWindow>
 {
 	Q_OBJECT
@@ -21,6 +23,8 @@ private:
 	MainWindow* m_view;
 
 	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;
+
+	TabManager*         m_tabManager;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

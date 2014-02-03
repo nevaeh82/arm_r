@@ -5,10 +5,10 @@
 StationProperty::StationProperty()
 {
 
-    QTextCodec *codec = QTextCodec::codecForName("CP1251");
+	/*QTextCodec *codec = QTextCodec::codecForName("CP1251");
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
+	QTextCodec::setCodecForLocale(codec);*/
 
     _id = -1;
     _name = "Default";

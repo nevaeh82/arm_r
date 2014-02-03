@@ -7,8 +7,9 @@ MainWindowController::MainWindowController(QObject *parent) :
 {
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindowController));
 
-
 	m_view = NULL;
+
+	m_tabManager = NULL;
 }
 
 MainWindowController::~MainWindowController()
@@ -51,7 +52,12 @@ void MainWindowController::stop()
 
 void MainWindowController::init()
 {
+	m_tabManager =  new TabManager(m_view->getWorkTabsWidget(), this);
 
+	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
+	tabsSettingsFile.append("/Tabs/Tabs.ini");
+
+	m_tabManager->createSubModules(tabsSettingsFile);
 }
 
 void MainWindowController::serverFailedToStartSlot()

@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 
-#include "Tabs/TabManager.h"
+#include <PwLogger/PwLogger.h>
 
-#include "ControlPanelWidget.h"
+#include "ControlPanel/ControlPanelWidget.h"
+
+#include "Tabs/TabManager.h"
 
 
 typedef QVector<QPointF>         rpc_send_points_vector;
@@ -24,6 +26,9 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+
+	ControlPanelWidget* getControlPanelWidget() const;
+	QTabWidget* getWorkTabsWidget() const;
     
 private:
 	Ui::MainWindow*     ui;
