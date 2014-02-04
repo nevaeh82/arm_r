@@ -3,7 +3,7 @@
 
 #include "ui_GraphicsWidget.h"
 
-GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, int id, ITabSpectrum* tab):
+GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
 	QWidget(parent, flags), ui(new Ui::GraphicsWidget)
 {
 
@@ -20,7 +20,7 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 	_peak_visible = false;
 
 	_id = id;
-	_tab = tab;
+	_tab = NULL;
 
 
 	m_graphicsContextMenu = new QMenu(ui->spectrumWidget);
@@ -123,6 +123,11 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 GraphicWidget::~GraphicWidget()
 {
 	delete m_graphicsContextMenu;
+}
+
+void GraphicWidget::setTab(ITabSpectrum *tab)
+{
+	_tab = tab;
 }
 
 void GraphicWidget::mouseDoubleClickEvent( QMouseEvent * event )
@@ -260,7 +265,7 @@ void GraphicWidget::_slotSelectiontypeChanged(bool state)
 /// set graphic name
 void GraphicWidget::slotSetCaption(QString name)
 {
-	_caption->setText(name);
+	//_caption->setText(name);
 }
 
 /// request data
@@ -347,8 +352,8 @@ void GraphicWidget::_slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 
 	if(_rett == 0 )
 	{
-		int ret = QMessageBox::warning(this, tr("ÂÍÈÌÀÍÈÅ"),
-									   tr("ÎÁÍÀÐÓÆÅÍ ÑÈÃÍÀË.\n"),
+		int ret = QMessageBox::warning(this, tr("Attention!"),
+									   tr("Signal was decected!"),
 									   QMessageBox::Cancel, QMessageBox::Ok);
 
 		_rett = -101;
@@ -459,9 +464,9 @@ void GraphicWidget::_slotSSCorrelation()
 	CommandMessage *msg = new CommandMessage(COMMAND_KM, _enable_correlation);
 	_tab->set_command(msg);
 	if(_enable_correlation)
-		m_graphicsContextMenu->actions().at(3)->setText("Îòêëþ÷èòü êîððåëÿöèþ");
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	else
-		m_graphicsContextMenu->actions().at(3)->setText("Âêëþ÷èòü êîððåëÿöèþ");
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 void GraphicWidget::_slotClearLabels()

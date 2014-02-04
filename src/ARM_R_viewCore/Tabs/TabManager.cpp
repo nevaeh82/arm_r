@@ -26,7 +26,7 @@ TabManager::~TabManager()
     }
     if(_map_tabs.count() > 0)
     {
-        QMap<int, TabSpectrum *>::iterator its;
+		QMap<int, TabSpectrumWidget*>::iterator its;
         for(its = _map_tabs.begin(); its != _map_tabs.end(); ++its)
         {
             delete its.value();
@@ -80,7 +80,7 @@ int TabManager::createSubModules(const QString& settingsFile)
     QMap<int, TabsProperty* >::iterator it;
     for(it = _map_settings.begin(); it != _map_settings.end(); ++it)
     {
-        TabSpectrum* tab_sp = new TabSpectrum(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
+		TabSpectrumWidget* tab_sp = new TabSpectrumWidget(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
 		int index = m_tabWidget->addTab(tab_sp, it.value()->get_name());
 
 		/// TODO: update
@@ -116,7 +116,7 @@ QString TabManager::getStationName(int id)
 /// call this method when data in tree has changed
 void TabManager::send_data(int pid, IMessage *msg)
 {
-	TabSpectrum* tab_sp = static_cast<TabSpectrum* >(m_tabWidget->widget(pid));
+	TabSpectrumWidget* tab_sp = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(pid));
     tab_sp->set_command(msg);
 }
 
@@ -136,7 +136,7 @@ void TabManager::changeTabSlot(int index)
     }
     _current_tab_widget->stop();
 
-	_current_tab_widget = static_cast<TabSpectrum* >(m_tabWidget->widget(index));
+	_current_tab_widget = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(index));
     _current_tab_widget->start();
     TabsProperty *prop = _current_tab_widget->get_tab_property();
 
@@ -176,7 +176,7 @@ int TabManager::readSettings(const QString& settingsFile)
 
 void TabManager::checkStatus()
 {
-    QMap<int, TabSpectrum* >::iterator it;
+	QMap<int, TabSpectrumWidget* >::iterator it;
     for(it = _map_tabs.begin(); it != _map_tabs.end(); ++it)
     {
         it.value()->check_status();

@@ -16,7 +16,7 @@
 
 #include "TabsProperty.h"
 
-#include "TabSpectrum.h"
+#include "TabSpectrumWidget.h"
 
 //#include "Tree/Controller.h"
 
@@ -41,7 +41,7 @@ private:
 	unsigned int    _id;
 	QString         _name;
 	QMap<int, TabsProperty *>   _map_settings;
-	QMap<int, TabSpectrum* >    _map_tabs;
+	QMap<int, TabSpectrumWidget* >    _map_tabs;
 	ICommonComponents*          _common_spectra;
 	ICommonComponents*          _common_correlations;
 
@@ -49,7 +49,7 @@ private:
 
 	TreeModel*                  _model_spectrum;
 
-	TabSpectrum*                _current_tab_widget;
+	TabSpectrumWidget*                _current_tab_widget;
 
 	QMutex                      m_mutex;
 

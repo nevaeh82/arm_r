@@ -39,8 +39,10 @@ class GraphicWidget : public QWidget, public IGraphicWidget
 {
     Q_OBJECT
 public:
-    GraphicWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0, ITabSpectrum *tab = 0);
+	GraphicWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
     ~GraphicWidget();
+
+	void setTab(ITabSpectrum* tab);
 
 private:
 	Ui::GraphicsWidget*     ui;

@@ -37,15 +37,24 @@
 
 #include "Controls/ControlPRM.h"
 
-#include "../Controls/ControlPanelWidgets.h"
-#include "../Controls/ButtonShowPanel.h"
+#include "Controls/ControlPanelWidgets.h"
+#include "Controls/ButtonShowPanel.h"
 
-class TabSpectrum: public QWidget, public ISubModule, public ITabSpectrum
+namespace Ui {
+class TabSpectrumWidget;
+}
+
+
+class TabSpectrumWidget: public QWidget, public ISubModule, public ITabSpectrum
 {
+
+private:
+	Ui::TabSpectrumWidget*     ui;
+
     Q_OBJECT
 public:
-    TabSpectrum(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents* common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager);
-    ~TabSpectrum();
+	TabSpectrumWidget(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents* common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager);
+	~TabSpectrumWidget();
 
 private:
     int                 _id;
@@ -53,27 +62,27 @@ private:
     TabsProperty*       _tab_property;
     ICommonComponents*  _common_components;
     ICommonComponents*  _common_correlations;
-    GraphicWidget*      _spectrumWidget;
+	//GraphicWidget*      _spectrumWidget;
     GraphicData*        _spectrumData;
 
 
-    QHBoxLayout*        _hboxlayout;
+	//QHBoxLayout*        _hboxlayout;
 
-    TreeView*           _tree_view;
+	//TreeView*           _tree_view;
 
     IDBManager*          _db_manager;
 
-    TreeModel*          _model;
+	TreeModel*          _model;
 
     RPCClient*          _rpc_client1;
 
     QMap<int, IGraphicWidget *>*     _map_correlation_widget;
     ITabManager*        _tab_manager;
 
-    QVBoxLayout*        _vboxlayout;
+	//QVBoxLayout*        _vboxlayout;
 
     ControlPRM*         _controlPRM;
-    QDockWidget*        _dock_controlPRM;
+	//QDockWidget*        _dock_controlPRM;
 
     double              _threshold;
 
@@ -83,13 +92,13 @@ private:
 
     ControlPanelWidgets*    _control_widget;
 
-    QStackedWidget*         _view_stacked_widget;
-    QWidget*                _com_spectra_widget;
+	//QStackedWidget*         _view_stacked_widget;
+	//QWidget*                _com_spectra_widget;
 
-    QGridLayout*            _gl_spectra;
+	//QGridLayout*            _gl_spectra;
 
-    QWidget*                _com_spectrum_widget;
-    QGridLayout*            _gl_spectrum;
+   // QWidget*                _com_spectrum_widget;
+	//QGridLayout*            _gl_spectrum;
 
     int                     _current_stecked_widget;
 

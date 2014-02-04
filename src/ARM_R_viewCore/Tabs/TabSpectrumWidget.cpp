@@ -1,13 +1,17 @@
-#include "TabSpectrum.h"
+#include "TabSpectrumWidget.h"
 #include <QDebug>
 
-TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager) :
-    _control_widget(NULL),
-    _current_stecked_widget(0)
-{
+#include "ui_TabSpectrumWidget.h"
 
-    _view_stacked_widget = new QStackedWidget();
-    _view_stacked_widget->setContentsMargins(0, 0, 0, 0);
+TabSpectrumWidget::TabSpectrumWidget(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager) :
+    _control_widget(NULL),
+	_current_stecked_widget(0),
+	ui(new Ui::TabSpectrumWidget)
+{
+	ui->setupUi(this);
+
+	//_view_stacked_widget = new QStackedWidget();
+	//_view_stacked_widget->setContentsMargins(0, 0, 0, 0);
 
     _pm_round_red = new QPixmap(":/images/signals/images/bullet_red.png");
     _pm_round_green = new QPixmap(":/images/signals/images/bullet_green.png");
@@ -30,19 +34,22 @@ TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_component
     _id = _tab_property->get_id();
     _name = _tab_property->get_name();
 
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+	//setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-    _spectrumWidget = NULL;
+	//_spectrumWidget = NULL;
     _rpc_client1 = NULL;
-    _tree_view = NULL;
-    _dock_controlPRM = NULL;
 
-    _vboxlayout = new QVBoxLayout();
-    _hboxlayout = new QHBoxLayout();
+
+	//_tree_view = NULL;
+
+	//_dock_controlPRM = NULL;
+
+	//_vboxlayout = new QVBoxLayout();
+	//_hboxlayout = new QHBoxLayout();
 
     start();
 
-    this->setLayout(_hboxlayout);
+	//this->setLayout(_hboxlayout);
 
     connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QVector<QPointF>)), this, SLOT(_slot_get_points_from_rpc(QVector<QPointF>)));
 
@@ -52,12 +59,14 @@ TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_component
 //    {
 //        _vboxlayout->addWidget(static_cast<CorrelationWidget *>(_common_correlations->get(i)));
 //    }
-    _hboxlayout->insertLayout(2, _vboxlayout, Qt::AlignRight);
+
+
+	//_hboxlayout->insertLayout(2, _vboxlayout, Qt::AlignRight);
 
 
 }
 
-TabSpectrum::~TabSpectrum()
+TabSpectrumWidget::~TabSpectrumWidget()
 {
     emit signalStopRPC();
 //    delete _spectrumWidget;
@@ -67,20 +76,21 @@ TabSpectrum::~TabSpectrum()
     {
         delete _control_widget;
     }
-    delete _tree_view;
-    delete _view_stacked_widget;
 
-    if(_dock_controlPRM != NULL)
+	//delete _tree_view;
+	//delete _view_stacked_widget;
+
+	/*if(_dock_controlPRM != NULL)
     {
         delete _controlPRM;
         delete _dock_controlPRM;
-    }
+	}*/
 
-    delete _vboxlayout;
-    delete _hboxlayout;
+	//delete _vboxlayout;
+	//delete _hboxlayout;
 }
 
-int TabSpectrum::_init()
+int TabSpectrumWidget::_init()
 {
     int error = createView(this);
     if(error != 0)
@@ -103,22 +113,25 @@ int TabSpectrum::_init()
     return 0;
 }
 
-int TabSpectrum::start()
+int TabSpectrumWidget::start()
 {
 //    view = new QWidget(this);
 //    view->setMinimumSize(this->width(), this->height());
 //    view->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
 //    _hboxlayout->removeItem(_vboxlayout);
-    CorrelationWidget *w;
+
+	/// TODO: update
+	/*CorrelationWidget *w;
     for(int i = 0; i < _common_correlations->count(0); i++)
     {
         w = static_cast<CorrelationWidget *>(_common_correlations->get(i));
         w->clear();
         _vboxlayout->addWidget(w);
-    }
+	}*/
 
-    switch(_current_stecked_widget)
+
+	/*switch(_current_stecked_widget)
     {
     case 0:
         _slot_show_spectrum();
@@ -128,8 +141,8 @@ int TabSpectrum::start()
         break;
     default:
         _slot_show_spectrum();
-        break;
-    }
+		break;
+	}*/
 
 //    _hboxlayout->re 1, _vboxlayout, Qt::AlignRight);
 
@@ -138,33 +151,37 @@ int TabSpectrum::start()
     return 0;
 }
 
-int TabSpectrum::stop()
+int TabSpectrumWidget::stop()
 {    
 //    emit signalStopRPC();
-    for(int i = 0; i < _common_correlations->count(0); i++)
+
+	/// TODO: recheck
+
+	/*for(int i = 0; i < _common_correlations->count(0); i++)
     {
         _vboxlayout->removeWidget(static_cast<CorrelationWidget *>(_common_correlations->get(i)));
-    }
+	}*/
+
 //    _hboxlayout->removeItem(_vboxlayout);
 
     return 0;
 }
 
-void TabSpectrum::show()
+void TabSpectrumWidget::show()
 {
     //_model->fill_model(this->_id);
-    _spectrumWidget->setup();
+	ui->graphicsWidget->setup();
 //    emit signalStartRPC();
     this->show();
 }
 
-void TabSpectrum::hide()
+void TabSpectrumWidget::hide()
 {
 //    emit signalStopRPC();
     this->hide();
 }
 
-int TabSpectrum::createRPC()
+int TabSpectrumWidget::createRPC()
 {
     _rpc_client1 = new RPCClient(_tab_property, _db_manager, this, _spectrumData, _controlPRM);
     QThread *thread_rpc_client = new QThread;
@@ -195,22 +212,25 @@ int TabSpectrum::createRPC()
     return 0;
 }
 
-int TabSpectrum::closeRPC()
+int TabSpectrumWidget::closeRPC()
 {
     emit signalFinishRPC();
     return 0;
 }
 
-int TabSpectrum::createView(QWidget* view)
+int TabSpectrumWidget::createView(QWidget* view)
 {
-    _spectrumWidget = new GraphicWidget(0,0,_tab_property->get_name(), _id, this);//( _tab_property->get_ip_prm300(), _tab_property->get_ip_adc(), _tab_property->get_port_adc(), this, view);
+   // _spectrumWidget = new GraphicWidget(0,0,_tab_property->get_name(), _id, this);//( _tab_property->get_ip_prm300(), _tab_property->get_ip_adc(), _tab_property->get_port_adc(), this, view);
+	ui->graphicsWidget->setTab(this);
+
 
     connect(this, SIGNAL(signalDoubleClicked(int,double,double)), this, SLOT(_slot_double_clicked(int,double,double)));
     /// add to common spectra
-    _common_components->set(_id, _spectrumWidget);
+	_common_components->set(_id, ui->graphicsWidget);
 
 
-    _controlPRM = new ControlPRM(0, this);
+	/// TODO: update
+	/*_controlPRM = new ControlPRM(0, this);
     _dock_controlPRM = new QDockWidget(tr("Управление ПРМ300В"), this);
     _dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
     _dock_controlPRM->setWidget(_controlPRM);
@@ -218,7 +238,9 @@ int TabSpectrum::createView(QWidget* view)
     connect(_dock_controlPRM, SIGNAL(visibilityChanged(bool)), this, SLOT(_slot_show_controlPRM(bool)));
 
     _dock_controlPRM->hide();
-    _hboxlayout->insertWidget(0, _dock_controlPRM, Qt::AlignLeft);
+	_hboxlayout->insertWidget(0, _dock_controlPRM, Qt::AlignLeft);*/
+
+
 //    _controlPRM->slotShow();
 
 //    QGridLayout *l = new QGridLayout();
@@ -230,7 +252,12 @@ int TabSpectrum::createView(QWidget* view)
 //    _hboxlayout->addLayout(hbox);
 //    _view_stacked_widget->addWidget(_spectrumWidget);
 
-    _hboxlayout->insertWidget(1, _view_stacked_widget, Qt::AlignJustify);
+	//
+
+	///TODO: update
+	///_hboxlayout->insertWidget(1, _view_stacked_widget, Qt::AlignJustify);
+
+
 //    _spectrumWidget->setLayout(this->layout());
 
 
@@ -249,11 +276,11 @@ int TabSpectrum::createView(QWidget* view)
 //    }
 
 
-    _spectrumData = new GraphicData(_spectrumWidget, _common_correlations, _tab_manager, _id);
+	_spectrumData = new GraphicData(ui->graphicsWidget, _common_correlations, _tab_manager, _id);
 
 
-    connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), _spectrumWidget, SLOT(_slotSetFFTSetup(float*,float*)));
-    connect(_spectrumData, SIGNAL(signalData(float*,float*)), _spectrumWidget, SLOT(_slotSetFFT(float*,float*)));
+	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), ui->graphicsWidget, SLOT(_slotSetFFTSetup(float*,float*)));
+	connect(_spectrumData, SIGNAL(signalData(float*,float*)), ui->graphicsWidget, SLOT(_slotSetFFT(float*,float*)));
 
     //_common_components->set(_id, _spectrumWidget);
 
@@ -274,7 +301,9 @@ int TabSpectrum::createView(QWidget* view)
 //    _hboxlayout->insertLayout(-1, vboxlayout);
 
     _current_stecked_widget = 0;
-    _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
+
+	///TODO: update
+	//_view_stacked_widget->setCurrentIndex(_current_stecked_widget);
 
     _init_spectrum();
     _init_spectra();
@@ -284,26 +313,27 @@ int TabSpectrum::createView(QWidget* view)
     return 0;
 }
 
-int TabSpectrum::createTree()
+int TabSpectrumWidget::createTree()
 {
-    _tree_view = new TreeView();
-    _tree_view->setMinimumWidth(200);
-    _tree_view->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+	//_tree_view = new TreeView();
+	//_tree_view->setMinimumWidth(200);
+   // _tree_view->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
 
-    _tree_view->get_tree()->setMinimumWidth(200);
+   // _tree_view->get_tree()->setMinimumWidth(200);
 
-    _tree_view->get_tree()->header()->setResizeMode(QHeaderView::ResizeToContents);
+   // _tree_view->get_tree()->header()->setResizeMode(QHeaderView::ResizeToContents);
 
     if(_id == 0)
     _model->fill_model(this->_id);
 
-    _tree_view->get_tree()->setModel(_model);
+	ui->settingsTreeView->setModel(_model);
 
-    _control_widget = new ControlPanelWidgets(_tree_view->get_tree());
+	_control_widget = new ControlPanelWidgets( ui->settingsTreeView);
     connect(_control_widget->tb_spectra, SIGNAL(clicked()), this, SLOT(_slot_show_spectra()));
     connect(_control_widget->tb_spectrum, SIGNAL(clicked()), this, SLOT(_slot_show_spectrum()));
 
-    ButtonShowPanel *pb = new ButtonShowPanel(_tree_view->get_tree());
+	/// TODO: reckeck
+	/*ButtonShowPanel *pb = new ButtonShowPanel( ui->settingsTreeView);
     pb->setMaximumHeight(30);
     pb->setMaximumWidth(30);
     pb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -313,37 +343,40 @@ int TabSpectrum::createTree()
     gbox2->setSpacing(0);
     gbox2->addWidget(pb, 0, 0, Qt::AlignRight | Qt::AlignTop);
 
-    pb->setMouseTracking(true);
+	pb->setMouseTracking(true);*
 
-    _tree_view->get_tree()->setLayout(gbox2);
+	//_tree_view->get_tree()->setLayout(gbox2);
 
-    connect(pb, SIGNAL(signalPanelShow()), _control_widget, SLOT(slotShow()));
+	connect(pb, SIGNAL(signalPanelShow()), _control_widget, SLOT(slotShow()));*/
 
-    connect(_tree_view, SIGNAL(signalResize(int,int)), _control_widget, SLOT(slotSetSize(int,int)));
+	//connect(_tree_view, SIGNAL(signalResize(int,int)), _control_widget, SLOT(slotSetSize(int,int)));
 
-    _tree_view->get_tree()->header()->setResizeMode(QHeaderView::ResizeToContents);
+	//_tree_view->get_tree()->header()->setResizeMode(QHeaderView::ResizeToContents);
 
 
 //    QHBoxLayout *hbox = new QHBoxLayout();
 //    hbox->addWidget(_tree_view, Qt::AlignRight);
 //    _hboxlayout->addLayout(hbox, Qt::AlignRight);
-    _hboxlayout->insertWidget(-1, _tree_view, Qt::AlignRight);
+
+
+	//_hboxlayout->insertWidget(-1, _tree_view, Qt::AlignRight);
     return 0;
 }
 
-void TabSpectrum::set_indicator(int state)
+void TabSpectrumWidget::set_indicator(int state)
 {
     emit signalChangeIndicator(state);
 }
 
-QLabel* TabSpectrum::get_indicator()
+QLabel* TabSpectrumWidget::get_indicator()
 {
     return _indicator;
 }
 
-void TabSpectrum::set_show_controlPRM(bool state)
+void TabSpectrumWidget::set_show_controlPRM(bool state)
 {
-    switch(state)
+	/// TODO: update
+	/*switch(state)
     {
     case true:
         _dock_controlPRM->show();
@@ -355,21 +388,21 @@ void TabSpectrum::set_show_controlPRM(bool state)
         _dock_controlPRM->show();
         break;
 
-    }
+	}*/
 }
 
-void TabSpectrum::set_double_clicked(int id, double d1, double d2)
+void TabSpectrumWidget::set_double_clicked(int id, double d1, double d2)
 {
     emit signalDoubleClicked(id, d1, d2);
 }
 
-TabsProperty* TabSpectrum::get_tab_property()
+TabsProperty* TabSpectrumWidget::get_tab_property()
 {
     return _tab_property;
 }
 
 
-void TabSpectrum::set_selected_area(QMap<int, QVariant> data)
+void TabSpectrumWidget::set_selected_area(QMap<int, QVariant> data)
 {
     QMap<QString, QVariant>* getting_data;
     QMap<int, QVariant>::iterator it;
@@ -382,26 +415,26 @@ void TabSpectrum::set_selected_area(QMap<int, QVariant> data)
     }
 }
 
-void TabSpectrum::set_command(IMessage *msg)
+void TabSpectrumWidget::set_command(IMessage *msg)
 {
     _rpc_client1->set_command(msg);
 }
 
 
 ///getting points from rpc (flakon)
-void TabSpectrum::set_points_rpc(QVector<QPointF> points)
+void TabSpectrumWidget::set_points_rpc(QVector<QPointF> points)
 {
 //    _spectrumWidget->_slotSetFFT(points, false);
 //    _spectrumWidget->setFFT(points, false);
     emit signalGetPointsFromRPCFlakon(points);
 }
 
-void TabSpectrum::set_thershold(double y)
+void TabSpectrumWidget::set_thershold(double y)
 {
     _threshold = y;
 }
 
-void TabSpectrum::check_status()
+void TabSpectrumWidget::check_status()
 {
     CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
     _tab_manager->send_data(_id, msg);
@@ -409,12 +442,12 @@ void TabSpectrum::check_status()
 
 
 /// in this thread set points from rpc
-void TabSpectrum::_slot_get_points_from_rpc(QVector<QPointF> points)
+void TabSpectrumWidget::_slot_get_points_from_rpc(QVector<QPointF> points)
 {
     _spectrumData->set_data(points, false);
 }
 
-void TabSpectrum::_slot_set_indicator(int state)
+void TabSpectrumWidget::_slot_set_indicator(int state)
 {
     switch(state)
     {
@@ -430,10 +463,12 @@ void TabSpectrum::_slot_set_indicator(int state)
     }
 }
 
-void TabSpectrum::_init_spectrum()
+void TabSpectrumWidget::_init_spectrum()
 {
-    _com_spectrum_widget = new QWidget();
-    _gl_spectrum = new QGridLayout();
+	///TODO: update
+	//_com_spectrum_widget = new QWidget();
+	//_gl_spectrum = new QGridLayout();
+
 
 //    _spectrumWidget = _tab_property->get_graphic_widget();//_map_spectra->value(_id_spectra);//new GraphicWidget(this);
 
@@ -441,19 +476,19 @@ void TabSpectrum::_init_spectrum()
 //    connect(_spectrumWidget, SIGNAL(selected(double, double, double, double)), this, SLOT(slotSelectedArea(double, double, double,double)));
 //    connect(_spectrumWidget, SIGNAL(signalChoosedThreshold(double)), this, SLOT(slotSetThreshold(double)));
 //    connect(_spectrumWidget, SIGNAL(signalAddSelToLists(int)), this, SLOT(slotAddToDBList(int)));
-    _gl_spectrum->addWidget(_spectrumWidget, 0, 0/*, Qt::AlignVCenter*/);
-    //_gl_spectrum->addWidget(_chb_setThreshold, 1, 0, Qt::AlignLeft | Qt::AlignTop);
 
-    _com_spectrum_widget->setLayout(_gl_spectrum);
-    _view_stacked_widget->addWidget(_com_spectrum_widget);
-    _current_stecked_widget = 0;
-    _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
+	///TODO: update
+	//_com_spectrum_widget->setLayout(_gl_spectrum);
+   // _view_stacked_widget->addWidget(_com_spectrum_widget);
+	//_current_stecked_widget = 0;
+	//_view_stacked_widget->setCurrentIndex(_current_stecked_widget);
 }
 
-void TabSpectrum::_init_spectra()
+void TabSpectrumWidget::_init_spectra()
 {
-    _com_spectra_widget = new QWidget();
-    _gl_spectra = new QGridLayout();
+	///TODO: update
+	/*_com_spectra_widget = new QWidget();
+	_gl_spectra = new QGridLayout();
 
     int i = 0;
     int j = 0;
@@ -481,12 +516,15 @@ void TabSpectrum::_init_spectra()
     _com_spectra_widget->setLayout(_gl_spectra);
     _view_stacked_widget->addWidget(_com_spectra_widget);
     _current_stecked_widget = 0;
-    _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
+	_view_stacked_widget->setCurrentIndex(_current_stecked_widget);*/
 
 }
 
-void TabSpectrum::_slot_show_spectra()
+void TabSpectrumWidget::_slot_show_spectra()
 {
+
+		///TODO: update
+  /*
     _dock_controlPRM->hide();
     IGraphicWidget *gr = _common_components->get(_id);
 
@@ -523,31 +561,33 @@ void TabSpectrum::_slot_show_spectra()
     _current_stecked_widget = 1;
     _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
 
-
+*/
 }
 
-void TabSpectrum::_slot_show_spectrum()
+void TabSpectrumWidget::_slot_show_spectrum()
 {
+		///TODO: update
+/*
     int id_view = 1;
     IGraphicWidget *gr = _common_components->get(_id);
     if(gr == NULL)
         return;
     _gl_spectrum->removeWidget(dynamic_cast<QWidget *>(gr));
-    _gl_spectrum->addWidget(dynamic_cast<QWidget *>(gr), 0, 0/*, Qt::AlignVCenter*/);
+	_gl_spectrum->addWidget(dynamic_cast<QWidget *>(gr), 0, 0);
 
 //    _models_controller->reset_model(_id_spectra, id_view);
 //    _models_controller->setupData();
 //    _view->setModel(_models_controller->get_model());
     _current_stecked_widget = 0;
-    _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
+	_view_stacked_widget->setCurrentIndex(_current_stecked_widget);*/
 }
 
-void TabSpectrum::_slot_show_controlPRM(bool state)
+void TabSpectrumWidget::_slot_show_controlPRM(bool state)
 {
-    _spectrumWidget->set_coontrolPRM_state(state);
+	ui->graphicsWidget->set_coontrolPRM_state(state);
 }
 
-void TabSpectrum::_slot_double_clicked(int id, double d1, double d2)
+void TabSpectrumWidget::_slot_double_clicked(int id, double d1, double d2)
 {
 //    if(id != _id)
 //    {

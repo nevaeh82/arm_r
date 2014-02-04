@@ -13,13 +13,14 @@ include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
 include(../../specs/logger.pri)
 
+INCLUDEPATH += $$PWD
+
 SOURCES += \
         CorrelationWidget.cpp \
         GraphicData.cpp \
         GraphicWidget.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
-	Tabs/TabSpectrum.cpp \
 	Common/CommonSpectra.cpp \
 	Tabs/Tree/TreeItem.cpp \
 	Tabs/Tree/TreeModel.cpp \
@@ -41,7 +42,8 @@ SOURCES += \
     MainWindow.cpp \
     MainWindowController.cpp \
     ControlPanel/ControlPanelWidget.cpp \
-    ControlPanel/ControlPanelController.cpp
+    ControlPanel/ControlPanelController.cpp \
+    Tabs/TabSpectrumWidget.cpp
 
 HEADERS += \
         CorrelationWidget.h \
@@ -55,7 +57,6 @@ HEADERS += \
 	Abstracts/ICommonComponents.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
-	Tabs/TabSpectrum.h \
 	Common/CommonSpectra.h \
 	Tabs/Tree/TreeItem.h \
 	Tabs/Tree/TreeModel.h \
@@ -92,13 +93,15 @@ HEADERS += \
     MainWindow.h \
     MainWindowController.h \
      ControlPanel/ControlPanelWidget.h \
-    ControlPanel/ControlPanelController.h
+    ControlPanel/ControlPanelController.h \
+    Tabs/TabSpectrumWidget.h
 
 FORMS += \
     ControlPanel.ui \
     MainWindow.ui \
     CorrelationWidget.ui \
-    GraphicsWidget.ui
+    GraphicsWidget.ui \
+    TabSpectrumWidget.ui
 	
 LIBS += -luser32
 

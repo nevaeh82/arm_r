@@ -119,9 +119,9 @@ void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_pea
 		ui->spectrumWidget->SetAlign(3);
 
 
-	ui->spectrumWidget->SetHorizontalLabel("m");
+	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
 
-	ui->spectrumWidget->Setup(true,_bandwidth,"Уровень", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+	ui->spectrumWidget->Setup(true,_bandwidth,tr("Level"), spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
 	ui->spectrumWidget->SetSpectrumVisible(1, true);
     _mux.unlock();
 }
