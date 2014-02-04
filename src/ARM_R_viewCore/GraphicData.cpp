@@ -181,7 +181,7 @@ void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 		_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
 //		list_alt.append(vecFFT.at(i).y());
 
-		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]))
+		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]) || (_spectrum_peak_hold[i] == 0))
 		{
 			_spectrum_peak_hold[i] = _spectrum[i];
 		}
@@ -200,7 +200,7 @@ void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 	if(m_needSetupSpectrum)
     {
 //        emit signalDataS(_spectrum, _spectrum_peak_hold);
-		qDebug() << _spectrum[8000];
+//		qDebug() << _spectrum[8000];
 		_gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, m_pointCountWhole/*vecFFT.size()*/, _bandwidth, isComplex);
 		m_needSetupSpectrum = false;
     }
@@ -226,8 +226,6 @@ void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool
 
     QString base = _tab_manager->getStationName(_id);
     QString second = _tab_manager->getStationName(point2);
-
-
 
     float* sp_correlation = _map_spectrum_corelation.value(cor_id);
     float* peaks_correlation = _map_peaks_correlation.value(cor_id);
@@ -272,8 +270,6 @@ void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool
     {
         _startx_cor = startx;
     }
-
-
 
     if(_needSetup)
     {
@@ -330,8 +326,6 @@ void GraphicData::m_slotPanoramaStart(double start, double end)
 
 	m_isPanaramaStart = true;
 	set_bandwidth(bandwidth);
-
-
 }
 
 void GraphicData::m_slotPanoramaStop()
