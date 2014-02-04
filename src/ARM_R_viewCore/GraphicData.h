@@ -33,6 +33,7 @@ public:
 	void set_panorama_stop();
 
 	int _find_index(qreal startx);
+	void m_dataProccess(QVector<QPointF> vecFFT, bool isComplex);
 private:
     ICommonComponents*      _common_correlations;
     ITabManager*            _tab_manager;

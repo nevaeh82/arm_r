@@ -2,6 +2,10 @@
 
 #include <QDebug>
 
+#define BANDWIDTH_SINGLE	20000000
+#define TO_KHZ				1000
+#define TO_HZ				1000000
+
 GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id)
 {
 	_PointCount = 0;
@@ -57,7 +61,7 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 
 GraphicData::~GraphicData()
 {
-    emit signalFinished();
+	emit signalFinished();
 }
 
 void GraphicData::set_data(QVector<QPointF> vecFFT, bool isComplex)
@@ -109,7 +113,7 @@ int GraphicData::_find_index(qreal startx)
 		if(startx > _list_startx.back() + 1)
 		{
 			_list_startx.push_back(startx);
-			return _list_startx.size();
+			return _list_startx.size() - 1;
 		}
 	}
 
@@ -132,23 +136,13 @@ int GraphicData::_find_index(qreal startx)
 	return index;
 }
 
-void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
 {
-    if(!_gr_widget->isGraphicVisible())
-        return;
-//	if(_bandwidth == 0)
-//		return;
-
-//	if(_pointCountWhole == 0)
-//		return;
-
 	_PointCount = vecFFT.size();
-//    float* spectrum = new float[PointCount];
 
-    qreal startx = vecFFT.at(0).x();
-    qreal endx = vecFFT.at(vecFFT.size() - 1).x();
-	double bandwidth = (endx - startx)*1000;
-//	m_slotSetBandwidth(bandwidth);
+	qreal startx = vecFFT.at(0).x();
+	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
+	double bandwidth = (endx - startx)*TO_KHZ;
 
 	if(m_bandwidthSingleSample != bandwidth && m_isPanaramaStart == false)
 	{
@@ -157,29 +151,16 @@ void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 		_needSetup = true;
 	}
 
-
-//    if(_bandwidth != bandwidth)
-//    {
-//        _bandwidth = bandwidth;
-//        delete[] _spectrum;
-//        _spectrum = new float[PointCount];
-
-//        delete[] _spectrum_peak_hold;
-//        _spectrum_peak_hold = new float[PointCount];
-//        _needSetup = true;
-//    }
-
-
-//	QMap<qreal, QList<qreal> >::iterator it = _map_spectrum.lowerBound(startx);
-
 	int index = _find_index(startx);
 
 
-//	QList<qreal> list_alt;
+	qDebug() << vecFFT.size();
+
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
 		_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
-//		list_alt.append(vecFFT.at(i).y());
+
+		qDebug() << index << i << _spectrum[index*vecFFT.size() + i];
 
 		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]) || (_spectrum_peak_hold[i] == 0))
 		{
@@ -187,29 +168,30 @@ void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 		}
 	}
 
-//	_map_spectrum.remove(it.key());
-//	_map_spectrum.insert(startx, list_alt);
+	if(_startx != startx)
+	{
+		_startx = startx;
+	}
 
 
+}
 
-    if(_startx != startx)
-    {
-        _startx = startx;
-    }
+void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
+{
+    if(!_gr_widget->isGraphicVisible())
+        return;
+
+	m_dataProccess(vecFFT, isComplex);
 
 	if(m_needSetupSpectrum)
-    {
-//        emit signalDataS(_spectrum, _spectrum_peak_hold);
-//		qDebug() << _spectrum[8000];
+	{
 		_gr_widget->setSignalSetup(_spectrum, _spectrum_peak_hold, m_pointCountWhole/*vecFFT.size()*/, _bandwidth, isComplex);
 		m_needSetupSpectrum = false;
-    }
-    else
-    {
-//        emit signalData(_spectrum, _spectrum_peak_hold);
-
-        _gr_widget->setSignal(_spectrum, _spectrum_peak_hold);
-    }
+	}
+	else
+	{
+		_gr_widget->setSignal(_spectrum, _spectrum_peak_hold);
+	}
 }
 
 void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool isComplex)
@@ -298,8 +280,11 @@ void GraphicData::m_slotSetBandwidth(double bandwidth)
 	if(_bandwidth != bandwidth)
 	{
 		_bandwidth = bandwidth;
-		int div = _bandwidth/20000000;
+		int div = _bandwidth/BANDWIDTH_SINGLE;
+		qDebug() << div << _PointCount;
 		m_pointCountWhole = _PointCount*div;
+		qDebug() << "m_pointCountWhole" << m_pointCountWhole;
+
 		delete[] _spectrum;
 		_spectrum = new float[m_pointCountWhole] ();
 
@@ -322,7 +307,7 @@ void GraphicData::m_slotPanoramaStart(double start, double end)
 		bandwidth = 20;
 	}
 
-	bandwidth *= 1000000;
+	bandwidth *= TO_HZ;
 
 	m_isPanaramaStart = true;
 	set_bandwidth(bandwidth);
