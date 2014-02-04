@@ -154,13 +154,13 @@ void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
 	int index = _find_index(startx);
 
 
-	qDebug() << vecFFT.size();
+//	qDebug() << vecFFT.size();
 
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
 		_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
 
-		qDebug() << index << i << _spectrum[index*vecFFT.size() + i];
+//		qDebug() << index << i << _spectrum[index*vecFFT.size() + i];
 
 		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]) || (_spectrum_peak_hold[i] == 0))
 		{
