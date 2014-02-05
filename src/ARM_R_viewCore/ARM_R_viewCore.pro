@@ -43,7 +43,8 @@ SOURCES += \
     MainWindowController.cpp \
     ControlPanel/ControlPanelWidget.cpp \
     ControlPanel/ControlPanelController.cpp \
-    Tabs/TabSpectrumWidget.cpp
+    Tabs/TabSpectrumWidget.cpp \
+    CorrelationGroupWidget.cpp
 
 HEADERS += \
         CorrelationWidget.h \
@@ -94,14 +95,16 @@ HEADERS += \
     MainWindowController.h \
      ControlPanel/ControlPanelWidget.h \
     ControlPanel/ControlPanelController.h \
-    Tabs/TabSpectrumWidget.h
+    Tabs/TabSpectrumWidget.h \
+    CorrelationGroupWidget.h
 
 FORMS += \
     ControlPanel.ui \
     MainWindow.ui \
     CorrelationWidget.ui \
     GraphicsWidget.ui \
-    TabSpectrumWidget.ui
+    TabSpectrumWidget.ui \
+    CorrelationGroupWidget.ui
 	
 LIBS += -luser32
 

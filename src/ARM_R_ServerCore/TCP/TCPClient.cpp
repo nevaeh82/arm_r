@@ -735,12 +735,13 @@ void TCPClient::set(QByteArray data)
 /// read settings from ini file
 void TCPClient::_read_settings()
 {
-	//QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QString app_dir = QCoreApplication::applicationDirPath();
-    app_dir.append("/TCP/coders.ini");
+	app_dir.append("./TCP/coders.ini");
     QSettings m_settings(app_dir, QSettings::IniFormat);
 
-   // m_settings.setIniCodec(codec);
+	m_settings.setIniCodec(codec);
+
     QString ip = "127.0.0.1";
     quint16 port = 1024;
 

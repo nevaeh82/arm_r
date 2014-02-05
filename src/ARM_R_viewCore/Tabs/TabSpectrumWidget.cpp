@@ -222,6 +222,7 @@ int TabSpectrumWidget::createView(QWidget* view)
 {
    // _spectrumWidget = new GraphicWidget(0,0,_tab_property->get_name(), _id, this);//( _tab_property->get_ip_prm300(), _tab_property->get_ip_adc(), _tab_property->get_port_adc(), this, view);
 	ui->graphicsWidget->setTab(this);
+	ui->graphicsWidget->setId(_id);
 
 
     connect(this, SIGNAL(signalDoubleClicked(int,double,double)), this, SLOT(_slot_double_clicked(int,double,double)));
@@ -567,8 +568,8 @@ void TabSpectrumWidget::_slot_show_spectra()
 void TabSpectrumWidget::_slot_show_spectrum()
 {
 		///TODO: update
-/*
-    int id_view = 1;
+
+	/*int id_view = 1;
     IGraphicWidget *gr = _common_components->get(_id);
     if(gr == NULL)
         return;

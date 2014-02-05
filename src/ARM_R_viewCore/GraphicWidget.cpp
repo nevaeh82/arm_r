@@ -122,12 +122,17 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 
 GraphicWidget::~GraphicWidget()
 {
-	delete m_graphicsContextMenu;
+	//delete m_graphicsContextMenu;
 }
 
 void GraphicWidget::setTab(ITabSpectrum *tab)
 {
 	_tab = tab;
+}
+
+void GraphicWidget::setId(const int id)
+{
+	_id = id;
 }
 
 void GraphicWidget::mouseDoubleClickEvent( QMouseEvent * event )

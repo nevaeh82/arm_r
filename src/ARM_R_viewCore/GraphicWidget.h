@@ -43,6 +43,7 @@ public:
     ~GraphicWidget();
 
 	void setTab(ITabSpectrum* tab);
+	void setId(const int id);
 
 private:
 	Ui::GraphicsWidget*     ui;

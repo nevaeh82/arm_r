@@ -268,12 +268,10 @@ void RPCClient::_slotReconnection()
 bool RPCClient::readSettings(const QString& settingsFile)
 {
 
-	//QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
 	QSettings m_settings(settingsFile, QSettings::IniFormat);
 
-	//m_settings.setIniCodec(codec);
-
-	//m_settings.beginGroup(childKey);
+	m_settings.setIniCodec(codec);
 
 	_ip_RPC = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
 	_port_RPC = m_settings.value("RPC_UI/Port", 24500).toInt();

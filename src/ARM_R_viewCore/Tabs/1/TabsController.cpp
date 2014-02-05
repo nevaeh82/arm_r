@@ -14,7 +14,7 @@ int TabsController::createCommonComponents()
 {
 	//QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
     QString app_dir = QCoreApplication::applicationDirPath();
-    app_dir.append("/CommonComponents.ini");
+	app_dir.append("./CommonComponents.ini");
     QSettings m_settings(app_dir, QSettings::IniFormat);
 
    // m_settings.setIniCodec(codec);

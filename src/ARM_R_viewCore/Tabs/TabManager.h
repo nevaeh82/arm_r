@@ -54,7 +54,7 @@ private:
 	QMutex                      m_mutex;
 
 public:
-	//virtual int start();
+	virtual int start();
 
 	virtual int createSubModules(const QString& settingsFile);
 

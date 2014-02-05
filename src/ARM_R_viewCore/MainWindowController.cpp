@@ -58,6 +58,8 @@ void MainWindowController::init()
 	tabsSettingsFile.append("/Tabs/Tabs.ini");
 
 	m_tabManager->createSubModules(tabsSettingsFile);
+
+	m_tabManager->start();
 }
 
 void MainWindowController::serverFailedToStartSlot()
