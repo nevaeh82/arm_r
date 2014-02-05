@@ -384,11 +384,11 @@ void TabSpectrum::set_selected_area(QMap<int, QVariant> data)
     }
 }
 
-void TabSpectrum::set_command(int type, IMessage *msg)
+void TabSpectrum::set_command(TypeCommand type, IMessage *msg)
 {
 	switch(type)
 	{
-		case 1:
+		case graphic:
 			_rpc_client1->set_command(msg);
 			break;
 		case 2:
@@ -415,7 +415,7 @@ void TabSpectrum::set_thershold(double y)
 void TabSpectrum::check_status()
 {
     CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	_tab_manager->send_data(_id, 1, msg);
+	_tab_manager->send_data(_id, TypeCommand(graphic), msg);
 }
 
 void TabSpectrum::set_panorama(bool state)

@@ -120,7 +120,7 @@ public:
 
 public:
     virtual void set_selected_area(QMap<int, QVariant> data);
-	virtual void set_command(int type, IMessage *msg);
+	virtual void set_command(TypeCommand type, IMessage *msg);
     virtual void set_points_rpc(QVector<QPointF> points);
 
     virtual void set_thershold(double y);

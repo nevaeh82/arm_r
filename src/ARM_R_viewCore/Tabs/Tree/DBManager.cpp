@@ -52,29 +52,29 @@ int DBManager::set(QMap<QString, QVariant>* data)
 
     int id = data->value("id").toInt();
     int pid = data->value("pid").toInt();
-	int type = -1;
+	TypeCommand type = TypeCommand(unknown);
     CommandMessage *msg;
     switch(id)
     {
     case 0:
         msg = new CommandMessage(COMMAND_PRM_SET_FREQ, data->value("value"));
-		type = 1;
+		type = TypeCommand(graphic);
         break;
     case 5:
         msg = new CommandMessage(COMMAND_FLAKON_SET_MAIN_STATION_COR, data->value("value"));
-		type = 1;
+		type = TypeCommand(graphic);
         break;
     case 6:
         msg = new CommandMessage(COMMAND_FLAKON_SET_AVARAGE, data->value("value"));
-		type = 1;
+		type = TypeCommand(graphic);
         break;
 	case 7:
 		msg = new CommandMessage(COMMAND_SET_PANORAMA_START_VALUE, data->value("value"));
-		type = 2;
+		type = TypeCommand(panorama);
 		break;
 	case 8:
 		msg = new CommandMessage(COMMAND_SET_PANORAMA_END_VALUE, data->value("value"));
-		type = 2;
+		type = TypeCommand(panorama);
 		break;
 
     default:

@@ -119,7 +119,7 @@ QString TabManager::getStationName(int id)
 }
 
 /// call this method when data in tree has changed
-void TabManager::send_data(int pid, int type, IMessage *msg)
+void TabManager::send_data(int pid, TypeCommand type, IMessage *msg)
 {
 	TabSpectrum* tab_sp = static_cast<TabSpectrum* >(this->widget(pid));
 	tab_sp->set_command(type, msg);

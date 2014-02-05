@@ -59,8 +59,6 @@ RESOURCES += \
     $$PWD/modules/gui/multi_graphics/grafic.qrc \
     $$PWD/modules/gui/utilities/button_list.qrc \
     $$PWD/modules/gui/multi_graphics/labels/labels_resource.qrc
-	
-#LIBS += -luser32
 
 DEFINES += UNICODE
 DEFINES += _UNICODE

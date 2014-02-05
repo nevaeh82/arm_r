@@ -11,7 +11,8 @@ ProjectDir=$$PWD
 
 INCLUDEPATH += ../../tools/cxxtest
 
-HEADERS = teststreaming.h
+HEADERS += \
+    testGraphicsData.h
 
 include(../../specs/project.pri)
 include(../ARM_R_viewCore/reference.pri)
@@ -22,7 +23,3 @@ include(../../specs/qxt.pri)
 include(../TestShared/mksuite.pri)
 
 applyReferences()
-
-#LIBS += -luser32
-#DEFINES += UNICODE
-#DEFINES += _UNICODE

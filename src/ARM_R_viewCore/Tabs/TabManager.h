@@ -62,7 +62,7 @@ public:
 
 public:
     virtual QString getStationName(int id);
-	virtual void send_data(int pid, int type, IMessage* msg);
+	virtual void send_data(int pid, TypeCommand type, IMessage* msg);
     virtual void set_tab(int id);
 
 
