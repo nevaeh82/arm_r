@@ -22,13 +22,6 @@
 
 #include <QTimer>
 
-
-//#include "E:\Projects\Qt\Zaviruha7\src\Zaviruha\Graphics\modules\gui\multi_graphics\components_relation.h"
-//#include "E:\Projects\Qt\Zaviruha7\src\Zaviruha\Graphics\modules\gui\multi_graphics_spectrum_interface\mg_spectrum_interface.h"
-
-//#include "E:\Projects\Qt\MegaGragicQt\modules\gui\multi_graphics\components_relation.h"
-//#include "E:\Projects\Qt\MegaGragicQt\modules\gui\multi_graphics_spectrum_interface\mg_spectrum_interface.h"
-
 #include "../Graphics_ipp/modules/gui/multi_graphics/components_relation.h"
 #include "../Graphics_ipp/modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 

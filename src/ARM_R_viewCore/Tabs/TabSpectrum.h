@@ -120,12 +120,14 @@ public:
 
 public:
     virtual void set_selected_area(QMap<int, QVariant> data);
-    virtual void set_command(IMessage *msg);
+	virtual void set_command(TypeCommand type, IMessage *msg);
     virtual void set_points_rpc(QVector<QPointF> points);
 
     virtual void set_thershold(double y);
 
     virtual void check_status();
+
+	virtual void set_panorama(bool state);
 
 private:
     int _init();
@@ -148,16 +150,21 @@ signals:
 
     void signalDoubleClicked(int id, double, double);
 
+	void signalPanoramaState(bool state);
+
+
 private slots:
-    void _slot_get_points_from_rpc(QVector<QPointF> points);
+	void m_slot_get_points_from_rpc(QVector<QPointF> points);
 
-    void _slot_set_indicator(int state);
+	void m_slot_set_indicator(int state);
 
-    void _slot_show_spectra();
-    void _slot_show_spectrum();
-    void _slot_show_controlPRM(bool state);
+	void m_slot_show_spectra();
+	void m_slot_show_spectrum();
+	void m_slot_show_controlPRM(bool state);
 
-    void _slot_double_clicked(int id, double d1, double d2);
+	void m_slot_double_clicked(int id, double d1, double d2);
+
+	void m_slotPanoramaState(bool state);
 
 
 };

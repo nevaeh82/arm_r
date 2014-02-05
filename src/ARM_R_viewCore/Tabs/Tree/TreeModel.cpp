@@ -414,5 +414,6 @@ TreeModel::TreeModel(const QStringList &headers, QObject *parent)
          if(data->count() == 0)
              break;
          addChild(data, Qt::DisplayRole);
+//		 qDebug() << i << data;
      }while(data->count());
  }

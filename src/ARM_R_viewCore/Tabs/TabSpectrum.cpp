@@ -14,7 +14,7 @@ TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_component
     _indicator = new QLabel();
     _indicator->setFixedSize(16, 16);
     _indicator->setPixmap(_pm_round_red->scaled(16,16,Qt::KeepAspectRatio));
-    connect(this, SIGNAL(signalChangeIndicator(int)), this, SLOT(_slot_set_indicator(int)));
+	connect(this, SIGNAL(signalChangeIndicator(int)), this, SLOT(m_slot_set_indicator(int)));
 
     _threshold = -1;
     _common_correlations = common_correlations;
@@ -44,7 +44,7 @@ TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_component
 
     this->setLayout(_hboxlayout);
 
-    connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QVector<QPointF>)), this, SLOT(_slot_get_points_from_rpc(QVector<QPointF>)));
+	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QVector<QPointF>)), this, SLOT(m_slot_get_points_from_rpc(QVector<QPointF>)));
 
     _init();
 
@@ -53,6 +53,8 @@ TabSpectrum::TabSpectrum(TabsProperty* prop, ICommonComponents* common_component
 //        _vboxlayout->addWidget(static_cast<CorrelationWidget *>(_common_correlations->get(i)));
 //    }
     _hboxlayout->insertLayout(2, _vboxlayout, Qt::AlignRight);
+
+	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(m_slotPanoramaState(bool)));
 
 
 }
@@ -121,13 +123,13 @@ int TabSpectrum::start()
     switch(_current_stecked_widget)
     {
     case 0:
-        _slot_show_spectrum();
+		m_slot_show_spectrum();
         break;
     case 1:
-        _slot_show_spectra();
+		m_slot_show_spectra();
         break;
     default:
-        _slot_show_spectrum();
+		m_slot_show_spectrum();
         break;
     }
 
@@ -205,7 +207,7 @@ int TabSpectrum::createView(QWidget* view)
 {
     _spectrumWidget = new GraphicWidget(0,0,_tab_property->get_name(), _id, this);//( _tab_property->get_ip_prm300(), _tab_property->get_ip_adc(), _tab_property->get_port_adc(), this, view);
 
-    connect(this, SIGNAL(signalDoubleClicked(int,double,double)), this, SLOT(_slot_double_clicked(int,double,double)));
+	connect(this, SIGNAL(signalDoubleClicked(int,double,double)), this, SLOT(m_slot_double_clicked(int,double,double)));
     /// add to common spectra
     _common_components->set(_id, _spectrumWidget);
 
@@ -215,7 +217,7 @@ int TabSpectrum::createView(QWidget* view)
     _dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
     _dock_controlPRM->setWidget(_controlPRM);
 
-    connect(_dock_controlPRM, SIGNAL(visibilityChanged(bool)), this, SLOT(_slot_show_controlPRM(bool)));
+	connect(_dock_controlPRM, SIGNAL(visibilityChanged(bool)), this, SLOT(m_slot_show_controlPRM(bool)));
 
     _dock_controlPRM->hide();
     _hboxlayout->insertWidget(0, _dock_controlPRM, Qt::AlignLeft);
@@ -279,7 +281,7 @@ int TabSpectrum::createView(QWidget* view)
     _init_spectrum();
     _init_spectra();
 
-    _slot_show_spectrum();
+	m_slot_show_spectrum();
 
     return 0;
 }
@@ -300,8 +302,8 @@ int TabSpectrum::createTree()
     _tree_view->get_tree()->setModel(_model);
 
     _control_widget = new ControlPanelWidgets(_tree_view->get_tree());
-    connect(_control_widget->tb_spectra, SIGNAL(clicked()), this, SLOT(_slot_show_spectra()));
-    connect(_control_widget->tb_spectrum, SIGNAL(clicked()), this, SLOT(_slot_show_spectrum()));
+	connect(_control_widget->tb_spectra, SIGNAL(clicked()), this, SLOT(m_slot_show_spectra()));
+	connect(_control_widget->tb_spectrum, SIGNAL(clicked()), this, SLOT(m_slot_show_spectrum()));
 
     ButtonShowPanel *pb = new ButtonShowPanel(_tree_view->get_tree());
     pb->setMaximumHeight(30);
@@ -382,9 +384,18 @@ void TabSpectrum::set_selected_area(QMap<int, QVariant> data)
     }
 }
 
-void TabSpectrum::set_command(IMessage *msg)
+void TabSpectrum::set_command(TypeCommand type, IMessage *msg)
 {
-    _rpc_client1->set_command(msg);
+	switch(type)
+	{
+		case graphic:
+			_rpc_client1->set_command(msg);
+			break;
+		case 2:
+			break;
+		default:
+			break;
+	}
 }
 
 
@@ -404,17 +415,24 @@ void TabSpectrum::set_thershold(double y)
 void TabSpectrum::check_status()
 {
     CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-    _tab_manager->send_data(_id, msg);
+	_tab_manager->send_data(_id, TypeCommand(graphic), msg);
+}
+
+void TabSpectrum::set_panorama(bool state)
+{
+	emit signalPanoramaState(state);
+//	qDebug() << "PANORAMA = " << state;
 }
 
 
 /// in this thread set points from rpc
-void TabSpectrum::_slot_get_points_from_rpc(QVector<QPointF> points)
+void TabSpectrum::m_slot_get_points_from_rpc(QVector<QPointF> points)
 {
+//	if()
     _spectrumData->set_data(points, false);
 }
 
-void TabSpectrum::_slot_set_indicator(int state)
+void TabSpectrum::m_slot_set_indicator(int state)
 {
     switch(state)
     {
@@ -485,7 +503,7 @@ void TabSpectrum::_init_spectra()
 
 }
 
-void TabSpectrum::_slot_show_spectra()
+void TabSpectrum::m_slot_show_spectra()
 {
     _dock_controlPRM->hide();
     IGraphicWidget *gr = _common_components->get(_id);
@@ -526,7 +544,7 @@ void TabSpectrum::_slot_show_spectra()
 
 }
 
-void TabSpectrum::_slot_show_spectrum()
+void TabSpectrum::m_slot_show_spectrum()
 {
     int id_view = 1;
     IGraphicWidget *gr = _common_components->get(_id);
@@ -542,12 +560,12 @@ void TabSpectrum::_slot_show_spectrum()
     _view_stacked_widget->setCurrentIndex(_current_stecked_widget);
 }
 
-void TabSpectrum::_slot_show_controlPRM(bool state)
+void TabSpectrum::m_slot_show_controlPRM(bool state)
 {
     _spectrumWidget->set_coontrolPRM_state(state);
 }
 
-void TabSpectrum::_slot_double_clicked(int id, double d1, double d2)
+void TabSpectrum::m_slot_double_clicked(int id, double d1, double d2)
 {
 //    if(id != _id)
 //    {
@@ -556,6 +574,29 @@ void TabSpectrum::_slot_double_clicked(int id, double d1, double d2)
 //    }
 //    else if(_current_stecked_widget != 0)
 //    {
-        _slot_show_spectrum();
-//    }
+		m_slot_show_spectrum();
+		//    }
+}
+
+void TabSpectrum::m_slotPanoramaState(bool state)
+{
+	qDebug() << "slot Panorama = " << state;
+	QMap<QString, QVariant>* getting_data;
+	double start = 300;
+	double end = 300;
+	switch(state)
+	{
+		case true:
+			getting_data = _db_manager->get(7, _id);
+			start = getting_data->value("value").toDouble();
+			getting_data = _db_manager->get(8, _id);
+			end = getting_data->value("value").toDouble();
+			_spectrumData->set_panorama(start, end);
+			break;
+		case false:
+			_spectrumData->set_panorama_stop();
+			break;
+		default:
+			break;
+	}
 }

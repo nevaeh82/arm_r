@@ -79,6 +79,7 @@ QMap<QString, QVariant>* DBController::get_data(int id, int pid)
         for(int i = 0; i < rec.count(); i++)
         {
             map_result->insert(rec.fieldName(i), query.value(i));
+//			qDebug() << rec.fieldName(i);
         }
     }
     return map_result;

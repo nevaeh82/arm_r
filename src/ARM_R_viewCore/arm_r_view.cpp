@@ -48,7 +48,11 @@ ARM_R_view::ARM_R_view(QWidget *parent) :
     _create_actions();
     _create_menu();
 
-    _serviceNames.append("./ARM_R_Server");
+#ifdef QT_DEBUG
+	_serviceNames.append("./ARM_R_Serverd");
+#else
+	_serviceNames.append("./ARM_R_Server");
+#endif
 
     _start_services();
 }

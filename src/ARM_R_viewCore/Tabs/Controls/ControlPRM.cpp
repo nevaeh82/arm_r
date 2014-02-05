@@ -145,13 +145,13 @@ void ControlPRM::slotSetSize(int width, int height)
 void ControlPRM::_setAtt1(int value)
 {
     CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT1, QVariant::fromValue(value));
-    _tab->set_command(msg);
+	_tab->set_command(TypeCommand(graphic), msg);
 }
 
 void ControlPRM::_setAtt2(int value)
 {
     CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT2, QVariant::fromValue(value));
-    _tab->set_command(msg);
+	_tab->set_command(TypeCommand(graphic), msg);
 }
 
 void ControlPRM::_slotAtt1Up()
@@ -204,5 +204,5 @@ void ControlPRM::_slotAtt2Down()
 void ControlPRM::_slotSetFilter(int index)
 {
     CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_FILTER, QVariant::fromValue(index));
-    _tab->set_command(msg);
+	_tab->set_command(TypeCommand(graphic), msg);
 }

@@ -928,6 +928,90 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 #undef ChechX_continue
 }
 
+//QVector<double> Q_MG_Grid::MyMarkInterval( double start,double end,double WidthPix, double MinSpacePix, QVector<double>* Subdivision, double SubdivRate, bool isVertical)
+//{
+//#define NormalizeStartEndV if (qAbs(startV) > qAbs(endV)) { double t = endV;endV = startV;startV = t; }
+//	QVector<double> retVal;
+//	double startV = start;
+//	double endV = end;
+//	if (isVertical)
+//	{
+//		startV = start+VertInterpretSum;
+//		endV = end+VertInterpretSum;
+//	}
+//	else
+//	{
+//		startV = start+HorInterpretSum;
+//		endV = end+HorInterpretSum;
+//	}
+
+//	if ((startV < 0) && (endV > 0))
+//	{
+//		if (qAbs(startV) > endV)
+//		{
+//			double wPix = WidthPix - GetPixelByValue(end,isVertical);
+//			if (wPix < MinSpacePix) wPix = MinSpacePix;
+			
+//			QVector<double> tmpVal = MarkInterval(0,qAbs(startV),wPix,MinSpacePix,Subdivision,SubdivRate);
+//			int Count = tmpVal.count();
+//			for (int i =0; i < Count;i++)
+//			{
+//				tmpVal[i] = -tmpVal[i];
+//				if (-tmpVal[i] > endV) continue;
+//				tmpVal.append(-tmpVal[i]);
+//			}
+//			if ((DrawVSubDiv) || (DrawHSubDiv))
+//			{
+//				Count = Subdivision->count();
+//				for (int i =0; i < Count;i++)
+//				{
+//					Subdivision->replace(i,-Subdivision->at(i));
+//					if (-Subdivision->at(i) > endV) continue;
+//					Subdivision->append(-Subdivision->at(i));
+//				}
+//			}
+//			return tmpVal;
+//		}
+//		else
+//		{
+//			double wPix = WidthPix - GetPixelByValue(end,isVertical);
+//			if (wPix < MinSpacePix) wPix = MinSpacePix;
+
+//			QVector<double> tmpVal = MarkInterval(0,endV,wPix,MinSpacePix,Subdivision,SubdivRate);
+//			int Count = tmpVal.count();
+//			for (int i =0; i < Count;i++)
+//			{
+//				if (tmpVal[i] > qAbs(startV)) break;
+//				tmpVal.append(-tmpVal[i]);
+//			}
+//			if ((DrawVSubDiv) || (DrawHSubDiv))
+//			{
+//				Count = Subdivision->count();
+//				for (int i =0; i < Count;i++)
+//				{
+//					if (Subdivision->at(i) > qAbs(startV)) break;
+//					Subdivision->append(-Subdivision->at(i));
+//				}
+//			}
+//			return tmpVal;
+//		}
+//	}
+//	if ((startV >= 0) && (endV > 0))
+//	{
+//		NormalizeStartEndV
+//		return MarkInterval(startV,endV,WidthPix,MinSpacePix,Subdivision,SubdivRate);
+//	}
+//	if ((startV < 0) && (endV <= 0))
+//	{
+//		NormalizeStartEndV
+//		QVector<double> tmpVal = MarkInterval(qAbs(startV),qAbs(endV),WidthPix,MinSpacePix,Subdivision,SubdivRate);
+//		for (int i =0; i < tmpVal.count();i++)	tmpVal[i] = -tmpVal[i];
+//		if ((DrawVSubDiv) || (DrawHSubDiv))	for (int i =0; i < Subdivision->count();i++) Subdivision->replace(i,-Subdivision->at(i));
+//		return tmpVal;
+//	}
+//	return retVal;
+//#undef NormalizeStartEndV
+//}
 QVector<double> Q_MG_Grid::MyMarkInterval( double start,double end,double WidthPix, double MinSpacePix, QVector<double>* Subdivision, double SubdivRate, bool isVertical)
 {
 #define NormalizeStartEndV if (qAbs(startV) > qAbs(endV)) { double t = endV;endV = startV;startV = t; }
@@ -951,8 +1035,8 @@ QVector<double> Q_MG_Grid::MyMarkInterval( double start,double end,double WidthP
 		{
 			double wPix = WidthPix - GetPixelByValue(end,isVertical);
 			if (wPix < MinSpacePix) wPix = MinSpacePix;
-			
-			QVector<double> tmpVal = MarkInterval(0,qAbs(startV),wPix,MinSpacePix,Subdivision,SubdivRate);	
+
+			QVector<double> tmpVal = MarkInterval(0,qAbs(startV),wPix,MinSpacePix,Subdivision,SubdivRate);
 			int Count = tmpVal.count();
 			for (int i =0; i < Count;i++)
 			{
@@ -977,7 +1061,7 @@ QVector<double> Q_MG_Grid::MyMarkInterval( double start,double end,double WidthP
 			double wPix = WidthPix - GetPixelByValue(end,isVertical);
 			if (wPix < MinSpacePix) wPix = MinSpacePix;
 
-			QVector<double> tmpVal = MarkInterval(0,endV,wPix,MinSpacePix,Subdivision,SubdivRate);	
+			QVector<double> tmpVal = MarkInterval(0,endV,wPix,MinSpacePix,Subdivision,SubdivRate);
 			int Count = tmpVal.count();
 			for (int i =0; i < Count;i++)
 			{
@@ -4210,6 +4294,115 @@ QString FormatNanSecs( double NanSecs, double begin, double End, QString &outfor
 }
 
 
+//QVector<double> MarkInterval( double aStart, double aEnd, double WidthPix, double MinSpacePix, QVector<double>* Subdivision, double SubdivRate, double* OutStep )
+//{
+//	QVector<double> res;
+//	if(WidthPix == 0)return res;
+//	Q_ASSERT(WidthPix > 0);
+//	Q_ASSERT(aStart >= 0);
+//	Q_ASSERT(aEnd > 0);
+//	if(WidthPix < MinSpacePix)return res;
+//	double Start = qMin(aStart, aEnd);
+//	double End = qMax(aStart, aEnd);
+//	double Length = End-Start;
+//	double Scale = Length/WidthPix;
+//	double FirstSign;
+//	QString Text = QString("%1").arg(MinSpacePix*Scale, 50, 'f', 30, '0');
+
+//	bool Found = false;
+//	for(int i = 0; i < Text.size(); i++)
+//	{
+//		if(!Found)
+//		{
+//			if((Text[i] > '0') && (Text[i] <= '9'))
+//			{
+//				Found = true;
+//				Text[i] = '1';
+//			}
+//		}
+//		else
+//			if((Text[i] >= '0') && (Text[i] <= '9'))
+//				Text[i] = '0';
+//	}
+
+//	FirstSign = Text.toDouble()*10.0;
+
+//	double MinSpaceS = FirstSign;
+//	while(MinSpacePix*Scale < MinSpaceS*0.5)MinSpaceS *= 0.5;
+//	Q_ASSERT(MinSpaceS > 0.0);
+
+//	QString Start1 = QString("%1").arg(Start, 50, 'f', 30, '0');
+//	QString Start2 = QString("%1").arg(Start+MinSpaceS, 50, 'f', 30, '0');
+
+//	Found = false;
+//	for(int i = 0; i < Start1.size(); i++)
+//	{
+//		if(!Found)
+//		{
+//			if((Start1[i] != Start2[i]) && (Start2[i] != '0'))
+//			{
+//				Found = true;
+//				Start1[i] = '0';
+//			}
+//		}
+//		else
+//			if((Start1[i] >= '0') && (Start1[i] <= '9'))
+//				Start1[i] = '0';
+//	}
+
+//	double Current = Start1.toDouble();
+//	bool first_adequate_number = false;
+//	double SecondStart = 0;
+	
+//	if(Current >= Start)
+//	{
+//		if (!first_adequate_number)
+//		{
+//			first_adequate_number = true;
+//			SecondStart = Current;
+//		}
+//		res.append(Current);
+//	}
+
+//    {
+//        bool res_size_less_10000 = res.size() < 10000;  //  cache
+//        while((Current <= End) && res_size_less_10000)
+//        {
+//            Current += MinSpaceS;
+//            if(Current >= Start)
+//            {
+//                if (!first_adequate_number)
+//                {
+//                    first_adequate_number = true;
+//                    SecondStart = Current - MinSpaceS;
+//                }
+//                res.append(Current);
+//                res_size_less_10000 = res.size() < 10000;
+//            }
+//        }
+//        Q_ASSERT(first_adequate_number);
+//    }
+
+//	if(Subdivision)
+//	{
+//		double Current = SecondStart;//Start1.toDouble();
+//		int DivRate = 1.0/SubdivRate;
+//		int Num = 0;
+
+//		while((Current <= End) && (Subdivision->size() < 10000))
+//		{
+//			if(Num != 0)
+//				if(Current >= Start)
+//					Subdivision->append(Current);
+//			Current += MinSpaceS*SubdivRate;
+//			Num = ++Num % DivRate;
+//		}
+//	}
+
+//	if(OutStep) *OutStep = MinSpaceS;
+//	return res;
+//}
+
 QVector<double> MarkInterval( double aStart, double aEnd, double WidthPix, double MinSpacePix, QVector<double>* Subdivision, double SubdivRate, double* OutStep )
 {
 	QVector<double> res;
@@ -4269,7 +4462,7 @@ QVector<double> MarkInterval( double aStart, double aEnd, double WidthPix, doubl
 	double Current = Start1.toDouble();
 	bool first_adequate_number = false;
 	double SecondStart = 0;
-	
+
 	if(Current >= Start)
 	{
 		if (!first_adequate_number)
@@ -4280,24 +4473,24 @@ QVector<double> MarkInterval( double aStart, double aEnd, double WidthPix, doubl
 		res.append(Current);
 	}
 
-    {
-        bool res_size_less_10000 = res.size() < 10000;  //  cache
-        while((Current <= End) && res_size_less_10000)
-        {
-            Current += MinSpaceS;
-            if(Current >= Start)
-            {
-                if (!first_adequate_number)
-                {
-                    first_adequate_number = true;
-                    SecondStart = Current - MinSpaceS;
-                }
-                res.append(Current);
-                res_size_less_10000 = res.size() < 10000;
-            }
-        }
-        Q_ASSERT(first_adequate_number);
-    }
+	{
+		bool res_size_less_10000 = res.size() < 10000;  //  cache
+		while((Current <= End) && res_size_less_10000)
+		{
+			Current += MinSpaceS;
+			if(Current >= Start)
+			{
+				if (!first_adequate_number)
+				{
+					first_adequate_number = true;
+					SecondStart = Current - MinSpaceS;
+				}
+				res.append(Current);
+				res_size_less_10000 = res.size() < 10000;
+			}
+		}
+		Q_ASSERT(first_adequate_number);
+	}
 
 	if(Subdivision)
 	{
