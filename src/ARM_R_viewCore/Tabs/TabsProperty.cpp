@@ -1,6 +1,7 @@
 #include "TabsProperty.h"
 
-TabsProperty::TabsProperty()
+TabsProperty::TabsProperty(QObject *parent):
+	QObject(parent)
 {
     _grafic_widget = NULL;
 }

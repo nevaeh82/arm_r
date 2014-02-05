@@ -16,7 +16,7 @@ include(../../specs/logger.pri)
 INCLUDEPATH += $$PWD
 
 SOURCES += \
-        CorrelationWidget.cpp \
+        Correlations/CorrelationWidget.cpp \
         GraphicData.cpp \
         GraphicWidget.cpp \
 	Tabs/TabManager.cpp \
@@ -33,7 +33,6 @@ SOURCES += \
 	Tabs/Tree/DBCache.cpp \
 	Common/CommonCorrelations.cpp \
 	Tabs/Controls/ControlPRM.cpp \
-	Tabs/TabAtlant.cpp \
 	Tabs/RPC/RPCAtlant.cpp \
 	Controls/ControlPanelWidgets.cpp \
 	Controls/ButtonShowPanel.cpp \
@@ -44,10 +43,11 @@ SOURCES += \
     ControlPanel/ControlPanelWidget.cpp \
     ControlPanel/ControlPanelController.cpp \
     Tabs/TabSpectrumWidget.cpp \
-    CorrelationGroupWidget.cpp
+    Correlations/CorrelationGroupWidget.cpp \
+    Tabs/AtlantTabWidget.cpp
 
 HEADERS += \
-        CorrelationWidget.h \
+        Correlations/CorrelationWidget.h \
         GraphicData.h \
         GraphicWidget.h \
         ICorrelationWidget.h \
@@ -78,7 +78,6 @@ HEADERS += \
 	Common/CommonCorrelations.h \
 	Tabs/Controls/ControlPRM.h \
 	Tabs/Controls/IControlPRM.h \
-	Tabs/TabAtlant.h \
 	Tabs/RPC/RPCAtlant.h \
 	Tabs/ITabAtlant.h \
 	Controls/ControlPanelWidgets.h \
@@ -96,15 +95,17 @@ HEADERS += \
      ControlPanel/ControlPanelWidget.h \
     ControlPanel/ControlPanelController.h \
     Tabs/TabSpectrumWidget.h \
-    CorrelationGroupWidget.h
+    Correlations/CorrelationGroupWidget.h \
+    Tabs/AtlantTabWidget.h
 
 FORMS += \
     ControlPanel.ui \
     MainWindow.ui \
-    CorrelationWidget.ui \
+    Correlations/CorrelationWidget.ui \
     GraphicsWidget.ui \
     TabSpectrumWidget.ui \
-    CorrelationGroupWidget.ui
+    Correlations/CorrelationGroupWidget.ui \
+    AtlantTabWidget.ui
 	
 LIBS += -luser32
 

@@ -62,8 +62,10 @@ void GraphicData::set_def_modulation(QString modulation)
 
 void GraphicData::_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 {
-    if(!_gr_widget->isGraphicVisible())
+	if(!_gr_widget->isGraphicVisible()){
         return;
+	}
+
     int PointCount = vecFFT.size();
 //    float* spectrum = new float[PointCount];
 
@@ -121,8 +123,10 @@ void GraphicData::_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool 
     }
 
     IGraphicWidget* gr_correlation = _common_correlations->get(cor_id);//_map_correlation_widget->value(point2);
-    if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL)
-        return;
+
+	if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL) {
+		return;
+	}
 
     QString base = _tab_manager->getStationName(_id);
     QString second = _tab_manager->getStationName(point2);

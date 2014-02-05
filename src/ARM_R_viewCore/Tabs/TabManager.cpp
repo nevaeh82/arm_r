@@ -96,7 +96,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	checkStatus();
 
-	TabAtlant* atlant = new TabAtlant(/*_map_settings.value(6)*/);
+	AtlantTabWidget* atlant = new AtlantTabWidget(/*_map_settings.value(6)*/);
 
 	m_tabWidget->addTab(atlant, tr("Atlant"));
 
@@ -160,7 +160,7 @@ int TabManager::readSettings(const QString& settingsFile)
 	{
 		settings.beginGroup(childKey);
 
-		TabsProperty *prop = new TabsProperty();
+		TabsProperty *prop = new TabsProperty(this);
 
 		prop->set_id(settings.value("Id", 0).toInt());
 		prop->set_name(settings.value("Name", 0).toString());

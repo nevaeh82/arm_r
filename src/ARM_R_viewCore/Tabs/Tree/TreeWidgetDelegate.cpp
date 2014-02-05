@@ -29,13 +29,13 @@ TreeWidgetDelegate::TreeWidgetDelegate(QObject *parent) :
         file.close();
     }
 
-    _cb_items_main_op.push_back("Гал");
-    _cb_items_main_op.push_back("Пичора");
-    _cb_items_main_op.push_back("Набакиа");
-    _cb_items_main_op.push_back("Таглан");
-    _cb_items_main_op.push_back("Очамчир");
-    _cb_items_main_op.push_back("Папынрхуа");
-    _cb_items_main_op.push_back("Авто");
+	_cb_items_main_op.push_back(tr("Gal"));
+	_cb_items_main_op.push_back(tr("Pichora"));
+	_cb_items_main_op.push_back(tr("Nabakia"));
+	_cb_items_main_op.push_back(tr("Taglan"));
+	_cb_items_main_op.push_back(tr("Ochamchir"));
+	_cb_items_main_op.push_back(tr("Papinrhua"));
+	_cb_items_main_op.push_back(tr("Auto"));
 }
 
 QWidget *TreeWidgetDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -212,13 +212,13 @@ bool TreeWidgetDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 {
     QModelIndex ind = index.sibling(index.row(), 0);
     QString name = ind.data(Qt::DisplayRole).toString();
-    if(name == tr("Частота"))
+	if(name == tr("Frequency"))
         _cur_view = 1;
     else
-    if(name == tr("Ведущий ОП"))
+	if(name == tr("Leading OP"))
         _cur_view = 2;
     else
-    if(name == tr("Усреднение"))
+	if(name == tr("Averaging"))
         _cur_view = 3;
     else
         _cur_view = 0;

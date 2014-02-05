@@ -1,17 +1,16 @@
 #ifndef TABSPROPERTY_H
 #define TABSPROPERTY_H
 
+#include <QObject>
 #include <QString>
 #include <QMap>
 
-//#include "MainTab.h"
+#include "GraphicWidget.h"
 
-#include "../GraphicWidget.h"
-
-class TabsProperty
+class TabsProperty: public QObject
 {
 public:
-    TabsProperty();
+	TabsProperty(QObject* parent = NULL);
 
 private:
     /// punkt Id

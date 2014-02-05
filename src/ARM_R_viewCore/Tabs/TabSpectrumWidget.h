@@ -21,7 +21,7 @@
 #include "../GraphicWidget.h"
 #include "../GraphicData.h"
 
-#include "../CorrelationWidget.h"
+#include "Correlations/CorrelationWidget.h"
 
 #include "Tree/TreeView.h"
 

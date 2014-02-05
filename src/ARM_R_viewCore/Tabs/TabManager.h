@@ -26,7 +26,7 @@
 #include "ITabManager.h"
 
 /// ATLANT
-#include "TabAtlant.h"
+#include "AtlantTabWidget.h"
 
 class TabManager: public QObject, /*public IModuleController, */public ITabManager
 {

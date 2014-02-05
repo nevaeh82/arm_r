@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,1,1">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="CorrelationWidget" name="correlationWidget" native="true">
+    <widget class="CorrelationGroupWidget" name="correlationsGroupWidget" native="true">
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -69,15 +69,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CorrelationWidget</class>
-   <extends>QWidget</extends>
-   <header>CorrelationWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>GraphicWidget</class>
    <extends>QWidget</extends>
    <header>GraphicWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CorrelationGroupWidget</class>
+   <extends>QWidget</extends>
+   <header>Correlations/CorrelationGroupWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -60,7 +60,7 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString 
 
 
     connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
-	ui->spectrumWidget->SetHorizontalLabel("m");
+	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
 
 }
 
