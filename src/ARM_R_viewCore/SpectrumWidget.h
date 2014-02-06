@@ -32,21 +32,22 @@
 
 
 namespace Ui {
-class GraphicsWidget;
+class SpectrumWidget;
 }
 
-class GraphicWidget : public QWidget, public IGraphicWidget
+class SpectrumWidget : public QWidget, public IGraphicWidget
 {
     Q_OBJECT
 public:
-	GraphicWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
-    ~GraphicWidget();
+	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
+	~SpectrumWidget();
 
 	void setTab(ITabSpectrum* tab);
 	void setId(const int id);
+	void setSpectrumName(const QString& name);
 
 private:
-	Ui::GraphicsWidget*     ui;
+	Ui::SpectrumWidget*     ui;
 
     int                     _id;
     float                   *_spectrum_peak_hold;
@@ -141,6 +142,8 @@ signals:
     void signalSetLabelName(QString, QString);
 
     void signalSetControlPRMState(bool state);
+
+	void doubleClickedSignal(int);
 
 private:
     virtual void mouseDoubleClickEvent ( QMouseEvent * event );

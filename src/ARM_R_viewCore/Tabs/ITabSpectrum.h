@@ -6,12 +6,12 @@
 #include <QVariant>
 #include <QLabel>
 
-#include "../Common/IMessage.h"
+#include "Common/IMessage.h"
 
 class ITabSpectrum
 {
 public:
-    virtual ~ITabSpectrum(){};
+	virtual ~ITabSpectrum(){}
 
     virtual void set_selected_area(QMap<int, QVariant> data)        = 0; //1 - selection, 2 - central freq, 3 - begin freq, 4 - end freq
 
@@ -21,7 +21,7 @@ public:
     virtual void set_thershold(double y)                            = 0;
 
     virtual void set_indicator(int state)                           = 0;
-    virtual QLabel* get_indicator()                                 = 0;
+	//virtual QLabel* get_indicator()                                 = 0;
 
     virtual void set_show_controlPRM(bool state)                    = 0;
 

@@ -25,6 +25,8 @@
 
 #include "ITabManager.h"
 
+#include "TabSpectrumWidgetController.h"
+
 /// ATLANT
 #include "AtlantTabWidget.h"
 
@@ -41,7 +43,7 @@ private:
 	unsigned int    _id;
 	QString         _name;
 	QMap<int, TabsProperty *>   _map_settings;
-	QMap<int, TabSpectrumWidget* >    _map_tabs;
+	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
 	ICommonComponents*          _common_spectra;
 	ICommonComponents*          _common_correlations;
 
@@ -49,7 +51,7 @@ private:
 
 	TreeModel*                  _model_spectrum;
 
-	TabSpectrumWidget*                _current_tab_widget;
+	ITabWidget*                m_currentTabWidget;
 
 	QMutex                      m_mutex;
 

@@ -4,9 +4,9 @@
 #include <QString>
 #include <QMap>
 
-#include "../Abstracts/ICommonComponents.h"
+#include "Abstracts/ICommonComponents.h"
 
-#include "../GraphicWidget.h"
+#include "SpectrumWidget.h"
 
 class CommonSpectra: public ICommonComponents
 {

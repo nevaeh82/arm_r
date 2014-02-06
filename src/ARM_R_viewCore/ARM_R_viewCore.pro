@@ -18,7 +18,6 @@ INCLUDEPATH += $$PWD
 SOURCES += \
         Correlations/CorrelationWidget.cpp \
         GraphicData.cpp \
-        GraphicWidget.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
 	Common/CommonSpectra.cpp \
@@ -44,17 +43,18 @@ SOURCES += \
     ControlPanel/ControlPanelController.cpp \
     Tabs/TabSpectrumWidget.cpp \
     Correlations/CorrelationGroupWidget.cpp \
-    Tabs/AtlantTabWidget.cpp
+    Tabs/AtlantTabWidget.cpp \
+    Tabs/CommonSpectrumTabWidget.cpp \
+    SpectrumWidget.cpp \
+    Tabs/TabSpectrumWidgetController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
         GraphicData.h \
-        GraphicWidget.h \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \
 	Abstracts/IModuleController.h \
-	Abstracts/ISubModule.h \
 	Abstracts/ICommonComponents.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
@@ -96,19 +96,26 @@ HEADERS += \
     ControlPanel/ControlPanelController.h \
     Tabs/TabSpectrumWidget.h \
     Correlations/CorrelationGroupWidget.h \
-    Tabs/AtlantTabWidget.h
+    Tabs/AtlantTabWidget.h \
+    Tabs/CommonSpectrumTabWidget.h \
+    Abstracts/ITabWidget.h \
+    SpectrumWidget.h \
+    Tabs/TabSpectrumWidgetController.h
 
 FORMS += \
     ControlPanel.ui \
     MainWindow.ui \
     Correlations/CorrelationWidget.ui \
-    GraphicsWidget.ui \
     TabSpectrumWidget.ui \
     Correlations/CorrelationGroupWidget.ui \
-    AtlantTabWidget.ui
+    AtlantTabWidget.ui \
+    Tabs/CommonSpectrumTabWidget.ui \
+    SpectrumWidget.ui
 	
 LIBS += -luser32
 
 DEFINES += UNICODE
 DEFINES += _UNICODE
+
+OTHER_FILES +=
 

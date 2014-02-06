@@ -1,6 +1,6 @@
 #include "GraphicWidget.h"
 
-GraphicWidget::GraphicWidget(QString ipprm300, QString ipadc, quint16 portadc, ITabSpectrum *tab, QWidget *parent)
+SpectrumWidget::SpectrumWidget(QString ipprm300, QString ipadc, quint16 portadc, ITabSpectrum *tab, QWidget *parent)
     : QWidget( parent )
 {
 
@@ -23,10 +23,10 @@ GraphicWidget::GraphicWidget(QString ipprm300, QString ipadc, quint16 portadc, I
 
     rSpectr = new RSpectr;
 
-    rSpectr->CreateTestData(); // Только для отладки графики заполнение случайными числами всего массива
-//    rSpectr->CreateTestData(); // Только для отладки графики заполнение случайными числами всего массива
-//    rSpectr->CreateTestData(); // Только для отладки графики заполнение случайными числами всего массива
-//    rSpectr->CreateTestData(); // Только для отладки графики заполнение случайными числами всего массива
+    rSpectr->CreateTestData(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+//    rSpectr->CreateTestData(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+//    rSpectr->CreateTestData(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+//    rSpectr->CreateTestData(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     qSpectrItem = new QSpectrItem(this);
     qSpectrItem->SetRSpectr(rSpectr);
@@ -44,16 +44,16 @@ GraphicWidget::GraphicWidget(QString ipprm300, QString ipadc, quint16 portadc, I
     qHBoxLayout->addLayout(qVBoxLayout);
 //	qHBoxLayout->addStretch(1);
 
-    cbMinLevel = new QCheckBox(QString("Порог"));
-    cbMaxHistLevel = new QCheckBox(QString("Макс. уровень"));
-    cbAllView = new QCheckBox(QString("Показать все"));
-    pbResetMax = new QPushButton(QString("Сброс Макс"));
-    pbAttUp = new QPushButton(QString("Атт1 +"));
-    pbAttDn = new QPushButton(QString("Атт1 -"));
-    pbAtt2Up = new QPushButton(QString("Атт2 +"));
-    pbAtt2Dn = new QPushButton(QString("Атт2 -"));
-    pbStartScan = new QPushButton(QString("Старт скан"));
-    pbStopScan = new QPushButton(QString("Стоп скан"));
+    cbMinLevel = new QCheckBox(QString("пїЅпїЅпїЅпїЅпїЅ"));
+    cbMaxHistLevel = new QCheckBox(QString("пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"));
+    cbAllView = new QCheckBox(QString("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ"));
+    pbResetMax = new QPushButton(QString("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"));
+    pbAttUp = new QPushButton(QString("пїЅпїЅпїЅ1 +"));
+    pbAttDn = new QPushButton(QString("пїЅпїЅпїЅ1 -"));
+    pbAtt2Up = new QPushButton(QString("пїЅпїЅпїЅ2 +"));
+    pbAtt2Dn = new QPushButton(QString("пїЅпїЅпїЅ2 -"));
+    pbStartScan = new QPushButton(QString("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"));
+    pbStopScan = new QPushButton(QString("пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"));
 
     qVBoxLayout->addWidget(cbAllView);
     qVBoxLayout->addWidget(cbMinLevel);
@@ -127,7 +127,7 @@ GraphicWidget::GraphicWidget(QString ipprm300, QString ipadc, quint16 portadc, I
 ////////////
     statBad=statAll=statGood=statSend=0;
 ///
-// Из Init
+// пїЅпїЅ Init
     RecvMsgBuff.Init();
     SendMsgBuff.Init();
 
@@ -142,13 +142,13 @@ GraphicWidget::GraphicWidget(QString ipprm300, QString ipadc, quint16 portadc, I
     newData=true;
 }
 
-GraphicWidget::~GraphicWidget()
+SpectrumWidget::~SpectrumWidget()
 {
     emit signalFinished();
     delete rSpectr;
 }
 
-void GraphicWidget::resizeEvent(QResizeEvent *event)
+void SpectrumWidget::resizeEvent(QResizeEvent *event)
 {
     qDebug() << event;
 //	QRectF widgetRect = qSpectrView->childrenRect();
@@ -158,7 +158,7 @@ void GraphicWidget::resizeEvent(QResizeEvent *event)
     scene->update();
 }
 
-void GraphicWidget::mousePressEvent(QMouseEvent *)
+void SpectrumWidget::mousePressEvent(QMouseEvent *)
 {
 //	QRectF widgetRect = qSpectrView->childrenRect();
     QRectF widgetRect = qSpectrView->rect();
@@ -167,34 +167,34 @@ void GraphicWidget::mousePressEvent(QMouseEvent *)
 }
 
 /// to server
- void GraphicWidget::slotReadyReadADC()
+ void SpectrumWidget::slotReadyReadADC()
  {
  }
 
-///// Завируха
+///// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  /// to server set freq ADC
-void GraphicWidget::SendSetFreqADC(unsigned short aFreq)
+void SpectrumWidget::SendSetFreqADC(unsigned short aFreq)
 {
 }
 
 /// to server
-void GraphicWidget::SendSetFiltrADC(int aFiltr)
+void SpectrumWidget::SendSetFiltrADC(int aFiltr)
 {
 }
 
 /// to server
-void GraphicWidget::SendSetShift(float aShift)
+void SpectrumWidget::SendSetShift(float aShift)
 {
 }
 
 /// to server
-void GraphicWidget::SendStartADC(bool aIsStart)
+void SpectrumWidget::SendStartADC(bool aIsStart)
 {
 }
 
 
 
-void GraphicWidget::slotMinLevel()
+void SpectrumWidget::slotMinLevel()
 {
     if(cbMinLevel->isChecked())
     {
@@ -206,7 +206,7 @@ void GraphicWidget::slotMinLevel()
     }
 }
 
-void GraphicWidget::slotMaxHistLevel()
+void SpectrumWidget::slotMaxHistLevel()
 {
     if(cbMaxHistLevel->isChecked())
     {
@@ -218,7 +218,7 @@ void GraphicWidget::slotMaxHistLevel()
     }
 }
 
-void GraphicWidget::slotAllView()
+void SpectrumWidget::slotAllView()
 {
     if(cbAllView->isChecked())
     {
@@ -230,25 +230,25 @@ void GraphicWidget::slotAllView()
     }
 }
 
-void GraphicWidget::slotResetMax()
+void SpectrumWidget::slotResetMax()
 {
     rSpectr->ResetMax();
     scene->update();
 }
 
-void GraphicWidget::slotAttUp()
+void SpectrumWidget::slotAttUp()
 {
     SendSetAtt(1);
     SendGetFreqAtt();
 }
 
-void GraphicWidget::slotAttDn()
+void SpectrumWidget::slotAttDn()
 {
     SendSetAtt(0);
     SendGetFreqAtt();
 }
 
-void GraphicWidget::slotAtt2Up()
+void SpectrumWidget::slotAtt2Up()
 {
     if(m_att2 < 15)
     {
@@ -257,7 +257,7 @@ void GraphicWidget::slotAtt2Up()
     SendGetFreqAtt();
 }
 
-void GraphicWidget::slotAtt2Dn()
+void SpectrumWidget::slotAtt2Dn()
 {
     if(m_att2 > 0)
     {
@@ -266,18 +266,18 @@ void GraphicWidget::slotAtt2Dn()
     SendGetFreqAtt();
 }
 
-void GraphicWidget::slotStartScan()
+void SpectrumWidget::slotStartScan()
 {
     isScan=true;
 }
 
-void GraphicWidget::slotStopScan()
+void SpectrumWidget::slotStopScan()
 {
     isScan=false;
 }
 
 /// change indecation about connect to PRM
-void GraphicWidget::slotIpConnectedPRM()
+void SpectrumWidget::slotIpConnectedPRM()
 {
     isConnectedPRM = true;
     qSpectrItem->SetPrmData(ipPrm300, isConnectedPRM, m_frequ, 0, 0);
@@ -286,7 +286,7 @@ void GraphicWidget::slotIpConnectedPRM()
 }
 
 /// change indecation about connect to ADC
-void GraphicWidget::slotIpConnectedADC()
+void SpectrumWidget::slotIpConnectedADC()
 {
     isConnectedADC = true;
     SendStartADC(true);
@@ -295,13 +295,13 @@ void GraphicWidget::slotIpConnectedADC()
     scene->update();
 }
 
-void GraphicWidget::set_command(IMessage *msg)
+void SpectrumWidget::set_command(IMessage *msg)
 {
     _tab->set_command(msg);
 }
 
 /// change indecation about connect to PRM (disconnected)
-void GraphicWidget::slotIpErrorPRM()
+void SpectrumWidget::slotIpErrorPRM()
 {
     isConnectedPRM = false;
     qSpectrItem->SetPrmData(ipPrm300, isConnectedPRM, m_frequ, 0, 0);
@@ -310,7 +310,7 @@ void GraphicWidget::slotIpErrorPRM()
 }
 
 /// change indecation about connect to ADC (disconnected)
-void GraphicWidget::slotIpErrorADC()
+void SpectrumWidget::slotIpErrorADC()
 {
     isConnectedADC = false;
     qSpectrItem->SetPrmData(ipPrm300, isConnectedPRM, m_frequ, 0, 0);
@@ -319,7 +319,7 @@ void GraphicWidget::slotIpErrorADC()
 
 }
 
-void GraphicWidget::timerEvent(QTimerEvent *)
+void SpectrumWidget::timerEvent(QTimerEvent *)
 {
     if(isScan)
     {
@@ -338,38 +338,38 @@ void GraphicWidget::timerEvent(QTimerEvent *)
     Deal();
 }
 
-void GraphicWidget::Deal()
+void SpectrumWidget::Deal()
 {
     Protocol();
 }
 
 /// to server
-void GraphicWidget::SendGetFreqAtt()
+void SpectrumWidget::SendGetFreqAtt()
 {
 }
 
 /// to server
-void GraphicWidget::SendSetAtt(unsigned char att)
+void SpectrumWidget::SendSetAtt(unsigned char att)
 {
 }
 
 /// to server
-void GraphicWidget::SendSetAtt2(unsigned char att)
+void SpectrumWidget::SendSetAtt2(unsigned char att)
 {
 }
 
 /// to server
-void GraphicWidget::SendSetFreq(unsigned short freq)
+void SpectrumWidget::SendSetFreq(unsigned short freq)
 {
 }
 
 /// from server ?
-void GraphicWidget::Protocol()
+void SpectrumWidget::Protocol()
 {
 }
 
 
-void GraphicWidget::set(QVector<double> data)
+void SpectrumWidget::set(QVector<double> data)
 {
     _tab->set_selected_area(data);
 }

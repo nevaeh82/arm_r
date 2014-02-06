@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+#include "CommonSpectrumTabWidget.h"
+#include "TabSpectrumWidgetController.h"
+
 TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 	QObject(parent)
 {
@@ -24,10 +27,10 @@ TabManager::~TabManager()
 			delete it.value();
 		}
 	}
-	if(_map_tabs.count() > 0)
+	if(m_tabWidgetsMap.count() > 0)
 	{
-		QMap<int, TabSpectrumWidget*>::iterator its;
-		for(its = _map_tabs.begin(); its != _map_tabs.end(); ++its)
+		QMap<QString, ITabWidget*>::iterator its;
+		for(its = m_tabWidgetsMap.begin(); its != m_tabWidgetsMap.end(); ++its)
 		{
 			delete its.value();
 		}
@@ -48,13 +51,10 @@ int TabManager::start()
 {
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 
-	_current_tab_widget  = static_cast<TabSpectrumWidget* >(m_tabWidget->currentWidget());
-	_current_tab_widget->start();
-	//    _map_settings.value(this->currentIndex());
+	changeTabSlot(m_tabWidget->currentIndex());
+
 	return 0;
 }
-
-
 
 int TabManager::createSubModules(const QString& settingsFile)
 {
@@ -80,23 +80,48 @@ int TabManager::createSubModules(const QString& settingsFile)
 	QMap<int, TabsProperty* >::iterator it;
 	for(it = _map_settings.begin(); it != _map_settings.end(); ++it)
 	{
-		TabSpectrumWidget* tab_sp = new TabSpectrumWidget(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
-		int index = m_tabWidget->addTab(tab_sp, it.value()->get_name());
+		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
+		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
-		/// TODO: update
-		//m_tabWidget->tabBar()->setTabButton(i++, QTabBar::LeftSide, tab_sp->get_indicator());
+		tabController->appendView(tabSpectrumWidget);
+
+		int index = m_tabWidget->addTab(tabSpectrumWidget, it.value()->get_name());
+
 		QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 		if (tabBar != NULL) {
-			tabBar->setTabButton(index, QTabBar::LeftSide, tab_sp->get_indicator());
+			tabBar->setTabButton(index, QTabBar::LeftSide, tabSpectrumWidget->getIndicator());
 		}
 
-		_map_tabs.insert(it.key(), tab_sp);
+		m_tabWidgetsMap.insert(it.value()->get_name(), tabController);
 	}
 
 	checkStatus();
 
-	AtlantTabWidget* atlant = new AtlantTabWidget(/*_map_settings.value(6)*/);
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
+	commonTabSpectrumWidget->setCorrelationComponent(_common_correlations);
+
+	/// FOR FUTURE
+//	TabSpectrumWidgetController* commonTabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
+//	TabSpectrumWidget* commonTabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
+//	commonTabController->appendView(commonTabSpectrumWidget);
+
+	foreach(ITabWidget* widget, m_tabWidgetsMap) {
+
+		if (NULL != widget->getSpectrumWidget()) {
+			commonTabSpectrumWidget->insertSpectrumWidget(widget->getSpectrumWidget());
+		}
+	}
+
+	commonTabSpectrumWidget->deactivate();
+
+	int index = m_tabWidget->addTab(commonTabSpectrumWidget, tr("Common"));
+
+	QString tabName = m_tabWidget->tabText(index);
+	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
+
+
+	AtlantTabWidget* atlant = new AtlantTabWidget(m_tabWidget);
 
 	m_tabWidget->addTab(atlant, tr("Atlant"));
 
@@ -116,8 +141,18 @@ QString TabManager::getStationName(int id)
 /// call this method when data in tree has changed
 void TabManager::send_data(int pid, IMessage *msg)
 {
-	TabSpectrumWidget* tab_sp = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(pid));
-	tab_sp->set_command(msg);
+	QString tabName =m_tabWidget->tabText(pid);
+
+	ITabWidget* tabController = m_tabWidgetsMap.value(tabName, NULL);
+
+	if (NULL == tabController) {
+		return;
+	}
+
+	//TabSpectrumWidget* tab_sp = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(pid));
+
+	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
+	tabController1->set_command(msg);
 }
 
 void TabManager::set_tab(int id)
@@ -134,17 +169,34 @@ void TabManager::set_tab(int id)
 /// slot tab change
 void TabManager::changeTabSlot(int index)
 {
-	if(index > 5)
-	{
+	if (NULL != m_currentTabWidget) {
+		m_currentTabWidget->deactivate();
+	}
+
+	QString tabName = m_tabWidget->tabText(index);
+	m_currentTabWidget = m_tabWidgetsMap.value(tabName, NULL);
+
+	if (m_currentTabWidget == NULL) {
 		return;
 	}
-	_current_tab_widget->stop();
 
-	_current_tab_widget = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(index));
-	_current_tab_widget->start();
-	TabsProperty *prop = _current_tab_widget->get_tab_property();
+	m_currentTabWidget->activate();
 
+
+	///TODO: update
+	//_current_tab_widget = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(index));
+
+
+	//_current_tab_widget->activate();
+
+	//TabsProperty *prop = _current_tab_widget->get_tab_property();
+
+	//_model_spectrum->fill_model(prop->get_id());
+
+	TabSpectrumWidgetController* currentWidgetController = static_cast<TabSpectrumWidgetController* >(m_currentTabWidget);
+	TabsProperty *prop = currentWidgetController->get_tab_property();
 	_model_spectrum->fill_model(prop->get_id());
+
 }
 
 /// read settings for generated submodules (tabs)
@@ -180,9 +232,11 @@ int TabManager::readSettings(const QString& settingsFile)
 
 void TabManager::checkStatus()
 {
-	QMap<int, TabSpectrumWidget* >::iterator it;
-	for(it = _map_tabs.begin(); it != _map_tabs.end(); ++it)
+
+	///TODO: update
+	/*QMap<int, ITabWidget* >::iterator it;
+	for(it = tabWidgetsMap.begin(); it != tabWidgetsMap.end(); ++it)
 	{
 		it.value()->check_status();
-	}
+	}*/
 }

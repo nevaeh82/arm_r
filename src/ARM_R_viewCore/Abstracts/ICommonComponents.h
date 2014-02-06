@@ -8,7 +8,7 @@ class IGraphicWidget;
 class ICommonComponents : public QWidget
 {
 public:
-    virtual ~ICommonComponents(){};
+	virtual ~ICommonComponents(){}
     virtual int init(QString path_to_ini_file)              = 0;
     virtual int init(int count)                             = 0;
     virtual int set(int id, IGraphicWidget* widget)         = 0;

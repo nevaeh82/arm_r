@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TabSpectrumWidget</class>
- <widget class="QWidget" name="TabSpectrumWidget">
+ <class>CommonSpectrumTabWidget</class>
+ <widget class="QWidget" name="CommonSpectrumTabWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
-    <height>668</height>
+    <width>997</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,29 +19,11 @@
    </item>
    <item>
     <widget class="CorrelationGroupWidget" name="correlationsGroupWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
+     <layout class="QVBoxLayout" name="correlationWidgetsContainer"/>
     </widget>
    </item>
    <item>
-    <widget class="QTreeView" name="settingsTreeView">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-    </widget>
+    <widget class="QTreeView" name="settingsTreeView"/>
    </item>
   </layout>
  </widget>
