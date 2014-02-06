@@ -40,7 +40,7 @@ SonogramInterface::~SonogramInterface()
 
 void SonogramInterface::InitMainGraf()
 {
-	MainGraf = new Q_MultiGraphics(this,settings_);
+	MainGraf = new Q_MultiGraphics(this);
 	MainGraf->installEventFilter(this);
 	MainGraf->SpectrumMode = false;
 	MainGraf->VertStep = 2;

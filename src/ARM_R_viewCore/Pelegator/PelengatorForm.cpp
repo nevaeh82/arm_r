@@ -10,9 +10,9 @@ PelengatorForm::PelengatorForm(QWidget *parent) :
 
     _contr = new ControllerPelengator("127.0.0.1", 1195, "Detector");
 
-    QTextCodec *codec = QTextCodec::codecForName("CP1251");
+	/*QTextCodec *codec = QTextCodec::codecForName("CP1251");
     QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
+	QTextCodec::setCodecForCStrings(codec);*/
 
     this->setWindowTitle(tr("Настройка пеленгаторов"));
     QGridLayout *gl = new QGridLayout;

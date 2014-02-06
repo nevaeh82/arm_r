@@ -25,103 +25,103 @@
 
 typedef struct A_Dir_Ans_msg
 {
-    //id запроса
-    int requestId;
-    //id источника, при ответе на DirectionFindingRequest совпадает с айди запроса
-    //              при ответе на ScanRequest назначается пеленгатором
-    int sourceId;
-    //время засечки
-    //DateTime.Utc.Now - время в 100наносекундных интервалах начиная с 1 января 1 года
-    quint64 dateTime;
+	//id запроса
+	int requestId;
+	//id источника, при ответе на DirectionFindingRequest совпадает с айди запроса
+	//              при ответе на ScanRequest назначается пеленгатором
+	int sourceId;
+	//время засечки
+	//DateTime.Utc.Now - время в 100наносекундных интервалах начиная с 1 января 1 года
+	quint64 dateTime;
 
-    //имя поста
-    QString post;
-    double postLatitude;     //GPS Geo Coords
-    double postLongitude;    //GPS Geo Coords
-    double postHeight;       //meters
+	//имя поста
+	QString post;
+	double postLatitude;     //GPS Geo Coords
+	double postLongitude;    //GPS Geo Coords
+	double postHeight;       //meters
 
-    //центральная частота
-    double frequency;
-    //ширина пика
-    double widht;
+	//центральная частота
+	double frequency;
+	//ширина пика
+	double widht;
 
-    //пеленг
-    double direction;
-    //угол места
-    double angle;
-    //уровень
-    double level;
-    //качество
-    double quality;
+	//пеленг
+	double direction;
+	//угол места
+	double angle;
+	//уровень
+	double level;
+	//качество
+	double quality;
 
-    int motionType;
-    double motionConfidence;
+	int motionType;
+	double motionConfidence;
 }A_Dir_Ans_msg;
 
 typedef QByteArray                  rpc_send_atlant_data;
 
 class RPCAtlant : public QObject, public IRPC
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    RPCAtlant(int id, ITabAtlant* parent_tab);
-    ~RPCAtlant();
+	RPCAtlant(int id, ITabAtlant* parent_tab);
+	~RPCAtlant();
 
 private slots:
-    virtual int start();
-    virtual int stop();
+	virtual int start();
+	virtual int stop();
 
 public:
-    void set_command(IMessage* msg);
+	void set_command(IMessage* msg);
 
 private slots:
-    void _slotSetCommand(IMessage* msg);
+	void _slotSetCommand(IMessage* msg);
 
 private:
-    QxtRPCPeer*         _rpc_client;
-    QString             _ip_RPC;
-    quint16             _port_RPC;
-    IMessage*           _command_msg;
-    int                 _id;
-    ITabAtlant*         _parent_tab;
+	QxtRPCPeer*         _rpc_client;
+	QString             _ip_RPC;
+	quint16             _port_RPC;
+	IMessage*           _command_msg;
+	int                 _id;
+	ITabAtlant*         _parent_tab;
 
 private:
-    int     _read_settings(QString path_to_ini_file_RPC);
-    void    _form_command(IMessage *msg);
-    void    _send_freq(QVariant data);
+	bool readSettings(const QString& path_to_ini_file_RPC);
+	void    _form_command(IMessage *msg);
+	void    _send_freq(QVariant data);
 
 
 private slots:
-    void _close();
-    void _slotRCPConnetion();
-    void _slotRPCDisconnection();
-    void _slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-    void _slotReconnection();
+	void _close();
+	void _slotRCPConnetion();
+	void _slotRPCDisconnection();
+	void _slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
+	void _slotReconnection();
 
 signals:
-    void signalSetCommand(IMessage *msg);
-    void signalFinished();
+	void signalSetCommand(IMessage *msg);
+	void signalFinished();
 
-    void signalStart();
-    void signalStop();
-    void signalFinishRPC();
+	void signalStart();
+	void signalStop();
+	void signalFinishRPC();
 
-    ///RPC signals
+	///RPC signals
 signals:
-    void signalSetClientId(int id);
-    void signalSetFreq(QByteArray data);
-    void signalReconnection();
+	void signalSetClientId(int id);
+	void signalSetFreq(QByteArray data);
+	void signalReconnection();
 
 public slots:
-    void slotInit();
-    void slotStart();
-    void slotStop();
-    void slotFinish();
+	void slotInit();
+	void slotStart();
+	void slotStop();
+	void slotFinish();
 
-    ///rpc_server
+	///rpc_server
 
 private slots:
-    void rpc_slot_server_atlant_direction(QByteArray data);
+	void rpc_slot_server_atlant_direction(QByteArray data);
 
 private:
 

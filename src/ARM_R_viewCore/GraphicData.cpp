@@ -203,8 +203,10 @@ void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool
     }
 
     IGraphicWidget* gr_correlation = _common_correlations->get(cor_id);//_map_correlation_widget->value(point2);
-    if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL)
-        return;
+
+	if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL) {
+		return;
+	}
 
     QString base = _tab_manager->getStationName(_id);
     QString second = _tab_manager->getStationName(point2);

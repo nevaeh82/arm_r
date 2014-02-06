@@ -5,7 +5,9 @@
 .NOTPARALLEL:
 
 SolutionName=src/ARM_R.pro
-include src/ARM_R_projects.pri
+include src/ARM_R_UI.pri
+include src/ARM_R_Server.pri
+
 
 include scripts/common.mak
 

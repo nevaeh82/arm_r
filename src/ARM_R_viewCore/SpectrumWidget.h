@@ -22,8 +22,8 @@
 
 #include <QTimer>
 
-#include "../Graphics_ipp/modules/gui/multi_graphics/components_relation.h"
-#include "../Graphics_ipp/modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
+#include "modules/gui/multi_graphics/components_relation.h"
+#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
 #include "Tabs/ITabSpectrum.h"
 #include "IGraphicWidget.h"
@@ -31,24 +31,24 @@
 #include "Common/CommandMessage.h"
 
 
-class GraphicWidget : public QWidget, public IGraphicWidget
+namespace Ui {
+class SpectrumWidget;
+}
+
+class SpectrumWidget : public QWidget, public IGraphicWidget
 {
     Q_OBJECT
 public:
-    GraphicWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0, ITabSpectrum *tab = 0);
-    ~GraphicWidget();
+	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
+	~SpectrumWidget();
+
+	void setTab(ITabSpectrum* tab);
+	void setId(const int id);
+	void setSpectrumName(const QString& name);
 
 private:
-    Q_MG_SpectrumInterface  *spectrumWidget;
-    QSettings               *setings;
-    QCheckBox               *_chb_auto_search;
-    QCheckBox               *_chb_panorama;
-    QCheckBox               *_chb_get_spectra;
-    QCheckBox               *_chb_setThreshold;
-//    QCheckBox               *_chb_KM;
-    QCheckBox               *_chb_peaks;
-    QCheckBox               *_chb_controlPRM;
-    QLabel                  *_caption;
+	Ui::SpectrumWidget*     ui;
+
     int                     _id;
     float                   *_spectrum_peak_hold;
     float                   *_spectrum_peak_hold_corr;
@@ -61,7 +61,7 @@ private:
 
     QMutex                  _mux;
     bool                    _enable_correlation;
-    QMenu*                  _graphicsContextMenu;
+	QMenu*                  m_graphicsContextMenu;
 
     double                  _center_freq_sel_temp;
     double                  _center_freq_def_modulation;
@@ -142,6 +142,8 @@ signals:
     void signalSetLabelName(QString, QString);
 
     void signalSetControlPRMState(bool state);
+
+	void doubleClickedSignal(int);
 
 private:
     virtual void mouseDoubleClickEvent ( QMouseEvent * event );

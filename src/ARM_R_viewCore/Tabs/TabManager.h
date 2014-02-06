@@ -16,7 +16,7 @@
 
 #include "TabsProperty.h"
 
-#include "TabSpectrum.h"
+#include "TabSpectrumWidget.h"
 
 //#include "Tree/Controller.h"
 
@@ -25,56 +25,55 @@
 
 #include "ITabManager.h"
 
-/// ATLANT
-#include "TabAtlant.h"
+#include "TabSpectrumWidgetController.h"
 
-class TabManager: public QTabWidget, public IModuleController, public ITabManager
+/// ATLANT
+#include "AtlantTabWidget.h"
+
+class TabManager: public QObject, /*public IModuleController, */public ITabManager
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    TabManager(QWidget *parent = 0);
-    ~TabManager();
+	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
+	virtual ~TabManager();
 
 private:
-    unsigned int    _id;
-    QString         _name;
-    QMap<int, TabsProperty *>   _map_settings;
-    QMap<int, TabSpectrum* >    _map_tabs;
-    ICommonComponents*          _common_spectra;
-    ICommonComponents*          _common_correlations;
-    QVBoxLayout*                _layout;
-//    Controller*                 _model_controller;
+	QTabWidget* m_tabWidget;
 
-    DBManager*                 _db_manager_spectrum;
+	unsigned int    _id;
+	QString         _name;
+	QMap<int, TabsProperty *>   _map_settings;
+	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
+	ICommonComponents*          _common_spectra;
+	ICommonComponents*          _common_correlations;
 
-    TreeModel*                  _model_spectrum;
+	DBManager*                 _db_manager_spectrum;
 
-    TabSpectrum*                _current_tab_widget;
+	TreeModel*                  _model_spectrum;
 
-    QMutex                      _mux;
+	ITabWidget*                m_currentTabWidget;
+
+	QMutex                      m_mutex;
 
 public:
-    virtual int start();
-    virtual int stop();
-    virtual void show();
-    virtual void hide();
-    virtual int createSubModules(QString path_to_ini_file);
+	virtual int start();
+
+	virtual int createSubModules(const QString& settingsFile);
 
 public:
     virtual QString getStationName(int id);
 	virtual void send_data(int pid, TypeCommand type, IMessage* msg);
     virtual void set_tab(int id);
 
-
 private:
-    int _read_settings(QString path_to_ini_file);
-    void _check_status();
+	int readSettings(const QString &settingsFile);
+	void checkStatus();
 
 private slots:
-    void _slot_change_tab(int index);
+	void changeTabSlot(int index);
 
 signals:
-    void signalChangeTab(int index);
+	void changeTabSignal(int index);
 };
 
 #endif // TABMANAGER_H

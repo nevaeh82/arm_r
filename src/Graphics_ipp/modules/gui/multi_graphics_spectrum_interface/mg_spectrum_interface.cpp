@@ -9,13 +9,12 @@
 //#define MG_STYLE1 ;
 //#define MG_STYLE2 ;
 
-Q_MG_SpectrumInterface::Q_MG_SpectrumInterface(QWidget *parent,QSettings* settings_in,QString wallPaperFileName) : QWidget(parent)
+Q_MG_SpectrumInterface::Q_MG_SpectrumInterface(QWidget *parent, QString wallPaperFileName) : QWidget(parent)
 {
     _material2_visible = false;
 	MainLayout = new QVBoxLayout(this);
 	MainLayout->setSpacing(2);
 	MainLayout->setContentsMargins(0, 0, 0, 0);
-	settings = settings_in;
 	align = 0;
 	ZoomOutMaxOnDataSet = false;
 
@@ -40,7 +39,7 @@ void Q_MG_SpectrumInterface::InitMainGraf()
 {
 	spectrumActivated_ = false;
 
-	MainGraf = new Q_MultiGraphics(this,settings);
+	MainGraf = new Q_MultiGraphics(this);
 	MainGraf->installEventFilter(this);
 	MainGraf->SpectrumMode = true;
 	MainGraf->VertStep = 1.15;
