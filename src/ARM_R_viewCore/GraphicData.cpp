@@ -31,6 +31,7 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 
 	connect(this, SIGNAL(signalPanoramaStart(double,double)), this, SLOT(m_slotPanoramaStart(double,double)));
 	connect(this, SIGNAL(signalPanoramaStop()), this, SLOT(m_slotPanoramaStop()));
+	connect(this, SIGNAL(signalSetDetectedAreas(QVector<QPointF>)), this, SLOT(m_slotSetDetectedAreas(QVector<QPointF>)));
 	//    QMap<int, IGraphicWidget *>::iterator it;
 //    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
 //    {
@@ -92,6 +93,11 @@ void GraphicData::set_panorama(double start, double end)
 void GraphicData::set_panorama_stop()
 {
 	emit signalPanoramaStop();
+}
+
+void GraphicData::setDetectedAreas(QVector<QPointF> vec)
+{
+	emit signalSetDetectedAreas(vec);
 }
 
 int GraphicData::_find_index(qreal startx)
@@ -319,4 +325,9 @@ void GraphicData::m_slotPanoramaStop()
 	m_isPanaramaStart = false;
 
 	set_bandwidth(m_bandwidthSingleSample);
+}
+
+void GraphicData::m_slotSetDetectedAreas(QVector<QPointF> vec)
+{
+	_gr_widget->setDetectedAreasUpdate(vec);
 }

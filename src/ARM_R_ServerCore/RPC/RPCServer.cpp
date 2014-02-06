@@ -79,17 +79,17 @@ void RPCServer::_slotErrorRPCConnection(QAbstractSocket::SocketError socketError
     switch(socketError)
     {
     case QAbstractSocket::RemoteHostClosedError:
-        thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
         return;
         break;
     case QAbstractSocket::HostNotFoundError:
-        thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
         break;
     default:
-//        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + _rpc_client->->errorString()));
+//        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + _rpc_client->->errorString()));
         break;
     }
     QTextStream(stdout) << thiserror << endl;
@@ -150,7 +150,8 @@ void RPCServer::rpc_slot_set_client_id(quint64 client, int id)
     RPCClientFlakon* cl = new RPCClientFlakon(_router, this);
     _map_clients.insert(client, cl);
     connect(cl, SIGNAL(signalSendToRPCPoints(quint64,rpc_send_points_vector)), this, SLOT(rpc_slot_send_FFT(quint64,rpc_send_points_vector)));
-    connect(cl, SIGNAL(signalResponseModulationType(quint64,QString)), this, SLOT(rpc_slot_send_resp_modulation(quint64,QString)));
+	connect(cl, SIGNAL(signalSendToRPCDetectedBandwidth(quint64,rpc_send_points_vector)), this,SLOT(rpc_slotSendDetectedBandwidth(quint64,rpc_send_points_vector)));
+	connect(cl, SIGNAL(signalResponseModulationType(quint64,QString)), this, SLOT(rpc_slot_send_resp_modulation(quint64,QString)));
     connect(cl, SIGNAL(signalSendToRPCCorPoints(quint64,quint32,quint32,rpc_send_points_vector)), this, SLOT(rpc_slot_send_corr(quint64,quint32,quint32,rpc_send_points_vector)));
     connect(cl, SIGNAL(signalPRMStatus(quint64,QByteArray*)), this, SLOT(rpc_slot_prm_status(quint64,QByteArray*)));
 
@@ -168,6 +169,7 @@ void RPCServer::rpc_slot_set_client_id(quint64 client, int id)
 
     /// added subscription with type == 1001
     _subscriber->add_subscription(FLAKON_FFT, cl);
+	_subscriber->add_subscription(FLAKON_DETECTED_BANDWIDTH, cl);
     _subscriber->add_subscription(FLAKON_CORRELATION, cl);
     _subscriber->add_subscription(FLAKON_SIGNAL_TYPE, cl);
     _subscriber->add_subscription(PRM_STATUS, cl);
@@ -337,7 +339,12 @@ void RPCServer::rpc_slot_set_clear_to_solver(quint64 client, QByteArray data)
 
 void RPCServer::rpc_slot_send_FFT(quint64 client, rpc_send_points_vector points)
 {
-    _rpc_server->call(client, RPC_SLOT_SERVER_SEND_POINTS, QVariant::fromValue(points));
+	_rpc_server->call(client, RPC_SLOT_SERVER_SEND_POINTS, QVariant::fromValue(points));
+}
+
+void RPCServer::rpc_slotSendDetectedBandwidth(quint64 client, rpc_send_points_vector points)
+{
+	_rpc_server->call(client, RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, QVariant::fromValue(points));
 }
 
 void RPCServer::rpc_slot_send_corr(quint64 client, quint32 point1, quint32 point2, rpc_send_points_vector points)

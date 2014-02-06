@@ -29,26 +29,26 @@ ControlPanelWidgets::ControlPanelWidgets(QWidget *parent)
 //    QPixmap _pm_tab_map(":/images/tabs/images/Tabs/map.png");
 //    tb_map->setIcon(QIcon(_pm_tab_map.scaled(32,32,Qt::KeepAspectRatio)));
 //    tb_map->setFixedSize(32, 32);
-//    tb_map->setToolTip(tr("œÂÂÍÎ˛˜ËÚ¸Òˇ Ì‡ Í‡ÚÛ"));
+//    tb_map->setToolTip(tr("–ü–µ—Ä–µ–∫–ª—é—á–∏—Ç—å—Å—è –Ω–∞ –∫–∞—Ä—Ç—É"));
     int left, right, top, bottom;
     _vbox_panel->getContentsMargins(&left, &top, &right, &bottom);
     _vbox_panel->setContentsMargins(left, top + 20, right, bottom);
 //    _add_widgets_to_panel(tb_map);
 
     tb_spectrum = new QToolButton(this);
-    tb_spectrum->setText(tr("—ÔÂÍÚ"));
+    tb_spectrum->setText(tr("–°–ø–µ–∫—Ç—Ä"));
     QPixmap _pm_tab_spectrum(":/images/tabs/images/Tabs/spectrum.png");
     tb_spectrum->setIcon(QIcon(_pm_tab_spectrum.scaled(32,32,Qt::KeepAspectRatio)));
     tb_spectrum->setFixedSize(32, 32);
-    tb_spectrum->setToolTip(tr("œÓÍ‡Á‡Ú¸ ÚÂÍÛ˘ËÈ ÒÔÂÍÚ"));
+    tb_spectrum->setToolTip(tr("–ü–æ–∫–∞–∑–∞—Ç—å —Ç–µ–∫—É—â–∏–π —Å–ø–µ–∫—Ç—Ä"));
     _add_widgets_to_panel(tb_spectrum);
 
     tb_spectra = new QToolButton(this);
-    tb_spectra->setText(tr("—ÔÂÍÚ˚"));
+    tb_spectra->setText(tr("–°–ø–µ–∫—Ç—Ä—ã"));
     QPixmap _pm_tab_spectra(":/images/tabs/images/Tabs/spectra.png");
     tb_spectra->setIcon(QIcon(_pm_tab_spectra.scaled(32,32,Qt::KeepAspectRatio)));
     tb_spectra->setFixedSize(32, 32);
-    tb_spectra->setToolTip(tr("œÓÍ‡Á‡Ú¸ ‚ÒÂ ÒÔÂÍÚ˚"));
+    tb_spectra->setToolTip(tr("–ü–æ–∫–∞–∑–∞—Ç—å –≤—Å–µ —Å–ø–µ–∫—Ç—Ä—ã"));
     _add_widgets_to_panel(tb_spectra);
 
 //    tb_correlations = new QToolButton(this);

@@ -15,7 +15,7 @@ class NoVisualLabelsManager : public QObject
 public:
 	NoVisualLabelsManager(Q_MG_MouseCursor *parent);
 	~NoVisualLabelsManager();
-	//ОСНОВНЫЕ
+	//РћРЎРќРћР’РќР«Р•
 	void addLabel(double pos, QString text, QString name = QString(), bool immediately_update = false, QColor label_text_color = QColor(100,250,250));
 	void changeLabelText(QString name, QString new_text, bool immediately_update = false);
 	void changeLabelPosition(QString name, double new_pos, bool immediately_update = false);
@@ -34,7 +34,7 @@ private:
 	void					updateUnionPosition(gui::mg1::LabelInstrumentUnion* un);
 	void					UpdateLabelsGeomentry(bool update_unions);
 	gui::mg1::LabelInstrumentUnion*	CreateNewUnion();
-	bool					StartTimerForUpdate();//возвращает: true - стартовал ; false - сразу обновил, нестартовал
+	bool					StartTimerForUpdate();//РІРѕР·РІСЂР°С‰Р°РµС‚: true - СЃС‚Р°СЂС‚РѕРІР°Р» ; false - СЃСЂР°Р·Сѓ РѕР±РЅРѕРІРёР», РЅРµСЃС‚Р°СЂС‚РѕРІР°Р»
 	gui::mg1::LabelInstrumentItem* findItemByName(QString name);
 
 	QList<gui::mg1::LabelInstrumentItem*>		labels_list_;

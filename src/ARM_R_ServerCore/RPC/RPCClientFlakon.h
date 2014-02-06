@@ -45,6 +45,7 @@ signals:
     void signalResponseModulationType(quint64 cid, QString modulation);
 
     void signalSendToRPCPoints(quint64 cid, rpc_send_points_vector points);
+	void signalSendToRPCDetectedBandwidth(quint64 cid, rpc_send_points_vector points);
     void signalSendToRPCCorPoints(quint64 cid, quint32 point1, quint32 point2, rpc_send_points_vector points);
 
     ///PRM

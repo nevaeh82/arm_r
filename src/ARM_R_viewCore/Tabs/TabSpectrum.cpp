@@ -213,7 +213,7 @@ int TabSpectrum::createView(QWidget* view)
 
 
     _controlPRM = new ControlPRM(0, this);
-    _dock_controlPRM = new QDockWidget(tr("Óïðàâëåíèå ÏÐÌ300Â"), this);
+    _dock_controlPRM = new QDockWidget(tr("Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐŸÐ Ðœ300Ð’"), this);
     _dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
     _dock_controlPRM->setWidget(_controlPRM);
 

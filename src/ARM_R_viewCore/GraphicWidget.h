@@ -19,6 +19,8 @@
 #include <QSpinBox>
 #include <QPushButton>
 
+#include <QTextCodec>
+
 
 #include <QTimer>
 
@@ -42,6 +44,7 @@ private:
     Q_MG_SpectrumInterface  *spectrumWidget;
     QSettings               *setings;
     QCheckBox               *_chb_auto_search;
+	bool					m_autoSearch;
     QCheckBox               *_chb_panorama;
     QCheckBox               *_chb_get_spectra;
     QCheckBox               *_chb_setThreshold;
@@ -79,6 +82,8 @@ public:
     virtual void setDefModulation(QString modulation);
     virtual void setLabelName(QString base, QString second);
 
+	virtual void setDetectedAreasUpdate(QVector<QPointF> vec);
+
     void setup();
 
     void set_coontrolPRM_state(bool state);
@@ -92,6 +97,8 @@ public slots:
     void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
     void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
     void _slotSetDefModulation(QString modulation);
+
+	void m_slotSetDetectedAreas(QVector<QPointF> vec);
 
 //    void slotSetFFT2(QVector<QPointF> vecFFT, const bool isComplex);
 //    void slotSetParam(int PointCount, double bandwidth, bool isComplex);
@@ -134,6 +141,8 @@ signals:
     void signalSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
     void signalSetFFT(float* spectrum, float* spectrum_peak_hold);
     void signalSetDefModulation(QString modulation);
+
+	void signalSetDetectedAreas(QVector<QPointF> vec);
 
     void signalFinished();
 

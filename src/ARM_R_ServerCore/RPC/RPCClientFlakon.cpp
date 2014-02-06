@@ -63,6 +63,10 @@ void RPCClientFlakon::_slotGetData(rpc_flakon_msg msg_ptr)
         ds >> points;
         emit signalSendToRPCPoints(cid, points);
         break;
+	case FLAKON_DETECTED_BANDWIDTH:
+		ds >> points;
+		emit signalSendToRPCDetectedBandwidth(cid, points);
+		break;
     case FLAKON_CORRELATION:
 //        ds >> cor_time;
         ds >> point1;

@@ -3,8 +3,8 @@
 
 const char *RecognModulation[] =
 {
-    "rmUnknown",		//= 0,	//тип не определен
-    "rmFM",			//= 1,	//аналоговая ЧМ
+    "rmUnknown",		//= 0,	//С‚РёРї РЅРµ РѕРїСЂРµРґРµР»РµРЅ
+    "rmFM",			//= 1,	//Р°РЅР°Р»РѕРіРѕРІР°СЏ Р§Рњ
     "rmFSK",//			= 2,
     "rmBPSK",//			= 3,
     "rmQPSK",//			= 4,
@@ -20,7 +20,7 @@ const char *RecognModulation[] =
     "rmDQPSK",//			= 14,	//DQPSK ???
     "rmSDPSK",//			= 15,
     "rmAM",//			= 16,
-    "rmQAM16"//			= 17	//QAM16, непонятно чем отличается от QAM ?
+    "rmQAM16"//			= 17	//QAM16, РЅРµРїРѕРЅСЏС‚РЅРѕ С‡РµРј РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ QAM ?
 };
 
 ParserFlakon::ParserFlakon(IRouter *router):
@@ -132,6 +132,18 @@ void ParserFlakon::_completeMsg()
 //        if(_header.id == 3)
 //            emit signalFFT3(vec, isComplex);
         break;
+	case 2:
+	//2 вЂ“ РѕР±РЅР°СЂСѓР¶РµРЅРЅС‹Р№ СЃРёРіРЅР°Р» РЅР° С‚РµРєСѓС‰РµРј id РїСѓРЅРєС‚Рµ (QVector<QPointF>, РЅР°РїСЂРёРјРµСЂ (-1.0,5.2) - СЃРёРіРЅР°Р» СЃ С€РёСЂРёРЅРѕР№ РїРѕР»РѕСЃС‹ РѕС‚ -1 РњР“С† РґРѕ 5.2 РњР“С† ),
+//		QVector<QPointF> vec;
+//		QPointF point;
+		for(int i = 0; i < _header.length; i += sizeof(QPointF))
+		{
+			stream >> point;
+			vec.append(point);
+//			qDebug() << _header.id << "detected signal = " << point;
+		}
+		m_sendDetectedBandwidth(vec);
+		break;
     case 3:
         QTextStream(stdout) << "Received type" << endl;
         stream >> str;
@@ -172,13 +184,23 @@ void ParserFlakon::_send_pointers(QVector<QPointF> vec)
     _subscriber->data_ready(FLAKON_FFT, msg);
 }
 
+void ParserFlakon::m_sendDetectedBandwidth(QVector<QPointF> vec)
+{
+	QByteArray *ba = new QByteArray();
+	QDataStream ds(ba, QIODevice::ReadWrite);
+	ds << vec;
+
+	QSharedPointer<IMessage> msg(new Message(_header.id, FLAKON_DETECTED_BANDWIDTH, ba));
+	_subscriber->data_ready(FLAKON_DETECTED_BANDWIDTH, msg);
+}
+
 void ParserFlakon::_send_correlation(quint32 point1, quint32 point2, QVector<QPointF> vec)
 {
-//    //Для поиска максимума и критерия корреляции
+//    //Р”Р»СЏ РїРѕРёСЃРєР° РјР°РєСЃРёРјСѓРјР° Рё РєСЂРёС‚РµСЂРёСЏ РєРѕСЂСЂРµР»СЏС†РёРё
 //    double aTempForMax=-9999;
 //    double aCurrentDr;
 //    double aTempBenchmark;
-//    //Для нахождения МО
+//    //Р”Р»СЏ РЅР°С…РѕР¶РґРµРЅРёСЏ РњРћ
 //    double aSum=0;
 //    double aMean;
 //    if(_router->get_station_property() == NULL)
@@ -212,7 +234,7 @@ void ParserFlakon::_send_correlation(quint32 point1, quint32 point2, QVector<QPo
 //        aTempBenchmark = ((aTempForMax - aMean) / (aMean)) * (aTempForMax * 10);
 //    }
 
-//    //Вычисленные по графику корреляции разности и достоверности
+//    //Р’С‹С‡РёСЃР»РµРЅРЅС‹Рµ РїРѕ РіСЂР°С„РёРєСѓ РєРѕСЂСЂРµР»СЏС†РёРё СЂР°Р·РЅРѕСЃС‚Рё Рё РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚Рё
 //    double aBenchmark = aTempBenchmark;
 //    double aDR = aCurrentDr;
 

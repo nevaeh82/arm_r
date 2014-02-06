@@ -60,6 +60,7 @@ signals:
 private:
 //    const char *RecognModulation[];
 
+	void m_sendDetectedBandwidth(QVector<QPointF> vec);
 };
 
 #endif // PARSERFLAKON_H

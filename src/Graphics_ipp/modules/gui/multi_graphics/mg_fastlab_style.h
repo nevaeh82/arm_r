@@ -35,6 +35,10 @@ public:
 		DeselectionFillColor =					QColor(255,50,50,100);
 		DeselectionBorderColor =				QColor(255,50,50);
 
+		StaticAreaFillColor =					QColor(255,100,0,50);
+		DeStaticAreaFillColor =					QColor(255,100,0,50);
+
+
 		TextDecorate_MidLineColor0 =			QColor(0,190,255);
 		TextDecorate_MidLineColor1 =			QColor(200,255,255);
 		TextDecorate_MidLineColor2 =			QColor(255,50,50);

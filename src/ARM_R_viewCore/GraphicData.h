@@ -32,6 +32,8 @@ public:
 	void set_panorama(double start, double end);
 	void set_panorama_stop();
 
+	void setDetectedAreas(QVector<QPointF> vec);
+
 	int _find_index(qreal startx);
 	void m_dataProccess(QVector<QPointF> vecFFT, bool isComplex);
 private:
@@ -73,6 +75,8 @@ signals:
 
     void signalData(float*,float*);
 
+	void signalSetDetectedAreas(QVector<QPointF> vec);
+
 	void signalSetBandwidth(double);
 	void signalPanoramaStart(double start, double end);
 	void signalPanoramaStop();
@@ -86,6 +90,8 @@ private slots:
 
 	void m_slotPanoramaStart(double start, double end);
 	void m_slotPanoramaStop();
+
+	void m_slotSetDetectedAreas(QVector<QPointF> vec);
 };
 
 #endif // GRAPHICDATA_H

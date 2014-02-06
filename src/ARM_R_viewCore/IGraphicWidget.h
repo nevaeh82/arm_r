@@ -2,6 +2,7 @@
 #define IGRAPHICWIDGET_H
 
 #include <QString>
+#include <QPointF>
 
 class IGraphicWidget
 {
@@ -12,6 +13,8 @@ public:
     virtual void setDefModulation(QString modulation)                                                                         = 0;
     virtual bool isGraphicVisible()                                                                                           = 0;
     virtual void setLabelName(QString base, QString second)                                                                   = 0;
+	virtual void setDetectedAreasUpdate(QVector<QPointF> vec)																	= 0;
+
 };
 
 #endif // IGRAPHICWIDGET_H

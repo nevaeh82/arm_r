@@ -31,7 +31,7 @@ void NoVisualLabelsManager::addLabel( double pos, QString text, QString name, bo
 	labels_list_.append(new_item);
 
 	if (immediately_update) Timer_recalc_unions_timeout_slot();
-	else					timer_recalc_unions_.start();//при добалении всегда рестартуем таймер обновления (ибо тогда первая сотня влезать долго будет)
+	else					timer_recalc_unions_.start();//РїСЂРё РґРѕР±Р°Р»РµРЅРёРё РІСЃРµРіРґР° СЂРµСЃС‚Р°СЂС‚СѓРµРј С‚Р°Р№РјРµСЂ РѕР±РЅРѕРІР»РµРЅРёСЏ (РёР±Рѕ С‚РѕРіРґР° РїРµСЂРІР°СЏ СЃРѕС‚РЅСЏ РІР»РµР·Р°С‚СЊ РґРѕР»РіРѕ Р±СѓРґРµС‚)
 }
 
 void NoVisualLabelsManager::clearLabels()
@@ -72,10 +72,10 @@ void NoVisualLabelsManager::ReCalcUnions()
 			if (b == visibleList.count()) break;
 			gui::mg1::LabelInstrumentItem* label_instrument_check_item = visibleList.at(b);
 			//LabelInstrumentItem* label_instrument_check_item = labels_list_.at(b);
-			if (label_instrument_target_item == label_instrument_check_item) continue;//судя по алгоритму такого ваще не должно быть
+			if (label_instrument_target_item == label_instrument_check_item) continue;//СЃСѓРґСЏ РїРѕ Р°Р»РіРѕСЂРёС‚РјСѓ С‚Р°РєРѕРіРѕ РІР°С‰Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ
 			if (!label_instrument_check_item->isVisible()) continue;
 			
-			//проверяем столкновение элементов на предмет создания объеденения
+			//РїСЂРѕРІРµСЂСЏРµРј СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РЅР° РїСЂРµРґРјРµС‚ СЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРґРµРЅРµРЅРёСЏ
 			if (fastItemsIntersect(label_instrument_target_item,label_instrument_check_item))
 			{
 				gui::mg1::LabelInstrumentUnion* cur_target_union = CreateNewUnion();
@@ -89,7 +89,7 @@ void NoVisualLabelsManager::ReCalcUnions()
 				visibleList.removeOne(label_instrument_check_item);
 				b-=2;
 
-				//далее в цикле с самого начала проверяем кого теперь из свободных пересекает созданное объеденение а также уже созданные ранее объеденения
+				//РґР°Р»РµРµ РІ С†РёРєР»Рµ СЃ СЃР°РјРѕРіРѕ РЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµРј РєРѕРіРѕ С‚РµРїРµСЂСЊ РёР· СЃРІРѕР±РѕРґРЅС‹С… РїРµСЂРµСЃРµРєР°РµС‚ СЃРѕР·РґР°РЅРЅРѕРµ РѕР±СЉРµРґРµРЅРµРЅРёРµ Р° С‚Р°РєР¶Рµ СѓР¶Рµ СЃРѕР·РґР°РЅРЅС‹Рµ СЂР°РЅРµРµ РѕР±СЉРµРґРµРЅРµРЅРёСЏ
 				bool free_items_restart_search = true;
 				while (free_items_restart_search)
 				{
@@ -134,11 +134,11 @@ void NoVisualLabelsManager::ReCalcUnions()
 	} //for (int i = 0;i< labels_list_.count();i++)
 
 
-	//установка хинтов (экономит время)
+	//СѓСЃС‚Р°РЅРѕРІРєР° С…РёРЅС‚РѕРІ (СЌРєРѕРЅРѕРјРёС‚ РІСЂРµРјСЏ)
 	for (int u = 0;u< labels_unions_list_.count();u++)
 		labels_unions_list_.at(u)->setHint();
 	
-	//проверка
+	//РїСЂРѕРІРµСЂРєР°
 	/*{
 		int total = 0;
 		for (int u = 0;u< labels_unions_list_.count();u++)
@@ -199,7 +199,7 @@ void NoVisualLabelsManager::UpdateLabelsGeomentry( bool update_unions )
 		tbb::tick_count t2 = tbb::tick_count::now();	
 #endif
 
-		//расставляем как есть
+		//СЂР°СЃСЃС‚Р°РІР»СЏРµРј РєР°Рє РµСЃС‚СЊ
 		for (int i = 0;i< labels_list_.count();i++)
 		{
 			gui::mg1::LabelInstrumentItem* l_item = labels_list_.at(i);
@@ -210,32 +210,32 @@ void NoVisualLabelsManager::UpdateLabelsGeomentry( bool update_unions )
 		}
 
 		bool needCalcUnions = false;
-		//проверяем пересечения как элементов и минимизируем необходимые
+		//РїСЂРѕРІРµСЂСЏРµРј РїРµСЂРµСЃРµС‡РµРЅРёСЏ РєР°Рє СЌР»РµРјРµРЅС‚РѕРІ Рё РјРёРЅРёРјРёР·РёСЂСѓРµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ
 		for (int i = 0;i< labels_list_.count();i++)
 		{
 			gui::mg1::LabelInstrumentItem* label_instrument_target_item = labels_list_.at(i);
 			for (int b = i+1;b < labels_list_.count();b++)
 			{
 				gui::mg1::LabelInstrumentItem* label_instrument_check_item = labels_list_.at(b);
-				if (label_instrument_target_item == label_instrument_check_item) continue;//судя по алгоритму такого ваще не должно быть
-				//проверяем столкновение
+				if (label_instrument_target_item == label_instrument_check_item) continue;//СЃСѓРґСЏ РїРѕ Р°Р»РіРѕСЂРёС‚РјСѓ С‚Р°РєРѕРіРѕ РІР°С‰Рµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ
+				//РїСЂРѕРІРµСЂСЏРµРј СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ
 				if (fastItemsIntersect(label_instrument_target_item,label_instrument_check_item))
 				{
 					if (label_instrument_target_item->isInMinimalMode() && label_instrument_check_item->isInMinimalMode())
 					{
-						//оба уже свернутых и пересекаются, в дальнеих действиях смысла нет
+						//РѕР±Р° СѓР¶Рµ СЃРІРµСЂРЅСѓС‚С‹С… Рё РїРµСЂРµСЃРµРєР°СЋС‚СЃСЏ, РІ РґР°Р»СЊРЅРµРёС… РґРµР№СЃС‚РІРёСЏС… СЃРјС‹СЃР»Р° РЅРµС‚
 						needCalcUnions = true;
 						continue;
 					}
 
-					//уменьшаем первый элемент
+					//СѓРјРµРЅСЊС€Р°РµРј РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚
 					label_instrument_target_item->setMinimalMode();
-					//проверяем продолжается ли столкновение
+					//РїСЂРѕРІРµСЂСЏРµРј РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ Р»Рё СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ
 					if (fastItemsIntersect(label_instrument_target_item,label_instrument_check_item))
 					{
-						//уменьшаем второй элемент
+						//СѓРјРµРЅСЊС€Р°РµРј РІС‚РѕСЂРѕР№ СЌР»РµРјРµРЅС‚
 						label_instrument_check_item->setMinimalMode();
-						//проверяем продолжается ли столкновение
+						//РїСЂРѕРІРµСЂСЏРµРј РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ Р»Рё СЃС‚РѕР»РєРЅРѕРІРµРЅРёРµ
 						if (fastItemsIntersect(label_instrument_target_item,label_instrument_check_item))
 							needCalcUnions = true;
 					}
@@ -252,7 +252,7 @@ void NoVisualLabelsManager::UpdateLabelsGeomentry( bool update_unions )
 	}
 	else
 	{
-		//только позиции
+		//С‚РѕР»СЊРєРѕ РїРѕР·РёС†РёРё
 		for (int i = 0;i< labels_list_.count();i++)
 		{
 			gui::mg1::LabelInstrumentItem* l_item = labels_list_.at(i);
@@ -320,12 +320,12 @@ void NoVisualLabelsManager::redraw()
 {
 
 	if ((prev_trans_x_ == graphics_parent_->getCurTrans().x()) && (prev_kf_x_ == graphics_parent_->getCurKf().x())) 
-		return;	//нихера не изменилось
+		return;	//РЅРёС…РµСЂР° РЅРµ РёР·РјРµРЅРёР»РѕСЃСЊ
 	
 	if (prev_kf_x_ == graphics_parent_->getCurKf().x())
 	{
 //        qDebug() << "REDRAW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-		//масштаб по x не менялся
+		//РјР°СЃС€С‚Р°Р± РїРѕ x РЅРµ РјРµРЅСЏР»СЃСЏ
 		prev_trans_x_ = graphics_parent_->getCurTrans().x();
 		UpdateLabelsGeomentry(false);
 	}

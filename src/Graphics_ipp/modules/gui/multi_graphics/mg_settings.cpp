@@ -35,6 +35,9 @@ void Q_MG_Settings::saveSettings(bool AutoSyncIni)
 	settings->setValue("SelectionBorderColor",SelectionBorderColor);
 	settings->setValue("DeselectionFillColor",DeselectionFillColor);
 	settings->setValue("DeselectionBorderColor",DeselectionBorderColor);
+
+	settings->setValue("StaticAreaFillColor", StaticAreaFillColor);
+	settings->setValue("DeStaticAreaFillColor", DeStaticAreaFillColor);
 	
 	settings->setValue("TextDecorate_MidLineColor0",TextDecorate_MidLineColor0);
 	settings->setValue("TextDecorate_MidLineColor1",TextDecorate_MidLineColor1);
@@ -110,6 +113,9 @@ void Q_MG_Settings::loadSettings()
 	SelectionBorderColor					= settings->value("SelectionBorderColor",SelectionBorderColor).value<QColor>();
 	DeselectionFillColor					= settings->value("DeselectionFillColor",DeselectionFillColor).value<QColor>();
 	DeselectionBorderColor					= settings->value("DeselectionBorderColor",DeselectionBorderColor).value<QColor>();
+
+	StaticAreaFillColor						= settings->value("StaticAreaFillColor", StaticAreaFillColor).value<QColor>();
+	DeStaticAreaFillColor					= settings->value("DeStaticAreaFillColor", DeStaticAreaFillColor).value<QColor>();
 
 	TextDecorate_MidLineColor0				= settings->value("TextDecorate_MidLineColor0",TextDecorate_MidLineColor0).value<QColor>();
 	TextDecorate_MidLineColor1				= settings->value("TextDecorate_MidLineColor1",TextDecorate_MidLineColor1).value<QColor>();
