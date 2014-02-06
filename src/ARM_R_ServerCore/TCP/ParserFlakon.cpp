@@ -140,7 +140,7 @@ void ParserFlakon::_completeMsg()
 		{
 			stream >> point;
 			vec.append(point);
-//			qDebug() << _header.id << "detected signal = " << point;
+			qDebug() << _header.id << "detected signal = " << point;
 		}
 		m_sendDetectedBandwidth(vec);
 		break;

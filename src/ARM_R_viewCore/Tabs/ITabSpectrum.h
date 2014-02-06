@@ -37,6 +37,8 @@ public:
     virtual void check_status()                                     = 0;
 
 	virtual void set_panorama(bool state)							= 0;
+
+	virtual double get_current_frequency()							= 0;
 };
 
 #endif // ITABSPECTRUM_H

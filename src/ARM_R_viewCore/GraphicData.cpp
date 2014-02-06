@@ -19,7 +19,7 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
     _spectrum_peak_hold = new float[1];
     _bandwidth = 0;
 	m_bandwidthSingleSample = 0;
-	m_isPanaramaStart = false;
+	m_isPanoramaStart = false;
     _needSetup = true;
 	m_needSetupSpectrum = true;
 	connect(this, SIGNAL(signalSetData(QVector<QPointF>,bool)), this, SLOT(m_slotSetData(QVector<QPointF>,bool)));
@@ -150,11 +150,16 @@ void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
 	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
 	double bandwidth = (endx - startx)*TO_KHZ;
 
-	if(m_bandwidthSingleSample != bandwidth && m_isPanaramaStart == false)
+	if(m_bandwidthSingleSample != bandwidth && m_isPanoramaStart == false)
 	{
 		m_slotSetBandwidth(bandwidth);
 		m_bandwidthSingleSample = bandwidth;
 		_needSetup = true;
+		if(_gr_widget)
+		{
+			qDebug() << "ZERO FREQ = " << vecFFT.at(0).x();
+			_gr_widget->setZeroFrequency((vecFFT.at(0).x())*TO_KHZ);
+		}
 	}
 
 	int index = _find_index(startx);
@@ -315,14 +320,14 @@ void GraphicData::m_slotPanoramaStart(double start, double end)
 
 	bandwidth *= TO_HZ;
 
-	m_isPanaramaStart = true;
+	m_isPanoramaStart = true;
 	set_bandwidth(bandwidth);
 }
 
 void GraphicData::m_slotPanoramaStop()
 {
 	qDebug() << "panorama stopped";
-	m_isPanaramaStart = false;
+	m_isPanoramaStart = false;
 
 	set_bandwidth(m_bandwidthSingleSample);
 }

@@ -74,6 +74,8 @@ private:
     double                  _threshold;
     int _rett;
 
+	double					m_current_frequency;
+
 public:
     Q_MG_SpectrumInterface  *get_spectrum_widget();
     virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
@@ -83,6 +85,8 @@ public:
     virtual void setLabelName(QString base, QString second);
 
 	virtual void setDetectedAreasUpdate(QVector<QPointF> vec);
+
+	virtual void setZeroFrequency(double val);
 
     void setup();
 
@@ -124,6 +128,8 @@ private slots:
 
     void _slot_double_clicked(double, double);
 
+	void m_slotSetZeroFrequency(double val);
+
 //    void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
 //    void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
 
@@ -133,6 +139,7 @@ signals:
     void signalCurSelChanged(int);
     void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
     void signalEnableKM(bool state);
+	void signalSetZeroFrequency(double val);
 
     /// id - is id of ilsts (1 - White list, 2 - Black list)
     void signalAddSelToLists(int id);

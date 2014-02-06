@@ -45,7 +45,7 @@ private:
     float*                  _spectrum_peak_hold;
     double                  _bandwidth;
 	double                  m_bandwidthSingleSample;
-	bool					m_isPanaramaStart;
+	bool					m_isPanoramaStart;
 //	double					m_pointCountWhole;
 
     qreal                   _startx;

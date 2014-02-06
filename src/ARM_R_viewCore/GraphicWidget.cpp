@@ -1,6 +1,8 @@
 #include "GraphicWidget.h"
 #include <QDebug>
 
+#define TO_MHZ	1000000
+
 GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, int id, ITabSpectrum* tab):
     QWidget(parent, flags)
 {
@@ -10,6 +12,7 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 	QTextCodec::setCodecForCStrings(codec);
 	QTextCodec::setCodecForLocale(codec);
 
+	m_current_frequency = 0;
 
 	m_autoSearch = false;
     _rett = -100;
@@ -170,6 +173,7 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 
     connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
 	connect(this, SIGNAL(signalSetDetectedAreas(QVector<QPointF>)), this, SLOT(m_slotSetDetectedAreas(QVector<QPointF>)));
+	connect(this, SIGNAL(signalSetZeroFrequency(double)), this, SLOT(m_slotSetZeroFrequency(double)));
 	//    connect(this, SIGNAL(signalNeedToUpdate()), spectrumWidget, SLOT(update()));
 //    QTimer* timer = new QTimer();
 //    connect(timer, SIGNAL(timeout()), spectrumWidget, SLOT(update()));
@@ -261,6 +265,11 @@ void GraphicWidget::setDetectedAreasUpdate(QVector<QPointF> vec)
 	emit signalSetDetectedAreas(vec);
 }
 
+void GraphicWidget::setZeroFrequency(double val)
+{
+	emit signalSetZeroFrequency(val);
+}
+
 void GraphicWidget::_slotSetDefModulation(QString modulation)
 {
 	spectrumWidget->SetLabel(_center_freq_def_modulation*1000, modulation);
@@ -276,7 +285,7 @@ void GraphicWidget::m_slotSetDetectedAreas(QVector<QPointF> vec)
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it)
 	{
-		spectrumWidget->SetDetectedAreas((*it).x()*1000000, 0, (*it).y()*1000000, 0, false);
+		spectrumWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
 }
 
@@ -389,7 +398,8 @@ void GraphicWidget::_slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
 //    {
         spectrumWidget->SetAutoscaleY(true);
         spectrumWidget->SetAlign(0);
-        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+//		spectrumWidget->SetZeroFrequencyHz(15000000/*spectrum[0]*//* + bandwidth*/);
+//		qDebug() << "ZERO = " << spectrum[0];
 //    }
 //    else
 //    {
@@ -398,7 +408,8 @@ void GraphicWidget::_slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
 //        spectrumWidget->SetAlign(3);
 //    }
 
-    spectrumWidget->Setup(_isComplex,_bandwidth,"Уровень", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+		_isComplex = false;
+	spectrumWidget->Setup(_isComplex,_bandwidth,"Уровень", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
     _mux.unlock();
 
 }
@@ -416,9 +427,11 @@ void GraphicWidget::_slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 
 //    if(!_isComplex)
 //    {
-        spectrumWidget->SetAutoscaleY(true);
-        spectrumWidget->SetAlign(0);
-        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+		spectrumWidget->SetAutoscaleY(true);
+		spectrumWidget->SetAlign(0);
+//        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+//		spectrumWidget->SetZeroFrequencyHz(15000000/*spectrum[0]*//* + bandwidth*/);
+
 //    }
 //    else
 //    {
@@ -585,5 +598,12 @@ void GraphicWidget::_slotShowControlPRM(bool state)
 
 void GraphicWidget::_slot_double_clicked(double d1, double d2)
 {
-    _tab->set_double_clicked(_id, d1, d2);
+	_tab->set_double_clicked(_id, d1, d2);
+}
+
+void GraphicWidget::m_slotSetZeroFrequency(double val)
+{
+	double cur_freq = _tab->get_current_frequency();
+	m_current_frequency = cur_freq*TO_MHZ;
+	spectrumWidget->SetZeroFrequencyHz(val + m_current_frequency);
 }

@@ -245,12 +245,12 @@ bool Q_MG_SpectrumInterface::Setup(bool is_complex, double bandwidth_hz, QString
 
     is_complex_ = is_complex;
 	bandwidth_hz_ = bandwidth_hz;
-    if (is_complex_)
+	if (is_complex_)
 	{
         qreal ttt = bandwidth_hz_/2;
 		MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(ttt,maxv+raznTop),QPointF(-ttt,minv-raznBot));
 	}
-    else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
+	else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
 
 	material_1->Hor_kf_inc = (items_count_1)/bandwidth_hz_;
 	if (EnabelSecondGraph) material_2->Hor_kf_inc = (items_count_2)/bandwidth_hz_;
@@ -956,12 +956,12 @@ bool Q_MG_SpectrumInterface::PermanentDataSetup( const float* spectrum_1, const 
 //    }
 
 //    qDebug() << "Per is_complex! = " << is_complex_ << minv << maxv << bandwidth_hz_;
-    if (is_complex_)
+	if (is_complex_)
     {
         qreal ttt = bandwidth_hz_/2;
         MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(ttt,maxv+raznTop),QPointF(-ttt,minv-raznBot));
     }
-    else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
+	else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
 
 
 	if (haveRelations_) wasProgrammChangeOffViewPort_ = true;

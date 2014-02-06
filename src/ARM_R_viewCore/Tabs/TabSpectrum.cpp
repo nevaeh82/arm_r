@@ -362,7 +362,13 @@ void TabSpectrum::set_show_controlPRM(bool state)
 
 void TabSpectrum::set_double_clicked(int id, double d1, double d2)
 {
-    emit signalDoubleClicked(id, d1, d2);
+	emit signalDoubleClicked(id, d1, d2);
+}
+
+double TabSpectrum::get_current_frequency()
+{
+	QMap<QString, QVariant> *data = _db_manager->get(0, _id);
+	return data->value("value").toDouble();
 }
 
 TabsProperty* TabSpectrum::get_tab_property()
