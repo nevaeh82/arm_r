@@ -1,16 +1,15 @@
-
 TARGET   = ARM_R_ServerCoreTest
 TEMPLATE = app
 
+ProjectDir=$$PWD
+
 QT     +=  core network
 QT     -= gui
+
 CONFIG += console
 CONFIG += qtestlib
 
 INCLUDEPATH += ../../tools/cxxtest
-
-
-ProjectDir=$$PWD
 
 HEADERS += testDBIB.h
 

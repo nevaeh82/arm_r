@@ -7,7 +7,7 @@
 
 #include "../Abstracts/ICommonComponents.h"
 
-#include "../CorrelationWidget.h"
+#include "Correlations/CorrelationWidget.h"
 #include "../IGraphicWidget.h"
 
 class CommonCorrelations : public ICommonComponents

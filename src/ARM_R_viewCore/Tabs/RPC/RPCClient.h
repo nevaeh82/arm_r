@@ -89,7 +89,7 @@ private:
 private:
 //    int     _init();
 
-    int     _read_settings(QString path_to_ini_file_RPC);
+	bool readSettings(const QString& settingsFile);
     void    _form_command(IMessage *msg);
     void    _recognize();
     void    _ss_correlation(bool enable);

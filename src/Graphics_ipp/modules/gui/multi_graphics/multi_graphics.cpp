@@ -30,7 +30,7 @@
 
 //#define ScaleFocusToCenter //раскомментировать чтобы при Zoom желаемый объект смещался к центру
 
-Q_MultiGraphics::Q_MultiGraphics(QWidget *parent,QSettings* settings) : QGraphicsView(parent)
+Q_MultiGraphics::Q_MultiGraphics(QWidget *parent) : QGraphicsView(parent)
 {
 	setTransformationAnchor(QGraphicsView::NoAnchor);
 	setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -43,7 +43,7 @@ Q_MultiGraphics::Q_MultiGraphics(QWidget *parent,QSettings* settings) : QGraphic
 	
 	setFrameStyle(0);
 
-	MainSettings = new Q_MG_Style(settings);
+	MainSettings = new Q_MG_Style();
 	
 	if (MainSettings == NULL) {QMessageBox::critical(this,tr("Init error"),tr("Settings file or pointer == NULL.")); return;}
 

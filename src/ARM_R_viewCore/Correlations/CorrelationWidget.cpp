@@ -1,26 +1,29 @@
 #include "CorrelationWidget.h"
 
+#include "ui_CorrelationWidget.h"
+
 CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
-    QWidget(parent, flags)
+	QWidget(parent, flags), ui(new Ui::CorrelationWidget)
 {
+
+	ui->setupUi(this);
+
 
     _bandwidth = 0;
     _pointCount = 0;
     _isComplex = false;
 
-    _settings = new QSettings("settings.ini",QSettings::IniFormat,this);
-
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+	//QGridLayout *mainLayout = new QGridLayout(this);
+	//mainLayout->setSpacing(0);
+	//mainLayout->setContentsMargins(0, 0, 0, 0);
 
 
-    _correlationWidget = new Q_MG_SpectrumInterface(this,_settings,"Correlations");
+	//_correlationWidget = new Q_MG_SpectrumInterface(this, "Correlations");
 //    _correlationWidget->setContextMenu(_graphicsContextMenu);
 
-    _correlationWidget->setMinimumSize(100, 100);
-    _correlationWidget->SetZoomOutMaxOnDataSet(true);
-    _correlationWidget->SetAlign(2);
+	//_correlationWidget->setMinimumSize(100, 100);
+	ui->spectrumWidget->SetZoomOutMaxOnDataSet(true);
+	ui->spectrumWidget->SetAlign(2);
 
 //    float* spectrum = new float[1];
 //    spectrum[0] = 0;
@@ -45,10 +48,10 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString 
 //        delete[] spectrum;
 //    }
 
-    mainLayout->addWidget(_correlationWidget, 0, 0/*, Qt::AlignLeft | Qt::AlignTop*/);
+	//mainLayout->addWidget(_correlationWidget, 0, 0/*, Qt::AlignLeft | Qt::AlignTop*/);
 
 
-    this->setLayout(mainLayout);
+	//this->setLayout(mainLayout);
     this->installEventFilter(this);
 
     connect(this, SIGNAL(signalSetSignalSetup(float*,float*)), this, SLOT(_slotSetSignalSetup(float*,float*)), Qt::QueuedConnection);
@@ -57,14 +60,13 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString 
 
 
     connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
-    _correlationWidget->SetHorizontalLabel("m");
+	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
 
 }
 
 CorrelationWidget::~CorrelationWidget()
 {
-    delete _settings;
-    delete _correlationWidget;
+	//delete _correlationWidget;
 }
 
 void CorrelationWidget::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
@@ -112,15 +114,15 @@ void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_pea
        float maxv = 1.0;
        float minv = 0.0;
 
-        _correlationWidget->SetAutoscaleY(false);
+		ui->spectrumWidget->SetAutoscaleY(false);
 //        spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
-        _correlationWidget->SetAlign(3);
+		ui->spectrumWidget->SetAlign(3);
 
 
-    _correlationWidget->SetHorizontalLabel("m");
+	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
 
-    _correlationWidget->Setup(true,_bandwidth,"Уровень", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
-    _correlationWidget->SetSpectrumVisible(1, true);
+	ui->spectrumWidget->Setup(true,_bandwidth,tr("Level"), spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+	ui->spectrumWidget->SetSpectrumVisible(1, true);
     _mux.unlock();
 }
 
@@ -136,7 +138,7 @@ void CorrelationWidget::_slotSetSignal(float *spectrum, float *spectrum_peak_hol
 //        _correlationWidget->SetAlign(3);
 
     _mux.unlock();
-    _correlationWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+	ui->spectrumWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 }
 
 void CorrelationWidget::_slotSetLabelName(QString base, QString second)
@@ -146,7 +148,7 @@ void CorrelationWidget::_slotSetLabelName(QString base, QString second)
     if(_label_name != name)
     {
         _label_name = name;
-        _correlationWidget->ClearAllLabels();
-        _correlationWidget->SetLabel(0, _label_name);
+		ui->spectrumWidget->ClearAllLabels();
+		ui->spectrumWidget->SetLabel(0, _label_name);
     }
 }

@@ -8,7 +8,7 @@ class QSettings;
 class Q_MG_Style : public Q_MG_Settings
 {
 public:
-	Q_MG_Style(QSettings* _settings = NULL)
+	Q_MG_Style()
 	{
 		BackGroundBrush_BeginColor =			QColor(0,0,0);
 		BackGroundBrush_MidColor =				QColor(0,0,0);

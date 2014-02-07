@@ -205,7 +205,7 @@ QString LabelInstrumentUnion::GenerateHint()
 {
 	if (!show_hints_) return QString();
 	QString header = "<html><head/><body>";
-	QString total_str = "Всего: !TOTAL_RECORDS!<br/>";
+	QString total_str = tr("Total:") + " !TOTAL_RECORDS! <br/>";
 	QString end = "</body></html>";
 	QString html_return = "<br/>";
 	
