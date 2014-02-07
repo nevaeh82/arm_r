@@ -39,6 +39,9 @@ public:
 	QColor DeselectionFillColor;
 	QColor DeselectionBorderColor;
 
+	QColor StaticAreaFillColor;
+	QColor DeStaticAreaFillColor;
+
 	//0-выделение 1-маркеры , 2 - deselect
 	QColor TextDecorate_MidLineColor0;
 	QColor TextDecorate_MidLineColor1;

@@ -14,37 +14,37 @@ class Q_MG_SpectrumInterface : public QWidget
 
 
 public:
-	Q_MG_SpectrumInterface(QWidget *parent = NULL, QSettings* settings = NULL, QString wallPaperFileName = ":/Q_MultiGraphics/Resources/WallPaperSpec.png");//создает виджет в котором будет размещен спектр после вызова Setup
+	Q_MG_SpectrumInterface(QWidget *parent = NULL, QSettings* settings = NULL, QString wallPaperFileName = ":/Q_MultiGraphics/Resources/WallPaperSpec.png");//СЃРѕР·РґР°РµС‚ РІРёРґР¶РµС‚ РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґРµС‚ СЂР°Р·РјРµС‰РµРЅ СЃРїРµРєС‚СЂ РїРѕСЃР»Рµ РІС‹Р·РѕРІР° Setup
 	~Q_MG_SpectrumInterface();
 
-	//функция активации (создания) спектра
+	//С„СѓРЅРєС†РёСЏ Р°РєС‚РёРІР°С†РёРё (СЃРѕР·РґР°РЅРёСЏ) СЃРїРµРєС‚СЂР°
     bool Setup(bool is_complex, double bandwidth_hz, QString vertical_dial_label, const float* spectrum_1, size_t items_count_1, const float* spectrum_2 = NULL, size_t items_count_2 = 0, bool inline_memory_1 = false, bool inline_memory_2 = false, float minv_ = 0.0, float maxv_ = 0.0);
-	//выставить новый спектр без пересоздания объектов спектра, не меняет viewPort 
-	//функция должна быть вызвана после функции Setup в которой инициализуется движок
-	//вызов до Setup возвращает false и нихрена не делает, размерность массива (items_count) не должна быть меньше выставленного в Setup,
-	//NOTE: проверить что спектрум инициализирован можно функцией isActivated()
+	//РІС‹СЃС‚Р°РІРёС‚СЊ РЅРѕРІС‹Р№ СЃРїРµРєС‚СЂ Р±РµР· РїРµСЂРµСЃРѕР·РґР°РЅРёСЏ РѕР±СЉРµРєС‚РѕРІ СЃРїРµРєС‚СЂР°, РЅРµ РјРµРЅСЏРµС‚ viewPort 
+	//С„СѓРЅРєС†РёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РІС‹Р·РІР°РЅР° РїРѕСЃР»Рµ С„СѓРЅРєС†РёРё Setup РІ РєРѕС‚РѕСЂРѕР№ РёРЅРёС†РёР°Р»РёР·СѓРµС‚СЃСЏ РґРІРёР¶РѕРє
+	//РІС‹Р·РѕРІ РґРѕ Setup РІРѕР·РІСЂР°С‰Р°РµС‚ false Рё РЅРёС…СЂРµРЅР° РЅРµ РґРµР»Р°РµС‚, СЂР°Р·РјРµСЂРЅРѕСЃС‚СЊ РјР°СЃСЃРёРІР° (items_count) РЅРµ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РјРµРЅСЊС€Рµ РІС‹СЃС‚Р°РІР»РµРЅРЅРѕРіРѕ РІ Setup,
+	//NOTE: РїСЂРѕРІРµСЂРёС‚СЊ С‡С‚Рѕ СЃРїРµРєС‚СЂСѓРј РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РјРѕР¶РЅРѕ С„СѓРЅРєС†РёРµР№ isActivated()
     bool PermanentDataSetup(const float* spectrum_1,const float* spectrum_2 = NULL, float minv_ = 0, float maxv_ = 0);
 	void Reset();
 
 	
-	//работа с viewPort
-	void	SetAlign(int inc_alig)	{	align = inc_alig;	};//0 - середина, 1 - верхний пустой бордюр отсутсвует, 2 - нижний пустой бордюр отсутсвует, 3 - все отступы убраны. Эффект применяется после очередного вызова Setup.
+	//СЂР°Р±РѕС‚Р° СЃ viewPort
+	void	SetAlign(int inc_alig)	{	align = inc_alig;	};//0 - СЃРµСЂРµРґРёРЅР°, 1 - РІРµСЂС…РЅРёР№ РїСѓСЃС‚РѕР№ Р±РѕСЂРґСЋСЂ РѕС‚СЃСѓС‚СЃРІСѓРµС‚, 2 - РЅРёР¶РЅРёР№ РїСѓСЃС‚РѕР№ Р±РѕСЂРґСЋСЂ РѕС‚СЃСѓС‚СЃРІСѓРµС‚, 3 - РІСЃРµ РѕС‚СЃС‚СѓРїС‹ СѓР±СЂР°РЅС‹. Р­С„С„РµРєС‚ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РїРѕСЃР»Рµ РѕС‡РµСЂРµРґРЅРѕРіРѕ РІС‹Р·РѕРІР° Setup.
 	void	SetHorizontalLabel(QString label);
-	void	SetZeroFrequencyHz(double valX);//аналог SetVirtualOffsetX
+	void	SetZeroFrequencyHz(double valX);//Р°РЅР°Р»РѕРі SetVirtualOffsetX
 	double	ZeroFrequencyHz() const { return MainGraf->Grid_Layer->HorInterpretSum;}
 	void	SetVirtualOffsetY(double valY);
-	void	SetVirtualOffsetXY(double valX,double valY);//функция не перегружена, она быстрее, если надо ставить сразу 2 значения
+	void	SetVirtualOffsetXY(double valX,double valY);//С„СѓРЅРєС†РёСЏ РЅРµ РїРµСЂРµРіСЂСѓР¶РµРЅР°, РѕРЅР° Р±С‹СЃС‚СЂРµРµ, РµСЃР»Рё РЅР°РґРѕ СЃС‚Р°РІРёС‚СЊ СЃСЂР°Р·Сѓ 2 Р·РЅР°С‡РµРЅРёСЏ
 	void	GetCurrentViewport( double &start_hz, double &start_Y, double &end_hz, double &end_Y);
-	void	SetScaleStepByHorizontal(double hor_wheel_step);//установка шага зуума
+	void	SetScaleStepByHorizontal(double hor_wheel_step);//СѓСЃС‚Р°РЅРѕРІРєР° С€Р°РіР° Р·СѓСѓРјР°
 	void	SetScaleStepByVertical(double vert_wheel_step);
-	void	ZoomInX();//увеличивает. уменьшает текущий Zoom на 1 шаг 
+	void	ZoomInX();//СѓРІРµР»РёС‡РёРІР°РµС‚. СѓРјРµРЅСЊС€Р°РµС‚ С‚РµРєСѓС‰РёР№ Zoom РЅР° 1 С€Р°Рі 
 	void	ZoomOutX();
-	void	ZoomInY();//увеличивает. уменьшает текущий Zoom на 1 шаг 
+	void	ZoomInY();//СѓРІРµР»РёС‡РёРІР°РµС‚. СѓРјРµРЅСЊС€Р°РµС‚ С‚РµРєСѓС‰РёР№ Zoom РЅР° 1 С€Р°Рі 
 	void	ZoomOutY();
 	void	ZoomToSelection();
-	void	SetViewport(double LeftVal,double TopVal,double RightVal,double BottomVal);//пользовательские
-	void	ZoomOutFull();//скейлит весь график на экран (максимальный ZoomOut)
-	void	SetZoomOutMaxOnDataSet(bool enabled = true) {		ZoomOutMaxOnDataSet = enabled;		};//по умолчанию=false автоматический вызов  ZoomOutFull() после Setup или SetupNewData
+	void	SetViewport(double LeftVal,double TopVal,double RightVal,double BottomVal);//РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ
+	void	ZoomOutFull();//СЃРєРµР№Р»РёС‚ РІРµСЃСЊ РіСЂР°С„РёРє РЅР° СЌРєСЂР°РЅ (РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ ZoomOut)
+	void	SetZoomOutMaxOnDataSet(bool enabled = true) {		ZoomOutMaxOnDataSet = enabled;		};//РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ=false Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ РІС‹Р·РѕРІ  ZoomOutFull() РїРѕСЃР»Рµ Setup РёР»Рё SetupNewData
 	void	SetAutoscaleY(bool enabled = true) {	autoscaleY_	= enabled;	};
 	void	SetScaleY_1to1();
 	void	MoveScreenByPixels(QPoint pixels,bool emit_viewPortChangeSignal = true);
@@ -52,23 +52,23 @@ public:
 	//////////////////////////
 
 
-	//сетка и бордюр
+	//СЃРµС‚РєР° Рё Р±РѕСЂРґСЋСЂ
 	bool	ShowHorizGrid();
-	void	SetShowHorizGrid(bool value = true);		//скрывается разметка (сетка)
+	void	SetShowHorizGrid(bool value = true);		//СЃРєСЂС‹РІР°РµС‚СЃСЏ СЂР°Р·РјРµС‚РєР° (СЃРµС‚РєР°)
 	bool	ShowVerticalGrid();
 	void	SetShowVerticalGrid(bool value = true);
 	bool	ShowLevelBar();							
-	void	SetShowLevelBar(bool value = true);		//показывать ли верт. линейку, выключит и сетку и подписи указателя
+	void	SetShowLevelBar(bool value = true);		//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РІРµСЂС‚. Р»РёРЅРµР№РєСѓ, РІС‹РєР»СЋС‡РёС‚ Рё СЃРµС‚РєСѓ Рё РїРѕРґРїРёСЃРё СѓРєР°Р·Р°С‚РµР»СЏ
 	bool	ShowHorizontalBar();			
-	void	SetShowHorizontalBar(bool value = true);	//показывать ли горизонт. линейку, выключит и сетку и подписи указателя
+	void	SetShowHorizontalBar(bool value = true);	//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РіРѕСЂРёР·РѕРЅС‚. Р»РёРЅРµР№РєСѓ, РІС‹РєР»СЋС‡РёС‚ Рё СЃРµС‚РєСѓ Рё РїРѕРґРїРёСЃРё СѓРєР°Р·Р°С‚РµР»СЏ
 	bool	ShowHorGridBorder();
-	void	SetShowHorGridBorder(bool value = true);	//подписи и разметка остаются скрывается только бордюр
+	void	SetShowHorGridBorder(bool value = true);	//РїРѕРґРїРёСЃРё Рё СЂР°Р·РјРµС‚РєР° РѕСЃС‚Р°СЋС‚СЃСЏ СЃРєСЂС‹РІР°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ Р±РѕСЂРґСЋСЂ
 	bool	ShowVertGridBorder();
-	void	SetShowVertGridBorder(bool value = true);	//подписи и разметка остаются скрывается только бордюр
+	void	SetShowVertGridBorder(bool value = true);	//РїРѕРґРїРёСЃРё Рё СЂР°Р·РјРµС‚РєР° РѕСЃС‚Р°СЋС‚СЃСЏ СЃРєСЂС‹РІР°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ Р±РѕСЂРґСЋСЂ
 	/////////////////////////
 
 	
-	//маркеры
+	//РјР°СЂРєРµСЂС‹
 	int		MarkersCount() const;
 	bool	MarkersVisible() const;
 	QList<double> GetMarkers() const;
@@ -83,15 +83,15 @@ public:
 	////////////////////////////////////
 
 	
-	//ОКНО СООБЩЕНИЙ
-	void	SetUserTextToInfo(QString txt, bool IsHtmlFormat = false);//установка пользовательского текста в информационное окно
-	void	SetInfoWidgetPrintTextMode(int _PrintTextMode);//вид выводимых занчений: 0 - стандарт, если пусто то пользовательские, а если и там пусто то скрыть, 1 - всегда только пользовательские(устанавливается автоматом при SetUserTextToInfo)
-	void	SetVisibleInfoWidget(bool isVisible = true);//установить видимость окна с сообщениями
-	void	SetShowOptionsForStarndartLabels(QString name = "", bool showparam = false);//установить видимость надписей в окне с сообщениями, при передпче пустого имени - скроется вся группа
+	//РћРљРќРћ РЎРћРћР‘Р©Р•РќРР™
+	void	SetUserTextToInfo(QString txt, bool IsHtmlFormat = false);//СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ С‚РµРєСЃС‚Р° РІ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅРѕРµ РѕРєРЅРѕ
+	void	SetInfoWidgetPrintTextMode(int _PrintTextMode);//РІРёРґ РІС‹РІРѕРґРёРјС‹С… Р·Р°РЅС‡РµРЅРёР№: 0 - СЃС‚Р°РЅРґР°СЂС‚, РµСЃР»Рё РїСѓСЃС‚Рѕ С‚Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ, Р° РµСЃР»Рё Рё С‚Р°Рј РїСѓСЃС‚Рѕ С‚Рѕ СЃРєСЂС‹С‚СЊ, 1 - РІСЃРµРіРґР° С‚РѕР»СЊРєРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ(СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РѕРј РїСЂРё SetUserTextToInfo)
+	void	SetVisibleInfoWidget(bool isVisible = true);//СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРёРґРёРјРѕСЃС‚СЊ РѕРєРЅР° СЃ СЃРѕРѕР±С‰РµРЅРёСЏРјРё
+	void	SetShowOptionsForStarndartLabels(QString name = "", bool showparam = false);//СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІРёРґРёРјРѕСЃС‚СЊ РЅР°РґРїРёСЃРµР№ РІ РѕРєРЅРµ СЃ СЃРѕРѕР±С‰РµРЅРёСЏРјРё, РїСЂРё РїРµСЂРµРґРїС‡Рµ РїСѓСЃС‚РѕРіРѕ РёРјРµРЅРё - СЃРєСЂРѕРµС‚СЃСЏ РІСЃСЏ РіСЂСѓРїРїР°
 	/////////////////////////
 
 	
-	//свободные подписи
+	//СЃРІРѕР±РѕРґРЅС‹Рµ РїРѕРґРїРёСЃРё
 	void	ClearAllLabels();
 	void	SetLabel(double valX_b, QString text, QString name = QString(), bool immediately_update = false, QColor label_color = QColor(100,250,250));
 	void	ChangeLabelText(QString name, QString new_text, bool immediately_update = false);
@@ -102,7 +102,7 @@ public:
 	///////////////////////
 
 		
-	//страшный крест
+	//СЃС‚СЂР°С€РЅС‹Р№ РєСЂРµСЃС‚
 	double	CrossHz() const;	
 	double	CrossPix() const;
 	void	SetCross(double, double);
@@ -113,12 +113,12 @@ public:
 
 
 
-	//выделение
+	//РІС‹РґРµР»РµРЅРёРµ
 	void				SetMultySelectEnabled(bool enable);
-	void				SetButtonCtrlClickIsSingle(bool is_single = true);//по умолчанию с зажатым Ctrl делается множественное выделение (false), с установкой флага все меняется на оборот, без Ctrl multy с Ctrl single
+	void				SetButtonCtrlClickIsSingle(bool is_single = true);//РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃ Р·Р°Р¶Р°С‚С‹Рј Ctrl РґРµР»Р°РµС‚СЃСЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРµ РІС‹РґРµР»РµРЅРёРµ (false), СЃ СѓСЃС‚Р°РЅРѕРІРєРѕР№ С„Р»Р°РіР° РІСЃРµ РјРµРЅСЏРµС‚СЃСЏ РЅР° РѕР±РѕСЂРѕС‚, Р±РµР· Ctrl multy СЃ Ctrl single
 	double				SelStartHz() const;
 	double				SelEndHz() const;
-	bool				HasSelection() const; // == IsSomethingSelected() , просто перегружена
+	bool				HasSelection() const; // == IsSomethingSelected() , РїСЂРѕСЃС‚Рѕ РїРµСЂРµРіСЂСѓР¶РµРЅР°
 	bool				IsSomethingSelected() const;
 	bool				HasRectSelection() const;
 	bool				HasHorSelection() const;
@@ -131,9 +131,11 @@ public:
 	void				SetSelection( double x1,double y1,double x2,double y2, bool noSignal = false);
 	///////////////////////////////
 
-	
-	//связь компонентов
-	void setRelationStatus(bool enable) {	haveRelations_ = enable;}//не надо вызывать если использовать класс ComponentsRelation, сам все сделает необходимое
+	/// my
+	void				SetDetectedAreas(double x1,double y1,double x2,double y2, bool noSignal = false);
+	void				ClearAllDetectedAreas();
+	//СЃРІСЏР·СЊ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
+	void setRelationStatus(bool enable) {	haveRelations_ = enable;}//РЅРµ РЅР°РґРѕ РІС‹Р·С‹РІР°С‚СЊ РµСЃР»Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєР»Р°СЃСЃ ComponentsRelation, СЃР°Рј РІСЃРµ СЃРґРµР»Р°РµС‚ РЅРµРѕР±С…РѕРґРёРјРѕРµ
 	
 
 	//contextMenu
@@ -143,7 +145,7 @@ public:
 
 
 
-	//разное
+	//СЂР°Р·РЅРѕРµ
 	bool isActivated() { return spectrumActivated_;}
 	double BandWidth()	const	{ return bandwidth_hz_; }
 	bool FilledSpectrum() const;
@@ -155,10 +157,10 @@ public:
 	
 public slots:
 		
-	void SetFillSpectrum();//TODO:залить
-	void SetLinesOnlySpectrum();//TODO:отлить
+	void SetFillSpectrum();//TODO:Р·Р°Р»РёС‚СЊ
+	void SetLinesOnlySpectrum();//TODO:РѕС‚Р»РёС‚СЊ
 
-	void SetProgress(double);//некий прогресс от 0 до 100, отображать в инфо окне, если не 0 или 100 показать
+	void SetProgress(double);//РЅРµРєРёР№ РїСЂРѕРіСЂРµСЃСЃ РѕС‚ 0 РґРѕ 100, РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РІ РёРЅС„Рѕ РѕРєРЅРµ, РµСЃР»Рё РЅРµ 0 РёР»Рё 100 РїРѕРєР°Р·Р°С‚СЊ
 	bool ShowProgress();
 	void SetShowProgress(bool value);
 
@@ -174,16 +176,16 @@ signals:
     void selectionFinishedRedLine(double y); ///emit when choose threshold
 	void DeselectFinished();
 	
-	void CrossMoved();//крест двигается
+	void CrossMoved();//РєСЂРµСЃС‚ РґРІРёРіР°РµС‚СЃСЏ
 
-	void viewPortChanged( double start_hz, double start_Y, double end_hz, double end_Y);//изменен ViewPort
+	void viewPortChanged( double start_hz, double start_Y, double end_hz, double end_Y);//РёР·РјРµРЅРµРЅ ViewPort
 
-	void MarkerMoved(int, double,bool);//индекс маркера и ГЦ (если двигается любой маркер и к каждому)
-	void MarkersChanged(QVector<double>,bool);//состояние маркеров было изменено, в любом случае, (передвинули , почистили, добавили)
+	void MarkerMoved(int, double,bool);//РёРЅРґРµРєСЃ РјР°СЂРєРµСЂР° Рё Р“Р¦ (РµСЃР»Рё РґРІРёРіР°РµС‚СЃСЏ Р»СЋР±РѕР№ РјР°СЂРєРµСЂ Рё Рє РєР°Р¶РґРѕРјСѓ)
+	void MarkersChanged(QVector<double>,bool);//СЃРѕСЃС‚РѕСЏРЅРёРµ РјР°СЂРєРµСЂРѕРІ Р±С‹Р»Рѕ РёР·РјРµРЅРµРЅРѕ, РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ, (РїРµСЂРµРґРІРёРЅСѓР»Рё , РїРѕС‡РёСЃС‚РёР»Рё, РґРѕР±Р°РІРёР»Рё)
 
-	void DoubleClicked(double, double);//ГЦ и ДБ
+	void DoubleClicked(double, double);//Р“Р¦ Рё Р”Р‘
 
-	void SpectrumActivated();//эмитится когда спектр стал активным
+	void SpectrumActivated();//СЌРјРёС‚РёС‚СЃСЏ РєРѕРіРґР° СЃРїРµРєС‚СЂ СЃС‚Р°Р» Р°РєС‚РёРІРЅС‹Рј
 
 	
 
@@ -192,7 +194,7 @@ signals:
 
 
 private:
-	SpectrumMaterial* material_1;//поддерживает пока что только 1 материал, в дальнейшем можно сделать либо списком либо тупо 2 (по мере постановки задачи и выделения времени)
+	SpectrumMaterial* material_1;//РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РїРѕРєР° С‡С‚Рѕ С‚РѕР»СЊРєРѕ 1 РјР°С‚РµСЂРёР°Р», РІ РґР°Р»СЊРЅРµР№С€РµРј РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ Р»РёР±Рѕ СЃРїРёСЃРєРѕРј Р»РёР±Рѕ С‚СѓРїРѕ 2 (РїРѕ РјРµСЂРµ РїРѕСЃС‚Р°РЅРѕРІРєРё Р·Р°РґР°С‡Рё Рё РІС‹РґРµР»РµРЅРёСЏ РІСЂРµРјРµРЅРё)
 	SpectrumMaterial* material_2;
 	
 	Q_MultiGraphics* MainGraf;
@@ -209,12 +211,12 @@ private:
 	bool spectrumActivated_;
 	int align;
 
-	bool is_complex_;//для передачи в SetNewData(QByteArray);
+	bool is_complex_;//РґР»СЏ РїРµСЂРµРґР°С‡Рё РІ SetNewData(QByteArray);
 	double bandwidth_hz_;
 	void InitMainGraf();
 
 	bool haveRelations_;
-	bool emitSignalOnProgrammChangeOffViewPort_;//отладочная, не используется пользователями в нормальном режиме всегда = false
+	bool emitSignalOnProgrammChangeOffViewPort_;//РѕС‚Р»Р°РґРѕС‡РЅР°СЏ, РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё РІ РЅРѕСЂРјР°Р»СЊРЅРѕРј СЂРµР¶РёРјРµ РІСЃРµРіРґР° = false
 	bool wasProgrammChangeOffViewPort_;
 
 	QGraphicsPixmapItem wallPaper;
@@ -229,11 +231,11 @@ private:
 
 	QString HorLabel;
 
-	bool eventFilter(QObject*, QEvent*);//для установки wasProgrammChangeOffViewPort_ во время Resize в отношениях
+	bool eventFilter(QObject*, QEvent*);//РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё wasProgrammChangeOffViewPort_ РІРѕ РІСЂРµРјСЏ Resize РІ РѕС‚РЅРѕС€РµРЅРёСЏС…
 	
 
 private slots:
-	void on_selectedPixelChangeSpectrum(double x1, double y1, double x2, double y2);//принимает реальные бубны
+	void on_selectedPixelChangeSpectrum(double x1, double y1, double x2, double y2);//РїСЂРёРЅРёРјР°РµС‚ СЂРµР°Р»СЊРЅС‹Рµ Р±СѓР±РЅС‹
 	void on_selectionCleared();
 	void on_selectionFinished(double x1, double y1, double x2, double y2);
     void on_selectionFinishedRedLine(double y);

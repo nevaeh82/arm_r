@@ -1,51 +1,52 @@
-#ifndef TCPPACKETSTRUCT_H
-#define TCPPACKETSTRUCT_H
+#ifndef PACKETSTRUCT_H
+#define PACKETSTRUCT_H
 
 #pragma pack(push, 1)
 
 #define PAYLOAD_PREAMBULE       (0xFFEECCFF)
-#define PAYLOAD_MAX_DATA_LEN    20480
+#define PAYLOAD_MAX_DATA_LEN    200000
 #define PAYLOAD_HEADER_LENGTH   40
 
-typedef struct  ZaviruhaPayloadPacketHeader
+typedef struct ZaviruhaPayloadPacketHeader
 {
-    //magic 0xffeeccff
+    //! РџСЂРµР°РјР±СѓР»Р°, РІСЃРµРіРґР° 0xFFEECCFF
     unsigned int magic;
-    //packet number
+    //! РќРѕРјРµСЂ РїР°РєРµС‚Р°
     unsigned int number;
-    //id device
+    //! РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓСЃС‚СЂРѕР№СЃС‚РІР° (0 - Flacon, 1 - CРѕС„СЊСЏ, 2 - РўРѕРєСЃРѕРІРѕ, 3 - Р’СЃРµРІРѕР»Р¶СЃРє)
     unsigned int id;
-    //flags
+    //! Р¤Р»Р°РіРё, РЅРµ РёСЃРїРѕР»СЊР·СѓСЋ
     unsigned int flags;
-    //timestamp
+    //! Р’СЃРµРјСЏ РїРѕСЃС‹Р»РєРё СЃРѕРѕР±С‰РµРЅРёСЏ, РЅРµ РёСЃРїРѕР»СЊР·СѓСЋ
     long long timestamp;
-    //message type
-    // 0 - ping, 1 - FFT, 2 - signal, 3 - coordinate, 4 - correlation
-    // 100 - задание центрального пункта, с которым происходит свертка (int 0..5), если >5 то выбирается автоматически,
-    // 101 - установить ширину сигнала в кГц (float 0..20000),
-    // 102 - установить сдвиг в кГц относительно центра (float -9000..9000),
-    // 103 - начать координатометрию (bool state = true - стартовать, false - остановить)
-    // 104 - распознать сигнал (int - Идентификатор устройства, с которого нужно распознать сигнал).
-    // 105 - параметр усреднения спектра (int 0..100, 0 - нет усреднения).
+    /*!
+     РўРёРї СЃРѕР±С‰РµРЅРёСЏ
+     РћС‚ СЃРµСЂРІРµСЂР° РєР»РµРЅС‚Сѓ:
+     0 - ping,
+     1 - FFT (QVector<QPointF>),
+     2 вЂ“ РѕР±РЅР°СЂСѓР¶РµРЅРЅС‹Р№ СЃРёРіРЅР°Р» РЅР° С‚РµРєСѓС‰РµРј id РїСѓРЅРєС‚Рµ (QVector<QPointF>, РЅР°РїСЂРёРјРµСЂ (-1.0,5.2) - СЃРёРіРЅР°Р» СЃ С€РёСЂРёРЅРѕР№ РїРѕР»РѕСЃС‹ РѕС‚ -1 РњР“С† РґРѕ 5.2 РњР“С† ),
+     3 - С‚РµРєСЃС‚ (QString),
+     4 - РєРѕСЂСЂРµР»СЏС†РёСЏ (uint РЅРѕРјРµСЂ РїСѓРЅРєС‚Р°_A, uint РЅРѕРјРµСЂ РїСѓРЅРєС‚Р°_B, QVector<QPointF>),
+     5 - С‚РёРї СЃРёРіРЅР°Р»Р° (int - РўРёРї СЃРёРіРЅР°Р»Р°)
+     РћС‚ РєР»РёРµРЅС‚Р° СЃРµСЂРІРµСЂСѓ:
+     100 - Р·Р°РґР°РЅРёРµ С†РµРЅС‚СЂР°Р»СЊРЅРѕРіРѕ РїСѓРЅРєС‚Р°, СЃ РєРѕС‚РѕСЂС‹Рј РїСЂРѕРёСЃС…РѕРґРёС‚ СЃРІРµСЂС‚РєР° (int 0..5), РµСЃР»Рё >5 С‚Рѕ РІС‹Р±РёСЂР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
+     101 - СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С€РёСЂРёРЅСѓ СЃРёРіРЅР°Р»Р° РІ РєР“С† (float 0..20000),
+     102 - СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРґРІРёРі РІ РєР“С† РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ С†РµРЅС‚СЂР° (float -9000..9000),
+     103 - РЅР°С‡Р°С‚СЊ РєРѕРѕСЂРґРёРЅР°С‚РѕРјРµС‚СЂРёСЋ (bool true - СЃС‚Р°СЂС‚РѕРІР°С‚СЊ, false - РѕСЃС‚Р°РЅРѕРІРёС‚СЊ).
+     104 - СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃРёРіРЅР°Р» (int - РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓСЃС‚СЂРѕР№СЃС‚РІР°, СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ СЂР°СЃРїРѕР·РЅР°С‚СЊ СЃРёРіРЅР°Р»).
+	 105 - РїР°СЂР°РјРµС‚СЂ СѓСЃСЂРµРґРЅРµРЅРёСЏ СЃРїРµРєС‚СЂР° (int 0..100, 0 - РЅРµС‚ СѓСЃСЂРµРґРЅРµРЅРёСЏ).
+    */
     unsigned int type;
-    //message length
+    //! Р”Р»РёРЅР° СЃРѕРѕР±С‰РµРЅРёСЏ
     unsigned int length;
-    //reserved data
-    //for flakon (1 - СОФЬЯ, 2 - ТОКСОВО, 3 - ВСЕВОЛЖСК - для FFT, 1 - корреляция Софья-Токсово, 2 - коррреляция Софья-Всеволжск)
-    int reserved;
-    //message CRC
+    //! Р РµР·РµСЂРІРЅС‹Рµ РґР°РЅРЅС‹Рµ (РјРѕР¶РЅРѕ РЅРёС‡РµРіРѕ РЅРµ РїРµСЂРµРґР°РІР°С‚СЊ)
+	int reserved;
+    //! CRC16 РґР°РЅРЅС‹С…
     unsigned short messageCRC;
-    //header CRC
+    //! CRC8 Р·Р°РіРѕР»РѕРІРєР°
     unsigned short headerCRC;
 }ZaviruhaPayloadPacketHeader;
 
-typedef struct ZaviruhaPayloadPacket
-{
-    ZaviruhaPayloadPacketHeader header;
-    unsigned char   data[PAYLOAD_MAX_DATA_LEN];
-
-}ZaviruhaPayloadPacket;
-
 #pragma pack(pop)
 
-#endif // TCPPACKETSTRUCT_H
+#endif // PACKETSTRUCT_H

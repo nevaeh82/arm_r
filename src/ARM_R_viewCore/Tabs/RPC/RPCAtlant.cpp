@@ -157,17 +157,17 @@ void RPCAtlant::_slotErrorRPCConnection(QAbstractSocket::SocketError socketError
     switch(socketError)
     {
     case QAbstractSocket::RemoteHostClosedError:
-        thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
         //return;
         break;
     case QAbstractSocket::HostNotFoundError:
-        thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
         break;
     default:
-//        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + _rpc_client->->errorString()));
+//        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + _rpc_client->->errorString()));
         break;
     }
 //    _rpc_client->takeDevice()->;
@@ -185,7 +185,7 @@ void RPCAtlant::_slotReconnection()
 int RPCAtlant::_read_settings(QString path_to_ini_file_RPC)
 {
     int error = -1;
-    QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QSettings m_settings(path_to_ini_file_RPC, QSettings::IniFormat);
 
     m_settings.setIniCodec(codec);

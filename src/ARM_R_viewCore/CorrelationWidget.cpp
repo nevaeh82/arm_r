@@ -119,7 +119,7 @@ void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_pea
 
     _correlationWidget->SetHorizontalLabel("m");
 
-    _correlationWidget->Setup(true,_bandwidth,"Óðîâåíü", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+    _correlationWidget->Setup(true,_bandwidth,"Ð£Ñ€Ð¾Ð²ÐµÐ½ÑŒ", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
     _correlationWidget->SetSpectrumVisible(1, true);
     _mux.unlock();
 }

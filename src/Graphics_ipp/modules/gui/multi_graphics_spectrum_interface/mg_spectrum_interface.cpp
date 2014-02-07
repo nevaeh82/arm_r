@@ -27,7 +27,7 @@ Q_MG_SpectrumInterface::Q_MG_SpectrumInterface(QWidget *parent,QSettings* settin
 	{
 		wallPaper.setPixmap(QPixmap(wallPaperFileName));
 	}
-	HorLabel = tr("Ãö");
+	HorLabel = tr("Ð“Ñ†");
 	InitMainGraf();
 	
 	
@@ -54,7 +54,7 @@ void Q_MG_SpectrumInterface::InitMainGraf()
 	//connect(material_1,SIGNAL(sendCommand(QString,QString,QVariant)),MainGraf->InfoLayer,SLOT(getCommand(QString,QString,QVariant)));
 	//connect(material_1,SIGNAL(ViewPortChanged(double,double,double,double)),this,SLOT(on_ViewPortChanged(double,double,double,double)));
 
-	//óñòàíîâêà ïàðàìåòðîâ êîìïîíåíòà
+	//ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð¾Ð² ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚Ð°
 	MainGraf->Grid_Layer->Hor_RoundValue = 3;
 	MainGraf->Grid_Layer->Vert_RoundValue = 3;
 	MainGraf->Grid_Layer->flag_GridAligment = 1;
@@ -109,17 +109,17 @@ void Q_MG_SpectrumInterface::InitMainGraf()
 
 	QVector<InfoWidgetData> selectInfoData;
 	selectInfoData.resize(8);
-	selectInfoData[0].name = QObject::tr("Íà÷àëî");
-	selectInfoData[1].name = QObject::tr("Öåíòð");
-	selectInfoData[2].name = QObject::tr("Êîíåö");
-	selectInfoData[3].name = QObject::tr("Âûäåëåíî");
-	selectInfoData[4].name = QObject::tr("Ìàêñ.");
-	selectInfoData[5].name = QObject::tr("Ìàêñ.÷àñòîòà");
-	selectInfoData[6].name = QObject::tr("Ìèí.");
-	selectInfoData[7].name = QObject::tr("Îòñ÷åòîâ");
+	selectInfoData[0].name = QObject::tr("ÐÐ°Ñ‡Ð°Ð»Ð¾");
+	selectInfoData[1].name = QObject::tr("Ð¦ÐµÐ½Ñ‚Ñ€");
+	selectInfoData[2].name = QObject::tr("ÐšÐ¾Ð½ÐµÑ†");
+	selectInfoData[3].name = QObject::tr("Ð’Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¾");
+	selectInfoData[4].name = QObject::tr("ÐœÐ°ÐºÑ.");
+	selectInfoData[5].name = QObject::tr("ÐœÐ°ÐºÑ.Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ð°");
+	selectInfoData[6].name = QObject::tr("ÐœÐ¸Ð½.");
+	selectInfoData[7].name = QObject::tr("ÐžÑ‚ÑÑ‡ÐµÑ‚Ð¾Ð²");
 	MainGraf->InfoLayer->setUserData(selectInfoData);
 
-	//äåëàåì ïóñòîé ýêðàí
+	//Ð´ÐµÐ»Ð°ÐµÐ¼ Ð¿ÑƒÑÑ‚Ð¾Ð¹ ÑÐºÑ€Ð°Ð½
     /*MainGraf->InfoLayer->setVisible(false);
 	MainGraf->InfoLayer->setEnabled(false);
 	MainGraf->Grid_Layer->setVisible(false);
@@ -144,7 +144,7 @@ void Q_MG_SpectrumInterface::InitMainGraf()
 	skip_signal_on_selection_change_ = false;
 	skip_signal_on_selection_clear_ = false;
 
-	//ðàçìåùåíèå îáîåâ
+	//Ñ€Ð°Ð·Ð¼ÐµÑ‰ÐµÐ½Ð¸Ðµ Ð¾Ð±Ð¾ÐµÐ²
 	if (!wallPaper.pixmap().isNull())
 	{
 		wallPaper.setOpacity(0);
@@ -245,12 +245,12 @@ bool Q_MG_SpectrumInterface::Setup(bool is_complex, double bandwidth_hz, QString
 
     is_complex_ = is_complex;
 	bandwidth_hz_ = bandwidth_hz;
-    if (is_complex_)
+	if (is_complex_)
 	{
         qreal ttt = bandwidth_hz_/2;
 		MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(ttt,maxv+raznTop),QPointF(-ttt,minv-raznBot));
 	}
-    else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
+	else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
 
 	material_1->Hor_kf_inc = (items_count_1)/bandwidth_hz_;
 	if (EnabelSecondGraph) material_2->Hor_kf_inc = (items_count_2)/bandwidth_hz_;
@@ -362,7 +362,7 @@ void Q_MG_SpectrumInterface::on_selectedPixelChangeSpectrum( double x1, double y
 	if (y1 > y2) {double t=y2;y2=y1;y1=t;}
 
 	if (MainGraf->Materials_LayersList.count() == 0) return;
-	if (MainGraf->Materials_LayersList.count() > 2) Q_ASSERT_X(NULL,"Q_MultiGraphics::on_selectedPixelChange","Ïîïðàâèòü òóò, íå ðàññ÷èòàíî áûëî íà áîëüøåå êîë-âî ìàòåðèàëîâ");
+	if (MainGraf->Materials_LayersList.count() > 2) Q_ASSERT_X(NULL,"Q_MultiGraphics::on_selectedPixelChange","ÐŸÐ¾Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ Ñ‚ÑƒÑ‚, Ð½Ðµ Ñ€Ð°ÑÑÑ‡Ð¸Ñ‚Ð°Ð½Ð¾ Ð±Ñ‹Ð»Ð¾ Ð½Ð° Ð±Ð¾Ð»ÑŒÑˆÐµÐµ ÐºÐ¾Ð»-Ð²Ð¾ Ð¼Ð°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ð¾Ð²");
 	bool EnabelSecondGraph = MainGraf->Materials_LayersList.count()==2;
 	SpectrumMaterial* mat1 = dynamic_cast<SpectrumMaterial*> (MainGraf->Materials_LayersList[0]);
 	if (mat1 == NULL) return;
@@ -439,7 +439,7 @@ void Q_MG_SpectrumInterface::on_selectedPixelChangeSpectrum( double x1, double y
 		MainGraf->InfoLayer->UserData[4].setValueAndValid(maxv,!isVertical);
 		
 		double maxHz = 0;
-		{//ðàññ÷åò , êàêàÿ æå òàì ÷àñòîòà 
+		{//Ñ€Ð°ÑÑÑ‡ÐµÑ‚ , ÐºÐ°ÐºÐ°Ñ Ð¶Ðµ Ñ‚Ð°Ð¼ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ð° 
 			double globP1x = v1x;
 			if (v1x > v2x) { globP1x = v2x;}
 			double StartPixelX = (usedMatMax->pos().x()*-1)+globP1x;
@@ -463,7 +463,7 @@ void Q_MG_SpectrumInterface::on_selectedPixelChangeSpectrum( double x1, double y
 
 //        qDebug() << "on_selectedPixelChangeSpectrum";
 
-	//ïðåîáðàçóåì ðåàëüíûå â âèðòóàëüíûå
+	//Ð¿Ñ€ÐµÐ¾Ð±Ñ€Ð°Ð·ÑƒÐµÐ¼ Ñ€ÐµÐ°Ð»ÑŒÐ½Ñ‹Ðµ Ð² Ð²Ð¸Ñ€Ñ‚ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ðµ
 	x1 = MainGraf->Grid_Layer->ApplyInterpretSum(x1,false);
 	y1 = MainGraf->Grid_Layer->ApplyInterpretSum(y1,true);
 	x2 = MainGraf->Grid_Layer->ApplyInterpretSum(x2,false);
@@ -513,7 +513,7 @@ void Q_MG_SpectrumInterface::SetStartAndFinishHz(QPointF start, QPointF finish)
     MainGraf->Grid_Layer->setMinAndMaxTransPoint(start, finish);
 }
 
-/* ïîêà âûêëþ÷åíî, íåò âðåìåíè ðàçáèðàòüñÿ è ïðàâèòü, íàäî óòî÷íèòü êàê îíà èñïîëüçóåòñÿ
+/* Ð¿Ð¾ÐºÐ° Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾, Ð½ÐµÑ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ñ€Ð°Ð·Ð±Ð¸Ñ€Ð°Ñ‚ÑŒÑÑ Ð¸ Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ, Ð½Ð°Ð´Ð¾ ÑƒÑ‚Ð¾Ñ‡Ð½Ð¸Ñ‚ÑŒ ÐºÐ°Ðº Ð¾Ð½Ð° Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ
 void Q_MG_SpectrumInterface::SetupNewData( QByteArray inc_ba)
 {
 	SpectrumActivated = false;
@@ -627,7 +627,7 @@ void Q_MG_SpectrumInterface::SetMoveOneMarker()
 }
 
 
-// Áîðäþðû îñè ñåòêà
+// Ð‘Ð¾Ñ€Ð´ÑŽÑ€Ñ‹ Ð¾ÑÐ¸ ÑÐµÑ‚ÐºÐ°
 
 bool Q_MG_SpectrumInterface::ShowHorizGrid()
 {
@@ -698,7 +698,7 @@ void Q_MG_SpectrumInterface::SetShowVertGridBorder( bool value /*= true*/ )
 	MainGraf->Grid_Layer->ReDraw();
 }
 
-// êîíåö Áîðäþðû îñè ñåòêà
+// ÐºÐ¾Ð½ÐµÑ† Ð‘Ð¾Ñ€Ð´ÑŽÑ€Ñ‹ Ð¾ÑÐ¸ ÑÐµÑ‚ÐºÐ°
 
 int Q_MG_SpectrumInterface::MarkersCount() const
 {
@@ -737,6 +737,16 @@ void Q_MG_SpectrumInterface::SetSelection( double x1,double y1,double x2,double 
 	MainGraf->MouseLayer->SetSelection(x1,y1,x2,y2);
 }
 
+void Q_MG_SpectrumInterface::SetDetectedAreas(double x1, double y1, double x2, double y2, bool noSignal)
+{
+	MainGraf->DetectedLayer->SetSelection(x1,y1,x2,y2);
+}
+
+void Q_MG_SpectrumInterface::ClearAllDetectedAreas()
+{
+	MainGraf->DetectedLayer->ClearAllSelections();
+}
+
 double Q_MG_SpectrumInterface::SelStartHz() const
 {
 	QList<QPointF> retPoint = MainGraf->MouseLayer->getHVSelected(false);
@@ -753,7 +763,7 @@ double Q_MG_SpectrumInterface::SelEndHz() const
 	return SelectionHz;
 }
 
-/*ÍÀÕ
+/*ÐÐÐ¥
 double Q_MG_SpectrumInterface::SelStartPix() const
 {
 	return MainGraf->getSelectionStartPix();
@@ -847,7 +857,7 @@ bool Q_MG_SpectrumInterface::PermanentDataSetup( const float* spectrum_1, const 
 {
 	if (!isActivated())
 	{
-		qDebug() << "ERROR (ÎØÈÁÊÀ). SpectrumInterface::PermanentDataSetup : âûçîâ PermanentDataSetup äî ôóíêöèè Setup ! Ôóíêöèÿ íå âûïîëíåíà.";
+		qDebug() << "ERROR (ÐžÐ¨Ð˜Ð‘ÐšÐ). SpectrumInterface::PermanentDataSetup : Ð²Ñ‹Ð·Ð¾Ð² PermanentDataSetup Ð´Ð¾ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Setup ! Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð½Ðµ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð°.";
 		return false;
 	}
 	
@@ -859,7 +869,7 @@ bool Q_MG_SpectrumInterface::PermanentDataSetup( const float* spectrum_1, const 
 
 	if (items_count_1 == 0) return false;
 
-	/* ÊÎÑÒÛÒÜ ÇÀÊÎÌÌÅÍÒÈÐÎÂÀÍ (äåòàëè â êàðòî÷êå ¹417)
+	/* ÐšÐžÐ¡Ð¢Ð«Ð¢Ð¬ Ð—ÐÐšÐžÐœÐœÐ•ÐÐ¢Ð˜Ð ÐžÐ’ÐÐ (Ð´ÐµÑ‚Ð°Ð»Ð¸ Ð² ÐºÐ°Ñ€Ñ‚Ð¾Ñ‡ÐºÐµ â„–417)
     bool spectrum_1_ok;
     bool spectrum_2_ok = !EnableSeconsSpectr;
 
@@ -878,7 +888,7 @@ bool Q_MG_SpectrumInterface::PermanentDataSetup( const float* spectrum_1, const 
 
     if(!spectrum_1_ok || !spectrum_2_ok)
     {
-        qDebug() << "FIXME: ïóñòîé ñïåêòð";
+        qDebug() << "FIXME: Ð¿ÑƒÑÑ‚Ð¾Ð¹ ÑÐ¿ÐµÐºÑ‚Ñ€";
         return false;
     }//*/
 	
@@ -946,12 +956,12 @@ bool Q_MG_SpectrumInterface::PermanentDataSetup( const float* spectrum_1, const 
 //    }
 
 //    qDebug() << "Per is_complex! = " << is_complex_ << minv << maxv << bandwidth_hz_;
-    if (is_complex_)
+	if (is_complex_)
     {
         qreal ttt = bandwidth_hz_/2;
         MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(ttt,maxv+raznTop),QPointF(-ttt,minv-raznBot));
     }
-    else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
+	else MainGraf->Grid_Layer->setMinAndMaxTransPoint(QPointF(bandwidth_hz_,maxv+raznTop),QPointF(0,minv-raznBot));
 
 
 	if (haveRelations_) wasProgrammChangeOffViewPort_ = true;

@@ -213,7 +213,7 @@ int TabSpectrum::createView(QWidget* view)
 
 
     _controlPRM = new ControlPRM(0, this);
-    _dock_controlPRM = new QDockWidget(tr("Óïðàâëåíèå ÏÐÌ300Â"), this);
+    _dock_controlPRM = new QDockWidget(tr("Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÐŸÐ Ðœ300Ð’"), this);
     _dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
     _dock_controlPRM->setWidget(_controlPRM);
 
@@ -362,7 +362,13 @@ void TabSpectrum::set_show_controlPRM(bool state)
 
 void TabSpectrum::set_double_clicked(int id, double d1, double d2)
 {
-    emit signalDoubleClicked(id, d1, d2);
+	emit signalDoubleClicked(id, d1, d2);
+}
+
+double TabSpectrum::get_current_frequency()
+{
+	QMap<QString, QVariant> *data = _db_manager->get(0, _id);
+	return data->value("value").toDouble();
 }
 
 TabsProperty* TabSpectrum::get_tab_property()

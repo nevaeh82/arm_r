@@ -118,6 +118,8 @@ public:
     virtual void set_show_controlPRM(bool state);
     virtual void set_double_clicked(int id, double, double);
 
+	virtual double get_current_frequency();
+
 public:
     virtual void set_selected_area(QMap<int, QVariant> data);
 	virtual void set_command(TypeCommand type, IMessage *msg);

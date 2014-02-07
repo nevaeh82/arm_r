@@ -26,6 +26,9 @@ public:
     virtual bool isGraphicVisible();
     virtual void setDefModulation(QString modulation);
     virtual void setLabelName(QString base, QString second);
+	virtual void setDetectedAreasUpdate(QVector<QPointF> vec){};
+	virtual void setZeroFrequency(double val){};
+
 
 public:
     void clear();

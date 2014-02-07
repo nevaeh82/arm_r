@@ -1,16 +1,27 @@
 #include "GraphicWidget.h"
 #include <QDebug>
 
+#define TO_MHZ	1000000
+
 GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, int id, ITabSpectrum* tab):
     QWidget(parent, flags)
 {
+
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QTextCodec::setCodecForTr(codec);
+	QTextCodec::setCodecForCStrings(codec);
+	QTextCodec::setCodecForLocale(codec);
+
+	m_current_frequency = 0;
+
+	m_autoSearch = false;
     _rett = -100;
     _threshold = -1000;
 
     _enable_correlation = false;
     _bandwidth = 0;
     _pointCount = 0;
-    _isComplex = false;
+	_isComplex = false;
 
     _peak_visible = false;
 
@@ -29,16 +40,16 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 //    spectrumWidget->SetShowCross(true);
 
     _graphicsContextMenu = new QMenu(spectrumWidget);
-    _graphicsContextMenu->addAction(new QAction("ƒÓ·‡‚ËÚ¸ ‚ ·ÂÎ˚È ÒÔËÒÓÍ",this) );
-    _graphicsContextMenu->addAction(new QAction("ƒÓ·‡‚ËÚ¸ ‚ ˜ÂÌ˚È ÒÔËÒÓÍ",this) );
-    _graphicsContextMenu->addAction(new QAction("–‡ÒÔÓÁÌ‡Ú¸ ÒË„Ì‡Î",this) );
-    _graphicsContextMenu->addAction(new QAction("¬ÍÎ˛˜ËÚ¸ ÍÓÂÎˇˆË˛",this) );
-    _graphicsContextMenu->addAction(new QAction("Œ˜ËÒÚËÚ¸ Ì‡‰ÔËÒË",this) );
+    _graphicsContextMenu->addAction(new QAction("–î–æ–±–∞–≤–∏—Ç—å –≤ –±–µ–ª—ã–π —Å–ø–∏—Å–æ–∫",this) );
+    _graphicsContextMenu->addAction(new QAction("–î–æ–±–∞–≤–∏—Ç—å –≤ —á–µ—Ä–Ω—ã–π —Å–ø–∏—Å–æ–∫",this) );
+    _graphicsContextMenu->addAction(new QAction("–†–∞—Å–ø–æ–∑–Ω–∞—Ç—å —Å–∏–≥–Ω–∞–ª",this) );
+    _graphicsContextMenu->addAction(new QAction("–í–∫–ª—é—á–∏—Ç—å –∫–æ—Ä—Ä–µ–ª—è—Ü–∏—é",this) );
+    _graphicsContextMenu->addAction(new QAction("–û—á–∏—Å—Ç–∏—Ç—å –Ω–∞–¥–ø–∏—Å–∏",this) );
 
-//    _graphicsContextMenu->addAction(new QAction("—Â‰ÌÂÂ",this) );
-//    _graphicsContextMenu->addAction(new QAction("Ã‡ÍÒËÏ‡Î¸ÌÓÂ",this) );
-//    _graphicsContextMenu->addAction(new QAction("¬ÒÂ",this) );
-//    _graphicsContextMenu->addAction(new QAction("Œ˜ËÒÚËÚ¸ ‚˚‰ÂÎÂÌËÂ",this) );
+//    _graphicsContextMenu->addAction(new QAction("–°—Ä–µ–¥–Ω–µ–µ",this) );
+//    _graphicsContextMenu->addAction(new QAction("–ú–∞–∫—Å–∏–º–∞–ª—å–Ω–æ–µ",this) );
+//    _graphicsContextMenu->addAction(new QAction("–í—Å–µ",this) );
+//    _graphicsContextMenu->addAction(new QAction("–û—á–∏—Å—Ç–∏—Ç—å –≤—ã–¥–µ–ª–µ–Ω–∏–µ",this) );
     connect(_graphicsContextMenu->actions()[0],SIGNAL(triggered()),SLOT(_slotCMAddWhiteList()));
     connect(_graphicsContextMenu->actions()[1],SIGNAL(triggered()),SLOT(_slotCMAddBlackList()));
     connect(_graphicsContextMenu->actions()[2],SIGNAL(triggered()),SLOT(_slotRecognizeSignal()));
@@ -60,33 +71,33 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
     spectrumWidget->setMinimumSize(300, 100);
 
     _chb_panorama = new QCheckBox(this);
-    _chb_panorama->setText(tr("œ‡ÌÓ‡Ï‡"));
+    _chb_panorama->setText(tr("–ü–∞–Ω–æ—Ä–∞–º–∞"));
     connect(_chb_panorama, SIGNAL(toggled(bool)), this, SLOT(_slotSetEnablePanorama(bool)));
 
     _chb_auto_search = new QCheckBox(this);
-    _chb_auto_search->setText(tr("¿‚ÚÓÔÓËÒÍ"));
+    _chb_auto_search->setText(tr("–ê–≤—Ç–æ–ø–æ–∏—Å–∫"));
     connect(_chb_auto_search, SIGNAL(toggled(bool)), this, SLOT(_slotAutoSearch(bool)));
 
     _chb_setThreshold = new QCheckBox(this);
-    _chb_setThreshold->setText(tr("œÓÓ„"));
+    _chb_setThreshold->setText(tr("–ü–æ—Ä–æ–≥"));
     connect(_chb_setThreshold, SIGNAL(clicked(bool)), this, SLOT(_slotSelectiontypeChanged(bool)));
 
     _chb_get_spectra = new QCheckBox(this);
-    _chb_get_spectra->setText(tr("œÓÎÛ˜ËÚ¸ ÒÔÂÍÚ"));
+    _chb_get_spectra->setText(tr("–ü–æ–ª—É—á–∏—Ç—å —Å–ø–µ–∫—Ç—Ä"));
     connect(_chb_get_spectra, SIGNAL(clicked(bool)), this, SLOT(_slotRequestData(bool)));
 
     ///control for enable coordinate mesuaring
 //    _chb_KM = new QCheckBox(this);
-//    _chb_KM->setText((tr(" Ã")));
+//    _chb_KM->setText((tr("–ö–ú")));
 //     connect(_chb_KM, SIGNAL(clicked(bool)), this, SLOT(_slotEnableKM(bool)));
 
      ///hide/show hold peaks
      _chb_peaks = new QCheckBox(this);
-     _chb_peaks->setText("Ã‡ÍÒËÏÛÏ˚");
+	 _chb_peaks->setText(tr("–ú–∞–∫—Å–∏–º—É–º—ã"));
      connect(_chb_peaks, SIGNAL(clicked(bool)), this, SLOT(_slotShowPeaks(bool)));
 
      _chb_controlPRM = new QCheckBox(this);
-     _chb_controlPRM->setText(tr("”Ô‡‚ÎÂÌËÂ œ–Ã"));
+     _chb_controlPRM->setText(tr("–£–ø—Ä–∞–≤–ª–µ–Ω–∏–µ –ü–†–ú"));
      connect(_chb_controlPRM, SIGNAL(clicked(bool)), this, SLOT(_slotShowControlPRM(bool)));
      connect(this, SIGNAL(signalSetControlPRMState(bool)), _chb_controlPRM, SLOT(setChecked(bool)));
 
@@ -143,7 +154,7 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 //        delete[] spectrum;
 
     spectrumWidget->ZoomOutFull();
-    spectrumWidget->SetHorizontalLabel("√ˆ");
+    spectrumWidget->SetHorizontalLabel("–ì—Ü");
 
 //    spectrumWidget->Reset();
 
@@ -161,13 +172,18 @@ GraphicWidget::GraphicWidget(QWidget *parent, Qt::WFlags flags, QString name, in
 
 
     connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
-//    connect(this, SIGNAL(signalNeedToUpdate()), spectrumWidget, SLOT(update()));
+	connect(this, SIGNAL(signalSetDetectedAreas(QVector<QPointF>)), this, SLOT(m_slotSetDetectedAreas(QVector<QPointF>)));
+	connect(this, SIGNAL(signalSetZeroFrequency(double)), this, SLOT(m_slotSetZeroFrequency(double)));
+	//    connect(this, SIGNAL(signalNeedToUpdate()), spectrumWidget, SLOT(update()));
 //    QTimer* timer = new QTimer();
 //    connect(timer, SIGNAL(timeout()), spectrumWidget, SLOT(update()));
 //    timer->start(2000);
 
     this->setLayout(mainLayout);
     this->installEventFilter(this);
+
+//	spectrumWidget->SetDetectedAreas(-10.0, -1.0, 10.0, 1.0, false);
+
 
 }
 
@@ -204,7 +220,9 @@ void GraphicWidget::setup()
         spectrumWidget->Setup(true,9000,"",spectrum,PointCount, 0, 0);
 
         delete[] spectrum;
+
     }
+
 }
 
 void GraphicWidget::set_coontrolPRM_state(bool state)
@@ -239,12 +257,36 @@ void GraphicWidget::setDefModulation(QString modulation)
 
 void GraphicWidget::setLabelName(QString base, QString second)
 {
-    emit signalSetLabelName(base, second);
+	emit signalSetLabelName(base, second);
+}
+
+void GraphicWidget::setDetectedAreasUpdate(QVector<QPointF> vec)
+{
+	emit signalSetDetectedAreas(vec);
+}
+
+void GraphicWidget::setZeroFrequency(double val)
+{
+	emit signalSetZeroFrequency(val);
 }
 
 void GraphicWidget::_slotSetDefModulation(QString modulation)
 {
-    spectrumWidget->SetLabel(_center_freq_def_modulation*1000, modulation);
+	spectrumWidget->SetLabel(_center_freq_def_modulation*1000, modulation);
+}
+
+void GraphicWidget::m_slotSetDetectedAreas(QVector<QPointF> vec)
+{
+	if(m_autoSearch == false)
+	{
+		return;
+	}
+	spectrumWidget->ClearAllDetectedAreas();
+	QVector<QPointF>::iterator it;
+	for(it = vec.begin(); it != vec.end(); ++it)
+	{
+		spectrumWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
+	}
 }
 
 void GraphicWidget::_slotSetEnablePanorama(bool state)
@@ -256,11 +298,23 @@ void GraphicWidget::_slotSetEnablePanorama(bool state)
 void GraphicWidget::_slotAutoSearch(bool state)
 {
     /// set auto search
+	switch(state)
+	{
+		case true:
+			m_autoSearch = true;
+			break;
+		case false:
+			m_autoSearch = false;
+			spectrumWidget->ClearAllDetectedAreas();
+			break;
+		default:
+			break;
+	}
 }
 
 void GraphicWidget::slotSelectionFinished(double x1, double y1, double x2, double y2)
 {
-    /// to Í√ˆ
+    /// to –∫–ì—Ü
     x1 /= 1000;
     x2 /= 1000;
     double dx;
@@ -344,7 +398,8 @@ void GraphicWidget::_slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
 //    {
         spectrumWidget->SetAutoscaleY(true);
         spectrumWidget->SetAlign(0);
-        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+//		spectrumWidget->SetZeroFrequencyHz(15000000/*spectrum[0]*//* + bandwidth*/);
+//		qDebug() << "ZERO = " << spectrum[0];
 //    }
 //    else
 //    {
@@ -353,7 +408,8 @@ void GraphicWidget::_slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
 //        spectrumWidget->SetAlign(3);
 //    }
 
-    spectrumWidget->Setup(_isComplex,_bandwidth,"”Ó‚ÂÌ¸", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+		_isComplex = false;
+	spectrumWidget->Setup(_isComplex,_bandwidth,"–£—Ä–æ–≤–µ–Ω—å", spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
     _mux.unlock();
 
 }
@@ -371,9 +427,11 @@ void GraphicWidget::_slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 
 //    if(!_isComplex)
 //    {
-        spectrumWidget->SetAutoscaleY(true);
-        spectrumWidget->SetAlign(0);
-        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+		spectrumWidget->SetAutoscaleY(true);
+		spectrumWidget->SetAlign(0);
+//        spectrumWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+//		spectrumWidget->SetZeroFrequencyHz(15000000/*spectrum[0]*//* + bandwidth*/);
+
 //    }
 //    else
 //    {
@@ -399,8 +457,8 @@ void GraphicWidget::_slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 
     if(_rett == 0 )
     {
-        int ret = QMessageBox::warning(this, tr("¬Õ»Ã¿Õ»≈"),
-                                        tr("Œ¡Õ¿–”∆≈Õ —»√Õ¿À.\n"),
+        int ret = QMessageBox::warning(this, tr("–í–ù–ò–ú–ê–ù–ò–ï"),
+                                        tr("–û–ë–ù–ê–†–£–ñ–ï–ù –°–ò–ì–ù–ê–õ.\n"),
                                         QMessageBox::Cancel, QMessageBox::Ok);
 
         _rett = -101;
@@ -470,7 +528,7 @@ void GraphicWidget::slotSetCorrelations(int id, const QVector<QPointF> vecFFT, c
 //        {
 //            _spectrum_peak_hold_corr[i] = spectrum[i];
 //        }
-//        spectrumWidget->Setup(isComplex,bandwidth,"”Ó‚ÂÌ¸",spectrum,PointCount, 0/*_spectrum_peak_hold_corr*/,0/*PointCount*/,false, false, minv, maxv);
+//        spectrumWidget->Setup(isComplex,bandwidth,"–£—Ä–æ–≤–µ–Ω—å",spectrum,PointCount, 0/*_spectrum_peak_hold_corr*/,0/*PointCount*/,false, false, minv, maxv);
     }
     delete[] spectrum;
 }
@@ -511,9 +569,9 @@ void GraphicWidget::_slotSSCorrelation()
     CommandMessage *msg = new CommandMessage(COMMAND_KM, _enable_correlation);
 	_tab->set_command(TypeCommand(graphic), msg);
     if(_enable_correlation)
-        _graphicsContextMenu->actions().at(3)->setText("ŒÚÍÎ˛˜ËÚ¸ ÍÓÂÎˇˆË˛");
+        _graphicsContextMenu->actions().at(3)->setText("–û—Ç–∫–ª—é—á–∏—Ç—å –∫–æ—Ä—Ä–µ–ª—è—Ü–∏—é");
     else
-        _graphicsContextMenu->actions().at(3)->setText("¬ÍÎ˛˜ËÚ¸ ÍÓÂÎˇˆË˛");
+        _graphicsContextMenu->actions().at(3)->setText("–í–∫–ª—é—á–∏—Ç—å –∫–æ—Ä—Ä–µ–ª—è—Ü–∏—é");
 }
 
 void GraphicWidget::_slotClearLabels()
@@ -540,5 +598,12 @@ void GraphicWidget::_slotShowControlPRM(bool state)
 
 void GraphicWidget::_slot_double_clicked(double d1, double d2)
 {
-    _tab->set_double_clicked(_id, d1, d2);
+	_tab->set_double_clicked(_id, d1, d2);
+}
+
+void GraphicWidget::m_slotSetZeroFrequency(double val)
+{
+	double cur_freq = _tab->get_current_frequency();
+	m_current_frequency = cur_freq*TO_MHZ;
+	spectrumWidget->SetZeroFrequencyHz(val + m_current_frequency);
 }

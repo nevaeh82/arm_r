@@ -29,11 +29,11 @@ ControlPanel::ControlPanel(QWidget* parent = 0)
 
     QVBoxLayout* v1 = new QVBoxLayout();
 
-    _chb_auto_search_common = new QCheckBox(tr("Àâòîïîèñê"));
+    _chb_auto_search_common = new QCheckBox(tr("ÐÐ²Ñ‚Ð¾Ð¿Ð¾Ð¸ÑÐº"));
     _chb_auto_search_common->setChecked(false);
     v1->addWidget(_chb_auto_search_common, Qt::AlignTop);
 
-    _chb_panorama_common = new QCheckBox(tr("Ïàíîðàìà"));
+    _chb_panorama_common = new QCheckBox(tr("ÐŸÐ°Ð½Ð¾Ñ€Ð°Ð¼Ð°"));
     _chb_panorama_common->setChecked(false);
     v1->addWidget(_chb_panorama_common, Qt::AlignTop);
 
@@ -45,7 +45,7 @@ ControlPanel::ControlPanel(QWidget* parent = 0)
     _sb_freq->setMaximumWidth(100);
     hbox->addWidget(_sb_freq, Qt::AlignLeft);
 
-    _pb_set_freq = new QPushButton(tr("Îáùàÿ ÷àñòîòà"));
+    _pb_set_freq = new QPushButton(tr("ÐžÐ±Ñ‰Ð°Ñ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ð°"));
     _pb_set_freq->setMaximumWidth(100);
 
     hbox->addWidget(_pb_set_freq, Qt::AlignLeft);

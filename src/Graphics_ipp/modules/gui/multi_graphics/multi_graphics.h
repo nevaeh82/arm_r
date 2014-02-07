@@ -32,7 +32,7 @@
 #include "../../gui/utilities/push_button_item.h"
 #include "../../gui/multi_graphics/labels/no_visual_labels_manager.h"
 
-//убрать дефайн или перегрузить вывод в релизе/
+//СѓР±СЂР°С‚СЊ РґРµС„Р°Р№РЅ РёР»Рё РїРµСЂРµРіСЂСѓР·РёС‚СЊ РІС‹РІРѕРґ РІ СЂРµР»РёР·Рµ/
 #ifdef _DEBUG
 #define MG_EnableDebugOutput
 #endif
@@ -79,6 +79,7 @@ QVector<double> MarkInterval(double aStart, double aEnd, double WidthPix, double
 class Q_MG_Grid;
 class Q_MG_Back_Grid;
 class Q_MG_MouseCursor;
+class Q_MG_SelectionAreas;
 class Q_MG_Material;
 class Q_MG_InfoWidget;
 class Q_MG_Style;
@@ -94,9 +95,10 @@ public:
 	Q_MG_Back_Grid* GridBack_Layer;
 	Q_MG_Grid* Grid_Layer;
 	Q_MG_MouseCursor* MouseLayer;
+	Q_MG_SelectionAreas*	DetectedLayer;
 	Q_MG_InfoWidget* InfoLayer;
 	QVector<Q_MG_Material*> Materials_LayersList;
-	bool SpectrumMode;//необходимо для переназначения колесика мыши на другой тип зуума, испоользуется только в wheelEvent
+	bool SpectrumMode;//РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ РїРµСЂРµРЅР°Р·РЅР°С‡РµРЅРёСЏ РєРѕР»РµСЃРёРєР° РјС‹С€Рё РЅР° РґСЂСѓРіРѕР№ С‚РёРї Р·СѓСѓРјР°, РёСЃРїРѕРѕР»СЊР·СѓРµС‚СЃСЏ С‚РѕР»СЊРєРѕ РІ wheelEvent
 
 	void addMaterial(Q_MG_Material* mat);
 	void wheelEvent ( QWheelEvent * event );
@@ -104,7 +106,7 @@ public:
 	void AllCopyMatrixByGridPublic() {AllCopyMatrixByGrid();}
 	
 
-	//маркеры
+	//РјР°СЂРєРµСЂС‹
 	void	ShowMarkers();
 	void	HideMarkers();
 	void	SetMoveAllMarkers();
@@ -114,33 +116,33 @@ public:
 	bool	MoveAllMarkers() const;
 
 	
-	//страшный крест
+	//СЃС‚СЂР°С€РЅС‹Р№ РєСЂРµСЃС‚
 	void	SetStrangeCross(double, double);
 	void	SetShowStrangeCross(bool value,bool horLabel,bool vertLabel);
 
 	
-	//выборка
+	//РІС‹Р±РѕСЂРєР°
 	void	ClearAllSelections();
 	
 	
 	//ZOOM
 	void ScaleOnSteps(int steps, bool byX,bool byY);
 	void ZoomOutFull(bool x = true, bool y = true);
-	void SetViewportForValues(double LeftVal,double TopVal,double RightVal,double BottomVal);//в пользовательских (виртуальных) бубнах
-	void ZoomToSelection(int selIndex = 0);//selIndex - если есть мультиселект то говорить конкретно для какого индекса зумить, зависит от CurSelectionType
+	void SetViewportForValues(double LeftVal,double TopVal,double RightVal,double BottomVal);//РІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… (РІРёСЂС‚СѓР°Р»СЊРЅС‹С…) Р±СѓР±РЅР°С…
+	void ZoomToSelection(int selIndex = 0);//selIndex - РµСЃР»Рё РµСЃС‚СЊ РјСѓР»СЊС‚РёСЃРµР»РµРєС‚ С‚Рѕ РіРѕРІРѕСЂРёС‚СЊ РєРѕРЅРєСЂРµС‚РЅРѕ РґР»СЏ РєР°РєРѕРіРѕ РёРЅРґРµРєСЃР° Р·СѓРјРёС‚СЊ, Р·Р°РІРёСЃРёС‚ РѕС‚ CurSelectionType
 	void SetDirectKf(QPointF newKf);
 	bool isSomeZoomIsOnMax(bool &X, bool& Y);
-	bool EnableHorZoom;//вкл. выкл Zoom
+	bool EnableHorZoom;//РІРєР». РІС‹РєР» Zoom
 	bool EnableVertZoom;
-	double VertStep;//шаги скейла по 1-му крутку колесика мыши, по умолчанию 2
+	double VertStep;//С€Р°РіРё СЃРєРµР№Р»Р° РїРѕ 1-РјСѓ РєСЂСѓС‚РєСѓ РєРѕР»РµСЃРёРєР° РјС‹С€Рё, РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 2
 	double HorStep;
 
 
 
-	QPointer<Q_MultiGraphics>  RelationBaseClass_;//указатель на класс который relation
+	QPointer<Q_MultiGraphics>  RelationBaseClass_;//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РєР»Р°СЃСЃ РєРѕС‚РѕСЂС‹Р№ relation
 	
-	void keyPressEvent ( QKeyEvent * event );//временные тестовые
-	void keyReleaseEvent ( QKeyEvent * event );//временные тестовые
+	void keyPressEvent ( QKeyEvent * event );//РІСЂРµРјРµРЅРЅС‹Рµ С‚РµСЃС‚РѕРІС‹Рµ
+	void keyReleaseEvent ( QKeyEvent * event );//РІСЂРµРјРµРЅРЅС‹Рµ С‚РµСЃС‚РѕРІС‹Рµ
 
 
 	//ContextMenu
@@ -176,7 +178,7 @@ public slots:
 	void ScreenDragByMouse(QPointF pf);
 	void ScreenScaleByMidMouse(QPointF pf, QPointF MousePos);
 	
-	//слот для ContextMenu
+	//СЃР»РѕС‚ РґР»СЏ ContextMenu
 	void on_wantContextMenu();
 	void on_menuAboutToShow();
 	void on_menuAboutToHide();
@@ -188,7 +190,7 @@ public slots:
 
 
 //////////////////////////////////////////////////////////////////////////
-//ДАЛЕЕ ИДУТ СЛУЖЕБНЫЕ КЛАССЫ НЕОБХОДИМЫЕ ДЛЯ РАБОТЫ
+//Р”РђР›Р•Р• РР”РЈРў РЎР›РЈР–Р•Р‘РќР«Р• РљР›РђРЎРЎР« РќР•РћР‘РҐРћР”РРњР«Р• Р”Р›РЇ Р РђР‘РћРўР«
 //////////////////////////////////////////////////////////////////////////
 
 struct str_MouseState
@@ -212,6 +214,7 @@ class Q_MG_BaseClass :public QGraphicsObject
 	friend Q_MG_Grid;
 	friend Q_MG_Material;
 	friend Q_MG_MouseCursor;
+	friend Q_MG_SelectionAreas;
 	friend Q_MultiGraphics;
 	friend Q_MG_InfoWidget;
 	Q_OBJECT
@@ -219,57 +222,57 @@ public:
 	Q_MG_BaseClass(QGraphicsItem *parent = NULL);
 	virtual ~Q_MG_BaseClass() {};
 
-	void CopyMatrix(Q_MG_BaseClass* src);//копирует базовую матрицу из класса, чтобы не производить расчетов, вид предствления InterpretType не копируется
+	void CopyMatrix(Q_MG_BaseClass* src);//РєРѕРїРёСЂСѓРµС‚ Р±Р°Р·РѕРІСѓСЋ РјР°С‚СЂРёС†Сѓ РёР· РєР»Р°СЃСЃР°, С‡С‚РѕР±С‹ РЅРµ РїСЂРѕРёР·РІРѕРґРёС‚СЊ СЂР°СЃС‡РµС‚РѕРІ, РІРёРґ РїСЂРµРґСЃС‚РІР»РµРЅРёСЏ InterpretType РЅРµ РєРѕРїРёСЂСѓРµС‚СЃСЏ
 
-	inline void ResizeEvent(QPoint _sz, bool MinMaxChanged = false);//вызывать при ресайезе сцены
-	inline void MoveEvent(QPointF _Trans,bool NeedCalcKf = false);//перемещение, устанавливает новый Trans (Trans = _Trans) в пикселях	(NeedCalcKf - ставиться если инициировано Scale-ом)
-	void MoveEvent_ValueOnCenter(QPointF Value);//перегруженная фнкция, ставит трансформ таким образом чтобы значение оказалось по середине экрана не зависимо от TransformOnCenter
+	inline void ResizeEvent(QPoint _sz, bool MinMaxChanged = false);//РІС‹Р·С‹РІР°С‚СЊ РїСЂРё СЂРµСЃР°Р№РµР·Рµ СЃС†РµРЅС‹
+	inline void MoveEvent(QPointF _Trans,bool NeedCalcKf = false);//РїРµСЂРµРјРµС‰РµРЅРёРµ, СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РЅРѕРІС‹Р№ Trans (Trans = _Trans) РІ РїРёРєСЃРµР»СЏС…	(NeedCalcKf - СЃС‚Р°РІРёС‚СЊСЃСЏ РµСЃР»Рё РёРЅРёС†РёРёСЂРѕРІР°РЅРѕ Scale-РѕРј)
+	void MoveEvent_ValueOnCenter(QPointF Value);//РїРµСЂРµРіСЂСѓР¶РµРЅРЅР°СЏ С„РЅРєС†РёСЏ, СЃС‚Р°РІРёС‚ С‚СЂР°РЅСЃС„РѕСЂРј С‚Р°РєРёРј РѕР±СЂР°Р·РѕРј С‡С‚РѕР±С‹ Р·РЅР°С‡РµРЅРёРµ РѕРєР°Р·Р°Р»РѕСЃСЊ РїРѕ СЃРµСЂРµРґРёРЅРµ СЌРєСЂР°РЅР° РЅРµ Р·Р°РІРёСЃРёРјРѕ РѕС‚ TransformOnCenter
 	void MoveEvent_ValueOnPixel(double valX, double valY, double PixelX, double PixelY);
-	QPointF ScaleEvent(QPointF scaleKf, QPointF scalePos);//вычисляет новый kf (kf+scaleKf), в сучае если зуум не влазит в границы области просмотра изменяется Kf сам, возвращает полченный kf
+	QPointF ScaleEvent(QPointF scaleKf, QPointF scalePos);//РІС‹С‡РёСЃР»СЏРµС‚ РЅРѕРІС‹Р№ kf (kf+scaleKf), РІ СЃСѓС‡Р°Рµ РµСЃР»Рё Р·СѓСѓРј РЅРµ РІР»Р°Р·РёС‚ РІ РіСЂР°РЅРёС†С‹ РѕР±Р»Р°СЃС‚Рё РїСЂРѕСЃРјРѕС‚СЂР° РёР·РјРµРЅСЏРµС‚СЃСЏ Kf СЃР°Рј, РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР»С‡РµРЅРЅС‹Р№ kf
 	QPointF setKf(QPointF inc_kf);
-	void ScaleAllToScreen(bool x,bool y);//устанавливет такой коофициент при котором все находится на экране
+	void ScaleAllToScreen(bool x,bool y);//СѓСЃС‚Р°РЅР°РІР»РёРІРµС‚ С‚Р°РєРѕР№ РєРѕРѕС„РёС†РёРµРЅС‚ РїСЂРё РєРѕС‚РѕСЂРѕРј РІСЃРµ РЅР°С…РѕРґРёС‚СЃСЏ РЅР° СЌРєСЂР°РЅРµ
 
-	void SetViewportForValues(double LeftVal,double TopVal,double RightVal,double BottomVal, int mode);//в "реальных" бубнах, mode: 0-просчитываем все оси, 1-только 0X 2-только 0Y
+	void SetViewportForValues(double LeftVal,double TopVal,double RightVal,double BottomVal, int mode);//РІ "СЂРµР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…, mode: 0-РїСЂРѕСЃС‡РёС‚С‹РІР°РµРј РІСЃРµ РѕСЃРё, 1-С‚РѕР»СЊРєРѕ 0X 2-С‚РѕР»СЊРєРѕ 0Y
 
-	void setMinAndMaxTransPoint( QPointF _MaxTransPoint,QPointF  _MinTransPoint);//в "реальных" бубнах
+	void setMinAndMaxTransPoint( QPointF _MaxTransPoint,QPointF  _MinTransPoint);//РІ "СЂРµР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
 
-	QPointF getCurTrans();//возвращает пользовательский трансформ
-	QPointF getCurKf();//возвращает текущий
+	QPointF getCurTrans();//РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ С‚СЂР°РЅСЃС„РѕСЂРј
+	QPointF getCurKf();//РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№
 
-	bool Release_ScaleIncrementType;//true умножать текущий на шаг, false плюсовать к текущему шаг
-	bool InverseVAxis;//устанавливают инверсию осей
+	bool Release_ScaleIncrementType;//true СѓРјРЅРѕР¶Р°С‚СЊ С‚РµРєСѓС‰РёР№ РЅР° С€Р°Рі, false РїР»СЋСЃРѕРІР°С‚СЊ Рє С‚РµРєСѓС‰РµРјСѓ С€Р°Рі
+	bool InverseVAxis;//СѓСЃС‚Р°РЅР°РІР»РёРІР°СЋС‚ РёРЅРІРµСЂСЃРёСЋ РѕСЃРµР№
 	bool InverseHAxis;
-	bool LockHorMove;//флаг включается когда необходимо залочить движение по горизонтали (включается сам при достижении конца зумма)
+	bool LockHorMove;//С„Р»Р°Рі РІРєР»СЋС‡Р°РµС‚СЃСЏ РєРѕРіРґР° РЅРµРѕР±С…РѕРґРёРјРѕ Р·Р°Р»РѕС‡РёС‚СЊ РґРІРёР¶РµРЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё (РІРєР»СЋС‡Р°РµС‚СЃСЏ СЃР°Рј РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё РєРѕРЅС†Р° Р·СѓРјРјР°)
 	bool LockVerMove;
 	QPointF MaximumZoom;
 
-	virtual void on_Resize() {};//вызывеатся после выполнения ResizeEvent
-	virtual void on_Move() {};//вызывеатся после выполнения MoveEvent
-	virtual void on_MinMaxChage() {};//вызывеатся после выполнения setMinAndMaxTransPoint
+	virtual void on_Resize() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ ResizeEvent
+	virtual void on_Move() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ MoveEvent
+	virtual void on_MinMaxChage() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ setMinAndMaxTransPoint
 	virtual void on_Scale() {};
-	virtual void on_Scale_or_MinMaxChange() {};//исключительный случай
+	virtual void on_Scale_or_MinMaxChange() {};//РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№
 
 	////
-	virtual QString Interpret(double val,  bool isVertical,bool isVirtual, QString* out = NULL,QString In = QString(),double start = 0,double end = 0,bool startEndisVirtual = true);//функция интерпритирования цифровых значений для отображения на экране
-	int Vert_RoundValue;//тип округдения цифровых значений на шкале по умолчанию = 0 (выкл.)
+	virtual QString Interpret(double val,  bool isVertical,bool isVirtual, QString* out = NULL,QString In = QString(),double start = 0,double end = 0,bool startEndisVirtual = true);//С„СѓРЅРєС†РёСЏ РёРЅС‚РµСЂРїСЂРёС‚РёСЂРѕРІР°РЅРёСЏ С†РёС„СЂРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РЅР° СЌРєСЂР°РЅРµ
+	int Vert_RoundValue;//С‚РёРї РѕРєСЂСѓРіРґРµРЅРёСЏ С†РёС„СЂРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ РЅР° С€РєР°Р»Рµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ = 0 (РІС‹РєР».)
 	int Hor_RoundValue;
 	bool EnableInterpretAddLabel;
-	QString Vert_InterpretAddLabel;//добавочная запись при интерпритации, добавляется при EnableInterpretAddLabel
+	QString Vert_InterpretAddLabel;//РґРѕР±Р°РІРѕС‡РЅР°СЏ Р·Р°РїРёСЃСЊ РїСЂРё РёРЅС‚РµСЂРїСЂРёС‚Р°С†РёРё, РґРѕР±Р°РІР»СЏРµС‚СЃСЏ РїСЂРё EnableInterpretAddLabel
 	QString Hor_InterpretAddLabel;
 	bool EnableKiloMath;//
 	bool EnableHorTimerConvertor;
 	bool EnableVertTimerConvertor;
 	bool InterpretShowFullTime;
-	double HorTimerKf;//посути FormatMSec ( val / HorTimerKf )
-	double VertTimerKf;//посути FormatMSec ( val / HorTimerKf )
+	double HorTimerKf;//РїРѕСЃСѓС‚Рё FormatMSec ( val / HorTimerKf )
+	double VertTimerKf;//РїРѕСЃСѓС‚Рё FormatMSec ( val / HorTimerKf )
 
 	/////
 	double ApplyInterpretSum(double val,bool isVertical) const;
 	double DisApplyInterpretSum(double val,bool isVertical) const;
-	double VertInterpretSum;//коофициент интерпритации вертикаль
-	double HorInterpretSum;//коофициент интерпритации горизонт
+	double VertInterpretSum;//РєРѕРѕС„РёС†РёРµРЅС‚ РёРЅС‚РµСЂРїСЂРёС‚Р°С†РёРё РІРµСЂС‚РёРєР°Р»СЊ
+	double HorInterpretSum;//РєРѕРѕС„РёС†РёРµРЅС‚ РёРЅС‚РµСЂРїСЂРёС‚Р°С†РёРё РіРѕСЂРёР·РѕРЅС‚
 
-	//это вызывает Grid после перерисовки
+	//СЌС‚Рѕ РІС‹Р·С‹РІР°РµС‚ Grid РїРѕСЃР»Рµ РїРµСЂРµСЂРёСЃРѕРІРєРё
 	bool GridChanged(QPointF Hw,int aligment);
 
 	void Reset();
@@ -279,45 +282,45 @@ public:
 
 	void setFixedScaleList(QList<double> FixedList);
 
-	bool isSomeZoomIsOnMax(bool &X, bool& Y);//вопрос звучит так , "какой нить зуум (по X или Y) приближен максимально или че-ли?"
+	bool isSomeZoomIsOnMax(bool &X, bool& Y);//РІРѕРїСЂРѕСЃ Р·РІСѓС‡РёС‚ С‚Р°Рє , "РєР°РєРѕР№ РЅРёС‚СЊ Р·СѓСѓРј (РїРѕ X РёР»Рё Y) РїСЂРёР±Р»РёР¶РµРЅ РјР°РєСЃРёРјР°Р»СЊРЅРѕ РёР»Рё С‡Рµ-Р»Рё?"
 
 
-	str_Collision CheckCollisionForTrans(QPointF trans,QPointF _kf);//проверяет перехлест с краями области для заданного trans и _kf
+	str_Collision CheckCollisionForTrans(QPointF trans,QPointF _kf);//РїСЂРѕРІРµСЂСЏРµС‚ РїРµСЂРµС…Р»РµСЃС‚ СЃ РєСЂР°СЏРјРё РѕР±Р»Р°СЃС‚Рё РґР»СЏ Р·Р°РґР°РЅРЅРѕРіРѕ trans Рё _kf
 	double GetTransByValueOnPixel(double Value, double pointOnScreen, bool isVertical);
 	double GetPixelByValueForTrans(QPointF tans, QPointF _kf,double val,bool isVertical);
-	double GetPixelByValue(double val,bool isVertical);//функции пребразования координат c учетом Trans и инверсии осей
+	double GetPixelByValue(double val,bool isVertical);//С„СѓРЅРєС†РёРё РїСЂРµР±СЂР°Р·РѕРІР°РЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚ c СѓС‡РµС‚РѕРј Trans Рё РёРЅРІРµСЂСЃРёРё РѕСЃРµР№
 	double GetValueByPixel(double pixel,bool isVertical);
 
 protected:
-	virtual void ReDraw () = 0;//вызывается при Move и Resize когда надо перерисовать объект
-	QPoint sz;//текущая ширина и высота сцены (окна просмотра)
-	QPointF Trans;//точка на сколько пикселей сдвиг по глобальной системе (в пикселях)
-	QPointF UserTrans;// -/- пользовательский
-	QPointF kf;//коофицент , сколько вешать в пикселях //screenX = x*kf.x() screenY = y*kf.y()
-	QPointF MinimumKf;//минимально возможный коофициент, рассчитывается только при ресайзе
+	virtual void ReDraw () = 0;//РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё Move Рё Resize РєРѕРіРґР° РЅР°РґРѕ РїРµСЂРµСЂРёСЃРѕРІР°С‚СЊ РѕР±СЉРµРєС‚
+	QPoint sz;//С‚РµРєСѓС‰Р°СЏ С€РёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° СЃС†РµРЅС‹ (РѕРєРЅР° РїСЂРѕСЃРјРѕС‚СЂР°)
+	QPointF Trans;//С‚РѕС‡РєР° РЅР° СЃРєРѕР»СЊРєРѕ РїРёРєСЃРµР»РµР№ СЃРґРІРёРі РїРѕ РіР»РѕР±Р°Р»СЊРЅРѕР№ СЃРёСЃС‚РµРјРµ (РІ РїРёРєСЃРµР»СЏС…)
+	QPointF UserTrans;// -/- РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№
+	QPointF kf;//РєРѕРѕС„РёС†РµРЅС‚ , СЃРєРѕР»СЊРєРѕ РІРµС€Р°С‚СЊ РІ РїРёРєСЃРµР»СЏС… //screenX = x*kf.x() screenY = y*kf.y()
+	QPointF MinimumKf;//РјРёРЅРёРјР°Р»СЊРЅРѕ РІРѕР·РјРѕР¶РЅС‹Р№ РєРѕРѕС„РёС†РёРµРЅС‚, СЂР°СЃСЃС‡РёС‚С‹РІР°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ РїСЂРё СЂРµСЃР°Р№Р·Рµ
 
-	QPointF MaxTransPoint;//ограничители размеров в значениях
-	QPointF MinTransPoint;//ограничители размеров
+	QPointF MaxTransPoint;//РѕРіСЂР°РЅРёС‡РёС‚РµР»Рё СЂР°Р·РјРµСЂРѕРІ РІ Р·РЅР°С‡РµРЅРёСЏС…
+	QPointF MinTransPoint;//РѕРіСЂР°РЅРёС‡РёС‚РµР»Рё СЂР°Р·РјРµСЂРѕРІ
 
 	Q_MG_Style* settings;
 
 
-	//параметры сетки, меняется по команде вызываеемой из подготовки сетки GridChanged
+	//РїР°СЂР°РјРµС‚СЂС‹ СЃРµС‚РєРё, РјРµРЅСЏРµС‚СЃСЏ РїРѕ РєРѕРјР°РЅРґРµ РІС‹Р·С‹РІР°РµРµРјРѕР№ РёР· РїРѕРґРіРѕС‚РѕРІРєРё СЃРµС‚РєРё GridChanged
 	double GridTopStep;
 	double GridLeftStep;
 	double GridRightStep;
 	double GridBottomStep;
 	QPointF curGridBhw;int curGridAlig;
 
-	//фиксированный скейл
+	//С„РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№ СЃРєРµР№Р»
 	bool EnableFixedScale;
-	QList<double> FixedScaleList;//желательно должен быть отсортирован в порядке увеличения т.е. 1,2,3,3.5,4, однако и без этого работает
+	QList<double> FixedScaleList;//Р¶РµР»Р°С‚РµР»СЊРЅРѕ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅ РІ РїРѕСЂСЏРґРєРµ СѓРІРµР»РёС‡РµРЅРёСЏ С‚.Рµ. 1,2,3,3.5,4, РѕРґРЅР°РєРѕ Рё Р±РµР· СЌС‚РѕРіРѕ СЂР°Р±РѕС‚Р°РµС‚
 	
 
 public slots:
 	virtual void getCommand(QString ToObj,QString CommandName,QVariant params) = 0;
 
-	//функуции для тестирования, вызываются из Squish
+	//С„СѓРЅРєСѓС†РёРё РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ, РІС‹Р·С‹РІР°СЋС‚СЃСЏ РёР· Squish
 	double getCurKf_SQ_X()		{	return kf.x();		};
 	double getCurKf_SQ_Y()		{	return kf.y();		};
 	double getCurTrans_SQ_X()	{	return Trans.x();	};
@@ -332,7 +335,7 @@ private:
 };
 #include <QDebug>
 //////////////////////////////////////////////////////////////////////////
-//ТРЕБУЕТ ОТ КЛАССА СЕТКИ Align и BorderHW
+//РўР Р•Р‘РЈР•Рў РћРў РљР›РђРЎРЎРђ РЎР•РўРљР Align Рё BorderHW
 class Q_MG_MouseCursor : public Q_MG_BaseClass
 {
 	Q_OBJECT
@@ -342,47 +345,47 @@ public:
 
     virtual void ReDraw () {update();};
 
-	// приниают и возвращают "виртуальные" бубны
+	// РїСЂРёРЅРёР°СЋС‚ Рё РІРѕР·РІСЂР°С‰Р°СЋС‚ "РІРёСЂС‚СѓР°Р»СЊРЅС‹Рµ" Р±СѓР±РЅС‹
 
-	//маркеры
-	void			addMarker(double Val,bool isVert);//добавляет маркер в "виртуальных" бубнах
-	void			ClearAllMarkers(bool isVert);//очищает все маркеры 
-	void			RemoveMarker(int index, bool isVert, bool need_change_signal = true);//также можно удалять при зажатом Ctrl и правой кнопкой мыши клик по маркеру
-	QList<double>	getMarkers(bool isVert);//получить список маркеров в "виртуальных" бубнах
-	void			SetMarkers(QList<double>,bool isVertical,bool noSignal = false);//в "виртуальных" бубнах
-	void			UpdateMarker(int index, double val,bool isVertical);//в "виртуальных" бубнах
-	bool			showVMarkers;//показывать ли маркеры
-	bool			showHMarkers;//показывать ли маркеры
-	bool			mutiMarkerMoove;//перемещать маркеры кучкой
-	bool			MarkerGlowEffect;//применять подсветку к маркерам
-	bool			showMarkersText;//показывать ли подписи на меркерах
-	bool			showMarkersDeff;//показывать ли разницу между маркерами
-	bool			showMarkerCentralParam;//показывать ли подписи к центру во время показа разницы
+	//РјР°СЂРєРµСЂС‹
+	void			addMarker(double Val,bool isVert);//РґРѕР±Р°РІР»СЏРµС‚ РјР°СЂРєРµСЂ РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	void			ClearAllMarkers(bool isVert);//РѕС‡РёС‰Р°РµС‚ РІСЃРµ РјР°СЂРєРµСЂС‹ 
+	void			RemoveMarker(int index, bool isVert, bool need_change_signal = true);//С‚Р°РєР¶Рµ РјРѕР¶РЅРѕ СѓРґР°Р»СЏС‚СЊ РїСЂРё Р·Р°Р¶Р°С‚РѕРј Ctrl Рё РїСЂР°РІРѕР№ РєРЅРѕРїРєРѕР№ РјС‹С€Рё РєР»РёРє РїРѕ РјР°СЂРєРµСЂСѓ
+	QList<double>	getMarkers(bool isVert);//РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РјР°СЂРєРµСЂРѕРІ РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	void			SetMarkers(QList<double>,bool isVertical,bool noSignal = false);//РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	void			UpdateMarker(int index, double val,bool isVertical);//РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	bool			showVMarkers;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РјР°СЂРєРµСЂС‹
+	bool			showHMarkers;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РјР°СЂРєРµСЂС‹
+	bool			mutiMarkerMoove;//РїРµСЂРµРјРµС‰Р°С‚СЊ РјР°СЂРєРµСЂС‹ РєСѓС‡РєРѕР№
+	bool			MarkerGlowEffect;//РїСЂРёРјРµРЅСЏС‚СЊ РїРѕРґСЃРІРµС‚РєСѓ Рє РјР°СЂРєРµСЂР°Рј
+	bool			showMarkersText;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РїРѕРґРїРёСЃРё РЅР° РјРµСЂРєРµСЂР°С…
+	bool			showMarkersDeff;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё СЂР°Р·РЅРёС†Сѓ РјРµР¶РґСѓ РјР°СЂРєРµСЂР°РјРё
+	bool			showMarkerCentralParam;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё РїРѕРґРїРёСЃРё Рє С†РµРЅС‚СЂСѓ РІРѕ РІСЂРµРјСЏ РїРѕРєР°Р·Р° СЂР°Р·РЅРёС†С‹
 	//////////////////////////////////////////////////////////////////////////
 
-	//выделение
-	void			SetSelection(double,double,double,double, bool noSignal = false);//по текущему  CurSelectionType, в виртуальных бубнах
-	void			updateCursorPosition(QPointF pos);//обновляет позицию курсора (вызывается из-за контекстного меню, оибо приходит paintEvent а hover еще не пришел) 
-	bool			HasSelection() const;//по всем
+	//РІС‹РґРµР»РµРЅРёРµ
+	void			SetSelection(double,double,double,double, bool noSignal = false);//РїРѕ С‚РµРєСѓС‰РµРјСѓ  CurSelectionType, РІ РІРёСЂС‚СѓР°Р»СЊРЅС‹С… Р±СѓР±РЅР°С…
+	void			updateCursorPosition(QPointF pos);//РѕР±РЅРѕРІР»СЏРµС‚ РїРѕР·РёС†РёСЋ РєСѓСЂСЃРѕСЂР° (РІС‹Р·С‹РІР°РµС‚СЃСЏ РёР·-Р·Р° РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ, РѕРёР±Рѕ РїСЂРёС…РѕРґРёС‚ paintEvent Р° hover РµС‰Рµ РЅРµ РїСЂРёС€РµР») 
+	bool			HasSelection() const;//РїРѕ РІСЃРµРј
 	bool			HasRectSelection() const;
 	bool			HasHorSelection() const;
 	bool			HasVertSelection() const;
-	void			ClearAllSelections();//очищает всю выборку
-	QList<QPointF>	getHVSelected(bool Vert);//получить то что выделенно пользователем в "виртуальных" бубнах
-	QList<QRectF>	getRectSelected();//получить то что выделенно пользователем в "виртуальных" бубнах
-	void			RemoveLastSelection();//по текущему  CurSelectionType
-	void			SetMultySelectEnabled(bool enable);//true, только фллаг возможности работы с multy select, т.е. кнопка Ctrl не будет игнорироваться см. SetButtonAltClickIsSingle
+	void			ClearAllSelections();//РѕС‡РёС‰Р°РµС‚ РІСЃСЋ РІС‹Р±РѕСЂРєСѓ
+	QList<QPointF>	getHVSelected(bool Vert);//РїРѕР»СѓС‡РёС‚СЊ С‚Рѕ С‡С‚Рѕ РІС‹РґРµР»РµРЅРЅРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	QList<QRectF>	getRectSelected();//РїРѕР»СѓС‡РёС‚СЊ С‚Рѕ С‡С‚Рѕ РІС‹РґРµР»РµРЅРЅРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј РІ "РІРёСЂС‚СѓР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	void			RemoveLastSelection();//РїРѕ С‚РµРєСѓС‰РµРјСѓ  CurSelectionType
+	void			SetMultySelectEnabled(bool enable);//true, С‚РѕР»СЊРєРѕ С„Р»Р»Р°Рі РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ СЃ multy select, С‚.Рµ. РєРЅРѕРїРєР° Ctrl РЅРµ Р±СѓРґРµС‚ РёРіРЅРѕСЂРёСЂРѕРІР°С‚СЊСЃСЏ СЃРј. SetButtonAltClickIsSingle
 	bool			IsMultySelectEnabled() const;
-	void			SetButtonCtrlClickIsSingle(bool is_single = true);//по умолчанию с зажатым Ctrl делается множественное выделение (false), с установкой флага все меняется на оборот, без Ctrl multy с Ctrl single
+	void			SetButtonCtrlClickIsSingle(bool is_single = true);//РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ СЃ Р·Р°Р¶Р°С‚С‹Рј Ctrl РґРµР»Р°РµС‚СЃСЏ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅРѕРµ РІС‹РґРµР»РµРЅРёРµ (false), СЃ СѓСЃС‚Р°РЅРѕРІРєРѕР№ С„Р»Р°РіР° РІСЃРµ РјРµРЅСЏРµС‚СЃСЏ РЅР° РѕР±РѕСЂРѕС‚, Р±РµР· Ctrl multy СЃ Ctrl single
 	bool			IsButtonCtrlClickIsSingle() const;
-	bool			EnableByStepSelection;//шаг выделения
-	double			stepValX;//шаг выделения
-	double			stepValY;//шаг выделения
-	bool			ShowSelectText;//Рисовать ли подписи и стрелочки при выделении
-	int				CurSelectionType;//тип пользовательского выделения, 0 - недоступна, 1 - горизонтальная ||, 2 - вертикальная =, 3 - свободная []
+	bool			EnableByStepSelection;//С€Р°Рі РІС‹РґРµР»РµРЅРёСЏ
+	double			stepValX;//С€Р°Рі РІС‹РґРµР»РµРЅРёСЏ
+	double			stepValY;//С€Р°Рі РІС‹РґРµР»РµРЅРёСЏ
+	bool			ShowSelectText;//Р РёСЃРѕРІР°С‚СЊ Р»Рё РїРѕРґРїРёСЃРё Рё СЃС‚СЂРµР»РѕС‡РєРё РїСЂРё РІС‹РґРµР»РµРЅРёРё
+	int				CurSelectionType;//С‚РёРї РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ РІС‹РґРµР»РµРЅРёСЏ, 0 - РЅРµРґРѕСЃС‚СѓРїРЅР°, 1 - РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ ||, 2 - РІРµСЂС‚РёРєР°Р»СЊРЅР°СЏ =, 3 - СЃРІРѕР±РѕРґРЅР°СЏ []
 	//////////////////////////////////////////////////////////////////////////
 
-	//подписи
+	//РїРѕРґРїРёСЃРё
 	void			ClearAllFredomLabels();
 	void			ChangeLabelText(QString name,QString new_text, bool immediately_update = false);
 	void			ChangeLabelPos(QString name,double new_pos, bool immediately_update = false);
@@ -392,16 +395,16 @@ public:
 	void			RemoveLabel(QString name, bool immediately_update = false);
 	//////////////////////////////////////////////////////////////////////////
 
-	bool	DrawTextDecorateMidLine;//рисовать ли пунктирную линию центра при маркерах или выделении	
-	bool	showBigGrafCursor;//рисовать ли большое перекрестие курсора
-	bool	showMiniGrafCursor;//рисовать ли малое перекрестие курсора (когда рисуется большое, малое не рисуется)
-	bool	showVValues;//показывать значения по которым указатель мыши
+	bool	DrawTextDecorateMidLine;//СЂРёСЃРѕРІР°С‚СЊ Р»Рё РїСѓРЅРєС‚РёСЂРЅСѓСЋ Р»РёРЅРёСЋ С†РµРЅС‚СЂР° РїСЂРё РјР°СЂРєРµСЂР°С… РёР»Рё РІС‹РґРµР»РµРЅРёРё	
+	bool	showBigGrafCursor;//СЂРёСЃРѕРІР°С‚СЊ Р»Рё Р±РѕР»СЊС€РѕРµ РїРµСЂРµРєСЂРµСЃС‚РёРµ РєСѓСЂСЃРѕСЂР°
+	bool	showMiniGrafCursor;//СЂРёСЃРѕРІР°С‚СЊ Р»Рё РјР°Р»РѕРµ РїРµСЂРµРєСЂРµСЃС‚РёРµ РєСѓСЂСЃРѕСЂР° (РєРѕРіРґР° СЂРёСЃСѓРµС‚СЃСЏ Р±РѕР»СЊС€РѕРµ, РјР°Р»РѕРµ РЅРµ СЂРёСЃСѓРµС‚СЃСЏ)
+	bool	showVValues;//РїРѕРєР°Р·С‹РІР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РїРѕ РєРѕС‚РѕСЂС‹Рј СѓРєР°Р·Р°С‚РµР»СЊ РјС‹С€Рё
 	bool	showHValues;
-	bool	GlowEffect;//применять эффект подсветки к курсору
-	bool	UseMouseCursorJump;//перепрыгивает ли мышь в начало экрана при достижения конца и наоборот
+	bool	GlowEffect;//РїСЂРёРјРµРЅСЏС‚СЊ СЌС„С„РµРєС‚ РїРѕРґСЃРІРµС‚РєРё Рє РєСѓСЂСЃРѕСЂСѓ
+	bool	UseMouseCursorJump;//РїРµСЂРµРїСЂС‹РіРёРІР°РµС‚ Р»Рё РјС‹С€СЊ РІ РЅР°С‡Р°Р»Рѕ СЌРєСЂР°РЅР° РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёСЏ РєРѕРЅС†Р° Рё РЅР°РѕР±РѕСЂРѕС‚
 		
 	
-	//крест
+	//РєСЂРµСЃС‚
 	bool	showStrangeCrossHorText;
 	bool	showStrangeCrossVertText;
 	bool	showStrangeCross;
@@ -428,14 +431,14 @@ private:
 	bool CursorJastReDroped;
 
 
-	//выделения
+	//РІС‹РґРµР»РµРЅРёСЏ
 	QRectF CurMoveSel;
 	bool OnSelection;
 	bool selection_deselection_started_;
-	bool multi_select_enable_;//вызможен ли множественный выбор
+	bool multi_select_enable_;//РІС‹Р·РјРѕР¶РµРЅ Р»Рё РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Р№ РІС‹Р±РѕСЂ
 	bool button_ctrl_click_is_single_;
 	bool is_deselect_;
-	QList<QPointF> VAxisSelList;//хранится в значениях, меньшее всегда первое
+	QList<QPointF> VAxisSelList;//С…СЂР°РЅРёС‚СЃСЏ РІ Р·РЅР°С‡РµРЅРёСЏС…, РјРµРЅСЊС€РµРµ РІСЃРµРіРґР° РїРµСЂРІРѕРµ
 	QList<QPointF> HAxisSelList;
 	QList<QRectF> RectSelList;
 	struct SelectionButtonPanel
@@ -454,50 +457,50 @@ private:
 	bool CalcDeselectPoint(QList<QPointF> & list, QPointF unSelectRectPoint, bool multySelect);
 	bool CalcDeselectRect(QList<QRectF> & list, QRectF unSelectRect);
 
-	//Не реализовано имеется ссылска с 
-	QList<SelectionButtonPanel> zoomOnButtonList_VAxisSel;//список кнопок для выборки
+	//РќРµ СЂРµР°Р»РёР·РѕРІР°РЅРѕ РёРјРµРµС‚СЃСЏ СЃСЃС‹Р»СЃРєР° СЃ 
+	QList<SelectionButtonPanel> zoomOnButtonList_VAxisSel;//СЃРїРёСЃРѕРє РєРЅРѕРїРѕРє РґР»СЏ РІС‹Р±РѕСЂРєРё
 	QList<SelectionButtonPanel> zoomOnButtonList_HAxisSel;
 	QList<SelectionButtonPanel> zoomOnButtonList_RectSel;
 	//////////////////////////////////////////////////////////////////////////
 
 	inline void DrawSelections(QPainter *painter);
 	inline void TextDecorate(QPainter *painter,const QRectF& points, const QPointF& value, bool isVertical,int style = 0);
-	inline bool FigureIsVisible(const QRectF& points);//видима ли фигура ваще на экране с учетом алиджина, в пикселях
+	inline bool FigureIsVisible(const QRectF& points);//РІРёРґРёРјР° Р»Рё С„РёРіСѓСЂР° РІР°С‰Рµ РЅР° СЌРєСЂР°РЅРµ СЃ СѓС‡РµС‚РѕРј Р°Р»РёРґР¶РёРЅР°, РІ РїРёРєСЃРµР»СЏС…
 
-	//маркеры
+	//РјР°СЂРєРµСЂС‹
 	QPixmap VerCurPix;
 	QPixmap HorCurPix;
 	QList<double> HorMark;
 	QList<double> VertMark;
-	inline void DrawMarkers(QPainter *painter);//рисует маркеры и также проверяет находится ли маркер под курсором и заполняет соответственно UnderMouseMarkerIndex
-	int UnderMouseMarkerIndex;//индекс маркера под курсором (тот который тянем если < 0 то ничего не тянем)
-	bool UnderMouseMarkerIndexIsVert;//в каком массиве индекс собственно
+	inline void DrawMarkers(QPainter *painter);//СЂРёСЃСѓРµС‚ РјР°СЂРєРµСЂС‹ Рё С‚Р°РєР¶Рµ РїСЂРѕРІРµСЂСЏРµС‚ РЅР°С…РѕРґРёС‚СЃСЏ Р»Рё РјР°СЂРєРµСЂ РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј Рё Р·Р°РїРѕР»РЅСЏРµС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ UnderMouseMarkerIndex
+	int UnderMouseMarkerIndex;//РёРЅРґРµРєСЃ РјР°СЂРєРµСЂР° РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј (С‚РѕС‚ РєРѕС‚РѕСЂС‹Р№ С‚СЏРЅРµРј РµСЃР»Рё < 0 С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ С‚СЏРЅРµРј)
+	bool UnderMouseMarkerIndexIsVert;//РІ РєР°РєРѕРј РјР°СЃСЃРёРІРµ РёРЅРґРµРєСЃ СЃРѕР±СЃС‚РІРµРЅРЅРѕ
 	bool OnMarkerMoove;
 	bool NeedSortHorMark;
 	bool NeedSortVertMark;
 	QList<double> sortedHorMark;
 	QList<double> sortedVertMark;
 
-	//корректировка значений выделений и маркеров по заданной сетке\шагу выделения
+	//РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ РІС‹РґРµР»РµРЅРёР№ Рё РјР°СЂРєРµСЂРѕРІ РїРѕ Р·Р°РґР°РЅРЅРѕР№ СЃРµС‚РєРµ\С€Р°РіСѓ РІС‹РґРµР»РµРЅРёСЏ
 	inline double Correct_ValueByStep_or_PixelByGrid(double val,double pixel,bool isVertical);
 
-	//скейл по ср копке мышке
+	//СЃРєРµР№Р» РїРѕ СЃСЂ РєРѕРїРєРµ РјС‹С€РєРµ
 	int screenStartPosScaleX;
 	int screenStartPosScaleY;
 	QPointF sceneStartPosScale;
 
 	void DrawStrangeCross(QPainter *painter);
 
-	//счетчик перемещения мыши для выова контекстного меню
+	//СЃС‡РµС‚С‡РёРє РїРµСЂРµРјРµС‰РµРЅРёСЏ РјС‹С€Рё РґР»СЏ РІС‹РѕРІР° РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ
 	qint64 deltaMoveX;
 	qint64 deltaMoveY;
 	
-	//необходимо для COntextMenu чтобы курсор не прыгал
+	//РЅРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ COntextMenu С‡С‚РѕР±С‹ РєСѓСЂСЃРѕСЂ РЅРµ РїСЂС‹РіР°Р»
 	bool IgnoreNextHoverEvent;
 
-	//свободные подписи на экране
+	//СЃРІРѕР±РѕРґРЅС‹Рµ РїРѕРґРїРёСЃРё РЅР° СЌРєСЂР°РЅРµ
 	void DrawFredomLabels(QPainter *painter);
-	//новое
+	//РЅРѕРІРѕРµ
 	QPointer<NoVisualLabelsManager> labels_manager_;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -505,16 +508,16 @@ private:
 	DISALLOW_COPY_AND_ASSIGN(Q_MG_MouseCursor);
 
 signals:
-	//все сигналы в "реальных" бубнах
-	void dragScreen(QPointF dragPoint);//в пикселях на экране
-	void dragScreenFinish();//таскание экрана завершено, эмитится если экран был перемещен хотябы на 1 пиксель (по daltaMooveX (Y) )
-	void scaleScreen(QPointF dragPoint, QPointF MousePos);//в пикселях на экране
+	//РІСЃРµ СЃРёРіРЅР°Р»С‹ РІ "СЂРµР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+	void dragScreen(QPointF dragPoint);//РІ РїРёРєСЃРµР»СЏС… РЅР° СЌРєСЂР°РЅРµ
+	void dragScreenFinish();//С‚Р°СЃРєР°РЅРёРµ СЌРєСЂР°РЅР° Р·Р°РІРµСЂС€РµРЅРѕ, СЌРјРёС‚РёС‚СЃСЏ РµСЃР»Рё СЌРєСЂР°РЅ Р±С‹Р» РїРµСЂРµРјРµС‰РµРЅ С…РѕС‚СЏР±С‹ РЅР° 1 РїРёРєСЃРµР»СЊ (РїРѕ daltaMooveX (Y) )
+	void scaleScreen(QPointF dragPoint, QPointF MousePos);//РІ РїРёРєСЃРµР»СЏС… РЅР° СЌРєСЂР°РЅРµ
 	
 	void selectionCleared();
 	void selectedPixelChange(double x1, double y1,double x2,double y2);
 	void selectionFinished(double x1, double y1,double x2,double y2);
     void selectionFinishedRedLine(double y); ///emit when choose threshold
-	void deselectFinished();//эмитится когда deselect чето натворил - определить какие конкретно изменения произошли - проще перечитать все данные
+	void deselectFinished();//СЌРјРёС‚РёС‚СЃСЏ РєРѕРіРґР° deselect С‡РµС‚Рѕ РЅР°С‚РІРѕСЂРёР» - РѕРїСЂРµРґРµР»РёС‚СЊ РєР°РєРёРµ РєРѕРЅРєСЂРµС‚РЅРѕ РёР·РјРµРЅРµРЅРёСЏ РїСЂРѕРёР·РѕС€Р»Рё - РїСЂРѕС‰Рµ РїРµСЂРµС‡РёС‚Р°С‚СЊ РІСЃРµ РґР°РЅРЅС‹Рµ
 	
 	void markerMooved(int index, double value,bool isVertical);
 	void markersChanged(QList<double> Mark,bool isVertical);
@@ -530,6 +533,57 @@ public slots:
 
 };
 
+//РўР Р•Р‘РЈР•Рў РћРў РљР›РђРЎРЎРђ РЎР•РўРљР Align Рё BorderHW
+class Q_MG_SelectionAreas : public Q_MG_BaseClass
+{
+	Q_OBJECT
+public:
+	Q_MG_SelectionAreas(QGraphicsItem *parent = NULL);
+	~Q_MG_SelectionAreas() {/*ClearAllSelections();delete SizeAllCur;*/};
+
+	virtual void ReDraw () {update();};
+
+	void			SetSelection(double,double,double,double, bool noSignal = false);//РїРѕ С‚РµРєСѓС‰РµРјСѓ  CurSelectionType, РІ РІРёСЂС‚СѓР°Р»СЊРЅС‹С… Р±СѓР±РЅР°С…
+//	bool			HasSelection() const;//РїРѕ РІСЃРµРј
+//	bool			HasRectSelection() const;
+//	bool			HasHorSelection() const;
+//	bool			HasVertSelection() const;
+
+	void			ClearAllSelections();//РѕС‡РёС‰Р°РµС‚ РІСЃСЋ РІС‹Р±РѕСЂРєСѓ
+
+
+private:
+	QList<QPointF> HAxisSelList;
+
+	inline void DrawSelections(QPainter *painter);
+	virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
+
+	QRectF boundingRect() const {return QRectF();};
+	virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * event ){};
+	virtual void hoverLeaveEvent ( QGraphicsSceneHoverEvent * event ){};
+	virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event ){};
+	virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event ){};
+	virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * event ){};
+	virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * event ){};
+	virtual void on_Resize() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ ResizeEvent
+	virtual void on_Move() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ MoveEvent
+	virtual void on_MinMaxChage() {};//РІС‹Р·С‹РІРµР°С‚СЃСЏ РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ setMinAndMaxTransPoint
+	virtual void on_Scale() {};
+	virtual void on_Scale_or_MinMaxChange() {};//РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅС‹Р№ СЃР»СѓС‡Р°Р№
+
+	virtual QString Interpret(double val,  bool isVertical,bool isVirtual, QString* out = NULL,QString In = QString(),double start = 0,double end = 0,bool startEndisVirtual = true){ return QString();};//С„СѓРЅРєС†РёСЏ РёРЅС‚РµСЂРїСЂРёС‚РёСЂРѕРІР°РЅРёСЏ С†РёС„СЂРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РЅР° СЌРєСЂР°РЅРµ
+
+public slots:
+	virtual void getCommand(QString ToObj,QString CommandName,QVariant params) {};
+
+
+signals:
+	//РІСЃРµ СЃРёРіРЅР°Р»С‹ РІ "СЂРµР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…
+
+	void selectionCleared();
+	void selectionFinished(double x1, double y1,double x2,double y2);
+
+};
 
 //////////////////////////////////////////////////////////////////////////
 class Q_MG_Back_Grid : public  QGraphicsItem
@@ -548,7 +602,7 @@ public:
 private:
 	QPoint sz;
 	
-	//все что ниже - в пиксеях здесь нет никаких значений тупо пиксели где рисовать
+	//РІСЃРµ С‡С‚Рѕ РЅРёР¶Рµ - РІ РїРёРєСЃРµСЏС… Р·РґРµСЃСЊ РЅРµС‚ РЅРёРєР°РєРёС… Р·РЅР°С‡РµРЅРёР№ С‚СѓРїРѕ РїРёРєСЃРµР»Рё РіРґРµ СЂРёСЃРѕРІР°С‚СЊ
 	QVector<qreal> XSubDiv;
 	QVector<qreal> YSubDiv;
 	QVector<qreal> XDiv;
@@ -570,40 +624,40 @@ public:
 	QRectF boundingRect() const { return QRectF(0,0,sz.x()+1,sz.y()+1); };
 	QPainterPath shape() const;
 	virtual void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget );
-	virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );//нажали чисто на бордюр, далее не пускает
-	virtual QPointF getBorderHightWidth();//вовращает ширину и высоту отрисованного бордюра, вызывается из Q_MG_MouseCursor
+	virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );//РЅР°Р¶Р°Р»Рё С‡РёСЃС‚Рѕ РЅР° Р±РѕСЂРґСЋСЂ, РґР°Р»РµРµ РЅРµ РїСѓСЃРєР°РµС‚
+	virtual QPointF getBorderHightWidth();//РІРѕРІСЂР°С‰Р°РµС‚ С€РёСЂРёРЅСѓ Рё РІС‹СЃРѕС‚Сѓ РѕС‚СЂРёСЃРѕРІР°РЅРЅРѕРіРѕ Р±РѕСЂРґСЋСЂР°, РІС‹Р·С‹РІР°РµС‚СЃСЏ РёР· Q_MG_MouseCursor
 
 	
-	int flag_GridAligment;// 0 - LT 1 - LB 2 - RT 3 - RB // требуется для Q_MG_MouseCursor		0	2
+	int flag_GridAligment;// 0 - LT 1 - LB 2 - RT 3 - RB // С‚СЂРµР±СѓРµС‚СЃСЏ РґР»СЏ Q_MG_MouseCursor		0	2
 																					//			1	3
 
-	bool flag_DrawVAxis;//рисовать ли ось в целом
+	bool flag_DrawVAxis;//СЂРёСЃРѕРІР°С‚СЊ Р»Рё РѕСЃСЊ РІ С†РµР»РѕРј
 	bool flag_DrawHAxis;
 
-	bool DrawVSubDiv;//рисовать ли доп. деления
+	bool DrawVSubDiv;//СЂРёСЃРѕРІР°С‚СЊ Р»Рё РґРѕРї. РґРµР»РµРЅРёСЏ
 	bool DrawHSubDiv;
 
 	bool DrawVBaseLine;
 	bool DrawHBaseLine;
 
-	bool DrawVGridBorders;//рисовать бордюры со значениями
+	bool DrawVGridBorders;//СЂРёСЃРѕРІР°С‚СЊ Р±РѕСЂРґСЋСЂС‹ СЃРѕ Р·РЅР°С‡РµРЅРёСЏРјРё
 	bool DrawHGridBorders;
 
-	double HightLightVVal;//какие значения подсвечивать по умолчанию подсвечивается 0 0, если значения нет на сетке оно не подсвечивается
+	double HightLightVVal;//РєР°РєРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРѕРґСЃРІРµС‡РёРІР°С‚СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїРѕРґСЃРІРµС‡РёРІР°РµС‚СЃСЏ 0 0, РµСЃР»Рё Р·РЅР°С‡РµРЅРёСЏ РЅРµС‚ РЅР° СЃРµС‚РєРµ РѕРЅРѕ РЅРµ РїРѕРґСЃРІРµС‡РёРІР°РµС‚СЃСЏ
 	double HightLightHVal;
 	
-	QString LabelVAxis;//подписи к шакалам запрошенные пользователем (оригиналы)
+	QString LabelVAxis;//РїРѕРґРїРёСЃРё Рє С€Р°РєР°Р»Р°Рј Р·Р°РїСЂРѕС€РµРЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј (РѕСЂРёРіРёРЅР°Р»С‹)
 	QString LabelHAxis;
 
-	double HGridNumberStep;//базовый шаг шкалы, расчет идет maxTextWidth += HGridNumberStep, результат минимум 50
-	double VGridNumberStep;//базовый шаг шкалы = 25 идет как есть.
+	double HGridNumberStep;//Р±Р°Р·РѕРІС‹Р№ С€Р°Рі С€РєР°Р»С‹, СЂР°СЃС‡РµС‚ РёРґРµС‚ maxTextWidth += HGridNumberStep, СЂРµР·СѓР»СЊС‚Р°С‚ РјРёРЅРёРјСѓРј 50
+	double VGridNumberStep;//Р±Р°Р·РѕРІС‹Р№ С€Р°Рі С€РєР°Р»С‹ = 25 РёРґРµС‚ РєР°Рє РµСЃС‚СЊ.
 
 	void ReDraw ()
 	{
 		int errCode = MarkIntervalAndCalcBorderSizes();
 		if (errCode == 1)
 		{
-			sendCommand("mg_InfoWidget","PrintText",QObject::tr("Значения графика выходят за границы отображаемой области"));
+			sendCommand("mg_InfoWidget","PrintText",QObject::tr("Р—РЅР°С‡РµРЅРёСЏ РіСЂР°С„РёРєР° РІС‹С…РѕРґСЏС‚ Р·Р° РіСЂР°РЅРёС†С‹ РѕС‚РѕР±СЂР°Р¶Р°РµРјРѕР№ РѕР±Р»Р°СЃС‚Рё"));
 		}
 
 		if (errCode == 2)
@@ -615,7 +669,7 @@ public:
 	};
 
 	
-	int MarkIntervalAndCalcBorderSizes();//возвращает код ошибки 0-все нормально, 1 - ошибка при расчетах интервалов, 2-размеры окна очень малы, вообщем рисовать сетку ненадо
+	int MarkIntervalAndCalcBorderSizes();//РІРѕР·РІСЂР°С‰Р°РµС‚ РєРѕРґ РѕС€РёР±РєРё 0-РІСЃРµ РЅРѕСЂРјР°Р»СЊРЅРѕ, 1 - РѕС€РёР±РєР° РїСЂРё СЂР°СЃС‡РµС‚Р°С… РёРЅС‚РµСЂРІР°Р»РѕРІ, 2-СЂР°Р·РјРµСЂС‹ РѕРєРЅР° РѕС‡РµРЅСЊ РјР°Р»С‹, РІРѕРѕР±С‰РµРј СЂРёСЃРѕРІР°С‚СЊ СЃРµС‚РєСѓ РЅРµРЅР°РґРѕ
 	QVector<double> IntervalRetValV;
 	QVector<double> IntervalRetValH;
 	QVector<double> SubDivRetValV;
@@ -623,11 +677,11 @@ public:
 
 private:
 
-	QString printLabelVAxis;//подписи к шакалам реальни печатаемые
-	QString printLabelHAxis;//подписи к шакалам реальни печатаемые
+	QString printLabelVAxis;//РїРѕРґРїРёСЃРё Рє С€Р°РєР°Р»Р°Рј СЂРµР°Р»СЊРЅРё РїРµС‡Р°С‚Р°РµРјС‹Рµ
+	QString printLabelHAxis;//РїРѕРґРїРёСЃРё Рє С€Р°РєР°Р»Р°Рј СЂРµР°Р»СЊРЅРё РїРµС‡Р°С‚Р°РµРјС‹Рµ
 
-	qreal BorderW;//ширина вертикального бордюра, определяется во время рисования
-	qreal BorderH;//высота -/-
+	qreal BorderW;//С€РёСЂРёРЅР° РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ Р±РѕСЂРґСЋСЂР°, РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РІРѕ РІСЂРµРјСЏ СЂРёСЃРѕРІР°РЅРёСЏ
+	qreal BorderH;//РІС‹СЃРѕС‚Р° -/-
 		
 	Q_MG_Back_Grid* GridBack_Layer;
 
@@ -674,7 +728,7 @@ public:
 	void SetValid(QVector<InfoWidgetData>& vect,bool a);
 	void SetShow(QVector<InfoWidgetData>& vect,bool a);
 
-	QVector<InfoWidgetData> UserData;//список выводимых значений пользователя
+	QVector<InfoWidgetData> UserData;//СЃРїРёСЃРѕРє РІС‹РІРѕРґРёРјС‹С… Р·РЅР°С‡РµРЅРёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 
 private:
 	QRectF boundingRect() const { return QRectF(0,0,szX+1,szY+1); };
@@ -702,7 +756,7 @@ private:
 	
 	QVector< QVector<InfoWidgetData>* > ShowList;
 
-	//прогресс бар
+	//РїСЂРѕРіСЂРµСЃСЃ Р±Р°СЂ
 	double ProgressBarValue;
 	bool ShowProgressBar;
 	bool NeedShowProgress();
@@ -711,12 +765,12 @@ private:
 
 public slots:
 
-	void setUserText(QString str,bool isHtml = false);//установка пользовательского текста флаг PrintTextMode = 1 ставится автоматически
-	void setPrintTextMode(int _PrintTextMode);//вид выводимых занчений: 0 - стандарт,1 - пользовательские
+	void setUserText(QString str,bool isHtml = false);//СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ С‚РµРєСЃС‚Р° С„Р»Р°Рі PrintTextMode = 1 СЃС‚Р°РІРёС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё
+	void setPrintTextMode(int _PrintTextMode);//РІРёРґ РІС‹РІРѕРґРёРјС‹С… Р·Р°РЅС‡РµРЅРёР№: 0 - СЃС‚Р°РЅРґР°СЂС‚,1 - РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ
 	void getCommand(QString ToObj,QString CommandName,QVariant params);
 
-	void SetProgress(double);//некий прогресс от 0 до 100, отображать в инфо окне, если не 0 или 100 показать
-	double GetProgress();//возвращает текущий прогресс
+	void SetProgress(double);//РЅРµРєРёР№ РїСЂРѕРіСЂРµСЃСЃ РѕС‚ 0 РґРѕ 100, РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РІ РёРЅС„Рѕ РѕРєРЅРµ, РµСЃР»Рё РЅРµ 0 РёР»Рё 100 РїРѕРєР°Р·Р°С‚СЊ
+	double GetProgress();//РІРѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№ РїСЂРѕРіСЂРµСЃСЃ
 	bool ShowProgress();
 	void SetShowProgress(bool value);
 
@@ -778,7 +832,7 @@ public:
 
         {
             QReadLocker locker(&thread_status_lock_);
-            if (thread_status_ == 2) return;// чтобы флаг убить не снялся флагом паузы
+            if (thread_status_ == 2) return;// С‡С‚РѕР±С‹ С„Р»Р°Рі СѓР±РёС‚СЊ РЅРµ СЃРЅСЏР»СЃСЏ С„Р»Р°РіРѕРј РїР°СѓР·С‹
         }
 
         {
@@ -826,17 +880,17 @@ signals:
 
 
 protected:
-	void	Start_Wake();		//будит WaitContion, если поток спал,снимает флаг паузы
-	void	FinishHim_wait();	//возвращается только при полной остановке
-	bool	NeedBreaked();		//Возвращает true если поставлен один из флагов pause или finish
+	void	Start_Wake();		//Р±СѓРґРёС‚ WaitContion, РµСЃР»Рё РїРѕС‚РѕРє СЃРїР°Р»,СЃРЅРёРјР°РµС‚ С„Р»Р°Рі РїР°СѓР·С‹
+	void	FinishHim_wait();	//РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ РїСЂРё РїРѕР»РЅРѕР№ РѕСЃС‚Р°РЅРѕРІРєРµ
+	bool	NeedBreaked();		//Р’РѕР·РІСЂР°С‰Р°РµС‚ true РµСЃР»Рё РїРѕСЃС‚Р°РІР»РµРЅ РѕРґРёРЅ РёР· С„Р»Р°РіРѕРІ pause РёР»Рё finish
 	bool UseFilterIfOn(Q_MG_MaterialElement* el)
 	{	if (useFilter_) return filter_func_(el);else return true;	}
 
 private:
-	//упрпавление
+	//СѓРїСЂРїР°РІР»РµРЅРёРµ
 	void	run();
 	std::function<bool(Q_MG_MaterialElement*)>  filter_func_;
-	//void	setPauseFlag();		//ставит "по правилам" флаг паузы
+	//void	setPauseFlag();		//СЃС‚Р°РІРёС‚ "РїРѕ РїСЂР°РІРёР»Р°Рј" С„Р»Р°Рі РїР°СѓР·С‹
 	bool	isPaused_;
 
     QReadWriteLock  thread_status_lock_;
@@ -866,13 +920,13 @@ public:
 	QPointF GetPixelByValueOnMaterial(double Val1,double Val2);
 	QPointF GetValueByPixelOnMaterial(double PixelX,double PixelY);
 	double fast_GetYPixelByValue(double Val1) {return GetPixelByValue(Val1,true)-pos().y();};
-	void ReDraw() { }; //на слое материала обновление ненужно оно обновляется само при изменении позиции
+	void ReDraw() { }; //РЅР° СЃР»РѕРµ РјР°С‚РµСЂРёР°Р»Р° РѕР±РЅРѕРІР»РµРЅРёРµ РЅРµРЅСѓР¶РЅРѕ РѕРЅРѕ РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ СЃР°РјРѕ РїСЂРё РёР·РјРµРЅРµРЅРёРё РїРѕР·РёС†РёРё
 
 	double Hor_kf_inc;
 	double Vert_kf_inc;
 
-	virtual void SelfClear() {};//когда дохуя элементов на сцене, и как правило 90% из них уже ненадо, надо почиститься, случается при долгом таскании
-	virtual void ExtMaterialReInit() = 0;//когда происходит любой скейл
+	virtual void SelfClear() {};//РєРѕРіРґР° РґРѕС…СѓСЏ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС†РµРЅРµ, Рё РєР°Рє РїСЂР°РІРёР»Рѕ 90% РёР· РЅРёС… СѓР¶Рµ РЅРµРЅР°РґРѕ, РЅР°РґРѕ РїРѕС‡РёСЃС‚РёС‚СЊСЃСЏ, СЃР»СѓС‡Р°РµС‚СЃСЏ РїСЂРё РґРѕР»РіРѕРј С‚Р°СЃРєР°РЅРёРё
+	virtual void ExtMaterialReInit() = 0;//РєРѕРіРґР° РїСЂРѕРёСЃС…РѕРґРёС‚ Р»СЋР±РѕР№ СЃРєРµР№Р»
 	virtual bool ExtViewPortChange(Q_MG_MaterialElement* NewEl,unsigned __int64 elXpos,unsigned __int64 elYpos) = 0;
 	virtual bool PrepareForViewPortChange(qreal key_kf_x,qreal key_kf_y,double StartPixelX, double EndPixelX, double StartPixelY,double EndPixelY) = 0;
 	virtual void ExtAfterViewPortChange() = 0;
@@ -880,14 +934,14 @@ public:
 	bool ElementIsOnScreen(const Q_MG_MaterialElement* el);
 	void GetViewPort(double& value_startX, double& value_startY,double& value_endX, double& value_endY);
 
-	int MaterialID;//выдается единожды при добавленни в список, пока только для определения каким цветом рисовать
+	int MaterialID;//РІС‹РґР°РµС‚СЃСЏ РµРґРёРЅРѕР¶РґС‹ РїСЂРё РґРѕР±Р°РІР»РµРЅРЅРё РІ СЃРїРёСЃРѕРє, РїРѕРєР° С‚РѕР»СЊРєРѕ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РєР°РєРёРј С†РІРµС‚РѕРј СЂРёСЃРѕРІР°С‚СЊ
 
 signals:
-	void ViewPortChanged(double value_startX, double value_startY,double value_endX, double value_endY);//в реальных значениях (надо виртить)
+	void ViewPortChanged(double value_startX, double value_startY,double value_endX, double value_endY);//РІ СЂРµР°Р»СЊРЅС‹С… Р·РЅР°С‡РµРЅРёСЏС… (РЅР°РґРѕ РІРёСЂС‚РёС‚СЊ)
 
 protected:
 
-	void AllMaterialReInit();//автоматически вызывается при полном изменении сцены, вслучаях: изменение масштаба, установка новых данных
+	void AllMaterialReInit();//Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РїРѕР»РЅРѕРј РёР·РјРµРЅРµРЅРёРё СЃС†РµРЅС‹, РІСЃР»СѓС‡Р°СЏС…: РёР·РјРµРЅРµРЅРёРµ РјР°СЃС€С‚Р°Р±Р°, СѓСЃС‚Р°РЅРѕРІРєР° РЅРѕРІС‹С… РґР°РЅРЅС‹С…
 	bool FirstPaint;
 	QSizeF MaterialSize;
 
@@ -903,13 +957,13 @@ protected:
 	QImage::Format ElementsImageFormat_;
 	
 	void ClearEl();
-	void RemoveAllOffScreenEl();//очистить все элементы находящихся за экраном, включая и список рендера
+	void RemoveAllOffScreenEl();//РѕС‡РёСЃС‚РёС‚СЊ РІСЃРµ СЌР»РµРјРµРЅС‚С‹ РЅР°С…РѕРґСЏС‰РёС…СЃСЏ Р·Р° СЌРєСЂР°РЅРѕРј, РІРєР»СЋС‡Р°СЏ Рё СЃРїРёСЃРѕРє СЂРµРЅРґРµСЂР°
 	
 	Storage<Q_MG_MaterialElement*> ElList;
 	int ElementH;
 	int ElementW;
 	
-	//для многопоточности
+	//РґР»СЏ РјРЅРѕРіРѕРїРѕС‚РѕС‡РЅРѕСЃС‚Рё
 	bool UseMultiThread;
 	QPointer<Q_MG_RenderThreadClass> RenderThread;
 

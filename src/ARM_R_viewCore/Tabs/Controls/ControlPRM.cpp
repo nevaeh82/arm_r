@@ -20,7 +20,7 @@ ControlPRM::ControlPRM(QWidget *parent, ITabSpectrum* tab) : QWidget(parent)
     _ln_freq->display(0);
     _vbox_panel->addWidget(_ln_freq/*, Qt::AlignCenter | Qt::AlignTop*/);
 
-    _gb_att1 = new QGroupBox("Àòòåíþàòîð 1");
+    _gb_att1 = new QGroupBox("ÐÑ‚Ñ‚ÐµÐ½ÑŽÐ°Ñ‚Ð¾Ñ€ 1");
     _tb_att1_up = new QToolButton();
     _tb_att1_up->setText("+");
     _tb_att1_up->setFixedSize(40,40);
@@ -39,7 +39,7 @@ ControlPRM::ControlPRM(QWidget *parent, ITabSpectrum* tab) : QWidget(parent)
     _vbox_panel->addWidget(_gb_att1);
 
     QHBoxLayout *hb_att2 = new QHBoxLayout();
-    _gb_att2 = new QGroupBox("Àòòåíþàòîð 2");
+    _gb_att2 = new QGroupBox("ÐÑ‚Ñ‚ÐµÐ½ÑŽÐ°Ñ‚Ð¾Ñ€ 2");
 
     _tb_att2_up = new QToolButton();
     _tb_att2_up->setText("+");
@@ -61,10 +61,10 @@ ControlPRM::ControlPRM(QWidget *parent, ITabSpectrum* tab) : QWidget(parent)
     _vbox_panel->addWidget(_gb_att2);
 
     _cb_filter = new QComboBox();
-    _cb_filter->addItem("140/70 ÌÃö");
-    _cb_filter->addItem("140/22 ÌÃö");
-    _cb_filter->addItem("140/20 ÌÃö");
-    _cb_filter->addItem("150/80 ÌÃö");
+    _cb_filter->addItem("140/70 ÐœÐ“Ñ†");
+    _cb_filter->addItem("140/22 ÐœÐ“Ñ†");
+    _cb_filter->addItem("140/20 ÐœÐ“Ñ†");
+    _cb_filter->addItem("150/80 ÐœÐ“Ñ†");
 
     _vbox_panel->addWidget(_cb_filter);
     this->setLayout(_vbox_panel);

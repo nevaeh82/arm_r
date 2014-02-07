@@ -19,6 +19,8 @@
 #include <QSpinBox>
 #include <QPushButton>
 
+#include <QTextCodec>
+
 
 #include <QTimer>
 
@@ -42,6 +44,7 @@ private:
     Q_MG_SpectrumInterface  *spectrumWidget;
     QSettings               *setings;
     QCheckBox               *_chb_auto_search;
+	bool					m_autoSearch;
     QCheckBox               *_chb_panorama;
     QCheckBox               *_chb_get_spectra;
     QCheckBox               *_chb_setThreshold;
@@ -71,6 +74,8 @@ private:
     double                  _threshold;
     int _rett;
 
+	double					m_current_frequency;
+
 public:
     Q_MG_SpectrumInterface  *get_spectrum_widget();
     virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
@@ -78,6 +83,10 @@ public:
     virtual bool isGraphicVisible();
     virtual void setDefModulation(QString modulation);
     virtual void setLabelName(QString base, QString second);
+
+	virtual void setDetectedAreasUpdate(QVector<QPointF> vec);
+
+	virtual void setZeroFrequency(double val);
 
     void setup();
 
@@ -92,6 +101,8 @@ public slots:
     void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
     void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
     void _slotSetDefModulation(QString modulation);
+
+	void m_slotSetDetectedAreas(QVector<QPointF> vec);
 
 //    void slotSetFFT2(QVector<QPointF> vecFFT, const bool isComplex);
 //    void slotSetParam(int PointCount, double bandwidth, bool isComplex);
@@ -117,6 +128,8 @@ private slots:
 
     void _slot_double_clicked(double, double);
 
+	void m_slotSetZeroFrequency(double val);
+
 //    void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
 //    void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
 
@@ -126,6 +139,7 @@ signals:
     void signalCurSelChanged(int);
     void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
     void signalEnableKM(bool state);
+	void signalSetZeroFrequency(double val);
 
     /// id - is id of ilsts (1 - White list, 2 - Black list)
     void signalAddSelToLists(int id);
@@ -134,6 +148,8 @@ signals:
     void signalSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
     void signalSetFFT(float* spectrum, float* spectrum_peak_hold);
     void signalSetDefModulation(QString modulation);
+
+	void signalSetDetectedAreas(QVector<QPointF> vec);
 
     void signalFinished();
 

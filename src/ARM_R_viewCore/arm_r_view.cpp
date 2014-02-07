@@ -21,11 +21,11 @@ ARM_R_view::ARM_R_view(QWidget *parent) :
     qRegisterMetaType<QByteArray>("rpc_send_atlant_data");
 
 
-    QTextCodec *codec = QTextCodec::codecForName("CP1251");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForCStrings(codec);
 
-    this->setWindowTitle(tr("«‡‚ËÛı‡"));
+    this->setWindowTitle(tr("–ó–∞–≤–∏—Ä—É—Ö–∞"));
 
     _layout = new QGridLayout();
 
@@ -65,11 +65,11 @@ ARM_R_view::~ARM_R_view()
 
 void ARM_R_view::_create_menu()
 {
-    fileMenu = menuBar()->addMenu(tr("&‘‡ÈÎ"));
+    fileMenu = menuBar()->addMenu(tr("&–§–∞–π–ª"));
     fileMenu->addAction(newAct);
     fileMenu->addAction(exitAct);
 
-    settingsMenu = menuBar()->addMenu(tr("&Õ‡ÒÚÓÈÍË"));
+    settingsMenu = menuBar()->addMenu(tr("&–ù–∞—Å—Ç—Ä–æ–π–∫–∏"));
     settingsMenu->addAction(diagPelengatorAct);
 }
 
@@ -86,19 +86,19 @@ void ARM_R_view::_start_services()
 
 void ARM_R_view::_create_actions()
 {
-    newAct = new QAction(tr("&ÕÓ‚˚È"), this);
+    newAct = new QAction(tr("&–ù–æ–≤—ã–π"), this);
     newAct->setShortcuts(QKeySequence::New);
-    newAct->setStatusTip(tr("ÕÓ‚˚È"));
+    newAct->setStatusTip(tr("–ù–æ–≤—ã–π"));
     //connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    exitAct = new QAction(tr("¬&˚ıÓ‰"), this);
+    exitAct = new QAction(tr("–í&—ã—Ö–æ–¥"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip(tr("¬˚ÈÚË ËÁ ÔËÎÓÊÂÌËˇ"));
+    exitAct->setStatusTip(tr("–í—ã–π—Ç–∏ –∏–∑ –ø—Ä–∏–ª–æ–∂–µ–Ω–∏—è"));
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 //
-    diagPelengatorAct = new QAction(tr("&¿ÚÎ‡ÌÚ"), this);
+    diagPelengatorAct = new QAction(tr("&–ê—Ç–ª–∞–Ω—Ç"), this);
     diagPelengatorAct->setShortcuts(QKeySequence::Preferences);
-    diagPelengatorAct->setStatusTip(tr("¿ÚÎ‡ÌÚ (Ì‡ÒÚÓÈÍË)"));
+    diagPelengatorAct->setStatusTip(tr("–ê—Ç–ª–∞–Ω—Ç (–Ω–∞—Å—Ç—Ä–æ–π–∫–∏)"));
 //        connect(diagPelengatorAct, SIGNAL(triggered()), _diag_txt, SLOT(slotShow()));
 
 }

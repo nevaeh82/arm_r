@@ -82,7 +82,7 @@ int TabManager::createSubModules(QString path_to_ini_file)
     _db_manager_spectrum = new DBManager(this);
     /// create common model for spectrum tabs
     QStringList headers;
-    headers << tr("Õ‡Á‚‡ÌËÂ") << tr("—‚ÓÈÒÚ‚Ó");
+    headers << tr("–ù–∞–∑–≤–∞–Ω–∏–µ") << tr("–°–≤–æ–π—Å—Ç–≤–æ");
     _model_spectrum = new TreeModel(headers);
 
     _db_manager_spectrum->set_model(_model_spectrum);
@@ -104,7 +104,7 @@ int TabManager::createSubModules(QString path_to_ini_file)
 
     TabAtlant* atlant = new TabAtlant(/*_map_settings.value(6)*/);
 
-    this->addTab(atlant, tr("¿ÌÚÎ‡ÌÚ"));
+    this->addTab(atlant, tr("–ê–Ω—Ç–ª–∞–Ω—Ç"));
 
     connect(this, SIGNAL(signalChangeTab(int)), this, SLOT(_slot_change_tab(int)));
     return count;
@@ -151,7 +151,7 @@ void TabManager::_slot_change_tab(int index)
 int TabManager::_read_settings(QString path_to_ini_file)
 {
     int count = 0;
-    QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QSettings m_settings(path_to_ini_file, QSettings::IniFormat);
 
     m_settings.setIniCodec(codec);

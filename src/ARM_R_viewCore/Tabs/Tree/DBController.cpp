@@ -29,7 +29,7 @@ int DBController::_set_db()
     _sdb.setDatabaseName(_db_name);
     if(!_sdb.open())
     {
-        QMessageBox::warning(NULL, tr("¬Õ»Ã¿Õ»≈"), _sdb.lastError().text(),QMessageBox::Cancel, QMessageBox::Ok);
+        QMessageBox::warning(NULL, tr("–í–ù–ò–ú–ê–ù–ò–ï"), _sdb.lastError().text(),QMessageBox::Cancel, QMessageBox::Ok);
 //        qDebug() << _sdb.lastError().text();
         _logger->info(_sdb.lastError().text());
     }
@@ -190,7 +190,7 @@ void DBController::_slot_set(QMap<QString, QVariant> *data)
 int DBController::_read_settings(QString path_to_ini_file)
 {
     int error = -1;
-    QTextCodec *codec = QTextCodec::codecForName("Windows-1251");
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QSettings m_settings(path_to_ini_file, QSettings::IniFormat);
 
     m_settings.setIniCodec(codec);

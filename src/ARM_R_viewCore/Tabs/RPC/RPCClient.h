@@ -41,6 +41,7 @@
 
 ///server
 #define RPC_SLOT_SERVER_SEND_POINTS                 "rpc_slot_server_send_points"
+#define RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH		"rpc_slot_server_send_detected_bandwidth"
 #define RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION    "rpc_slot_server_send_response_modulation"
 #define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
 
@@ -152,6 +153,7 @@ public slots:
 
     ///rpc_server
     void rpc_slot_getting_points(rpc_send_points_vector points);
+	void rpc_slotGettingDetectedBandwidth(rpc_send_points_vector points);
     void rpc_slot_getting_modulation(QString modulation);
     void rpc_slot_server_send_correlation(int point1, int point2, rpc_send_points_vector points);
 

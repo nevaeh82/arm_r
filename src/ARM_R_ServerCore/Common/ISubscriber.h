@@ -15,9 +15,10 @@
 #define RPC_AVARAGE_SPECTRUM    105
 
 
-#define FLAKON_FFT              1001
-#define FLAKON_CORRELATION      1004
-#define FLAKON_SIGNAL_TYPE      1005
+#define FLAKON_FFT					1001
+#define FLAKON_DETECTED_BANDWIDTH	1002
+#define FLAKON_CORRELATION			1004
+#define FLAKON_SIGNAL_TYPE			1005
 /// BPLA
 #define FLAKON_BPLA             1006
 #define FLAKON_BPLA_AUTO        1007

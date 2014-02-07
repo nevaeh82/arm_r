@@ -1,6 +1,6 @@
 #include "../../../stdafx.h"
 #include "multi_graphics.h"
-#include "mg_fastlab_style.h"//цветовой стиль по умолчанию
+#include "mg_fastlab_style.h"//С†РІРµС‚РѕРІРѕР№ СЃС‚РёР»СЊ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 #include <QApplication>
 #include <QLayout>
 #include <QLinearGradient>
@@ -28,7 +28,7 @@
 #endif
 #endif
 
-//#define ScaleFocusToCenter //раскомментировать чтобы при Zoom желаемый объект смещался к центру
+//#define ScaleFocusToCenter //СЂР°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ С‡С‚РѕР±С‹ РїСЂРё Zoom Р¶РµР»Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ СЃРјРµС‰Р°Р»СЃСЏ Рє С†РµРЅС‚СЂСѓ
 
 Q_MultiGraphics::Q_MultiGraphics(QWidget *parent,QSettings* settings) : QGraphicsView(parent)
 {
@@ -69,7 +69,7 @@ Q_MultiGraphics::Q_MultiGraphics(QWidget *parent,QSettings* settings) : QGraphic
 	VertStep = 2;
 	HorStep = 2;
 
-	QPixmapCache::setCacheLimit(1024*500);//500 метров КЭШ
+	QPixmapCache::setCacheLimit(1024*500);//500 РјРµС‚СЂРѕРІ РљР­РЁ
 
 	verticalScrollBar()->setMinimum(0);
 	horizontalScrollBar()->setMinimum(0);
@@ -117,6 +117,16 @@ void Q_MultiGraphics::PrepareScene()
 
 	MainScene->addItem(MouseLayer);
 
+	DetectedLayer = new Q_MG_SelectionAreas();
+	Q_ASSERT_X(DetectedLayer,"Q_MultiGraphics::PrepareScene","Error in initialization of scene, MouseLayer");
+	DetectedLayer->setPos(0,0);
+	DetectedLayer->setZValue(3);
+	DetectedLayer->settings = MainSettings;
+	MainScene->addItem(DetectedLayer);
+	DetectedLayer->show();
+
+
+
 	InfoLayer = new Q_MG_InfoWidget(MainSettings);
 	Q_ASSERT_X(InfoLayer,"Q_MultiGraphics::PrepareScene","Error in initialization of scene, InfoLayer");
 	InfoLayer->setZValue(3.5);
@@ -127,7 +137,7 @@ void Q_MultiGraphics::PrepareScene()
     //InfoLayer->setVisible(false);
 
 
-	//законнекчивание объектов в общую сеть
+	//Р·Р°РєРѕРЅРЅРµРєС‡РёРІР°РЅРёРµ РѕР±СЉРµРєС‚РѕРІ РІ РѕР±С‰СѓСЋ СЃРµС‚СЊ
 	connect(Grid_Layer,SIGNAL(sendCommand(QString,QString,QVariant)),MouseLayer,SLOT(getCommand(QString,QString,QVariant)));
 	connect(Grid_Layer,SIGNAL(sendCommand(QString,QString,QVariant)),InfoLayer,SLOT(getCommand(QString,QString,QVariant)));
 	
@@ -157,7 +167,7 @@ void Q_MultiGraphics::wheelEvent( QWheelEvent * event )
 		if ((event->modifiers() == Qt::NoModifier) && (EnableHorZoom))
 		{
 			if (RelationBaseClass_)
-			{//передача эвента скейла в сонограмму
+			{//РїРµСЂРµРґР°С‡Р° СЌРІРµРЅС‚Р° СЃРєРµР№Р»Р° РІ СЃРѕРЅРѕРіСЂР°РјРјСѓ
 				QWheelEvent sonoEvent(event->pos(),event->delta(),event->buttons(),Qt::ShiftModifier);
 				RelationBaseClass_->wheelEvent(&sonoEvent);
 				return;
@@ -361,6 +371,7 @@ void Q_MultiGraphics::AllCopyMatrixByGrid()
 {
 	 MouseLayer->CopyMatrix(Grid_Layer);
 	 InfoLayer->CopyMatrix(Grid_Layer);
+	 DetectedLayer->CopyMatrix(Grid_Layer);
 	 for (int z = 0; z < Materials_LayersList.count();z++) Materials_LayersList[z]->CopyMatrix(Grid_Layer);
 }
 
@@ -476,7 +487,7 @@ bool Q_MultiGraphics::MoveAllMarkers() const
 }
 
 
-void Q_MultiGraphics::SetViewportForValues( double LeftVal,double TopVal,double RightVal,double BottomVal )//в пользовательских (виртуальных) бубнах
+void Q_MultiGraphics::SetViewportForValues( double LeftVal,double TopVal,double RightVal,double BottomVal )//РІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёС… (РІРёСЂС‚СѓР°Р»СЊРЅС‹С…) Р±СѓР±РЅР°С…
 {
 	int mode = 0;
 	if (TopVal == BottomVal) mode = 1;
@@ -491,7 +502,7 @@ void Q_MultiGraphics::SetViewportForValues( double LeftVal,double TopVal,double 
 
 void Q_MultiGraphics::scrollContentsBy(int a, int b)
 {
-	//  ничего не делаем если просят подвинуть сцену
+	//  РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј РµСЃР»Рё РїСЂРѕСЃСЏС‚ РїРѕРґРІРёРЅСѓС‚СЊ СЃС†РµРЅСѓ
 }
 
 
@@ -562,7 +573,7 @@ bool Q_MultiGraphics::isSomeZoomIsOnMax( bool &X, bool& Y )
 	return Grid_Layer->isSomeZoomIsOnMax(X,Y);
 }
 
-/*//свободные подписи
+/*//СЃРІРѕР±РѕРґРЅС‹Рµ РїРѕРґРїРёСЃРё
 void Q_MultiGraphics::ClearAllLabels()
 {
 	MouseLayer->ClearAllFredomLabels();
@@ -573,7 +584,7 @@ void Q_MultiGraphics::SetLabel( double valX_b,double valY_b,QString text )
 	MouseLayer->SetFredomLabel(valX_b,valY_b,text);
 }*/
 
-//конец свободные подписи
+//РєРѕРЅРµС† СЃРІРѕР±РѕРґРЅС‹Рµ РїРѕРґРїРёСЃРё
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -599,16 +610,16 @@ void Q_MG_Back_Grid::paint( QPainter * painter, const QStyleOptionGraphicsItem *
 	painter->setRenderHint(QPainter::Antialiasing,false);
 
 	QPen pn (Qt::DotLine);
-	pn.setColor(settings->BackGrid_SubLinesColor);//цвет доп. линий
+	pn.setColor(settings->BackGrid_SubLinesColor);//С†РІРµС‚ РґРѕРї. Р»РёРЅРёР№
 	painter->setPen(pn);
 	for (int i = 0 ; i < XSubDiv.count();i++) painter->drawLine(QLineF(XSubDiv[i],0,XSubDiv[i],sz.y()));
 	for (int i = 0 ; i < YSubDiv.count();i++) painter->drawLine(QLineF(0.0,YSubDiv[i],(qreal)sz.x(),YSubDiv[i]));
 
-	painter->setPen(settings->BackGrid_BaseLinesColor);//цвет основных линий
+	painter->setPen(settings->BackGrid_BaseLinesColor);//С†РІРµС‚ РѕСЃРЅРѕРІРЅС‹С… Р»РёРЅРёР№
 	for (int i = 0 ; i < YDiv.count();i++) painter->drawLine(QLineF(0.0,YDiv[i],(qreal)sz.x(),YDiv[i]));
 	for (int i = 0 ; i < XDiv.count();i++) painter->drawLine(QLineF(XDiv[i],0,XDiv[i],sz.y()));
 
-	painter->setPen(settings->BackGrid_HightLinesColor);//цвет выделенных линий
+	painter->setPen(settings->BackGrid_HightLinesColor);//С†РІРµС‚ РІС‹РґРµР»РµРЅРЅС‹С… Р»РёРЅРёР№
 	if (HightLightY >= 0) painter->drawLine(QLineF(0.0,HightLightY,(qreal)sz.x(),HightLightY));
 	if (HightLightX >= 0) painter->drawLine(QLineF(HightLightX,0,HightLightX,sz.y()));
 }
@@ -686,7 +697,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 	
 	QFontMetrics fnt = pnt1->font();
 
-	//необходимы доя правильной маркировки
+	//РЅРµРѕР±С…РѕРґРёРјС‹ РґРѕСЏ РїСЂР°РІРёР»СЊРЅРѕР№ РјР°СЂРєРёСЂРѕРІРєРё
 	double VerStartNumV = (Trans.y()*kf.y())+VertInterpretSum;
 	double VerEndNumV = ((Trans.y()+sz.y())*kf.y())+VertInterpretSum;
 	double HorStartNumV = (Trans.x()*kf.x())+HorInterpretSum;
@@ -722,7 +733,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 	}
 
 	/////////////////////////////////////////////////////////////////////
-	// ОСЬ YYYY
+	// РћРЎР¬ YYYY
 	/////////////////////////////////////////////////////////////////////
 	if (flag_DrawVAxis)
 	{
@@ -731,14 +742,14 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 		if (DrawVGridBorders)
 		{
 			
-			//определяем границы расования в зависимости от горизонтальной оси
+			//РѕРїСЂРµРґРµР»СЏРµРј РіСЂР°РЅРёС†С‹ СЂР°СЃРѕРІР°РЅРёСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РѕСЃРё
 			if (flag_DrawHAxis)
 			{
 				if ((flag_GridAligment == 0) || (flag_GridAligment == 2)) {	TextTop = BorderH; TextBotton = sz.y();}
 				else {	TextTop = 0; TextBotton = sz.y()-BorderH;}
 			}
 
-			//рисование градиентов шкал
+			//СЂРёСЃРѕРІР°РЅРёРµ РіСЂР°РґРёРµРЅС‚РѕРІ С€РєР°Р»
 			pnt1->setPen(settings->GridBorder_LineColor);
 			QLinearGradient BorderGrad(0.0, 0.0, 0.0, sz.y());
 			BorderGrad.setColorAt(0.0, settings->GridBorder_BeginColor);BorderGrad.setColorAt(0.5, settings->GridBorder_MidColor);BorderGrad.setColorAt(1.0, settings->GridBorder_EndColor);
@@ -754,13 +765,13 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 			}
 		}
 
-		pnt1->setPen(settings->GridText_Color);//цвет букв
+		pnt1->setPen(settings->GridText_Color);//С†РІРµС‚ Р±СѓРєРІ
 		for (int i = 0;i < IntervalRetValV.count();i++)
 		{
 			double RcV = IntervalRetValV.at(i);
 			double Rc = RcV-VertInterpretSum;
 			qreal y = 0;ChechY_continue(y,Rc);
-			//рисование на заднем фоне, если он виден, основных линий
+			//СЂРёСЃРѕРІР°РЅРёРµ РЅР° Р·Р°РґРЅРµРј С„РѕРЅРµ, РµСЃР»Рё РѕРЅ РІРёРґРµРЅ, РѕСЃРЅРѕРІРЅС‹С… Р»РёРЅРёР№
 			if ((GridBack_Layer->isVisible()) && (DrawVBaseLine))
 			{
 				if (RcV == HightLightVVal) HightLightVy = y;
@@ -769,7 +780,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 					
 			if (DrawVGridBorders)
 			{
-				//вывод подписей
+				//РІС‹РІРѕРґ РїРѕРґРїРёСЃРµР№
 				qreal textY = y;
 				qreal numberHalf = (fnt.ascent()/2)-1;			
 				QString OutText = Interpret(RcV,true,true,&printLabelVAxis,LabelVAxis, VerStartNumV, VerEndNumV,true);
@@ -784,7 +795,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 	}
 
 	/////////////////////////////////////////////////////////////////////
-	// ОСЬ XXXX
+	// РћРЎР¬ XXXX
 	/////////////////////////////////////////////////////////////////////
 	if (flag_DrawHAxis)
 	{
@@ -792,14 +803,14 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 		qreal TextRight = sz.x();
 		if (DrawHGridBorders)
 		{
-			//определяем границы расования в зависимости от вертикальной оси
+			//РѕРїСЂРµРґРµР»СЏРµРј РіСЂР°РЅРёС†С‹ СЂР°СЃРѕРІР°РЅРёСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РѕСЃРё
 			if (flag_DrawVAxis)
 			{
 				if ((flag_GridAligment == 0) || (flag_GridAligment == 1)) {	TextLeft = BorderW+1; TextRight = sz.x();}
 				else {	TextLeft = 0; TextRight = sz.x()-BorderW-1;}
 			}
 
-			//рисование градиентов шкал
+			//СЂРёСЃРѕРІР°РЅРёРµ РіСЂР°РґРёРµРЅС‚РѕРІ С€РєР°Р»
 			pnt1->setPen(settings->GridBorder_LineColor);
 			QLinearGradient BorderGrad(0.0, 0.0, sz.x(), 0.0);
 			BorderGrad.setColorAt(0.0, settings->GridBorder_BeginColor);BorderGrad.setColorAt(0.5, settings->GridBorder_MidColor);BorderGrad.setColorAt(1.0, settings->GridBorder_EndColor);
@@ -815,16 +826,16 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 			}
 		}
 
-		pnt1->setPen(settings->GridText_Color);//цвет букв
-		qreal prev_text_item_right = -50000;//правая (x+w) позиция предыдущего текста
-		qreal prev_text_item_left  = 50000;//левая (x) позиция предыдущего текста
+		pnt1->setPen(settings->GridText_Color);//С†РІРµС‚ Р±СѓРєРІ
+		qreal prev_text_item_right = -50000;//РїСЂР°РІР°СЏ (x+w) РїРѕР·РёС†РёСЏ РїСЂРµРґС‹РґСѓС‰РµРіРѕ С‚РµРєСЃС‚Р°
+		qreal prev_text_item_left  = 50000;//Р»РµРІР°СЏ (x) РїРѕР·РёС†РёСЏ РїСЂРµРґС‹РґСѓС‰РµРіРѕ С‚РµРєСЃС‚Р°
 		for (int i = 0;i < IntervalRetValH.count();i++)
 		{
 			double RcV = IntervalRetValH.at(i);
 			double Rc = RcV-HorInterpretSum;
 			qreal x;ChechX_continue(x,Rc);
 
-			//рисование на заднем фоне, если он виден, основных линий
+			//СЂРёСЃРѕРІР°РЅРёРµ РЅР° Р·Р°РґРЅРµРј С„РѕРЅРµ, РµСЃР»Рё РѕРЅ РІРёРґРµРЅ, РѕСЃРЅРѕРІРЅС‹С… Р»РёРЅРёР№
 			if ((GridBack_Layer->isVisible()) && (DrawHBaseLine))
 			{
 				if (RcV == HightLightHVal) HightLightHx = x;
@@ -833,7 +844,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 
 			if (DrawHGridBorders)
 			{
-				//вывод подписей
+				//РІС‹РІРѕРґ РїРѕРґРїРёСЃРµР№
 				qreal textX = x;
 				QString OutText = Interpret(RcV,false,true,&printLabelHAxis,LabelHAxis, HorStartNumV, HorEndNumV,true);
 				qreal numberHalf = (fnt.width(OutText)/2);
@@ -857,14 +868,14 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 
 	}//if flag_DrawHAxis
 
-	//рисование выделенных линий
+	//СЂРёСЃРѕРІР°РЅРёРµ РІС‹РґРµР»РµРЅРЅС‹С… Р»РёРЅРёР№
 	if (GridBack_Layer->isVisible())
 	{
 		GridBack_Layer->HightLightY = HightLightVy;
 		GridBack_Layer->HightLightX = HightLightHx;
 	}
 
-	//рисование угловой области
+	//СЂРёСЃРѕРІР°РЅРёРµ СѓРіР»РѕРІРѕР№ РѕР±Р»Р°СЃС‚Рё
 	if (flag_DrawVAxis && flag_DrawHAxis && DrawHGridBorders && DrawVGridBorders)
 	{
 		QPixmap* parentPixmap = dynamic_cast<QPixmap*>(pnt1->device());
@@ -917,7 +928,7 @@ void Q_MG_Grid::DrawStandartGrid(QPainter* pnt1)
 		}		
 	}
 
-	//завершения рисования на заднем фоне, если он виден
+	//Р·Р°РІРµСЂС€РµРЅРёСЏ СЂРёСЃРѕРІР°РЅРёСЏ РЅР° Р·Р°РґРЅРµРј С„РѕРЅРµ, РµСЃР»Рё РѕРЅ РІРёРґРµРЅ
 	if (GridBack_Layer->isVisible())
 	{
 		GridBack_Layer->sz = sz;
@@ -1148,12 +1159,12 @@ int Q_MG_Grid::MarkIntervalAndCalcBorderSizes()
 	SubDivRetValV.clear();
 	SubDivRetValH.clear();
 
-	BorderW = 0;//ширина вертикального бордюра
-	if (flag_DrawHAxis && DrawHGridBorders) BorderH= fnt.height()*2-fnt.ascent()/2; //константная высота горизонтального бордюра
+	BorderW = 0;//С€РёСЂРёРЅР° РІРµСЂС‚РёРєР°Р»СЊРЅРѕРіРѕ Р±РѕСЂРґСЋСЂР°
+	if (flag_DrawHAxis && DrawHGridBorders) BorderH= fnt.height()*2-fnt.ascent()/2; //РєРѕРЅСЃС‚Р°РЅС‚РЅР°СЏ РІС‹СЃРѕС‚Р° РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕРіРѕ Р±РѕСЂРґСЋСЂР°
 	else BorderH = 0;
 
 
-	//подготовка, маркировка и рисование доп. линий на заднем фоне
+	//РїРѕРґРіРѕС‚РѕРІРєР°, РјР°СЂРєРёСЂРѕРІРєР° Рё СЂРёСЃРѕРІР°РЅРёРµ РґРѕРї. Р»РёРЅРёР№ РЅР° Р·Р°РґРЅРµРј С„РѕРЅРµ
 	double VerStartNum = Trans.y()*kf.y();
 	double VerEndNum = (Trans.y()+sz.y())*kf.y();
 	double HorStartNum = Trans.x()*kf.x();
@@ -1163,7 +1174,7 @@ int Q_MG_Grid::MarkIntervalAndCalcBorderSizes()
 	if ((sz.y() <= 0) || (qAbs(VerEndNum-VerStartNum) == 0)) return 2;
 	if ((sz.x() <= 0) || (qAbs(HorEndNum-HorStartNum) == 0)) return 2;
 
-	QString tempP;//передать хоть че либо
+	QString tempP;//РїРµСЂРµРґР°С‚СЊ С…РѕС‚СЊ С‡Рµ Р»РёР±Рѕ
 
 	if (flag_DrawVAxis)
 	{
@@ -1177,7 +1188,7 @@ int Q_MG_Grid::MarkIntervalAndCalcBorderSizes()
 		double maxTextWidth = fnt.width(Interpret(IntervalRetValV.at(0),true,true,&tempP,"",VerStartNum,VerEndNum,false));
 		if (DrawVGridBorders)
 		{
-			//вычисляем длинну самой длинно возможной строчки, для вычисления ширины бордюра
+			//РІС‹С‡РёСЃР»СЏРµРј РґР»РёРЅРЅСѓ СЃР°РјРѕР№ РґР»РёРЅРЅРѕ РІРѕР·РјРѕР¶РЅРѕР№ СЃС‚СЂРѕС‡РєРё, РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ С€РёСЂРёРЅС‹ Р±РѕСЂРґСЋСЂР°
 			for (int i = 1;i  < IntervalRetValV.count();i++)
 			{
 				double RcV = IntervalRetValV.at(i);
@@ -1186,7 +1197,7 @@ int Q_MG_Grid::MarkIntervalAndCalcBorderSizes()
 				double pret = fnt.width(Interpret(RcV,true,true,&tempP,"",VerStartNum,VerEndNum,false));
 				if (pret > maxTextWidth) maxTextWidth = pret;				
 			}
-			BorderW = maxTextWidth+10;//ширина бордюра
+			BorderW = maxTextWidth+10;//С€РёСЂРёРЅР° Р±РѕСЂРґСЋСЂР°
 		}
 		if (IntervalRetValV.count() == 0) return 1;
 	}
@@ -1196,7 +1207,7 @@ int Q_MG_Grid::MarkIntervalAndCalcBorderSizes()
 		IntervalRetValH = MyMarkInterval(HorStartNum,HorEndNum,sz.x(),50,&SubDivRetValH,0.25,false);
 		if (IntervalRetValH.count() == 0) return false;
 		
-		//вычисляем длинну самой длинно возможной строчки, для корректировки шага
+		//РІС‹С‡РёСЃР»СЏРµРј РґР»РёРЅРЅСѓ СЃР°РјРѕР№ РґР»РёРЅРЅРѕ РІРѕР·РјРѕР¶РЅРѕР№ СЃС‚СЂРѕС‡РєРё, РґР»СЏ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё С€Р°РіР°
 		double maxTextWidth = fnt.width(Interpret(IntervalRetValH.at(0),false,true,&tempP,"",HorStartNum,HorEndNum,false));
 		for (int i = 1;i  < IntervalRetValH.count();i++)
 		{
@@ -1276,7 +1287,7 @@ Q_MG_BaseClass::Q_MG_BaseClass(QGraphicsItem *parent) : QGraphicsObject(parent)
 
 void Q_MG_BaseClass::ResizeEvent( QPoint _sz, bool MinMaxChanged /*= false*/ )
 {
-	//пересчет минимально возможного KF
+	//РїРµСЂРµСЃС‡РµС‚ РјРёРЅРёРјР°Р»СЊРЅРѕ РІРѕР·РјРѕР¶РЅРѕРіРѕ KF
 	QPoint CalcScreenSize;
 	CalcScreenSize.setX((_sz.x()-1)-(GridRightStep+GridLeftStep));
 	CalcScreenSize.setY((_sz.y()-1)-(GridBottomStep+GridTopStep));
@@ -1397,12 +1408,12 @@ void Q_MG_BaseClass::MoveEvent( QPointF _Trans, bool NeedCalcKf /*= false */)
 
 void Q_MG_BaseClass::SetViewportForValues( double LeftVal,double TopVal,double RightVal,double BottomVal,int mode ) 
 {
-	//в "реальных" бубнах, mode: 0-просчитываем все оси, 1-только 0X 2-только 0Y
+	//РІ "СЂРµР°Р»СЊРЅС‹С…" Р±СѓР±РЅР°С…, mode: 0-РїСЂРѕСЃС‡РёС‚С‹РІР°РµРј РІСЃРµ РѕСЃРё, 1-С‚РѕР»СЊРєРѕ 0X 2-С‚РѕР»СЊРєРѕ 0Y
 	double MaxXVal_val = RightVal;	
 	double MinXVal_val = LeftVal;
 	double MaxYVal_val = TopVal;
 	double MinYVal_val = BottomVal;
-	//корректировка введенных не правильных значений и пердобразования относительно инверсии осей
+	//РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РІРІРµРґРµРЅРЅС‹С… РЅРµ РїСЂР°РІРёР»СЊРЅС‹С… Р·РЅР°С‡РµРЅРёР№ Рё РїРµСЂРґРѕР±СЂР°Р·РѕРІР°РЅРёСЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РёРЅРІРµСЂСЃРёРё РѕСЃРµР№
 	if (MaxXVal_val < MinXVal_val)
 	{	double z = MaxXVal_val;MaxXVal_val = MinXVal_val; MinXVal_val = z;	}
 	if (MaxYVal_val < MinYVal_val)
@@ -1422,7 +1433,7 @@ void Q_MG_BaseClass::SetViewportForValues( double LeftVal,double TopVal,double R
 	CalcScreenSize.setX((sz.x()-1)-(GridRightStep+GridLeftStep));
 	CalcScreenSize.setY((sz.y()-1)-(GridBottomStep+GridTopStep));
 
-	double totalValues;//всего бубнов
+	double totalValues;//РІСЃРµРіРѕ Р±СѓР±РЅРѕРІ
 	QPointF newTrans = UserTrans;
 
 	if ((mode == 0) || (mode == 1))
@@ -1486,7 +1497,7 @@ QPointF Q_MG_BaseClass::ScaleEvent( QPointF scaleKf, QPointF scalePos )
 	double posValX = GetValueByPixel(scalePos.x(),false);
 	double posValY = GetValueByPixel(scalePos.y(),true);
 	
-	//алгоритм округления kf
+	//Р°Р»РіРѕСЂРёС‚Рј РѕРєСЂСѓРіР»РµРЅРёСЏ kf
 	/*if ((!LockHorMoove) && (newKf.x() > 4))
 	{
 		unsigned __int64 nx = qRound64(newKf.x());
@@ -1729,23 +1740,23 @@ QString Q_MG_BaseClass::Interpret( double val, bool isVertical,bool isVirtual, Q
 		{
 			if (LineEtalon > 0)
 			{
-				if (LineEtalon >= 5000000000) {val = val/1000000000; addedLabel = QObject::tr("Г"); return;}
-				if (LineEtalon >= 5000000) {val = val/1000000; addedLabel = QObject::tr("М");return;}
-				if (LineEtalon >= 5000) {val = val/1000; addedLabel = QObject::tr("к");return;}
+				if (LineEtalon >= 5000000000) {val = val/1000000000; addedLabel = QObject::tr("Р“"); return;}
+				if (LineEtalon >= 5000000) {val = val/1000000; addedLabel = QObject::tr("Рњ");return;}
+				if (LineEtalon >= 5000) {val = val/1000; addedLabel = QObject::tr("Рє");return;}
 
-				if (LineEtalon <= 0.0000009) {val = val*1000000000; addedLabel = QObject::tr("н"); return;}
-				if (LineEtalon <= 0.0009) {val = val*1000000; addedLabel = QObject::tr("мк");return;}
-				if (LineEtalon <= 0.9) {val = val*1000; addedLabel = QObject::tr("м");return;}						
+				if (LineEtalon <= 0.0000009) {val = val*1000000000; addedLabel = QObject::tr("РЅ"); return;}
+				if (LineEtalon <= 0.0009) {val = val*1000000; addedLabel = QObject::tr("РјРє");return;}
+				if (LineEtalon <= 0.9) {val = val*1000; addedLabel = QObject::tr("Рј");return;}						
 			}
 			else
 			{
-				if (LineEtalon <= -5000000000) {val = val/1000000000; addedLabel = QObject::tr("Г");return;}
-				if (LineEtalon <= -5000000) {val = val/1000000; addedLabel = QObject::tr("М");return;}
-				if (LineEtalon <= -5000) {val = val/1000; addedLabel = QObject::tr("к");return;}
+				if (LineEtalon <= -5000000000) {val = val/1000000000; addedLabel = QObject::tr("Р“");return;}
+				if (LineEtalon <= -5000000) {val = val/1000000; addedLabel = QObject::tr("Рњ");return;}
+				if (LineEtalon <= -5000) {val = val/1000; addedLabel = QObject::tr("Рє");return;}
 
-				if (LineEtalon >= -0.0000009) {val = val*1000000000; addedLabel = QObject::tr("н"); return;}
-				if (LineEtalon >= -0.0009) {val = val*1000000; addedLabel = QObject::tr("мк");return;}
-				if (LineEtalon >= -0.9) {val = val*1000; addedLabel = QObject::tr("м");return;}		
+				if (LineEtalon >= -0.0000009) {val = val*1000000000; addedLabel = QObject::tr("РЅ"); return;}
+				if (LineEtalon >= -0.0009) {val = val*1000000; addedLabel = QObject::tr("РјРє");return;}
+				if (LineEtalon >= -0.9) {val = val*1000; addedLabel = QObject::tr("Рј");return;}		
 			}			
 		}
 		return;
@@ -1929,7 +1940,7 @@ Q_MG_MouseCursor::Q_MG_MouseCursor(QGraphicsItem *parent) : Q_MG_BaseClass(paren
 	UseMouseCursorJump = true;
 	GlowEffect = true;
 
-	//выделение
+	//РІС‹РґРµР»РµРЅРёРµ
 	CurSelectionType			= 0;
 	multi_select_enable_		= true;
 	button_ctrl_click_is_single_ = false;
@@ -2002,18 +2013,18 @@ void Q_MG_MouseCursor::paint( QPainter *painter, const QStyleOptionGraphicsItem 
 				return;
 			}
 			
-			//рисование курсоров
+			//СЂРёСЃРѕРІР°РЅРёРµ РєСѓСЂСЃРѕСЂРѕРІ
 			if ((showBigGrafCursor))
 			{
 				if (GlowEffect)
 				{
-					painter->setPen(settings->MouseCursor_GlowColor);//цвет свечения курсора
+					painter->setPen(settings->MouseCursor_GlowColor);//С†РІРµС‚ СЃРІРµС‡РµРЅРёСЏ РєСѓСЂСЃРѕСЂР°
 					painter->drawLine(QPointF(CursorPosX+1,0),QPointF(CursorPosX+1,sz.y()));
 					painter->drawLine(QPointF(CursorPosX-1,0),QPointF(CursorPosX-1,sz.y()));
 					painter->drawLine(QPointF(0,CursorPosY-1),QPointF(sz.x(),CursorPosY-1));
 					painter->drawLine(QPointF(0,CursorPosY+1),QPointF(sz.x(),CursorPosY+1));//*/
 				}
-				painter->setPen(settings->MouseCursor_Color);//цвет курсора
+				painter->setPen(settings->MouseCursor_Color);//С†РІРµС‚ РєСѓСЂСЃРѕСЂР°
 				painter->drawLine(QPointF(CursorPosX,0),QPointF(CursorPosX,sz.y()));
 				painter->drawLine(QPointF(0,CursorPosY),QPointF(sz.x(),CursorPosY));
 			}
@@ -2027,13 +2038,13 @@ void Q_MG_MouseCursor::paint( QPainter *painter, const QStyleOptionGraphicsItem 
 				}
 
 
-			//вывод текущих значений курсора
+			//РІС‹РІРѕРґ С‚РµРєСѓС‰РёС… Р·РЅР°С‡РµРЅРёР№ РєСѓСЂСЃРѕСЂР°
 			double VerTextW = 0;
 			double VerTextXpos = 0;
 			double VerTextYpos = CursorPosY-2;	
 			QFontMetrics fnt(painter->font());
-			painter->setPen(settings->MouseCursor_TextColor);//цвет текста подписей
-			//показывать значение на вертикальной оси
+			painter->setPen(settings->MouseCursor_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р° РїРѕРґРїРёСЃРµР№
+			//РїРѕРєР°Р·С‹РІР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РЅР° РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РѕСЃРё
 			if (showVValues)
 			{
 				double PrintNum = GetValueByPixel(CursorPosY,true);
@@ -2048,7 +2059,7 @@ void Q_MG_MouseCursor::paint( QPainter *painter, const QStyleOptionGraphicsItem 
 				painter->drawText(VerTextXpos,VerTextYpos,PrintText);
 			}//if (showVValues)
 			
-			//показывать значение на горизонтальной оси
+			//РїРѕРєР°Р·С‹РІР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РЅР° РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РѕСЃРё
 			if (showHValues)
 			{
 				double PrintNum = GetValueByPixel(CursorPosX,false);
@@ -2104,11 +2115,11 @@ void Q_MG_MouseCursor::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 
 void Q_MG_MouseCursor::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
-	//временна и служит чисто для теста, пока не придумал как и кто должен заниматься расстановкой маркеров
+	//РІСЂРµРјРµРЅРЅР° Рё СЃР»СѓР¶РёС‚ С‡РёСЃС‚Рѕ РґР»СЏ С‚РµСЃС‚Р°, РїРѕРєР° РЅРµ РїСЂРёРґСѓРјР°Р» РєР°Рє Рё РєС‚Рѕ РґРѕР»Р¶РµРЅ Р·Р°РЅРёРјР°С‚СЊСЃСЏ СЂР°СЃСЃС‚Р°РЅРѕРІРєРѕР№ РјР°СЂРєРµСЂРѕРІ
 	//////////////////////////////////////////////////////////////////////////
     if ((event->buttons() & Qt::LeftButton) && (event->modifiers() & Qt::ShiftModifier))
 	{
-		//установка маркера
+		//СѓСЃС‚Р°РЅРѕРІРєР° РјР°СЂРєРµСЂР°
 		if (event->modifiers() & Qt::ControlModifier)
 		{
 			if (showVMarkers) addMarker(ApplyInterpretSum(GetValueByPixel(CursorPosY,true),true),false);
@@ -2123,7 +2134,7 @@ void Q_MG_MouseCursor::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	}//*/
 	//////////////////////////////////////////////////////////////////////////
 	
-	if ((event->buttons() == Qt::LeftButton) && (event->modifiers() == Qt::AltModifier))//== чтобы вместе с контролом больше ничего небыло нажато
+	if ((event->buttons() == Qt::LeftButton) && (event->modifiers() == Qt::AltModifier))//== С‡С‚РѕР±С‹ РІРјРµСЃС‚Рµ СЃ РєРѕРЅС‚СЂРѕР»РѕРј Р±РѕР»СЊС€Рµ РЅРёС‡РµРіРѕ РЅРµР±С‹Р»Рѕ РЅР°Р¶Р°С‚Рѕ
 	{
 		StrangeCrossValX = GetValueByPixel(CursorPosX,false);
 		StrangeCrossValY = GetValueByPixel(CursorPosY,true);
@@ -2150,14 +2161,14 @@ void Q_MG_MouseCursor::mousePressEvent( QGraphicsSceneMouseEvent * event )
 
 	if (event->buttons() == Qt::LeftButton)
 	{
-		//старт таскания маркера
+		//СЃС‚Р°СЂС‚ С‚Р°СЃРєР°РЅРёСЏ РјР°СЂРєРµСЂР°
 		if (UnderMouseMarkerIndex >= 0) OnMarkerMoove = true;
 		StartSelectionDeselection(event);
 	}
 
 	if ((event->buttons() == Qt::RightButton) && (event->modifiers() == Qt::ControlModifier))
 	{
-		//удалить маркер
+		//СѓРґР°Р»РёС‚СЊ РјР°СЂРєРµСЂ
 		if (UnderMouseMarkerIndex >= 0) 
 		{
 			RemoveMarker(UnderMouseMarkerIndex,UnderMouseMarkerIndexIsVert);
@@ -2170,12 +2181,12 @@ void Q_MG_MouseCursor::mousePressEvent( QGraphicsSceneMouseEvent * event )
 		setCursor(*SizeAllCur);
 		HideCursor = true;
 		
-		//инициализация расчета кол-ва пикселей перемещения мыши для вызова контекстного меню
+		//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЂР°СЃС‡РµС‚Р° РєРѕР»-РІР° РїРёРєСЃРµР»РµР№ РїРµСЂРµРјРµС‰РµРЅРёСЏ РјС‹С€Рё РґР»СЏ РІС‹Р·РѕРІР° РєРѕРЅС‚РµРєСЃС‚РЅРѕРіРѕ РјРµРЅСЋ
 		deltaMoveX = 0;
 		deltaMoveY = 0;
 	}
 	ReDraw();
-	event->accept();//необходимо принять евент  чтобы объект захвател фокус мыши и работал Release и Move
+	event->accept();//РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРёРЅСЏС‚СЊ РµРІРµРЅС‚  С‡С‚РѕР±С‹ РѕР±СЉРµРєС‚ Р·Р°С…РІР°С‚РµР» С„РѕРєСѓСЃ РјС‹С€Рё Рё СЂР°Р±РѕС‚Р°Р» Release Рё Move
 }
 
 void Q_MG_MouseCursor::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
@@ -2189,7 +2200,7 @@ void Q_MG_MouseCursor::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 	
 	if (event->button() == Qt::LeftButton)
 	{
-		//конец таскания маркера если даже оно и не было
+		//РєРѕРЅРµС† С‚Р°СЃРєР°РЅРёСЏ РјР°СЂРєРµСЂР° РµСЃР»Рё РґР°Р¶Рµ РѕРЅРѕ Рё РЅРµ Р±С‹Р»Рѕ
 		OnMarkerMoove = false;
 	}
 
@@ -2198,7 +2209,7 @@ void Q_MG_MouseCursor::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		if ((event->button() == Qt::LeftButton) && (is_deselect_)) return;
 		if ((event->button() == Qt::RightButton) && (!is_deselect_)) return;
 		
-		//конец выделение
+		//РєРѕРЅРµС† РІС‹РґРµР»РµРЅРёРµ
 		if ((CurSelectionType == 1) || (CurSelectionType == 2))
 			if (CurMoveSel.x() > CurMoveSel.y()) {double z = CurMoveSel.x();CurMoveSel.setX(CurMoveSel.y());CurMoveSel.setY(z);}
 		
@@ -2319,7 +2330,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
         return;
     }
 
-    if ((event->buttons() & Qt::LeftButton) && (event->modifiers() == Qt::AltModifier))//== чтобы вместе с контролом больше ничего небыло нажато
+    if ((event->buttons() & Qt::LeftButton) && (event->modifiers() == Qt::AltModifier))//== С‡С‚РѕР±С‹ РІРјРµСЃС‚Рµ СЃ РєРѕРЅС‚СЂРѕР»РѕРј Р±РѕР»СЊС€Рµ РЅРёС‡РµРіРѕ РЅРµР±С‹Р»Рѕ РЅР°Р¶Р°С‚Рѕ
     {
         CursorPosX = event->pos().x();
         CursorPosY = event->pos().y();
@@ -2331,13 +2342,13 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
         return;
     }
 
-    //маркер
+    //РјР°СЂРєРµСЂ
     if (event->buttons() & Qt::LeftButton)
     {
         CursorPosX = event->pos().x();
         CursorPosY = event->pos().y();
 		
-        //двигаем маркер под курсором
+        //РґРІРёРіР°РµРј РјР°СЂРєРµСЂ РїРѕРґ РєСѓСЂСЃРѕСЂРѕРј
         if ((UnderMouseMarkerIndex >= 0) && (OnMarkerMoove))
         {
             if (UnderMouseMarkerIndexIsVert)
@@ -2392,7 +2403,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
     }
     //////////////////////////////////////////////////////////////////////////
 
-    //выделение
+    //РІС‹РґРµР»РµРЅРёРµ
     if (selection_deselection_started_)
     {
         CursorPosX = event->pos().x();
@@ -2404,7 +2415,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
             if (CurSelectionType == 1) //||
             {
                 double prevPixel = GetPixelByValue(CurMoveSel.x(),false);
-                //что бы случайно не выделялось по малу пикселей
+                //С‡С‚Рѕ Р±С‹ СЃР»СѓС‡Р°Р№РЅРѕ РЅРµ РІС‹РґРµР»СЏР»РѕСЃСЊ РїРѕ РјР°Р»Сѓ РїРёРєСЃРµР»РµР№
                 if ((qAbs(CursorPosX-prevPixel) >= minimum_selected_pixels) || (OnSelection))
                 {
                     double valX = GetValueByPixel(CursorPosX,false);
@@ -2419,7 +2430,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
             if (CurSelectionType == 2) //=
             {
                 double prevPixel = GetPixelByValue(CurMoveSel.x(),true);
-                //что бы случайно не выделялось по малу пикселей
+                //С‡С‚Рѕ Р±С‹ СЃР»СѓС‡Р°Р№РЅРѕ РЅРµ РІС‹РґРµР»СЏР»РѕСЃСЊ РїРѕ РјР°Р»Сѓ РїРёРєСЃРµР»РµР№
                 if ((qAbs(CursorPosY-prevPixel) >= minimum_selected_pixels) || (OnSelection))
                 {
                     double valY = GetValueByPixel(CursorPosY,true);
@@ -2435,7 +2446,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
             {
                 double prevPixelX = GetPixelByValue(CurMoveSel.x(),false);
                 double prevPixelY = GetPixelByValue(CurMoveSel.y(),true);
-                //что бы случайно не выделялось по малу пикселей
+                //С‡С‚Рѕ Р±С‹ СЃР»СѓС‡Р°Р№РЅРѕ РЅРµ РІС‹РґРµР»СЏР»РѕСЃСЊ РїРѕ РјР°Р»Сѓ РїРёРєСЃРµР»РµР№
                 if ((qAbs(CursorPosX-prevPixelX)+qAbs(CursorPosY-prevPixelY) > minimum_selected_pixels*2) || (OnSelection))
                 {
                     double valX = GetValueByPixel(CursorPosX,false);
@@ -2468,7 +2479,7 @@ void Q_MG_MouseCursor::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
     }
     //////////////////////////////////////////////////////////////////////////
 	
-    //таскание экрана
+    //С‚Р°СЃРєР°РЅРёРµ СЌРєСЂР°РЅР°
     if ((event->buttons() == Qt::RightButton) && (event->modifiers() == Qt::NoModifier))
     {
         #define DropReturn CursorJastReDroped = true;event->accept();return;
@@ -2508,10 +2519,10 @@ void Q_MG_MouseCursor::DrawSelections( QPainter *painter )
 	{
 		QBrush oldBrush = painter->brush();
 		QPen oldPen = painter->pen();
-		QBrush SellFill = settings->SelectionFillColor;//цвет выделения
-		QPen SellPen = settings->SelectionBorderColor;//цвет бордюра выделения
+		QBrush SellFill = settings->SelectionFillColor;//С†РІРµС‚ РІС‹РґРµР»РµРЅРёСЏ
+		QPen SellPen = settings->SelectionBorderColor;//С†РІРµС‚ Р±РѕСЂРґСЋСЂР° РІС‹РґРµР»РµРЅРёСЏ
 
-		//статическое
+		//СЃС‚Р°С‚РёС‡РµСЃРєРѕРµ
 		for (int z = 0;z < HAxisSelList.count();z++)//1
 		{
 			QPointF sel = HAxisSelList[z];
@@ -2578,7 +2589,7 @@ void Q_MG_MouseCursor::DrawSelections( QPainter *painter )
 		//////////////////////////////////////////////////////////////////////////
 			
 		
-		//динамическое рисование
+		//РґРёРЅР°РјРёС‡РµСЃРєРѕРµ СЂРёСЃРѕРІР°РЅРёРµ
 		if (OnSelection)
 		{            
 			int text_deco_style = 0;
@@ -2657,7 +2668,7 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 	double val = qAbs(value.y()-value.x());
 	OutText = Interpret(val,isVertical,true);
 	
-	QPen MidLinePen;//карандаш центрального пунктира
+	QPen MidLinePen;//РєР°СЂР°РЅРґР°С€ С†РµРЅС‚СЂР°Р»СЊРЅРѕРіРѕ РїСѓРЅРєС‚РёСЂР°
 	if (style == 0) MidLinePen.setColor(settings->TextDecorate_MidLineColor0);
 	if (style == 1) MidLinePen.setColor(settings->TextDecorate_MidLineColor1);
 	if (style == 2) MidLinePen.setColor(settings->TextDecorate_MidLineColor2);
@@ -2669,13 +2680,13 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		IntervalStart = FromY;
 		IntervalEnd = ToY;
 
-		//рисование центрального пунктира
+		//СЂРёСЃРѕРІР°РЅРёРµ С†РµРЅС‚СЂР°Р»СЊРЅРѕРіРѕ РїСѓРЅРєС‚РёСЂР°
 		if ((DrawTextDecorateMidLine) && (style != 2))
 		{
 			painter->setPen(MidLinePen);
 			double Half = (ToY-FromY)/2+FromY;
 			painter->drawLine(FromX,Half,ToX,Half);
-			//подпись к центральному пунктиру
+			//РїРѕРґРїРёСЃСЊ Рє С†РµРЅС‚СЂР°Р»СЊРЅРѕРјСѓ РїСѓРЅРєС‚РёСЂСѓ
 			if ((style == 1) && (showMarkerCentralParam) && (ToY-FromY > 23))
 			{
 				double val2 = GetValueByPixel(Half,true);
@@ -2685,12 +2696,12 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 				if ((curGridAlig == 0) || (curGridAlig == 1)) TextXpos = sz.x()-fnt.width(OutText2)-25;
 				else TextXpos = 22;
 				QRectF LabelRect(QPointF(TextXpos-3,Half-TextH_2),QPointF(TextXpos+fnt.width(OutText2)+2,Half+TextH_2));
-				painter->setBrush(settings->TextDecorate_MidLine_TextFillColor);//цвет фона
+				painter->setBrush(settings->TextDecorate_MidLine_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 				QPen pen(settings->TextDecorate_MidLine_TextBorderColor);
 				pen.setStyle(Qt::DotLine);
 				painter->setPen(pen);
 				painter->drawRect(LabelRect);
-				painter->setPen(settings->TextDecorate_MidLine_TextColor);//цвет текста
+				painter->setPen(settings->TextDecorate_MidLine_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 				painter->drawText(TextXpos,Half+TextH_2-1,OutText2);
 			}
 		}
@@ -2710,7 +2721,7 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 
 		double TextXpos = 0;
 		double TextYpos = ((IntervalEnd-IntervalStart)/2)+IntervalStart;
-		//рисование текста
+		//СЂРёСЃРѕРІР°РЅРёРµ С‚РµРєСЃС‚Р°
 		if ((curGridAlig == 0) || (curGridAlig == 1))	
 		{	
 			if (style == 0)	TextXpos = FromX+1;
@@ -2739,9 +2750,9 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		else OutText = "";
 
 		if (ToY-FromY < 20) return;
-		//рисование Линии со стрелками
+		//СЂРёСЃРѕРІР°РЅРёРµ Р›РёРЅРёРё СЃРѕ СЃС‚СЂРµР»РєР°РјРё
 		double LineXPos = TextXpos+fnt.height()/2+1;
-		//рисование направляющих если значение выскачило за пределы квадрата
+		//СЂРёСЃРѕРІР°РЅРёРµ РЅР°РїСЂР°РІР»СЏСЋС‰РёС… РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РІС‹СЃРєР°С‡РёР»Рѕ Р·Р° РїСЂРµРґРµР»С‹ РєРІР°РґСЂР°С‚Р°
 		if (!points.contains(QPointF(LineXPos,FromY)))
 		{
 			QPen pen(settings->TextDecorate_AdditionLinesColor);
@@ -2752,7 +2763,7 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		}
 
 		QRectF LineRect(QPointF(LineXPos-fnt.height()/2,TextYpos-SpaceVal),QPointF(LineXPos+fnt.height()/2+1,TextYpos+SpaceVal+fnt.width(OutText)-1));
-		//цвет линий
+		//С†РІРµС‚ Р»РёРЅРёР№
 		if (style == 0) painter->setPen(settings->TextDecorate_BaseLineColor0);
 		if (style == 1) painter->setPen(settings->TextDecorate_BaseLineColor1);
 		if (style == 2) painter->setPen(settings->TextDecorate_BaseLineColor2);
@@ -2765,13 +2776,13 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		
 		if (!OutText.isEmpty())
 		{
-			//цвет фона
+			//С†РІРµС‚ С„РѕРЅР°
 			if (style == 0) painter->setBrush(settings->TextDecorate_BaseFillColor0);
 			if (style == 1) painter->setBrush(settings->TextDecorate_BaseFillColor1);
 			if (style == 2) painter->setBrush(settings->TextDecorate_BaseFillColor2);
 			painter->drawRect(LineRect);	
-			painter->setPen(settings->TextDecorate_BaseTextColor);//цвет текста
-			//поворот и рисование
+			painter->setPen(settings->TextDecorate_BaseTextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
+			//РїРѕРІРѕСЂРѕС‚ Рё СЂРёСЃРѕРІР°РЅРёРµ
 			if ((curGridAlig == 0) || (curGridAlig == 1))
 			{
 				painter->rotate(90);
@@ -2792,13 +2803,13 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		IntervalStart = FromX;
 		IntervalEnd = ToX;
 
-		//рисование центрального пунктира
+		//СЂРёСЃРѕРІР°РЅРёРµ С†РµРЅС‚СЂР°Р»СЊРЅРѕРіРѕ РїСѓРЅРєС‚РёСЂР°
 		if ((DrawTextDecorateMidLine) && (style != 2))
 		{
 			painter->setPen(MidLinePen);
 			double Half = (ToX-FromX)/2+FromX;
 			painter->drawLine(Half,FromY,Half,ToY);
-			//подпись к центральному пунктиру
+			//РїРѕРґРїРёСЃСЊ Рє С†РµРЅС‚СЂР°Р»СЊРЅРѕРјСѓ РїСѓРЅРєС‚РёСЂСѓ
 			if ((style == 1) && (showMarkerCentralParam) && (ToX-FromX > 23))
 			{
 				double val2 = GetValueByPixel(Half,false);
@@ -2808,12 +2819,12 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 				if ((curGridAlig == 0) || (curGridAlig == 2)) TextYpos = sz.y()-7;
 				else TextYpos = fnt.height()+3;
 				QRectF LabelRect(QPointF(Half-TextW_2-2,TextYpos-fnt.height()),QPointF(Half+TextW_2+1,TextYpos+3));
-				painter->setBrush(settings->TextDecorate_MidLine_TextFillColor);//цвет фона
+				painter->setBrush(settings->TextDecorate_MidLine_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 				QPen pen(settings->TextDecorate_MidLine_TextBorderColor);
 				pen.setStyle(Qt::DotLine);
 				painter->setPen(pen);
 				painter->drawRect(LabelRect);
-				painter->setPen(settings->TextDecorate_MidLine_TextColor);//цвет текста
+				painter->setPen(settings->TextDecorate_MidLine_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 				painter->drawText(Half-TextW_2,TextYpos,OutText2);
 			}
 		}
@@ -2833,7 +2844,7 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		
 		double TextXpos = ((IntervalEnd-IntervalStart)/2)+IntervalStart;
 		double TextYpos = 0;
-		//рисование текста
+		//СЂРёСЃРѕРІР°РЅРёРµ С‚РµРєСЃС‚Р°
 		if ((curGridAlig == 0) || (curGridAlig == 2))	
 		{	
 			if (style == 0) TextYpos = FromY+fnt.height();
@@ -2861,9 +2872,9 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		} else OutText = "";
 	
 		if (ToX-FromX < 20) return;
-		//рисование Линии со стрелками
+		//СЂРёСЃРѕРІР°РЅРёРµ Р›РёРЅРёРё СЃРѕ СЃС‚СЂРµР»РєР°РјРё
 		double LineYPos = TextYpos-fnt.height()/2+1;
-		//рисование направляющих если значение выскачило за пределы квадрата
+		//СЂРёСЃРѕРІР°РЅРёРµ РЅР°РїСЂР°РІР»СЏСЋС‰РёС… РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ РІС‹СЃРєР°С‡РёР»Рѕ Р·Р° РїСЂРµРґРµР»С‹ РєРІР°РґСЂР°С‚Р°
 		if (!points.contains(QPointF(FromX,LineYPos)))
 		{
 			QPen pen(settings->TextDecorate_AdditionLinesColor);
@@ -2875,7 +2886,7 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		
 		QRectF LineRect(QPointF(TextXpos-SpaceVal,LineYPos-fnt.height()/2),QPointF(TextXpos+SpaceVal+fnt.width(OutText)-1,LineYPos+fnt.height()/2+1));
 		
-		//цвет линий
+		//С†РІРµС‚ Р»РёРЅРёР№
 		if (style == 0) painter->setPen(settings->TextDecorate_BaseLineColor0);
 		if (style == 1) painter->setPen(settings->TextDecorate_BaseLineColor1);
 		if (style == 2) painter->setPen(settings->TextDecorate_BaseLineColor2);
@@ -2887,12 +2898,12 @@ void Q_MG_MouseCursor::TextDecorate( QPainter *painter,const QRectF& points, con
 		painter->drawLine(QLineF(ToX-1,LineYPos,ToX-4,LineYPos+2));
 		if (!OutText.isEmpty())
 		{
-			//цвет фона
+			//С†РІРµС‚ С„РѕРЅР°
 			if (style == 0) painter->setBrush(settings->TextDecorate_BaseFillColor0);
 			if (style == 1) painter->setBrush(settings->TextDecorate_BaseFillColor1);
 			if (style == 2) painter->setBrush(settings->TextDecorate_BaseFillColor2);
 			painter->drawRect(LineRect);
-			painter->setPen(settings->TextDecorate_BaseTextColor);//цвет текста
+			painter->setPen(settings->TextDecorate_BaseTextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 			painter->drawText(TextXpos,TextYpos,OutText);
 		}
 	}
@@ -2971,8 +2982,8 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 	if (!OnMarkerMoove) UnderMouseMarkerIndex = -1;
 	if ((!showVMarkers) && (!showHMarkers)) return;
 	QPen oldPen = painter->pen();
-	QPen markPen = settings->Marker_Color;//цвет маркера
-	QPen markPenGlow = settings->Marker_GlowColor;//цвет свечения
+	QPen markPen = settings->Marker_Color;//С†РІРµС‚ РјР°СЂРєРµСЂР°
+	QPen markPenGlow = settings->Marker_GlowColor;//С†РІРµС‚ СЃРІРµС‡РµРЅРёСЏ
 	double prevVal;
 
 	if (showVMarkers)
@@ -2987,7 +2998,7 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 		{
 			double posX = GetPixelByValue(sortedVertMark[i],false);
 			QRectF markFig = QRectF(QPointF(posX-2,-1),QPointF(posX+2,sz.y()+1));
-			//рисование подписи к маркеру и маркера
+			//СЂРёСЃРѕРІР°РЅРёРµ РїРѕРґРїРёСЃРё Рє РјР°СЂРєРµСЂСѓ Рё РјР°СЂРєРµСЂР°
 			if (FigureIsVisible(markFig))
 			{
 				QPointF startEndRect;
@@ -3001,9 +3012,9 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 					if ((curGridAlig == 0) || (curGridAlig == 2)) TextYpos = sz.y()-7;
 					else TextYpos = fnt.height()+3;
 					QRectF LabelRect(QPointF(posX-TextW_2-4,TextYpos-fnt.height()),QPointF(posX+TextW_2+3,TextYpos+3));
-					painter->setBrush(settings->Marker_TextFillColor);//цвет фона
+					painter->setBrush(settings->Marker_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 					painter->drawRect(LabelRect);
-					painter->setPen(settings->Marker_TextColor);//цвет текста
+					painter->setPen(settings->Marker_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 					painter->drawText(posX-TextW_2,TextYpos,OutText);
 					startEndRect = QPointF(LabelRect.y(),LabelRect.bottom());
 				}
@@ -3025,7 +3036,7 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 				{	UnderMouseMarkerIndex = VertMark.indexOf(sortedVertMark[i]);UnderMouseMarkerIndexIsVert = true;	}
 			} //if (FigureIsVisible(markFig))
 			
-			//разметка ширины между маркерами
+			//СЂР°Р·РјРµС‚РєР° С€РёСЂРёРЅС‹ РјРµР¶РґСѓ РјР°СЂРєРµСЂР°РјРё
 			if (showMarkersDeff)
 			{
 				if (i == 0) {prevVal = posX;continue;}
@@ -3049,7 +3060,7 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 		{
 			double posY = GetPixelByValue(sortedHorMark[i],true);
 			QRectF markFig = QRectF(QPointF(-1,posY-2),QPointF(sz.x()+1,posY+2));
-			//рисование подписи к маркеру
+			//СЂРёСЃРѕРІР°РЅРёРµ РїРѕРґРїРёСЃРё Рє РјР°СЂРєРµСЂСѓ
 			if (FigureIsVisible(markFig))
 			{
 				QPointF startEndRect;
@@ -3063,9 +3074,9 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 					if ((curGridAlig == 0) || (curGridAlig == 1)) TextXpos = sz.x()-fnt.width(OutText)-23;
 					else TextXpos = 20;
 					QRectF LabelRect(QPointF(TextXpos-3,posY-TextH_2),QPointF(TextXpos+fnt.width(OutText)+2,posY+TextH_2));
-					painter->setBrush(settings->Marker_TextFillColor);//цвет фона
+					painter->setBrush(settings->Marker_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 					painter->drawRect(LabelRect);
-					painter->setPen(settings->Marker_TextColor);//цвет текста
+					painter->setPen(settings->Marker_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 					painter->drawText(TextXpos,posY+TextH_2-1,OutText);
 					startEndRect = QPointF(LabelRect.x(),LabelRect.right());
 				}
@@ -3087,7 +3098,7 @@ void Q_MG_MouseCursor::DrawMarkers( QPainter *painter )
 				{	UnderMouseMarkerIndex = HorMark.indexOf(sortedHorMark[i]);UnderMouseMarkerIndexIsVert = false;	}
 			}//if (FigureIsVisible(markFig))
 
-			//разметка ширины между маркерами
+			//СЂР°Р·РјРµС‚РєР° С€РёСЂРёРЅС‹ РјРµР¶РґСѓ РјР°СЂРєРµСЂР°РјРё
 			if (showMarkersDeff)
 			{
 				if (i == 0) {prevVal = posY;continue;}
@@ -3207,9 +3218,9 @@ void Q_MG_MouseCursor::DrawStrangeCross(QPainter *painter)
 			else TextYpos = fnt.height()+3;
 			QRectF LabelRect(QPointF(posX-TextW_2-4,TextYpos-fnt.height()),QPointF(posX+TextW_2+3,TextYpos+3));
 			painter->setPen(settings->StrangeCross_LineColor);
-			painter->setBrush(settings->StrangeCross_TextFillColor);//цвет фона
+			painter->setBrush(settings->StrangeCross_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 			painter->drawRect(LabelRect);
-			painter->setPen(settings->StrangeCross_TextColor);//цвет текста
+			painter->setPen(settings->StrangeCross_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 			painter->drawText(posX-TextW_2,TextYpos,OutText);
 			startEndRect = QPointF(LabelRect.y(),LabelRect.bottom());
 		}
@@ -3234,9 +3245,9 @@ void Q_MG_MouseCursor::DrawStrangeCross(QPainter *painter)
 			else TextXpos = 20;
 			QRectF LabelRect(QPointF(TextXpos-3,posY-TextH_2),QPointF(TextXpos+fnt.width(OutText)+2,posY+TextH_2));
 			painter->setPen(settings->StrangeCross_LineColor);
-			painter->setBrush(settings->StrangeCross_TextFillColor);//цвет фона
+			painter->setBrush(settings->StrangeCross_TextFillColor);//С†РІРµС‚ С„РѕРЅР°
 			painter->drawRect(LabelRect);
-			painter->setPen(settings->StrangeCross_TextColor);//цвет текста
+			painter->setPen(settings->StrangeCross_TextColor);//С†РІРµС‚ С‚РµРєСЃС‚Р°
 			painter->drawText(TextXpos,posY+TextH_2-1,OutText);
 			startEndRect = QPointF(LabelRect.x(),LabelRect.right());
 		}
@@ -3368,7 +3379,7 @@ void Q_MG_MouseCursor::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
 	event->accept();
 }
 
-//подписи
+//РїРѕРґРїРёСЃРё
 void Q_MG_MouseCursor::SetFredomLabel( double valX_b,QString text,QString name,bool immediately_update /*= false*/, QColor label_color )
 {
 	if (!labels_manager_) return;
@@ -3441,7 +3452,7 @@ void Q_MG_MouseCursor::SetButtonCtrlClickIsSingle(bool is_single)
 
 void Q_MG_MouseCursor::StartSelectionDeselection(QGraphicsSceneMouseEvent * event)
 {
-	//старт выделения
+	//СЃС‚Р°СЂС‚ РІС‹РґРµР»РµРЅРёСЏ
 	if (!OnMarkerMoove)
 	{
 		if (event->buttons() == Qt::LeftButton) is_deselect_ = false;
@@ -3496,7 +3507,7 @@ bool Q_MG_MouseCursor::CalcAddSelectionPoint( QList<QPointF> & list, QPointF sel
     QRectF SelectRect(QPointF(selectRectPoint.x(),0),QPointF(selectRectPoint.y(),1));
 
     bool anyIntersect = false;
-	bool wasFullAddIndex = false;//было ли полное добавление
+	bool wasFullAddIndex = false;//Р±С‹Р»Рѕ Р»Рё РїРѕР»РЅРѕРµ РґРѕР±Р°РІР»РµРЅРёРµ
 
     for (int z = 0;z < list.count();z++)//1
 	{
@@ -3711,7 +3722,117 @@ void Q_MG_MouseCursor::RemoveMarker( int index, bool isVert, bool need_change_si
 
 
 
-//конец подписи
+//РєРѕРЅРµС† РїРѕРґРїРёСЃРё
+
+//////////////////////////////////////////////////////////////////////////
+//		Q_MG_SelectionAreas
+//////////////////////////////////////////////////////////////////////////
+
+Q_MG_SelectionAreas::Q_MG_SelectionAreas(QGraphicsItem *parent) : Q_MG_BaseClass(parent)
+{
+}
+
+void Q_MG_SelectionAreas::SetSelection(double x1,double y1,double x2,double y2, bool noSignal)
+{
+	x1 -= HorInterpretSum;
+	x2 -= HorInterpretSum;
+	HAxisSelList.append(QPointF(x1,x2));
+	ReDraw();
+}
+
+void Q_MG_SelectionAreas::ClearAllSelections()
+{
+	HAxisSelList.clear();
+	ReDraw();
+}
+
+void Q_MG_SelectionAreas::paint( QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget )
+{
+	DrawSelections(painter);
+//	QPointF p1(-5, 0.55);
+//	QPointF p2(5, 0.55);
+//	painter->drawLine(p1, p2);
+}
+
+void Q_MG_SelectionAreas::DrawSelections( QPainter *painter )
+{
+//	if (CurSelectionType > 0)
+//	{
+		QBrush oldBrush = painter->brush();
+		QPen oldPen = painter->pen();
+		QBrush SellFill = settings->StaticAreaFillColor;//С†РІРµС‚ РІС‹РґРµР»РµРЅРёСЏ
+		QPen SellPen = settings->StaticAreaFillColor;//С†РІРµС‚ Р±РѕСЂРґСЋСЂР° РІС‹РґРµР»РµРЅРёСЏ
+
+		//СЃС‚Р°С‚РёС‡РµСЃРєРѕРµ
+		for (int z = 0;z < HAxisSelList.count();z++)//1
+		{
+			QPointF sel = HAxisSelList[z];
+			double FromX = GetPixelByValue(sel.x(),false);
+			double ToX = GetPixelByValue(sel.y(),false);
+			QRectF selFigure(QPointF(FromX,-1),QPointF(ToX,sz.y()+1));
+//			if (FigureIsVisible(selFigure))
+//			{
+				painter->setBrush(SellFill);
+				painter->setPen(SellPen);
+				painter->drawRect(selFigure);
+//				TextDecorate(painter,selFigure,sel,false);
+//			}
+		}
+
+//        for (int z = 0;z < VAxisSelList.count();z++)
+//		{
+//            if(CurSelectionType == 4)
+//            {
+//                QPointF sel = VAxisSelList[z];
+//                double FromY = GetPixelByValue(sel.x(),true);
+//                double ToY = GetPixelByValue(sel.y(),true);
+////                QRectF selFigure(QPointF(-1,ToY-1),QPointF(sz.x()+1,ToY+1));
+////                if (FigureIsVisible(selFigure))
+////                {
+////                    painter->setBrush(SellFill);
+////                    painter->setPen(SellPen);
+////                    painter->drawRect(selFigure);
+//                    painter->setPen(QColor(255,0,0));
+//                    painter->drawLine(-1, ToY, sz.x() + 1, ToY);
+////                    TextDecorate(painter,selFigure,sel,true);
+////                }
+//            }
+//            else
+//            {
+//                QPointF sel = VAxisSelList[z];
+//                double FromY = GetPixelByValue(sel.x(),true);
+//                double ToY = GetPixelByValue(sel.y(),true);
+//                QRectF selFigure(QPointF(-1,FromY),QPointF(sz.x()+1,ToY));
+//                if (FigureIsVisible(selFigure))
+//                {
+//                    painter->setBrush(SellFill);painter->setPen(SellPen);
+//                    painter->drawRect(selFigure);
+//                    TextDecorate(painter,selFigure,sel,true);
+//                }
+//            }
+//		}
+
+//		for (int z = 0;z < RectSelList.count();z++)
+//		{
+//			QRectF sel = RectSelList[z];
+//			double FromX = GetPixelByValue(sel.x(),false);
+//			double ToX = GetPixelByValue(sel.right(),false);
+//			double FromY = GetPixelByValue(sel.y(),true);
+//			double ToY = GetPixelByValue(sel.bottom(),true);
+//			QRectF selFigure(QPointF(FromX,FromY),QPointF(ToX,ToY));
+//			if (FigureIsVisible(selFigure))
+//			{
+//				painter->setBrush(SellFill);painter->setPen(SellPen);
+//				painter->drawRect(selFigure);
+//				TextDecorate(painter,selFigure,QPointF(sel.x(),sel.right()),false);
+//				TextDecorate(painter,selFigure,QPointF(sel.y(),sel.bottom()),true);
+//			}
+//		}
+
+		painter->setBrush(oldBrush);
+		painter->setPen(oldPen);
+//	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 //		Q_MG_Material													//
@@ -3847,14 +3968,14 @@ Q_MG_Material::Q_MG_Material( QGraphicsItem *parent, int _ElementH, int _Element
 	Hor_kf_inc = 1;
 	Vert_kf_inc = 1;
 
-	//для многопоточности
+	//РґР»СЏ РјРЅРѕРіРѕРїРѕС‚РѕС‡РЅРѕСЃС‚Рё
 	UseMultiThread = use_multy_thread_render;
 	if (in_renderThread == NULL) UseMultiThread = false;
 	if (UseMultiThread)
 	{
 		RenderThread = in_renderThread;
 		connect(RenderThread,SIGNAL(RenderFinished()),this,SLOT(RenderFinishedSlot()));
-		connect(RenderThread,SIGNAL(ElementReady(Q_MG_MaterialElement*,bool)),this,SLOT(ElementReady(Q_MG_MaterialElement*,bool)));//пока оставляю все параметры, потом после теста посмотрим пригодятся они или нет, ибо хз как там будут евенты приходить
+		connect(RenderThread,SIGNAL(ElementReady(Q_MG_MaterialElement*,bool)),this,SLOT(ElementReady(Q_MG_MaterialElement*,bool)));//РїРѕРєР° РѕСЃС‚Р°РІР»СЏСЋ РІСЃРµ РїР°СЂР°РјРµС‚СЂС‹, РїРѕС‚РѕРј РїРѕСЃР»Рµ С‚РµСЃС‚Р° РїРѕСЃРјРѕС‚СЂРёРј РїСЂРёРіРѕРґСЏС‚СЃСЏ РѕРЅРё РёР»Рё РЅРµС‚, РёР±Рѕ С…Р· РєР°Рє С‚Р°Рј Р±СѓРґСѓС‚ РµРІРµРЅС‚С‹ РїСЂРёС…РѕРґРёС‚СЊ
 
 		RenderThread->setFilter([&](Q_MG_MaterialElement* el)->bool
 		{
@@ -3863,7 +3984,7 @@ Q_MG_Material::Q_MG_Material( QGraphicsItem *parent, int _ElementH, int _Element
 
 	}
 	
-	on_Scale_or_MinMaxChange();//считаем размер материала
+	on_Scale_or_MinMaxChange();//СЃС‡РёС‚Р°РµРј СЂР°Р·РјРµСЂ РјР°С‚РµСЂРёР°Р»Р°
 }
 
 void Q_MG_Material::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget )
@@ -3909,7 +4030,7 @@ void Q_MG_Material::on_Resize()
 
 void Q_MG_Material::on_Scale_or_MinMaxChange()
 {
-	//вычисляет размер MaterialSize исходя из BaseClass
+	//РІС‹С‡РёСЃР»СЏРµС‚ СЂР°Р·РјРµСЂ MaterialSize РёСЃС…РѕРґСЏ РёР· BaseClass
 //    qDebug() << "on_Scale_or_MinMaxChange";
 	double MaxXVal_pix = GetPixelByValueForTrans(Trans,kf,MaxTransPoint.x(),false);
 	double MinXVal_pix = GetPixelByValueForTrans(Trans,kf,MinTransPoint.x(),false);
@@ -3925,7 +4046,7 @@ void Q_MG_Material::on_Scale_or_MinMaxChange()
     
 	NeedMaterialUpdateAfterMoov = true;
 	on_Resize();
-	setCacheMode(QGraphicsItem::DeviceCoordinateCache);//обновляем Кэш
+	setCacheMode(QGraphicsItem::DeviceCoordinateCache);//РѕР±РЅРѕРІР»СЏРµРј РљСЌС€
 }
 
 QPointF Q_MG_Material::GetPixelByValueOnMaterial( double Val1,double Val2 )
@@ -3978,7 +4099,7 @@ void Q_MG_Material::ViewPortChange()
 	}
 	
 
-	//необходимо выяснить какие элементы необходимо рисовать
+	//РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹СЏСЃРЅРёС‚СЊ РєР°РєРёРµ СЌР»РµРјРµРЅС‚С‹ РЅРµРѕР±С…РѕРґРёРјРѕ СЂРёСЃРѕРІР°С‚СЊ
 	unsigned __int64 byXStart = StartPixelX/ElementW;
 	unsigned __int64 byXEnd = (EndPixelX/ElementW)+1;
 	unsigned __int64 byYStart = (unsigned __int64) (StartPixelY / (double)ElementH);
@@ -4004,7 +4125,7 @@ void Q_MG_Material::ViewPortChange()
 					{ Found = true;break; }
 					if (Found) continue;
 
-					//надо создавать и размещать
+					//РЅР°РґРѕ СЃРѕР·РґР°РІР°С‚СЊ Рё СЂР°Р·РјРµС‰Р°С‚СЊ
 					Q_MG_MaterialElement* NewEl = new Q_MG_MaterialElement(ElementW,ElementH,ElementsImageFormat_,this);
 					NewEl->setVisible(false);
 					NewEl->setZValue(1);
@@ -4016,7 +4137,7 @@ void Q_MG_Material::ViewPortChange()
 					ElList.PrepareForWrite(1);
 					ElList[ElList.AvailRead()] = NewEl;
 					ElList.WriteComplete(1);
-					//добавление в очередь на рендер
+					//РґРѕР±Р°РІР»РµРЅРёРµ РІ РѕС‡РµСЂРµРґСЊ РЅР° СЂРµРЅРґРµСЂ
 					newElements.PrepareForWrite(1);
 					newElements[newElements.AvailRead()] = NewEl;
 					newElements.WriteComplete(1);
@@ -4042,7 +4163,7 @@ void Q_MG_Material::ViewPortChange()
 					{ Found = true;break; }
 				if (Found) continue;
 			
-				//надо создавать и размещать
+				//РЅР°РґРѕ СЃРѕР·РґР°РІР°С‚СЊ Рё СЂР°Р·РјРµС‰Р°С‚СЊ
 				Q_MG_MaterialElement* NewEl = new Q_MG_MaterialElement(ElementW,ElementH,ElementsImageFormat_,this);
 				NewEl->setZValue(1);
 				NewEl->setPos(h*ElementW,i*ElementH);
@@ -4101,7 +4222,7 @@ void Q_MG_Material::RenderFinishedSlot()
 
 void Q_MG_Material::ElementReady(Q_MG_MaterialElement* el,  bool ElementIsEmpty)
 {
-	//проверяем че это за херня и есть ли она в очереди (защита от того что если сигнал не успел дойти когда пользователь агрессивно тащит и очердь чиститься)
+	//РїСЂРѕРІРµСЂСЏРµРј С‡Рµ СЌС‚Рѕ Р·Р° С…РµСЂРЅСЏ Рё РµСЃС‚СЊ Р»Рё РѕРЅР° РІ РѕС‡РµСЂРµРґРё (Р·Р°С‰РёС‚Р° РѕС‚ С‚РѕРіРѕ С‡С‚Рѕ РµСЃР»Рё СЃРёРіРЅР°Р» РЅРµ СѓСЃРїРµР» РґРѕР№С‚Рё РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ Р°РіСЂРµСЃСЃРёРІРЅРѕ С‚Р°С‰РёС‚ Рё РѕС‡РµСЂРґСЊ С‡РёСЃС‚РёС‚СЊСЃСЏ)
 	bool founded = false;
 	for (int i = 0;i < (int)ElList.AvailRead();i++)
 		if (el == ElList[i]) {founded = true;break;}
@@ -4126,8 +4247,8 @@ bool Q_MG_Material::ElementIsOnScreen(const Q_MG_MaterialElement* el )
 
 void Q_MG_Material::RemoveAllOffScreenEl()
 {
-	//соритруем чтобы offscrin-ы были в конце массива
-	//if (UseMultiThread)	if (!RenderThread->isSleep()) return;//!!!! тоже под вопросом надо ли оно тут
+	//СЃРѕСЂРёС‚СЂСѓРµРј С‡С‚РѕР±С‹ offscrin-С‹ Р±С‹Р»Рё РІ РєРѕРЅС†Рµ РјР°СЃСЃРёРІР°
+	//if (UseMultiThread)	if (!RenderThread->isSleep()) return;//!!!! С‚РѕР¶Рµ РїРѕРґ РІРѕРїСЂРѕСЃРѕРј РЅР°РґРѕ Р»Рё РѕРЅРѕ С‚СѓС‚
 
 	std::sort(&ElList.data()[0],&ElList.data()[ElList.AvailRead()],
 
@@ -4188,7 +4309,7 @@ Q_MG_MaterialElement::Q_MG_MaterialElement( int _szX,int _szY, QImage::Format El
 	szX = _szX;szY = _szY;
 	elementIsReady_ = false;
 	img = new QImage(szX,szY,ElementFormat);
-	img->fill(0); //не убирать - надо для спектра
+	img->fill(0); //РЅРµ СѓР±РёСЂР°С‚СЊ - РЅР°РґРѕ РґР»СЏ СЃРїРµРєС‚СЂР°
 	setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
@@ -4231,7 +4352,7 @@ QString FormatSecs( quint64 secs )
 	tmp = tmp.addSecs(temp);
 	
 	QString result;
-	if (days > 0) result = QString::number(days)+QObject::tr("д.");
+	if (days > 0) result = QString::number(days)+QObject::tr("Рґ.");
 	result += tmp.toString("hh:mm:ss");
 	return result;	
 }
@@ -4257,36 +4378,36 @@ QString FormatNanSecs( double NanSecs, double begin, double End, QString &outfor
 	
 	if (beg_end.h >= 1)
 	{
-		outformat = QObject::tr("ч:м");
+		outformat = QObject::tr("С‡:Рј");
 		retVal = QString::number(val.h)+":"+QString::number(val.m);
 	}
 	else
 		if (beg_end.m >= 1)
 		{
-			outformat = QObject::tr("м:c");
+			outformat = QObject::tr("Рј:c");
 			retVal = MG_NanoTimeStruct::toStr(val.m,2)+":"+MG_NanoTimeStruct::toStr(val.s,2);
 		}
 		else
 			if (beg_end.s >= 1)
 			{
-				outformat = QObject::tr("c.мс");
+				outformat = QObject::tr("c.РјСЃ");
 				retVal = MG_NanoTimeStruct::toStr(val.s,2)+"."+MG_NanoTimeStruct::toStr(val.ms,3);
 			}
 			else
 				if (beg_end.ms >= 1)
 				{
-					outformat = QObject::tr("мс.мкс");
+					outformat = QObject::tr("РјСЃ.РјРєСЃ");
 					retVal = MG_NanoTimeStruct::toStr(val.ms,3)+"."+MG_NanoTimeStruct::toStr(val.mks,3);
 				}
 				else
 					if (beg_end.mks >= 1)
 					{
-						outformat = QObject::tr("мкс.нс");
+						outformat = QObject::tr("РјРєСЃ.РЅСЃ");
 						retVal = MG_NanoTimeStruct::toStr(val.mks,3)+"."+MG_NanoTimeStruct::toStr(val.ns,3);
 					}
 					else
 					{
-						outformat = QObject::tr("нс");
+						outformat = QObject::tr("РЅСЃ");
 						retVal = MG_NanoTimeStruct::toStr(val.ns,3);
 					}
 		
@@ -4539,7 +4660,7 @@ Q_MG_InfoWidget::Q_MG_InfoWidget( Q_MG_Style* sett, QGraphicsItem *parent /*= NU
 	TextItem->setFlag(QGraphicsItem::ItemIsMovable,false);
 	TextItem->setFlag(QGraphicsItem::ItemIsSelectable,false);
 	TextItem->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-	TextItem->setPlainText(tr("Нет данных"));
+	TextItem->setPlainText(tr("РќРµС‚ РґР°РЅРЅС‹С…"));
 	TextItem->setPos(7,7);
 	TextItem->setDefaultTextColor(settings->InfoWidget_Text_Color);//
 	QFont fnt = TextItem->font();
@@ -4655,7 +4776,7 @@ void Q_MG_InfoWidget::calcGeometry(bool onMove)
 	Bhw.setX(curGridBhw.x()+2);
 	Bhw.setY(curGridBhw.y());
 
-	QRectF screenRect;//рект сцены без бордюра 
+	QRectF screenRect;//СЂРµРєС‚ СЃС†РµРЅС‹ Р±РµР· Р±РѕСЂРґСЋСЂР° 
 	switch (curGridAlig)
 	{
 		case 0: screenRect = QRectF(Bhw,QPointF(mySz));break;
@@ -4749,7 +4870,7 @@ void Q_MG_InfoWidget::PrepareAndUpdateStandartText()
 	QString text;
 	bool SameAdded = false;
 	
-	//необходимы для правильной интерпритации
+	//РЅРµРѕР±С…РѕРґРёРјС‹ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕР№ РёРЅС‚РµСЂРїСЂРёС‚Р°С†РёРё
 	double VerStartNumV = (Trans.y()*kf.y())+VertInterpretSum;
 	double VerEndNumV = ((Trans.y()+sz.y())*kf.y())+VertInterpretSum;
 	double HorStartNumV = (Trans.x()*kf.x())+HorInterpretSum;
