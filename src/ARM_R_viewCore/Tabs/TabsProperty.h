@@ -1,17 +1,16 @@
 #ifndef TABSPROPERTY_H
 #define TABSPROPERTY_H
 
+#include <QObject>
 #include <QString>
 #include <QMap>
 
-//#include "MainTab.h"
+#include "SpectrumWidget.h"
 
-#include "../GraphicWidget.h"
-
-class TabsProperty
+class TabsProperty: public QObject
 {
 public:
-    TabsProperty();
+	TabsProperty(QObject* parent = NULL);
 
 private:
     /// punkt Id
@@ -30,21 +29,21 @@ private:
     quint16             _port_ADC;
 
 
-    GraphicWidget*              _grafic_widget;
+	SpectrumWidget*              _grafic_widget;
 
-    QMap<int, GraphicWidget *>  _map_correlations;
+	QMap<int, SpectrumWidget *>  _map_correlations;
 
 public:
     void                destroy();
     int                 get_id();
     QString             get_name();
-    GraphicWidget       *get_graphic_widget();
+	SpectrumWidget       *get_graphic_widget();
     double              get_latitude();
     double              get_longitude();
     QString             get_ip_prm300();
     QString             get_ip_adc();
     quint16             get_port_adc();
-    QMap<int, GraphicWidget *> &get_correlations();
+	QMap<int, SpectrumWidget *> &get_correlations();
 
 
     void set_id(int id);
@@ -55,8 +54,8 @@ public:
     void set_ip_adc(QString ip);
     void set_port_adc(quint16 port);
 
-    void set_graphic_widget(GraphicWidget *gr);
-    void set_graphic_widget_correlation(int id, GraphicWidget *gr_corr);
+	void set_graphic_widget(SpectrumWidget *gr);
+	void set_graphic_widget_correlation(int id, SpectrumWidget *gr_corr);
 };
 
 #endif // TABSPROPERTY_H

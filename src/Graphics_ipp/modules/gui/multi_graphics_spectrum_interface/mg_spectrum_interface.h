@@ -4,7 +4,6 @@
 #include "../../../modules/gui/multi_graphics/multi_graphics.h"
 #include <QWidget>
 
-class QSettings;
 class SpectrumMaterial;
 class QVBoxLayout;
 
@@ -14,7 +13,9 @@ class Q_MG_SpectrumInterface : public QWidget
 
 
 public:
-	Q_MG_SpectrumInterface(QWidget *parent = NULL, QSettings* settings = NULL, QString wallPaperFileName = ":/Q_MultiGraphics/Resources/WallPaperSpec.png");//СЃРѕР·РґР°РµС‚ РІРёРґР¶РµС‚ РІ РєРѕС‚РѕСЂРѕРј Р±СѓРґРµС‚ СЂР°Р·РјРµС‰РµРЅ СЃРїРµРєС‚СЂ РїРѕСЃР»Рµ РІС‹Р·РѕРІР° Setup
+
+	Q_MG_SpectrumInterface(QWidget *parent = NULL, QString wallPaperFileName = ":/Q_MultiGraphics/Resources/WallPaperSpec.png");//создает виджет в котором будет размещен спектр после вызова Setup
+
 	~Q_MG_SpectrumInterface();
 
 	//С„СѓРЅРєС†РёСЏ Р°РєС‚РёРІР°С†РёРё (СЃРѕР·РґР°РЅРёСЏ) СЃРїРµРєС‚СЂР°
@@ -26,9 +27,9 @@ public:
     bool PermanentDataSetup(const float* spectrum_1,const float* spectrum_2 = NULL, float minv_ = 0, float maxv_ = 0);
 	void Reset();
 
-	
-	//СЂР°Р±РѕС‚Р° СЃ viewPort
-	void	SetAlign(int inc_alig)	{	align = inc_alig;	};//0 - СЃРµСЂРµРґРёРЅР°, 1 - РІРµСЂС…РЅРёР№ РїСѓСЃС‚РѕР№ Р±РѕСЂРґСЋСЂ РѕС‚СЃСѓС‚СЃРІСѓРµС‚, 2 - РЅРёР¶РЅРёР№ РїСѓСЃС‚РѕР№ Р±РѕСЂРґСЋСЂ РѕС‚СЃСѓС‚СЃРІСѓРµС‚, 3 - РІСЃРµ РѕС‚СЃС‚СѓРїС‹ СѓР±СЂР°РЅС‹. Р­С„С„РµРєС‚ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РїРѕСЃР»Рµ РѕС‡РµСЂРµРґРЅРѕРіРѕ РІС‹Р·РѕРІР° Setup.
+	//работа с viewPort
+	void	SetAlign(int inc_alig)	{	align = inc_alig;	}//0 - середина, 1 - верхний пустой бордюр отсутсвует, 2 - нижний пустой бордюр отсутсвует, 3 - все отступы убраны. Эффект применяется после очередного вызова Setup.
+
 	void	SetHorizontalLabel(QString label);
 	void	SetZeroFrequencyHz(double valX);//Р°РЅР°Р»РѕРі SetVirtualOffsetX
 	double	ZeroFrequencyHz() const { return MainGraf->Grid_Layer->HorInterpretSum;}
@@ -42,10 +43,12 @@ public:
 	void	ZoomInY();//СѓРІРµР»РёС‡РёРІР°РµС‚. СѓРјРµРЅСЊС€Р°РµС‚ С‚РµРєСѓС‰РёР№ Zoom РЅР° 1 С€Р°Рі 
 	void	ZoomOutY();
 	void	ZoomToSelection();
-	void	SetViewport(double LeftVal,double TopVal,double RightVal,double BottomVal);//РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ
-	void	ZoomOutFull();//СЃРєРµР№Р»РёС‚ РІРµСЃСЊ РіСЂР°С„РёРє РЅР° СЌРєСЂР°РЅ (РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ ZoomOut)
-	void	SetZoomOutMaxOnDataSet(bool enabled = true) {		ZoomOutMaxOnDataSet = enabled;		};//РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ=false Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ РІС‹Р·РѕРІ  ZoomOutFull() РїРѕСЃР»Рµ Setup РёР»Рё SetupNewData
-	void	SetAutoscaleY(bool enabled = true) {	autoscaleY_	= enabled;	};
+
+	void	SetViewport(double LeftVal,double TopVal,double RightVal,double BottomVal);//пользовательские
+	void	ZoomOutFull();//скейлит весь график на экран (максимальный ZoomOut)
+	void	SetZoomOutMaxOnDataSet(bool enabled = true) {		ZoomOutMaxOnDataSet = enabled;		}//по умолчанию=false автоматический вызов  ZoomOutFull() после Setup или SetupNewData
+	void	SetAutoscaleY(bool enabled = true) {	autoscaleY_	= enabled;	}
+
 	void	SetScaleY_1to1();
 	void	MoveScreenByPixels(QPoint pixels,bool emit_viewPortChangeSignal = true);
     void    SetSpectrumVisible(int spectr, bool visible);
@@ -149,7 +152,7 @@ public:
 	bool isActivated() { return spectrumActivated_;}
 	double BandWidth()	const	{ return bandwidth_hz_; }
 	bool FilledSpectrum() const;
-	Q_MultiGraphics* getBaseEngineClass() { return MainGraf;};
+	Q_MultiGraphics* getBaseEngineClass() { return MainGraf;}
 
 
     /// set min value for horizontal axis
@@ -187,9 +190,6 @@ signals:
 
 	void SpectrumActivated();//СЌРјРёС‚РёС‚СЃСЏ РєРѕРіРґР° СЃРїРµРєС‚СЂ СЃС‚Р°Р» Р°РєС‚РёРІРЅС‹Рј
 
-	
-
-
 
 
 
@@ -199,8 +199,6 @@ private:
 	
 	Q_MultiGraphics* MainGraf;
 
-
-	QSettings* settings;
 	QVBoxLayout* MainLayout;
 
 	bool skip_signal_on_selection_change_;

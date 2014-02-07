@@ -1,6 +1,7 @@
 #include "TabsProperty.h"
 
-TabsProperty::TabsProperty()
+TabsProperty::TabsProperty(QObject *parent):
+	QObject(parent)
 {
     _grafic_widget = NULL;
 }
@@ -20,7 +21,7 @@ void TabsProperty::set_name(QString name)
     _name = name;
 }
 
-void TabsProperty::set_graphic_widget(GraphicWidget *gr)
+void TabsProperty::set_graphic_widget(SpectrumWidget *gr)
 {
     _grafic_widget = gr;
 }
@@ -85,17 +86,17 @@ quint16 TabsProperty::get_port_adc()
     return _port_ADC;
 }
 
-GraphicWidget *TabsProperty::get_graphic_widget()
+SpectrumWidget *TabsProperty::get_graphic_widget()
 {
     return _grafic_widget;
 }
 
-void TabsProperty::set_graphic_widget_correlation(int id, GraphicWidget *gr_corr)
+void TabsProperty::set_graphic_widget_correlation(int id, SpectrumWidget *gr_corr)
 {
     _map_correlations.insert(id, gr_corr);
 }
 
-QMap<int, GraphicWidget *> &TabsProperty::get_correlations()
+QMap<int, SpectrumWidget *> &TabsProperty::get_correlations()
 {
     return _map_correlations;
 }

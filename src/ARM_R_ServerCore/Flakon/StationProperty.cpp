@@ -4,12 +4,6 @@
 
 StationProperty::StationProperty()
 {
-
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-
     _id = -1;
     _name = "Default";
     _ip = "127.0.0.1";

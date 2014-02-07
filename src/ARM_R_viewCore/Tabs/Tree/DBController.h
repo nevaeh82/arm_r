@@ -38,7 +38,7 @@ private:
     static Pw::Logger::ILogger*    _logger;
 
 private:
-     int _read_settings(QString path_to_ini_file);
+	 bool readSettings(const QString &settingsFile);
      int _set_db();
      void _set_table(QString name);
 

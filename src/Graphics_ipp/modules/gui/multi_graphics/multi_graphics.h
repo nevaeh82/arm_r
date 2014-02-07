@@ -89,7 +89,7 @@ class Q_MultiGraphics : public QGraphicsView
 	Q_OBJECT
 
 public:
-	Q_MultiGraphics(QWidget *parent,QSettings* settings);
+	Q_MultiGraphics(QWidget *parent);
 	~Q_MultiGraphics();
 
 	Q_MG_Back_Grid* GridBack_Layer;

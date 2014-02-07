@@ -24,14 +24,14 @@
 
 #include "../Common/CommandMessage.h"
 
-class GraphicWidget;
+class SpectrumWidget;
 
 class QSpectrItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 
 private:
-    GraphicWidget *prm300;
+    SpectrumWidget *prm300;
 
     QString adcIP;
     bool adcConnectFlag;
@@ -130,7 +130,7 @@ public:
     virtual void wheelEvent ( QGraphicsSceneWheelEvent * event );
 
     void SetRSpectr(RSpectr *r);
-    void SetPrm300Widget(GraphicWidget *w);
+    void SetPrm300Widget(SpectrumWidget *w);
     void SetPrmData(QString ip, bool connect, int freq, int at1, int at2);
     void SetADCData(QString ip, quint16 port, bool connect);
 

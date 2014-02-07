@@ -200,9 +200,9 @@ TreeModel::TreeModel(const QStringList &headers, QObject *parent)
          switch(section)
          {
          case 0:
-             return tr("Нзвание");
+			 return tr("Name");
          case 1:
-             return tr("Свойство");
+			 return tr("Property");
          default:
              break;
          }
@@ -402,7 +402,8 @@ TreeModel::TreeModel(const QStringList &headers, QObject *parent)
  void TreeModel::fill_model(int pid)
  {
      _id = pid;
-     this->reset();
+	 reset();
+
      delete _rootItem;
 
      _rootItem = new TreeItem(NULL);
