@@ -2,7 +2,7 @@ include makeimage-win32-common.mak
 
 .NOTPARALLEL:
 
-DEPLOY = *.exe *.dll *.conf *.log4qt
+DEPLOY = *.exe *.dll *.conf
 
 TmpRel = $(SolutionDir)/build/tmprel
 BinDir = $(SolutionDir)/build/bin/msvc
