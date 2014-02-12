@@ -175,7 +175,7 @@ int TabSpectrumWidgetController::createView()
 
 	/// TODO: update
 	/*_controlPRM = new ControlPRM(0, this);
-	_dock_controlPRM = new QDockWidget(tr("Управление ПРМ300В"), this);
+	_dock_controlPRM = new QDockWidget(tr("Управление П� М300В"), this);
 	_dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
 	_dock_controlPRM->setWidget(_controlPRM);
 
@@ -290,7 +290,7 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 		return;
 	}
 
-	_rpc_client1->set_command(msg);
+	_rpc_client1->setCommand(msg);
 }
 
 

@@ -23,95 +23,53 @@
 
 #include "../Controls/IControlPRM.h"
 
-#define RPC_SLOT_SET_CLIENT_ID          "rpc_slot_set_client_id"
-#define RPC_SLOT_SET_MAIN_STATION_COR   "rpc_slot_set_main_station_cor"
-#define RPC_SLOT_SET_BANDWIDTH          "rpc_slot_set_bandwidth"
-#define RPC_SLOT_SET_SHIFT              "rpc_slot_set_shift"
-#define RPC_SLOT_RECOGNIZE              "rpc_slot_recognize"
-#define RPC_SLOT_SS_CORRELATION         "rpc_slot_ss_correlation"
-#define RPC_SLOT_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
-
-
-///PRM300
-#define RPC_SLOT_PRM_SET_FREQ       "rpc_slot_prm_set_freq"
-#define RPC_SLOT_PRM_REQUEST_FREQ   "rpc_slot_prm_request_freq"
-#define RPC_SLOT_PRM_SET_ATT1       "rpc_slot_prm_set_att1"
-#define RPC_SLOT_PRM_SET_ATT2       "rpc_slot_prm_set_att2"
-#define RPC_SLOT_PRM_SET_FILTER     "rpc_slot_prm_set_filter"
-
-///server
-#define RPC_SLOT_SERVER_SEND_POINTS                 "rpc_slot_server_send_points"
-#define RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH		"rpc_slot_server_send_detected_bandwidth"
-#define RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION    "rpc_slot_server_send_response_modulation"
-#define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
-
-///PRM from rpc server
-#define RPC_SLOT_SERVER_PRM_STATUS                   "rpc_slot_server_prm_status"
-
-/// connectiont status
-#define RPC_SLOT_SERVER_STATUS                      "rpc_slot_server_status"
-#define RPC_SLOT_REQUEST_STATUS                    "rpc_slot_request_status"
-
-
+#include "Rpc/RpcDefines.h"
 
 typedef QVector<QPointF>         rpc_send_points_vector;
-
 
 class RPCClient : public QObject, public IRPC
 {
     Q_OBJECT
+private:
+	IControlPRM*	m_controlPrm;
+	QxtRPCPeer*		m_rpcClient;
+	QString			m_ipRpc;
+	quint16			m_portRpc;
+	IMessage*		m_commandMsg;
+	IDBManager*		m_dbManager;
+	TabsProperty*	m_tabProperty;
+	ITabSpectrum*	m_parentTab;
+	GraphicData*	m_grData;
+
+	float*	m_spectrum;
+	float*	m_spectrumPeakHold;
+	double	m_bandwidth;
+	qreal	m_startx;
+	bool	m_needSetup;
+
 public:
     RPCClient(TabsProperty *prop, IDBManager *db_manager, ITabSpectrum *parent_tab, GraphicData *gr_data, IControlPRM* control_prm);
     ~RPCClient();
 
-
-private slots:
-    virtual int start();
-    virtual int stop();
-
-public:
-    void set_command(IMessage* msg);
-
-private slots:
-    void _slotSetCommand(IMessage* msg);
-
-private:
-    IControlPRM*        _control_prm;
-    QxtRPCPeer*         _rpc_client;
-    QString             _ip_RPC;
-    quint16             _port_RPC;
-    IMessage*           _command_msg;
-    IDBManager*         _db_manager;
-    TabsProperty*       _tab_property;
-    ITabSpectrum*       _parent_tab;
-    GraphicData*        _gr_data;
+	void setCommand(IMessage* msg);
 
 private:
 //    int     _init();
-
 	bool readSettings(const QString& settingsFile);
-    void    _form_command(IMessage *msg);
-    void    _recognize();
-    void    _ss_correlation(bool enable);
+	void formCommand(IMessage *msg);
+	void recognize();
+	void ssCorrelation(bool enable);
 
-    void    _prm_set_freq(short freq);
-    void    _prm_request_freq();
-    void    _prm_set_att1(int att1);
-    void    _prm_set_att2(int att2);
-    void    _prm_set_filter(int index);
+	void prmSetFreq(short freq);
+	void prmRequestFreq();
+	void prmSetAtt1(int att1);
+	void prmSetAtt2(int att2);
+	void prmSetFilter(int index);
 
-    void    _flakon_set_main_station_cor(int value);
-    void    _flakon_set_avarage(int value);
+	void flakonSetMainStationCor(int value);
+	void flakonSetAvarage(int value);
 
-    void    _request_satatus();
-
-
-private slots:
-    void _close();
-    void _slotRCPConnetion();
-    void _slotRPCDisconnection();
-    void _slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-    void _slotReconnection();
+	void requestSatatus();
 
 signals:
     void signalSetCommand(IMessage *msg);
@@ -121,8 +79,7 @@ signals:
     void signalStop();
     void signalFinishRPC();
 
-    ///RPC signals
-signals:
+	///RPC signals
     void signalSetClientId(int id);
     void signalSetMainStationCor(int id, int station);
     void signalSetBandwidth(int id, float db);
@@ -139,7 +96,6 @@ signals:
 
     void signalRequestStatus(int id);
 
-
     void signalReconnection();
 
     void signalDataS(float*,float*);
@@ -152,26 +108,25 @@ public slots:
     void slotFinish();
 
     ///rpc_server
-    void rpc_slot_getting_points(rpc_send_points_vector points);
-	void rpc_slotGettingDetectedBandwidth(rpc_send_points_vector points);
-    void rpc_slot_getting_modulation(QString modulation);
-    void rpc_slot_server_send_correlation(int point1, int point2, rpc_send_points_vector points);
+	void rpcSlotGettingPoints(rpc_send_points_vector points);
+	void rpcSlotGettingDetectedBandwidth(rpc_send_points_vector points);
+	void rpcSlotGettingModulation(QString modulation);
+	void rpcSlotServerSendCorrelation(int point1, int point2, rpc_send_points_vector points);
 
-    void rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
+	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
 
-    void rpc_slot_server_status(bool state);
+	void rpcSlotServerStatus(bool state);
 
+private slots:
+	void close();
+	void slotRCPConnetion();
+	void slotRPCDisconnection();
+	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
+	void slotReconnection();
+	void slotSetCommand(IMessage* msg);
 
-private:
-    float*                  _spectrum;
-    float*                  _spectrum_peak_hold;
-    double                  _bandwidth;
-    qreal                   _startx;
-    bool                    _needSetup;
-
-
-
-
+	virtual int start();
+	virtual int stop();
 };
 
 #endif // RPCCLIENT_H
