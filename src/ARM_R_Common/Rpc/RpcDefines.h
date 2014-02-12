@@ -45,4 +45,58 @@
 #define RPC_SLOT_SET_DATA_TO_SOLVER                "rpc_slot_set_data_to_solver"
 #define RPC_SLOT_SET_CLEAR_TO_SOLVER               "rpc_slot_set_clear_to_solver"
 
+typedef struct A_Dir_Ans_msg
+{
+	//id запроса
+	int requestId;
+	//id источника, при ответе на DirectionFindingRequest совпадает с айди запроса
+	//              при ответе на ScanRequest назначается пеленгатором
+	int sourceId;
+	//время засечки
+	//DateTime.Utc.Now - время в 100наносекундных интервалах начиная с 1 января 1 года
+	quint64 dateTime;
+
+	//имя поста
+	QString post;
+	double postLatitude;     //GPS Geo Coords
+	double postLongitude;    //GPS Geo Coords
+	double postHeight;       //meters
+
+	//центральная частота
+	double frequency;
+	//ширина пика
+	double widht;
+
+	//пеленг
+	double direction;
+	//угол места
+	double angle;
+	//уровень
+	double level;
+	//качество
+	double quality;
+
+	int motionType;
+	double motionConfidence;
+}A_Dir_Ans_msg;
+
+// POSITION_ANSWER_MESSAGE
+typedef struct A_Pos_Ans_msg
+{
+	//id запроса
+	int requestId;
+	//id источника, при ответе на DirectionFindingRequest совпадает с айди запроса
+	//              при ответе на ScanRequest назначается пеленгатором
+	int sourceId;
+	//время засечки
+	quint64 dateTime;
+
+	 //Geo Coords
+	double longitude;
+	 //Geo Coords
+	double latitude;
+	 //качество
+	double quality;
+}A_Pos_Ans_msg;
+
 #endif // RPCDEFINES_H
