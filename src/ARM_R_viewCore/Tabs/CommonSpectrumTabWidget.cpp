@@ -1,13 +1,23 @@
 #include "CommonSpectrumTabWidget.h"
 #include "ui_CommonSpectrumTabWidget.h"
 
-CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
+CommonSpectrumTabWidget::CommonSpectrumTabWidget(IDbManager* dbManager, QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::CommonSpectrumTabWidget)
 {
 	ui->setupUi(this);
 
+	m_dbManager = dbManager;
+
 	m_correlationComponent = NULL;
+
+	QStringList headers;
+	headers << tr("Name") << tr("Property");
+	m_treeModel = new TreeModel(m_dbManager, headers, this);
+
+	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+
+	ui->settingsTreeView->setModel(m_treeModel);
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
@@ -113,6 +123,16 @@ void CommonSpectrumTabWidget::insertSpectrumWidget(SpectrumWidget *spectrumWidge
 	m_widgetList.append(spectrumWidget);
 
 	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget);
+
+	m_treeModel->onCleanSettings();
+
+	QStringList stationsList;
+
+	foreach (SpectrumWidget* widget , m_widgetList) {
+		stationsList << widget->getSpectrumName();
+	}
+
+	m_treeModel->setStationsList(stationsList);
 
 }
 

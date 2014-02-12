@@ -1,6 +1,7 @@
 #include "TabSpectrumWidgetController.h"
+#include "UiDefines.h"
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
@@ -8,15 +9,21 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 	_threshold = -1;
 	_common_correlations = common_correlations;
 	_tab_manager = tab_manager;
-	_model = model;
-	_db_manager = db_manager;
+	m_dbManager = db_manager;
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
 	_common_components = common_components;
 	_tab_property = prop;
 	_id = _tab_property->get_id();
-	_name = _tab_property->get_name();
+	m_stationName = _tab_property->get_name();
+
+	QStringList headers;
+	headers << tr("Name") << tr("Property");
+	m_treeModel = new TreeModel(m_dbManager, headers, this);
+	m_dbManager->registerReceiver(m_treeModel);
+
+	m_treeDelegate = new TreeWidgetDelegate(this);
 
 	_rpc_client1 = NULL;
 
@@ -24,7 +31,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QVector<QPointF>)), this, SLOT(_slot_get_points_from_rpc(QVector<QPointF>)));
 
-	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(_slotPanoramaState(bool)));
+	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 
 
 	///TODO: recheck
@@ -50,16 +57,6 @@ void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
 void TabSpectrumWidgetController::activate()
 {
 	m_view->activate();
-	//	ui->correlationsGroupWidget->clearWidgetContainer();
-
-	//	for(int i = 0; i < _common_correlations->count(0); i++){
-
-	//		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(_common_correlations->get(i))));
-	//	}
-
-	//	foreach (SpectrumWidget* spectrumWidget, m_widgetList) {
-	//		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget);
-	//	}
 }
 
 void TabSpectrumWidgetController::deactivate()
@@ -117,7 +114,7 @@ int TabSpectrumWidgetController::init()
 
 int TabSpectrumWidgetController::createRPC()
 {
-	_rpc_client1 = new RPCClient(_tab_property, _db_manager, this, _spectrumData, _controlPRM);
+	_rpc_client1 = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM);
 	QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));
@@ -166,7 +163,7 @@ int TabSpectrumWidgetController::createView()
 
 	spectrumWidget->setTab(this);
 	spectrumWidget->setId(_id);
-	spectrumWidget->setSpectrumName(_name);
+	spectrumWidget->setSpectrumName(m_stationName);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
@@ -220,11 +217,12 @@ int TabSpectrumWidgetController::createTree()
 		return 0;
 	}
 
-	if(_id == 0) {
-		_model->fill_model(this->_id);
-	}
+	connect(m_treeModel, SIGNAL(onItemAddedSignal()), m_view->getTreeView(), SLOT(expandAll()));
 
-	m_view->getTreeView()->setModel(_model);
+	m_view->getTreeView()->setModel(m_treeModel);
+	m_view->getTreeView()->setItemDelegate(m_treeDelegate);
+
+	m_treeModel->setStationsList(QStringList(m_stationName));
 
 	return 0;
 }
@@ -240,11 +238,19 @@ void TabSpectrumWidgetController::set_indicator(int state)
 
 double TabSpectrumWidgetController::get_current_frequency()
 {
-	QMap<QString, QVariant> *data = _db_manager->get(0, _id);
-	return data->value("value").toDouble();
+	double frequency = 1830;
+
+	SettingsNode settingsNode = m_dbManager->getSettingsNode(m_stationName);
+
+	foreach (Property property, settingsNode.properties) {
+		if (DB_FREQUENCY_PROPERTY == property.name) {
+			frequency = property.value.toDouble();
+			break;
+		}
+	}
+
+	return frequency;
 }
-
-
 
 void TabSpectrumWidgetController::set_show_controlPRM(bool state)
 {
@@ -271,16 +277,41 @@ void TabSpectrumWidgetController::set_double_clicked(int id, double d1, double d
 
 
 
-void TabSpectrumWidgetController::set_selected_area(QMap<int, QVariant> data)
+void TabSpectrumWidgetController::set_selected_area(const SpectrumSelection& selection)
 {
-	QMap<QString, QVariant>* getting_data;
-	QMap<int, QVariant>::iterator it;
-	for(it = data.begin(); it != data.end(); ++it)
-	{
-		getting_data = _db_manager->get(it.key(), _id);
+	double x1 = selection.start.x();
+	double x2 = selection.end.x();
 
-		getting_data->insert("value", it.value().toDouble());
-		_db_manager->set(getting_data);
+	/// Ho HZ
+	x1 /= 1000;
+	x2 /= 1000;
+	double dx;
+	double center;
+
+	if(x2 >= x1) {
+		dx = x2 - x1;
+		center = x1 + dx/2;
+	} else {
+		dx = x1 - x2;
+		center = x2 + dx/2;
+	}
+
+	SettingsNode  settingsNode = m_dbManager->getSettingsNode(m_stationName);
+
+	foreach (Property prop, settingsNode.properties) {
+		if (prop.name == DB_SELECTED_PROPERTY) {
+			prop.value = QString::number(dx, 'f', 3);
+			m_dbManager->updateProperty(prop);
+		} else if (prop.name == DB_CENTER_PROPERTY) {
+			prop.value = QString::number(center, 'f', 3);
+			m_dbManager->updateProperty(prop);
+		} else if (prop.name == DB_START_PROPERTY) {
+			prop.value = QString::number(x1, 'f', 3);
+			m_dbManager->updateProperty(prop);
+		} else if (prop.name == DB_STOP_PROPERTY) {
+			prop.value = QString::number(x2, 'f', 3);
+			m_dbManager->updateProperty(prop);
+		}
 	}
 }
 
@@ -338,19 +369,28 @@ void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 	_tab_manager->set_tab(id);
 }
 
-void TabSpectrumWidgetController::_slotPanoramaState(bool state)
+void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 {
-	qDebug() << "slot Panorama = " << state;
-	QMap<QString, QVariant>* getting_data;
-	double start = 300;
-	double end = 300;
+	qDebug() << "slot Panorama = " << isEnabled;
 
-	if (true == state) {
-		getting_data = _db_manager->get(7, _id);
-		start = getting_data->value("value").toDouble();
-		getting_data = _db_manager->get(8, _id);
-		end = getting_data->value("value").toDouble();
-		_spectrumData->set_panorama(start, end);
+	double panoramaStartValue = 300;
+	double panoramaEndValue = 300;
+
+	if (isEnabled) {
+
+		SettingsNode settingsNode =  m_dbManager->getSettingsNode(m_stationName);
+
+		foreach (Property property, settingsNode.properties) {
+			if (DB_PANORAMA_START_PROPERTY == property.name) {
+				panoramaStartValue = property.value.toDouble();
+			}
+			else if (DB_PANORAMA_END_PROPERTY == property.name) {
+				panoramaEndValue = property.value.toDouble();
+			}
+		}
+
+		_spectrumData->set_panorama(panoramaStartValue, panoramaEndValue);
+
 	} else {
 		_spectrumData->set_panorama_stop();
 	}

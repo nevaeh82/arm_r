@@ -20,8 +20,8 @@
 
 //#include "Tree/Controller.h"
 
-#include "Tree/DBManager.h"
-#include "Tree/TreeModel.h"
+#include "Interfaces/IDBManager.h"
+#include "SettingsTree/TreeModel.h"
 
 #include "ITabManager.h"
 
@@ -42,14 +42,12 @@ private:
 
 	unsigned int    _id;
 	QString         _name;
-	QMap<int, TabsProperty *>   _map_settings;
+	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
 	ICommonComponents*          _common_spectra;
 	ICommonComponents*          _common_correlations;
 
-	DBManager*                 _db_manager_spectrum;
-
-	TreeModel*                  _model_spectrum;
+	IDbManager*                 m_dbManager;
 
 	ITabWidget*                m_currentTabWidget;
 

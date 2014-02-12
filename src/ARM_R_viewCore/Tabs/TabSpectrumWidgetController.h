@@ -5,6 +5,7 @@
 
 #include "Interfaces/IController.h"
 #include "TabSpectrumWidget.h"
+#include "SettingsTree/TreeWidgetDelegate.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum
 {
@@ -14,15 +15,16 @@ private:
 	TabSpectrumWidget* m_view;
 
 	int                 _id;
-	QString             _name;
+	QString             m_stationName;
 	TabsProperty*       _tab_property;
 	ICommonComponents*  _common_components;
 	ICommonComponents*  _common_correlations;
 	GraphicData*        _spectrumData;
 
-	IDBManager*          _db_manager;
+	IDbManager*          m_dbManager;
 
-	TreeModel*          _model;
+	TreeModel*          m_treeModel;
+	TreeWidgetDelegate* m_treeDelegate;
 
 	RPCClient*          _rpc_client1;
 
@@ -39,7 +41,7 @@ private:
 
 
 public:
-	explicit TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, TreeModel* model, DBManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -65,7 +67,7 @@ public:
 	virtual void set_show_controlPRM(bool state);
 	virtual void set_double_clicked(int id, double, double);
 
-	virtual void set_selected_area(QMap<int, QVariant> data);
+	virtual void set_selected_area(const SpectrumSelection &selection);
 	virtual void set_command(TypeCommand type, IMessage *msg);
 	virtual void set_points_rpc(QVector<QPointF> points);
 
@@ -94,7 +96,7 @@ private slots:
 	void _slot_show_controlPRM(bool state);
 	void spectrumDoubleClickedSlot(int id);
 
-	void _slotPanoramaState(bool state);
+	void enablePanoramaSlot(bool isEnabled);
 
 private:
 	int init();

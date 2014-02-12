@@ -10,3 +10,9 @@ include ../../specs/logger.mak
 prebuild::
 	-$(cp) -ud qt.conf $(DESTDIR)
 	$(call begin-build, Prebuild OK )
+	
+postbuild::
+	-$(mkdir) $(SolutionDir)/build/bin/$(MAKE_PLATFORM)/DB
+	-$(cp) -ud *.sqlite $(DESTDIR)/DB
+	
+	

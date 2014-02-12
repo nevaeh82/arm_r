@@ -3,13 +3,14 @@
 TabsProperty::TabsProperty(QObject *parent):
 	QObject(parent)
 {
-    _grafic_widget = NULL;
+	_grafic_widget = NULL;
 }
 
-void TabsProperty::destroy()
+TabsProperty::~TabsProperty()
 {
-    delete this;
+
 }
+
 
 void TabsProperty::set_id(int id)
 {
