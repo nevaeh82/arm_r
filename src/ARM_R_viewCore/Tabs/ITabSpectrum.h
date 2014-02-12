@@ -10,9 +10,9 @@
 
 enum TypeCommand
 {
-	unknown = -1,
-	graphic = 1,
-	panorama = 2
+	TypeUnknownCommand = 0,
+	TypeGraphicCommand = 1,
+	TypePanoramaCommand = 2
 };
 
 

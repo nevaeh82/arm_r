@@ -64,6 +64,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	/// create common database manager for spectrum tabs
 	m_dbManager = new DbManager(this);
+	m_dbManager->registerReceiver(this);
 
 
 	_common_correlations->init(m_tabsPropertyMap.count() - 1);
@@ -215,4 +216,49 @@ void TabManager::checkStatus()
 	{
 		it.value()->check_status();
 	}*/
+}
+
+
+void TabManager::onSettingsNodeChanged(const SettingsNode &)
+{
+}
+
+void TabManager::onPropertyChanged(const Property & property)
+{
+	Property inProperty = property;
+
+	TypeCommand commandType = TypeUnknownCommand;
+
+	int commandCode = 0;
+
+	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_PRM_SET_FREQ;
+		commandType = TypeGraphicCommand;
+	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
+		commandType = TypeGraphicCommand;
+	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_AVARAGE;
+		commandType = TypeGraphicCommand;
+	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
+		commandType = TypePanoramaCommand;
+	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
+		commandType = TypePanoramaCommand;
+	}
+
+	if (0 == commandCode) {
+		return;
+	}
+
+	CommandMessage *msg = new CommandMessage(commandCode, property.value);
+
+
+	/// TODO: update
+	send_data(0, commandType, msg);
+}
+
+void TabManager::onCleanSettings()
+{
 }

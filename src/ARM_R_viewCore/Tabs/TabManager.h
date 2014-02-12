@@ -27,15 +27,14 @@
 
 #include "TabSpectrumWidgetController.h"
 
+#include "Interfaces/IDbChangedListener.h"
+
 /// ATLANT
 #include "AtlantTabWidget.h"
 
-class TabManager: public QObject, /*public IModuleController, */public ITabManager
+class TabManager: public QObject, /*public IModuleController, */public ITabManager, public IDbChangedListener
 {
 	Q_OBJECT
-public:
-	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
-	virtual ~TabManager();
 
 private:
 	QTabWidget* m_tabWidget;
@@ -54,14 +53,20 @@ private:
 	QMutex                      m_mutex;
 
 public:
+	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
+	virtual ~TabManager();
+
 	virtual int start();
 
 	virtual int createSubModules(const QString& settingsFile);
 
-public:
     virtual QString getStationName(int id);
 	virtual void send_data(int pid, TypeCommand type, IMessage* msg);
     virtual void set_tab(int id);
+
+	virtual void onSettingsNodeChanged(const SettingsNode &);
+	virtual void onPropertyChanged(const Property &);
+	virtual void onCleanSettings();
 
 private:
 	int readSettings(const QString &settingsFile);
@@ -72,6 +77,7 @@ private slots:
 
 signals:
 	void changeTabSignal(int index);
+
 };
 
 #endif // TABMANAGER_H

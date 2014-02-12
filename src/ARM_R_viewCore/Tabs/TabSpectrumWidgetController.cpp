@@ -317,7 +317,7 @@ void TabSpectrumWidgetController::set_selected_area(const SpectrumSelection& sel
 
 void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 {
-	if (graphic != type) {
+	if (TypeGraphicCommand != type) {
 		return;
 	}
 
@@ -339,7 +339,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	_tab_manager->send_data(_id, TypeCommand(graphic), msg);
+	_tab_manager->send_data(_id, TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
