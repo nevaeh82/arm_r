@@ -11,6 +11,8 @@
 #include <QSettings>
 #include <QStringList>
 
+#include <PwLogger/PwLogger.h>
+
 #include "IRPC.h"
 #include "../../Common/IMessage.h"
 #include "../../Common/CommandMessage.h"
@@ -24,15 +26,15 @@
 #include "../Controls/IControlPRM.h"
 
 #include "Rpc/RpcDefines.h"
+#include "Rpc/RpcClientBase.h"
 
 typedef QVector<QPointF>         rpc_send_points_vector;
 
-class RPCClient : public QObject, public IRPC
+class RPCClient : public RpcClientBase
 {
     Q_OBJECT
 private:
 	IControlPRM*	m_controlPrm;
-	QxtRPCPeer*		m_rpcClient;
 	QString			m_ipRpc;
 	quint16			m_portRpc;
 	IMessage*		m_commandMsg;
@@ -48,14 +50,16 @@ private:
 	bool	m_needSetup;
 
 public:
-    RPCClient(TabsProperty *prop, IDBManager *db_manager, ITabSpectrum *parent_tab, GraphicData *gr_data, IControlPRM* control_prm);
+	RPCClient(TabsProperty *prop, IDBManager *db_manager,
+			  ITabSpectrum *parent_tab, GraphicData *gr_data,
+			  IControlPRM* control_prm, QObject *parent = 0);
     ~RPCClient();
 
 	void setCommand(IMessage* msg);
 
+	bool start(QString& ipAddress, quint16 port);
+
 private:
-//    int     _init();
-	bool readSettings(const QString& settingsFile);
 	void formCommand(IMessage *msg);
 	void recognize();
 	void ssCorrelation(bool enable);
@@ -98,15 +102,10 @@ signals:
 
     void signalReconnection();
 
-    void signalDataS(float*,float*);
-    void signalData(float*,float*);
+	void signalDataS(float*, float*);
+	void signalData(float*, float*);
 
 public slots:
-    void slotInit();
-    void slotStart();
-    void slotStop();
-    void slotFinish();
-
     ///rpc_server
 	void rpcSlotGettingPoints(rpc_send_points_vector points);
 	void rpcSlotGettingDetectedBandwidth(rpc_send_points_vector points);
@@ -118,15 +117,9 @@ public slots:
 	void rpcSlotServerStatus(bool state);
 
 private slots:
-	void close();
-	void slotRCPConnetion();
-	void slotRPCDisconnection();
+	void slotRpcConnetion();
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-	void slotReconnection();
 	void slotSetCommand(IMessage* msg);
-
-	virtual int start();
-	virtual int stop();
 };
 
 #endif // RPCCLIENT_H

@@ -10,13 +10,14 @@ RpcClientBase::RpcClientBase(Pw::Logger::ILogger* logger, QObject* parent) :
 }
 
 
-bool RpcClientBase::start(quint16 port)
+bool RpcClientBase::start(QString& ipAddress, quint16 port)
 {
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(connectedToServerSlot()) );
 	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(connectionToServerFailedSlot()));
 	connect(m_clientPeer, SIGNAL(disconnectedFromServer()), this, SLOT(connectionToServerFailedSlot()));
 
 	m_port = port;
+	m_ipAddress = ipAddress;
 
 	connectToServer();
 
@@ -48,8 +49,8 @@ void RpcClientBase::deregisterListener(IRpcListener *listener)
 
 void RpcClientBase::connectToServer()
 {
-	m_logger->debug(QString("RPC-client status: connecting to server 127.0.0.1:%1").arg(QString::number(m_port)));
-	m_clientPeer->connect("127.0.0.1", m_port);
+	m_logger->debug(QString("RPC-client status: connecting to server %1:%2").arg(m_ipAddress).arg(QString::number(m_port)));
+	m_clientPeer->connect(m_ipAddress, m_port);
 }
 
 void RpcClientBase::connectedToServerSlot()

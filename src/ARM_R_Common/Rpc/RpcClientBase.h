@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QxtRPCPeer>
+#include <QString>
 
 #include <PwLogger/PwLogger.h>
 #include "Interfaces/IRpcControllerBase.h"
@@ -14,6 +15,7 @@ class RpcClientBase: public QObject, public IRpcControllerBase
 
 private:
 	quint16 m_port;
+	QString m_ipAddress;
 	QTimer * reconnectTimer;
 
 protected:
@@ -25,7 +27,7 @@ public:
 	explicit RpcClientBase(Pw::Logger::ILogger* logger, QObject* parent = NULL);
 	virtual ~RpcClientBase(){}
 
-	virtual bool start(quint16 port);
+	virtual bool start(QString& ipAddress, quint16 port);
 	virtual void stop();
 
 	virtual void registerListener(IRpcListener* listener);

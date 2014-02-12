@@ -2,18 +2,16 @@
 
 #include <QDebug>
 
-RPCClient::RPCClient(TabsProperty *prop, IDBManager *db_manager, ITabSpectrum* parent_tab, GraphicData* gr_data, IControlPRM* control_prm)
+RPCClient::RPCClient(TabsProperty *prop, IDBManager *db_manager,
+					 ITabSpectrum* parent_tab, GraphicData* gr_data,
+					 IControlPRM* control_prm, QObject *parent) :
+	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
 
 	m_controlPrm = control_prm;
 	m_parentTab = parent_tab;
 	m_tabProperty = prop;
 	m_dbManager = db_manager;
-	//    _rpc_client->attachSlot()
-
-	connect(this, SIGNAL(signalStart()), this, SLOT(start()));
-	connect(this, SIGNAL(signalStop()), this, SLOT(stop()));
-	connect(this, SIGNAL(signalFinishRPC()), this, SLOT(close()));
 
 	m_spectrum = new float[1];
 	m_spectrumPeakHold = new float[1];
@@ -21,75 +19,47 @@ RPCClient::RPCClient(TabsProperty *prop, IDBManager *db_manager, ITabSpectrum* p
 	m_needSetup = true;
 
 	m_grData = gr_data;
-
-	//    _init();
 }
 
 RPCClient::~RPCClient()
 {
-	//    _close();
-	//    delete _rpc_client;
 }
 
-void RPCClient::slotInit()
+bool RPCClient::start(QString& ipAddress, quint16 port)
 {
-	QString tabs_setting_file = QCoreApplication::applicationDirPath();
-	tabs_setting_file.append("/Tabs/RPC.ini");
-	if(!readSettings(tabs_setting_file)){
-		return;
-	}
-
-	m_rpcClient = new QxtRPCPeer();
-	connect(m_rpcClient, SIGNAL(connectedToServer()), this, SLOT(slotRCPConnetion()));
-	connect(m_rpcClient, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
+	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRpcConnetion()));
+	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 
 	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 
-	m_rpcClient->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
-	m_rpcClient->attachSignal(this, SIGNAL(signalSetMainStationCor(int,int)), RPC_SLOT_SET_MAIN_STATION_COR);
-	m_rpcClient->attachSignal(this, SIGNAL(signalSetBandwidth(int, float)), RPC_SLOT_SET_BANDWIDTH);
-	m_rpcClient->attachSignal(this, SIGNAL(signalSetShift(int, float)), RPC_SLOT_SET_SHIFT);
-	m_rpcClient->attachSignal(this, SIGNAL(signalRecognize(int, int)), RPC_SLOT_RECOGNIZE);
-	m_rpcClient->attachSignal(this, SIGNAL(signalSSCorrelation(int, bool)), RPC_SLOT_SS_CORRELATION);
-	m_rpcClient->attachSignal(this, SIGNAL(signalSetAvarageSpectrum(int,int)), RPC_SLOT_AVARAGE_SPECTRUM);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetMainStationCor(int,int)), RPC_SLOT_SET_MAIN_STATION_COR);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetBandwidth(int, float)), RPC_SLOT_SET_BANDWIDTH);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetShift(int, float)), RPC_SLOT_SET_SHIFT);
+	m_clientPeer->attachSignal(this, SIGNAL(signalRecognize(int, int)), RPC_SLOT_RECOGNIZE);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSSCorrelation(int, bool)), RPC_SLOT_SS_CORRELATION);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetAvarageSpectrum(int,int)), RPC_SLOT_AVARAGE_SPECTRUM);
 
-	m_rpcClient->attachSignal(this, SIGNAL(signalPRMSetFreq(int, short)), RPC_SLOT_PRM_SET_FREQ);
-	m_rpcClient->attachSignal(this, SIGNAL(signalPRMRequestFreq(int)), RPC_SLOT_PRM_REQUEST_FREQ);
-	m_rpcClient->attachSignal(this, SIGNAL(signalPRMSetAtt1(int, int)), RPC_SLOT_PRM_SET_ATT1);
-	m_rpcClient->attachSignal(this, SIGNAL(signalPRMSetAtt2(int, int)), RPC_SLOT_PRM_SET_ATT2);
-	m_rpcClient->attachSignal(this, SIGNAL(signalPRMSetFilter(int,int)), RPC_SLOT_PRM_SET_FILTER);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFreq(int, short)), RPC_SLOT_PRM_SET_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMRequestFreq(int)), RPC_SLOT_PRM_REQUEST_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(int, int)), RPC_SLOT_PRM_SET_ATT1);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(int, int)), RPC_SLOT_PRM_SET_ATT2);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(int,int)), RPC_SLOT_PRM_SET_FILTER);
+	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
 
+	///server
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(rpc_send_points_vector)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpcSlotGettingDetectedBandwidth(rpc_send_points_vector)));
 
-	m_rpcClient->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpcSlotGettingModulation(QString)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(int, int, rpc_send_points_vector)));
 
-	connect(this, SIGNAL(signalReconnection()), this, SLOT(slotReconnection()));
-	connect(m_rpcClient, SIGNAL(disconnectedFromServer()), this, SLOT(slotRPCDisconnection()));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
 
-	//    return 0;
-	slotStart();
-}
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
 
-int RPCClient::start()
-{
-	m_rpcClient->connect(m_ipRpc, m_portRpc);
-	return 0;
-}
-
-int RPCClient::stop()
-{
-	m_rpcClient->disconnectServer();
-	return 0;
-}
-
-void RPCClient::close()
-{
-	if(m_rpcClient->isClient())
-	{
-		m_rpcClient->disconnectServer();
-		delete m_rpcClient;
-		m_rpcClient = NULL;
-	}
-	emit signalFinished();
+	m_logger->debug("Start RPCClient");
+	return RpcClientBase::start(ipAddress, port);
 }
 
 void RPCClient::setCommand(IMessage *msg)
@@ -190,17 +160,17 @@ void RPCClient::requestSatatus()
 	emit signalRequestStatus(m_tabProperty->get_id());
 }
 
-
 void RPCClient::recognize()
 {
 	QMap<QString, QVariant>* m_data = m_dbManager->get(1, m_tabProperty->get_id());
+
 	float bandwidth = m_data->value("value").toFloat();
-	//    bandwidth /=1000;
 	emit signalSetBandwidth(m_tabProperty->get_id(), bandwidth);
+
 	m_data = m_dbManager->get(2, m_tabProperty->get_id());
 	float shift = m_data->value("value").toFloat();
-	//    shift /= 1000;
 	emit signalSetShift(m_tabProperty->get_id(), shift);
+
 	int s_type = 104;
 	emit signalRecognize(m_tabProperty->get_id(), s_type);
 }
@@ -212,28 +182,11 @@ void RPCClient::ssCorrelation(bool enable)
 }
 
 /// slot when connection complete
-void RPCClient::slotRCPConnetion()
+void RPCClient::slotRpcConnetion()
 {
-
 	emit signalSetClientId(m_tabProperty->get_id());
-    ///server
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(rpc_send_points_vector)));
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpcSlotgettingdetectedbandwidth(rpc_send_points_vector)));
-
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpcSlotGettingModulation(QString)));
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(int, int, rpc_send_points_vector)));
-
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
-
-	m_rpcClient->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
-
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_REQUEST_FREQ, QVariant());
-	this->setCommand(msg);
-}
-
-void RPCClient::slotRPCDisconnection()
-{
-	emit signalReconnection();
+	setCommand(msg);
 }
 
 /// slot if have some error while connetiting
@@ -244,7 +197,6 @@ void RPCClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 	{
 		case QAbstractSocket::RemoteHostClosedError:
 			thiserror.append(("Ошибка! Соеденение с пунктом потеряно!"));
-			//return;
 			break;
 		case QAbstractSocket::HostNotFoundError:
 			thiserror.append(("Ошибка! Не удалось подключиться к пункту!"));
@@ -256,48 +208,7 @@ void RPCClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 			//        thiserror.append(("Ошибка! Произошла ошибка: " + _rpc_client->->errorString()));
 			break;
 	}
-	//    _rpc_client->takeDevice()->;
-
-
-	emit signalReconnection();
 }
-
-void RPCClient::slotReconnection()
-{
-	QIODevice *dev = m_rpcClient->takeDevice();
-	m_rpcClient->connect(m_ipRpc, m_portRpc);
-}
-
-/// read rpc configuration from ini file
-bool RPCClient::readSettings(const QString& settingsFile)
-{
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QSettings m_settings(settingsFile, QSettings::IniFormat);
-
-	m_settings.setIniCodec(codec);
-
-	m_ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
-	m_portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
-
-
-	return true;
-}
-
-void RPCClient::slotStart()
-{
-	emit signalStart();
-}
-
-void RPCClient::slotStop()
-{
-	emit signalStop();
-}
-
-void RPCClient::slotFinish()
-{
-	emit signalFinishRPC();
-}
-
 
 /// getting points from server
 void RPCClient::rpcSlotGettingPoints(rpc_send_points_vector points)
@@ -334,7 +245,6 @@ void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att
 	status.insert(3, QVariant::fromValue(prm_att2));
 
 	m_controlPrm->set_status(status);
-
 }
 
 void RPCClient::rpcSlotServerStatus(bool state)

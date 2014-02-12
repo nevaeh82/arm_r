@@ -43,15 +43,15 @@ private:
 	void sendFreq(QVariant data);
 
 public slots:
+	void start();
+	void stop();
+
 	void slotInit();
-	void slotStart();
-	void slotStop();
 	void slotFinish();
 
 private slots:
-	virtual int start();
-	virtual int stop();
-
+	virtual int slotStart();
+	virtual int slotStop();
 	void slotClose();
 	void slotRCPConnetion();
 	void slotRPCDisconnection();

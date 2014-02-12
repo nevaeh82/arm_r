@@ -25,8 +25,8 @@ public:
     ~GraphicData();
 
 public:
-    void set_data(QVector<QPointF> points, bool isComplex);
-    void set_data(quint32 point2, QVector<QPointF> points, bool isComplex);
+	void set_data(QVector<QPointF> &points, bool isComplex);
+	void set_data(quint32 point2, QVector<QPointF>& points, bool isComplex);
     void set_def_modulation(QString modulation);
 	void set_bandwidth(double bandwidth);
 	void set_panorama(double start, double end);
