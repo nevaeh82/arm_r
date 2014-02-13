@@ -11,52 +11,40 @@
 #include <QSettings>
 #include <QStringList>
 
+#include <PwLogger/PwLogger.h>
+
 #include "IRPC.h"
 #include "../../Common/IMessage.h"
 #include "../../Common/CommandMessage.h"
 #include "../ITabAtlant.h"
 
 #include "Rpc/RpcDefines.h"
+#include "Rpc/RpcClientBase.h"
 
 typedef	QByteArray	rpc_send_atlant_data;
 
-class RPCAtlant : public QObject, public IRPC
+class RPCAtlant : public RpcClientBase
 {
 	Q_OBJECT
 private:
-	QxtRPCPeer*         m_rpcClient;
-	QString             m_ipRpc;
-	quint16             m_portRpc;
 	IMessage*           m_commandMsg;
 	int                 m_id;
 	ITabAtlant*         m_parentTab;
 
 public:
-	RPCAtlant(int id, ITabAtlant* parent_tab);
+	RPCAtlant(int id, ITabAtlant* parent_tab, QObject*  = 0);
 	~RPCAtlant();
 
+	bool start(QString& ipAddress, quint16 port);
 	void set_command(IMessage* msg);
 
 private:
-	bool readSettings(const QString& path_to_ini_file_RPC);
 	void formCommand(IMessage* msg);
 	void sendFreq(QVariant data);
 
-public slots:
-	void start();
-	void stop();
-
-	void slotInit();
-	void slotFinish();
-
 private slots:
-	virtual int slotStart();
-	virtual int slotStop();
-	void slotClose();
 	void slotRCPConnetion();
-	void slotRPCDisconnection();
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-	void slotReconnection();
 	void slotSetCommand(IMessage* msg);
 
 	///rpc_server

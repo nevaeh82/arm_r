@@ -35,8 +35,6 @@ class RPCClient : public RpcClientBase
     Q_OBJECT
 private:
 	IControlPRM*	m_controlPrm;
-	QString			m_ipRpc;
-	quint16			m_portRpc;
 	IMessage*		m_commandMsg;
 	IDBManager*		m_dbManager;
 	TabsProperty*	m_tabProperty;

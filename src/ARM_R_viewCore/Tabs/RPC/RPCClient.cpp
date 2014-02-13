@@ -7,7 +7,6 @@ RPCClient::RPCClient(TabsProperty *prop, IDBManager *db_manager,
 					 IControlPRM* control_prm, QObject *parent) :
 	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
-
 	m_controlPrm = control_prm;
 	m_parentTab = parent_tab;
 	m_tabProperty = prop;
