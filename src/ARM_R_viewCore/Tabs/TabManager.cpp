@@ -12,17 +12,16 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 
 	_common_spectra = NULL;
 	_common_correlations = NULL;
+
+	m_currentTabWidget = NULL;
 }
 
 TabManager::~TabManager()
 {
-	///TODO: recheck
-	//disconnect(this, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
-
-	if(_map_settings.count() > 0)
+	if(m_tabsPropertyMap.count() > 0)
 	{
 		QMap<int, TabsProperty *>::iterator it;
-		for(it = _map_settings.begin(); it != _map_settings.end(); ++it)
+		for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
 		{
 			delete it.value();
 		}
@@ -64,22 +63,16 @@ int TabManager::createSubModules(const QString& settingsFile)
 	int submodulesCount = readSettings(settingsFile);
 
 	/// create common database manager for spectrum tabs
-	_db_manager_spectrum = new DBManager(this);
+	m_dbManager = new DbManager(this);
+	m_dbManager->registerReceiver(this);
 
-	/// create common model for spectrum tabs
-	QStringList headers;
-	headers << tr("Name") << tr("Property");
-	_model_spectrum = new TreeModel(headers);
 
-	_db_manager_spectrum->set_model(_model_spectrum);
-	_model_spectrum->set_db(_db_manager_spectrum);
-
-	_common_correlations->init(_map_settings.count() - 1);
+	_common_correlations->init(m_tabsPropertyMap.count() - 1);
 
 	QMap<int, TabsProperty* >::iterator it;
-	for(it = _map_settings.begin(); it != _map_settings.end(); ++it)
+	for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
 	{
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
+		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		tabController->appendView(tabSpectrumWidget);
@@ -97,7 +90,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	checkStatus();
 
-	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
 	commonTabSpectrumWidget->setCorrelationComponent(_common_correlations);
 
 	/// FOR FUTURE
@@ -132,23 +125,21 @@ int TabManager::createSubModules(const QString& settingsFile)
 QString TabManager::getStationName(int id)
 {
 	m_mutex.lock();
-	TabsProperty *t = _map_settings.value(id);
+	TabsProperty *t = m_tabsPropertyMap.value(id);
 	m_mutex.unlock();
 	return t->get_name();
 }
 
 /// call this method when data in tree has changed
-void TabManager::send_data(int pid, TypeCommand type, IMessage *msg)
+void TabManager::send_data(const QString &stationName, TypeCommand type, IMessage *msg)
 {
-	QString tabName =m_tabWidget->tabText(pid);
-
-	ITabWidget* tabController = m_tabWidgetsMap.value(tabName, NULL);
+	ITabWidget* tabController = m_tabWidgetsMap.value(stationName, NULL);
 
 	if (NULL == tabController) {
 		return;
 	}
 
-	//TabSpectrumWidget* tab_sp = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(pid));
+	///TODO: update in future
 
 	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
 	tabController1->set_command(type, msg);
@@ -181,24 +172,6 @@ void TabManager::changeTabSlot(int index)
 
 	m_currentTabWidget->activate();
 
-
-	///TODO: update
-	//_current_tab_widget = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(index));
-
-
-	//_current_tab_widget->activate();
-
-	//TabsProperty *prop = _current_tab_widget->get_tab_property();
-
-	//_model_spectrum->fill_model(prop->get_id());
-
-	TabSpectrumWidgetController* currentWidgetController = static_cast<TabSpectrumWidgetController* >(m_currentTabWidget);
-	TabsProperty *prop = currentWidgetController->get_tab_property();
-
-	if (m_currentTabWidget->getWidgetType() != TypeCommonSpectrum) {
-		_model_spectrum->fill_model(prop->get_id());
-	}
-
 }
 
 /// read settings for generated submodules (tabs)
@@ -224,7 +197,7 @@ int TabManager::readSettings(const QString& settingsFile)
 		prop->set_ip_adc(settings.value("IPADC", "127.0.0.1").toString());
 		prop->set_port_adc(settings.value("portADC", 1030).toInt());
 
-		_map_settings.insert(settings.value("Id", 0).toInt(), prop);
+		m_tabsPropertyMap.insert(settings.value("Id", 0).toInt(), prop);
 		settings.endGroup();
 		count++;
 	}
@@ -241,4 +214,51 @@ void TabManager::checkStatus()
 	{
 		it.value()->check_status();
 	}*/
+}
+
+
+void TabManager::onSettingsNodeChanged(const SettingsNode &)
+{
+}
+
+void TabManager::onPropertyChanged(const Property & property)
+{
+
+	Property inProperty = property;
+
+	TypeCommand commandType = TypeUnknownCommand;
+
+	int commandCode = 0;
+
+	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_PRM_SET_FREQ;
+		commandType = TypeGraphicCommand;
+	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
+		commandType = TypeGraphicCommand;
+	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_AVARAGE;
+		commandType = TypeGraphicCommand;
+	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
+		commandType = TypePanoramaCommand;
+	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
+		commandType = TypePanoramaCommand;
+	}
+
+	if (0 == commandCode) {
+		return;
+	}
+
+	CommandMessage *msg = new CommandMessage(commandCode, property.value);
+
+	QString stationName = m_dbManager->getObjectName(property.pid);
+
+	/// TODO: update
+	send_data(stationName, commandType, msg);
+}
+
+void TabManager::onCleanSettings()
+{
 }

@@ -11,6 +11,7 @@ class TabsProperty: public QObject
 {
 public:
 	TabsProperty(QObject* parent = NULL);
+	~TabsProperty();
 
 private:
     /// punkt Id
@@ -34,7 +35,6 @@ private:
 	QMap<int, SpectrumWidget *>  _map_correlations;
 
 public:
-    void                destroy();
     int                 get_id();
     QString             get_name();
 	SpectrumWidget       *get_graphic_widget();

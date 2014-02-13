@@ -8,6 +8,8 @@
 #include "Abstracts/ICommonComponents.h"
 #include "Abstracts/ITabWidget.h"
 
+#include "SettingsTree/TreeModel.h"
+
 namespace Ui {
 class CommonSpectrumTabWidget;
 }
@@ -23,15 +25,17 @@ private:
 
 	ICommonComponents* m_correlationComponent;
 
+	TreeModel*          m_treeModel;
+
+	IDbManager* m_dbManager;
+
 
 public:
-	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
+	explicit CommonSpectrumTabWidget(IDbManager *dbManager, QWidget *parent = 0);
 	~CommonSpectrumTabWidget();
-
 
 	//void insertSpectrumWidget(GraphicWidget* widget);
 	void clearSpectrumWidgetsContainer();
-
 
 	void setCorrelationComponent(ICommonComponents* correlation);
 

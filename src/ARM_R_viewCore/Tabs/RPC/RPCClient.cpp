@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-RPCClient::RPCClient(TabsProperty *prop, IDBManager *db_manager, ITabSpectrum* parent_tab, GraphicData* gr_data, IControlPRM* control_prm)
+RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager, ITabSpectrum* parent_tab, GraphicData* gr_data, IControlPRM* control_prm)
 {
 
 	_control_prm = control_prm;
@@ -34,7 +34,7 @@ RPCClient::~RPCClient()
 void RPCClient::slotInit()
 {
 	QString tabs_setting_file = QCoreApplication::applicationDirPath();
-	tabs_setting_file.append("/Tabs/RPC.ini");
+	tabs_setting_file.append("./Tabs/RPC.ini");
 	if(!readSettings(tabs_setting_file)){
 		return;
 	}
@@ -193,7 +193,10 @@ void RPCClient::_request_satatus()
 
 void RPCClient::_recognize()
 {
-	QMap<QString, QVariant>* m_data = _db_manager->get(1, _tab_property->get_id());
+
+	/// TODO: update
+
+	/*QMap<QString, QVariant>* m_data = _db_manager->get(1, _tab_property->get_id());
 	float bandwidth = m_data->value("value").toFloat();
 	//    bandwidth /=1000;
 	emit signalSetBandwidth(_tab_property->get_id(), bandwidth);
@@ -202,7 +205,7 @@ void RPCClient::_recognize()
 	//    shift /= 1000;
 	emit signalSetShift(_tab_property->get_id(), shift);
 	int s_type = 104;
-	emit signalRecognize(_tab_property->get_id(), s_type);
+	emit signalRecognize(_tab_property->get_id(), s_type);*/
 }
 
 void RPCClient::_ss_correlation(bool enable)
@@ -243,17 +246,17 @@ void RPCClient::_slotErrorRPCConnection(QAbstractSocket::SocketError socketError
 	switch(socketError)
 	{
 		case QAbstractSocket::RemoteHostClosedError:
-			thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
+			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
 			//return;
 			break;
 		case QAbstractSocket::HostNotFoundError:
-			thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
+			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
 			break;
 		case QAbstractSocket::ConnectionRefusedError:
-			thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
+			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
 			break;
 		default:
-			//        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + _rpc_client->->errorString()));
+			//        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + _rpc_client->->errorString()));
 			break;
 	}
 	//    _rpc_client->takeDevice()->;
@@ -323,7 +326,9 @@ void RPCClient::rpc_slot_server_send_correlation(int point1, int point2, rpc_sen
 
 void RPCClient::rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
 {
-	QMap<QString, QVariant>* data = _db_manager->get(0, _tab_property->get_id());
+	///TODO: update
+
+	/*QMap<QString, QVariant>* data = _db_manager->get(0, _tab_property->get_id());
 	data->insert("value", prm_freq);
 	_db_manager->set(data);
 
@@ -333,7 +338,7 @@ void RPCClient::rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm
 	status.insert(2, QVariant::fromValue(prm_att1));
 	status.insert(3, QVariant::fromValue(prm_att2));
 
-	_control_prm->set_status(status);
+	_control_prm->set_status(status);*/
 
 }
 

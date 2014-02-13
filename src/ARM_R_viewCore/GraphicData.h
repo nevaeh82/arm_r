@@ -21,7 +21,7 @@ class GraphicData : public QObject
 	friend class GraphicsDataTest;
 
 public:
-    GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id);
+	GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id, QObject* parent = NULL );
     ~GraphicData();
 
 public:

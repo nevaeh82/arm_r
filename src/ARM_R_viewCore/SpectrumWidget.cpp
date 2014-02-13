@@ -110,6 +110,11 @@ void SpectrumWidget::setSpectrumName(const QString &name)
 	ui->spectrumNameLB->setText(name);
 }
 
+QString SpectrumWidget::getSpectrumName() const
+{
+	return ui->spectrumNameLB->text();
+}
+
 void SpectrumWidget::mouseDoubleClickEvent( QMouseEvent * event )
 {
 }
@@ -224,32 +229,29 @@ void SpectrumWidget::_slotAutoSearch(bool state)
 
 void SpectrumWidget::slotSelectionFinished(double x1, double y1, double x2, double y2)
 {
+	///TODO: fix
+
 	/// Ho HZ
 	x1 /= 1000;
 	x2 /= 1000;
 	double dx;
 	double center;
-	if(x2 >= x1)
-	{
+	if(x2 >= x1) {
 		dx = x2 - x1;
 		center = x1 + dx/2;
 	}
-	else
-	{
+	else {
 		dx = x1 - x2;
 		center = x2 + dx/2;
 	}
-	double dy = y2 - y1;
-
-	QMap<int, QVariant> _selection;
-	_selection.insert(1, QString::number(dx, 'f', 3));
-	_selection.insert(2, QString::number(center, 'f', 3));
-	_selection.insert(3, QString::number(x1, 'f', 3));
-	_selection.insert(4, QString::number(x2, 'f', 3));
 
 	_center_freq_sel_temp = center;
 
-	_tab->set_selected_area(_selection);
+	SpectrumSelection selection;
+	selection.start = QPointF(x1, y1);
+	selection.end = QPointF(x2, y2);
+
+	_tab->set_selected_area(selection);
 }
 
 void SpectrumWidget::slotSelectionFinishedRedLine(double y)
@@ -421,7 +423,7 @@ void SpectrumWidget::_slotRecognizeSignal()
 {
 	_center_freq_def_modulation = _center_freq_sel_temp;
 	CommandMessage *msg = new CommandMessage(COMMAND_RECOGNIZESIGNAL, QVariant());
-	_tab->set_command(graphic,msg);
+	_tab->set_command(TypeGraphicCommand,msg);
 }
 
 /// signal for flakon to recognize signal
@@ -429,7 +431,7 @@ void SpectrumWidget::_slotSSCorrelation()
 {
 	_enable_correlation = !_enable_correlation;
 	CommandMessage *msg = new CommandMessage(COMMAND_KM, _enable_correlation);
-	_tab->set_command(graphic,msg);
+	_tab->set_command(TypeGraphicCommand,msg);
 	if(_enable_correlation)
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	else

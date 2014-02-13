@@ -6,7 +6,8 @@
 #define TO_KHZ				1000
 #define TO_HZ				1000000
 
-GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id)
+GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id, QObject* parent):
+	QObject(parent)
 {
 	_PointCount = 0;
 	m_pointCountWhole = 0;

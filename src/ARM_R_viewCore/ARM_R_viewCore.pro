@@ -21,22 +21,13 @@ SOURCES += \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
 	Common/CommonSpectra.cpp \
-	Tabs/Tree/TreeItem.cpp \
-	Tabs/Tree/TreeModel.cpp \
-	Tabs/Tree/DBManager.cpp \
-	Tabs/Tree/DBController.cpp \
-	Tabs/Tree/TreeView.cpp \
-	Tabs/Tree/TreeWidgetDelegate.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
-	Tabs/Tree/DBCache.cpp \
 	Common/CommonCorrelations.cpp \
 	Tabs/Controls/ControlPRM.cpp \
 	Tabs/RPC/RPCAtlant.cpp \
 	Controls/ControlPanelWidgets.cpp \
 	Controls/ButtonShowPanel.cpp \
-    Common/ServiceHandler/ServiceHandler.cpp \
-    Common/ServiceHandler/CommonCodes.cpp \
     MainWindow.cpp \
     MainWindowController.cpp \
     ControlPanel/ControlPanelWidget.cpp \
@@ -46,7 +37,12 @@ SOURCES += \
     Tabs/AtlantTabWidget.cpp \
     Tabs/CommonSpectrumTabWidget.cpp \
     SpectrumWidget.cpp \
-    Tabs/TabSpectrumWidgetController.cpp
+    Tabs/TabSpectrumWidgetController.cpp \
+    DB/DbController.cpp \
+    DB/DbManager.cpp \
+    SettingsTree/TreeItem.cpp \
+    SettingsTree/TreeModel.cpp \
+    SettingsTree/TreeWidgetDelegate.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -59,21 +55,11 @@ HEADERS += \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
 	Common/CommonSpectra.h \
-	Tabs/Tree/TreeItem.h \
-	Tabs/Tree/TreeModel.h \
-	Tabs/Tree/IDBManager.h \
-	Tabs/Tree/DBManager.h \
-	Tabs/Tree/IDBController.h \
-	Tabs/Tree/DBController.h \
-	Tabs/Tree/TreeView.h \
-	Tabs/Tree/TreeWidgetDelegate.h \
 	Common/IMessage.h \
 	Common/CommandMessage.h \
 	Tabs/ITabSpectrum.h \
 	Tabs/RPC/IRPC.h \
 	Tabs/RPC/RPCClient.h \
-	Tabs/Tree/DBCache.h \
-	Tabs/Tree/IDBCache.h \
 	Tabs/ITabManager.h \
 	Common/CommonCorrelations.h \
 	Tabs/Controls/ControlPRM.h \
@@ -82,14 +68,6 @@ HEADERS += \
 	Tabs/ITabAtlant.h \
 	Controls/ControlPanelWidgets.h \
 	Controls/ButtonShowPanel.h \
-    Common/ServiceHandler/ServiceTerminateCauseEnumsToString.h \
-    Common/ServiceHandler/ServiceTerminateCause.h \
-    Common/ServiceHandler/ServiceHandler.h \
-    Common/ServiceHandler/ProcessStateEnumsToString.h \
-    Common/ServiceHandler/ProcessState.h \
-    Common/ServiceHandler/IServiceHandler.h \
-    Common/ServiceHandler/CommonCodesEnumsToString.h \
-    Common/ServiceHandler/CommonCodes.h \
     MainWindow.h \
     MainWindowController.h \
      ControlPanel/ControlPanelWidget.h \
@@ -100,7 +78,18 @@ HEADERS += \
     Tabs/CommonSpectrumTabWidget.h \
     Abstracts/ITabWidget.h \
     SpectrumWidget.h \
-    Tabs/TabSpectrumWidgetController.h
+    Tabs/TabSpectrumWidgetController.h \
+    DB/DbController.h \
+    DB/DbManager.h \
+    Interfaces/IDbController.h \
+    Interfaces/IDbManager.h \
+    SettingsTree/TreeItem.h \
+    SettingsTree/TreeModel.h \
+    SettingsTree/TreeWidgetDelegate.h \
+    Tabs/RPC/RpcDefines.h \
+    Interfaces/IDbChangedListener.h \
+    Interfaces/ISettingsChangedListener.h \
+    UiDefines.h
 
 FORMS += \
     ControlPanel.ui \

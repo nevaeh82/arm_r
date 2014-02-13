@@ -32,5 +32,10 @@ HEADERS += \
     ServiceHandler/CommonCodesEnumsToString.h \
     ServiceHandler/ProcessStateEnumsToString.h \
     Interfaces/IController.h \
-    Interfaces/ITerminateRpcController.h
+    Interfaces/ITerminateRpcController.h \
+    Settings/BaseItem.h \
+    Settings/Object.h \
+    Settings/Property.h \
+    Settings/SettingsNode.h \
+    BaseSubject.h
   

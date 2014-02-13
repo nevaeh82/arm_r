@@ -45,6 +45,7 @@ public:
 	void setTab(ITabSpectrum* tab);
 	void setId(const int id);
 	void setSpectrumName(const QString& name);
+	QString getSpectrumName() const;
 
 private:
 	Ui::SpectrumWidget*     ui;

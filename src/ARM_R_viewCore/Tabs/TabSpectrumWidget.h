@@ -4,11 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QString>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QHeaderView>
-#include <QStackedWidget>
+#include <QTreeView>
 
 #include <QThread>
 
@@ -23,12 +19,8 @@
 
 #include "Correlations/CorrelationWidget.h"
 
-#include "Tree/TreeView.h"
-
-//#include "Tree/Controller.h"
-
-#include "Tree/DBManager.h"
-#include "Tree/TreeModel.h"
+#include "Db/DbManager.h"
+#include "SettingsTree/TreeModel.h"
 
 #include "ITabManager.h"
 #include "ITabSpectrum.h"
