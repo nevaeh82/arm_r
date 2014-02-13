@@ -11,6 +11,8 @@
 #include <QSettings>
 #include <QStringList>
 
+#include <QHostAddress>
+
 #include <PwLogger/PwLogger.h>
 
 #include "IRPC.h"
@@ -55,7 +57,7 @@ public:
 
 	void setCommand(IMessage* msg);
 
-	bool start(QString& ipAddress, quint16 port);
+	bool start(quint16 port, QHostAddress ipAddress);
 
 private:
 	void formCommand(IMessage *msg);

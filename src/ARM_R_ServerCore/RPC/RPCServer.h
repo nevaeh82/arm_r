@@ -14,6 +14,9 @@
 #include <QDataStream>
 
 #include <QMap>
+#include <QHostAddress>
+
+#include <PwLogger/PwLogger.h>
 
 #include "IRPC.h"
 #include "RPCClientFlakon.h"
@@ -26,85 +29,79 @@
 #include "RPCClient_OD.h"
 
 #include "Rpc/RpcDefines.h"
+#include "Rpc/RpcServerBase.h"
 
-class RPCServer : public QObject, public IRPC
+class RPCServer : public RpcServerBase, public IRPC
 {
     Q_OBJECT
 public:
-    RPCServer(IRouter* router);
+	RPCServer(IRouter* router, QObject *parent = 0);
     ~RPCServer();
 
 public:
-    virtual int start();
-    virtual int stop();
-    virtual quint64 get_client_id(IClient* client);
+	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
 
+	virtual quint64 getClientId(IClient* client);
 
 private slots:
-    void _slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-    void _slotRPCConnetion(quint64 client);
-    void _slotRPCDisconnected(quint64 client);
+	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
+	void slotRPCConnetion(quint64 client);
+	void slotRPCDisconnected(quint64 client);
 
 public slots:
-    void rpc_slot_set_client_id(quint64 client, int id);
-    void rpc_slot_set_main_station_cor(quint64 client, int id, int station);
-    void rpc_slot_set_bandwidth(quint64 client, int id, float bandwidth);
-    void rpc_slot_set_shift(quint64 client, int id, float shift);
-    void rpc_slot_recognize(quint64 client, int id, int type);
-    void rpc_slot_ss_correlation(quint64 client, int id, bool enable);
-    void rpc_slot_set_avarage_spectrum(quint64 client, int id, int avarage);
+	void rpcSlotSetClientId(quint64 client, int id);
+	void rpcSlotSetMainStationCor(quint64 client, int id, int station);
+	void rpcSlotSetBandwidth(quint64 client, int id, float bandwidth);
+	void rpcSlotSetShift(quint64 client, int id, float shift);
+	void rpcSlotRecognize(quint64 client, int id, int type);
+	void rpcSlotSsCorrelation(quint64 client, int id, bool enable);
+	void rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage);
 
     ///prm300 from rpc client
-
-    void rpc_slot_prm_set_freq(quint64 client, int id, short freq);
-    void rpc_slot_prm_request_freq(quint64 client, int id);
-    void rpc_slot_prm_set_att1(quint64 client, int id, int value);
-    void rpc_slot_prm_set_att2(quint64 client, int id, int value);
-    void rpc_slot_prm_set_filter(quint64 client, int id, int index);
+	void rpcSlotPrmSetFreq(quint64 client, int id, short freq);
+	void rpcSlotPrmRequestFreq(quint64 client, int id);
+	void rpcSlotPrmSetAtt1(quint64 client, int id, int value);
+	void rpcSlotPrmSetAtt2(quint64 client, int id, int value);
+	void rpcSlotPrmSetFilter(quint64 client, int id, int index);
 
     /// solver
-    void rpc_slot_set_data_to_solver(quint64 client, QByteArray data);
-    void rpc_slot_set_clear_to_solver(quint64 client, QByteArray data);
-
-
-
+	void rpcSlotSetDataToSolver(quint64 client, QByteArray data);
+	void rpcSlotSetClearToSolver(quint64 client, QByteArray data);
 
     /// to clients
-    void rpc_slot_send_FFT(quint64 client, rpc_send_points_vector points);
-	void rpc_slotSendDetectedBandwidth(quint64 client, rpc_send_points_vector points);
-    void rpc_slot_send_corr(quint64 client, quint32 point1, quint32 point2, rpc_send_points_vector points);
+	void rpcSlotSendFft(quint64 client, rpc_send_points_vector points);
+	void rpcSlotsenddetectedbandwidth(quint64 client, rpc_send_points_vector points);
+	void rpcSlotSendCorr(quint64 client, quint32 point1, quint32 point2, rpc_send_points_vector points);
 
-    void rpc_slot_send_resp_modulation(quint64 client, QString modulation);
+	void rpcSlotSendRespModulation(quint64 client, QString modulation);
 
     ///PRM
-    void rpc_slot_prm_status(quint64 client, QByteArray *data);
+	void rpcSlotPrmStatus(quint64 client, QByteArray *data);
 
     /// connection status
-    void rpc_slot_status(quint64 client, QByteArray *data);
+	void rpcSlotStatus(quint64 client, QByteArray *data);
 
     ///ATLANT
-    void rpc_slot_send_atalnt_data(quint64 client, QByteArray *data);
-    void rpc_slot_send_atalnt_data_pos(quint64 client, QByteArray *data);
+	void rpcSlotSendAtalntData(quint64 client, QByteArray *data);
+	void rpcSlotSendAtalntDataPos(quint64 client, QByteArray *data);
 
     /// ATLANT from client
-    void rpc_slot_set_atlant_frequency(quint64 clint, QByteArray data);
+	void rpcSlotSetAtlantFrequency(quint64 clint, QByteArray data);
 
     /// ARM_OD
-    void rpc_slot_send_bpla(quint64 client, QByteArray *data);
-    void rpc_slot_send_bpla_auto(quint64 client, QByteArray *data);
+	void rpcSlotSendBpla(quint64 client, QByteArray *data);
+	void rpcSlotSendBplaAuto(quint64 client, QByteArray *data);
 
-    void rpc_slot_send_atlant_direction(quint64 client, QByteArray* data);
-    void rpc_slot_send_atlant_position(quint64 client, QByteArray* data);
+	void rpcSlotSendAtlantDirection(quint64 client, QByteArray* data);
+	void rpcSlotSendAtlantPosition(quint64 client, QByteArray* data);
 
-    void rpc_slot_request_status(quint64 client, int id);
+	void rpcSlotRequestStatus(quint64 client, int id);
+
 private:
-    QxtRPCPeer*     _rpc_server;
+	QMap<quint64, IClient *> m_mapClients;
 
-    QMap<quint64, IClient *> _map_clients;
-
-    IRouter*        _router;
-    ISubscriber*    _subscriber;
-
+	IRouter*        m_router;
+	ISubscriber*    m_subscriber;
 
 signals:
     void finished();

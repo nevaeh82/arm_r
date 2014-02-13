@@ -106,7 +106,7 @@ void AtlantController::_slotGetData(rpc_flakon_msg msg_ptr)
     IMessage *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream ds(*dd);
-    quint64 cid = _server->get_client_id(this);
+    quint64 cid = _server->getClientId(this);
 
     switch(type1)
     {

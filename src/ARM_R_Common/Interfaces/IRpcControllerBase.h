@@ -3,12 +3,14 @@
 
 #include "IRpcListener.h"
 
+class QHostAddress;
+
 class IRpcControllerBase
 {
 public:
     virtual ~IRpcControllerBase(){}
 
-	virtual bool start(QString& ipAddress, quint16 port) = 0;
+	virtual bool start(quint16 port, QHostAddress ipAddress) = 0;
     virtual void stop() = 0;
 
     virtual void registerListener(IRpcListener* listener) = 0;

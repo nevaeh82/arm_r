@@ -11,6 +11,8 @@
 #include <QSettings>
 #include <QStringList>
 
+#include <QHostAddress>
+
 #include <PwLogger/PwLogger.h>
 
 #include "IRPC.h"
@@ -35,7 +37,7 @@ public:
 	RPCAtlant(int id, ITabAtlant* parent_tab, QObject*  = 0);
 	~RPCAtlant();
 
-	bool start(QString& ipAddress, quint16 port);
+	bool start(quint16 port, QHostAddress address);
 	void set_command(IMessage* msg);
 
 private:

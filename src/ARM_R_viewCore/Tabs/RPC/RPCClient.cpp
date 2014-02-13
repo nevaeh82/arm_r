@@ -24,7 +24,7 @@ RPCClient::~RPCClient()
 {
 }
 
-bool RPCClient::start(QString& ipAddress, quint16 port)
+bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 {
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRpcConnetion()));
 	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
@@ -58,7 +58,7 @@ bool RPCClient::start(QString& ipAddress, quint16 port)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
 
 	m_logger->debug("Start RPCClient");
-	return RpcClientBase::start(ipAddress, port);
+	return RpcClientBase::start(port, ipAddress);
 }
 
 void RPCClient::setCommand(IMessage *msg)

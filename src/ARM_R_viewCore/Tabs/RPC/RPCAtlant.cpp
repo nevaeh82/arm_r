@@ -73,7 +73,7 @@ void RPCAtlant::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 	emit signalReconnection();
 }
 
-bool RPCAtlant::start(QString& ipAddress, quint16 port)
+bool RPCAtlant::start(quint16 port, QHostAddress address)
 {
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRCPConnetion()));
 	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
@@ -86,7 +86,7 @@ bool RPCAtlant::start(QString& ipAddress, quint16 port)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_ATLANT_DIRECTION, this, SLOT(rpcSlotServerAtlantDirection(QByteArray)));
 
 	m_logger->debug("Start RPCAtlant");
-	return RpcClientBase::start(ipAddress, port);
+	return RpcClientBase::start(port, address);
 }
 
 void RPCAtlant::rpcSlotServerAtlantDirection(QByteArray data)

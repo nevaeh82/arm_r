@@ -2,6 +2,7 @@
 #define TABSPECTRUMWIDGETCONTROLLER_H
 
 #include <QObject>
+#include <QHostAddress>
 
 #include "Interfaces/IController.h"
 #include "TabSpectrumWidget.h"

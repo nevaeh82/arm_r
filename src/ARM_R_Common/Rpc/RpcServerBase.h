@@ -23,11 +23,11 @@ public:
 	explicit RpcServerBase(Pw::Logger::ILogger* logger, QObject* parent = NULL);
 	virtual ~RpcServerBase(){}
 
-	virtual bool start(quint16 port);
+	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
 	virtual void stop();
 
-	void registerListener(IRpcListener *listener);
-	void deregisterListener(IRpcListener *listener);
+	void registerListener(IRpcListener* listener);
+	void deregisterListener(IRpcListener* listener);
 };
 
 #endif // RPCSERVERBASE_H

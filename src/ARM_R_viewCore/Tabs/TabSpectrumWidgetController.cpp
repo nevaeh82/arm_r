@@ -129,7 +129,7 @@ int TabSpectrumWidgetController::createRPC()
 	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
 
 	_rpc_client1 = new RPCClient(_tab_property, _db_manager, this, _spectrumData, _controlPRM, this);
-	_rpc_client1->start(ipRpc, portRpc);
+	_rpc_client1->start(portRpc, QHostAddress(ipRpc));
 	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));

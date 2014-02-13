@@ -80,7 +80,7 @@ int AtlantTabWidget::createRPC()
 	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
 
 	_rpc_client = new RPCAtlant(_tab_property->get_id(), this, this);
-	_rpc_client->start(ipRpc, portRpc);
+	_rpc_client->start(portRpc, QHostAddress(ipRpc));
 	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client, SLOT(slotInit()));

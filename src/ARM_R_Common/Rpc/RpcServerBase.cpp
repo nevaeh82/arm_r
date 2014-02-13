@@ -7,16 +7,16 @@ RpcServerBase::RpcServerBase(Pw::Logger::ILogger* logger, QObject* parent) :
 	m_serverPeer = new QxtRPCPeer(this);
 }
 
-bool RpcServerBase::start(quint16 port)
+bool RpcServerBase::start(quint16 port, QHostAddress address)
 {
-	bool result = m_serverPeer->listen(QHostAddress::Any, port);
+	bool result = m_serverPeer->listen(address, port);
 
 	if (!result){
-		m_logger->debug(QString("RPC-server was not started on port: %1").arg(QString::number(port)));
+		m_logger->debug(QString("RPC-server was not started on %1:%2").arg(address.toString()).arg(QString::number(port)));
 		return false;
 	}
 
-	m_logger->debug(QString("RPC-server started successfully and listens to port: %1").arg(QString::number(port)));
+	m_logger->debug(QString("RPC-server started successfully and listens to %1:%2").arg(address.toString()).arg(QString::number(port)));
 
 	return true;
 }
@@ -27,13 +27,12 @@ void RpcServerBase::stop()
 	m_serverPeer->disconnectAll();
 }
 
-void RpcServerBase::registerListener(IRpcListener *listener)
+void RpcServerBase::registerListener(IRpcListener* listener)
 {
 	m_listeners.append(listener);
 }
 
-
-void RpcServerBase::deregisterListener(IRpcListener *listener)
+void RpcServerBase::deregisterListener(IRpcListener* listener)
 {
 	int index = m_listeners.indexOf(listener);
 
