@@ -116,18 +116,19 @@ void SpectrumWidget::setup()
 	QString fileNameSpec = "2.pcm";
 
 	QFile fl(fileNameSpec);
-	if (fl.open(QIODevice::ReadOnly))
-	{
-		unsigned int PointCount = (fl.size()/sizeof(float));
-		if (PointCount < 5) {QMessageBox::critical(this, tr("File error"), tr("Very small file or file not found")); return;}
-		float* spectrum = new float[PointCount];
-		fl.read((char*)spectrum,PointCount*sizeof(float));
-		fl.close();
-
-		ui->graphicsWidget->Setup(true,9000,"",spectrum,PointCount, 0, 0);
-
-		delete[] spectrum;
+	if (!fl.open(QIODevice::ReadOnly)){
+		return;
 	}
+
+	unsigned int PointCount = (fl.size()/sizeof(float));
+	if (PointCount < 5) {QMessageBox::critical(this, tr("File error"), tr("Very small file or file not found")); return;}
+	float* spectrum = new float[PointCount];
+	fl.read((char*)spectrum,PointCount*sizeof(float));
+	fl.close();
+
+	ui->graphicsWidget->Setup(true,9000,"",spectrum,PointCount, 0, 0);
+
+	delete[] spectrum;
 }
 
 void SpectrumWidget::setCoontrolPrmState(bool state)
@@ -182,14 +183,12 @@ void SpectrumWidget::setZeroFrequency(double val)
 
 void SpectrumWidget::slotSetDetectedAreas(QVector<QPointF> vec)
 {
-	if(m_autoSearch == false)
-	{
+	if(m_autoSearch == false){
 		return;
 	}
 	ui->graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
-	for(it = vec.begin(); it != vec.end(); ++it)
-	{
+	for(it = vec.begin(); it != vec.end(); ++it){
 		ui->graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
 }
@@ -245,15 +244,13 @@ void SpectrumWidget::slotSelectionFinishedRedLine(double y)
 /// change cur selection type
 void SpectrumWidget::slotSelectiontypeChanged(bool state)
 {
-	if(state)
-	{
+	if(state){
 		emit signalCurSelChanged(4);
+		return;
 	}
-	else
-	{
-		emit signalCurSelChanged(1);
-		m_threshold = -1000;
-	}
+
+	emit signalCurSelChanged(1);
+	m_threshold = -1000;
 }
 
 /// set graphic name
@@ -266,8 +263,7 @@ void SpectrumWidget::slotSetCaption(QString name)
 void SpectrumWidget::slotRequestData(bool state)
 {
 	int data[4] = {0, 1, 2, 3};
-	if(state)
-	{
+	if(state){
 		emit signalRequestData(m_id, 0, &data[0], 4);
 	}
 }
@@ -314,12 +310,11 @@ void SpectrumWidget::slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 		}
 	}
 
-	if(m_rett == 0 )
+	if(m_rett == 0)
 	{
 		int ret = QMessageBox::warning(this, tr("Attention!"),
 									   tr("Signal was decected!"),
 									   QMessageBox::Cancel, QMessageBox::Ok);
-
 		m_rett = -101;
 
 	}
@@ -344,8 +339,7 @@ void SpectrumWidget::slotSetCorrelations(int id, const QVector<QPointF> vecFFT, 
 	qreal startx = vecFFT.at(0).x();
 	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
 	double bandwidth = endx - startx;
-	for(int i = 0; i < vecFFT.size(); i++)
-	{
+	for(int i = 0; i < vecFFT.size(); i++){
 		spectrum[i] = vecFFT.at(i).y();
 	}
 
