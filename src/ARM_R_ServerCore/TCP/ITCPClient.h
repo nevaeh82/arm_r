@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QByteArray>
 
-class ITCPClient: public QObject
+class ITcpClient: public QObject
 {
 public:
-    virtual ~ITCPClient(){};
+	virtual ~ITcpClient(){};
 
     virtual void set(QByteArray data)       = 0;
 //    virtual QByteArray get()                = 0;

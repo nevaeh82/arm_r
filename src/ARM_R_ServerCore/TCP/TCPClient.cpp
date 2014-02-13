@@ -118,7 +118,7 @@ void TCPClient::proccess()
     this->connect(socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketDisplayError(QAbstractSocket::SocketError))/*, Qt::DirectConnection*/);
     this->connect(socket_, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(slotState(QAbstractSocket::SocketState)));
     this->connect(this, SIGNAL(signalReconnection()), this, SLOT(reconnection()), Qt::QueuedConnection);
-    this->socket_->connectToHost(_host, _port);
+	this->socket_->connectToHost(_host, _port);
     if(!socket_->waitForConnected(100))
     {
         QString thiserror;
