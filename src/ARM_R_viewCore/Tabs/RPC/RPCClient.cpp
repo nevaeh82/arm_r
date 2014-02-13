@@ -161,24 +161,28 @@ void RPCClient::requestSatatus()
 
 void RPCClient::recognize()
 {
-	QMap<QString, QVariant>* m_data = m_dbManager->get(1, m_tabProperty->get_id());
+	SettingsNode settingsNode = m_dbManager->getSettingsNode(m_tabProperty->get_name());
 
+	float bandwidth = 0;
+	float shift = 0;
+	foreach (Property property, settingsNode.properties) {
+		if (DB_SELECTED_PROPERTY != property.name && DB_CENTER_PROPERTY != property.name) {
+			continue;
+		}
 
-void RPCClient::_recognize()
-{
+		if (DB_CENTER_PROPERTY == property.name) {
+			shift = property.value.toFloat();
+		}
 
-	/// TODO: update
+		if (DB_SELECTED_PROPERTY == property.name) {
+			bandwidth = property.value.toFloat();
+		}
+	}
 
-	/*QMap<QString, QVariant>* m_data = _db_manager->get(1, _tab_property->get_id());
-	float bandwidth = m_data->value("value").toFloat();
-	//    bandwidth /=1000;
-	emit signalSetBandwidth(_tab_property->get_id(), bandwidth);
-	m_data = _db_manager->get(2, _tab_property->get_id());
-	float shift = m_data->value("value").toFloat();
-	//    shift /= 1000;
-	emit signalSetShift(_tab_property->get_id(), shift);
+	emit signalSetBandwidth(m_tabProperty->get_id(), bandwidth);
+	emit signalSetShift(m_tabProperty->get_id(), shift);
 	int s_type = 104;
-	emit signalRecognize(_tab_property->get_id(), s_type);*/
+	emit signalRecognize(m_tabProperty->get_id(), s_type);
 }
 
 void RPCClient::ssCorrelation(bool enable)
@@ -238,7 +242,7 @@ void RPCClient::rpcSlotServerSendCorrelation(int point1, int point2, rpc_send_po
 		m_grData->set_data(point2, points, true);
 }
 
-void RPCClient::rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
+void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
 {
 	///TODO: update
 

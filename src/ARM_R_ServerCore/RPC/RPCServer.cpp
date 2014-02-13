@@ -17,10 +17,6 @@ RPCServer::RPCServer(IRouter* router, QObject *parent) :
 
 RPCServer::~RPCServer()
 {
-	if(m_serverPeer != NULL)
-    {
-		delete m_serverPeer;
-    }
 }
 
 bool RPCServer::start(quint16 port, QHostAddress address)

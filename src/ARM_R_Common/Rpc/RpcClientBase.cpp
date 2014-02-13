@@ -52,12 +52,12 @@ void RpcClientBase::connectToServer()
 
 void RpcClientBase::connectedToServerSlot()
 {
-	m_logger->debug("RPC-client status: connected to server %1:%2").arg(m_address.toString()).arg(QString::number(m_port));
+	m_logger->debug(QString("RPC-client status: connected to server %1:%2").arg(m_address.toString()).arg(QString::number(m_port)));
 	reconnectTimer->stop();
 }
 
 void RpcClientBase::connectionToServerFailedSlot()
 {
-	m_logger->debug("ERROR RPC-client unable to connect to server %1:%2").arg(m_address.toString()).arg(QString::number(m_port));
+	m_logger->debug(QString("ERROR RPC-client unable to connect to server %1:%2").arg(m_address.toString()).arg(QString::number(m_port)));
 	reconnectTimer->start(1000);
 }

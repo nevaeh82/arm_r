@@ -27,7 +27,11 @@
 
 #include "../Controls/IControlPRM.h"
 
+#include "UiDefines.h"
+#include "Rpc/RpcDefines.h"
 #include "Rpc/RpcClientBase.h"
+
+#include "Interfaces/IDbManager.h"
 
 typedef QVector<QPointF>         rpc_send_points_vector;
 
