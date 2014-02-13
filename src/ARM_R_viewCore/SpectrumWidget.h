@@ -19,7 +19,6 @@
 #include <QSpinBox>
 #include <QPushButton>
 
-
 #include <QTimer>
 
 #include "modules/gui/multi_graphics/components_relation.h"
@@ -29,7 +28,6 @@
 #include "IGraphicWidget.h"
 
 #include "Common/CommandMessage.h"
-
 
 namespace Ui {
 class SpectrumWidget;
@@ -48,35 +46,35 @@ public:
 	QString getSpectrumName() const;
 
 private:
-	Ui::SpectrumWidget*     ui;
+	Ui::SpectrumWidget*	ui;
 
-	bool					m_autoSearch;
-	double					m_current_frequency;
+	bool	m_autoSearch;
+	double	m_current_frequency;
 
-	int                     _id;
-	float                   *_spectrum_peak_hold;
-	float                   *_spectrum_peak_hold_corr;
+	int	m_id;
+	float*	m_spectrumPeakHold;
+	float*	m_spectrumPeakHoldCorr;
 
-	ITabSpectrum*           _tab;
+	ITabSpectrum*	m_tab;
 
-	double                  _bandwidth;
-	int                     _pointCount;
-	bool                    _isComplex;
+	double	m_bandwidth;
+	int		m_pointCount;
+	bool	m_isComplex;
 
-	QMutex                  _mux;
-	bool                    _enable_correlation;
-	QMenu*                  m_graphicsContextMenu;
+	QMutex	m_mux;
+	bool	m_enableCorrelation;
+	QMenu*	m_graphicsContextMenu;
 
-	double                  _center_freq_sel_temp;
-	double                  _center_freq_def_modulation;
+	double	m_centerFreqSelTemp;
+	double	m_centerFreqDefModulation;
 
-	bool                    _peak_visible;
+	bool	m_peakVisible;
 
-	double                  _threshold;
-	int _rett;
+	double	m_threshold;
+	int		m_rett;
 
 public:
-	Q_MG_SpectrumInterface  *get_spectrum_widget();
+	Q_MG_SpectrumInterface* getSpectrumWidget();
 	virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
 	virtual void setSignal(float* spectrum, float* spectrum_peak_hold);
 	virtual bool isGraphicVisible();
@@ -87,49 +85,40 @@ public:
 	virtual void setZeroFrequency(double val);
 
 	void setup();
-
-	void set_coontrolPRM_state(bool state);
-
+	void setCoontrolPrmState(bool state);
 
 public slots:
 	void slotSelectionFinished(double x1, double y1, double x2, double y2);
 	void slotSelectionFinishedRedLine(double y);
 	void slotSetCaption(QString name);
 	void slotSetCorrelations(int id, const QVector<QPointF> vecFFT, const bool isComplex);
-	void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
-	void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
-	void _slotSetDefModulation(QString modulation);
+	void slotSetFFT(float* spectrum, float* spectrum_peak_hold);
+	void slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
+	void slotSetDefModulation(QString modulation);
 
-	void m_slotSetDetectedAreas(QVector<QPointF> vec);
-
-	//    void slotSetFFT2(QVector<QPointF> vecFFT, const bool isComplex);
-	//    void slotSetParam(int PointCount, double bandwidth, bool isComplex);
-
+	void slotSetDetectedAreas(QVector<QPointF> vec);
 
 private slots:
-	void _slotSetEnablePanorama(bool state);
-	void _slotAutoSearch(bool state);
-	void _slotSelectiontypeChanged(bool);
-	void _slotRequestData(bool state);
-	void _slotEnableKM(bool state);
-	void _slotIsShowContextMenu();
-	void _slotCMAddWhiteList();
-	void _slotCMAddBlackList();
-	void _slotRecognizeSignal();
-	void _slotSSCorrelation();
-	void _slotClearLabels();
+	void slotSetEnablePanorama(bool state);
+	void slotAutoSearch(bool state);
+	void slotSelectiontypeChanged(bool);
+	void slotRequestData(bool state);
+	void slotEnableKM(bool state);
+	void slotIsShowContextMenu();
+	void slotCMAddWhiteList();
+	void slotCMAddBlackList();
+	void slotRecognizeSignal();
+	void slotSSCorrelation();
+	void slotClearLabels();
 
-	void _slotShowPeaks(bool);
-	void _slotSetLabelName(QString base, QString second);
+	void slotShowPeaks(bool);
+	void slotSetLabelName(QString base, QString second);
 
-	void _slotShowControlPRM(bool state);
+	void slotShowControlPRM(bool state);
 
-	void _slot_double_clicked(double, double);
+	void slotDoubleClicked(double, double);
 
-	void m_slotSetZeroFrequency(double val);
-
-	//    void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
-	//    void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
+	void slotSetZeroFrequency(double val);
 
 signals:
 	void selected(double x1, double x2, double y1, double y2);
@@ -141,17 +130,13 @@ signals:
 	/// id - is id of ilsts (1 - White list, 2 - Black list)
 	void signalAddSelToLists(int id);
 
-
 	void signalSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
 	void signalSetFFT(float* spectrum, float* spectrum_peak_hold);
 	void signalSetDefModulation(QString modulation);
 
 	void signalFinished();
-
 	void signalNeedToUpdate();
-
 	void signalSetLabelName(QString, QString);
-
 	void signalSetControlPRMState(bool state);
 
 	void doubleClickedSignal(int);
@@ -161,8 +146,6 @@ signals:
 
 private:
 	virtual void mouseDoubleClickEvent ( QMouseEvent * event );
-
-
 };
 
 #endif // GRAPHICWIDGET_H

@@ -373,7 +373,7 @@ void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
 		return;
 	}
 
-	m_view->getSpectrumWidget()->set_coontrolPRM_state(state);
+	m_view->getSpectrumWidget()->setCoontrolPrmState(state);
 }
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
