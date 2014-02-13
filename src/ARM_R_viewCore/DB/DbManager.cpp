@@ -80,6 +80,18 @@ bool DbManager::updateProperty(const Property &property)
 	return true;
 }
 
+QString DbManager::getObjectName(const uint id) const
+{
+	// Create object KTP settings
+	Object obj= m_dbController->getObject(id);
+
+	if (obj.id == INVALID_INDEX) {
+		return QString();
+	}
+
+	return obj.name;
+}
+
 Object DbManager::createSettingsNode(const QString &objectName)
 {
 	Object obj = createStation(objectName);

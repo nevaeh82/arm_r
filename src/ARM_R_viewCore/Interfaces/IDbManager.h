@@ -16,6 +16,8 @@ public:
 
 	virtual SettingsNode getSettingsNode(const QString& objectName) = 0;
 	virtual bool updateProperty(const Property& property) = 0;
+
+	virtual QString getObjectName(const uint id) const = 0;
 };
 
 #endif // IDBMANAGER_H

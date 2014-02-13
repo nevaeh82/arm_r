@@ -28,8 +28,6 @@ SOURCES += \
 	Tabs/RPC/RPCAtlant.cpp \
 	Controls/ControlPanelWidgets.cpp \
 	Controls/ButtonShowPanel.cpp \
-    Common/ServiceHandler/ServiceHandler.cpp \
-    Common/ServiceHandler/CommonCodes.cpp \
     MainWindow.cpp \
     MainWindowController.cpp \
     ControlPanel/ControlPanelWidget.cpp \
@@ -44,8 +42,7 @@ SOURCES += \
     DB/DbManager.cpp \
     SettingsTree/TreeItem.cpp \
     SettingsTree/TreeModel.cpp \
-    SettingsTree/TreeWidgetDelegate.cpp \
-    SettingsTree/DbCache.cpp
+    SettingsTree/TreeWidgetDelegate.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -71,14 +68,6 @@ HEADERS += \
 	Tabs/ITabAtlant.h \
 	Controls/ControlPanelWidgets.h \
 	Controls/ButtonShowPanel.h \
-    Common/ServiceHandler/ServiceTerminateCauseEnumsToString.h \
-    Common/ServiceHandler/ServiceTerminateCause.h \
-    Common/ServiceHandler/ServiceHandler.h \
-    Common/ServiceHandler/ProcessStateEnumsToString.h \
-    Common/ServiceHandler/ProcessState.h \
-    Common/ServiceHandler/IServiceHandler.h \
-    Common/ServiceHandler/CommonCodesEnumsToString.h \
-    Common/ServiceHandler/CommonCodes.h \
     MainWindow.h \
     MainWindowController.h \
      ControlPanel/ControlPanelWidget.h \
@@ -97,8 +86,6 @@ HEADERS += \
     SettingsTree/TreeItem.h \
     SettingsTree/TreeModel.h \
     SettingsTree/TreeWidgetDelegate.h \
-    SettingsTree/DbCache.h \
-    Interfaces/IDbCache.h \
     Tabs/RPC/RpcDefines.h \
     Interfaces/IDbChangedListener.h \
     Interfaces/ISettingsChangedListener.h \

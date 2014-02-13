@@ -9,10 +9,10 @@ class IMessage;
 class ITabManager
 {
 public:
-    ~ITabManager(){};
+	~ITabManager(){}
 
     virtual QString getStationName(int id)              = 0;
-	virtual void send_data(int pid, TypeCommand type, IMessage *data)     = 0;
+	virtual void send_data(const QString &stationName, TypeCommand type, IMessage *data)     = 0;
     virtual void set_tab(int id)                        = 0;
 };
 

@@ -8,7 +8,7 @@
 #include "Interfaces/IController.h"
 #include "MainWindow.h"
 
-#include "Common/ServiceHandler/ServiceHandler.h"
+#include "ServiceHandler/ServiceHandler.h"
 
 #include "Tabs/TabManager.h"
 
@@ -46,7 +46,6 @@ private:
 	void stop();
 
 	void init();
-
 };
 
 #endif // MAINWINDOWCONTROLLER_H

@@ -23,30 +23,22 @@ private:
 	Pw::Logger::ILogger* m_logger;
 
 	DbController*       m_dbController;
-	//QList<ISettingsChangedListener*> m_receiversList;
 
 public:
 
 	DbManager(QObject* parent  = NULL);
 	virtual ~DbManager();
 
-	//void registerDbChangedReceiver(ISettingsChangedListener *receiver);
-	//void deregisterDbChangedReceiver(ISettingsChangedListener *receiver);
-
 	SettingsNode getSettingsNode(const QString& objectName);
 	bool updateProperty(const Property& property);
+
+	QString getObjectName(const uint id) const;
 
 private:
 	Object createSettingsNode(const QString& objectName);
 
 	Object createObject(const QString& objectName);
-
-//	Object createKTPSettingsNode(const QString& objectName);
-//	Object createPhoenixSettingsNode(const QString& objectName);
-//	Object createRoatingAntennaSettingsNode(const QString& objectName);
-
 	Object createStation(const QString& stationName);
-
 
 	void notifyDbChanged(const SettingsNode &category);
 	void notifyDbChanged(const Property& property);

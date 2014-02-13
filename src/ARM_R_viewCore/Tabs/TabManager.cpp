@@ -131,17 +131,15 @@ QString TabManager::getStationName(int id)
 }
 
 /// call this method when data in tree has changed
-void TabManager::send_data(int pid, TypeCommand type, IMessage *msg)
+void TabManager::send_data(const QString &stationName, TypeCommand type, IMessage *msg)
 {
-	QString tabName =m_tabWidget->tabText(pid);
-
-	ITabWidget* tabController = m_tabWidgetsMap.value(tabName, NULL);
+	ITabWidget* tabController = m_tabWidgetsMap.value(stationName, NULL);
 
 	if (NULL == tabController) {
 		return;
 	}
 
-	//TabSpectrumWidget* tab_sp = static_cast<TabSpectrumWidget* >(m_tabWidget->widget(pid));
+	///TODO: update in future
 
 	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
 	tabController1->set_command(type, msg);
@@ -225,6 +223,7 @@ void TabManager::onSettingsNodeChanged(const SettingsNode &)
 
 void TabManager::onPropertyChanged(const Property & property)
 {
+
 	Property inProperty = property;
 
 	TypeCommand commandType = TypeUnknownCommand;
@@ -254,9 +253,10 @@ void TabManager::onPropertyChanged(const Property & property)
 
 	CommandMessage *msg = new CommandMessage(commandCode, property.value);
 
+	QString stationName = m_dbManager->getObjectName(property.pid);
 
 	/// TODO: update
-	send_data(0, commandType, msg);
+	send_data(stationName, commandType, msg);
 }
 
 void TabManager::onCleanSettings()

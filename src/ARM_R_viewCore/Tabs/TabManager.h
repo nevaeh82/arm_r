@@ -61,7 +61,7 @@ public:
 	virtual int createSubModules(const QString& settingsFile);
 
     virtual QString getStationName(int id);
-	virtual void send_data(int pid, TypeCommand type, IMessage* msg);
+	virtual void send_data(const QString& stationName, TypeCommand type, IMessage* msg);
     virtual void set_tab(int id);
 
 	virtual void onSettingsNodeChanged(const SettingsNode &);

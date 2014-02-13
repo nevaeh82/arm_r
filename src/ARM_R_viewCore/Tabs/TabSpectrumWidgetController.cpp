@@ -339,7 +339,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	_tab_manager->send_data(_id, TypeCommand(TypeGraphicCommand), msg);
+	_tab_manager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
