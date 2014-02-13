@@ -7,6 +7,7 @@ ProjectDir = $$PWD
 CONFIG += staticlib
 
 include(../../specs/project.pri)
+include(../ARM_R_Common/reference.pri)
 include(../../specs/qxt.pri)
 include(../../specs/Solver.pri)
 include(../../specs/protobuf.pri)

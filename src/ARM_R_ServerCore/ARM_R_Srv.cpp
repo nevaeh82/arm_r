@@ -50,7 +50,7 @@ ARM_R_Srv::ARM_R_Srv()
 //    QObject::connect(_rpc_server, SIGNAL(finished()), &a, SLOT(quit()));
 //    QObject::connect(&a, SIGNAL(aboutToQuit()), _rpc_server, SLOT(aboutToQuitApp()));
 
-    _rpc_server->start();
+	_rpc_server->start(24500);
 
     _pserver = new PServer(10240);
     _subscriber_up->add_subscription(FLAKON_BPLA, _pserver);

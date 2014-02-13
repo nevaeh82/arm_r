@@ -20,7 +20,9 @@ INCLUDEPATH += $$PWD
 
 SOURCES += \
     ServiceHandler/ServiceHandler.cpp \
-    ServiceHandler/CommonCodes.cpp
+    ServiceHandler/CommonCodes.cpp \
+    Rpc/RpcClientBase.cpp \
+    Rpc/RpcServerBase.cpp
 
 HEADERS += \
     ServiceHandler/ServiceTerminateCause.h \
@@ -31,11 +33,15 @@ HEADERS += \
     ServiceHandler/ServiceTerminateCauseEnumsToString.h \
     ServiceHandler/CommonCodesEnumsToString.h \
     ServiceHandler/ProcessStateEnumsToString.h \
+    Rpc/RpcClientBase.h \
+    Rpc/RpcServerBase.h \
     Interfaces/IController.h \
     Interfaces/ITerminateRpcController.h \
     Settings/BaseItem.h \
     Settings/Object.h \
     Settings/Property.h \
     Settings/SettingsNode.h \
-    BaseSubject.h
-  
+    BaseSubject.h \
+    Interfaces/IRpcControllerBase.h \
+    Interfaces/IRpcListener.h \
+    Rpc/RpcDefines.h  

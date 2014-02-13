@@ -2,108 +2,77 @@
 
 #include <QDebug>
 
-RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager, ITabSpectrum* parent_tab, GraphicData* gr_data, IControlPRM* control_prm)
+RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
+					 ITabSpectrum* parent_tab, GraphicData* gr_data,
+					 IControlPRM* control_prm, QObject *parent) :
+	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
+	m_controlPrm = control_prm;
+	m_parentTab = parent_tab;
+	m_tabProperty = prop;
+	m_dbManager = db_manager;
 
-	_control_prm = control_prm;
-	_parent_tab = parent_tab;
-	_tab_property = prop;
-	_db_manager = db_manager;
-	//    _rpc_client->attachSlot()
+	m_spectrum = new float[1];
+	m_spectrumPeakHold = new float[1];
+	m_bandwidth = 0;
+	m_needSetup = true;
 
-	connect(this, SIGNAL(signalStart()), this, SLOT(start()));
-	connect(this, SIGNAL(signalStop()), this, SLOT(stop()));
-	connect(this, SIGNAL(signalFinishRPC()), this, SLOT(_close()));
-
-	_spectrum = new float[1];
-	_spectrum_peak_hold = new float[1];
-	_bandwidth = 0;
-	_needSetup = true;
-
-	_gr_data = gr_data;
-
-	//    _init();
+	m_grData = gr_data;
 }
 
 RPCClient::~RPCClient()
 {
-	//    _close();
-	//    delete _rpc_client;
 }
 
-void RPCClient::slotInit()
+bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 {
-	QString tabs_setting_file = QCoreApplication::applicationDirPath();
-	tabs_setting_file.append("./Tabs/RPC.ini");
-	if(!readSettings(tabs_setting_file)){
-		return;
-	}
+	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRpcConnetion()));
+	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 
-	_rpc_client = new QxtRPCPeer();
-	connect(_rpc_client, SIGNAL(connectedToServer()), this, SLOT(_slotRCPConnetion()));
-	connect(_rpc_client, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(_slotErrorRPCConnection(QAbstractSocket::SocketError)));
+	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 
-	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(_slotSetCommand(IMessage*)));
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetMainStationCor(int,int)), RPC_SLOT_SET_MAIN_STATION_COR);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetBandwidth(int, float)), RPC_SLOT_SET_BANDWIDTH);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetShift(int, float)), RPC_SLOT_SET_SHIFT);
+	m_clientPeer->attachSignal(this, SIGNAL(signalRecognize(int, int)), RPC_SLOT_RECOGNIZE);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSSCorrelation(int, bool)), RPC_SLOT_SS_CORRELATION);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetAvarageSpectrum(int,int)), RPC_SLOT_AVARAGE_SPECTRUM);
 
-	_rpc_client->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
-	_rpc_client->attachSignal(this, SIGNAL(signalSetMainStationCor(int,int)), RPC_SLOT_SET_MAIN_STATION_COR);
-	_rpc_client->attachSignal(this, SIGNAL(signalSetBandwidth(int, float)), RPC_SLOT_SET_BANDWIDTH);
-	_rpc_client->attachSignal(this, SIGNAL(signalSetShift(int, float)), RPC_SLOT_SET_SHIFT);
-	_rpc_client->attachSignal(this, SIGNAL(signalRecognize(int, int)), RPC_SLOT_RECOGNIZE);
-	_rpc_client->attachSignal(this, SIGNAL(signalSSCorrelation(int, bool)), RPC_SLOT_SS_CORRELATION);
-	_rpc_client->attachSignal(this, SIGNAL(signalSetAvarageSpectrum(int,int)), RPC_SLOT_AVARAGE_SPECTRUM);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFreq(int, short)), RPC_SLOT_PRM_SET_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMRequestFreq(int)), RPC_SLOT_PRM_REQUEST_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(int, int)), RPC_SLOT_PRM_SET_ATT1);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(int, int)), RPC_SLOT_PRM_SET_ATT2);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(int,int)), RPC_SLOT_PRM_SET_FILTER);
+	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
 
-	_rpc_client->attachSignal(this, SIGNAL(signalPRMSetFreq(int, short)), RPC_SLOT_PRM_SET_FREQ);
-	_rpc_client->attachSignal(this, SIGNAL(signalPRMRequestFreq(int)), RPC_SLOT_PRM_REQUEST_FREQ);
-	_rpc_client->attachSignal(this, SIGNAL(signalPRMSetAtt1(int, int)), RPC_SLOT_PRM_SET_ATT1);
-	_rpc_client->attachSignal(this, SIGNAL(signalPRMSetAtt2(int, int)), RPC_SLOT_PRM_SET_ATT2);
-	_rpc_client->attachSignal(this, SIGNAL(signalPRMSetFilter(int,int)), RPC_SLOT_PRM_SET_FILTER);
+	///server
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(rpc_send_points_vector)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpcSlotGettingDetectedBandwidth(rpc_send_points_vector)));
 
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpcSlotGettingModulation(QString)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(int, int, rpc_send_points_vector)));
 
-	_rpc_client->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
 
-	connect(this, SIGNAL(signalReconnection()), this, SLOT(_slotReconnection()));
-	connect(_rpc_client, SIGNAL(disconnectedFromServer()), this, SLOT(_slotRPCDisconnection()));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
 
-	//    return 0;
-	slotStart();
+	m_logger->debug("Start RPCClient");
+	return RpcClientBase::start(port, ipAddress);
 }
 
-int RPCClient::start()
-{
-	_rpc_client->connect(_ip_RPC, _port_RPC);
-	return 0;
-}
-
-int RPCClient::stop()
-{
-	_rpc_client->disconnectServer();
-	return 0;
-}
-
-void RPCClient::_close()
-{
-	if(_rpc_client->isClient())
-	{
-		_rpc_client->disconnectServer();
-		delete _rpc_client;
-		_rpc_client = NULL;
-	}
-	emit signalFinished();
-}
-
-void RPCClient::set_command(IMessage *msg)
+void RPCClient::setCommand(IMessage *msg)
 {
 	emit signalSetCommand(msg);
 }
 
-void RPCClient::_slotSetCommand(IMessage *msg)
+void RPCClient::slotSetCommand(IMessage *msg)
 {
-	_command_msg = msg;
-	_form_command(_command_msg);
+	m_commandMsg = msg;
+	formCommand(m_commandMsg);
 }
 
-void RPCClient::_form_command(IMessage *msg)
+void RPCClient::formCommand(IMessage *msg)
 {
 	QVariant data;
 	int type = msg->get(data);
@@ -114,34 +83,34 @@ void RPCClient::_form_command(IMessage *msg)
 		case COMMAND_TOWHITELIST:
 			break;
 		case COMMAND_RECOGNIZESIGNAL:
-			_recognize();
+			recognize();
 			break;
 		case COMMAND_KM:
-			_ss_correlation(data.toBool());
+			ssCorrelation(data.toBool());
 			break;
 		case COMMAND_FLAKON_SET_MAIN_STATION_COR:
-			_flakon_set_main_station_cor(data.toInt());
+			flakonSetMainStationCor(data.toInt());
 			break;
 		case COMMAND_PRM_SET_FREQ:
-			_prm_set_freq(data.toUInt());
+			prmSetFreq(data.toUInt());
 			break;
 		case COMMAND_PRM_REQUEST_FREQ:
-			_prm_request_freq();
+			prmRequestFreq();
 			break;
 		case COMMAND_PRM_SET_ATT1:
-			_prm_set_att1(data.toInt());
+			prmSetAtt1(data.toInt());
 			break;
 		case COMMAND_PRM_SET_ATT2:
-			_prm_set_att2(data.toInt());
+			prmSetAtt2(data.toInt());
 			break;
 		case COMMAND_PRM_SET_FILTER:
-			_prm_set_filter(data.toInt());
+			prmSetFilter(data.toInt());
 			break;
 		case COMMAND_FLAKON_SET_AVARAGE:
-			_flakon_set_avarage(data.toInt());
+			flakonSetAvarage(data.toInt());
 			break;
 		case COMMAND_REQUEST_STATUS:
-			_request_satatus();
+			requestSatatus();
 			break;
 
 		default:
@@ -150,45 +119,49 @@ void RPCClient::_form_command(IMessage *msg)
 	msg->clenup();
 }
 
-void RPCClient::_prm_set_freq(short freq)
+void RPCClient::prmSetFreq(short freq)
 {
-	emit signalPRMSetFreq(_tab_property->get_id(), freq);
+	emit signalPRMSetFreq(m_tabProperty->get_id(), freq);
 }
 
-void RPCClient::_prm_request_freq()
+void RPCClient::prmRequestFreq()
 {
-	emit signalPRMRequestFreq(_tab_property->get_id());
+	emit signalPRMRequestFreq(m_tabProperty->get_id());
 }
 
-void RPCClient::_prm_set_att1(int att1)
+void RPCClient::prmSetAtt1(int att1)
 {
-	emit signalPRMSetAtt1(_tab_property->get_id(), att1);
+	emit signalPRMSetAtt1(m_tabProperty->get_id(), att1);
 }
 
-void RPCClient::_prm_set_att2(int att2)
+void RPCClient::prmSetAtt2(int att2)
 {
-	emit signalPRMSetAtt2(_tab_property->get_id(), att2);
+	emit signalPRMSetAtt2(m_tabProperty->get_id(), att2);
 }
 
-void RPCClient::_prm_set_filter(int index)
+void RPCClient::prmSetFilter(int index)
 {
-	emit signalPRMSetFilter(_tab_property->get_id(), index);
+	emit signalPRMSetFilter(m_tabProperty->get_id(), index);
 }
 
-void RPCClient::_flakon_set_main_station_cor(int value)
+void RPCClient::flakonSetMainStationCor(int value)
 {
-	emit signalSetMainStationCor(_tab_property->get_id(), value);
+	emit signalSetMainStationCor(m_tabProperty->get_id(), value);
 }
 
-void RPCClient::_flakon_set_avarage(int value)
+void RPCClient::flakonSetAvarage(int value)
 {
-	emit signalSetAvarageSpectrum(_tab_property->get_id(), value);
+	emit signalSetAvarageSpectrum(m_tabProperty->get_id(), value);
 }
 
-void RPCClient::_request_satatus()
+void RPCClient::requestSatatus()
 {
-	emit signalRequestStatus(_tab_property->get_id());
+	emit signalRequestStatus(m_tabProperty->get_id());
 }
+
+void RPCClient::recognize()
+{
+	QMap<QString, QVariant>* m_data = m_dbManager->get(1, m_tabProperty->get_id());
 
 
 void RPCClient::_recognize()
@@ -208,120 +181,61 @@ void RPCClient::_recognize()
 	emit signalRecognize(_tab_property->get_id(), s_type);*/
 }
 
-void RPCClient::_ss_correlation(bool enable)
+void RPCClient::ssCorrelation(bool enable)
 {
 	//    int type = 103;
-	emit signalSSCorrelation(_tab_property->get_id(), enable);
+	emit signalSSCorrelation(m_tabProperty->get_id(), enable);
 }
 
 /// slot when connection complete
-void RPCClient::_slotRCPConnetion()
+void RPCClient::slotRpcConnetion()
 {
-
-    emit signalSetClientId(_tab_property->get_id());
-    ///server
-    _rpc_client->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpc_slot_getting_points(rpc_send_points_vector)));
-	_rpc_client->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpc_slotGettingDetectedBandwidth(rpc_send_points_vector)));
-
-	_rpc_client->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpc_slot_getting_modulation(QString)));
-    _rpc_client->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpc_slot_server_send_correlation(int, int, rpc_send_points_vector)));
-
-	_rpc_client->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpc_slot_server_prm_status(int, int, int, int)));
-
-	_rpc_client->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpc_slot_server_status(bool)));
-
+	emit signalSetClientId(m_tabProperty->get_id());
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_REQUEST_FREQ, QVariant());
-	this->set_command(msg);
-}
-
-void RPCClient::_slotRPCDisconnection()
-{
-	emit signalReconnection();
+	setCommand(msg);
 }
 
 /// slot if have some error while connetiting
-void RPCClient::_slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
+void RPCClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 {
 	QString thiserror;
 	switch(socketError)
 	{
 		case QAbstractSocket::RemoteHostClosedError:
-			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
-			//return;
+			thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
 			break;
 		case QAbstractSocket::HostNotFoundError:
-			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
+			thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
 			break;
 		case QAbstractSocket::ConnectionRefusedError:
-			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
+			thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
 			break;
 		default:
-			//        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + _rpc_client->->errorString()));
+			//        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + _rpc_client->->errorString()));
 			break;
 	}
-	//    _rpc_client->takeDevice()->;
-
-
-	emit signalReconnection();
 }
-
-void RPCClient::_slotReconnection()
-{
-	QIODevice *dev = _rpc_client->takeDevice();
-	_rpc_client->connect(_ip_RPC, _port_RPC);
-}
-
-/// read rpc configuration from ini file
-bool RPCClient::readSettings(const QString& settingsFile)
-{
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QSettings m_settings(settingsFile, QSettings::IniFormat);
-
-	m_settings.setIniCodec(codec);
-
-	_ip_RPC = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
-	_port_RPC = m_settings.value("RPC_UI/Port", 24500).toInt();
-
-
-	return true;
-}
-
-void RPCClient::slotStart()
-{
-	emit signalStart();
-}
-
-void RPCClient::slotStop()
-{
-	emit signalStop();
-}
-
-void RPCClient::slotFinish()
-{
-	emit signalFinishRPC();
-}
-
 
 /// getting points from server
-void RPCClient::rpc_slot_getting_points(rpc_send_points_vector points)
+void RPCClient::rpcSlotGettingPoints(rpc_send_points_vector points)
 {
-	_gr_data->set_data(points, true);
+	m_grData->set_data(points, true);
 }
 
-void RPCClient::rpc_slotGettingDetectedBandwidth(rpc_send_points_vector points)
+void RPCClient::rpcSlotGettingDetectedBandwidth(rpc_send_points_vector points)
 {
-	_gr_data->setDetectedAreas(points);
+	m_grData->setDetectedAreas(points);
 }
 
-void RPCClient::rpc_slot_getting_modulation(QString modulation)
+void RPCClient::rpcSlotGettingModulation(QString modulation)
 {
-	_gr_data->set_def_modulation(modulation);
+	m_grData->set_def_modulation(modulation);
 }
 
-void RPCClient::rpc_slot_server_send_correlation(int point1, int point2, rpc_send_points_vector points)
+void RPCClient::rpcSlotServerSendCorrelation(int point1, int point2, rpc_send_points_vector points)
 {
-	if(point2 != _tab_property->get_id())
-		_gr_data->set_data(point2, points, true);
+	if(point2 != m_tabProperty->get_id())
+		m_grData->set_data(point2, points, true);
 }
 
 void RPCClient::rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
@@ -342,7 +256,7 @@ void RPCClient::rpc_slot_server_prm_status(int prm_freq, int prm_filter, int prm
 
 }
 
-void RPCClient::rpc_slot_server_status(bool state)
+void RPCClient::rpcSlotServerStatus(bool state)
 {
-	_parent_tab->set_indicator(state);
+	m_parentTab->set_indicator(state);
 }

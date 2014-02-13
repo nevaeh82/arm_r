@@ -14,6 +14,8 @@
 #include <QVBoxLayout>
 #include <QThread>
 
+#include <QHostAddress>
+
 #include "TabsProperty.h"
 #include "RPC/RPCAtlant.h"
 
