@@ -68,8 +68,20 @@ void AtlantTabWidget::setLog(QByteArray data)
 
 int AtlantTabWidget::createRPC()
 {
-	_rpc_client = new RPCAtlant(_tab_property->get_id(), this);
-	QThread *thread_rpc_client = new QThread;
+	QString settingsFile = QCoreApplication::applicationDirPath();
+	settingsFile.append("/Tabs/RPC.ini");
+
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QSettings m_settings(settingsFile, QSettings::IniFormat);
+
+	m_settings.setIniCodec(codec);
+
+	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
+	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
+
+	_rpc_client = new RPCAtlant(_tab_property->get_id(), this, this);
+	_rpc_client->start(portRpc, QHostAddress(ipRpc));
+	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client, SLOT(slotInit()));
 	connect(thread_rpc_client, SIGNAL(started()), this, SLOT(_slotStart()));
@@ -84,7 +96,7 @@ int AtlantTabWidget::createRPC()
 
 	_rpc_client->setParent(0);
 	_rpc_client->moveToThread(thread_rpc_client);
-	thread_rpc_client->start();
+	thread_rpc_client->start();*/
 
 	return 0;
 }

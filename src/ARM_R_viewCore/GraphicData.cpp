@@ -66,12 +66,12 @@ GraphicData::~GraphicData()
 	emit signalFinished();
 }
 
-void GraphicData::set_data(QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::set_data(QVector<QPointF>& vecFFT, bool isComplex)
 {
     emit signalSetData(vecFFT, isComplex);
 }
 
-void GraphicData::set_data(quint32 point2, QVector<QPointF> points, bool isComplex)
+void GraphicData::set_data(quint32 point2, QVector<QPointF>& points, bool isComplex)
 {
     emit signalSetCorData(point2, points, isComplex);
 }

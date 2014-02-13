@@ -4,10 +4,10 @@
 class IRPC
 {
 public:
-    virtual ~IRPC(){};
+	virtual ~IRPC(){}
 
-    virtual int start()     = 0;
-    virtual int stop()      = 0;
+	virtual int slotStart()     = 0;
+	virtual int slotStop()      = 0;
 
 };
 

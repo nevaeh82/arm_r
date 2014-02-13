@@ -7,7 +7,7 @@
 class IGraphicWidget
 {
 public:
-    virtual ~IGraphicWidget(){};
+	virtual ~IGraphicWidget(){}
 	virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)   = 0;
 	virtual void setSignal(float* spectrum, float* spectrum_peak_hold)                                                          = 0;
 	virtual void setDefModulation(QString modulation)																			= 0;

@@ -86,7 +86,6 @@ HEADERS += \
     SettingsTree/TreeItem.h \
     SettingsTree/TreeModel.h \
     SettingsTree/TreeWidgetDelegate.h \
-    Tabs/RPC/RpcDefines.h \
     Interfaces/IDbChangedListener.h \
     Interfaces/ISettingsChangedListener.h \
     UiDefines.h

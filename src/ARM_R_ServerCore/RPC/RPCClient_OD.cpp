@@ -48,7 +48,7 @@ void RPCClient_OD::_slotGetData(rpc_flakon_msg msg_ptr)
     int id = 0;
     IMessage *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
-    quint64 cid = _server->get_client_id(this);
+    quint64 cid = _server->getClientId(this);
     switch(type1)
     {
     case FLAKON_BPLA:

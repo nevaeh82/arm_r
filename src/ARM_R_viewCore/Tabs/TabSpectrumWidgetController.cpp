@@ -114,8 +114,20 @@ int TabSpectrumWidgetController::init()
 
 int TabSpectrumWidgetController::createRPC()
 {
-	_rpc_client1 = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM);
-	QThread *thread_rpc_client = new QThread;
+	QString settingsFile = QCoreApplication::applicationDirPath();
+	settingsFile.append("/Tabs/RPC.ini");
+
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QSettings m_settings(settingsFile, QSettings::IniFormat);
+
+	m_settings.setIniCodec(codec);
+
+	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
+	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
+
+	_rpc_client1 = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM, this);
+	_rpc_client1->start(portRpc, QHostAddress(ipRpc));
+	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));
 
@@ -127,9 +139,9 @@ int TabSpectrumWidgetController::createRPC()
 	connect(this, SIGNAL(signalStopRPC()), _rpc_client1, SLOT(slotStop()));
 	connect(this, SIGNAL(signalFinishRPC()), _rpc_client1, SLOT(slotFinish()));
 
-	_rpc_client1->setParent(0);
+	//_rpc_client1->setParent(0);
 	_rpc_client1->moveToThread(thread_rpc_client);
-	thread_rpc_client->start();
+	thread_rpc_client->start();*/
 
 	return 0;
 }
@@ -172,7 +184,7 @@ int TabSpectrumWidgetController::createView()
 
 	/// TODO: update
 	/*_controlPRM = new ControlPRM(0, this);
-	_dock_controlPRM = new QDockWidget(tr("Управление ПРМ300В"), this);
+	_dock_controlPRM = new QDockWidget(tr("Управление П� М300В"), this);
 	_dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
 	_dock_controlPRM->setWidget(_controlPRM);
 
@@ -321,7 +333,7 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 		return;
 	}
 
-	_rpc_client1->set_command(msg);
+	_rpc_client1->setCommand(msg);
 }
 
 
