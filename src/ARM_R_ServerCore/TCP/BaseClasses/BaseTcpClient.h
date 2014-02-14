@@ -44,14 +44,14 @@ private slots:
 	void onSocketReadyRead();
 	void onSocketDisplayError(QAbstractSocket::SocketError socketError);
 
-	void connectToHostInternalSlot(const QString &host, const quint32 &port);
+	void connectToHostInternalSlot(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSlot();
-	void writeDataInternalSlot(const QByteArray &data);
+	void writeDataInternalSlot(const QByteArray& data);
 
 signals:
-	void connectToHostInternalSignal(const QString &host, const quint32 &port);
+	void connectToHostInternalSignal(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSignal();
-	void writeDataInternalSignal(const QByteArray &data);
+	void writeDataInternalSignal(const QByteArray& data);
 };
 
 #endif // BASETCPCLIENT_H

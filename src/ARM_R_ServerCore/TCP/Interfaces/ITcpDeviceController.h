@@ -2,7 +2,7 @@
 #define ITCPDEVICECONTROLLER_H
 
 #include <qglobal.h>
-class QObject;
+#include "Interfaces/IMessage.h"
 
 class ITcpDeviceController
 {
@@ -13,7 +13,7 @@ public:
 	virtual void connectToHost(const QString& host, const quint32& port)	= 0;
 	virtual void disconnectFromHost()	= 0;
 	virtual bool isConnected()	= 0;
-	virtual void sendData(const QByteArray& data)	= 0;
+	virtual void sendData(const IMessage<QByteArray>* message)	= 0;
 	virtual QObject* asQObject()	= 0;
 };
 

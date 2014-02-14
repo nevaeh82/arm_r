@@ -1,8 +1,7 @@
-#ifndef ITCPLISTENER_H
-#define ITCPLISTENER_H
+#ifndef ITCPRECEIVER_H
+#define ITCPRECEIVER_H
 
 class QVariant;
-
 class ITcpReceiver
 {
 
@@ -11,4 +10,4 @@ public:
 	virtual void onDataReceived(const QVariant& argument)	= 0;
 };
 
-#endif // ITCPLISTENER_H
+#endif // ITCPRECEIVER_H

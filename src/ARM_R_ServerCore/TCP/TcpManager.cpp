@@ -68,7 +68,7 @@ QObject* TcpManager::asQObject()
 	return this;
 }
 
-void TcpManager::onDataReceived(const QVariant& argument)
+void TcpManager::onMessageReceived(const QString& device, const IMessage<QByteArray>* argument)
 {
 	/// TODO
 }

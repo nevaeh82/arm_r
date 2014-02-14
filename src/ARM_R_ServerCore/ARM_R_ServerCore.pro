@@ -101,4 +101,6 @@ HEADERS += \
     TCP/TcpPRM300Controller.h \
     TCP/TcpPRM300Coder.h \
     TCP/TcpAtlantController.h \
-    TCP/TcpAtlantCoder.h
+    TCP/TcpAtlantCoder.h \
+    TCP/TcpDefines.h \
+    TCP/Interfaces/ITcpListener.h

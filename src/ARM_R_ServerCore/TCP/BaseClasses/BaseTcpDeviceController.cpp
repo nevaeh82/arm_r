@@ -12,8 +12,7 @@ BaseTcpDeviceController::BaseTcpDeviceController(Pw::Logger::ILogger* logger, QO
 
 	connect(this, SIGNAL(connectToHostInternalSignal(QString,quint32)), this, SLOT(connectToHostInternalSlot(QString,quint32)));
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
-	connect(this, SIGNAL(sendDataInternalSignal(QByteArray)), this, SLOT(sendDataInternalSlot(QByteArray)));
-	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
+	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
 }
 
 BaseTcpDeviceController::~BaseTcpDeviceController()
@@ -36,9 +35,9 @@ bool BaseTcpDeviceController::isConnected()
 	return m_tcpClient->isConnected();
 }
 
-void BaseTcpDeviceController::sendData(const QByteArray& data)
+void BaseTcpDeviceController::sendData(const IMessage<QByteArray>* message)
 {
-	emit sendDataInternalSignal(data);
+	emit sendDataInternalSignal(message);
 }
 
 QObject* BaseTcpDeviceController::asQObject()
@@ -48,7 +47,11 @@ QObject* BaseTcpDeviceController::asQObject()
 
 void BaseTcpDeviceController::onDataReceived(const QVariant& argument)
 {
-	emit onDataReceivedInternalSignal(argument);
+	IMessage<QByteArray>* encodedData = m_tcpDeviceCoder->encode(argument.toByteArray());
+
+	foreach(ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(BASE_TCP_DEVICE, QVariant(encodedData));
+	}
 }
 
 void BaseTcpDeviceController::connectToHostInternalSlot(const QString& host, const quint32& port)
@@ -61,17 +64,9 @@ void BaseTcpDeviceController::disconnectFromHostInternalSlot()
 	m_tcpClient->disconnectFromHost();
 }
 
-void BaseTcpDeviceController::sendDataInternalSlot(const QByteArray& data)
+void BaseTcpDeviceController::sendDataInternalSlot(const IMessage<QByteArray>* message)
 {
-	QByteArray encodedData = m_tcpDeviceCoder->encode(data);
-	m_tcpClient->writeData(encodedData);
+	QByteArray decodedData = m_tcpDeviceCoder->decode(message);
+	m_tcpClient->writeData(decodedData);
 }
 
-void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argument)
-{
-	QByteArray decodedData = m_tcpDeviceCoder->decode(argument.toByteArray());
-
-	foreach(ITcpReceiver* receiver, m_receiversList) {
-		receiver->onDataReceived(QVariant(decodedData));
-	}
-}

@@ -45,4 +45,6 @@ HEADERS += \
     Interfaces/IRpcControllerBase.h \
     Interfaces/IRpcListener.h \
     Rpc/RpcDefines.h \  
-    TcpDevicesDefines.h
+    TcpDevicesDefines.h \
+    Message.h \
+    Interfaces/IMessage.h

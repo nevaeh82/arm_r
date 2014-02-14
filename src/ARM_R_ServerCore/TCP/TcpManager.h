@@ -8,7 +8,7 @@
 #include <PwLogger/PwLogger.h>
 
 #include "Interfaces/ITcpManager.h"
-#include "Interfaces/ITcpReceiver.h"
+#include "Interfaces/ITcpListener.h"
 #include "../RPC/IRPC.h"
 
 #include "TcpDevicesDefines.h"
@@ -16,7 +16,7 @@
 #include "TcpAtlantController.h"
 #include "TcpPRM300Controller.h"
 
-class TcpManager : public QObject, public ITcpManager, public ITcpReceiver
+class TcpManager : public QObject, public ITcpManager, public ITcpListener
 {
 	Q_OBJECT
 
@@ -36,9 +36,9 @@ public:
 	virtual void setRpcServer(IRPC* rpcServer);
 	virtual QObject* asQObject();
 
-	// ITcpReceiver interface
+	// ITcpListener interface
 public:
-	virtual void onDataReceived(const QVariant& argument);
+	virtual void onMessageReceived(const QString& device, const IMessage<QByteArray>* argument);
 
 signals:
 	void threadTerminateSignal();

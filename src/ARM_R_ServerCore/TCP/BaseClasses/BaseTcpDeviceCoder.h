@@ -5,6 +5,7 @@
 #include <PwLogger/PwLogger.h>
 
 #include "../Interfaces/ITcpDeviceCoder.h"
+#include "../TcpDefines.h"
 
 class BaseTcpDeviceCoder : public QObject, public ITcpDeviceCoder
 {
@@ -19,8 +20,8 @@ public:
 
 	// ITcpDeviceCoder interface
 public:
-	virtual QByteArray encode(const QByteArray& data);
-	virtual QByteArray decode(const QByteArray& data);
+	virtual IMessage<QByteArray>* encode(const QByteArray& data) const;
+	virtual QByteArray decode(const IMessage<QByteArray>* message) const;
 	virtual QObject* asQObject();
 };
 
