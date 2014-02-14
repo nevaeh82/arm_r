@@ -62,9 +62,9 @@ private slots:
 	//void slotRequestData(bool state);
 	void slotEnableKM(bool state);
 
-	void slotShowPeaks(bool);
+	/*void slotShowPeaks(bool);
 
-	void slotShowControlPRM(bool state);
+	void slotShowControlPRM(bool state);*/
 
 signals:
 	//void selected(double x1, double x2, double y1, double y2);
@@ -83,6 +83,9 @@ signals:
 	void setAutoSearchSignal(bool);
 	void selectionTypeChangedSignal(bool);
 	void requestDataSignal(bool);
+
+	void setShowPeaksSignal(bool);
+	void setShowControlPRM(bool);
 };
 
 #endif // GRAPHICWIDGET_H

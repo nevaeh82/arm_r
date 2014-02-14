@@ -202,12 +202,13 @@ void SpectrumWidgetController::init()
 	connect(m_graphicsWidget, SIGNAL(selectionFinishedRedLine(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
 	connect(m_graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
 
-
 	connect(m_view, SIGNAL(setPanoramaSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
 	connect(m_view, SIGNAL(setAutoSearchSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
 	connect(m_view, SIGNAL(selectionTypeChangedSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
 	connect(m_view, SIGNAL(requestDataSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
 
+	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
+	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
 }
 
 void SpectrumWidgetController::slotSetEnablePanorama(bool state)
@@ -325,4 +326,15 @@ void SpectrumWidgetController::slotIsShowContextMenu()
 void SpectrumWidgetController::slotDoubleClicked(double d1, double d2)
 {
 	emit doubleClickedSignal(m_id);
+}
+
+void SpectrumWidgetController::slotShowPeaks(bool visible)
+{
+	m_graphicsWidget->SetSpectrumVisible(2, visible);
+	m_peakVisible = visible;
+}
+
+void SpectrumWidgetController::slotShowControlPRM(bool state)
+{
+	m_tab->set_show_controlPRM(state);
 }

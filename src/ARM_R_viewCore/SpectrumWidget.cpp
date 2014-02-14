@@ -24,8 +24,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, 
 	connect(ui->getSpectrumCB, SIGNAL(clicked(bool)), this, SLOT(slotRequestData(bool)));*/
 
 	///hide/show hold peaks
-	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SLOT(slotShowPeaks(bool)));
-	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SLOT(slotShowControlPRM(bool)));
+	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowPeaksSignal(bool)));
+	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowControlPRM(bool)));
 	connect(this, SIGNAL(signalCurSelChanged(int)), ui->graphicsWidget, SLOT(slotCurSelectionChanged(int)));
 }
 
