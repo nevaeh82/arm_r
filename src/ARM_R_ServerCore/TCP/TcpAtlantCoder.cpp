@@ -10,7 +10,7 @@ TcpAtlantCoder::~TcpAtlantCoder()
 {
 }
 
-IMessage<QByteArray>* TcpAtlantCoder::encode(const QByteArray& data) const
+IMessage<QByteArray>* TcpAtlantCoder::encode(const QByteArray& data)
 {
 	m_dataFromTcpSocket.append(data);
 	IMessage<QByteArray>* dataToSend = NULL;
@@ -34,7 +34,7 @@ IMessage<QByteArray>* TcpAtlantCoder::encode(const QByteArray& data) const
 	return dataToSend;
 }
 
-QByteArray TcpAtlantCoder::decode(const IMessage<QByteArray>* message) const
+QByteArray TcpAtlantCoder::decode(const IMessage<QByteArray>* message)
 {
 	QByteArray dataToSend;
 	if (message->type() == TCP_ATLANT_REQUEST_SET_FREQUENCY) {

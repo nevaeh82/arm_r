@@ -21,6 +21,8 @@ class BaseTcpDeviceController : public QObject, public ITcpDeviceController, pub
 protected:
 	BaseTcpClient* m_tcpClient;
 	BaseTcpDeviceCoder* m_tcpDeviceCoder;
+	QString m_tcpDeviceName;
+
 	Pw::Logger::ILogger* m_logger;
 
 public:

@@ -9,12 +9,12 @@ TcpPRM300Coder::~TcpPRM300Coder()
 {
 }
 
-QByteArray TcpPRM300Coder::encode(const QByteArray& data)
+IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 {
 	/// TODO
 }
 
-QByteArray TcpPRM300Coder::decode(const QByteArray& data)
+QByteArray TcpPRM300Coder::decode(const IMessage<QByteArray>* message)
 {
 	/// TODO
 }

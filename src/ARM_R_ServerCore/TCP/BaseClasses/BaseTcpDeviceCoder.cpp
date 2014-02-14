@@ -10,12 +10,12 @@ BaseTcpDeviceCoder::~BaseTcpDeviceCoder()
 {
 }
 
-IMessage<QByteArray>* BaseTcpDeviceCoder::encode(const QByteArray& data) const
+IMessage<QByteArray>* BaseTcpDeviceCoder::encode(const QByteArray& data)
 {
 	return new Message<QByteArray>(TCP_EMPTY_MESSAGE, data);
 }
 
-QByteArray BaseTcpDeviceCoder::decode(const IMessage<QByteArray>* message) const
+QByteArray BaseTcpDeviceCoder::decode(const IMessage<QByteArray>* message)
 {
 	return message->data();
 }
