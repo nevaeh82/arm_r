@@ -114,7 +114,7 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
 {
-	m_graphicsWidget->SetSpectrumVisible(2, _peak_visible);
+	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 
 	float maxv = 0.0;
 	float minv = 0.0;
@@ -125,7 +125,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
 	m_isComplex = false;
-	m_graphicsWidget->Setup(_isComplex,_bandwidth,tr("Level"), spectrum, m_pointCount, m_spectrumPeakHold, m_pointCount, false, false, minv, maxv);
+	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 	m_mux.unlock();
 
 }
