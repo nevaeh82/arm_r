@@ -8,3 +8,18 @@ TcpPRM300Coder::TcpPRM300Coder(QObject* parent) :
 TcpPRM300Coder::~TcpPRM300Coder()
 {
 }
+
+QByteArray TcpPRM300Coder::encode(const QByteArray& data)
+{
+	/// TODO
+}
+
+QByteArray TcpPRM300Coder::decode(const QByteArray& data)
+{
+	/// TODO
+}
+
+QObject* TcpPRM300Coder::asQObject()
+{
+	return this;
+}

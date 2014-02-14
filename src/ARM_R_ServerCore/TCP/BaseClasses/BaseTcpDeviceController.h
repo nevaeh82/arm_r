@@ -2,6 +2,7 @@
 #define BASETCPDEVICECONTROLLER_H
 
 #include <QObject>
+#include <QVariant>
 
 #include <PwLogger/PwLogger.h>
 
@@ -29,13 +30,25 @@ public:
 public:
 	virtual void connectToHost(const QString& host, const quint32& port);
 	virtual void disconnectFromHost();
-	virtual void isConnected();
+	virtual bool isConnected();
 	virtual void sendData(const QByteArray& data);
 	virtual QObject* asQObject();
 
 	// ITcpReceiver interface
 public:
 	virtual void onDataReceived(const QVariant& argument); // from BaseTcpClient
+
+signals:
+	void connectToHostInternalSignal(const QString& host, const quint32& port);
+	void disconnectFromHostInternalSignal();
+	void sendDataInternalSignal(const QByteArray& data);
+	void onDataReceivedInternalSignal(const QVariant& argument);
+
+private slots:
+	void connectToHostInternalSlot(const QString& host, const quint32& port);
+	void disconnectFromHostInternalSlot();
+	void sendDataInternalSlot(const QByteArray& data);
+	void onDataReceivedInternalSlot(const QVariant& argument);
 };
 
 #endif // BASETCPDEVICECONTROLLER_H

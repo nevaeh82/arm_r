@@ -1,14 +1,13 @@
-#ifndef TCPFLAKONCODER_H
-#define TCPFLAKONCODER_H
+#ifndef TCPATLANTCODER_H
+#define TCPATLANTCODER_H
 
 #include "BaseClasses/BaseTcpDeviceCoder.h"
 
-class TcpFlakonCoder : public BaseTcpDeviceCoder
+class TcpAtlantCoder : public BaseTcpDeviceCoder
 {
 	Q_OBJECT
 public:
-	explicit TcpFlakonCoder(QObject* parent = NULL);
-	virtual ~TcpFlakonCoder();
+	explicit TcpAtlantCoder(QObject* parent = NULL);
 
 	// ITcpDeviceCoder interface
 public:
@@ -17,4 +16,4 @@ public:
 	virtual QObject* asQObject();
 };
 
-#endif // TCPFLAKONCODER_H
+#endif // TCPATLANTCODER_H

@@ -9,3 +9,8 @@ TcpFlakonController::TcpFlakonController(QObject* parent) :
 TcpFlakonController::~TcpFlakonController()
 {
 }
+
+QObject* TcpFlakonController::asQObject()
+{
+	return this;
+}

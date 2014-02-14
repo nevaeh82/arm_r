@@ -47,7 +47,9 @@ SOURCES += \
     TCP/TcpFlakonCoder.cpp \
     TCP/TcpManager.cpp \
     TCP/TcpPRM300Controller.cpp \
-    TCP/TcpPRM300Coder.cpp
+    TCP/TcpPRM300Coder.cpp \
+    TCP/TcpAtlantController.cpp \
+    TCP/TcpAtlantCoder.cpp
 
 HEADERS += \
 	RPC/RPCServer.h \
@@ -97,4 +99,6 @@ HEADERS += \
     TCP/Interfaces/ITcpManager.h \
     TCP/TcpManager.h \
     TCP/TcpPRM300Controller.h \
-    TCP/TcpPRM300Coder.h
+    TCP/TcpPRM300Coder.h \
+    TCP/TcpAtlantController.h \
+    TCP/TcpAtlantCoder.h

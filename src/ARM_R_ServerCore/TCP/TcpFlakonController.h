@@ -11,6 +11,10 @@ class TcpFlakonController : public BaseTcpDeviceController
 public:
 	explicit TcpFlakonController(QObject* parent = NULL);
 	virtual ~TcpFlakonController();
+
+	// ITcpDeviceController interface
+public:
+	virtual QObject* asQObject();
 };
 
 #endif // TCPFLAKONCONTROLLER_H

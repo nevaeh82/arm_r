@@ -11,8 +11,15 @@ TcpFlakonCoder::~TcpFlakonCoder()
 
 QByteArray TcpFlakonCoder::encode(const QByteArray& data)
 {
+	/// TODO
 }
 
 QByteArray TcpFlakonCoder::decode(const QByteArray& data)
 {
+	/// TODO
+}
+
+QObject* TcpFlakonCoder::asQObject()
+{
+	return this;
 }
