@@ -196,11 +196,52 @@ void SpectrumWidgetController::init()
 	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(slotClearLabels()));
 	connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
 
-	ui->graphicsWidget->setContextMenu(m_graphicsContextMenu);
+	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
 
 	connect(m_graphicsWidget, SIGNAL(SelectionFinished(double,double,double,double)), this, SLOT(slotSelectionFinished(double,double,double,double)));
 	connect(m_graphicsWidget, SIGNAL(selectionFinishedRedLine(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
-	connect(ui->graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
+	connect(m_graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
+
+
+	connect(m_view, SIGNAL(setPanoramaSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
+	connect(m_view, SIGNAL(setAutoSearchSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
+	connect(m_view, SIGNAL(selectionTypeChangedSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
+	connect(m_view, SIGNAL(requestDataSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
+
+}
+
+void SpectrumWidgetController::slotSetEnablePanorama(bool state)
+{
+	m_tab->set_panorama(state);
+}
+
+void SpectrumWidgetController::slotAutoSearch(bool state)
+{
+	m_autoSearch = state;
+
+	if (!m_autoSearch) {
+		m_graphicsWidget->ClearAllDetectedAreas();
+	}
+}
+
+void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
+{
+	if(state){
+		emit signalCurSelChanged(4);
+		return;
+	}
+
+	emit signalCurSelChanged(1);
+
+	m_threshold = -1000;
+}
+
+void SpectrumWidgetController::slotRequestData(bool state)
+{
+	int data[4] = {0, 1, 2, 3};
+	if(state){
+		emit signalRequestData(m_id, 0, &data[0], 4);
+	}
 }
 
 /// add selection to white list

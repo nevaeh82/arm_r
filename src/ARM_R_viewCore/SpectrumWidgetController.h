@@ -74,10 +74,19 @@ private:
 
 signals:
 	void doubleClickedSignal(int);
-	
+	void signalChoosedThreshold(double y);
+	void signalAddSelToLists(int id);
+	void signalCurSelChanged(int);
+	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
+
 public slots:
 	
 private slots:
+	void slotSetEnablePanorama(bool);
+	void slotAutoSearch(bool);
+	void slotSelectiontypeChanged(bool);
+	void slotRequestData(bool);
+
 	void slotCMAddWhiteList();
 	void slotCMAddBlackList();
 	void slotRecognizeSignal();

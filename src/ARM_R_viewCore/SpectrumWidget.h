@@ -53,16 +53,13 @@ public:
 
 	void setControlPrmState(bool state);
 
-private:
-	virtual void mouseDoubleClickEvent ( QMouseEvent * event );
-
 public slots:
 
 private slots:
-	void slotSetEnablePanorama(bool state);
-	void slotAutoSearch(bool state);
-	void slotSelectiontypeChanged(bool);
-	void slotRequestData(bool state);
+	//void slotSetEnablePanorama(bool state);
+	//void slotAutoSearch(bool state);
+	//void slotSelectiontypeChanged(bool);
+	//void slotRequestData(bool state);
 	void slotEnableKM(bool state);
 
 	void slotShowPeaks(bool);
@@ -70,17 +67,22 @@ private slots:
 	void slotShowControlPRM(bool state);
 
 signals:
-	void selected(double x1, double x2, double y1, double y2);
-	void signalChoosedThreshold(double y);
-	void signalCurSelChanged(int);
-	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
+	//void selected(double x1, double x2, double y1, double y2);
+	//void signalChoosedThreshold(double y);
+	//void signalCurSelChanged(int);
+	//void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
 	void signalEnableKM(bool state);
 
 	/// id - is id of ilsts (1 - White list, 2 - Black list)
-	void signalAddSelToLists(int id);
+	//void signalAddSelToLists(int id);
 
-	void signalFinished();
-	void signalNeedToUpdate();
+	//void signalFinished();
+	//void signalNeedToUpdate();
+
+	void setPanoramaSignal(bool);
+	void setAutoSearchSignal(bool);
+	void selectionTypeChangedSignal(bool);
+	void requestDataSignal(bool);
 };
 
 #endif // GRAPHICWIDGET_H
