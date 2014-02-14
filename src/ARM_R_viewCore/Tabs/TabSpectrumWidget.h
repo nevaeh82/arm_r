@@ -8,13 +8,14 @@
 
 #include <QThread>
 
-
-
 #include "Abstracts/ITabWidget.h"
 #include "Abstracts/ICommonComponents.h"
 
+#include "Interfaces/ISpectrumWidget.h"
+
 #include "TabsProperty.h"
 #include "SpectrumWidget.h"
+#include "SpectrumWidgetController.h"
 #include "GraphicData.h"
 
 #include "Correlations/CorrelationWidget.h"
@@ -43,10 +44,11 @@ class TabSpectrumWidget: public QWidget
 private:
 	Ui::TabSpectrumWidget*     ui;
 
-	QList<SpectrumWidget*> m_spectrumWidgetsList;
+	QList<ISpectrumWidget*> m_spectrumWidgetsList;
 	QList<CorrelationWidget*> m_correlationWidgetsList;
 
 	SpectrumWidget* m_spectrumWidget;
+	SpectrumWidgetController* m_spectrumWidgetController;
 
 	QPixmap*            _pm_round_red;
 	QPixmap*            _pm_round_green;
@@ -63,9 +65,9 @@ public:
 	QWidget* getWidget();
 	QLabel* getIndicator();
 
-	virtual SpectrumWidget* getSpectrumWidget();
+	virtual ISpectrumWidget *getSpectrumWidget();
 
-	virtual void insertSpectrumWidget(SpectrumWidget *spectrumWidget);
+	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual void setIndicatorState(int state);
 
 	QTreeView *getTreeView() const;

@@ -17,7 +17,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 
 	m_peakVisible = false;
 
-	m_id = id;
+	m_id = 0;
 	m_tab = NULL;
 
 	m_spectrumPeakHold = new float[1];
@@ -59,7 +59,10 @@ void SpectrumWidgetController::setup()
 	}
 
 	unsigned int PointCount = (fl.size()/sizeof(float));
-	if (PointCount < 5) {QMessageBox::critical(this, tr("File error"), tr("Very small file or file not found")); return;}
+	if (PointCount < 5) {
+		QMessageBox::critical(m_view, tr("File error"), tr("Very small file or file not found"));
+		return;
+	}
 	float* spectrum = new float[PointCount];
 	fl.read((char*)spectrum,PointCount*sizeof(float));
 	fl.close();
@@ -79,6 +82,11 @@ QString SpectrumWidgetController::getSpectrumName() const
 	return m_view->getSpectrumName();
 }
 
+QWidget *SpectrumWidgetController::getWidget() const
+{
+	return m_view;
+}
+
 void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
 {
 	m_mux.lock();
@@ -87,6 +95,8 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 	m_isComplex = isComplex;
 	m_mux.unlock();
 
+	setFFTSetup(spectrum, spectrum_peak_hold);
+/*
 	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 
 	float maxv = 0.0;
@@ -95,13 +105,30 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 
 	m_graphicsWidget->SetAutoscaleY(true);
 	m_graphicsWidget->SetAlign(0);
-	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
-
+	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*///);
+/*
 	m_isComplex = false;
 	m_graphicsWidget->Setup(m_isComplex,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
-	m_mux.unlock();
+	m_mux.unlock();*/
 }
 
+void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
+{
+	ui->graphicsWidget->SetSpectrumVisible(2, _peak_visible);
+
+	float maxv = 0.0;
+	float minv = 0.0;
+	_mux.lock();
+
+	ui->graphicsWidget->SetAutoscaleY(true);
+	ui->graphicsWidget->SetAlign(0);
+	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
+
+	_isComplex = false;
+	ui->graphicsWidget->Setup(_isComplex,_bandwidth,tr("Level"), spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+	_mux.unlock();
+
+}
 void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_hold)
 {
 	m_mux.lock();
@@ -128,7 +155,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	if(m_rett == 0)
 	{
-		int ret = QMessageBox::warning(this, tr("Attention!"),
+		int ret = QMessageBox::warning(m_view, tr("Attention!"),
 									   tr("Signal was decected!"),
 									   QMessageBox::Cancel, QMessageBox::Ok);
 		m_rett = -101;

@@ -10,7 +10,11 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	ui->setupUi(this);
 
 	m_spectrumWidget = new SpectrumWidget(this);
-	insertSpectrumWidget(m_spectrumWidget);
+
+	m_spectrumWidgetController = new SpectrumWidgetController(this);
+	m_spectrumWidgetController->appendView(m_spectrumWidget);
+
+	insertSpectrumWidget(m_spectrumWidgetController);
 
 	_pm_round_red = new QPixmap(":/images/signals/images/bullet_red.png");
 	_pm_round_green = new QPixmap(":/images/signals/images/bullet_green.png");
@@ -20,7 +24,7 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
 
-	connect(m_spectrumWidget, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
+	connect(m_spectrumWidgetController, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
 
 	///TODO: recheck
 	activate();
@@ -40,8 +44,8 @@ void TabSpectrumWidget::activate()
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}
 
-	foreach (SpectrumWidget* spectrumWidget, m_spectrumWidgetsList) {
-		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget);
+	foreach (ISpectrumWidget* spectrumWidget, m_spectrumWidgetsList) {
+		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 	}
 }
 
@@ -60,24 +64,26 @@ QLabel *TabSpectrumWidget::getIndicator()
 	return m_indicatorLabel;
 }
 
-SpectrumWidget *TabSpectrumWidget::getSpectrumWidget()
+ISpectrumWidget *TabSpectrumWidget::getSpectrumWidget()
 {
+	return m_spectrumWidgetController;
+	/*
 	if (m_spectrumWidgetsList.isEmpty()) {
 		return NULL;
 	}
 
-	return m_spectrumWidgetsList.at(0);
+	return m_spectrumWidgetsList.at(0);*/
 }
 
-void TabSpectrumWidget::insertSpectrumWidget(SpectrumWidget *spectrumWidget)
+void TabSpectrumWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidget)
 {
-	if (NULL ==spectrumWidget) {
+	if (NULL == spectrumWidget) {
 		return;
 	}
 
 	m_spectrumWidgetsList.append(spectrumWidget);
 
-	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget);
+	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 }
 
 void TabSpectrumWidget::setIndicatorState(int state)

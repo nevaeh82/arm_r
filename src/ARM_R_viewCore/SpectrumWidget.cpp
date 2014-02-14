@@ -3,8 +3,6 @@
 
 #include "ui_SpectrumWidget.h"
 
-#define TO_MHZ	1000000
-
 SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
 	QWidget(parent, flags), ui(new Ui::SpectrumWidget)
 {
@@ -158,7 +156,7 @@ void SpectrumWidget::slotSetCorrelations(int id, const QVector<QPointF> vecFFT, 
 }*/
 
 /// show/hide peaks
-void SpectrumWidget::slotShowPeaks(bool visible)
+/*void SpectrumWidget::slotShowPeaks(bool visible)
 {
 	ui->graphicsWidget->SetSpectrumVisible(2, visible);
 	m_peakVisible = visible;
@@ -168,7 +166,7 @@ void SpectrumWidget::slotShowControlPRM(bool state)
 {
 	m_tab->set_show_controlPRM(state);
 }
-
+*/
 /*void SpectrumWidget::slotDoubleClicked(double d1, double d2)
 {
 	emit doubleClickedSignal(m_id);

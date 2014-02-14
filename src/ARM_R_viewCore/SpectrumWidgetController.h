@@ -5,6 +5,7 @@
 #include <QMutex>
 #include <QMenu>
 #include <QString>
+#include <QMessageBox>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
@@ -14,9 +15,11 @@
 #include "modules/gui/multi_graphics/components_relation.h"
 #include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
+#define TO_MHZ	1000000
+
 class SpectrumWidget;
 
-class SpectrumWidgetController : public QObject, public IGraphicWidget, public ISpectrumWidget, public IController<SpectrumWidget>
+class SpectrumWidgetController : public QObject, public ISpectrumWidget, public IController<SpectrumWidget>
 {
 	Q_OBJECT
 private:
@@ -57,7 +60,11 @@ public:
 	void setTab(ITabSpectrum*);
 	void setId(const int);
 	void setSpectrumName(const QString&);
+
+	void setFFTSetup(float* spectrum, float* spectrum_peak_hold);
+
 	QString getSpectrumName() const;
+	QWidget* getWidget() const;
 
 	void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
 	void setSignal(float* spectrum, float* spectrum_peak_hold);

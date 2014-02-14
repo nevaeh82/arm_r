@@ -14,6 +14,7 @@ class TabSpectrumWidgetController : public QObject, public IController<TabSpectr
 
 private:
 	TabSpectrumWidget* m_view;
+	ISpectrumWidget* m_spectrumWidget;
 
 	int                 _id;
 	QString             m_stationName;
@@ -53,9 +54,9 @@ public:
 	QWidget* getWidget();
 	QLabel* getIndicator();
 
-	virtual SpectrumWidget* getSpectrumWidget();
+	virtual ISpectrumWidget *getSpectrumWidget();
 
-	virtual void insertSpectrumWidget(SpectrumWidget *spectrumWidget);
+	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual int createRPC();
@@ -98,6 +99,9 @@ private slots:
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);
+
+	void slotSetFFTSetup(float*, float*);
+	void slotSetFFT(float*,float*);
 
 private:
 	int init();

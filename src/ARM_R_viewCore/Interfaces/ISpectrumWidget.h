@@ -3,17 +3,24 @@
 
 class QString;
 class ITabSpectrum;
+class QWidget;
 
-class ISpectrumWidget
+#include "IGraphicWidget.h"
+
+class ISpectrumWidget: public IGraphicWidget
 {
 	public:
-	virtual ~ISpectrumWidget(){}
+		virtual ~ISpectrumWidget(){}
 
-	virtual void setTab(ITabSpectrum*) = 0;
-	virtual void setId(const int) = 0;
-	virtual void setSpectrumName(const QString&) = 0;
+		virtual void setTab(ITabSpectrum*) = 0;
+		virtual void setId(const int) = 0;
+		virtual void setSpectrumName(const QString&) = 0;
+		virtual void setControlPrmState(bool) = 0;
 
-	virtual QString getSpectrumName() const = 0;
+		virtual void setFFTSetup(float* spectrum, float* spectrum_peak_hold) = 0;
+
+		virtual QString getSpectrumName() const = 0;
+		virtual QWidget* getWidget() const = 0;
 };
 
 #endif // ISPECTRUMWIDGET_H
