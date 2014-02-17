@@ -74,9 +74,23 @@ void CorrelationWidget::setSignalSetup(float *spectrum, float *spectrum_peak_hol
     _mux.lock();
     _bandwidth = bandwidth;
     _pointCount = PointCount;
-    _isComplex = isComplex;
-    _mux.unlock();
-    emit signalSetSignalSetup(spectrum, spectrum_peak_hold);
+	_isComplex = isComplex;
+
+   float maxv = 1.0;
+   float minv = 0.0;
+
+	ui->spectrumWidget->SetAutoscaleY(false);
+//        spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
+	ui->spectrumWidget->SetAlign(3);
+
+
+	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
+
+	ui->spectrumWidget->Setup(true,_bandwidth,tr("Level"), spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
+	ui->spectrumWidget->SetSpectrumVisible(1, true);
+	_mux.unlock();
+
+   // emit signalSetSignalSetup(spectrum, spectrum_peak_hold);
 }
 
 void CorrelationWidget::setSignal(float *spectrum, float *spectrum_peak_hold)
@@ -96,7 +110,7 @@ void CorrelationWidget::setDefModulation(QString modulation)
 
 void CorrelationWidget::setLabelName(QString base, QString second)
 {
-    emit signalSetLabelName(base, second);
+	emit signalSetLabelName(base, second);
 }
 
 void CorrelationWidget::clear()
@@ -109,7 +123,7 @@ void CorrelationWidget::clear()
 
 void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_peak_hold)
 {
-    _mux.lock();
+  /*  _mux.lock();
 
        float maxv = 1.0;
        float minv = 0.0;
@@ -123,7 +137,7 @@ void CorrelationWidget::_slotSetSignalSetup(float *spectrum, float *spectrum_pea
 
 	ui->spectrumWidget->Setup(true,_bandwidth,tr("Level"), spectrum, _pointCount, spectrum_peak_hold, _pointCount,false, false, minv, maxv);
 	ui->spectrumWidget->SetSpectrumVisible(1, true);
-    _mux.unlock();
+	_mux.unlock();*/
 }
 
 void CorrelationWidget::_slotSetSignal(float *spectrum, float *spectrum_peak_hold)
@@ -144,11 +158,11 @@ void CorrelationWidget::_slotSetSignal(float *spectrum, float *spectrum_peak_hol
 void CorrelationWidget::_slotSetLabelName(QString base, QString second)
 {
 
-    QString name = base + " - " + second;
-    if(_label_name != name)
-    {
-        _label_name = name;
+	QString name = base + " - " + second;
+	if(_label_name != name)
+	{
+		_label_name = name;
 		ui->spectrumWidget->ClearAllLabels();
 		ui->spectrumWidget->SetLabel(0, _label_name);
-    }
+	}
 }

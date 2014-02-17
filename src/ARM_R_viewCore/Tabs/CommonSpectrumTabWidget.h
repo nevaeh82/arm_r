@@ -21,7 +21,7 @@ class CommonSpectrumTabWidget : public QWidget, public ITabWidget
 private:
 	Ui::CommonSpectrumTabWidget *ui;
 
-	QList<SpectrumWidget*> m_widgetList;
+	QList<ISpectrumWidget*> m_widgetList;
 
 	ICommonComponents* m_correlationComponent;
 
@@ -43,9 +43,9 @@ public:
 	virtual void deactivate();
 
 	QWidget* getWidget();
-	SpectrumWidget* getSpectrumWidget();
+	ISpectrumWidget* getSpectrumWidget();
 
-	virtual void insertSpectrumWidget(SpectrumWidget *spectrumWidget);
+	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	QLabel* getIndicator();

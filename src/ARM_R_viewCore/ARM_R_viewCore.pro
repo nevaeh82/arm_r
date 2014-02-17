@@ -42,7 +42,8 @@ SOURCES += \
     DB/DbManager.cpp \
     SettingsTree/TreeItem.cpp \
     SettingsTree/TreeModel.cpp \
-    SettingsTree/TreeWidgetDelegate.cpp
+    SettingsTree/TreeWidgetDelegate.cpp \
+    SpectrumWidgetController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -88,7 +89,9 @@ HEADERS += \
     SettingsTree/TreeWidgetDelegate.h \
     Interfaces/IDbChangedListener.h \
     Interfaces/ISettingsChangedListener.h \
-    UiDefines.h
+    UiDefines.h \
+    SpectrumWidgetController.h \
+    Interfaces/ISpectrumWidget.h
 
 FORMS += \
     ControlPanel.ui \

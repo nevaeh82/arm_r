@@ -74,12 +74,12 @@ QLabel *TabSpectrumWidgetController::getIndicator()
 	return m_indicatorLabel;
 }
 
-SpectrumWidget *TabSpectrumWidgetController::getSpectrumWidget()
+ISpectrumWidget *TabSpectrumWidgetController::getSpectrumWidget()
 {
 	return m_view->getSpectrumWidget();
 }
 
-void TabSpectrumWidgetController::insertSpectrumWidget(SpectrumWidget *spectrumWidget)
+void TabSpectrumWidgetController::insertSpectrumWidget(ISpectrumWidget *spectrumWidget)
 {
 	m_view->insertSpectrumWidget(spectrumWidget);
 }
@@ -167,20 +167,20 @@ int TabSpectrumWidgetController::createView()
 		m_view->insertCorrelationWidget((static_cast<CorrelationWidget *>(_common_correlations->get(i))));
 	}
 
-	SpectrumWidget* spectrumWidget = m_view->getSpectrumWidget();
+	m_spectrumWidget = m_view->getSpectrumWidget();
 
-	if (NULL == spectrumWidget) {
+	if (NULL == m_spectrumWidget) {
 		return 0;
 	}
 
-	spectrumWidget->setTab(this);
-	spectrumWidget->setId(_id);
-	spectrumWidget->setSpectrumName(m_stationName);
+	m_spectrumWidget->setTab(this);
+	m_spectrumWidget->setId(_id);
+	m_spectrumWidget->setSpectrumName(m_stationName);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
 	/// add to common spectra
-	_common_components->set(_id, spectrumWidget);
+	_common_components->set(_id, m_spectrumWidget);
 
 	/// TODO: update
 	/*_controlPRM = new ControlPRM(0, this);
@@ -207,18 +207,18 @@ int TabSpectrumWidgetController::createView()
 
 	//
 
-	_spectrumData = new GraphicData(spectrumWidget, _common_correlations, _tab_manager, _id);
+	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, _tab_manager, _id);
 
-	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), spectrumWidget, SLOT(_slotSetFFTSetup(float*,float*)));
-	connect(_spectrumData, SIGNAL(signalData(float*,float*)), spectrumWidget, SLOT(_slotSetFFT(float*,float*)));
+	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
+	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));
 
-	QThread *thread_spectrum_client = new QThread;
+	//QThread *thread_spectrum_client = new QThread;
 
-	connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
-	connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
-	connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
-	_spectrumData->moveToThread(thread_spectrum_client);
-	thread_spectrum_client->start();
+	//connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
+	//connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
+	//connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
+	//_spectrumData->moveToThread(thread_spectrum_client);
+	//thread_spectrum_client->start();
 
 	return 0;
 }
@@ -373,7 +373,7 @@ void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
 		return;
 	}
 
-	m_view->getSpectrumWidget()->set_coontrolPRM_state(state);
+	m_view->getSpectrumWidget()->setControlPrmState(state);
 }
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
@@ -407,4 +407,14 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 		_spectrumData->set_panorama_stop();
 	}
 
+}
+
+void TabSpectrumWidgetController::slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
+{
+	m_spectrumWidget->setFFTSetup(spectrum, spectrum_peak_hold);
+}
+
+void TabSpectrumWidgetController::slotSetFFT(float* spectrum, float* spectrum_peak_hold)
+{
+	m_spectrumWidget->setSignal(spectrum, spectrum_peak_hold);
 }
