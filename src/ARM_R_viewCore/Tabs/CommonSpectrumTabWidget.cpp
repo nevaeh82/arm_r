@@ -38,9 +38,9 @@ CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
 
 void CommonSpectrumTabWidget::clearSpectrumWidgetsContainer()
 {
-	foreach (SpectrumWidget* widget , m_widgetList) {
+	foreach (ISpectrumWidget* widget , m_widgetList) {
 
-		ui->spectumWidgetsContainer->removeWidget(widget);
+		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
 	}
 
 	m_widgetList.clear();
@@ -64,17 +64,17 @@ void CommonSpectrumTabWidget::activate()
 		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(m_correlationComponent->get(i))));
 	}
 
-	foreach (SpectrumWidget* widget , m_widgetList) {
+	foreach (ISpectrumWidget* widget , m_widgetList) {
 
-		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget);
+		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
 	}
 }
 
 void CommonSpectrumTabWidget::deactivate()
 {
-	foreach (SpectrumWidget* widget , m_widgetList) {
+	foreach (ISpectrumWidget* widget , m_widgetList) {
 
-		ui->spectumWidgetsContainer->removeWidget(widget);
+		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
 	}
 }
 
@@ -83,7 +83,7 @@ QWidget *CommonSpectrumTabWidget::getWidget()
 	return this;
 }
 
-SpectrumWidget *CommonSpectrumTabWidget::getSpectrumWidget()
+ISpectrumWidget *CommonSpectrumTabWidget::getSpectrumWidget()
 {
 	return NULL;
 }
@@ -114,7 +114,7 @@ int CommonSpectrumTabWidget::createTree()
 }
 
 
-void CommonSpectrumTabWidget::insertSpectrumWidget(SpectrumWidget *spectrumWidget)
+void CommonSpectrumTabWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidget)
 {
 	if (NULL ==spectrumWidget) {
 		return;
@@ -122,13 +122,13 @@ void CommonSpectrumTabWidget::insertSpectrumWidget(SpectrumWidget *spectrumWidge
 
 	m_widgetList.append(spectrumWidget);
 
-	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget);
+	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 
 	m_treeModel->onCleanSettings();
 
 	QStringList stationsList;
 
-	foreach (SpectrumWidget* widget , m_widgetList) {
+	foreach (ISpectrumWidget* widget , m_widgetList) {
 		stationsList << widget->getSpectrumName();
 	}
 

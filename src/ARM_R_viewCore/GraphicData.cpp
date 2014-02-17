@@ -278,9 +278,9 @@ void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool
 //        emit signalData(_spectrum, _spectrum_peak_hold);
 
         gr_correlation->setSignal(sp_correlation, peaks_correlation);
-    }
+	}
 
-    gr_correlation->setLabelName(base, second);
+	gr_correlation->setLabelName(base, second);
 
 }
 

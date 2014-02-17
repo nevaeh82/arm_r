@@ -19,150 +19,49 @@
 #include <QSpinBox>
 #include <QPushButton>
 
-
 #include <QTimer>
 
-#include "modules/gui/multi_graphics/components_relation.h"
-#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
-
-#include "Tabs/ITabSpectrum.h"
-#include "IGraphicWidget.h"
-
 #include "Common/CommandMessage.h"
-
+#include "SpectrumWidgetController.h"
 
 namespace Ui {
 class SpectrumWidget;
 }
 
-class SpectrumWidget : public QWidget, public IGraphicWidget
+class SpectrumWidget : public QWidget
 {
 	Q_OBJECT
+private:
+	Ui::SpectrumWidget*	ui;
+
+	SpectrumWidgetController* m_controller;
+
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
 	~SpectrumWidget();
 
-	void setTab(ITabSpectrum* tab);
-	void setId(const int id);
 	void setSpectrumName(const QString& name);
 	QString getSpectrumName() const;
 
-private:
-	Ui::SpectrumWidget*     ui;
+	Q_MG_SpectrumInterface* getGraphicsWidget();
 
-	bool					m_autoSearch;
-	double					m_current_frequency;
-
-	int                     _id;
-	float                   *_spectrum_peak_hold;
-	float                   *_spectrum_peak_hold_corr;
-
-	ITabSpectrum*           _tab;
-
-	double                  _bandwidth;
-	int                     _pointCount;
-	bool                    _isComplex;
-
-	QMutex                  _mux;
-	bool                    _enable_correlation;
-	QMenu*                  m_graphicsContextMenu;
-
-	double                  _center_freq_sel_temp;
-	double                  _center_freq_def_modulation;
-
-	bool                    _peak_visible;
-
-	double                  _threshold;
-	int _rett;
-
-public:
-	Q_MG_SpectrumInterface  *get_spectrum_widget();
-	virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
-	virtual void setSignal(float* spectrum, float* spectrum_peak_hold);
-	virtual bool isGraphicVisible();
-	virtual void setDefModulation(QString modulation);
-	virtual void setLabelName(QString base, QString second);
-
-	virtual void setDetectedAreasUpdate(QVector<QPointF> vec);
-	virtual void setZeroFrequency(double val);
-
-	void setup();
-
-	void set_coontrolPRM_state(bool state);
-
+	void setControlPrmState(bool state);
 
 public slots:
-	void slotSelectionFinished(double x1, double y1, double x2, double y2);
-	void slotSelectionFinishedRedLine(double y);
-	void slotSetCaption(QString name);
-	void slotSetCorrelations(int id, const QVector<QPointF> vecFFT, const bool isComplex);
-	void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
-	void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
-	void _slotSetDefModulation(QString modulation);
-
-	void m_slotSetDetectedAreas(QVector<QPointF> vec);
-
-	//    void slotSetFFT2(QVector<QPointF> vecFFT, const bool isComplex);
-	//    void slotSetParam(int PointCount, double bandwidth, bool isComplex);
-
 
 private slots:
-	void _slotSetEnablePanorama(bool state);
-	void _slotAutoSearch(bool state);
-	void _slotSelectiontypeChanged(bool);
-	void _slotRequestData(bool state);
-	void _slotEnableKM(bool state);
-	void _slotIsShowContextMenu();
-	void _slotCMAddWhiteList();
-	void _slotCMAddBlackList();
-	void _slotRecognizeSignal();
-	void _slotSSCorrelation();
-	void _slotClearLabels();
-
-	void _slotShowPeaks(bool);
-	void _slotSetLabelName(QString base, QString second);
-
-	void _slotShowControlPRM(bool state);
-
-	void _slot_double_clicked(double, double);
-
-	void m_slotSetZeroFrequency(double val);
-
-	//    void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
-	//    void _slotSetFFT(float* spectrum, float* spectrum_peak_hold);
+	void slotEnableKM(bool state);
 
 signals:
-	void selected(double x1, double x2, double y1, double y2);
-	void signalChoosedThreshold(double y);
-	void signalCurSelChanged(int);
-	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
 	void signalEnableKM(bool state);
 
-	/// id - is id of ilsts (1 - White list, 2 - Black list)
-	void signalAddSelToLists(int id);
+	void setPanoramaSignal(bool);
+	void setAutoSearchSignal(bool);
+	void selectionTypeChangedSignal(bool);
+	void requestDataSignal(bool);
 
-
-	void signalSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
-	void signalSetFFT(float* spectrum, float* spectrum_peak_hold);
-	void signalSetDefModulation(QString modulation);
-
-	void signalFinished();
-
-	void signalNeedToUpdate();
-
-	void signalSetLabelName(QString, QString);
-
-	void signalSetControlPRMState(bool state);
-
-	void doubleClickedSignal(int);
-
-	void signalSetZeroFrequency(double val);
-	void signalSetDetectedAreas(QVector<QPointF> vec);
-
-private:
-	virtual void mouseDoubleClickEvent ( QMouseEvent * event );
-
-
+	void setShowPeaksSignal(bool);
+	void setShowControlPRM(bool);
 };
 
 #endif // GRAPHICWIDGET_H

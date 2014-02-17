@@ -5,6 +5,7 @@ class QWidget;
 class QLabel;
 class SpectrumWidget;
 class QString;
+class ISpectrumWidget;
 
 typedef enum TypeTabWidgetEnum
 {
@@ -25,8 +26,8 @@ public:
 
 	virtual QLabel* getIndicator() = 0;
 
-	virtual SpectrumWidget* getSpectrumWidget() = 0;
-	virtual void insertSpectrumWidget(SpectrumWidget* spectrumWidget) = 0;
+	virtual ISpectrumWidget* getSpectrumWidget() = 0;
+	virtual void insertSpectrumWidget(ISpectrumWidget* spectrumWidget) = 0;
 
 	virtual TypeTabWidgetEnum getWidgetType() const = 0;
 };
