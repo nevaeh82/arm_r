@@ -36,6 +36,7 @@ public:
 	virtual void disconnectFromHost();
 	virtual bool isConnected();
 	virtual void writeData(const QByteArray& data);
+	virtual QString getHost();
 	virtual QObject* asQObject();
 
 private slots:

@@ -8,13 +8,31 @@ BaseTcpDeviceController::BaseTcpDeviceController(Pw::Logger::ILogger* logger, QO
 	m_tcpClient = new BaseTcpClient(this);
 	m_tcpClient->registerReceiver(this);
 
-	m_tcpDeviceCoder = new BaseTcpDeviceCoder(this);
+	m_tcpDeviceCoder = new BaseTcpDeviceCoder(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(BaseTcpDeviceCoder)), this);
 	m_tcpDeviceName = BASE_TCP_DEVICE;
 
 	connect(this, SIGNAL(connectToHostInternalSignal(QString,quint32)), this, SLOT(connectToHostInternalSlot(QString,quint32)));
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
 	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
 	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
+}
+
+BaseTcpDeviceController::BaseTcpDeviceController(const QString& tcpDeviceName, Pw::Logger::ILogger* logger, QObject* parent) :
+	QObject(parent)
+{
+	m_logger = logger;
+
+	m_tcpClient = new BaseTcpClient(this);
+	m_tcpClient->registerReceiver(this);
+
+	m_tcpDeviceCoder = new BaseTcpDeviceCoder(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(BaseTcpDeviceCoder)), this);
+	m_tcpDeviceName = tcpDeviceName;
+
+	connect(this, SIGNAL(connectToHostInternalSignal(QString,quint32)), this, SLOT(connectToHostInternalSlot(QString,quint32)));
+	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
+	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
+	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
+
 }
 
 BaseTcpDeviceController::~BaseTcpDeviceController()
@@ -35,6 +53,11 @@ void BaseTcpDeviceController::disconnectFromHost()
 bool BaseTcpDeviceController::isConnected()
 {
 	return m_tcpClient->isConnected();
+}
+
+QString BaseTcpDeviceController::getHost()
+{
+	return m_tcpClient->getHost();
 }
 
 void BaseTcpDeviceController::sendData(const IMessage<QByteArray>* message)
@@ -65,6 +88,12 @@ void BaseTcpDeviceController::disconnectFromHostInternalSlot()
 void BaseTcpDeviceController::sendDataInternalSlot(const IMessage<QByteArray>* message)
 {
 	QByteArray decodedData = m_tcpDeviceCoder->decode(message);
+
+	if (decodedData.size() <= 0) {
+		m_logger->debug(QString("decodedData.size() <= 0 for %1").arg(m_tcpDeviceName));
+		return;
+	}
+
 	m_tcpClient->writeData(decodedData);
 }
 
@@ -77,7 +106,7 @@ void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argumen
 		return;
 	}
 
-	foreach(ITcpListener* receiver, m_receiversList) {
+	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(m_tcpDeviceName, message);
 	}
 }

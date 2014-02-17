@@ -60,43 +60,48 @@ QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
 
 	/// TODO: recheck _header.type = type1;
 
-	QByteArray data = message->data();
-	QDataStream inputDataStream(&data, QIODevice::ReadOnly);
+	QByteArray inputData = message->data();
+	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
 
-	header.length = data.size();
+	header.length = inputData.size();
 	m_logger->debug(QString("length = %1").arg(header.length));
 
 	CRCs crc;
-	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(data.data()), data.length());
+	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(inputData.data()), inputData.length());
 	header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&header), sizeof(ZaviruhaPayloadPacketHeader) - sizeof(short));
 
-	QByteArray ba;
-	QDataStream stream(&ba, QIODevice::WriteOnly);
+	QByteArray dataToSend;
+	QDataStream stream(&dataToSend, QIODevice::WriteOnly);
 
-	stream << _header.magic;
-	stream << _header.number;
-	stream << _header.id;
-	stream << _header.flags;
-	stream << _header.timestamp;
-	stream << _header.type;
-	stream << _header.length;
-	stream << _header.reserved;
-	stream << _header.messageCRC;
-	stream << _header.headerCRC;
+	stream << header.magic;
+	stream << header.number;
+	stream << header.id;
+	stream << header.flags;
+	stream << header.timestamp;
+	stream << header.type;
+	stream << header.length;
+	stream << header.reserved;
+	stream << header.messageCRC;
+	stream << header.headerCRC;
 
 	if (message->type() == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
 		int poin;
-		inputDataStream >> poin ;
-		QString s(data);
+		inputDataStream >> poin;
+		QString s(inputData);
 		m_logger->debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
 		stream << poin;
 	}
 	else if (message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM) {
 		int average;
-		inputDataStream >> average ;
+		inputDataStream >> average;
 		m_logger->debug(QString("average %1").arg(QString::number(average)));
 		stream << average;
 	}
+	else {
+		// For what??
+		dataToSend = inputData;
+	}
+	return dataToSend;
 }
 
 QObject* TcpFlakonCoder::asQObject()
@@ -181,14 +186,14 @@ IMessage<QByteArray>* TcpFlakonCoder::correlation(quint32 point1, quint32 point2
 	dataStream << point2;
 	dataStream << vec;
 
-	return new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION);
+	return new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba);
 }
 
 IMessage<QByteArray>* TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)
 {
 	QByteArray ba;
-	QDataStream dataStream(ba, QIODevice::WriteOnly);
+	QDataStream dataStream(&ba, QIODevice::WriteOnly);
 	dataStream << vec;
 
-	return new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH);
+	return new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba);
 }

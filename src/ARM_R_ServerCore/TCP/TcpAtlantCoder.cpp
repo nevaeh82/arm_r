@@ -76,7 +76,7 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		ad_struct.motionType		= d_msg.motiontype();
 		ad_struct.motionConfidence	= d_msg.motionconfidence();
 
-		QByteArray dataToSend = QByteArray;
+		QByteArray dataToSend;
 		QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
 		dataStream << ad_struct.requestId;
 		dataStream << ad_struct.sourceId;
@@ -94,7 +94,7 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		dataStream << ad_struct.motionType;
 		dataStream << ad_struct.motionConfidence;
 
-		return new Message<QByteArray*>(TCP_ATLANT_ANSWER_DIRECTION, dataToSend);
+		return new Message<QByteArray>(TCP_ATLANT_ANSWER_DIRECTION, dataToSend);
 	}
 	else if (type == Atlant_Position_MsgA) {
 		Storm::PositionAnswerMessage d_msg;
@@ -108,7 +108,7 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		ad_struct.latitude			= d_msg.latitude();
 		ad_struct.quality			= d_msg.quality();
 
-		QByteArray dataToSend = QByteArray;
+		QByteArray dataToSend;
 		QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
 		dataStream << ad_struct.requestId;
 		dataStream << ad_struct.sourceId;
@@ -117,7 +117,7 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		dataStream << ad_struct.latitude;
 		dataStream << ad_struct.quality;
 
-		return new Message<QByteArray*>(TCP_ATLANT_ANSWER_POSITION, dataToSend);
+		return new Message<QByteArray>(TCP_ATLANT_ANSWER_POSITION, dataToSend);
 	}
 
 	return NULL;
@@ -126,8 +126,8 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 QByteArray TcpAtlantCoder::atlantSetFrequency(const QByteArray& data)
 {
 	/// WTF??
-
-	QDataStream dataStream(data, QIODevice::ReadOnly);
+	QByteArray inputData = data;
+	QDataStream dataStream(&inputData, QIODevice::ReadOnly);
 
 	int id;
 	int post;

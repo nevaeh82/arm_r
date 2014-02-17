@@ -47,6 +47,12 @@ void BaseTcpClient::writeData(const QByteArray& data)
 	emit writeDataInternalSignal(data);
 }
 
+QString BaseTcpClient::getHost()
+{
+	QString host = m_host + ":" + QString::number(m_port);
+	return host;
+}
+
 QObject* BaseTcpClient::asQObject()
 {
 	return this;
@@ -67,7 +73,7 @@ void BaseTcpClient::onSocketReadyRead()
 	m_logger->debug("Socket ready read");
 	QByteArray data = m_tcpSocket->readAll();
 
-	foreach(ITcpReceiver* receiver, m_receiversList) {
+	foreach (ITcpReceiver* receiver, m_receiversList) {
 		receiver->onDataReceived(QVariant(data));
 	}
 }

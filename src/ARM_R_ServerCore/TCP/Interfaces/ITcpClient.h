@@ -14,6 +14,7 @@ public:
 	virtual void disconnectFromHost()	= 0;
 	virtual bool isConnected()	= 0;
 	virtual void writeData(const QByteArray& data)	= 0;
+	virtual QString getHost()	= 0; // Concatenation of host, ":" and port
 	virtual QObject* asQObject()	= 0;
 };
 

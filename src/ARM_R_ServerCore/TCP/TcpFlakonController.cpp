@@ -7,6 +7,12 @@ TcpFlakonController::TcpFlakonController(QObject* parent) :
 	m_tcpDeviceName = FLAKON_TCP_DEVICE;
 }
 
+TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* parent) :
+	BaseTcpDeviceController(tcpDeviceName, Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpAtlantController)), parent)
+{
+	m_tcpDeviceCoder = new TcpFlakonCoder(this);
+}
+
 TcpFlakonController::~TcpFlakonController()
 {
 }

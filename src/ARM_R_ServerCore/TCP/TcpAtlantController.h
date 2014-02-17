@@ -9,6 +9,7 @@ class TcpAtlantController : public BaseTcpDeviceController
 	Q_OBJECT
 public:
 	explicit TcpAtlantController(QObject* parent = NULL);
+	explicit TcpAtlantController(const QString& tcpDeviceName, QObject* parent = NULL);
 	virtual ~TcpAtlantController();
 
 	// ITcpDeviceController interface

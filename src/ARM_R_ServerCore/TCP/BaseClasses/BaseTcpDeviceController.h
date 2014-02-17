@@ -16,6 +16,7 @@
 #include "BaseTcpDeviceCoder.h"
 
 class BaseTcpDeviceController : public QObject, public ITcpDeviceController, public ITcpReceiver, public BaseSubject<ITcpListener>
+{
 	Q_OBJECT
 
 protected:
@@ -27,6 +28,7 @@ protected:
 
 public:
 	explicit BaseTcpDeviceController(Pw::Logger::ILogger* logger, QObject* parent = NULL);
+	explicit BaseTcpDeviceController(const QString& tcpDeviceName, Pw::Logger::ILogger* logger, QObject* parent = NULL);
 	virtual ~BaseTcpDeviceController();
 
 	// ITcpDeviceController interface
@@ -34,6 +36,7 @@ public:
 	virtual void connectToHost(const QString& host, const quint32& port);
 	virtual void disconnectFromHost();
 	virtual bool isConnected();
+	virtual QString getHost();
 	virtual void sendData(const IMessage<QByteArray>* message);
 	virtual QObject* asQObject();
 

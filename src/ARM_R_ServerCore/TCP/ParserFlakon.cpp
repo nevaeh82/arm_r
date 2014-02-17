@@ -23,10 +23,7 @@ const char *RecognModulation[] =
     "rmQAM16"//			= 17	//QAM16, непонятно чем отличается от QAM ?
 };
 
-ParserFlakon::ParserFlakon(IRouter *router):
-    _type(0),
-    _restLength(0),
-    _corr_threshold(2)
+ParserFlakon::ParserFlakon(IRouter *router)
 {
     _router = router;
     _subscriber = router->get_subscriber();
