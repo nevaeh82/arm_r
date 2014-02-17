@@ -21,7 +21,6 @@ private:
 protected:
 	Pw::Logger::ILogger* m_logger;
 	QxtRPCPeer* m_clientPeer;
-	QList<IRpcListener*> m_listeners;
 
 public:
 	explicit RpcClientBase(Pw::Logger::ILogger* logger, QObject* parent = NULL);
@@ -29,9 +28,6 @@ public:
 
 	virtual bool start(quint16 port, QHostAddress address);
 	virtual void stop();
-
-	virtual void registerListener(IRpcListener* listener);
-	virtual void deregisterListener(IRpcListener* listener);
 
 private slots:
 	void connectToServer();

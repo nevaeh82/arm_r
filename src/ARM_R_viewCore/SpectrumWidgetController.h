@@ -71,7 +71,7 @@ public:
 	void setDefModulation(QString modulation);
 	bool isGraphicVisible();
 	void setLabelName(QString base, QString second);
-	void setDetectedAreasUpdate(QVector<QPointF> vec);
+	void setDetectedAreasUpdate(const QByteArray& vec);
 	void setZeroFrequency(double val);
 
 	void setup();

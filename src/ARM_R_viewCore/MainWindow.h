@@ -10,10 +10,6 @@
 #include "Tabs/TabManager.h"
 
 
-typedef QVector<QPointF>         rpc_send_points_vector;
-typedef QByteArray               rpc_send_atlant_data;
-
-
 namespace Ui {
 class MainWindow;
 }
@@ -40,11 +36,6 @@ private:
 private:
 	void init();
 };
-
-Q_DECLARE_METATYPE(QPointF)
-Q_DECLARE_METATYPE(rpc_send_points_vector)
-Q_DECLARE_METATYPE(quint32)
-Q_DECLARE_METATYPE(rpc_send_atlant_data)
 
 
 #endif // MAINWINDOW_H

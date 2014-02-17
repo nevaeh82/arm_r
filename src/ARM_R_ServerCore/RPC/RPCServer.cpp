@@ -8,11 +8,11 @@ RPCServer::RPCServer(IRouter* router, QObject *parent) :
 	m_router = router;
 	m_subscriber = router->get_subscriber();
 
-    qRegisterMetaType<QVector<QPointF> >("rpc_send_points_vector");
-    qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
-    qRegisterMetaTypeStreamOperators<QVector<QPointF> >("QVector<QPointF>");
-    qRegisterMetaType<quint32>("quint32");
-    qRegisterMetaType<QByteArray>("rpc_send_atlant_data");
+	//qRegisterMetaType<QVector<QPointF> >("rpc_send_points_vector");
+	//qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
+	//qRegisterMetaTypeStreamOperators<QVector<QPointF> >("QVector<QPointF>");
+	//qRegisterMetaType<quint32>("quint32");
+	//qRegisterMetaType<QByteArray>("rpc_send_atlant_data");
 }
 
 RPCServer::~RPCServer()
@@ -298,22 +298,34 @@ void RPCServer::rpcSlotSetClearToSolver(quint64 client, QByteArray data)
 
 void RPCServer::rpcSlotSendFft(quint64 client, rpc_send_points_vector points)
 {
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_POINTS, QVariant::fromValue(points));
+	QByteArray outBA;
+	QDataStream stream(&outBA, QIODevice::WriteOnly);
+	stream << points;
+
+	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_POINTS, outBA);
 }
 
 void RPCServer::rpcSlotsenddetectedbandwidth(quint64 client, rpc_send_points_vector points)
 {
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, QVariant::fromValue(points));
+	QByteArray outBA;
+	QDataStream stream(&outBA, QIODevice::WriteOnly);
+	stream << points;
+
+	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, outBA);
 }
 
 void RPCServer::rpcSlotSendCorr(quint64 client, quint32 point1, quint32 point2, rpc_send_points_vector points)
 {
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_CORRELATION, QVariant::fromValue((int)point1), QVariant::fromValue((int)point2), QVariant::fromValue(points));
+	QByteArray outBA;
+	QDataStream stream(&outBA, QIODevice::WriteOnly);
+	stream << points;
+
+	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_CORRELATION, point1, point2, outBA);
 }
 
 void RPCServer::rpcSlotSendRespModulation(quint64 client, QString modulation)
 {
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, QVariant::fromValue(modulation));
+	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, modulation);
 }
 
 void RPCServer::rpcSlotPrmStatus(quint64 client, QByteArray *data)

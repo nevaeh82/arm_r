@@ -1,10 +1,15 @@
 #include "TabSpectrumWidgetController.h"
 #include "UiDefines.h"
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+#define DEFAULT_RPC_PORT		24500
+
+TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
+
+	m_rpcHostAddress = "127.0.0.1";
+	m_rpcHostPort = DEFAULT_RPC_PORT;
 
 	_threshold = -1;
 	_common_correlations = common_correlations;
@@ -13,7 +18,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
-	_common_components = common_components;
 	_tab_property = prop;
 	_id = _tab_property->get_id();
 	m_stationName = _tab_property->get_name();
@@ -25,11 +29,13 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
 
-	_rpc_client1 = NULL;
+	m_rpcClient = NULL;
 
-	//activate();
+	QString settingsFile = QCoreApplication::applicationDirPath();
+	settingsFile.append("./Tabs/RPC.ini");
+	readSettings(settingsFile);
 
-	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QVector<QPointF>)), this, SLOT(_slot_get_points_from_rpc(QVector<QPointF>)));
+	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(_slot_get_points_from_rpc(QByteArray)));
 
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 
@@ -112,21 +118,15 @@ int TabSpectrumWidgetController::init()
 	return 0;
 }
 
+
+
 int TabSpectrumWidgetController::createRPC()
 {
-	QString settingsFile = QCoreApplication::applicationDirPath();
-	settingsFile.append("/Tabs/RPC.ini");
+	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM, this);
+	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QSettings m_settings(settingsFile, QSettings::IniFormat);
+	m_rpcClient->registerReceiver(_spectrumData);
 
-	m_settings.setIniCodec(codec);
-
-	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
-	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
-
-	_rpc_client1 = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM, this);
-	_rpc_client1->start(portRpc, QHostAddress(ipRpc));
 	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));
@@ -179,12 +179,12 @@ int TabSpectrumWidgetController::createView()
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-	/// add to common spectra
-	_common_components->set(_id, m_spectrumWidget);
+
+	///_common_components->set(_id, spectrumWidget);
 
 	/// TODO: update
 	/*_controlPRM = new ControlPRM(0, this);
-	_dock_controlPRM = new QDockWidget(tr("Управление П� М300В"), this);
+	_dock_controlPRM = new QDockWidget(tr("РЈРїСЂР°РІР»РµРЅРёРµ РџР Рњ300Р’"), this);
 	_dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
 	_dock_controlPRM->setWidget(_controlPRM);
 
@@ -333,14 +333,18 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 		return;
 	}
 
-	_rpc_client1->setCommand(msg);
+	m_rpcClient->setCommand(msg);
 }
 
 
 ///getting points from rpc (flakon)
 void TabSpectrumWidgetController::set_points_rpc(QVector<QPointF> points)
 {
-	emit signalGetPointsFromRPCFlakon(points);
+	QByteArray outBA;
+	QDataStream stream(&outBA, QIODevice::WriteOnly);
+	stream << points;
+
+	emit signalGetPointsFromRPCFlakon(outBA);
 }
 
 void TabSpectrumWidgetController::set_thershold(double y)
@@ -361,7 +365,7 @@ void TabSpectrumWidgetController::set_panorama(bool state)
 
 
 /// in this thread set points from rpc
-void TabSpectrumWidgetController::_slot_get_points_from_rpc(QVector<QPointF> points)
+void TabSpectrumWidgetController::_slot_get_points_from_rpc(QByteArray points)
 {
 	_spectrumData->set_data(points, false);
 }
@@ -417,4 +421,15 @@ void TabSpectrumWidgetController::slotSetFFTSetup(float* spectrum, float* spectr
 void TabSpectrumWidgetController::slotSetFFT(float* spectrum, float* spectrum_peak_hold)
 {
 	m_spectrumWidget->setSignal(spectrum, spectrum_peak_hold);
+}
+
+void TabSpectrumWidgetController::readSettings(const QString &settingsFile)
+{
+	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+	QSettings settings(settingsFile, QSettings::IniFormat);
+
+	settings.setIniCodec(codec);
+
+	m_rpcHostAddress = settings.value("RPC_UI/IP", "127.0.0.1").toString();
+	m_rpcHostPort = settings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toInt();
 }

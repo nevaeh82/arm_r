@@ -35,7 +35,7 @@ public:
     virtual void setDefModulation(QString modulation);
     virtual void setLabelName(QString base, QString second);
 
-	virtual void setDetectedAreasUpdate(QVector<QPointF> vec){}
+	virtual void setDetectedAreasUpdate(const QByteArray& vec){}
 	virtual void setZeroFrequency(double val){}
 
 public:

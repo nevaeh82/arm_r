@@ -19,7 +19,6 @@ private:
 	int                 _id;
 	QString             m_stationName;
 	TabsProperty*       _tab_property;
-	ICommonComponents*  _common_components;
 	ICommonComponents*  _common_correlations;
 	GraphicData*        _spectrumData;
 
@@ -28,7 +27,7 @@ private:
 	TreeModel*          m_treeModel;
 	TreeWidgetDelegate* m_treeDelegate;
 
-	RPCClient*          _rpc_client1;
+	RPCClient*          m_rpcClient;
 
 	QMap<int, IGraphicWidget *>*     _map_correlation_widget;
 	ITabManager*        _tab_manager;
@@ -41,9 +40,12 @@ private:
 	QPixmap*            _pm_round_green;
 	QLabel*             m_indicatorLabel;
 
+	QString m_rpcHostAddress;
+	quint16 m_rpcHostPort;
+
 
 public:
-	explicit TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents* common_components, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -87,14 +89,14 @@ signals:
 	void signalStartRPC();
 	void signalStopRPC();
 	void signalFinishRPC();
-	void signalGetPointsFromRPCFlakon(QVector<QPointF> points);
+	void signalGetPointsFromRPCFlakon(QByteArray points);
 	void signalChangeIndicator(int state);
 	void signalDoubleClicked(int id, double, double);
 
 	void signalPanoramaState(bool state);
 
 private slots:
-	void _slot_get_points_from_rpc(QVector<QPointF> points);
+	void _slot_get_points_from_rpc(QByteArray points);
 	void _slot_show_controlPRM(bool state);
 	void spectrumDoubleClickedSlot(int id);
 
@@ -105,6 +107,8 @@ private slots:
 
 private:
 	int init();
+
+	void readSettings(const QString& settingsFile);
 
 };
 
