@@ -83,7 +83,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, 
 	connect(this, SIGNAL(signalSetDefModulation(QString)), this, SLOT(_slotSetDefModulation(QString)), Qt::QueuedConnection);
 	connect(this, SIGNAL(signalSetLabelName(QString,QString)), this, SLOT(_slotSetLabelName(QString,QString)));
 
-	connect(this, SIGNAL(signalSetDetectedAreas(QVector<QPointF>)), this, SLOT(m_slotSetDetectedAreas(QVector<QPointF>)));
+	connect(this, SIGNAL(signalSetDetectedAreas(QByteArray)), this, SLOT(m_slotSetDetectedAreas(QByteArray)));
 	connect(this, SIGNAL(signalSetZeroFrequency(double)), this, SLOT(m_slotSetZeroFrequency(double)));
 
 
@@ -185,7 +185,7 @@ void SpectrumWidget::_slotSetDefModulation(QString modulation)
 }
 
 
-void SpectrumWidget::setDetectedAreasUpdate(QVector<QPointF> vec)
+void SpectrumWidget::setDetectedAreasUpdate(const QByteArray &vec)
 {
 	emit signalSetDetectedAreas(vec);
 }
@@ -197,12 +197,16 @@ void SpectrumWidget::setZeroFrequency(double val)
 
 
 
-void SpectrumWidget::m_slotSetDetectedAreas(QVector<QPointF> vec)
+void SpectrumWidget::m_slotSetDetectedAreas(QByteArray inVecBA)
 {
-	if(m_autoSearch == false)
-	{
+	if(!m_autoSearch){
 		return;
 	}
+
+	QVector<QPointF> vec;
+	QDataStream stream(inVecBA);
+	stream >> vec;
+
 	ui->graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it)

@@ -10,7 +10,6 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 {
 	m_tabWidget = tabWidget;
 
-	_common_spectra = NULL;
 	_common_correlations = NULL;
 
 	m_currentTabWidget = NULL;
@@ -35,11 +34,6 @@ TabManager::~TabManager()
 		}
 	}
 
-	if(_common_spectra != NULL)
-	{
-		delete _common_spectra;
-	}
-
 	if(_common_correlations != NULL)
 	{
 		delete _common_correlations;
@@ -57,7 +51,7 @@ int TabManager::start()
 
 int TabManager::createSubModules(const QString& settingsFile)
 {
-	_common_spectra = new CommonSpectra();
+	//_common_spectra = new CommonSpectra();
 	_common_correlations = new CommonCorrelations();
 
 	int submodulesCount = readSettings(settingsFile);
@@ -72,7 +66,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 	QMap<int, TabsProperty* >::iterator it;
 	for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
 	{
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, m_dbManager, this);
+		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), /*_common_spectra,*/ _common_correlations, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		tabController->appendView(tabSpectrumWidget);

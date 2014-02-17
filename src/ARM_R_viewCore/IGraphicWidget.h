@@ -13,7 +13,7 @@ public:
 	virtual void setDefModulation(QString modulation)																			= 0;
 	virtual bool isGraphicVisible()																								= 0;
 	virtual void setLabelName(QString base, QString second)																		= 0;
-	virtual void setDetectedAreasUpdate(QVector<QPointF> vec)																	= 0;
+	virtual void setDetectedAreasUpdate(const QByteArray& vec)																	= 0;
 	virtual void setZeroFrequency(double val)																					= 0;
 };
 

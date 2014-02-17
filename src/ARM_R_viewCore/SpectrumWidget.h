@@ -83,7 +83,7 @@ public:
 	virtual void setDefModulation(QString modulation);
 	virtual void setLabelName(QString base, QString second);
 
-	virtual void setDetectedAreasUpdate(QVector<QPointF> vec);
+	virtual void setDetectedAreasUpdate(const QByteArray& vec);
 	virtual void setZeroFrequency(double val);
 
 	void setup();
@@ -100,7 +100,7 @@ public slots:
 	void _slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold);
 	void _slotSetDefModulation(QString modulation);
 
-	void m_slotSetDetectedAreas(QVector<QPointF> vec);
+	void m_slotSetDetectedAreas(QByteArray vec);
 
 	//    void slotSetFFT2(QVector<QPointF> vecFFT, const bool isComplex);
 	//    void slotSetParam(int PointCount, double bandwidth, bool isComplex);
@@ -157,7 +157,7 @@ signals:
 	void doubleClickedSignal(int);
 
 	void signalSetZeroFrequency(double val);
-	void signalSetDetectedAreas(QVector<QPointF> vec);
+	void signalSetDetectedAreas(QByteArray vec);
 
 private:
 	virtual void mouseDoubleClickEvent ( QMouseEvent * event );

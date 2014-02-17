@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include "Rpc/RpcDefines.h"
+
 #define BANDWIDTH_SINGLE	20000000
 #define TO_KHZ				1000
 #define TO_HZ				1000000
@@ -11,38 +13,38 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 {
 	_PointCount = 0;
 	m_pointCountWhole = 0;
-    _common_correlations = common_correlations;
-    _id = id;
-    _tab_manager = tab_manager;
-    _gr_widget = gr_widget;
-//    _map_correlation_widget = map_correlation_widget;
-    _spectrum = new float[1];
-    _spectrum_peak_hold = new float[1];
-    _bandwidth = 0;
+	_common_correlations = common_correlations;
+	_id = id;
+	_tab_manager = tab_manager;
+	_gr_widget = gr_widget;
+	//    _map_correlation_widget = map_correlation_widget;
+	_spectrum = new float[1];
+	_spectrum_peak_hold = new float[1];
+	_bandwidth = 0;
 	m_bandwidthSingleSample = 0;
 	m_isPanoramaStart = false;
-    _needSetup = true;
+	_needSetup = true;
 	m_needSetupSpectrum = true;
-	connect(this, SIGNAL(signalSetData(QVector<QPointF>,bool)), this, SLOT(m_slotSetData(QVector<QPointF>,bool)));
+	connect(this, SIGNAL(signalSetData(QByteArray,bool)), this, SLOT(m_slotSetData(QByteArray,bool)));
 	connect(this, SIGNAL(signalSetDefModulation(QString)), this, SLOT(m_slotSetDefModulation(QString)));
 
-	connect(this, SIGNAL(signalSetCorData(quint32,QVector<QPointF>,bool)), this, SLOT(m_slotSetCorData(quint32,QVector<QPointF>,bool)));
+	connect(this, SIGNAL(signalSetCorData(quint32,QByteArray,bool)), this, SLOT(m_slotSetCorData(quint32,QByteArray,bool)));
 
 	connect(this, SIGNAL(signalSetBandwidth(double)), this, SLOT(m_slotSetBandwidth(double)));
 
 	connect(this, SIGNAL(signalPanoramaStart(double,double)), this, SLOT(m_slotPanoramaStart(double,double)));
 	connect(this, SIGNAL(signalPanoramaStop()), this, SLOT(m_slotPanoramaStop()));
-	connect(this, SIGNAL(signalSetDetectedAreas(QVector<QPointF>)), this, SLOT(m_slotSetDetectedAreas(QVector<QPointF>)));
+	connect(this, SIGNAL(signalSetDetectedAreas(QByteArray)), this, SLOT(m_slotSetDetectedAreas(QByteArray)));
 	//    QMap<int, IGraphicWidget *>::iterator it;
-//    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
-//    {
-//        float *sp = new float[1];
-//        float *peak = new float[1];
-//        double b = 0;
-//        _map_peaks_correlation.insert(it.key(), peak);
-//        _map_spectrum_corelation.insert(it.key(), sp);
-//        _map_bandwidth_corelation.insert(it.key(), b);
-//    }
+	//    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
+	//    {
+	//        float *sp = new float[1];
+	//        float *peak = new float[1];
+	//        double b = 0;
+	//        _map_peaks_correlation.insert(it.key(), peak);
+	//        _map_spectrum_corelation.insert(it.key(), sp);
+	//        _map_bandwidth_corelation.insert(it.key(), b);
+	//    }
 
 	/// TODO need to correct architecture
 	if(common_correlations == NULL)
@@ -50,15 +52,15 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 		return;
 	}
 
-    for(int i = 0; i < common_correlations->count(0); i++)
-    {
-        float *sp = new float[1];
-        float *peak = new float[1];
-        double b = 0;
-        _map_peaks_correlation.insert(i, peak);
-        _map_spectrum_corelation.insert(i, sp);
-        _map_bandwidth_corelation.insert(i, b);
-    }
+	for(int i = 0; i < common_correlations->count(0); i++)
+	{
+		float *sp = new float[1];
+		float *peak = new float[1];
+		double b = 0;
+		_map_peaks_correlation.insert(i, peak);
+		_map_spectrum_corelation.insert(i, sp);
+		_map_bandwidth_corelation.insert(i, b);
+	}
 }
 
 GraphicData::~GraphicData()
@@ -66,17 +68,17 @@ GraphicData::~GraphicData()
 	emit signalFinished();
 }
 
-void GraphicData::set_data(QVector<QPointF>& vecFFT, bool isComplex)
+void GraphicData::set_data(const QByteArray &vecFFT, bool isComplex)
 {
-    emit signalSetData(vecFFT, isComplex);
+	emit signalSetData(vecFFT, isComplex);
 }
 
-void GraphicData::set_data(quint32 point2, QVector<QPointF>& points, bool isComplex)
+void GraphicData::set_data(quint32 point2, const QByteArray& points, bool isComplex)
 {
-    emit signalSetCorData(point2, points, isComplex);
+	emit signalSetCorData(point2, points, isComplex);
 }
 
-void GraphicData::set_def_modulation(QString modulation)
+void GraphicData::set_def_modulation(const QString& modulation)
 {
 	emit signalSetDefModulation(modulation);
 }
@@ -96,7 +98,7 @@ void GraphicData::set_panorama_stop()
 	emit signalPanoramaStop();
 }
 
-void GraphicData::setDetectedAreas(QVector<QPointF> vec)
+void GraphicData::setDetectedAreas(const QByteArray &vec)
 {
 	emit signalSetDetectedAreas(vec);
 }
@@ -124,7 +126,7 @@ int GraphicData::_find_index(qreal startx)
 		}
 	}
 
-//	qDebug() << _list_startx.size();
+	//	qDebug() << _list_startx.size();
 	if(_list_startx.size() == list_count)
 	{
 		QList<qreal>::iterator it;
@@ -143,7 +145,7 @@ int GraphicData::_find_index(qreal startx)
 	return index;
 }
 
-void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_dataProccess(QVector<QPointF> &vecFFT, bool isComplex)
 {
 	_PointCount = vecFFT.size();
 
@@ -166,13 +168,13 @@ void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
 	int index = _find_index(startx);
 
 
-//	qDebug() << vecFFT.size();
+	//	qDebug() << vecFFT.size();
 
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
 		_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
 
-//		qDebug() << index << i << _spectrum[index*vecFFT.size() + i];
+		//		qDebug() << index << i << _spectrum[index*vecFFT.size() + i];
 
 		if((_startx != startx) || (_spectrum[i] > _spectrum_peak_hold[i]) || (_spectrum_peak_hold[i] == 0))
 		{
@@ -188,10 +190,15 @@ void GraphicData::m_dataProccess(QVector<QPointF> vecFFT, bool isComplex)
 
 }
 
-void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_slotSetData(QByteArray vecFFTBA, bool isComplex)
 {
-    if(!_gr_widget->isGraphicVisible())
-        return;
+	if(!_gr_widget->isGraphicVisible())
+		return;
+
+	QVector<QPointF> vecFFT;
+	QDataStream stream(vecFFTBA);
+	stream >> vecFFT;
+
 
 	m_dataProccess(vecFFT, isComplex);
 
@@ -206,81 +213,85 @@ void GraphicData::m_slotSetData(QVector<QPointF> vecFFT, bool isComplex)
 	}
 }
 
-void GraphicData::m_slotSetCorData(quint32 point2, QVector<QPointF> vecFFT, bool isComplex)
+void GraphicData::m_slotSetCorData(quint32 point2, QByteArray vecFFTBA, bool isComplex)
 {
-    int cor_id = point2;
-    if(point2 > _id)
-    {
-        cor_id -= 1;
-    }
+	QVector<QPointF> vecFFT;
+	QDataStream stream(vecFFTBA);
+	stream >> vecFFT;
 
-    IGraphicWidget* gr_correlation = _common_correlations->get(cor_id);//_map_correlation_widget->value(point2);
+	int cor_id = point2;
+	if(point2 > _id)
+	{
+		cor_id -= 1;
+	}
+
+	IGraphicWidget* gr_correlation = _common_correlations->get(cor_id);//_map_correlation_widget->value(point2);
 
 	if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL) {
 		return;
 	}
 
-    QString base = _tab_manager->getStationName(_id);
-    QString second = _tab_manager->getStationName(point2);
+	QString base = _tab_manager->getStationName(_id);
+	QString second = _tab_manager->getStationName(point2);
 
-    float* sp_correlation = _map_spectrum_corelation.value(cor_id);
-    float* peaks_correlation = _map_peaks_correlation.value(cor_id);
-    double b_cor = _map_bandwidth_corelation.value(cor_id);
-    int PointCount = vecFFT.size();
-//    float* spectrum = new float[PointCount];
+	float* sp_correlation = _map_spectrum_corelation.value(cor_id);
+	float* peaks_correlation = _map_peaks_correlation.value(cor_id);
+	double b_cor = _map_bandwidth_corelation.value(cor_id);
+	int PointCount = vecFFT.size();
+	//    float* spectrum = new float[PointCount];
 
-    qreal startx = vecFFT.at(0).x();
-    qreal endx = vecFFT.at(vecFFT.size() - 1).x();
-    double bandwidth = endx - startx;
-
-
-    if(b_cor != bandwidth)
-    {
-        b_cor = bandwidth;
-        _map_bandwidth_corelation.insert(cor_id, b_cor);
-        delete[] sp_correlation;
-        sp_correlation = new float[PointCount];
-
-        delete[] peaks_correlation;
-        peaks_correlation = new float[PointCount];
-        _needSetup = true;
-    }
+	qreal startx = vecFFT.at(0).x();
+	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
+	double bandwidth = endx - startx;
 
 
-    for(int i = 0; i < vecFFT.size(); i++)
-    {
-        sp_correlation[i] = vecFFT.at(i).y();
+	if(b_cor != bandwidth)
+	{
+		b_cor = bandwidth;
+		_map_bandwidth_corelation.insert(cor_id, b_cor);
+		delete[] sp_correlation;
+		sp_correlation = new float[PointCount];
 
-        if((_startx_cor != startx) || (sp_correlation[i] > peaks_correlation[i]))
-        {
-            peaks_correlation[i] = sp_correlation[i];
-        }
-    }
-//return;
-
-    _map_spectrum_corelation.insert(cor_id, sp_correlation);
-    _map_peaks_correlation.insert(cor_id, peaks_correlation);
+		delete[] peaks_correlation;
+		peaks_correlation = new float[PointCount];
+		_needSetup = true;
+	}
 
 
-    if(_startx_cor != startx)
-    {
-        _startx_cor = startx;
-    }
+	for(int i = 0; i < vecFFT.size(); i++)
+	{
+		sp_correlation[i] = vecFFT.at(i).y();
 
-    if(_needSetup)
-    {
-//        emit signalDataS(_spectrum, _spectrum_peak_hold);
-        gr_correlation->setSignalSetup(sp_correlation, peaks_correlation, PointCount, b_cor, /*isComplex*/true);
-        _needSetup = false;
-    }
-    else
-    {
-//        emit signalData(_spectrum, _spectrum_peak_hold);
+		if((_startx_cor != startx) || (sp_correlation[i] > peaks_correlation[i]))
+		{
+			peaks_correlation[i] = sp_correlation[i];
+		}
+	}
+	//return;
 
-        gr_correlation->setSignal(sp_correlation, peaks_correlation);
-    }
+	_map_spectrum_corelation.insert(cor_id, sp_correlation);
+	_map_peaks_correlation.insert(cor_id, peaks_correlation);
 
-    gr_correlation->setLabelName(base, second);
+
+	if(_startx_cor != startx)
+	{
+		_startx_cor = startx;
+	}
+
+	if(_needSetup)
+	{
+		//        emit signalDataS(_spectrum, _spectrum_peak_hold);
+		gr_correlation->setSignalSetup(sp_correlation, peaks_correlation, PointCount, b_cor, /*isComplex*/true);
+		_needSetup = false;
+	}
+	else
+	{
+		//        emit signalData(_spectrum, _spectrum_peak_hold);
+
+		gr_correlation->setSignal(sp_correlation, peaks_correlation);
+	}
+
+	gr_correlation->setLabelName(base, second);
 
 }
 
@@ -335,7 +346,25 @@ void GraphicData::m_slotPanoramaStop()
 	set_bandwidth(m_bandwidthSingleSample);
 }
 
-void GraphicData::m_slotSetDetectedAreas(QVector<QPointF> vec)
+void GraphicData::m_slotSetDetectedAreas(QByteArray inVecBA)
 {
-	_gr_widget->setDetectedAreasUpdate(vec);
+	_gr_widget->setDetectedAreasUpdate(inVecBA);
+}
+
+
+void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
+{
+	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
+		set_data(arg.toByteArray(), true);
+	} else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
+		setDetectedAreas(arg.toByteArray());
+	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
+		set_def_modulation(arg.toString());
+	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
+
+
+		int point2 = 0;
+		set_data(point2, arg.toByteArray(), true);
+	}
+
 }

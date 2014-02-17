@@ -27,7 +27,6 @@ RPCClient::~RPCClient()
 bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 {
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRpcConnetion()));
-	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 
 	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 
@@ -47,14 +46,13 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
 
 	///server
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(rpc_send_points_vector)));
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpcSlotGettingDetectedBandwidth(rpc_send_points_vector)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(rpcSlotGettingDetectedBandwidth(QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpcSlotGettingModulation(QString)));
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(int, int, rpc_send_points_vector)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(uint, uint, QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
-
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
 
 	m_logger->debug("Start RPCClient");
@@ -199,47 +197,65 @@ void RPCClient::slotRpcConnetion()
 	setCommand(msg);
 }
 
-/// slot if have some error while connetiting
-void RPCClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
-{
-	QString thiserror;
-	switch(socketError)
-	{
-		case QAbstractSocket::RemoteHostClosedError:
-			thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
-			break;
-		case QAbstractSocket::HostNotFoundError:
-			thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
-			break;
-		case QAbstractSocket::ConnectionRefusedError:
-			thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
-			break;
-		default:
-			//        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + _rpc_client->->errorString()));
-			break;
-	}
-}
+///// slot if have some error while connetiting
+//void RPCClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
+//{
+//	QString thiserror;
+//	switch(socketError)
+//	{
+//		case QAbstractSocket::RemoteHostClosedError:
+//			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
+//			break;
+//		case QAbstractSocket::HostNotFoundError:
+//			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
+//			break;
+//		case QAbstractSocket::ConnectionRefusedError:
+//			thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
+//			break;
+//		default:
+//			//        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + _rpc_client->->errorString()));
+//			break;
+//	}
+//}
 
 /// getting points from server
-void RPCClient::rpcSlotGettingPoints(rpc_send_points_vector points)
+void RPCClient::rpcSlotGettingPoints(QByteArray points)
 {
-	m_grData->set_data(points, true);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_POINTS, points);
+	}
+
+	//m_grData->set_data(points, true);
 }
 
-void RPCClient::rpcSlotGettingDetectedBandwidth(rpc_send_points_vector points)
+void RPCClient::rpcSlotGettingDetectedBandwidth(QByteArray points)
 {
-	m_grData->setDetectedAreas(points);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, points);
+	}
+
+	//m_grData->setDetectedAreas(points);
 }
 
 void RPCClient::rpcSlotGettingModulation(QString modulation)
 {
-	m_grData->set_def_modulation(modulation);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, modulation);
+	}
+
+	//m_grData->set_def_modulation(modulation);
 }
 
-void RPCClient::rpcSlotServerSendCorrelation(int point1, int point2, rpc_send_points_vector points)
+void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points)
 {
-	if(point2 != m_tabProperty->get_id())
-		m_grData->set_data(point2, points, true);
+	///TODO: update
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, points);
+	}
+
+//	if(point2 != m_tabProperty->get_id())
+//		m_grData->set_data(point2, points, true);
 }
 
 void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
