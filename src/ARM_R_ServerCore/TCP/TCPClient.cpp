@@ -1,4 +1,4 @@
-#include "TCPClient.h"
+ï»¿#include "TCPClient.h"
 #include "assert.h"
 
 Pw::Logger::ILogger* TCPClient::_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TCPClient));
@@ -118,11 +118,11 @@ void TCPClient::proccess()
     this->connect(socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketDisplayError(QAbstractSocket::SocketError))/*, Qt::DirectConnection*/);
     this->connect(socket_, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(slotState(QAbstractSocket::SocketState)));
     this->connect(this, SIGNAL(signalReconnection()), this, SLOT(reconnection()), Qt::QueuedConnection);
-    this->socket_->connectToHost(_host, _port);
+	this->socket_->connectToHost(_host, _port);
     if(!socket_->waitForConnected(100))
     {
         QString thiserror;
-        thiserror.append(("Îøèáêà! Èñòåêëî âðåìÿ îæèäàíèÿ ïîäêëþ÷íèÿ!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð˜ÑÑ‚ÐµÐºÐ»Ð¾ Ð²Ñ€ÐµÐ¼Ñ Ð¾Ð¶Ð¸Ð´Ð°Ð½Ð¸Ñ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð½Ð¸Ñ!"));
         emit error(thiserror);
         finish_connection();
     }
@@ -137,17 +137,17 @@ void TCPClient::onSocketDisplayError(QAbstractSocket::SocketError socketError)
     switch(socketError)
     {
     case QAbstractSocket::RemoteHostClosedError:
-        thiserror.append(("Îøèáêà! Ñîåäåíåíèå ñ ïóíêòîì ïîòåðÿíî!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! Ð¡Ð¾ÐµÐ´ÐµÐ½ÐµÐ½Ð¸Ðµ Ñ Ð¿ÑƒÐ½ÐºÑ‚Ð¾Ð¼ Ð¿Ð¾Ñ‚ÐµÑ€ÑÐ½Ð¾!"));
         return;
         break;
     case QAbstractSocket::HostNotFoundError:
-        thiserror.append(("Îøèáêà! Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ïóíêòó!"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº Ð¿ÑƒÐ½ÐºÑ‚Ñƒ!"));
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        thiserror.append(("Îøèáêà! Îòêàçàíî â ñîåäèíåíèè"));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐžÑ‚ÐºÐ°Ð·Ð°Ð½Ð¾ Ð² ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ð¸"));
         break;
     default:
-        thiserror.append(("Îøèáêà! Ïðîèçîøëà îøèáêà: " + socket_->errorString()));
+        thiserror.append(("ÐžÑˆÐ¸Ð±ÐºÐ°! ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ°: " + socket_->errorString()));
         break;
     }
 //    QTextStream(stdout) << thiserror << endl;
@@ -356,7 +356,7 @@ QByteArray TCPClient::_prm_get_freq()
 
     quint8 aStart, aAddr, aSize, aBodyType, aCrc;
 
-    //Çàïðîñ î òåêóùåé ÷àñòîòå
+    //Ð—Ð°Ð¿Ñ€Ð¾Ñ Ð¾ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ¹ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ðµ
     aStart=170;         //0xAA
     aAddr=255;          //0xFF
     aSize=1;            //0x01
@@ -382,7 +382,7 @@ QByteArray TCPClient::_prm_set_att1(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Óñòàíîâêà àòòåíþàòîðà 1
+    //Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð°Ñ‚Ñ‚ÐµÐ½ÑŽÐ°Ñ‚Ð¾Ñ€Ð° 1
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -399,7 +399,7 @@ QByteArray TCPClient::_prm_set_att1(int value)
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Ïðîâåðêà ñïåöèàëüíûõ ñèìâîëîâ
+    //ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -420,7 +420,7 @@ QByteArray TCPClient::_prm_set_att2(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Óñòàíîâêà àòòåíþàòîðà 2
+    //Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð°Ñ‚Ñ‚ÐµÐ½ÑŽÐ°Ñ‚Ð¾Ñ€Ð° 2
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -437,7 +437,7 @@ QByteArray TCPClient::_prm_set_att2(int value)
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Ïðîâåðêà ñïåöèàëüíûõ ñèìâîëîâ
+    //ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -458,7 +458,7 @@ QByteArray TCPClient::_prm_set_filter(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Óñòàíîâêà ôèëüòðà
+    //Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ð°
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -475,7 +475,7 @@ QByteArray TCPClient::_prm_set_filter(int value)
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Ïðîâåðêà ñïåöèàëüíûõ ñèìâîëîâ
+    //ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -495,7 +495,7 @@ QByteArray TCPClient::_prm_set_freq(unsigned short aFreq)
     quint8 aSpecialB;
     aTemp=0;
 
-    //Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ñ‹
+    //Ð ÐˆÐ¡ÐƒÐ¡â€šÐ Â°Ð Ð…Ð Ñ•Ð Ð†Ð Ñ”Ð Â° Ð¡â€¡Ð Â°Ð¡ÐƒÐ¡â€šÐ Ñ•Ð¡â€šÐ¡â€¹
     aStart=170;         //0xAA
     aAddr=255;          //0xFF
     aSize=1+2;
@@ -516,7 +516,7 @@ QByteArray TCPClient::_prm_set_freq(unsigned short aFreq)
 
     streamWrite<<aStart<<aAddr<<aSize<<aBodyType;
 
-    //ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ñ… ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð²
+    //Ð ÑŸÐ¡Ð‚Ð Ñ•Ð Ð†Ð ÂµÐ¡Ð‚Ð Ñ”Ð Â° Ð¡ÐƒÐ Ñ—Ð ÂµÐ¡â€ Ð Ñ‘Ð Â°Ð Â»Ð¡ÐŠÐ Ð…Ð¡â€¹Ð¡â€¦ Ð¡ÐƒÐ Ñ‘Ð Ñ˜Ð Ð†Ð Ñ•Ð Â»Ð Ñ•Ð Ð†
     if (_specialSymb(aFreqFirst, aSpecialB)) streamWrite<<aFreqFirst<<aSpecialB;
     else streamWrite<<aFreqFirst;
 
