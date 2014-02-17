@@ -11,7 +11,7 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	m_spectrumWidget = new SpectrumWidget(this);
 
-	m_spectrumWidgetController = new SpectrumWidgetController(this);
+	m_spectrumWidgetController = new SpectrumWidgetController(m_spectrumWidget);
 	m_spectrumWidgetController->appendView(m_spectrumWidget);
 
 	insertSpectrumWidget(m_spectrumWidgetController);

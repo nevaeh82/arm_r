@@ -21,12 +21,6 @@
 
 #include <QTimer>
 
-#include "modules/gui/multi_graphics/components_relation.h"
-#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
-
-#include "Tabs/ITabSpectrum.h"
-#include "IGraphicWidget.h"
-
 #include "Common/CommandMessage.h"
 #include "SpectrumWidgetController.h"
 
@@ -34,7 +28,7 @@ namespace Ui {
 class SpectrumWidget;
 }
 
-class SpectrumWidget : public QWidget//, public IGraphicWidget
+class SpectrumWidget : public QWidget
 {
 	Q_OBJECT
 private:
@@ -56,28 +50,10 @@ public:
 public slots:
 
 private slots:
-	//void slotSetEnablePanorama(bool state);
-	//void slotAutoSearch(bool state);
-	//void slotSelectiontypeChanged(bool);
-	//void slotRequestData(bool state);
 	void slotEnableKM(bool state);
 
-	/*void slotShowPeaks(bool);
-
-	void slotShowControlPRM(bool state);*/
-
 signals:
-	//void selected(double x1, double x2, double y1, double y2);
-	//void signalChoosedThreshold(double y);
-	//void signalCurSelChanged(int);
-	//void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
 	void signalEnableKM(bool state);
-
-	/// id - is id of ilsts (1 - White list, 2 - Black list)
-	//void signalAddSelToLists(int id);
-
-	//void signalFinished();
-	//void signalNeedToUpdate();
 
 	void setPanoramaSignal(bool);
 	void setAutoSearchSignal(bool);

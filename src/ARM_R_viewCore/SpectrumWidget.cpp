@@ -8,23 +8,15 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, 
 {
 	ui->setupUi(this);
 
-	//connect(ui->graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
-	//connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
-
 	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SIGNAL(setPanoramaSignal(bool)));
 
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(setAutoSearchSignal(bool)));
 	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SIGNAL(selectionTypeChangedSignal(bool)));
 	connect(ui->getSpectrumCB, SIGNAL(toggled(bool)), this, SIGNAL(requestDataSignal(bool)));
 
-	/*connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SLOT(slotAutoSearch(bool)));
-	connect(ui->thresholdCB, SIGNAL(clicked(bool)), this, SLOT(slotSelectiontypeChanged(bool)));
-	connect(ui->getSpectrumCB, SIGNAL(clicked(bool)), this, SLOT(slotRequestData(bool)));*/
-
 	///hide/show hold peaks
 	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowPeaksSignal(bool)));
 	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowControlPRM(bool)));
-	connect(this, SIGNAL(signalCurSelChanged(int)), ui->graphicsWidget, SLOT(slotCurSelectionChanged(int)));
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -49,52 +41,7 @@ Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
 void SpectrumWidget::setControlPrmState(bool state)
 {
 	ui->prmControlCB->setChecked(state);
-	//emit signalSetControlPRMState(state);
 }
-/*
-void SpectrumWidget::slotSetEnablePanorama(bool state)
-{
-	emit setPanoramaSignal(state);
-}*/
-/*
-void SpectrumWidget::slotAutoSearch(bool state)
-{
-	m_autoSearch = state;
-
-	if (!m_autoSearch) {
-		ui->graphicsWidget->ClearAllDetectedAreas();
-	}
-}
-
-/// change cur selection type
-void SpectrumWidget::slotSelectiontypeChanged(bool state)
-{
-	if(state){
-		emit signalCurSelChanged(4);
-		return;
-	}
-
-	emit signalCurSelChanged(1);
-
-	m_threshold = -1000;
-}*/
-
-/// set graphic name
-/*
-void SpectrumWidget::slotSetCaption(QString name)
-{
-	ui->spectrumNameLB->setText(name);
-}*/
-
-/// request data
-/*
-void SpectrumWidget::slotRequestData(bool state)
-{
-	int data[4] = {0, 1, 2, 3};
-	if(state){
-		emit signalRequestData(m_id, 0, &data[0], 4);
-	}
-}*/
 
 void SpectrumWidget::slotEnableKM(bool state)
 {
@@ -144,32 +91,5 @@ void SpectrumWidget::slotSetCorrelations(int id, const QVector<QPointF> vecFFT, 
 	}
 
 	delete[] spectrum;
-}
-*/
-/// if something selected then show context menu
-/*void SpectrumWidget::slotIsShowContextMenu()
-{
-	if(ui->graphicsWidget->IsSomethingSelected())
-		ui->graphicsWidget->contextMenu()->setEnabled(true);
-	else
-		ui->graphicsWidget->contextMenu()->setEnabled(false);
-}*/
-
-/// show/hide peaks
-/*void SpectrumWidget::slotShowPeaks(bool visible)
-{
-	ui->graphicsWidget->SetSpectrumVisible(2, visible);
-	m_peakVisible = visible;
-}
-
-void SpectrumWidget::slotShowControlPRM(bool state)
-{
-	m_tab->set_show_controlPRM(state);
-}
-*/
-/*void SpectrumWidget::slotDoubleClicked(double d1, double d2)
-{
-	emit doubleClickedSignal(m_id);
-	//_tab->set_double_clicked(_id, d1, d2);
 }
 */

@@ -212,13 +212,13 @@ int TabSpectrumWidgetController::createView()
 	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
 	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));
 
-	QThread *thread_spectrum_client = new QThread;
+	//QThread *thread_spectrum_client = new QThread;
 
-	connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
-	connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
-	connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
-	_spectrumData->moveToThread(thread_spectrum_client);
-	thread_spectrum_client->start();
+	//connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
+	//connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
+	//connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
+	//_spectrumData->moveToThread(thread_spectrum_client);
+	//thread_spectrum_client->start();
 
 	return 0;
 }
