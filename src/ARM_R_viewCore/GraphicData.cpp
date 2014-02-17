@@ -353,14 +353,14 @@ void GraphicData::m_slotSetDetectedAreas(QByteArray inVecBA)
 void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
 {
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		set_data(arg.toByteArray(), true);
+		set_data(arg.toByteArray(), true); //spectrum
 	} else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
 		setDetectedAreas(arg.toByteArray());
 	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		set_def_modulation(arg.toString());
+		set_def_modulation(arg.toString()); //spectrum
 	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
-
-
+		//correlation
+		//TODO: point2 from rpc
 		int point2 = 0;
 		set_data(point2, arg.toByteArray(), true);
 	}
