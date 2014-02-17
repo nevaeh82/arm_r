@@ -20,7 +20,6 @@ SOURCES += \
         GraphicData.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
-	Common/CommonSpectra.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
 	Common/CommonCorrelations.cpp \
@@ -55,7 +54,6 @@ HEADERS += \
 	Abstracts/ICommonComponents.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
-	Common/CommonSpectra.h \
 	Common/IMessage.h \
 	Common/CommandMessage.h \
 	Tabs/ITabSpectrum.h \

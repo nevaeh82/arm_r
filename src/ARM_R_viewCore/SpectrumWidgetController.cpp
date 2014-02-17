@@ -180,11 +180,16 @@ void SpectrumWidgetController::setLabelName(QString base, QString second)
 	m_graphicsWidget->SetLabel(m_bandwidth/2, base);
 }
 
-void SpectrumWidgetController::setDetectedAreasUpdate(QVector<QPointF> vec)
+void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 {
 	if(m_autoSearch == false){
 		return;
 	}
+
+	QVector<QPointF> vec;
+	QDataStream stream(vecBA);
+	stream >> vec;
+
 	m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){

@@ -33,8 +33,6 @@
 
 #include "Interfaces/IDbManager.h"
 
-typedef QVector<QPointF>         rpc_send_points_vector;
-
 class RPCClient : public RpcClientBase
 {
     Q_OBJECT
@@ -110,10 +108,10 @@ signals:
 
 public slots:
     ///rpc_server
-	void rpcSlotGettingPoints(rpc_send_points_vector points);
-	void rpcSlotGettingDetectedBandwidth(rpc_send_points_vector points);
+	void rpcSlotGettingPoints(QByteArray points);
+	void rpcSlotGettingDetectedBandwidth(QByteArray points);
 	void rpcSlotGettingModulation(QString modulation);
-	void rpcSlotServerSendCorrelation(int point1, int point2, rpc_send_points_vector points);
+	void rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points);
 
 	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
 
@@ -121,7 +119,7 @@ public slots:
 
 private slots:
 	void slotRpcConnetion();
-	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
+	//void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
 	void slotSetCommand(IMessage* msg);
 };
 

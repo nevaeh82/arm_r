@@ -10,9 +10,8 @@
 #include <QVBoxLayout>
 #include <QMutex>
 
-#include "../Abstracts/IModuleController.h"
-#include "../Common/CommonSpectra.h"
-#include "../Common/CommonCorrelations.h"
+#include "Abstracts/IModuleController.h"
+#include "Common/CommonCorrelations.h"
 
 #include "TabsProperty.h"
 
@@ -43,7 +42,7 @@ private:
 	QString         _name;
 	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	ICommonComponents*          _common_spectra;
+	//ICommonComponents*          _common_spectra;
 	ICommonComponents*          _common_correlations;
 
 	IDbManager*                 m_dbManager;

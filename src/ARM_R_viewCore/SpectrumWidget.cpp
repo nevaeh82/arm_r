@@ -14,9 +14,9 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, 
 	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SIGNAL(selectionTypeChangedSignal(bool)));
 	connect(ui->getSpectrumCB, SIGNAL(toggled(bool)), this, SIGNAL(requestDataSignal(bool)));
 
-	///hide/show hold peaks
 	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowPeaksSignal(bool)));
 	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowControlPRM(bool)));
+
 }
 
 SpectrumWidget::~SpectrumWidget()

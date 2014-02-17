@@ -28,22 +28,6 @@ void RpcClientBase::stop()
 	m_clientPeer->disconnectAll();
 }
 
-void RpcClientBase::registerListener(IRpcListener *listener)
-{
-	m_listeners.append(listener);
-}
-
-void RpcClientBase::deregisterListener(IRpcListener *listener)
-{
-	int index = m_listeners.indexOf(listener);
-
-	if (index < 0){
-		return;
-	}
-
-	m_listeners.removeAt(index);
-}
-
 void RpcClientBase::connectToServer()
 {
 	m_logger->debug(QString("RPC-client status: connecting to server %1:%2").arg(m_address.toString()).arg(QString::number(m_port)));
