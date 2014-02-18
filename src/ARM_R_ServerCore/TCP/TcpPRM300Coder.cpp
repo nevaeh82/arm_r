@@ -58,7 +58,7 @@ IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 		inputDataSream >> aFlag;
 	}
 
-	if (m_aPacketType == (quint8)PRM300External::TypeAttenuatorOneChangedAnswer /*3*/) {
+	if (m_aPacketType == (quint8)PRM300External::TypeAttenuerOneChangedAnswer /*3*/) {
 		quint16 aFlag;
 		inputDataSream >> aFlag;
 	}
@@ -153,7 +153,7 @@ IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 		inputDataSream >> aFlag;
 	}
 
-	if (m_aPacketType == (quint8)PRM300External::TypeAttenuatorTwoChangedAnswer /*7*/) {
+	if (m_aPacketType == (quint8)PRM300External::TypeAttenuerTwoChangedAnswer /*7*/) {
 		quint16 aFlag;
 		inputDataSream >> aFlag;
 	}
@@ -178,12 +178,12 @@ QByteArray TcpPRM300Coder::decode(const IMessage<QByteArray>* message)
 		dataToSend = prmSetFrequency(avalue);
 	} else if (message->type() == TCP_PRM300_REQUEST_GET_FREQUENCY) {
 		dataToSend = prmGetFrequency();
-	} else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUATOR_1) {
+	} else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_ONE) {
 		inputDataStream >> int_value;
-		dataToSend = prmSetAttenuatorOne(int_value);
-	} else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUATOR_2) {
+		dataToSend = prmSetAttenuerOne(int_value);
+	} else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_TWO) {
 		inputDataStream >> int_value;
-		dataToSend = prmSetAttenuatorTwo(int_value);
+		dataToSend = prmSetAttenuerTwo(int_value);
 	} else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
 		inputDataStream >> int_value;
 		dataToSend = prmSetFilter(int_value);
@@ -333,7 +333,7 @@ QByteArray TcpPRM300Coder::prmGetFrequency()
 	return ba;
 }
 
-QByteArray TcpPRM300Coder::prmSetAttenuatorOne(int value)
+QByteArray TcpPRM300Coder::prmSetAttenuerOne(int value)
 {
 	/// Magic again
 
@@ -371,7 +371,7 @@ QByteArray TcpPRM300Coder::prmSetAttenuatorOne(int value)
 	return ba;
 }
 
-QByteArray TcpPRM300Coder::prmSetAttenuatorTwo(int value)
+QByteArray TcpPRM300Coder::prmSetAttenuerTwo(int value)
 {
 	/// Magic again
 

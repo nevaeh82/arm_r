@@ -12,8 +12,8 @@
 #define TCP_PRM300_ANSWER_STATUS				"tcpPRM300AnswerStatus"
 #define TCP_PRM300_REQUEST_SET_FREQUENCY		"tcpPRM300RequestSetFrequency"
 #define TCP_PRM300_REQUEST_GET_FREQUENCY		"tcpPRM300RequestGetFrequency"
-#define TCP_PRM300_REQUEST_SET_ATTENUATOR_1		"tcpPRM300RequestSetAttenuator1"
-#define TCP_PRM300_REQUEST_SET_ATTENUATOR_2		"tcpPRM300RequestSetAttenuator2"
+#define TCP_PRM300_REQUEST_SET_ATTENUER_ONE		"tcpPRM300RequestSetAttenuerOne"
+#define TCP_PRM300_REQUEST_SET_ATTENUER_TWO		"tcpPRM300RequestSetAttenuerTwo"
 #define TCP_PRM300_REQUEST_SET_FILTER			"tcpPRM300RequestSetFilter"
 
 /// Flakon device internal
@@ -32,10 +32,10 @@
 namespace PRM300External {
 typedef enum TypePRM300ExternalEnum {
 	TypeFrequencyChangedAnswer			= 2,
-	TypeAttenuatorOneChangedAnswer		= 3,
+	TypeAttenuerOneChangedAnswer		= 3,
 	TypeFrequencyAnswer					= 4,
 	TypeFilterChangedAnswer				= 6,
-	TypeAttenuatorTwoChangedAnswer		= 7
+	TypeAttenuerTwoChangedAnswer		= 7
 } TypePRM300ExternalEnum;
 }
 

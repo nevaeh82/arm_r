@@ -38,8 +38,8 @@ private:
 	QByteArray prmSetFrequency(unsigned short aFreq);
 	bool specialSymb(quint8 &aByteA, quint8 &aByteB);
 	QByteArray prmGetFrequency();
-	QByteArray prmSetAttenuatorOne(int value);
-	QByteArray prmSetAttenuatorTwo(int value);
+	QByteArray prmSetAttenuerOne(int value);
+	QByteArray prmSetAttenuerTwo(int value);
 	QByteArray prmSetFilter(int value);
 };
 
