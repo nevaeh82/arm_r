@@ -32,19 +32,9 @@ GraphicData::GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_co
 
 	connect(this, SIGNAL(signalSetBandwidth(double)), this, SLOT(m_slotSetBandwidth(double)));
 
-	connect(this, SIGNAL(signalPanoramaStart(double,double)), this, SLOT(m_slotPanoramaStart(double,double)));
-	connect(this, SIGNAL(signalPanoramaStop()), this, SLOT(m_slotPanoramaStop()));
+	//connect(this, SIGNAL(signalPanoramaStart(double,double)), this, SLOT(m_slotPanoramaStart(double,double)));
+	//connect(this, SIGNAL(signalPanoramaStop()), this, SLOT(m_slotPanoramaStop()));
 	connect(this, SIGNAL(signalSetDetectedAreas(QByteArray)), this, SLOT(m_slotSetDetectedAreas(QByteArray)));
-	//    QMap<int, IGraphicWidget *>::iterator it;
-	//    for(it = _map_correlation_widget->begin(); it != _map_correlation_widget->end(); ++it)
-	//    {
-	//        float *sp = new float[1];
-	//        float *peak = new float[1];
-	//        double b = 0;
-	//        _map_peaks_correlation.insert(it.key(), peak);
-	//        _map_spectrum_corelation.insert(it.key(), sp);
-	//        _map_bandwidth_corelation.insert(it.key(), b);
-	//    }
 
 	/// TODO need to correct architecture
 	if(common_correlations == NULL)
@@ -88,7 +78,7 @@ void GraphicData::set_bandwidth(double bandwidth)
 	emit signalSetBandwidth(bandwidth);
 }
 
-void GraphicData::set_panorama(double start, double end)
+/*void GraphicData::set_panorama(double start, double end)
 {
 	emit signalPanoramaStart(start, end);
 }
@@ -96,7 +86,7 @@ void GraphicData::set_panorama(double start, double end)
 void GraphicData::set_panorama_stop()
 {
 	emit signalPanoramaStop();
-}
+}*/
 
 void GraphicData::setDetectedAreas(const QByteArray &vec)
 {
@@ -186,8 +176,6 @@ void GraphicData::m_dataProccess(QVector<QPointF> &vecFFT, bool isComplex)
 	{
 		_startx = startx;
 	}
-
-
 }
 
 void GraphicData::m_slotSetData(QByteArray vecFFTBA, bool isComplex)
@@ -317,7 +305,7 @@ void GraphicData::m_slotSetBandwidth(double bandwidth)
 	}
 }
 
-void GraphicData::m_slotPanoramaStart(double start, double end)
+/*void GraphicData::m_slotPanoramaStart(double start, double end)
 {
 	qDebug() << "panorama started = " << start << end;
 
@@ -342,7 +330,7 @@ void GraphicData::m_slotPanoramaStop()
 	m_isPanoramaStart = false;
 
 	set_bandwidth(m_bandwidthSingleSample);
-}
+}*/
 
 void GraphicData::m_slotSetDetectedAreas(QByteArray inVecBA)
 {
@@ -353,7 +341,7 @@ void GraphicData::m_slotSetDetectedAreas(QByteArray inVecBA)
 void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
 {
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		set_data(arg.toByteArray(), true); //spectrum
+		//set_data(arg.toByteArray(), true); //spectrum
 	} else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
 		setDetectedAreas(arg.toByteArray());
 	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
@@ -361,8 +349,7 @@ void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
 	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
 		//correlation
 		//TODO: point2 from rpc
-		int point2 = 0;
-		set_data(point2, arg.toByteArray(), true);
+		//int point2 = 0;
+		//set_data(point2, arg.toByteArray(), true);
 	}
-
 }

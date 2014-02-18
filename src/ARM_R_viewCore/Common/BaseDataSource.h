@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QVariant>
 #include <QString>
+#include <QVector>
+#include <QPointF>
 
 #include "Interfaces/IDataSource.h"
 #include "Interfaces/IDataSourceListener.h"
@@ -23,7 +25,7 @@ public:
 	void sendCommand(int) = 0;
 
 protected:
-	void onDataReceived(const QString& method, const QVariant& arg);
+	void onDataReceived(const QString& method, const QVariant& arg, const QList< QVector<QPointF> >&);
 
 signals:
 	

@@ -126,22 +126,7 @@ int TabSpectrumWidgetController::createRPC()
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
 	m_rpcClient->registerReceiver(_spectrumData);
-
-	/*QThread *thread_rpc_client = new QThread;
-
-	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));
-
-	//    connect(this, SIGNAL(signalStartRPC()), _rpc_client1, SLOT(slotStart()));
-	connect(_rpc_client1, SIGNAL(signalFinished()), thread_rpc_client, SLOT(quit()));
-	connect(thread_rpc_client, SIGNAL(finished()), thread_rpc_client, SLOT(deleteLater()));
-
-	connect(_rpc_client1, SIGNAL(signalFinished()), _rpc_client1, SLOT(deleteLater()));
-	connect(this, SIGNAL(signalStopRPC()), _rpc_client1, SLOT(slotStop()));
-	connect(this, SIGNAL(signalFinishRPC()), _rpc_client1, SLOT(slotFinish()));
-
-	//_rpc_client1->setParent(0);
-	_rpc_client1->moveToThread(thread_rpc_client);
-	thread_rpc_client->start();*/
+	m_rpcClient->registerReceiver(m_spectrumDataSource);
 
 	return 0;
 }
@@ -179,46 +164,11 @@ int TabSpectrumWidgetController::createView()
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-
-	///_common_components->set(_id, spectrumWidget);
-
-	/// TODO: update
-	/*_controlPRM = new ControlPRM(0, this);
-	_dock_controlPRM = new QDockWidget(tr("РЈРїСЂР°РІР»РµРЅРёРµ РџР Рњ300Р’"), this);
-	_dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
-	_dock_controlPRM->setWidget(_controlPRM);
-
-	connect(_dock_controlPRM, SIGNAL(visibilityChanged(bool)), this, SLOT(_slot_show_controlPRM(bool)));
-
-	_dock_controlPRM->hide();
-	_hboxlayout->insertWidget(0, _dock_controlPRM, Qt::AlignLeft);*/
-
-
-	//    _controlPRM->slotShow();
-
-	//    QGridLayout *l = new QGridLayout();
-	//    l->addWidget(_spectrumWidget, 0, 0);
-	//    this->setLayout(l);
-
-	//    QHBoxLayout *hbox = new QHBoxLayout;
-	//    hbox->addWidget(_spectrumWidget, Qt::AlignJustify);
-	//    _hboxlayout->addLayout(hbox);
-	//    _view_stacked_widget->addWidget(_spectrumWidget);
-
-	//
-
 	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, _tab_manager, _id);
+	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 
 	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
 	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));
-
-	//QThread *thread_spectrum_client = new QThread;
-
-	//connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
-	//connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
-	//connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
-	//_spectrumData->moveToThread(thread_spectrum_client);
-	//thread_spectrum_client->start();
 
 	return 0;
 }
@@ -404,11 +354,10 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 				panoramaEndValue = property.value.toDouble();
 			}
 		}
-
-		_spectrumData->set_panorama(panoramaStartValue, panoramaEndValue);
+		m_spectrumDataSource->setPanorama(true, panoramaStartValue, panoramaEndValue);
 
 	} else {
-		_spectrumData->set_panorama_stop();
+		m_spectrumDataSource->setPanorama(false);
 	}
 
 }

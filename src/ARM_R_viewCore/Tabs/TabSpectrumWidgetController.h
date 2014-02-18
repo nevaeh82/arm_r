@@ -8,6 +8,8 @@
 #include "TabSpectrumWidget.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
 
+#include "SpectrumWidgetDataSource.h"
+
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum
 {
 	Q_OBJECT
@@ -15,6 +17,7 @@ class TabSpectrumWidgetController : public QObject, public IController<TabSpectr
 private:
 	TabSpectrumWidget* m_view;
 	ISpectrumWidget* m_spectrumWidget;
+	SpectrumWidgetDataSource* m_spectrumDataSource;
 
 	int                 _id;
 	QString             m_stationName;

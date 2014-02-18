@@ -13,19 +13,17 @@
 
 #include <QHostAddress>
 
-#include <PwLogger/PwLogger.h>
-
 #include "IRPC.h"
-#include "../../Common/IMessage.h"
-#include "../../Common/CommandMessage.h"
+#include "Common/IMessage.h"
+#include "Common/CommandMessage.h"
 
-#include "../TabsProperty.h"
+#include "Tabs/TabsProperty.h"
 #include "Interfaces/IDBManager.h"
-#include "../ITabSpectrum.h"
+#include "Tabs/ITabSpectrum.h"
 
-#include "../../GraphicData.h"
+#include "GraphicData.h"
 
-#include "../Controls/IControlPRM.h"
+#include "Tabs/Controls/IControlPRM.h"
 
 #include "UiDefines.h"
 #include "Rpc/RpcDefines.h"

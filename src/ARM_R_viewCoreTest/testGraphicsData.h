@@ -6,6 +6,7 @@
 //#include "../ARM_R_view/Tabs/Tree/DBController.cpp"
 
 #include "GraphicData.h"
+#include "SpectrumWidgetDataSource.h"
 
 class GraphicsDataTest: public CxxTest::TestSuite
 {
@@ -31,23 +32,20 @@ public:
 
 	void testGraphicsList()
 	{
-		GraphicData* grData = new GraphicData(0,0,0,0);
-		grData->_list_startx.append(1.23);
-		grData->_list_startx.append(8.97);
+		SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
+		grData->m_listStartx.append(1.23);
+		grData->m_listStartx.append(8.97);
 
-		qDebug() << grData->_list_startx.size() << grData->_list_startx.at(1);
+		qDebug() << grData->m_listStartx.size() << grData->m_listStartx.at(1);
 
-		TS_ASSERT_EQUALS(1, grData->_find_index(8.97));
-
-		TS_ASSERT_EQUALS(1, grData->_find_index(8));
-
-		TS_ASSERT_EQUALS(0, grData->_find_index(0.99));
-		delete grData;
+		TS_ASSERT_EQUALS(1, grData->findIndex(8.97));
+		TS_ASSERT_EQUALS(1, grData->findIndex(8));
+		TS_ASSERT_EQUALS(0, grData->findIndex(0.99));
 	}
 
 	void testGraphicsIncomeData()
 	{
-		GraphicData* grData = new GraphicData(0,0,0,0);
+		SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
 
 		QVector<QPointF> vecFFT1;
 		bool isComplex = true;
@@ -64,13 +62,12 @@ public:
 			qDebug() << point.x() << point.y();
 		}
 
+		grData->dataProccess(vecFFT1, isComplex);
+		//qDebug() << "-----------1-------------";
+		grData->setPanorama(true, 0, 40);
 
-		grData->m_dataProccess(vecFFT1, isComplex);
-
-		grData->m_slotPanoramaStart(0, 40);
-
-		grData->m_dataProccess(vecFFT1, isComplex);
-
+		grData->dataProccess(vecFFT1, isComplex);
+		//qDebug() << "-----------2-------------";
 
 		QVector<QPointF> vecFFT2;
 		for(int i = 21; i < 41; i++)
@@ -82,25 +79,39 @@ public:
 			vecFFT2.append(point);
 		}
 
-		grData->m_dataProccess(vecFFT2, isComplex);
+		grData->dataProccess(vecFFT2, isComplex);
+		//qDebug() << "------------3------------" << vecFFT1.size();
+		//grData->pointsVectorsList.at(1).at(i).y()
 
 		for(int i = 0; i < 40; i++)
 		{
 			if(i < 20)
 			{
-				qDebug() << i << vecFFT1.at(i).y() << grData->_spectrum[i];
-				TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->_spectrum[i]);
+				qDebug() << i << vecFFT1.at(i).y() << grData->m_spectrum[i];
+				TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->m_spectrum[i]);
 			}
 			else
 			{
-				qDebug() << i << vecFFT2.at(i-20).y() << grData->_spectrum[i];
-				TS_ASSERT_EQUALS(vecFFT2.at(i-20).y(), grData->_spectrum[i]);
+				qDebug() << i << vecFFT2.at(i-20).y() << grData->m_spectrum[i];
+				TS_ASSERT_EQUALS(vecFFT2.at(i-20).y(), grData->m_spectrum[i]);
 			}
 
 		}
 
-		TS_ASSERT_EQUALS(0, 0);
-		delete grData;
+		//qDebug() << "------------4------------";
+		for(int i = 0; i <= 20; i++)
+		{
+			qDebug() << i << vecFFT1.at(i).y() << grData->m_pointsList.at(0).at(i).y();
+			TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->m_pointsList.at(0).at(i).y());
+		}
+
+		//qDebug() << "------------5------------";
+		for(int i = 0; i < 20; i++)
+		{
+			qDebug() << i << vecFFT2.at(i).y() << grData->m_pointsList.at(1).at(i).y();
+			TS_ASSERT_EQUALS(vecFFT2.at(i).y(), grData->m_pointsList.at(1).at(i).y());
+		}
+
 
 	}
 };

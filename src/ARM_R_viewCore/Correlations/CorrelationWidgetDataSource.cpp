@@ -22,7 +22,8 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 		//TODO: point2 from rpc
 		int point2 = 0;
 		//set_data(point2, arg.toByteArray(), true);
-		onDataReceived(method, data);
+
+		//onDataReceived(method, data, );
 	}
 }
 

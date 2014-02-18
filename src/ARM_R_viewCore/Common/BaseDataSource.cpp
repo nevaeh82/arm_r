@@ -21,9 +21,9 @@ void BaseDataSource::deregisterListener(IDataSourceListener* listener)
 	m_listeners.removeAt(index);
 }
 
-void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)
+void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg, const QList< QVector<QPointF> >& argListVector)
 {
 	foreach(IDataSourceListener* listener, m_listeners){
-		listener->onDataArrived(method, arg);
+		listener->onDataArrived(method, arg, argListVector);
 	}
 }

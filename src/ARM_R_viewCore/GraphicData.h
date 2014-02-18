@@ -20,8 +20,6 @@ class GraphicData : public QObject, public IRpcListener
 {
     Q_OBJECT
 
-	friend class GraphicsDataTest;
-
 public:
 	GraphicData(IGraphicWidget *gr_widget, ICommonComponents* common_correlations, ITabManager* tab_manager, int id, QObject* parent = NULL );
 	virtual ~GraphicData();
@@ -32,8 +30,8 @@ public:
 	void set_data(quint32 point2, const QByteArray &points, bool isComplex);
 	void set_def_modulation(const QString& modulation);
 	void set_bandwidth(double bandwidth);
-	void set_panorama(double start, double end);
-	void set_panorama_stop();
+	//void set_panorama(double start, double end);
+	//void set_panorama_stop();
 
 	void setDetectedAreas(const QByteArray &vec);
 
@@ -81,8 +79,8 @@ signals:
 	void signalSetDetectedAreas(QByteArray vec);
 
 	void signalSetBandwidth(double);
-	void signalPanoramaStart(double start, double end);
-	void signalPanoramaStop();
+	//void signalPanoramaStart(double start, double end);
+	//void signalPanoramaStop();
 
 
 private slots:
@@ -91,8 +89,8 @@ private slots:
 	void m_slotSetDefModulation(QString modulation);
 	void m_slotSetBandwidth(double bandwidth);
 
-	void m_slotPanoramaStart(double start, double end);
-	void m_slotPanoramaStop();
+	//void m_slotPanoramaStart(double start, double end);
+	//void m_slotPanoramaStop();
 
 	void m_slotSetDetectedAreas(QByteArray vec);
 

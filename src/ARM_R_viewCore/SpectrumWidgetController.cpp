@@ -1,6 +1,8 @@
 #include "SpectrumWidgetController.h"
 #include "SpectrumWidget.h"
 
+#include "Rpc/RpcDefines.h"
+
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 	QObject(parent)
 {
@@ -77,6 +79,17 @@ void SpectrumWidgetController::setControlPrmState(bool state)
 	m_view->setControlPrmState(state);
 }
 
+void SpectrumWidgetController::onDataArrived(const QString &method, const QVariant &arg, const QList<QVector<QPointF> >& argListVector)
+{
+	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
+
+		//setSignal(m_spectrum, m_spectrumPeakHold);
+
+		return;
+		//set_data(arg.toByteArray(), true); //spectrum
+	}
+}
+
 QString SpectrumWidgetController::getSpectrumName() const
 {
 	return m_view->getSpectrumName();
@@ -125,7 +138,8 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
 	m_isComplex = false;
-	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
+	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
+							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 	m_mux.unlock();
 
 }
