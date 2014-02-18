@@ -248,10 +248,17 @@ void RPCClient::rpcSlotGettingModulation(QString modulation)
 
 void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points)
 {
-	///TODO: update
+	QList<QVariant> list;
+	QVariant pointsVariant(points);
+	QVariant point2Variant(point2);
+
+	list.append(pointsVariant);
+	list.append(point2Variant);
+
+	QVariant data(list);
 
 	foreach (IRpcListener* listener, m_receiversList) {
-		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, points);
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, data);
 	}
 
 //	if(point2 != m_tabProperty->get_id())

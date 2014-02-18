@@ -12,6 +12,8 @@
 #include <QStringList>
 
 #include <QHostAddress>
+#include <QVariant>
+#include <QList>
 
 #include "IRPC.h"
 #include "Common/IMessage.h"

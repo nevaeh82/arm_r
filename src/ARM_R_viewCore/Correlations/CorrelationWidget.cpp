@@ -166,3 +166,15 @@ void CorrelationWidget::_slotSetLabelName(QString base, QString second)
 		ui->spectrumWidget->SetLabel(0, _label_name);
 	}
 }
+
+void CorrelationWidget::onDataArrived(const QString &method, const QVariant &arg)
+{
+}
+
+void CorrelationWidget::onDataArrived(float *spectrum, float *spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
+{
+}
+
+void CorrelationWidget::onDataArrived(float *spectrum, float *spectrumPeakHold)
+{
+}
