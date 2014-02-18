@@ -62,12 +62,13 @@ public:
 			qDebug() << point.x() << point.y();
 		}
 
+
 		grData->dataProccess(vecFFT1, isComplex);
-		//qDebug() << "-----------1-------------";
+
 		grData->setPanorama(true, 0, 40);
 
 		grData->dataProccess(vecFFT1, isComplex);
-		//qDebug() << "-----------2-------------";
+
 
 		QVector<QPointF> vecFFT2;
 		for(int i = 21; i < 41; i++)
@@ -80,8 +81,6 @@ public:
 		}
 
 		grData->dataProccess(vecFFT2, isComplex);
-		//qDebug() << "------------3------------" << vecFFT1.size();
-		//grData->pointsVectorsList.at(1).at(i).y()
 
 		for(int i = 0; i < 40; i++)
 		{
@@ -97,22 +96,6 @@ public:
 			}
 
 		}
-
-		//qDebug() << "------------4------------";
-		for(int i = 0; i <= 20; i++)
-		{
-			qDebug() << i << vecFFT1.at(i).y() << grData->m_pointsList.at(0).at(i).y();
-			TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->m_pointsList.at(0).at(i).y());
-		}
-
-		//qDebug() << "------------5------------";
-		for(int i = 0; i < 20; i++)
-		{
-			qDebug() << i << vecFFT2.at(i).y() << grData->m_pointsList.at(1).at(i).y();
-			TS_ASSERT_EQUALS(vecFFT2.at(i).y(), grData->m_pointsList.at(1).at(i).y());
-		}
-
-
 	}
 };
 

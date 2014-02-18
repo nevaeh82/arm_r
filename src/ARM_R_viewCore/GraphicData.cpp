@@ -343,9 +343,9 @@ void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		//set_data(arg.toByteArray(), true); //spectrum
 	} else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
-		setDetectedAreas(arg.toByteArray());
+		//setDetectedAreas(arg.toByteArray());
 	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		set_def_modulation(arg.toString()); //spectrum
+	//	set_def_modulation(arg.toString()); //spectrum
 	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
 		//correlation
 		//TODO: point2 from rpc

@@ -25,7 +25,9 @@ public:
 	void sendCommand(int) = 0;
 
 protected:
-	void onDataReceived(const QString& method, const QVariant& arg, const QList< QVector<QPointF> >&);
+	void onDataReceived(const QString& method, const QVariant& arg);
+	void onDataReceived(float* spectrum, float* spectrumPeakHold, int pointCount, double bandwidth, bool isComplex);
+	void onDataReceived(float* spectrum, float* spectrumPeakHold);
 
 signals:
 	

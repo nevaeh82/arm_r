@@ -166,6 +166,7 @@ int TabSpectrumWidgetController::createView()
 
 	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, _tab_manager, _id);
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
+	m_spectrumDataSource->registerListener(m_spectrumWidget);
 
 	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
 	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));

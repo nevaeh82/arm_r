@@ -34,8 +34,9 @@ private:
 	double	m_bandwidth;
 
 	QList<qreal>	m_listStartx;
-	QList< QList<QPointF> > m_pointsList;
-	QList<QPointF> m_spectrumPeakHoldList;
+
+	//QList< QList<QPointF> > m_pointsList;
+	//QList<QPointF> m_spectrumPeakHoldList;
 
 public:
 	explicit SpectrumWidgetDataSource(IGraphicWidget*, QObject *parent = 0);

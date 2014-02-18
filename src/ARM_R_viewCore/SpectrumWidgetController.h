@@ -9,7 +9,6 @@
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
-#include "Interfaces/IDataSourceListener.h"
 #include "IGraphicWidget.h"
 #include "Tabs/ITabSpectrum.h"
 
@@ -20,7 +19,7 @@
 
 class SpectrumWidget;
 
-class SpectrumWidgetController : public QObject, public ISpectrumWidget, public IController<SpectrumWidget>, public IDataSourceListener
+class SpectrumWidgetController : public QObject, public ISpectrumWidget, public IController<SpectrumWidget>
 {
 	Q_OBJECT
 private:
@@ -78,7 +77,9 @@ public:
 	void setup();
 	void setControlPrmState(bool state);
 
-	void onDataArrived(const QString& method, const QVariant& arg, const QList< QVector<QPointF> >& argListVector);
+	void onDataArrived(const QString& method, const QVariant& arg);
+	void onDataArrived(float*, float*, int, double, bool);
+	void onDataArrived(float*, float*);
 private:
 	void init();
 

@@ -21,9 +21,23 @@ void BaseDataSource::deregisterListener(IDataSourceListener* listener)
 	m_listeners.removeAt(index);
 }
 
-void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg, const QList< QVector<QPointF> >& argListVector)
+void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)
 {
 	foreach(IDataSourceListener* listener, m_listeners){
-		listener->onDataArrived(method, arg, argListVector);
+		listener->onDataArrived(method, arg);
+	}
+}
+
+void BaseDataSource::onDataReceived(float *spectrum, float *spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
+{
+	foreach(IDataSourceListener* listener, m_listeners){
+		listener->onDataArrived(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+	}
+}
+
+void BaseDataSource::onDataReceived(float *spectrum, float *spectrumPeakHold)
+{
+	foreach(IDataSourceListener* listener, m_listeners){
+		listener->onDataArrived(spectrum, spectrumPeakHold);
 	}
 }

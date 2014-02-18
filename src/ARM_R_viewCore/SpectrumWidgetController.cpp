@@ -79,8 +79,18 @@ void SpectrumWidgetController::setControlPrmState(bool state)
 	m_view->setControlPrmState(state);
 }
 
-void SpectrumWidgetController::onDataArrived(const QString &method, const QVariant &arg, const QList<QVector<QPointF> >& argListVector)
+void SpectrumWidgetController::onDataArrived(const QString &method, const QVariant &arg)
 {
+	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
+		setDefModulation(arg.toString());
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
+		setDetectedAreasUpdate(arg.toByteArray());
+		return;
+	}
+
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 
 		//setSignal(m_spectrum, m_spectrumPeakHold);
@@ -88,6 +98,16 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 		return;
 		//set_data(arg.toByteArray(), true); //spectrum
 	}
+}
+
+void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
+{
+	setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+}
+
+void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold)
+{
+	setSignal(spectrum, spectrumPeakHold);
 }
 
 QString SpectrumWidgetController::getSpectrumName() const

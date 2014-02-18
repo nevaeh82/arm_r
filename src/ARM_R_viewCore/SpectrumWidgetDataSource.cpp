@@ -30,8 +30,6 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 
 		isComplex = true;
 
-		data.data();
-
 		QByteArray vecFFTBA = data.toByteArray();
 
 		QVector<QPointF> vecFFT;
@@ -42,56 +40,33 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 
 		if(m_needSetupSpectrum)
 		{
-			m_spectrumWidget->setSignalSetup(m_spectrum, m_spectrumPeakHold, m_pointCountWhole/*vecFFT.size()*/, m_bandwidth, isComplex);
+			onDataReceived(m_spectrum, m_spectrumPeakHold, m_pointCountWhole/*vecFFT.size()*/, m_bandwidth, isComplex);
 			m_needSetupSpectrum = false;
 		}
 		else
 		{
-			//m_spectrumWidget->setSignal(m_spectrum, m_spectrumPeakHold);
+			onDataReceived(m_spectrum, m_spectrumPeakHold);
 		}
-
-		QList< QList<QPointF> > proccessedDataList;
-
-		foreach (QList<QPointF> list, m_pointsList){
-			proccessedDataList.append(list);
-		}
-
-		proccessedDataList.append(m_spectrumPeakHoldList);
-
-		//proccessedDataList.append();
-
-		QVariant< QList< QList< QPointF > > > proccessedData(proccessedDataList);
-
-		//QList< QList<QPointF> > proccessedDataList;
-		QList< QVector<QPointF> > proccessedDataList2;
-		onDataReceived(method, proccessedData, proccessedDataList2);
 		return;
-		//set_data(arg.toByteArray(), true); //spectrum
 	}
 
-
-
-
-	/*else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
-		//setDetectedAreas(arg.toByteArray());
-	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		//set_def_modulation(arg.toString()); //spectrum
-	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
-		//correlation
-		//TODO: point2 from rpc
-		int point2 = 0;
-		//set_data(point2, arg.toByteArray(), true);
+	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
 		onDataReceived(method, data);
-	}*/
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
+		onDataReceived(method, data);
+		return;
+	}
 }
 
 void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool isComplex)
 {
-	QList<QPointF> vecFFTList = vecFFT.toList();
-	m_pointCount = vecFFTList.size();
+	m_pointCount = vecFFT.size();
 
-	qreal startx = vecFFTList.at(0).x();
-	qreal endx = vecFFTList.at(vecFFTList.size() - 1).x();
+	qreal startx = vecFFT.at(0).x();
+	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
 	double bandwidth = (endx - startx)*TO_KHZ;
 
 	if(m_bandwidthSingleSample != bandwidth && m_isPanoramaStart == false)
@@ -101,42 +76,20 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool isCom
 		m_needSetup = true;
 		if(m_spectrumWidget)
 		{
-			qDebug() << "ZERO FREQ = " << vecFFTList.at(0).x();
-			m_spectrumWidget->setZeroFrequency((vecFFTList.at(0).x())*TO_KHZ);
+			qDebug() << "ZERO FREQ = " << vecFFT.at(0).x();
+			m_spectrumWidget->setZeroFrequency((vecFFT.at(0).x())*TO_KHZ);
 		}
 	}
 
 	int index = findIndex(startx);
-	int vecCount = m_pointsList.count();
 
-	//qDebug() << "index = " << index;
-	//qDebug() << "vecCount1 = " << vecCount;
-
-	if (vecCount == 0){
-		m_spectrumPeakHoldList.reserve(m_pointCount);
-	}
-
-	if (vecCount < index + 1){
-		m_pointsList.append(vecFFTList);
-	} else {
-		m_pointsList.replace(index, vecFFTList);
-	}
-	//qDebug() << "vecCount2 = " << pointsVectorsList.count();
 
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
-		//m_spectrum[index*vecFFT.size() + i] = pointsVectorsList.at(index).at(i).y();
-
 		m_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
-		/*if((m_startx != startx) || (m_spectrum[i] > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
+		if((m_startx != startx) || (m_spectrum[i] > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
 		{
 			m_spectrumPeakHold[i] = m_spectrum[i];
-		}*/
-		if((m_startx != startx) || (m_pointsList.at(0).at(i).y() > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
-		{
-			m_spectrumPeakHoldList.replace(i, QPointF(m_pointsList.at(0).at(i).x(), m_pointsList.at(0).at(i).y()));
-			//m_spectrumPeakHoldVector.at(i).setY(m_pointsVectorsList.at(0).at(i).y());
-			//m_spectrumPeakHold[i] = m_pointsVectorsList.at(0).at(i).y();
 		}
 	}
 

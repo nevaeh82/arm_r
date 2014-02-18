@@ -6,8 +6,9 @@ class ITabSpectrum;
 class QWidget;
 
 #include "IGraphicWidget.h"
+#include "Interfaces/IDataSourceListener.h"
 
-class ISpectrumWidget: public IGraphicWidget
+class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 {
 	public:
 		virtual ~ISpectrumWidget(){}
