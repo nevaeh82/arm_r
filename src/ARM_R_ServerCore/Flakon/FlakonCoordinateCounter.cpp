@@ -1,4 +1,4 @@
-#include "FlakonCoordinateCounter.h"
+п»ї#include "FlakonCoordinateCounter.h"
 
 #include <QDebug>
 
@@ -94,13 +94,13 @@ void FlakonCoordinateCounter::_slotGetData(QSharedPointer<IMessage> msg_ptr)
             _map_vec_corr.clear();
             if (aDR.size() == 5)
             {
-                //Заполнение данных и отправка на вычисление координат
+                //Р—Р°РїРѕР»РЅРµРЅРёРµ РґР°РЅРЅС‹С… Рё РѕС‚РїСЂР°РІРєР° РЅР° РІС‹С‡РёСЃР»РµРЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚
 //                DataFromFlacon aData;
-                _aData.numOfReferenceDetector_= _main_point; //Номер опорного
-                _aData.time_ = QTime::currentTime();    //Время
-                _aData.ranges_ = aDR;                   //Откорректированные разности расстояний (максимумы графиков корреляции)
+                _aData.numOfReferenceDetector_= _main_point; //РќРѕРјРµСЂ РѕРїРѕСЂРЅРѕРіРѕ
+                _aData.time_ = QTime::currentTime();    //Р’СЂРµРјСЏ
+                _aData.ranges_ = aDR;                   //РћС‚РєРѕСЂСЂРµРєС‚РёСЂРѕРІР°РЅРЅС‹Рµ СЂР°Р·РЅРѕСЃС‚Рё СЂР°СЃСЃС‚РѕСЏРЅРёР№ (РјР°РєСЃРёРјСѓРјС‹ РіСЂР°С„РёРєРѕРІ РєРѕСЂСЂРµР»СЏС†РёРё)
 
-//                qDebug() << "Отправляю в солвер " << aData.ranges_.size();
+//                qDebug() << "РћС‚РїСЂР°РІР»СЏСЋ РІ СЃРѕР»РІРµСЂ " << aData.ranges_.size();
 //                emit signalSendDataFromFlackon(aData);
                 _solver->GetData(_aData);
 
@@ -219,7 +219,7 @@ void FlakonCoordinateCounter::_checkData()
 
     StationProperty* st2;
 
-    for (int i = 0; i < _map_main_stations.size() /*+ 1*/; i++) //Номер пункта, с которым сворачивается основной
+    for (int i = 0; i < _map_main_stations.size() /*+ 1*/; i++) //РќРѕРјРµСЂ РїСѓРЅРєС‚Р°, СЃ РєРѕС‚РѕСЂС‹Рј СЃРІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ РѕСЃРЅРѕРІРЅРѕР№
     {
 
         if(!_router->get_station_property()->contains(i))
@@ -229,7 +229,7 @@ void FlakonCoordinateCounter::_checkData()
         st2 = _router->get_station_property()->value(i);
 
         temp_distance = st2->get_direction_distance(st1, st2);
-        aDistance = qAbs(temp_distance);    ///getPointsDistance(0, 1) - выдает расстояние в метрах, между нулевым и 1м пунктами
+        aDistance = qAbs(temp_distance);    ///getPointsDistance(0, 1) - РІС‹РґР°РµС‚ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РІ РјРµС‚СЂР°С…, РјРµР¶РґСѓ РЅСѓР»РµРІС‹Рј Рё 1Рј РїСѓРЅРєС‚Р°РјРё
         if ((_map_maxs.value(i) < -aDistance * 1.2) || (_map_maxs.value(i) > aDistance * 1.2))
         {
             _map_maxs.insert(i, std::numeric_limits<double>::quiet_NaN());
@@ -258,10 +258,10 @@ void FlakonCoordinateCounter::initSolver()
     //Solver
     _solver = new Solver();
 
-    //Размер приходящих данных
+    //Р Р°Р·РјРµСЂ РїСЂРёС…РѕРґСЏС‰РёС… РґР°РЅРЅС‹С…
     _setSolverDataSize(100);
 
-    //Кол-во данных для определения движения
+    //РљРѕР»-РІРѕ РґР°РЅРЅС‹С… РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ
     _setSolverAnalyzeSize(60);
 
 
