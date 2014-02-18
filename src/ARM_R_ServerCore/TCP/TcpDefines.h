@@ -23,6 +23,12 @@
 #define TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION		"tcpFlakonRequestMainStationCorrelation"
 #define TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM				"tcpFlakonRequestAverageSpectrum"
 
+/// Flakon Coordinates Counter
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA					"tcpFlakonCoordinatesCounterAnswerBPLA"
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO				"tcpFlakonCoordinatesCounterAnswerBPLAAuto"
+#define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER			"tcpFlakonCoordinatesCounterRequestSetSolver"
+#define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR		"tcpFlakonCoordinatesCounterRequestSetSolverClear"
+
 /// Atlant device external
 #define Atlant_Direction_MsgA	"DIRECTION_ANSWER_MESSAGE"
 #define Atlant_Position_MsgA	"POSITION_ANSWER_MESSAGE"

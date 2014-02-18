@@ -115,6 +115,8 @@ signals:
 	void serverSendAtlantDirectionRpcSignal(QByteArray);
 	void serverSendAtlantPositionRpcSignal(QByteArray);
 	void serverSendPrmStatusRpcSignal(int, int, int, int);
+	void serverSendBplaDefRpcSignal(QByteArray);
+	void serverSendBplaDefAutoRpcSignal(QByteArray);
 
 public slots:
     void aboutToQuitApp();

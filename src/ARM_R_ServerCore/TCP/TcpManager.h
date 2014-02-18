@@ -17,6 +17,8 @@
 #include "TcpAtlantController.h"
 #include "TcpPRM300Controller.h"
 
+#include "../Flakon/CoordinateCounter.h"
+
 #include "Rpc/RpcDefines.h"
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
@@ -32,6 +34,8 @@ private:
 	 * Define own deviceType in TcpDevicesDefines
 	 *
 	 **/
+
+	CoordinateCounter* m_coordinatesCounter;
 
 public:
 	explicit TcpManager(QObject* parent = NULL);

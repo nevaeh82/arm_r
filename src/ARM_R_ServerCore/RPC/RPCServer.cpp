@@ -54,6 +54,9 @@ bool RPCServer::start(quint16 port, QHostAddress address)
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantDirectionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_DIRECTION);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantPositionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_POSITION);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendPrmStatusRpcSignal(int,int,int,int)), RPC_SLOT_SERVER_PRM_STATUS);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendBplaDefRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_BPLA_DEF);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendBplaDefAutoRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO);
+
 
 	return RpcServerBase::start(port, address);
 }
@@ -231,6 +234,14 @@ void RPCServer::sendDataByRpc(const QString& signalType, const QByteArray& data)
 
 		emit serverSendPrmStatusRpcSignal((int)freq, (int)filter, (int)att1, (int)att2);
 	}
+	/// TODO: Not used in UI
+	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF) {
+		emit serverSendBplaDefRpcSignal(data);
+	}
+	/// TODO: Not used in UI
+	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO) {
+		emit serverSendBplaDefAutoRpcSignal(data);
+	}
 }
 
 void RPCServer::rpcSlotSetBandwidth(quint64 client, int id, float bandwidth)
@@ -390,18 +401,32 @@ void RPCServer::rpcSlotPrmSetFilter(quint64 client, int id, int index)
 
 void RPCServer::rpcSlotSetDataToSolver(quint64 client, QByteArray data)
 {
-    QByteArray* ba = new QByteArray();
-    ba->append(data);
-    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER, ba));
-	m_subscriber->data_ready(SET_SOLVER, msg);
+//    QByteArray* ba = new QByteArray();
+//    ba->append(data);
+//    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER, ba));
+//	m_subscriber->data_ready(SET_SOLVER, msg);
+
+	QByteArray byteArray;
+	byteArray.append(data);
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_SET_DATA_TO_SOLVER, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSetClearToSolver(quint64 client, QByteArray data)
 {
-    QByteArray* ba = new QByteArray();
-    ba->append(data);
-    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER_CLEAR, ba));
-	m_subscriber->data_ready(SET_SOLVER_CLEAR, msg);
+//    QByteArray* ba = new QByteArray();
+//    ba->append(data);
+//    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER_CLEAR, ba));
+//	m_subscriber->data_ready(SET_SOLVER_CLEAR, msg);
+
+	QByteArray byteArray;
+	byteArray.append(data);
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_SET_CLEAR_TO_SOLVER, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSendFft(quint64 client, rpc_send_points_vector points)
@@ -485,7 +510,6 @@ void RPCServer::rpcSlotSetAtlantFrequency(quint64 client, QByteArray data)
 	}
 }
 
-/// Doesn't use
 void RPCServer::rpcSlotSendBpla(quint64 client, QByteArray *data)
 {
 //    QDataStream ds(data, QIODevice::ReadOnly);
@@ -495,7 +519,6 @@ void RPCServer::rpcSlotSendBpla(quint64 client, QByteArray *data)
 //	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_BPLA_DEF, QVariant::fromValue(*data));
 }
 
-/// Doesn't use
 void RPCServer::rpcSlotSendBplaAuto(quint64 client, QByteArray *data)
 {
 //    QDataStream ds(data, QIODevice::ReadOnly);
