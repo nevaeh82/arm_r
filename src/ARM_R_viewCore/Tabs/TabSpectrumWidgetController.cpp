@@ -289,13 +289,14 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 
 
 ///getting points from rpc (flakon)
+// METHOD IS NOT USED
 void TabSpectrumWidgetController::set_points_rpc(QVector<QPointF> points)
 {
-	QByteArray outBA;
+	/*QByteArray outBA;
 	QDataStream stream(&outBA, QIODevice::WriteOnly);
 	stream << points;
 
-	emit signalGetPointsFromRPCFlakon(outBA);
+	emit signalGetPointsFromRPCFlakon(outBA);*/
 }
 
 void TabSpectrumWidgetController::set_thershold(double y)
@@ -318,7 +319,7 @@ void TabSpectrumWidgetController::set_panorama(bool state)
 /// in this thread set points from rpc
 void TabSpectrumWidgetController::_slot_get_points_from_rpc(QByteArray points)
 {
-	_spectrumData->set_data(points, false);
+//	_spectrumData->set_data(points, false);
 }
 
 
