@@ -51,7 +51,7 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICommonComponents *correla
 	//ui->correlationsGroupWidget->
 	m_correlationComponent = correlation;
 
-	for(int i = 0; i < m_correlationComponent->count(0); i++){
+	for(int i = 0; i < m_correlationComponent->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationComponent->get(i));
 	}
 
@@ -60,7 +60,7 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICommonComponents *correla
 
 void CommonSpectrumTabWidget::activate()
 {
-	for(int i = 0; i < m_correlationComponent->count(0); i++){
+	for(int i = 0; i < m_correlationComponent->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationComponent->get(i));
 	}
 

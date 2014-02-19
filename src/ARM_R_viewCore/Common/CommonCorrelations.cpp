@@ -3,23 +3,18 @@
 
 CommonCorrelations::CommonCorrelations()
 {
-	_map_widgets = new QMap<int, ICorrelationWidget* >;
+	m_mapWidgets = new QMap<int, ICorrelationWidget* >;
 }
 
 CommonCorrelations::~CommonCorrelations()
 {
 	QMap<int, ICorrelationWidget* >::iterator it;
-    for(it = _map_widgets->begin(); it != _map_widgets->end(); ++it)
+	for(it = m_mapWidgets->begin(); it != m_mapWidgets->end(); ++it)
     {
         delete it.value();
     }
 
-    delete _map_widgets;
-}
-
-int CommonCorrelations::init(QString path_to_ini_file)
-{
-    return 0;
+	delete m_mapWidgets;
 }
 
 int CommonCorrelations::init(int count)
@@ -30,37 +25,25 @@ int CommonCorrelations::init(int count)
 		CorrelationWidgetController* controller = new CorrelationWidgetController(cor);
 
 		controller->appendView(cor);
-		_map_widgets->insert(i, controller);
+		m_mapWidgets->insert(i, controller);
     }
-    return 0;
-}
-
-int CommonCorrelations::set(int id, ICorrelationWidget *widget)
-{
-	_map_widgets->insert(id, widget);
     return 0;
 }
 
 ICorrelationWidget* CommonCorrelations::get(int id)
 {
-    _mux.lock();
+	m_mux.lock();
 	ICorrelationWidget *gr = NULL;
-    if(_map_widgets->contains(id))
+	if(m_mapWidgets->contains(id))
     {
-        gr = _map_widgets->value(id);
+		gr = m_mapWidgets->value(id);
     }
-    _mux.unlock();
+	m_mux.unlock();
 
     return gr;
 }
 
-int CommonCorrelations::count(int id)
+int CommonCorrelations::count()
 {
-    return _map_widgets->count();
+	return m_mapWidgets->count();
 }
-
-QMap<int, ICorrelationWidget *>* CommonCorrelations::get_components()
-{
-    return _map_widgets;
-}
-

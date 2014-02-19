@@ -149,7 +149,7 @@ int TabSpectrumWidgetController::createView()
 		return 0;
 	}
 
-	for(int i = 0; i < _common_correlations->count(0); i++){
+	for(int i = 0; i < _common_correlations->count(); i++){
 		ICorrelationWidget* correlationWidget = _common_correlations->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 

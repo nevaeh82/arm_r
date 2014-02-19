@@ -18,16 +18,13 @@ public:
     ~CommonCorrelations();
 
 public:
-    virtual int init(QString path_to_ini_file);
-    virtual int init(int count);
-	virtual int set(int id, ICorrelationWidget *widget);
+	virtual int init(int count);
 	virtual ICorrelationWidget* get(int id);
-    virtual int count(int id);
-	virtual QMap<int, ICorrelationWidget* >* get_components();
+	virtual int count();
 
 private:
-	QMap<int, ICorrelationWidget* >*      _map_widgets;
-    QMutex                           _mux;
+	QMap<int, ICorrelationWidget* >*	m_mapWidgets;
+	QMutex	m_mux;
 };
 
 #endif // COMMONCORRELATIONS_H
