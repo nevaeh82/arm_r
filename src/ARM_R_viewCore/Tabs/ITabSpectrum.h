@@ -7,14 +7,7 @@
 #include <QLabel>
 
 #include "Common/IMessage.h"
-
-enum TypeCommand
-{
-	TypeUnknownCommand = 0,
-	TypeGraphicCommand = 1,
-	TypePanoramaCommand = 2
-};
-
+#include "Defines.h"
 
 typedef struct SpectrumSelection
 {

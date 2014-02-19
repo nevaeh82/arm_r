@@ -12,7 +12,8 @@
 #include "SpectrumWidgetDataSource.h"
 #include "Correlations/CorrelationWidgetDataSource.h"
 
-class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum
+class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum,
+		public IDbChangedListener
 {
 	Q_OBJECT
 
@@ -81,12 +82,13 @@ public:
 	virtual void set_points_rpc(QVector<QPointF> points);
 
 	virtual void set_thershold(double y);
-
 	virtual void check_status();
-
 	virtual void set_panorama(bool state);
-
 	virtual double get_current_frequency();
+
+	virtual void onSettingsNodeChanged(const SettingsNode &);
+	virtual void onPropertyChanged(const Property &);
+	virtual void onCleanSettings();
 
 	TabsProperty* get_tab_property();
 
@@ -107,12 +109,8 @@ private slots:
 
 	void enablePanoramaSlot(bool isEnabled);
 
-	//void slotSetFFTSetup(float*, float*);
-	//void slotSetFFT(float*,float*);
-
 private:
 	int init();
-
 	void readSettings(const QString& settingsFile);
 
 };

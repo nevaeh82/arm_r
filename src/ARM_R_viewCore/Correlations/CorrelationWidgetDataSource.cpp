@@ -35,7 +35,7 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 }
 
 Q_DECLARE_METATYPE(float*)
-void CorrelationWidgetDataSource::setCorData(quint32 point2, QByteArray& vecFFTBA, bool isComplex)
+void CorrelationWidgetDataSource::setCorData(quint32 point2, QByteArray& vecFFTBA, bool /*isComplex*/)
 {
 	QVector<QPointF> vecFFT;
 	QDataStream stream(vecFFTBA);

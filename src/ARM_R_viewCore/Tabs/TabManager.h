@@ -10,62 +10,57 @@
 #include <QVBoxLayout>
 #include <QMutex>
 
-#include "Abstracts/IModuleController.h"
 #include "Common/CommonCorrelations.h"
 
 #include "TabsProperty.h"
 
 #include "TabSpectrumWidget.h"
 
-//#include "Tree/Controller.h"
-
 #include "Interfaces/IDBManager.h"
-#include "SettingsTree/TreeModel.h"
+//#include "SettingsTree/TreeModel.h"
 
-#include "ITabManager.h"
+#include "Interfaces/ITabManager.h"
 
 #include "TabSpectrumWidgetController.h"
 
 #include "Interfaces/IDbChangedListener.h"
+#include "Interfaces/IControlPanelListener.h"
 
 /// ATLANT
 #include "AtlantTabWidget.h"
 
-class TabManager: public QObject, /*public IModuleController, */public ITabManager, public IDbChangedListener
+class TabManager: public QObject, public ITabManager, public IDbChangedListener, public IControlPanelListener
 {
 	Q_OBJECT
 
 private:
 	QTabWidget* m_tabWidget;
 
-	unsigned int    _id;
-	QString         _name;
 	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	//ICommonComponents*          _common_spectra;
 	ICommonComponents*          _common_correlations;
 
-	IDbManager*                 m_dbManager;
-
-	ITabWidget*                m_currentTabWidget;
-
-	QMutex                      m_mutex;
+	IDbManager* m_dbManager;
+	ITabWidget* m_currentTabWidget;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
 
-	virtual int start();
+	void start();
+	int createSubModules(const QString& settingsFile);
+	void setDbManager(IDbManager* dbManager);
 
-	virtual int createSubModules(const QString& settingsFile);
-
-    virtual QString getStationName(int id);
-	virtual void send_data(const QString& stationName, TypeCommand type, IMessage* msg);
-    virtual void set_tab(int id);
+	virtual QString getStationName(const int id);
+	virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
+	virtual void setActiveTab(const int id);
 
 	virtual void onSettingsNodeChanged(const SettingsNode &);
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
+
+	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
+	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
 private:
 	int readSettings(const QString &settingsFile);
@@ -73,10 +68,6 @@ private:
 
 private slots:
 	void changeTabSlot(int index);
-
-signals:
-	void changeTabSignal(int index);
-
 };
 
 #endif // TABMANAGER_H

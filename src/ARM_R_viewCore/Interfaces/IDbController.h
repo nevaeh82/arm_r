@@ -12,6 +12,8 @@ public:
 	virtual PropertiesList getProperties(const uint objectID) = 0;
 	virtual Property getProperty(const uint propID) = 0;
 
+	virtual ObjectsList getAllObjects() = 0;
+
 	virtual uint addObject(const Object& object) = 0;
 	virtual uint addProperty(const Property &property) = 0;
 

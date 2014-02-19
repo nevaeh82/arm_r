@@ -22,15 +22,13 @@
 #include "Db/DbManager.h"
 #include "SettingsTree/TreeModel.h"
 
-#include "ITabManager.h"
+#include "Interfaces/ITabManager.h"
 #include "ITabSpectrum.h"
 
 #include "RPC/RPCClient.h"
 
 #include "Controls/ControlPRM.h"
 
-#include "Controls/ControlPanelWidgets.h"
-#include "Controls/ButtonShowPanel.h"
 
 namespace Ui {
 class TabSpectrumWidget;

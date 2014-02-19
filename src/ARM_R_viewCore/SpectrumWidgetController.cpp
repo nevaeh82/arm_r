@@ -247,6 +247,11 @@ void SpectrumWidgetController::setPanorama(bool enabled)
 	m_view->setPanorama(enabled);
 }
 
+void SpectrumWidgetController::setSelection(double start, double end)
+{
+	m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+}
+
 void SpectrumWidgetController::init()
 {
 	m_graphicsWidget = m_view->getGraphicsWidget();

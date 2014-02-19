@@ -3,12 +3,14 @@
 
 class IDataSourceListener;
 
-class IDataSource
-{
-	public:
-		virtual ~IDataSource(){}
+#include "BaseSubject.h"
 
-		virtual void sendCommand(int) = 0;
+class IDataSource: public BaseSubject<IDataSourceListener>
+{
+public:
+	virtual ~IDataSource(){}
+
+	virtual void sendCommand(int) = 0;
 };
 
 #endif // IPLAYERDATASOURCE_H

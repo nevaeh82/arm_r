@@ -77,6 +77,8 @@ public:
 	void setAutoSearch(bool);
 	void setPanorama(bool);
 
+	void setSelection(double start, double end);
+
 	void setup();
 	void setControlPrmState(bool state);
 

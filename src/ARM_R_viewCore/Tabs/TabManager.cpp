@@ -9,10 +9,11 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 	QObject(parent)
 {
 	m_tabWidget = tabWidget;
+	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 
 	_common_correlations = NULL;
-
 	m_currentTabWidget = NULL;
+	m_dbManager = NULL;
 }
 
 TabManager::~TabManager()
@@ -40,28 +41,21 @@ TabManager::~TabManager()
 	}
 }
 
-int TabManager::start()
+void TabManager::start()
 {
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
-
 	changeTabSlot(m_tabWidget->currentIndex());
-
-	return 0;
 }
 
 int TabManager::createSubModules(const QString& settingsFile)
 {
-	//_common_spectra = new CommonSpectra();
 	_common_correlations = new CommonCorrelations();
 
 	int submodulesCount = readSettings(settingsFile);
 
-	/// create common database manager for spectrum tabs
-	m_dbManager = new DbManager(this);
-	m_dbManager->registerReceiver(this);
-
-
 	_common_correlations->init(m_tabsPropertyMap.count() - 1);
+
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
+	commonTabSpectrumWidget->setCorrelationComponent(_common_correlations);
 
 	QMap<int, TabsProperty* >::iterator it;
 	for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
@@ -80,27 +74,18 @@ int TabManager::createSubModules(const QString& settingsFile)
 		}
 
 		m_tabWidgetsMap.insert(it.value()->get_name(), tabController);
+
+		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
 	}
 
 	checkStatus();
-
-	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
-	commonTabSpectrumWidget->setCorrelationComponent(_common_correlations);
 
 	/// FOR FUTURE
 	//	TabSpectrumWidgetController* commonTabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
 	//	TabSpectrumWidget* commonTabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 	//	commonTabController->appendView(commonTabSpectrumWidget);
 
-	foreach(ITabWidget* widget, m_tabWidgetsMap) {
-
-		if (NULL != widget->getSpectrumWidget()) {
-			commonTabSpectrumWidget->insertSpectrumWidget(widget->getSpectrumWidget());
-		}
-	}
-
 	commonTabSpectrumWidget->deactivate();
-
 	int index = m_tabWidget->addTab(commonTabSpectrumWidget, tr("Common"));
 
 	QString tabName = m_tabWidget->tabText(index);
@@ -108,24 +93,24 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 
 	AtlantTabWidget* atlant = new AtlantTabWidget(m_tabWidget);
-
 	m_tabWidget->addTab(atlant, tr("Atlant"));
-
-	connect(this, SIGNAL(changeTabSignal(int)), this, SLOT(changeTabSlot(int)));
 
 	return submodulesCount;
 }
 
-QString TabManager::getStationName(int id)
+void TabManager::setDbManager(IDbManager *dbManager)
 {
-	m_mutex.lock();
+	m_dbManager = dbManager;
+}
+
+QString TabManager::getStationName(const int id)
+{
 	TabsProperty *t = m_tabsPropertyMap.value(id);
-	m_mutex.unlock();
 	return t->get_name();
 }
 
 /// call this method when data in tree has changed
-void TabManager::send_data(const QString &stationName, TypeCommand type, IMessage *msg)
+void TabManager::sendCommand(const QString &stationName, TypeCommand type, IMessage *msg)
 {
 	ITabWidget* tabController = m_tabWidgetsMap.value(stationName, NULL);
 
@@ -139,7 +124,7 @@ void TabManager::send_data(const QString &stationName, TypeCommand type, IMessag
 	tabController1->set_command(type, msg);
 }
 
-void TabManager::set_tab(int id)
+void TabManager::setActiveTab(const int id)
 {
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
@@ -250,9 +235,36 @@ void TabManager::onPropertyChanged(const Property & property)
 	QString stationName = m_dbManager->getObjectName(property.pid);
 
 	/// TODO: update
-	send_data(stationName, commandType, msg);
+	sendCommand(stationName, commandType, msg);
 }
 
 void TabManager::onCleanSettings()
 {
+}
+
+
+void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
+{
+	foreach (ITabWidget* tabWidget, m_tabWidgetsMap) {
+		ISpectrumWidget* spectrumWidget = tabWidget->getSpectrumWidget();
+
+		if (NULL == spectrumWidget) {
+			continue;
+		}
+
+		spectrumWidget->setAutoSearch(isEnabled);
+	}
+}
+
+void TabManager::onGlobalPanoramaEnabled(const bool isEnabled)
+{
+	foreach (ITabWidget* tabWidget, m_tabWidgetsMap) {
+		ISpectrumWidget* spectrumWidget = tabWidget->getSpectrumWidget();
+
+		if (NULL == spectrumWidget) {
+			continue;
+		}
+
+		spectrumWidget->setPanorama(isEnabled);
+	}
 }

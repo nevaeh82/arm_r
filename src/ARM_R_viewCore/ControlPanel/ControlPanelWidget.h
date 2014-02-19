@@ -19,20 +19,24 @@ class ControlPanelWidget;
 class ControlPanelWidget : public QWidget
 {
     Q_OBJECT
+
+private:
+	Ui::ControlPanelWidget*     ui;
+
 public:
 	ControlPanelWidget(QWidget* parent = NULL);
 	~ControlPanelWidget();
 
 signals:
-	void onStartFreqChanged(int value);
-	void onEndFreqChanged(int value);
-	void onCommonFreqChanged(int value);
+	void commonFreqChangedSignal(int value);
+	void bandwidthChangedSignal(int start, int end);
 
-	void onPanoramaChecked(bool isChecked);
-	void onAutoSearchCheched(bool isChecked);
+	void panoramaCheckedSignal(bool isChecked);
+	void autoSearchCheckedSignal(bool isChecked);
 
-private:
-	Ui::ControlPanelWidget*     ui;
+private slots:
+	void onSetCommonFrequencySlot();
+	void onSetBandWidthSlot();
 
 };
 

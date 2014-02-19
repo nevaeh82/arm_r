@@ -8,8 +8,8 @@ MainWindowController::MainWindowController(QObject *parent) :
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindowController));
 
 	m_view = NULL;
-
 	m_tabManager = NULL;
+	m_controlPanelController = NULL;
 }
 
 MainWindowController::~MainWindowController()
@@ -52,14 +52,23 @@ void MainWindowController::stop()
 
 void MainWindowController::init()
 {
+	m_dbManager = new DbManager(this);
+
 	m_tabManager =  new TabManager(m_view->getWorkTabsWidget(), this);
 
 	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
-	tabsSettingsFile.append("/Tabs/Tabs.ini");
+	tabsSettingsFile.append("./Tabs/Tabs.ini");
+
+	m_tabManager->setDbManager(m_dbManager);
+	m_dbManager->registerReceiver(m_tabManager);
 
 	m_tabManager->createSubModules(tabsSettingsFile);
-
 	m_tabManager->start();
+
+	m_controlPanelController = new ControlPanelController(this);
+	m_controlPanelController->appendView(m_view->getControlPanelWidget());
+	m_controlPanelController->setDbManager(m_dbManager);
+	m_controlPanelController->registerReceiver(m_tabManager);
 }
 
 void MainWindowController::serverFailedToStartSlot()
