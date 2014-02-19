@@ -11,7 +11,7 @@
 #include <QMutex>
 
 #include "Abstracts/IModuleController.h"
-#include "Common/CorrelationControllersContainer.h"
+#include "Correlations/CorrelationControllersContainer.h"
 
 #include "TabsProperty.h"
 
@@ -43,7 +43,7 @@ private:
 	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
 	//ICommonComponents*          _common_spectra;
-	ICommonComponents*          _common_correlations;
+	ICorrelationControllersContainer*	_common_correlations;
 
 	IDbManager*                 m_dbManager;
 

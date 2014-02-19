@@ -5,13 +5,13 @@
 #include <QMap>
 #include <QMutex>
 
-#include "../Abstracts/ICommonComponents.h"
+#include "Interfaces/ICorrelationControllersContainer.h"
 
 #include "Correlations/CorrelationWidget.h"
 #include "Correlations/CorrelationWidgetController.h"
-#include "../IGraphicWidget.h"
+#include "IGraphicWidget.h"
 
-class CorrelationControllersContainer : public ICommonComponents
+class CorrelationControllersContainer : public ICorrelationControllersContainer
 {
 public:
 	CorrelationControllersContainer();

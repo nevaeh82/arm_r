@@ -9,7 +9,7 @@
 #include <QThread>
 
 #include "Abstracts/ITabWidget.h"
-#include "Abstracts/ICommonComponents.h"
+#include "Interfaces/ICorrelationControllersContainer.h"
 
 #include "Interfaces/ISpectrumWidget.h"
 

@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include "Interfaces/IRpcListener.h"
-#include "Abstracts/ICommonComponents.h"
+#include "Interfaces/ICorrelationControllersContainer.h"
 #include "Tabs/ITabManager.h"
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RPCClient.h"
@@ -15,7 +15,7 @@ class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 private:
 	IGraphicWidget* m_correlationWidget;
 
-	ICommonComponents*	m_commonCorrelations;
+	ICorrelationControllersContainer*	m_commonCorrelations;
 	ITabManager*	m_tabManager;
 	int	m_id;
 

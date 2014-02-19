@@ -53,7 +53,7 @@ HEADERS += \
         IGraphicWidget.h \
         stdafx.h \
 	Abstracts/IModuleController.h \
-	Abstracts/ICommonComponents.h \
+        Interfaces/ICorrelationControllersContainer.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
 	Common/IMessage.h \

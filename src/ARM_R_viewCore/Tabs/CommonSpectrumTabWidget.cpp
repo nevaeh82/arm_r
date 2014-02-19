@@ -46,7 +46,7 @@ void CommonSpectrumTabWidget::clearSpectrumWidgetsContainer()
 	m_widgetList.clear();
 }
 
-void CommonSpectrumTabWidget::setCorrelationComponent(ICommonComponents *correlation)
+void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersContainer *correlation)
 {
 	//ui->correlationsGroupWidget->
 	m_correlationComponent = correlation;
