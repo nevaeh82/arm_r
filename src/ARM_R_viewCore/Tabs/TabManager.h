@@ -38,7 +38,7 @@ private:
 
 	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	ICorrelationControllersContainer*	_common_correlations;
+	ICorrelationControllersContainer*	m_correlationControllers;
 
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;

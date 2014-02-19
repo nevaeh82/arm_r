@@ -26,7 +26,7 @@ private:
 	int                 m_id;
 	QString             m_stationName;
 	TabsProperty*       _tab_property;
-	ICorrelationControllersContainer*  _common_correlations;
+	ICorrelationControllersContainer*  m_correlationControllers;
 
 	IDbManager*          m_dbManager;
 
@@ -51,7 +51,7 @@ private:
 
 
 public:
-	explicit TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);

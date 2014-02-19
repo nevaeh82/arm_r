@@ -23,7 +23,7 @@ private:
 
 	QList<ISpectrumWidget*> m_widgetList;
 
-	ICorrelationControllersContainer* m_correlationComponent;
+	ICorrelationControllersContainer* m_correlationControllers;
 
 	TreeModel*          m_treeModel;
 
@@ -37,7 +37,7 @@ public:
 	//void insertSpectrumWidget(GraphicWidget* widget);
 	void clearSpectrumWidgetsContainer();
 
-	void setCorrelationComponent(ICorrelationControllersContainer* correlation);
+	void setCorrelationComponent(ICorrelationControllersContainer* correlationControllers);
 
 	virtual void activate();
 	virtual void deactivate();
