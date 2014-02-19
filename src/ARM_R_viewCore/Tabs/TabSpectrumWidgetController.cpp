@@ -13,13 +13,13 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	_threshold = -1;
 	_common_correlations = common_correlations;
-	_tab_manager = tab_manager;
+	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
 	_tab_property = prop;
-	_id = _tab_property->get_id();
+	m_id = _tab_property->get_id();
 	m_stationName = _tab_property->get_name();
 
 	QStringList headers;
@@ -118,30 +118,16 @@ int TabSpectrumWidgetController::init()
 	return 0;
 }
 
-
-
 int TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM, this);
+	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
-	m_rpcClient->registerReceiver(_spectrumData);
+	m_rpcClient->registerReceiver(m_spectrumDataSource);
 
-	/*QThread *thread_rpc_client = new QThread;
-
-	connect(thread_rpc_client, SIGNAL(started()), _rpc_client1, SLOT(slotInit()));
-
-	//    connect(this, SIGNAL(signalStartRPC()), _rpc_client1, SLOT(slotStart()));
-	connect(_rpc_client1, SIGNAL(signalFinished()), thread_rpc_client, SLOT(quit()));
-	connect(thread_rpc_client, SIGNAL(finished()), thread_rpc_client, SLOT(deleteLater()));
-
-	connect(_rpc_client1, SIGNAL(signalFinished()), _rpc_client1, SLOT(deleteLater()));
-	connect(this, SIGNAL(signalStopRPC()), _rpc_client1, SLOT(slotStop()));
-	connect(this, SIGNAL(signalFinishRPC()), _rpc_client1, SLOT(slotFinish()));
-
-	//_rpc_client1->setParent(0);
-	_rpc_client1->moveToThread(thread_rpc_client);
-	thread_rpc_client->start();*/
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		m_rpcClient->registerReceiver(correlationWidgetDataSource);
+	}
 
 	return 0;
 }
@@ -164,7 +150,13 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	for(int i = 0; i < _common_correlations->count(0); i++){
-		m_view->insertCorrelationWidget((static_cast<CorrelationWidget *>(_common_correlations->get(i))));
+		CorrelationWidget* correlationWidget = static_cast<CorrelationWidget*>(_common_correlations->get(i));
+		m_view->insertCorrelationWidget(correlationWidget);
+
+		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
+		correlationDataSource->registerListener(correlationWidget);
+
+		m_correlationDataSourcesList.append(correlationDataSource);
 	}
 
 	m_spectrumWidget = m_view->getSpectrumWidget();
@@ -174,51 +166,13 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	m_spectrumWidget->setTab(this);
-	m_spectrumWidget->setId(_id);
+	m_spectrumWidget->setId(m_id);
 	m_spectrumWidget->setSpectrumName(m_stationName);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-
-	///_common_components->set(_id, spectrumWidget);
-
-	/// TODO: update
-	/*_controlPRM = new ControlPRM(0, this);
-	_dock_controlPRM = new QDockWidget(tr("РЈРїСЂР°РІР»РµРЅРёРµ РџР Рњ300Р’"), this);
-	_dock_controlPRM->setAllowedAreas(Qt::LeftDockWidgetArea);
-	_dock_controlPRM->setWidget(_controlPRM);
-
-	connect(_dock_controlPRM, SIGNAL(visibilityChanged(bool)), this, SLOT(_slot_show_controlPRM(bool)));
-
-	_dock_controlPRM->hide();
-	_hboxlayout->insertWidget(0, _dock_controlPRM, Qt::AlignLeft);*/
-
-
-	//    _controlPRM->slotShow();
-
-	//    QGridLayout *l = new QGridLayout();
-	//    l->addWidget(_spectrumWidget, 0, 0);
-	//    this->setLayout(l);
-
-	//    QHBoxLayout *hbox = new QHBoxLayout;
-	//    hbox->addWidget(_spectrumWidget, Qt::AlignJustify);
-	//    _hboxlayout->addLayout(hbox);
-	//    _view_stacked_widget->addWidget(_spectrumWidget);
-
-	//
-
-	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, _tab_manager, _id);
-
-	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
-	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));
-
-	//QThread *thread_spectrum_client = new QThread;
-
-	//connect(_spectrumData, SIGNAL(signalFinished()), thread_spectrum_client, SLOT(quit()));
-	//connect(thread_spectrum_client, SIGNAL(finished()), thread_spectrum_client, SLOT(deleteLater()));
-	//connect(_spectrumData, SIGNAL(signalFinished()), _spectrumData, SLOT(deleteLater()));
-	//_spectrumData->moveToThread(thread_spectrum_client);
-	//thread_spectrum_client->start();
+	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
+	m_spectrumDataSource->registerListener(m_spectrumWidget);
 
 	return 0;
 }
@@ -338,13 +292,14 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 
 
 ///getting points from rpc (flakon)
+// METHOD IS NOT USED
 void TabSpectrumWidgetController::set_points_rpc(QVector<QPointF> points)
 {
-	QByteArray outBA;
+	/*QByteArray outBA;
 	QDataStream stream(&outBA, QIODevice::WriteOnly);
 	stream << points;
 
-	emit signalGetPointsFromRPCFlakon(outBA);
+	emit signalGetPointsFromRPCFlakon(outBA);*/
 }
 
 void TabSpectrumWidgetController::set_thershold(double y)
@@ -355,7 +310,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	_tab_manager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
+	m_tabManager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
@@ -367,7 +322,7 @@ void TabSpectrumWidgetController::set_panorama(bool state)
 /// in this thread set points from rpc
 void TabSpectrumWidgetController::_slot_get_points_from_rpc(QByteArray points)
 {
-	_spectrumData->set_data(points, false);
+//	_spectrumData->set_data(points, false);
 }
 
 
@@ -382,7 +337,7 @@ void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 {
-	_tab_manager->set_tab(id);
+	m_tabManager->set_tab(id);
 }
 
 void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
@@ -404,23 +359,12 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 				panoramaEndValue = property.value.toDouble();
 			}
 		}
-
-		_spectrumData->set_panorama(panoramaStartValue, panoramaEndValue);
+		m_spectrumDataSource->setPanorama(true, panoramaStartValue, panoramaEndValue);
 
 	} else {
-		_spectrumData->set_panorama_stop();
+		m_spectrumDataSource->setPanorama(false);
 	}
 
-}
-
-void TabSpectrumWidgetController::slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
-{
-	m_spectrumWidget->setFFTSetup(spectrum, spectrum_peak_hold);
-}
-
-void TabSpectrumWidgetController::slotSetFFT(float* spectrum, float* spectrum_peak_hold)
-{
-	m_spectrumWidget->setSignal(spectrum, spectrum_peak_hold);
 }
 
 void TabSpectrumWidgetController::readSettings(const QString &settingsFile)

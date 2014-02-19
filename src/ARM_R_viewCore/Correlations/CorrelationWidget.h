@@ -12,11 +12,13 @@
 
 #include "IGraphicWidget.h"
 
+#include "Interfaces/IDataSourceListener.h"
+
 namespace Ui {
 class CorrelationWidget;
 }
 
-class CorrelationWidget : public QWidget, public IGraphicWidget
+class CorrelationWidget : public QWidget, public IGraphicWidget, public IDataSourceListener
 {
 
 
@@ -29,19 +31,21 @@ public:
 	virtual ~CorrelationWidget();
 
 public:
-    virtual void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
-    virtual void setSignal(float* spectrum, float* spectrum_peak_hold);
-    virtual bool isGraphicVisible();
-    virtual void setDefModulation(QString modulation);
-    virtual void setLabelName(QString base, QString second);
+	void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
+	void setSignal(float* spectrum, float* spectrum_peak_hold);
+	bool isGraphicVisible();
+	void setDefModulation(QString modulation);
+	void setLabelName(QString base, QString second);
 
-	virtual void setDetectedAreasUpdate(const QByteArray& vec){}
-	virtual void setZeroFrequency(double val){}
+	void setDetectedAreasUpdate(const QByteArray& vec){}
+	void setZeroFrequency(double val){}
+
+	void onDataArrived(const QString& method, const QVariant& arg);
+	void onDataArrived(float* spectrum, float* spectrumPeakHold, int pointCount, double bandwidth, bool isComplex);
+	void onDataArrived(float* spectrum, float* spectrumPeakHold);
 
 public:
     void clear();
-
-
 
 private:
 	//Q_MG_SpectrumInterface  *_correlationWidget;

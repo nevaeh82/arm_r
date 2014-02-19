@@ -1,6 +1,8 @@
 #include "SpectrumWidgetController.h"
 #include "SpectrumWidget.h"
 
+#include "Rpc/RpcDefines.h"
+
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 	QObject(parent)
 {
@@ -77,6 +79,50 @@ void SpectrumWidgetController::setControlPrmState(bool state)
 	m_view->setControlPrmState(state);
 }
 
+Q_DECLARE_METATYPE(float*)
+void SpectrumWidgetController::onDataArrived(const QString &method, const QVariant &arg)
+{
+	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
+		setDefModulation(arg.toString());
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
+		setDetectedAreasUpdate(arg.toByteArray());
+		return;
+	}
+
+	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
+
+		QList<QVariant> list = arg.toList();
+		float* spectrum = list.at(0).value<float*>();
+		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
+
+		if (list.count() == 2){
+			setSignal(spectrum, spectrumPeakHold);
+		} else {
+			int pointCount = list.at(2).toInt();
+			double bandwidth = list.at(3).toDouble();
+			bool isComplex = list.at(4).toBool();
+			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+		}
+		//setSignal(m_spectrum, m_spectrumPeakHold);
+
+		return;
+		//set_data(arg.toByteArray(), true); //spectrum
+	}
+}
+
+void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
+{
+	setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+}
+
+void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold)
+{
+	setSignal(spectrum, spectrumPeakHold);
+}
+
 QString SpectrumWidgetController::getSpectrumName() const
 {
 	return m_view->getSpectrumName();
@@ -96,20 +142,6 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 	m_mux.unlock();
 
 	setFFTSetup(spectrum, spectrum_peak_hold);
-/*
-	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
-
-	float maxv = 0.0;
-	float minv = 0.0;
-	m_mux.lock();
-
-	m_graphicsWidget->SetAutoscaleY(true);
-	m_graphicsWidget->SetAlign(0);
-	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*///);
-/*
-	m_isComplex = false;
-	m_graphicsWidget->Setup(m_isComplex,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
-	m_mux.unlock();*/
 }
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
@@ -125,7 +157,8 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
 	m_isComplex = false;
-	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
+	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
+							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 	m_mux.unlock();
 
 }
@@ -202,6 +235,16 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	double cur_freq = m_tab->get_current_frequency();
 	m_current_frequency = cur_freq*TO_MHZ;
 	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
+}
+
+void SpectrumWidgetController::setAutoSearch(bool enabled)
+{
+	m_view->setAutoSearch(enabled);
+}
+
+void SpectrumWidgetController::setPanorama(bool enabled)
+{
+	m_view->setPanorama(enabled);
 }
 
 void SpectrumWidgetController::init()

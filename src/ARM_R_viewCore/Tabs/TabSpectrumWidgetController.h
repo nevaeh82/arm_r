@@ -3,10 +3,14 @@
 
 #include <QObject>
 #include <QHostAddress>
+#include <QList>
 
 #include "Interfaces/IController.h"
 #include "TabSpectrumWidget.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
+
+#include "SpectrumWidgetDataSource.h"
+#include "Correlations/CorrelationWidgetDataSource.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum
 {
@@ -15,12 +19,13 @@ class TabSpectrumWidgetController : public QObject, public IController<TabSpectr
 private:
 	TabSpectrumWidget* m_view;
 	ISpectrumWidget* m_spectrumWidget;
+	SpectrumWidgetDataSource* m_spectrumDataSource;
+	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
-	int                 _id;
+	int                 m_id;
 	QString             m_stationName;
 	TabsProperty*       _tab_property;
 	ICommonComponents*  _common_correlations;
-	GraphicData*        _spectrumData;
 
 	IDbManager*          m_dbManager;
 
@@ -30,7 +35,7 @@ private:
 	RPCClient*          m_rpcClient;
 
 	QMap<int, IGraphicWidget *>*     _map_correlation_widget;
-	ITabManager*        _tab_manager;
+	ITabManager*        m_tabManager;
 
 	ControlPRM*         _controlPRM;
 
@@ -102,8 +107,8 @@ private slots:
 
 	void enablePanoramaSlot(bool isEnabled);
 
-	void slotSetFFTSetup(float*, float*);
-	void slotSetFFT(float*,float*);
+	//void slotSetFFTSetup(float*, float*);
+	//void slotSetFFT(float*,float*);
 
 private:
 	int init();

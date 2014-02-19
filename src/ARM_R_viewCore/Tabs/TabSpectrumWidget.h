@@ -16,7 +16,6 @@
 #include "TabsProperty.h"
 #include "SpectrumWidget.h"
 #include "SpectrumWidgetController.h"
-#include "GraphicData.h"
 
 #include "Correlations/CorrelationWidget.h"
 

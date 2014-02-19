@@ -74,8 +74,15 @@ public:
 	void setDetectedAreasUpdate(const QByteArray& vec);
 	void setZeroFrequency(double val);
 
+	void setAutoSearch(bool);
+	void setPanorama(bool);
+
 	void setup();
 	void setControlPrmState(bool state);
+
+	void onDataArrived(const QString& method, const QVariant& arg);
+	void onDataArrived(float*, float*, int, double, bool);
+	void onDataArrived(float*, float*);
 private:
 	void init();
 

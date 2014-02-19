@@ -13,12 +13,10 @@
 
 #include <QHostAddress>
 
-#include <PwLogger/PwLogger.h>
-
 #include "IRPC.h"
-#include "../../Common/IMessage.h"
-#include "../../Common/CommandMessage.h"
-#include "../ITabAtlant.h"
+#include "Common/IMessage.h"
+#include "Common/CommandMessage.h"
+#include "Tabs/ITabAtlant.h"
 
 #include "Rpc/RpcDefines.h"
 #include "Rpc/RpcClientBase.h"

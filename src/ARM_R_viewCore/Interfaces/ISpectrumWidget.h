@@ -6,8 +6,9 @@ class ITabSpectrum;
 class QWidget;
 
 #include "IGraphicWidget.h"
+#include "Interfaces/IDataSourceListener.h"
 
-class ISpectrumWidget: public IGraphicWidget
+class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 {
 	public:
 		virtual ~ISpectrumWidget(){}
@@ -16,6 +17,9 @@ class ISpectrumWidget: public IGraphicWidget
 		virtual void setId(const int) = 0;
 		virtual void setSpectrumName(const QString&) = 0;
 		virtual void setControlPrmState(bool) = 0;
+
+		virtual void setAutoSearch(bool) = 0;
+		virtual void setPanorama(bool) = 0;
 
 		virtual void setFFTSetup(float* spectrum, float* spectrum_peak_hold) = 0;
 
