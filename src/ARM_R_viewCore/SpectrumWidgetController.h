@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QString>
 #include <QMessageBox>
+#include <QFile>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"

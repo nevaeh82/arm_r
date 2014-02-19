@@ -96,7 +96,7 @@ QTreeView *TabSpectrumWidget::getTreeView() const
 	return ui->settingsTreeView;
 }
 
-void TabSpectrumWidget::insertCorrelationWidget(CorrelationWidget *correlationWidget)
+void TabSpectrumWidget::insertCorrelationWidget(ICorrelationWidget *correlationWidget)
 {
 	if (NULL == correlationWidget) {
 		return;

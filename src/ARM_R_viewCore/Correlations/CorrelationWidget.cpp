@@ -2,7 +2,7 @@
 
 #include "ui_CorrelationWidget.h"
 
-CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
+CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
 	QWidget(parent, flags), ui(new Ui::CorrelationWidget)
 {
 	ui->setupUi(this);

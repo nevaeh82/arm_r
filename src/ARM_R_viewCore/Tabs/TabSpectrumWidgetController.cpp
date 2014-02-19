@@ -150,11 +150,11 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	for(int i = 0; i < _common_correlations->count(0); i++){
-		CorrelationWidget* correlationWidget = static_cast<CorrelationWidget*>(_common_correlations->get(i));
+		ICorrelationWidget* correlationWidget = _common_correlations->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
-		correlationDataSource->registerReceiver(correlationWidget);
+		correlationDataSource->registerReceiver(dynamic_cast<IDataSourceListener*>(correlationWidget));
 
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}

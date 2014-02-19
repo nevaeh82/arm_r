@@ -17,7 +17,7 @@ private:
 	Ui::CorrelationWidget*	ui;
 
 public:
-	CorrelationWidget(QWidget *parent = 0, Qt::WFlags flags = 0, QString name = "", int id = 0);
+	CorrelationWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	virtual ~CorrelationWidget();
 
 	Q_MG_SpectrumInterface* getGraphicsWidget();

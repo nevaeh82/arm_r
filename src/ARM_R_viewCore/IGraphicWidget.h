@@ -11,7 +11,6 @@ class IGraphicWidget
 		virtual bool isGraphicVisible() = 0;
 
 		virtual void setZeroFrequency(double val) = 0;
-
 };
 
 #endif // IGRAPHICWIDGET_H

@@ -6,6 +6,11 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent) :
 {
 }
 
+QWidget *CorrelationWidgetController::getWidget() const
+{
+	return m_view;
+}
+
 bool CorrelationWidgetController::isGraphicVisible()
 {
 	return m_view->isVisible();
@@ -41,6 +46,10 @@ void CorrelationWidgetController::onDataArrived(const QString &method, const QVa
 	QString second = list.at(list.size() - 1).toString();
 
 	setLabelName(base, second);
+}
+
+void CorrelationWidgetController::clear()
+{
 }
 
 void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)

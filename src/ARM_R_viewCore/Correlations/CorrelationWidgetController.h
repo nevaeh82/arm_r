@@ -37,6 +37,7 @@ public:
 	void onDataArrived(const QString& method, const QVariant& arg);
 
 	void clear();
+	QWidget* getWidget() const;
 
 private:
 	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
