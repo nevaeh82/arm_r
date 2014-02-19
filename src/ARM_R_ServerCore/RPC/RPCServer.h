@@ -43,6 +43,8 @@ public:
 
 	virtual quint64 getClientId(IClient* client);
 
+	virtual void sendDataByRpc(const QString& signalType, const QByteArray& data);
+
 private slots:
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
 	void slotRPCConnetion(quint64 client);
@@ -105,6 +107,16 @@ private:
 
 signals:
     void finished();
+
+	/// Rpc signals
+	void serverSendPointsRpcSignal(QByteArray);
+	void serverSendDetectedBandwidthRpcSignal(QByteArray);
+	void serverSendCorrelationRpcSignal(QByteArray);
+	void serverSendAtlantDirectionRpcSignal(QByteArray);
+	void serverSendAtlantPositionRpcSignal(QByteArray);
+	void serverSendPrmStatusRpcSignal(int, int, int, int);
+	void serverSendBplaDefRpcSignal(QByteArray);
+	void serverSendBplaDefAutoRpcSignal(QByteArray);
 
 public slots:
     void aboutToQuitApp();

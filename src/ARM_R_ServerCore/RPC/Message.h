@@ -1,5 +1,5 @@
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef MESSAGE_OLD_H
+#define MESSAGE_OLD_H
 
 #include <QByteArray>
 #include "../Common/IMessage.h"
@@ -20,4 +20,4 @@ private:
 
 };
 
-#endif // MESSAGE_H
+#endif // MESSAGE_OLD_H
