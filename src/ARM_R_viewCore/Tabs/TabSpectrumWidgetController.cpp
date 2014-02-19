@@ -3,7 +3,7 @@
 
 #define DEFAULT_RPC_PORT		24500
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICommonComponents *common_correlations, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
@@ -12,7 +12,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 	m_rpcHostPort = DEFAULT_RPC_PORT;
 
 	_threshold = -1;
-	_common_correlations = common_correlations;
+	m_correlationControllers = correlationControllers;
 	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
 	m_dbManager->registerReceiver(this);
@@ -161,12 +161,12 @@ int TabSpectrumWidgetController::createView()
 		return 0;
 	}
 
-	for(int i = 0; i < _common_correlations->count(0); i++){
-		CorrelationWidget* correlationWidget = static_cast<CorrelationWidget*>(_common_correlations->get(i));
+	for(int i = 0; i < m_correlationControllers->count(); i++){
+		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
-		correlationDataSource->registerReceiver(correlationWidget);
+		correlationDataSource->registerReceiver(dynamic_cast<IDataSourceListener*>(correlationWidget));
 
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}

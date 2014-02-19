@@ -9,7 +9,7 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(IDbManager* dbManager, QWidget 
 
 	m_dbManager = dbManager;
 
-	m_correlationComponent = NULL;
+	m_correlationControllers = NULL;
 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
@@ -47,20 +47,20 @@ void CommonSpectrumTabWidget::clearSpectrumWidgetsContainer()
 	m_widgetList.clear();
 }
 
-void CommonSpectrumTabWidget::setCorrelationComponent(ICommonComponents *correlation)
+void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersContainer* correlationControllers)
 {
-	m_correlationComponent = correlation;
+	m_correlationControllers = correlationControllers;
 
-	for(int i = 0; i < m_correlationComponent->count(0); i++){
-		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(m_correlationComponent->get(i))));
+	for(int i = 0; i < m_correlationControllers->count(); i++){
+		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
 }
 
 
 void CommonSpectrumTabWidget::activate()
 {
-	for(int i = 0; i < m_correlationComponent->count(0); i++){
-		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(m_correlationComponent->get(i))));
+	for(int i = 0; i < m_correlationControllers->count(); i++){
+		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {

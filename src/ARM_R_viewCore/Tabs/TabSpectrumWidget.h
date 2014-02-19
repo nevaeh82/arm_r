@@ -9,7 +9,7 @@
 #include <QThread>
 
 #include "Abstracts/ITabWidget.h"
-#include "Abstracts/ICommonComponents.h"
+#include "Interfaces/ICorrelationControllersContainer.h"
 
 #include "Interfaces/ISpectrumWidget.h"
 
@@ -42,7 +42,7 @@ private:
 	Ui::TabSpectrumWidget*     ui;
 
 	QList<ISpectrumWidget*> m_spectrumWidgetsList;
-	QList<CorrelationWidget*> m_correlationWidgetsList;
+	QList<ICorrelationWidget*> m_correlationWidgetsList;
 
 	SpectrumWidget* m_spectrumWidget;
 	SpectrumWidgetController* m_spectrumWidgetController;
@@ -68,7 +68,7 @@ public:
 	virtual void setIndicatorState(int state);
 
 	QTreeView *getTreeView() const;
-	void insertCorrelationWidget(CorrelationWidget* correlationWidget);
+	void insertCorrelationWidget(ICorrelationWidget *correlationWidget);
 
 signals:
 	void setIndicatorStateSignal(int state);
