@@ -11,8 +11,8 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 	m_tabWidget = tabWidget;
 
 	_common_correlations = NULL;
-
 	m_currentTabWidget = NULL;
+	m_dbManager = NULL;
 }
 
 TabManager::~TabManager()
@@ -51,15 +51,9 @@ int TabManager::start()
 
 int TabManager::createSubModules(const QString& settingsFile)
 {
-	//_common_spectra = new CommonSpectra();
 	_common_correlations = new CommonCorrelations();
 
 	int submodulesCount = readSettings(settingsFile);
-
-	/// create common database manager for spectrum tabs
-	m_dbManager = new DbManager(this);
-	m_dbManager->registerReceiver(this);
-
 
 	_common_correlations->init(m_tabsPropertyMap.count() - 1);
 
@@ -114,6 +108,11 @@ int TabManager::createSubModules(const QString& settingsFile)
 	connect(this, SIGNAL(changeTabSignal(int)), this, SLOT(changeTabSlot(int)));
 
 	return submodulesCount;
+}
+
+void TabManager::setDbManager(IDbManager *dbManager)
+{
+	m_dbManager = dbManager;
 }
 
 QString TabManager::getStationName(int id)

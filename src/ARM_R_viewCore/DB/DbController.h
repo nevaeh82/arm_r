@@ -28,6 +28,8 @@ public:
 	Object getObject(const uint objectId);
 	Object getObject(const QString& objectName);
 
+	ObjectsList getAllObjects();
+
 	uint addObject(const Object& object);
 	uint addProperty(const Property &property);
 

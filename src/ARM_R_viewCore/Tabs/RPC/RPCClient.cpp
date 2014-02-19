@@ -159,22 +159,19 @@ void RPCClient::requestSatatus()
 
 void RPCClient::recognize()
 {
-	SettingsNode settingsNode = m_dbManager->getSettingsNode(m_tabProperty->get_name());
-
 	float bandwidth = 0;
 	float shift = 0;
-	foreach (Property property, settingsNode.properties) {
-		if (DB_SELECTED_PROPERTY != property.name && DB_CENTER_PROPERTY != property.name) {
-			continue;
-		}
 
-		if (DB_CENTER_PROPERTY == property.name) {
-			shift = property.value.toFloat();
-		}
+	QVariant value = m_dbManager->getPropertyValue(m_tabProperty->get_name(), DB_SELECTED_PROPERTY);
 
-		if (DB_SELECTED_PROPERTY == property.name) {
-			bandwidth = property.value.toFloat();
-		}
+	if (value.isValid()) {
+		bandwidth = value.toFloat();
+	}
+
+	value = m_dbManager->getPropertyValue(m_tabProperty->get_name(), DB_CENTER_PROPERTY);
+
+	if (value.isValid()) {
+		shift = value.toFloat();
 	}
 
 	emit signalSetBandwidth(m_tabProperty->get_id(), bandwidth);
@@ -254,8 +251,8 @@ void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArra
 		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, points);
 	}
 
-//	if(point2 != m_tabProperty->get_id())
-//		m_grData->set_data(point2, points, true);
+	//	if(point2 != m_tabProperty->get_id())
+	//		m_grData->set_data(point2, points, true);
 }
 
 void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)

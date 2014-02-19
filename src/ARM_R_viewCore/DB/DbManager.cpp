@@ -19,22 +19,6 @@ DbManager::~DbManager()
 {
 }
 
-//void DbManager::registerDbChangedReceiver(ISettingsChangedListener *receiver)
-//{
-//	m_receiversList.append(receiver);
-//}
-
-//void DbManager::deregisterDbChangedReceiver(ISettingsChangedListener *receiver)
-//{
-//	int index = m_receiversList.indexOf(receiver);
-
-//	if (index < 0){
-//		return;
-//	}
-
-//	m_receiversList.removeAt(index);
-//}
-
 SettingsNode DbManager::getSettingsNode(const QString &objectName)
 {
 	SettingsNode settingsNode;
@@ -67,22 +51,32 @@ bool DbManager::updateProperty(const Property &property)
 
 	notifyDbChanged(property);
 
-//	Object obj =  m_dbController->getObject(property.pid);
+	return true;
+}
 
-//	if (INVALID_INDEX == obj.id) {
-//		return false;
-//	}
+bool DbManager::updatePropertyForAllObjects(const QString &propName, const QVariant& value)
+{
+	ObjectsList objects = m_dbController->getAllObjects();
 
-//	SettingsNode settingsNode = getSettingsNode(obj.name);
+	if (objects.isEmpty()) {
+		return false;
+	}
 
-//	notifyDbChanged(settingsNode);
+	foreach (Object object, objects) {
+		Property prop = getProperty(object.name, propName);
+		if (INVALID_INDEX == prop.id) {
+			continue;
+		}
+
+		prop.value = value;
+		updateProperty(prop);
+	}
 
 	return true;
 }
 
 QString DbManager::getObjectName(const uint id) const
 {
-	// Create object KTP settings
 	Object obj= m_dbController->getObject(id);
 
 	if (obj.id == INVALID_INDEX) {
@@ -90,6 +84,17 @@ QString DbManager::getObjectName(const uint id) const
 	}
 
 	return obj.name;
+}
+
+QVariant DbManager::getPropertyValue(const QString &objectName, const QString &propName)
+{
+	Property prop = getProperty(objectName, propName);
+
+	if (INVALID_INDEX == prop.id) {
+		return QVariant();
+	}
+
+	return prop.value;
 }
 
 Object DbManager::createSettingsNode(const QString &objectName)
@@ -236,6 +241,22 @@ Object DbManager::createStation(const QString &stationName)
 	return obj;
 
 }
+
+Property DbManager::getProperty(const QString &objectName, const QString &propName)
+{
+	SettingsNode settingsNode = getSettingsNode(objectName);
+
+	foreach (Property property, settingsNode.properties) {
+		if (propName != property.name) {
+			continue;
+		}
+
+		return property;
+	}
+
+	return Property();
+}
+
 
 void DbManager::notifyDbChanged(const SettingsNode& category)
 {

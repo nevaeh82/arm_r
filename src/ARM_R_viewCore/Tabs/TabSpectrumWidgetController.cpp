@@ -38,12 +38,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(_slot_get_points_from_rpc(QByteArray)));
 
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
-
-
-	///TODO: recheck
-	//	for(int i = 0; i < _common_correlations->count(0); i++){
-	//		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(_common_correlations->get(i))));
-	//	}
 }
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
@@ -252,13 +246,10 @@ double TabSpectrumWidgetController::get_current_frequency()
 {
 	double frequency = 1830;
 
-	SettingsNode settingsNode = m_dbManager->getSettingsNode(m_stationName);
+	QVariant value = m_dbManager->getPropertyValue(m_stationName, DB_FREQUENCY_PROPERTY);
 
-	foreach (Property property, settingsNode.properties) {
-		if (DB_FREQUENCY_PROPERTY == property.name) {
-			frequency = property.value.toDouble();
-			break;
-		}
+	if (value.isValid()) {
+		frequency = value.toDouble();
 	}
 
 	return frequency;

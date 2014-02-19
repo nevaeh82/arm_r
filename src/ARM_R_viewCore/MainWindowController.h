@@ -11,6 +11,7 @@
 #include "ServiceHandler/ServiceHandler.h"
 
 #include "Tabs/TabManager.h"
+#include "ControlPanel/ControlPanelController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>
 {
@@ -25,6 +26,8 @@ private:
 	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;
 
 	TabManager*         m_tabManager;
+	IDbManager*         m_dbManager;
+	ControlPanelController* m_controlPanelController;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

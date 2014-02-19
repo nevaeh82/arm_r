@@ -56,8 +56,9 @@ public:
 	virtual ~TabManager();
 
 	virtual int start();
-
 	virtual int createSubModules(const QString& settingsFile);
+
+	void setDbManager(IDbManager* dbManager);
 
     virtual QString getStationName(int id);
 	virtual void send_data(const QString& stationName, TypeCommand type, IMessage* msg);
