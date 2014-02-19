@@ -2,108 +2,115 @@
 
 #include "Rpc/RpcDefines.h"
 
-CorrelationWidgetDataSource::CorrelationWidgetDataSource(RPCClient* rpcClient, QObject *parent) :
+CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent) :
 	BaseDataSource(parent)
 {
-	m_rpcController = rpcClient;
-	m_rpcController->registerReceiver(this);
+	m_correlationWidget = correlationWidget;
+
+	m_id = id;
+	m_tabManager = tabManager;
+
+	m_mapPeaksCorrelation = new float[1];
+	m_mapSpectrumCorelation = new float[1];
+	m_mapBandwidthCorelation = 0;
 }
 
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		//set_data(arg.toByteArray(), true); //spectrum
-	} else if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
-		//setDetectedAreas(arg.toByteArray());
-	} else if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		//set_def_modulation(arg.toString()); //spectrum
-	} else if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
-		//correlation
-		//TODO: point2 from rpc
-		int point2 = 0;
-		//set_data(point2, arg.toByteArray(), true);
+	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
 
-		//onDataReceived(method, data, );
+		if(!m_correlationWidget->isGraphicVisible()) {
+			return;
+		}
+
+		QList<QVariant> list = data.toList();
+		quint32 point2 = list.at(1).toUInt();
+
+		if (point2 - 1 != m_id /*|| point2 > 1*/){
+			return;
+		}
+
+		setCorData(point2, list.at(0).toByteArray(), true);
 	}
 }
 
-void CorrelationWidgetDataSource::setCorData(quint32 point2, QByteArray vecFFTBA, bool isComplex)
+Q_DECLARE_METATYPE(float*)
+void CorrelationWidgetDataSource::setCorData(quint32 point2, QByteArray& vecFFTBA, bool isComplex)
 {
 	QVector<QPointF> vecFFT;
 	QDataStream stream(vecFFTBA);
 	stream >> vecFFT;
 
-	int cor_id = point2;
-	if(point2 > _id)
-	{
-		cor_id -= 1;
-	}
+	QString base = m_tabManager->getStationName(m_id);
+	QString second = m_tabManager->getStationName(point2);
 
-	IGraphicWidget* gr_correlation = _common_correlations->get(cor_id);//_map_correlation_widget->value(point2);
-
-	if(!gr_correlation->isGraphicVisible() || gr_correlation == NULL) {
-		return;
-	}
-
-	QString base = _tab_manager->getStationName(_id);
-	QString second = _tab_manager->getStationName(point2);
-
-	float* sp_correlation = _map_spectrum_corelation.value(cor_id);
-	float* peaks_correlation = _map_peaks_correlation.value(cor_id);
-	double b_cor = _map_bandwidth_corelation.value(cor_id);
-	int PointCount = vecFFT.size();
-	//    float* spectrum = new float[PointCount];
+	float* spCorrelation = m_mapSpectrumCorelation;
+	float* peaksCorrelation = m_mapPeaksCorrelation;
+	double bCor = m_mapBandwidthCorelation;
+	int pointCount = vecFFT.size();
 
 	qreal startx = vecFFT.at(0).x();
 	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
 	double bandwidth = endx - startx;
 
-
-	if(b_cor != bandwidth)
+	if(bCor != bandwidth)
 	{
-		b_cor = bandwidth;
-		_map_bandwidth_corelation.insert(cor_id, b_cor);
-		delete[] sp_correlation;
-		sp_correlation = new float[PointCount];
+		bCor = bandwidth;
+		m_mapBandwidthCorelation = bCor;
+		delete[] spCorrelation;
+		spCorrelation = new float[pointCount];
 
-		delete[] peaks_correlation;
-		peaks_correlation = new float[PointCount];
-		_needSetup = true;
+		delete[] peaksCorrelation;
+		peaksCorrelation = new float[pointCount];
+		m_needSetup = true;
 	}
 
 
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
-		sp_correlation[i] = vecFFT.at(i).y();
+		spCorrelation[i] = vecFFT.at(i).y();
 
-		if((_startx_cor != startx) || (sp_correlation[i] > peaks_correlation[i]))
+		if((m_startxCor != startx) || (spCorrelation[i] > peaksCorrelation[i]))
 		{
-			peaks_correlation[i] = sp_correlation[i];
+			peaksCorrelation[i] = spCorrelation[i];
 		}
 	}
-	//return;
 
-	_map_spectrum_corelation.insert(cor_id, sp_correlation);
-	_map_peaks_correlation.insert(cor_id, peaks_correlation);
+	m_mapSpectrumCorelation = spCorrelation;
+	m_mapPeaksCorrelation = peaksCorrelation;
 
-
-	if(_startx_cor != startx)
+	if(m_startxCor != startx)
 	{
-		_startx_cor = startx;
+		m_startxCor = startx;
 	}
 
-	if(_needSetup)
+	QList<QVariant> list;
+	QVariant spCorrelationVariant = QVariant::fromValue(spCorrelation);
+	QVariant peaksCorrelationVariant = QVariant::fromValue(peaksCorrelation);
+	list.append(spCorrelationVariant);
+	list.append(peaksCorrelationVariant);
+
+	if(m_needSetup)
 	{
-		//        emit signalDataS(_spectrum, _spectrum_peak_hold);
-		gr_correlation->setSignalSetup(sp_correlation, peaks_correlation, PointCount, b_cor, /*isComplex*/true);
-		_needSetup = false;
-	}
-	else {
-		//        emit signalData(_spectrum, _spectrum_peak_hold);
-		gr_correlation->setSignal(sp_correlation, peaks_correlation);
+		QVariant pointCountVariant(pointCount);
+		QVariant bCorVariant(bCor);
+		QVariant isComplexVariant(true);
+
+		list.append(pointCountVariant);
+		list.append(bCorVariant);
+		list.append(isComplexVariant);
+
+		m_needSetup = false;
 	}
 
-	gr_correlation->setLabelName(base, second);
+	QVariant labelBase(base);
+	QVariant labelSecond(second);
+
+	list.append(labelBase);
+	list.append(labelSecond);
+
+	QVariant data(list);
+	onDataReceived(RPC_SLOT_SERVER_SEND_CORRELATION, data);
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)

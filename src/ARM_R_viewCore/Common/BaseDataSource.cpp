@@ -27,17 +27,3 @@ void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)
 		listener->onDataArrived(method, arg);
 	}
 }
-
-void BaseDataSource::onDataReceived(float *spectrum, float *spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
-{
-	foreach(IDataSourceListener* listener, m_listeners){
-		listener->onDataArrived(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-	}
-}
-
-void BaseDataSource::onDataReceived(float *spectrum, float *spectrumPeakHold)
-{
-	foreach(IDataSourceListener* listener, m_listeners){
-		listener->onDataArrived(spectrum, spectrumPeakHold);
-	}
-}

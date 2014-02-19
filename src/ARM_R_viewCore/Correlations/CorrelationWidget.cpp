@@ -167,14 +167,38 @@ void CorrelationWidget::_slotSetLabelName(QString base, QString second)
 	}
 }
 
+Q_DECLARE_METATYPE(float*)
 void CorrelationWidget::onDataArrived(const QString &method, const QVariant &arg)
 {
+	QList<QVariant> list = arg.toList();
+	float* spectrum = list.at(0).value<float*>();
+	float* spectrumPeakHold = (float*)list.at(1).value<float*>();
+
+	if (list.count() == 4){
+		_slotSetSignal(spectrum, spectrumPeakHold);
+	} else {
+		int pointCount = list.at(2).toInt();
+		double bandwidth = list.at(3).toDouble();
+		bool isComplex = list.at(4).toBool();
+		setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+	}
+
+	QString base = list.at(list.size() - 2).toString();
+	QString second = list.at(list.size() - 1).toString();
+
+	setLabelName(base, second);
+
+
+	//setCorData(list.at(1).toUInt(), list.at(0).toByteArray(), true);
+
 }
 
 void CorrelationWidget::onDataArrived(float *spectrum, float *spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
 {
+	//setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 }
 
 void CorrelationWidget::onDataArrived(float *spectrum, float *spectrumPeakHold)
 {
+	//_slotSetSignal(spectrum, spectrumPeakHold);
 }

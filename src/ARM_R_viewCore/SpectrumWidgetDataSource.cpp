@@ -20,6 +20,7 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 	m_spectrumPeakHold = new float[1];
 }
 
+Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
 	bool isComplex = false;
@@ -38,15 +39,26 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 
 		dataProccess(vecFFT, isComplex);
 
+		QList<QVariant> list;
+		QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
+		QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
+		list.append(spectrumVariant);
+		list.append(peaksSpectrumVariant);
+
 		if(m_needSetupSpectrum)
 		{
-			onDataReceived(m_spectrum, m_spectrumPeakHold, m_pointCountWhole/*vecFFT.size()*/, m_bandwidth, isComplex);
+			QVariant pointsCountVariant(m_pointCountWhole);
+			QVariant bandwidthVariant(m_bandwidth);
+			QVariant isComplexVariant(isComplex);
+			list.append(pointsCountVariant);
+			list.append(bandwidthVariant);
+			list.append(isComplexVariant);
+
 			m_needSetupSpectrum = false;
 		}
-		else
-		{
-			onDataReceived(m_spectrum, m_spectrumPeakHold);
-		}
+
+		QVariant data(list);
+		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
 		return;
 	}
 

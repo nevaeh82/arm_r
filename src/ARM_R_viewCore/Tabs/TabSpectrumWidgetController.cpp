@@ -13,13 +13,13 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	_threshold = -1;
 	_common_correlations = common_correlations;
-	_tab_manager = tab_manager;
+	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
 	_tab_property = prop;
-	_id = _tab_property->get_id();
+	m_id = _tab_property->get_id();
 	m_stationName = _tab_property->get_name();
 
 	QStringList headers;
@@ -128,6 +128,10 @@ int TabSpectrumWidgetController::createRPC()
 	m_rpcClient->registerReceiver(_spectrumData);
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
 
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		m_rpcClient->registerReceiver(correlationWidgetDataSource);
+	}
+
 	return 0;
 }
 
@@ -149,7 +153,13 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	for(int i = 0; i < _common_correlations->count(0); i++){
-		m_view->insertCorrelationWidget((static_cast<CorrelationWidget *>(_common_correlations->get(i))));
+		CorrelationWidget* correlationWidget = static_cast<CorrelationWidget*>(_common_correlations->get(i));
+		m_view->insertCorrelationWidget(correlationWidget);
+
+		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
+		correlationDataSource->registerListener(correlationWidget);
+
+		m_correlationDataSourcesList.append(correlationDataSource);
 	}
 
 	m_spectrumWidget = m_view->getSpectrumWidget();
@@ -159,12 +169,12 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	m_spectrumWidget->setTab(this);
-	m_spectrumWidget->setId(_id);
+	m_spectrumWidget->setId(m_id);
 	m_spectrumWidget->setSpectrumName(m_stationName);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, _tab_manager, _id);
+	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, m_tabManager, m_id);
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 	m_spectrumDataSource->registerListener(m_spectrumWidget);
 
@@ -307,7 +317,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	_tab_manager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
+	m_tabManager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
@@ -334,7 +344,7 @@ void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 {
-	_tab_manager->set_tab(id);
+	m_tabManager->set_tab(id);
 }
 
 void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)

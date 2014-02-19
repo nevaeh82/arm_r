@@ -79,6 +79,7 @@ void SpectrumWidgetController::setControlPrmState(bool state)
 	m_view->setControlPrmState(state);
 }
 
+Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetController::onDataArrived(const QString &method, const QVariant &arg)
 {
 	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
@@ -93,6 +94,18 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 
+		QList<QVariant> list = arg.toList();
+		float* spectrum = list.at(0).value<float*>();
+		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
+
+		if (list.count() == 2){
+			setSignal(spectrum, spectrumPeakHold);
+		} else {
+			int pointCount = list.at(2).toInt();
+			double bandwidth = list.at(3).toDouble();
+			bool isComplex = list.at(4).toBool();
+			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+		}
 		//setSignal(m_spectrum, m_spectrumPeakHold);
 
 		return;

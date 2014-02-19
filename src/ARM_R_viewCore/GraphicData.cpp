@@ -126,8 +126,8 @@ void GraphicData::m_slotSetCorData(quint32 point2, QByteArray vecFFTBA, bool isC
 void GraphicData::onMethodCalled(const QString &method, const QVariant &arg)
 {
 	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
-		QList<QVariant> list = arg.toList();
-		set_data(list.at(1).toUInt(), list.at(0).toByteArray(), true);
+		//QList<QVariant> list = arg.toList();
+		//set_data(list.at(1).toUInt(), list.at(0).toByteArray(), true);
 
 
 		/*QList<QVariant> list;
