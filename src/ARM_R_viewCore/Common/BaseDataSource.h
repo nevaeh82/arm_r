@@ -10,17 +10,13 @@
 #include "Interfaces/IDataSource.h"
 #include "Interfaces/IDataSourceListener.h"
 
-class BaseDataSource : public QObject, public IDataSource
+#include "BaseSubject.h"
+
+class BaseDataSource : public QObject, public BaseSubject<IDataSourceListener>, public IDataSource
 {
 	Q_OBJECT
-protected:
-	QList<IDataSourceListener*> m_listeners;
-
 public:
 	explicit BaseDataSource(QObject *parent = 0);
-
-	void registerListener(IDataSourceListener*);
-	void deregisterListener(IDataSourceListener*);
 
 	void sendCommand(int) = 0;
 

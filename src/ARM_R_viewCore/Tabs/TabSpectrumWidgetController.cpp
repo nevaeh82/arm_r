@@ -154,7 +154,7 @@ int TabSpectrumWidgetController::createView()
 		m_view->insertCorrelationWidget(correlationWidget);
 
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
-		correlationDataSource->registerListener(correlationWidget);
+		correlationDataSource->registerReceiver(correlationWidget);
 
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}
@@ -172,7 +172,7 @@ int TabSpectrumWidgetController::createView()
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
-	m_spectrumDataSource->registerListener(m_spectrumWidget);
+	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
 
 	return 0;
 }

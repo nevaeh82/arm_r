@@ -5,7 +5,6 @@
 //#include "../ARM_R_view/Tabs/Tree/DBController.h"
 //#include "../ARM_R_view/Tabs/Tree/DBController.cpp"
 
-#include "GraphicData.h"
 #include "SpectrumWidgetDataSource.h"
 
 class GraphicsDataTest: public CxxTest::TestSuite
@@ -41,6 +40,8 @@ public:
 		TS_ASSERT_EQUALS(1, grData->findIndex(8.97));
 		TS_ASSERT_EQUALS(1, grData->findIndex(8));
 		TS_ASSERT_EQUALS(0, grData->findIndex(0.99));
+
+		delete grData;
 	}
 
 	void testGraphicsIncomeData()
@@ -96,6 +97,8 @@ public:
 			}
 
 		}
+
+		delete grData;
 	}
 };
 

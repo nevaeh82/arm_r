@@ -8,9 +8,6 @@ class IDataSource
 	public:
 		virtual ~IDataSource(){}
 
-		virtual void registerListener(IDataSourceListener*) = 0;
-		virtual void deregisterListener(IDataSourceListener*) = 0;
-
 		virtual void sendCommand(int) = 0;
 };
 
