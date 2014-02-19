@@ -44,7 +44,8 @@ SOURCES += \
     SpectrumWidgetController.cpp \
     Common/BaseDataSource.cpp \
     SpectrumWidgetDataSource.cpp \
-    Correlations/CorrelationWidgetDataSource.cpp
+    Correlations/CorrelationWidgetDataSource.cpp \
+    Correlations/CorrelationWidgetController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -95,7 +96,9 @@ HEADERS += \
     Interfaces/IDataSource.h \
     Common/BaseDataSource.h \
     SpectrumWidgetDataSource.h \
-    Correlations/CorrelationWidgetDataSource.h
+    Correlations/CorrelationWidgetDataSource.h \
+    Correlations/CorrelationWidgetController.h \
+    Interfaces/ICorrelationWidget.h
 
 FORMS += \
     ControlPanel.ui \

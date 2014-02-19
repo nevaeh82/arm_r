@@ -26,8 +26,7 @@ int CommonCorrelations::init(int count)
 {
     for(int i = 0; i < count; i++)
     {
-        CorrelationWidget *cor = new CorrelationWidget(0,0, "", i);//( _tab_property->get_ip_prm300(), _tab_property->get_ip_adc(), _tab_property->get_port_adc(), this, view);
-//        vboxlayout->addWidget(cor, Qt::AlignJustify);
+		CorrelationWidget *cor = new CorrelationWidget(0,0, "", i);
         _map_widgets->insert(i, cor);
     }
     return 0;

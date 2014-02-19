@@ -66,7 +66,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 	QMap<int, TabsProperty* >::iterator it;
 	for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
 	{
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), /*_common_spectra,*/ _common_correlations, m_dbManager, this);
+		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), _common_correlations, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		tabController->appendView(tabSpectrumWidget);

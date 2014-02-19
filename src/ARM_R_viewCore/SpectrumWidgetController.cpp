@@ -93,7 +93,6 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 	}
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-
 		QList<QVariant> list = arg.toList();
 		float* spectrum = list.at(0).value<float*>();
 		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
@@ -106,21 +105,9 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			bool isComplex = list.at(4).toBool();
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
-		//setSignal(m_spectrum, m_spectrumPeakHold);
 
 		return;
-		//set_data(arg.toByteArray(), true); //spectrum
 	}
-}
-
-void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold, int pointCount, double bandwidth, bool isComplex)
-{
-	setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-}
-
-void SpectrumWidgetController::onDataArrived(float* spectrum, float* spectrumPeakHold)
-{
-	setSignal(spectrum, spectrumPeakHold);
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -189,7 +176,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	if(m_rett == 0)
 	{
 		int ret = QMessageBox::warning(m_view, tr("Attention!"),
-									   tr("Signal was decected!"),
+									   tr("Signal was detected!"),
 									   QMessageBox::Cancel, QMessageBox::Ok);
 		m_rett = -101;
 
