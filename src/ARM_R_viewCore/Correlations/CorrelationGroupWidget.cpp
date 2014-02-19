@@ -13,7 +13,7 @@ CorrelationGroupWidget::~CorrelationGroupWidget()
 	delete ui;
 }
 
-void CorrelationGroupWidget::insertCorrelationWidget(CorrelationWidget *widget)
+void CorrelationGroupWidget::insertCorrelationWidget(ICorrelationWidget *widget)
 {
 	if (NULL ==widget) {
 		return;
@@ -21,15 +21,13 @@ void CorrelationGroupWidget::insertCorrelationWidget(CorrelationWidget *widget)
 
 	m_widgetList.append(widget);
 
-	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget);
+	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget->getWidget());
 }
 
 void CorrelationGroupWidget::clearWidgetContainer()
 {
-	foreach (CorrelationWidget* widget , m_widgetList) {
-
-		ui->correlationWidgetsContainer->removeWidget(widget);
-
+	foreach (ICorrelationWidget* widget , m_widgetList) {
+		ui->correlationWidgetsContainer->removeWidget(widget->getWidget());
 		widget->clear();
 	}
 

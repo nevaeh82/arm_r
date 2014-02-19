@@ -10,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QMutex>
 
-#include "Common/CommonCorrelations.h"
+#include "Correlations/CorrelationControllersContainer.h"
 
 #include "TabsProperty.h"
 
@@ -38,10 +38,12 @@ private:
 
 	QMap<int, TabsProperty *>   m_tabsPropertyMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	ICommonComponents*          _common_correlations;
+	ICorrelationControllersContainer*	_common_correlations;
 
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;
+
+	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);

@@ -4,22 +4,6 @@
 #include <QApplication>
 
 #include <QWidget>
-#include <QSettings>
-#include <QHBoxLayout>
-#include <QFile>
-#include <QMessageBox>
-#include <QCheckBox>
-#include <QLabel>
-#include <QList>
-#include <QPoint>
-#include <qmath.h>
-#include <QMutex>
-#include <QMenu>
-#include <QAction>
-#include <QSpinBox>
-#include <QPushButton>
-
-#include <QTimer>
 
 #include "Common/CommandMessage.h"
 #include "SpectrumWidgetController.h"

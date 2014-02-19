@@ -21,7 +21,6 @@ SOURCES += \
 	Tabs/TabsProperty.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
-	Common/CommonCorrelations.cpp \
 	Tabs/Controls/ControlPRM.cpp \
 	Tabs/RPC/RPCAtlant.cpp \
     MainWindow.cpp \
@@ -42,14 +41,16 @@ SOURCES += \
     SpectrumWidgetController.cpp \
     Common/BaseDataSource.cpp \
     SpectrumWidgetDataSource.cpp \
-    Correlations/CorrelationWidgetDataSource.cpp
+    Correlations/CorrelationWidgetDataSource.cpp \
+    Correlations/CorrelationWidgetController.cpp \
+    Correlations/CorrelationControllersContainer.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \
-	Abstracts/ICommonComponents.h \
+        Interfaces/ICorrelationControllersContainer.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
 	Common/IMessage.h \
@@ -58,7 +59,6 @@ HEADERS += \
 	Tabs/RPC/IRPC.h \
 	Tabs/RPC/RPCClient.h \
         Interfaces/ITabManager.h \
-	Common/CommonCorrelations.h \
 	Tabs/Controls/ControlPRM.h \
 	Tabs/Controls/IControlPRM.h \
 	Tabs/RPC/RPCAtlant.h \
@@ -93,7 +93,11 @@ HEADERS += \
     Correlations/CorrelationWidgetDataSource.h \
     Defines.h \
     Interfaces/IControlPanelListener.h \
-    Interfaces/IControlPanelController.h
+    Interfaces/IControlPanelController.h \
+    Correlations/CorrelationWidgetDataSource.h \
+    Correlations/CorrelationWidgetController.h \
+    Interfaces/ICorrelationWidget.h \
+    Correlations/CorrelationControllersContainer.h
 
 FORMS += \
     ControlPanel.ui \

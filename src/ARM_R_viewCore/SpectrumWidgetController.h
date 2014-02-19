@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QString>
 #include <QMessageBox>
+#include <QFile>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
@@ -66,12 +67,7 @@ public:
 	QString getSpectrumName() const;
 	QWidget* getWidget() const;
 
-	void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
-	void setSignal(float* spectrum, float* spectrum_peak_hold);
-	void setDefModulation(QString modulation);
 	bool isGraphicVisible();
-	void setLabelName(QString base, QString second);
-	void setDetectedAreasUpdate(const QByteArray& vec);
 	void setZeroFrequency(double val);
 
 	void setAutoSearch(bool);
@@ -83,10 +79,15 @@ public:
 	void setControlPrmState(bool state);
 
 	void onDataArrived(const QString& method, const QVariant& arg);
-	void onDataArrived(float*, float*, int, double, bool);
-	void onDataArrived(float*, float*);
+
 private:
 	void init();
+
+	void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
+	void setSignal(float* spectrum, float* spectrum_peak_hold);
+	void setDefModulation(QString modulation);
+	void setLabelName(QString base, QString second);
+	void setDetectedAreasUpdate(const QByteArray& vec);
 
 signals:
 	void doubleClickedSignal(int);
