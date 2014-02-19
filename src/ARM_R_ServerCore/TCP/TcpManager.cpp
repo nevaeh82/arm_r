@@ -11,7 +11,8 @@ TcpManager::TcpManager(QObject* parent) :
 
 	QThread* coordinateCounterThread = new QThread;
 	connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
-	connect(this, SIGNAL(finished()), m_coordinatesCounter, SLOT(deleteLater()));
+	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
+	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
 	connect(coordinateCounterThread, SIGNAL(finished()), coordinateCounterThread, SLOT(deleteLater()));
 	m_coordinatesCounter->moveToThread(coordinateCounterThread);
 	coordinateCounterThread->start();
@@ -19,10 +20,12 @@ TcpManager::TcpManager(QObject* parent) :
 
 TcpManager::~TcpManager()
 {
+	emit threadTerminateSignal();
 }
 
 void TcpManager::addTcpDevice(const QString& deviceType, const QString& host, const quint32& port)
 {
+	m_logger->debug(QString("Creating %1").arg(deviceType));
 	QString key = host + ":" + QString::number(port);
 
 	BaseTcpDeviceController* controller = NULL;
@@ -30,10 +33,13 @@ void TcpManager::addTcpDevice(const QString& deviceType, const QString& host, co
 	if (deviceType == FLAKON_TCP_DEVICE) {
 		controller = new TcpFlakonController(FLAKON_TCP_DEVICE);
 		controller->registerReceiver(m_coordinatesCounter);
+		m_logger->debug(QString("Created TcpFlakonController"));
 	} else if (deviceType == ATLANT_TCP_DEVICE) {
 		controller = new TcpAtlantController(ATLANT_TCP_DEVICE);
+		m_logger->debug(QString("Created TcpAtlantController"));
 	} else if (deviceType == PRM300_TCP_DEVICE) {
 		controller = new TcpPRM300Controller(PRM300_TCP_DEVICE);
+		m_logger->debug(QString("Created TcpPRM300Controller"));
 	}
 	/// if something else, create new Tcp%Device%Controller with new name and/or class
 

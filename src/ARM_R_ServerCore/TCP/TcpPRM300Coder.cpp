@@ -143,7 +143,7 @@ IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 		aForCrcCount.append(aAt2);
 		aForCrcCount.append(aAt3);
 
-		CRCs crc;
+		CRCsOld crc;
 		aCrc = crc.calcCRC(aForCrcCount);
 
 	}
@@ -253,7 +253,7 @@ QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)
 
 	aForCrcCount.append(aFreqFirst);
 	aForCrcCount.append(aFreqLast);
-	CRCs crc;
+	CRCsOld crc;
 	aCrc = crc.calcCRC(aForCrcCount);
 
 	streamWrite << aStart << aAddr << aSize << aBodyType;
@@ -325,7 +325,7 @@ QByteArray TcpPRM300Coder::prmGetFrequency()
 	aForCrcCount.append(aSize);
 	aForCrcCount.append(aBodyType);
 
-	CRCs crc;
+	CRCsOld crc;
 	aCrc = crc.calcCRC(aForCrcCount);
 
 	streamWrite << aStart << aAddr << aSize << aBodyType << aCrc;
@@ -356,7 +356,7 @@ QByteArray TcpPRM300Coder::prmSetAttenuerOne(int value)
 	aForCrcCount.append(aBodyType);
 	aForCrcCount.append(aBodyData);
 
-	CRCs crc;
+	CRCsOld crc;
 	aCrc = crc.calcCRC(aForCrcCount);
 
 	streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
@@ -395,7 +395,7 @@ QByteArray TcpPRM300Coder::prmSetAttenuerTwo(int value)
 	aForCrcCount.append(aBodyType);
 	aForCrcCount.append(aBodyData);
 
-	CRCs crc;
+	CRCsOld crc;
 	aCrc = crc.calcCRC(aForCrcCount);
 
 	streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
@@ -434,7 +434,7 @@ QByteArray TcpPRM300Coder::prmSetFilter(int value)
 	aForCrcCount.append(aBodyType);
 	aForCrcCount.append(aBodyData);
 
-	CRCs crc;
+	CRCsOld crc;
 	aCrc = crc.calcCRC(aForCrcCount);
 
 	streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;

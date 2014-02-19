@@ -31,11 +31,18 @@
 #include "Rpc/RpcDefines.h"
 #include "Rpc/RpcServerBase.h"
 
+#include "CommonDefines.h"
+
 class RPCServer : public RpcServerBase, public IRPC
 {
     Q_OBJECT
 public:
-	RPCServer(IRouter* router, QObject *parent = 0);
+#ifdef OLD_ARM_R_SERVER
+	RPCServer(IRouter* router, QObject* parent = 0);
+#else
+	RPCServer(/*IRouter* router,*/ QObject *parent = 0);
+#endif
+
     ~RPCServer();
 
 public:

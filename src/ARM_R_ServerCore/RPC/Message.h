@@ -4,11 +4,11 @@
 #include <QByteArray>
 #include "../Common/IMessage.h"
 
-class Message : public IMessage
+class MessageOld : public IMessageOld
 {
 public:
-    Message(int id, int type, QByteArray* data);
-    ~Message();
+	MessageOld(int id, int type, QByteArray* data);
+	~MessageOld();
 
 public:
     virtual QByteArray* get(int& id, int& type) const;

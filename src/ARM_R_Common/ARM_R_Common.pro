@@ -49,4 +49,7 @@ HEADERS += \
     TcpDevicesDefines.h \
     Message.h \
     Interfaces/IMessage.h \
-    CRCs.h
+    CRCs.h \
+    SingletonTemplate.h \
+    SingletonTemplate.hpp \
+    CommonDefines.h

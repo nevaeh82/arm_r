@@ -1,7 +1,7 @@
 #ifndef ITCPLISTENER_H
 #define ITCPLISTENER_H
 
-#include "Interfaces/IMessage.h"
+#include "Message.h"
 
 class ITcpListener
 {

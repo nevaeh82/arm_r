@@ -95,7 +95,7 @@ TCPClient::TCPClient(QString host, quint16 port, IRouter *router)
     }
 
     connect(this, SIGNAL(signalSend(QByteArray)), this, SLOT(_slotWrite(QByteArray)));
-    connect(this, SIGNAL(signalPrepareToWrite(QSharedPointer<IMessage>)), this, SLOT(_slotPrepareToWrite(QSharedPointer<IMessage>)));
+    connect(this, SIGNAL(signalPrepareToWrite(QSharedPointer<IMessageOld>)), this, SLOT(_slotPrepareToWrite(QSharedPointer<IMessageOld>)));
 }
 
 TCPClient::~TCPClient()
@@ -216,17 +216,17 @@ void TCPClient::set_id(int id)
     _id = id;
 }
 
-void TCPClient::send_data(QSharedPointer<IMessage> msg_ptr)
+void TCPClient::send_data(QSharedPointer<IMessageOld> msg_ptr)
 {    
     emit signalPrepareToWrite(msg_ptr);
 }
 
-void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessage> msg_ptr)
+void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessageOld> msg_ptr)
 {
 
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+    IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream streamprm(dd, QIODevice::ReadOnly);
 
@@ -308,7 +308,7 @@ void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessage> msg_ptr)
     _header.length = dd->size();
     QTextStream(stdout) << "length" << _header.length << endl;
 
-    CRCs crc;
+    CRCsOld crc;
     _header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(dd->data()), dd->length());
     _header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&_header), sizeof(ZaviruhaPayloadPacketHeader) - sizeof(short));
 //    QByteArray ba;
@@ -366,7 +366,7 @@ QByteArray TCPClient::_prm_get_freq()
     aForCrcCount.append(aAddr);
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aCrc;
@@ -394,7 +394,7 @@ QByteArray TCPClient::_prm_set_att1(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
@@ -432,7 +432,7 @@ QByteArray TCPClient::_prm_set_att2(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
@@ -470,7 +470,7 @@ QByteArray TCPClient::_prm_set_filter(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
@@ -511,7 +511,7 @@ QByteArray TCPClient::_prm_set_freq(unsigned short aFreq)
 
     aForCrcCount.append(aFreqFirst);
     aForCrcCount.append(aFreqLast);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite<<aStart<<aAddr<<aSize<<aBodyType;
@@ -700,7 +700,7 @@ void TCPClient::_send_status(bool state)
     QDataStream ds(ba, QIODevice::ReadWrite);
     ds << state;
 
-    QSharedPointer<IMessage> msg(new Message(_id, CONNECTION_STATUS, ba));
+    QSharedPointer<IMessageOld> msg(new MessageOld(_id, CONNECTION_STATUS, ba));
     _subscriber->data_ready(CONNECTION_STATUS, msg);
 }
 

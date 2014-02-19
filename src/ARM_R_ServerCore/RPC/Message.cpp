@@ -2,19 +2,19 @@
 
 #include <QDebug>
 
-Message::Message(const int id, const int type, QByteArray* data)
+MessageOld::MessageOld(const int id, const int type, QByteArray* data)
 {
     _id = id;
     _data = data;
     _type = type;
 }
 
-Message::~Message()
+MessageOld::~MessageOld()
 {
     delete _data;
 }
 
-QByteArray* Message::get(int& id, int& type) const
+QByteArray* MessageOld::get(int& id, int& type) const
 {
     id = _id;
     type = _type;

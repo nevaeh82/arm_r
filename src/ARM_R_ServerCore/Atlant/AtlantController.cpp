@@ -79,7 +79,7 @@ void AtlantController::set_id(int id)
     _id = id;
 }
 
-void AtlantController::send_data(QSharedPointer<IMessage> msg_ptr)
+void AtlantController::send_data(QSharedPointer<IMessageOld> msg_ptr)
 {
     _slotGetData(msg_ptr);
 }
@@ -103,7 +103,7 @@ void AtlantController::_slotGetData(rpc_flakon_msg msg_ptr)
 {
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+    IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream ds(*dd);
     quint64 cid = _server->getClientId(this);

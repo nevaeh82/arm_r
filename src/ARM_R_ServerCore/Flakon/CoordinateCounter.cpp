@@ -9,6 +9,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	initSolver();
 	m_likeADeviceName = deviceName;
+	m_logger->debug(QString("Created %1").arg(m_likeADeviceName));
 }
 
 CoordinateCounter::~CoordinateCounter()

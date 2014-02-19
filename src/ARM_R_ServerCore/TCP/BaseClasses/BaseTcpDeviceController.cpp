@@ -15,6 +15,8 @@ BaseTcpDeviceController::BaseTcpDeviceController(Pw::Logger::ILogger* logger, QO
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
 	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
 	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
+
+	m_logger->debug(QString("Created %1").arg(m_tcpDeviceName));
 }
 
 BaseTcpDeviceController::BaseTcpDeviceController(const QString& tcpDeviceName, Pw::Logger::ILogger* logger, QObject* parent) :
@@ -32,6 +34,8 @@ BaseTcpDeviceController::BaseTcpDeviceController(const QString& tcpDeviceName, P
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
 	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
 	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
+
+	m_logger->debug(QString("Created 11 %1").arg(m_tcpDeviceName));
 
 }
 
@@ -102,7 +106,7 @@ void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argumen
 	IMessage<QByteArray>* message = m_tcpDeviceCoder->encode(argument.toByteArray());
 
 	if (message == NULL) {
-		m_logger->debug(QString("message == NULL for %1").arg(m_tcpDeviceName));
+//		m_logger->debug(QString("message == NULL for %1").arg(m_tcpDeviceName));
 		return;
 	}
 

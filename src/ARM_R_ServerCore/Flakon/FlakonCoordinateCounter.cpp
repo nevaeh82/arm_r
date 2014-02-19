@@ -27,7 +27,7 @@ void FlakonCoordinateCounter::set_id(int id)
     _id = id;
 }
 
-void FlakonCoordinateCounter::send_data(QSharedPointer<IMessage> msg_ptr)
+void FlakonCoordinateCounter::send_data(QSharedPointer<IMessageOld> msg_ptr)
 {
     _slotGetData(msg_ptr);
 //    emit signalData(msg_ptr);
@@ -50,11 +50,11 @@ int FlakonCoordinateCounter::get_type()
 }
 
 
-void FlakonCoordinateCounter::_slotGetData(QSharedPointer<IMessage> msg_ptr)
+void FlakonCoordinateCounter::_slotGetData(QSharedPointer<IMessageOld> msg_ptr)
 {
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+	IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream ds(*dd);
     QVector<QPointF> points;
@@ -154,7 +154,7 @@ void FlakonCoordinateCounter::_slotCatchDataFromRadioLocationAuto(const DataFrom
     ds << aData.heigh.at(aLastItem);
     ds << aData.relativeBearing.at(aLastItem);
 
-    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA_AUTO, ba));
+	QSharedPointer<IMessageOld> msg(new MessageOld(_id, FLAKON_BPLA_AUTO, ba));
     _subscriber->data_ready(FLAKON_BPLA_AUTO, msg);
 }
 
@@ -178,7 +178,7 @@ void FlakonCoordinateCounter::_slotCatchDataFromRadioLocationManual(const DataFr
     ds << _alt;//aData.heigh.at(aLastItem);
     ds << aData.relativeBearing.at(aLastItem);
 
-    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA, ba));
+	QSharedPointer<IMessageOld> msg(new MessageOld(_id, FLAKON_BPLA, ba));
     _subscriber->data_ready(FLAKON_BPLA, msg);
 //    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA, aData));
 //    _subscriber->data_ready(FLAKON_BPLA, msg);

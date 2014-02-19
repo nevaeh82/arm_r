@@ -70,7 +70,7 @@ void BaseTcpClient::onSocketDisconnected()
 
 void BaseTcpClient::onSocketReadyRead()
 {
-	m_logger->debug("Socket ready read");
+//	m_logger->debug("Socket ready read");
 	QByteArray data = m_tcpSocket->readAll();
 
 	foreach (ITcpReceiver* receiver, m_receiversList) {

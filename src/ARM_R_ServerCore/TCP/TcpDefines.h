@@ -55,12 +55,13 @@ typedef enum TypeFlakonExternalEnum {
 } TypeFlakonExternalEnum;
 }
 
+
 #define PAYLOAD_PREAMBULE		0xFFEECCFF
 #define PAYLOAD_MAX_DATA_LEN	200000
 #define PAYLOAD_HEADER_LENGTH	40
 
 #pragma pack(push, 1)
-typedef struct ZaviruhaPayloadPacketHeader
+typedef struct ZaviruhaPayloadPacketHeader_redefenition
 {
 	//! Преамбула, всегда 0xFFEECCFF
 	unsigned int magic;
@@ -72,7 +73,7 @@ typedef struct ZaviruhaPayloadPacketHeader
 	unsigned int flags;
 	//! Всемя посылки сообщения, не использую
 	long long timestamp;
-	/*!
+	/**!
 	 Тип собщения
 	 От сервера кленту:
 	 0 - ping,
@@ -98,7 +99,7 @@ typedef struct ZaviruhaPayloadPacketHeader
 	unsigned short messageCRC;
 	//! CRC8 заголовка
 	unsigned short headerCRC;
-} ZaviruhaPayloadPacketHeader;
+} ZaviruhaPayloadPacketHeader_redefenition;
 #pragma pack(pop)
 
 #endif // TCPDEFINES_H

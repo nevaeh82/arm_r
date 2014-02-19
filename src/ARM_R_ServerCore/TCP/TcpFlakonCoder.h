@@ -14,7 +14,7 @@ class TcpFlakonCoder : public BaseTcpDeviceCoder
 	Q_OBJECT
 
 private:
-	ZaviruhaPayloadPacketHeader m_header;
+	ZaviruhaPayloadPacketHeader_redefenition m_header;
 	int m_residueLength;
 	QByteArray m_dataFromTcpSocket;
 

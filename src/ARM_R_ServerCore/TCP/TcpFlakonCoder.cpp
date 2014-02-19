@@ -49,7 +49,7 @@ IMessage<QByteArray>* TcpFlakonCoder::encode(const QByteArray& data)
 QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
 {
 	/// WTF magic??
-	ZaviruhaPayloadPacketHeader header;
+	ZaviruhaPayloadPacketHeader_redefenition header;
 
 	header.magic = PAYLOAD_PREAMBULE;
 	header.number = 0;
@@ -68,7 +68,7 @@ QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
 
 	CRCs crc;
 	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(inputData.data()), inputData.length());
-	header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&header), sizeof(ZaviruhaPayloadPacketHeader) - sizeof(short));
+	header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&header), sizeof(ZaviruhaPayloadPacketHeader_redefenition) - sizeof(short));
 
 	QByteArray dataToSend;
 	QDataStream stream(&dataToSend, QIODevice::WriteOnly);

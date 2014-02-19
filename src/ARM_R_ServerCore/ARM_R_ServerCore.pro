@@ -50,7 +50,8 @@ SOURCES += \
     TCP/TcpPRM300Coder.cpp \
     TCP/TcpAtlantController.cpp \
     TCP/TcpAtlantCoder.cpp \
-    Flakon/CoordinateCounter.cpp
+    Flakon/CoordinateCounter.cpp \
+    TCP/TcpSettingsManager.cpp
 
 HEADERS += \
 	RPC/RPCServer.h \
@@ -106,4 +107,6 @@ HEADERS += \
     TCP/TcpDefines.h \
     TCP/Interfaces/ITcpListener.h \
     Flakon/CoordinateCounter.h \
-    Flakon/Interfaces/ICoordinateCounter.h
+    Flakon/Interfaces/ICoordinateCounter.h \
+    TCP/TcpSettingsManager.h \
+    TCP/Interfaces/ITcpSettingsManager.h
