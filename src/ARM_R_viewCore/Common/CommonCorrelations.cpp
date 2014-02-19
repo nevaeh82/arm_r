@@ -23,8 +23,8 @@ int CommonCorrelations::init(int count)
     {
 		CorrelationWidget* cor = new CorrelationWidget();
 		CorrelationWidgetController* controller = new CorrelationWidgetController(cor);
-
 		controller->appendView(cor);
+
 		m_mapWidgets->insert(i, controller);
     }
     return 0;

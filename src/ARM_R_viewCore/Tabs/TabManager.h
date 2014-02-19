@@ -51,6 +51,8 @@ private:
 
 	QMutex                      m_mutex;
 
+	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
+
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
