@@ -29,8 +29,6 @@
 
 #include "Controls/ControlPRM.h"
 
-#include "Controls/ControlPanelWidgets.h"
-#include "Controls/ButtonShowPanel.h"
 
 namespace Ui {
 class TabSpectrumWidget;

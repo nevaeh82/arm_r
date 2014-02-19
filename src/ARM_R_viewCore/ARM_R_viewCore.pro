@@ -24,8 +24,6 @@ SOURCES += \
 	Common/CommonCorrelations.cpp \
 	Tabs/Controls/ControlPRM.cpp \
 	Tabs/RPC/RPCAtlant.cpp \
-	Controls/ControlPanelWidgets.cpp \
-	Controls/ButtonShowPanel.cpp \
     MainWindow.cpp \
     MainWindowController.cpp \
     ControlPanel/ControlPanelWidget.cpp \
@@ -51,7 +49,6 @@ HEADERS += \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \
-	Abstracts/IModuleController.h \
 	Abstracts/ICommonComponents.h \
 	Tabs/TabManager.h \
 	Tabs/TabsProperty.h \
@@ -66,8 +63,6 @@ HEADERS += \
 	Tabs/Controls/IControlPRM.h \
 	Tabs/RPC/RPCAtlant.h \
 	Tabs/ITabAtlant.h \
-	Controls/ControlPanelWidgets.h \
-	Controls/ButtonShowPanel.h \
     MainWindow.h \
     MainWindowController.h \
      ControlPanel/ControlPanelWidget.h \

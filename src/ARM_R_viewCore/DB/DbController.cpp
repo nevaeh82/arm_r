@@ -106,6 +106,41 @@ Object DbController::getObject(const QString &objectName)
 	return getObjectByParam("OBJECT_NAME", objectName);
 }
 
+ObjectsList DbController::getAllObjects()
+{
+	ObjectsList objectsList;
+
+	QSqlQuery query;
+	QString sql = QString("SELECT * FROM Objects");
+	bool succeeded = query.prepare(sql);
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!";
+		return objectsList;
+	}
+
+	succeeded = query.exec();
+
+	if (!succeeded) {
+		return objectsList;
+	}
+
+	while(query.next()) {
+
+		Object obj;
+
+		obj.id = query.value(0).toUInt();
+		obj.pid = query.value(2).toUInt();
+		obj.name = query.value(1).toString();
+		obj.state = query.value(3).toInt();
+		obj.isEditable= query.value(4).toBool();
+
+		objectsList.append(obj);
+	}
+
+	return objectsList;
+}
+
 uint DbController::addObject(const Object &object)
 {
 	QSqlQuery query;

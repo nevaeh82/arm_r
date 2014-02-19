@@ -32,13 +32,18 @@ public:
 	SettingsNode getSettingsNode(const QString& objectName);
 	bool updateProperty(const Property& property);
 
+	bool updatePropertyForAllObjects(const QString& propName, const QVariant &value);
+
 	QString getObjectName(const uint id) const;
+	QVariant getPropertyValue(const QString& objectName, const QString& propName);
 
 private:
 	Object createSettingsNode(const QString& objectName);
 
 	Object createObject(const QString& objectName);
 	Object createStation(const QString& stationName);
+
+	Property getProperty(const QString &objectName, const QString &propName);
 
 	void notifyDbChanged(const SettingsNode &category);
 	void notifyDbChanged(const Property& property);

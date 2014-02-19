@@ -14,6 +14,7 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(IDbManager* dbManager, QWidget 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
 	m_treeModel = new TreeModel(m_dbManager, headers, this);
+	m_dbManager->registerReceiver(m_treeModel);
 
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
 
@@ -48,13 +49,11 @@ void CommonSpectrumTabWidget::clearSpectrumWidgetsContainer()
 
 void CommonSpectrumTabWidget::setCorrelationComponent(ICommonComponents *correlation)
 {
-	//ui->correlationsGroupWidget->
 	m_correlationComponent = correlation;
 
 	for(int i = 0; i < m_correlationComponent->count(0); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget((static_cast<CorrelationWidget *>(m_correlationComponent->get(i))));
 	}
-
 }
 
 

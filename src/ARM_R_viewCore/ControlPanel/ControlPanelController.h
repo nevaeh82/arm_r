@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "Interfaces/IController.h"
+#include "Interfaces/IDbManager.h"
 #include "ControlPanelWidget.h"
 
 class ControlPanelController : public QObject, public IController<ControlPanelWidget>
@@ -13,16 +14,27 @@ class ControlPanelController : public QObject, public IController<ControlPanelWi
 private:
 	ControlPanelWidget* m_view;
 
+	IDbManager* m_dbManager;
+
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
 
 	void appendView(ControlPanelWidget* view);
 
+	void setDbManager(IDbManager* dbManager);
+
 
 signals:
 
 public slots:
+
+private slots:
+	void onPanoramaStateChangedSlot(bool isEnabled);
+	void onAutoSearchStateChangedSlot(bool isEnabled);
+
+	void onCommonFrequencyChangedSlot(int value);
+	void onBandWidthChangedSlot(int start, int end);
 
 };
 
