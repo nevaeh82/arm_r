@@ -1,12 +1,12 @@
-#include "CommonCorrelations.h"
+#include "CorrelationControllersContainer.h"
 #include <QDebug>
 
-CommonCorrelations::CommonCorrelations()
+CorrelationControllersContainer::CorrelationControllersContainer()
 {
 	m_mapWidgets = new QMap<int, ICorrelationWidget* >;
 }
 
-CommonCorrelations::~CommonCorrelations()
+CorrelationControllersContainer::~CorrelationControllersContainer()
 {
 	QMap<int, ICorrelationWidget* >::iterator it;
 	for(it = m_mapWidgets->begin(); it != m_mapWidgets->end(); ++it)
@@ -17,7 +17,7 @@ CommonCorrelations::~CommonCorrelations()
 	delete m_mapWidgets;
 }
 
-int CommonCorrelations::init(int count)
+int CorrelationControllersContainer::init(int count)
 {
     for(int i = 0; i < count; i++)
     {
@@ -30,7 +30,7 @@ int CommonCorrelations::init(int count)
     return 0;
 }
 
-ICorrelationWidget* CommonCorrelations::get(int id)
+ICorrelationWidget* CorrelationControllersContainer::get(int id)
 {
 	m_mux.lock();
 	ICorrelationWidget *gr = NULL;
@@ -43,7 +43,7 @@ ICorrelationWidget* CommonCorrelations::get(int id)
     return gr;
 }
 
-int CommonCorrelations::count()
+int CorrelationControllersContainer::count()
 {
 	return m_mapWidgets->count();
 }

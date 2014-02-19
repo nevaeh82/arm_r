@@ -11,7 +11,7 @@
 #include <QMutex>
 
 #include "Abstracts/IModuleController.h"
-#include "Common/CommonCorrelations.h"
+#include "Common/CorrelationControllersContainer.h"
 
 #include "TabsProperty.h"
 

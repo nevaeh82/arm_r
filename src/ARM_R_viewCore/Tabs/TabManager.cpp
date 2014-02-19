@@ -52,7 +52,7 @@ int TabManager::start()
 int TabManager::createSubModules(const QString& settingsFile)
 {
 	//_common_spectra = new CommonSpectra();
-	_common_correlations = new CommonCorrelations();
+	_common_correlations = new CorrelationControllersContainer();
 
 	int submodulesCount = readSettings(settingsFile);
 

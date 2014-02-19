@@ -1,5 +1,5 @@
-#ifndef COMMONCORRELATIONS_H
-#define COMMONCORRELATIONS_H
+#ifndef CORRELATIONCONTROLLERSCONTAINER_H
+#define CORRELATIONCONTROLLERSCONTAINER_H
 
 #include <QString>
 #include <QMap>
@@ -11,11 +11,11 @@
 #include "Correlations/CorrelationWidgetController.h"
 #include "../IGraphicWidget.h"
 
-class CommonCorrelations : public ICommonComponents
+class CorrelationControllersContainer : public ICommonComponents
 {
 public:
-    CommonCorrelations();
-    ~CommonCorrelations();
+	CorrelationControllersContainer();
+	~CorrelationControllersContainer();
 
 public:
 	virtual int init(int count);
@@ -27,4 +27,4 @@ private:
 	QMutex	m_mux;
 };
 
-#endif // COMMONCORRELATIONS_H
+#endif // CORRELATIONCONTROLLERSCONTAINER_H
