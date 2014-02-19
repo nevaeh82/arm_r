@@ -2,18 +2,19 @@
 #define ITABMANAGER_H
 
 #include <QString>
-#include "ITabSpectrum.h"
+
+#include "Defines.h"
 
 class IMessage;
 
 class ITabManager
 {
 public:
-	~ITabManager(){}
+	virtual ~ITabManager(){}
 
-    virtual QString getStationName(int id)              = 0;
-	virtual void send_data(const QString &stationName, TypeCommand type, IMessage *data)     = 0;
-    virtual void set_tab(int id)                        = 0;
+	virtual QString getStationName(const int id) = 0;
+	virtual void sendCommand(const QString &stationName, TypeCommand type, IMessage *data) = 0;
+	virtual void setActiveTab(const int id) = 0;
 };
 
 #endif // ITABMANAGER_H

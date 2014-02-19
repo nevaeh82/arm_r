@@ -6,8 +6,10 @@
 #include "Interfaces/IController.h"
 #include "Interfaces/IDbManager.h"
 #include "ControlPanelWidget.h"
+#include "Interfaces/IControlPanelController.h"
+#include "Interfaces/IControlPanelListener.h"
 
-class ControlPanelController : public QObject, public IController<ControlPanelWidget>
+class ControlPanelController : public QObject, public IControlPanelController
 {
 	Q_OBJECT
 

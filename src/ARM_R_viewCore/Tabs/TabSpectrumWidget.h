@@ -22,7 +22,7 @@
 #include "Db/DbManager.h"
 #include "SettingsTree/TreeModel.h"
 
-#include "ITabManager.h"
+#include "Interfaces/ITabManager.h"
 #include "ITabSpectrum.h"
 
 #include "RPC/RPCClient.h"

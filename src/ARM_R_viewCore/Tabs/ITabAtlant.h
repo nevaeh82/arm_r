@@ -6,7 +6,7 @@
 class ITabAtlant
 {
 public:
-    virtual ~ITabAtlant(){};
+	virtual ~ITabAtlant(){}
     virtual void setLog(QByteArray data)       = 0;
 };
 

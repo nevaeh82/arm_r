@@ -57,7 +57,7 @@ HEADERS += \
 	Tabs/ITabSpectrum.h \
 	Tabs/RPC/IRPC.h \
 	Tabs/RPC/RPCClient.h \
-	Tabs/ITabManager.h \
+        Interfaces/ITabManager.h \
 	Common/CommonCorrelations.h \
 	Tabs/Controls/ControlPRM.h \
 	Tabs/Controls/IControlPRM.h \
@@ -90,7 +90,10 @@ HEADERS += \
     Interfaces/IDataSource.h \
     Common/BaseDataSource.h \
     SpectrumWidgetDataSource.h \
-    Correlations/CorrelationWidgetDataSource.h
+    Correlations/CorrelationWidgetDataSource.h \
+    Defines.h \
+    Interfaces/IControlPanelListener.h \
+    Interfaces/IControlPanelController.h
 
 FORMS += \
     ControlPanel.ui \

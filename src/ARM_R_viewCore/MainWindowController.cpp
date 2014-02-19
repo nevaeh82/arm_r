@@ -57,7 +57,7 @@ void MainWindowController::init()
 	m_tabManager =  new TabManager(m_view->getWorkTabsWidget(), this);
 
 	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
-	tabsSettingsFile.append("/Tabs/Tabs.ini");
+	tabsSettingsFile.append("./Tabs/Tabs.ini");
 
 	m_tabManager->setDbManager(m_dbManager);
 	m_dbManager->registerReceiver(m_tabManager);
@@ -68,6 +68,7 @@ void MainWindowController::init()
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbManager(m_dbManager);
+	m_controlPanelController->registerReceiver(m_tabManager);
 }
 
 void MainWindowController::serverFailedToStartSlot()

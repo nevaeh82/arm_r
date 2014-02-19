@@ -15,6 +15,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 	_common_correlations = common_correlations;
 	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
+	m_dbManager->registerReceiver(this);
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
@@ -57,6 +58,23 @@ void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
 void TabSpectrumWidgetController::activate()
 {
 	m_view->activate();
+
+	double start = 0;
+	double end = 0;
+
+	QVariant value = m_dbManager->getPropertyValue(m_stationName, DB_START_PROPERTY);
+
+	if (value.isValid()) {
+		start = value.toDouble();
+	}
+
+	value = m_dbManager->getPropertyValue(m_stationName, DB_STOP_PROPERTY);
+
+	if (value.isValid()) {
+		end = value.toDouble();
+	}
+
+	m_view->getSpectrumWidget()->setSelection(start, end);
 }
 
 void TabSpectrumWidgetController::deactivate()
@@ -301,7 +319,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	m_tabManager->send_data(m_stationName, TypeCommand(TypeGraphicCommand), msg);
+	m_tabManager->sendCommand(m_stationName, TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
@@ -313,7 +331,7 @@ void TabSpectrumWidgetController::set_panorama(bool state)
 /// in this thread set points from rpc
 void TabSpectrumWidgetController::_slot_get_points_from_rpc(QByteArray points)
 {
-//	_spectrumData->set_data(points, false);
+	//	_spectrumData->set_data(points, false);
 }
 
 
@@ -328,7 +346,7 @@ void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 {
-	m_tabManager->set_tab(id);
+	m_tabManager->setActiveTab(id);
 }
 
 void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
@@ -367,4 +385,20 @@ void TabSpectrumWidgetController::readSettings(const QString &settingsFile)
 
 	m_rpcHostAddress = settings.value("RPC_UI/IP", "127.0.0.1").toString();
 	m_rpcHostPort = settings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toInt();
+}
+
+
+void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode &)
+{
+}
+
+void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
+{
+	if (DB_FREQUENCY_PROPERTY == property.name) {
+		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
+	}
+}
+
+void TabSpectrumWidgetController::onCleanSettings()
+{
 }

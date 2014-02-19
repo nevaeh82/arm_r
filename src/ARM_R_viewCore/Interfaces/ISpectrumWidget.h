@@ -21,6 +21,8 @@ class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 		virtual void setAutoSearch(bool) = 0;
 		virtual void setPanorama(bool) = 0;
 
+		virtual void setSelection(double start, double end) = 0;
+
 		virtual void setFFTSetup(float* spectrum, float* spectrum_peak_hold) = 0;
 
 		virtual QString getSpectrumName() const = 0;

@@ -31,13 +31,17 @@ void ControlPanelController::setDbManager(IDbManager *dbManager)
 
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
 {
-
+	foreach (IControlPanelListener* receiver, m_receiversList) {
+		receiver->onGlobalPanoramaEnabled(isEnabled);
+	}
 }
 
 
 void ControlPanelController::onAutoSearchStateChangedSlot(bool isEnabled)
 {
-
+	foreach (IControlPanelListener* receiver, m_receiversList) {
+		receiver->onGlobalAutoSearchEnabled(isEnabled);
+	}
 }
 
 void ControlPanelController::onCommonFrequencyChangedSlot(int value)

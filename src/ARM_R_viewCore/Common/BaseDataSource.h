@@ -10,9 +10,8 @@
 #include "Interfaces/IDataSource.h"
 #include "Interfaces/IDataSourceListener.h"
 
-#include "BaseSubject.h"
 
-class BaseDataSource : public QObject, public BaseSubject<IDataSourceListener>, public IDataSource
+class BaseDataSource : public QObject, public IDataSource
 {
 	Q_OBJECT
 public:

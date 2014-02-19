@@ -5,7 +5,7 @@
 
 #include "Interfaces/IRpcListener.h"
 #include "Abstracts/ICommonComponents.h"
-#include "Tabs/ITabManager.h"
+#include "Interfaces/ITabManager.h"
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RPCClient.h"
 
@@ -33,7 +33,7 @@ public:
 	void sendCommand(int);
 
 private:
-	void setCorData(quint32 point2, QByteArray &vecFFTBA, bool isComplex);
+	void setCorData(quint32 point2, QByteArray &vecFFTBA, bool);
 };
 
 #endif // CORRELATIONWIDGETDATASOURCE_H
