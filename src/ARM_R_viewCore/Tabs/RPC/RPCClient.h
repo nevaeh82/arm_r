@@ -12,20 +12,18 @@
 #include <QStringList>
 
 #include <QHostAddress>
-
-#include <PwLogger/PwLogger.h>
+#include <QVariant>
+#include <QList>
 
 #include "IRPC.h"
-#include "../../Common/IMessage.h"
-#include "../../Common/CommandMessage.h"
+#include "Common/IMessage.h"
+#include "Common/CommandMessage.h"
 
-#include "../TabsProperty.h"
+#include "Tabs/TabsProperty.h"
 #include "Interfaces/IDBManager.h"
-#include "../ITabSpectrum.h"
+#include "Tabs/ITabSpectrum.h"
 
-#include "../../GraphicData.h"
-
-#include "../Controls/IControlPRM.h"
+#include "Tabs/Controls/IControlPRM.h"
 
 #include "UiDefines.h"
 #include "Rpc/RpcDefines.h"
@@ -42,7 +40,6 @@ private:
 	IDbManager*		m_dbManager;
 	TabsProperty*	m_tabProperty;
 	ITabSpectrum*	m_parentTab;
-	GraphicData*	m_grData;
 
 	float*	m_spectrum;
 	float*	m_spectrumPeakHold;
@@ -52,8 +49,8 @@ private:
 
 public:
 	RPCClient(TabsProperty *prop, IDbManager *db_manager,
-			  ITabSpectrum *parent_tab, GraphicData *gr_data,
-			  IControlPRM* control_prm, QObject *parent = 0);
+			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
+			  QObject *parent);
     ~RPCClient();
 
 	void setCommand(IMessage* msg);

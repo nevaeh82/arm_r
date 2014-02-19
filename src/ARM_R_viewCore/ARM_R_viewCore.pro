@@ -17,7 +17,6 @@ INCLUDEPATH += $$PWD
 
 SOURCES += \
         Correlations/CorrelationWidget.cpp \
-        GraphicData.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
 	Common/CommandMessage.cpp \
@@ -42,11 +41,13 @@ SOURCES += \
     SettingsTree/TreeItem.cpp \
     SettingsTree/TreeModel.cpp \
     SettingsTree/TreeWidgetDelegate.cpp \
-    SpectrumWidgetController.cpp
+    SpectrumWidgetController.cpp \
+    Common/BaseDataSource.cpp \
+    SpectrumWidgetDataSource.cpp \
+    Correlations/CorrelationWidgetDataSource.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
-        GraphicData.h \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \
@@ -89,7 +90,12 @@ HEADERS += \
     Interfaces/ISettingsChangedListener.h \
     UiDefines.h \
     SpectrumWidgetController.h \
-    Interfaces/ISpectrumWidget.h
+    Interfaces/ISpectrumWidget.h \
+    Interfaces/IDataSourceListener.h \
+    Interfaces/IDataSource.h \
+    Common/BaseDataSource.h \
+    SpectrumWidgetDataSource.h \
+    Correlations/CorrelationWidgetDataSource.h
 
 FORMS += \
     ControlPanel.ui \

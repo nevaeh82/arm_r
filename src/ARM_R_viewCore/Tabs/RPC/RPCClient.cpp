@@ -3,7 +3,7 @@
 #include <QDebug>
 
 RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
-					 ITabSpectrum* parent_tab, GraphicData* gr_data,
+					 ITabSpectrum* parent_tab,
 					 IControlPRM* control_prm, QObject *parent) :
 	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
@@ -16,8 +16,6 @@ RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
 	m_spectrumPeakHold = new float[1];
 	m_bandwidth = 0;
 	m_needSetup = true;
-
-	m_grData = gr_data;
 }
 
 RPCClient::~RPCClient()
@@ -248,10 +246,17 @@ void RPCClient::rpcSlotGettingModulation(QString modulation)
 
 void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points)
 {
-	///TODO: update
+	QList<QVariant> list;
+	QVariant pointsVariant(points);
+	QVariant point2Variant(point2);
+
+	list.append(pointsVariant);
+	list.append(point2Variant);
+
+	QVariant data(list);
 
 	foreach (IRpcListener* listener, m_receiversList) {
-		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, points);
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_CORRELATION, data);
 	}
 
 //	if(point2 != m_tabProperty->get_id())
