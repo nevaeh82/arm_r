@@ -74,6 +74,9 @@ public:
 	void setDetectedAreasUpdate(const QByteArray& vec);
 	void setZeroFrequency(double val);
 
+	void setAutoSearch(bool);
+	void setPanorama(bool);
+
 	void setup();
 	void setControlPrmState(bool state);
 

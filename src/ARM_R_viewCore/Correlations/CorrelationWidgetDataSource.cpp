@@ -26,7 +26,7 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 		QList<QVariant> list = data.toList();
 		quint32 point2 = list.at(1).toUInt();
 
-		if (point2 - 1 != m_id /*|| point2 > 1*/){
+		if (point2 - 1 != m_id){
 			return;
 		}
 

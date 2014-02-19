@@ -23,8 +23,6 @@
 #include "Interfaces/IDBManager.h"
 #include "Tabs/ITabSpectrum.h"
 
-#include "GraphicData.h"
-
 #include "Tabs/Controls/IControlPRM.h"
 
 #include "UiDefines.h"
@@ -42,7 +40,6 @@ private:
 	IDbManager*		m_dbManager;
 	TabsProperty*	m_tabProperty;
 	ITabSpectrum*	m_parentTab;
-	GraphicData*	m_grData;
 
 	float*	m_spectrum;
 	float*	m_spectrumPeakHold;
@@ -52,8 +49,8 @@ private:
 
 public:
 	RPCClient(TabsProperty *prop, IDbManager *db_manager,
-			  ITabSpectrum *parent_tab, GraphicData *gr_data,
-			  IControlPRM* control_prm, QObject *parent = 0);
+			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
+			  QObject *parent);
     ~RPCClient();
 
 	void setCommand(IMessage* msg);

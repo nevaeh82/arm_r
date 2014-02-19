@@ -26,7 +26,6 @@ private:
 	QString             m_stationName;
 	TabsProperty*       _tab_property;
 	ICommonComponents*  _common_correlations;
-	GraphicData*        _spectrumData;
 
 	IDbManager*          m_dbManager;
 
@@ -108,8 +107,8 @@ private slots:
 
 	void enablePanoramaSlot(bool isEnabled);
 
-	void slotSetFFTSetup(float*, float*);
-	void slotSetFFT(float*,float*);
+	//void slotSetFFTSetup(float*, float*);
+	//void slotSetFFT(float*,float*);
 
 private:
 	int init();

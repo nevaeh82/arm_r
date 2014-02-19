@@ -23,6 +23,16 @@ SpectrumWidget::~SpectrumWidget()
 {
 }
 
+void SpectrumWidget::setAutoSearch(bool checked)
+{
+	ui->autosearchCB->setChecked(checked);
+}
+
+void SpectrumWidget::setPanorama(bool checked)
+{
+	ui->panoramaCB->setChecked(checked);
+}
+
 void SpectrumWidget::setSpectrumName(const QString &name)
 {
 	ui->spectrumNameLB->setText(name);

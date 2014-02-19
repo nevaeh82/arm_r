@@ -118,14 +118,11 @@ int TabSpectrumWidgetController::init()
 	return 0;
 }
 
-
-
 int TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _spectrumData, _controlPRM, this);
+	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
-	m_rpcClient->registerReceiver(_spectrumData);
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
@@ -174,12 +171,8 @@ int TabSpectrumWidgetController::createView()
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-	_spectrumData = new GraphicData(m_spectrumWidget, _common_correlations, m_tabManager, m_id);
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 	m_spectrumDataSource->registerListener(m_spectrumWidget);
-
-	connect(_spectrumData, SIGNAL(signalDataS(float*,float*)), this, SLOT(slotSetFFTSetup(float*,float*)));
-	connect(_spectrumData, SIGNAL(signalData(float*,float*)), this, SLOT(slotSetFFT(float*,float*)));
 
 	return 0;
 }
@@ -372,16 +365,6 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 		m_spectrumDataSource->setPanorama(false);
 	}
 
-}
-
-void TabSpectrumWidgetController::slotSetFFTSetup(float* spectrum, float* spectrum_peak_hold)
-{
-	m_spectrumWidget->setFFTSetup(spectrum, spectrum_peak_hold);
-}
-
-void TabSpectrumWidgetController::slotSetFFT(float* spectrum, float* spectrum_peak_hold)
-{
-	m_spectrumWidget->setSignal(spectrum, spectrum_peak_hold);
 }
 
 void TabSpectrumWidgetController::readSettings(const QString &settingsFile)

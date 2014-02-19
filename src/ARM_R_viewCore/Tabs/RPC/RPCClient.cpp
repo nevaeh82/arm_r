@@ -3,7 +3,7 @@
 #include <QDebug>
 
 RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
-					 ITabSpectrum* parent_tab, GraphicData* gr_data,
+					 ITabSpectrum* parent_tab,
 					 IControlPRM* control_prm, QObject *parent) :
 	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
@@ -16,8 +16,6 @@ RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
 	m_spectrumPeakHold = new float[1];
 	m_bandwidth = 0;
 	m_needSetup = true;
-
-	m_grData = gr_data;
 }
 
 RPCClient::~RPCClient()

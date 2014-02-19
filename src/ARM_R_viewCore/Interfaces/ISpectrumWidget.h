@@ -18,6 +18,9 @@ class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 		virtual void setSpectrumName(const QString&) = 0;
 		virtual void setControlPrmState(bool) = 0;
 
+		virtual void setAutoSearch(bool) = 0;
+		virtual void setPanorama(bool) = 0;
+
 		virtual void setFFTSetup(float* spectrum, float* spectrum_peak_hold) = 0;
 
 		virtual QString getSpectrumName() const = 0;

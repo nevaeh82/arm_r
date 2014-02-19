@@ -17,7 +17,6 @@ INCLUDEPATH += $$PWD
 
 SOURCES += \
         Correlations/CorrelationWidget.cpp \
-        GraphicData.cpp \
 	Tabs/TabManager.cpp \
 	Tabs/TabsProperty.cpp \
 	Common/CommandMessage.cpp \
@@ -49,7 +48,6 @@ SOURCES += \
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
-        GraphicData.h \
         ICorrelationWidget.h \
         IGraphicWidget.h \
         stdafx.h \

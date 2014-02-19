@@ -142,20 +142,6 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 	m_mux.unlock();
 
 	setFFTSetup(spectrum, spectrum_peak_hold);
-/*
-	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
-
-	float maxv = 0.0;
-	float minv = 0.0;
-	m_mux.lock();
-
-	m_graphicsWidget->SetAutoscaleY(true);
-	m_graphicsWidget->SetAlign(0);
-	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*///);
-/*
-	m_isComplex = false;
-	m_graphicsWidget->Setup(m_isComplex,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
-	m_mux.unlock();*/
 }
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
@@ -249,6 +235,16 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	double cur_freq = m_tab->get_current_frequency();
 	m_current_frequency = cur_freq*TO_MHZ;
 	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
+}
+
+void SpectrumWidgetController::setAutoSearch(bool enabled)
+{
+	m_view->setAutoSearch(enabled);
+}
+
+void SpectrumWidgetController::setPanorama(bool enabled)
+{
+	m_view->setPanorama(enabled);
 }
 
 void SpectrumWidgetController::init()

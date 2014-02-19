@@ -4,6 +4,8 @@
 #include <QObject>
 
 #include "Interfaces/IRpcListener.h"
+#include "Abstracts/ICommonComponents.h"
+#include "Tabs/ITabManager.h"
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RPCClient.h"
 
@@ -19,10 +21,6 @@ private:
 
 	qreal	m_startxCor;
 	bool	m_needSetup;
-
-	//QMap<int, float*>	m_mapPeaksCorrelation;
-	//QMap<int, float*>	m_mapSpectrumCorelation;
-	//QMap<int, double>	m_mapBandwidthCorelation;
 
 	float*	m_mapPeaksCorrelation;
 	float*	m_mapSpectrumCorelation;
