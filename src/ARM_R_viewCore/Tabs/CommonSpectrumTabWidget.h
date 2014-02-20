@@ -52,7 +52,7 @@ public:
 
 	virtual int createRPC();
 	virtual int closeRPC();
-	virtual int createView(QWidget *view);
+	virtual int createView(QWidget *);
 	virtual int createTree();
 
 

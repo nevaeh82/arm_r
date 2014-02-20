@@ -16,7 +16,7 @@
 
 #include <QHostAddress>
 
-#include "TabsProperty.h"
+#include "Station.h"
 #include "RPC/RPCAtlant.h"
 
 #include "ITabAtlant.h"
@@ -43,7 +43,7 @@ public:
 private:
 	int                 _id;
 
-	TabsProperty*       _tab_property;
+	Station*       m_station;
 	RPCAtlant*          _rpc_client;
 
 

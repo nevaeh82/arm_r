@@ -73,7 +73,7 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 	}
 }
 
-void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool isComplex)
+void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 {
 	m_pointCount = vecFFT.size();
 

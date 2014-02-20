@@ -114,7 +114,7 @@ private slots:
 	void slotSelectionFinishedRedLine(double y);
 
 	void slotIsShowContextMenu();
-	void slotDoubleClicked(double d1, double d2);
+	void slotDoubleClicked(double, double);
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);

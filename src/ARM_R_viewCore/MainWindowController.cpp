@@ -73,7 +73,6 @@ void MainWindowController::init()
 
 void MainWindowController::serverFailedToStartSlot()
 {
-
 	QMessageBox::critical(m_view, tr("Unable to connect to server"), tr("Please try to restart application"));
 }
 

@@ -3,7 +3,7 @@
 
 #define DEFAULT_RPC_PORT		24500
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
@@ -19,9 +19,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 
 	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
 
-	_tab_property = prop;
-	m_id = _tab_property->get_id();
-	m_stationName = _tab_property->get_name();
+	m_station = prop;
 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
@@ -62,13 +60,13 @@ void TabSpectrumWidgetController::activate()
 	double start = 0;
 	double end = 0;
 
-	QVariant value = m_dbManager->getPropertyValue(m_stationName, DB_START_PROPERTY);
+	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_START_PROPERTY);
 
 	if (value.isValid()) {
 		start = value.toDouble();
 	}
 
-	value = m_dbManager->getPropertyValue(m_stationName, DB_STOP_PROPERTY);
+	value = m_dbManager->getPropertyValue(m_station->getName(), DB_STOP_PROPERTY);
 
 	if (value.isValid()) {
 		end = value.toDouble();
@@ -132,7 +130,7 @@ int TabSpectrumWidgetController::init()
 
 int TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _controlPRM, this);
+	m_rpcClient = new RPCClient(m_station, m_dbManager, this, _controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
@@ -142,11 +140,6 @@ int TabSpectrumWidgetController::createRPC()
 	}
 
 	return 0;
-}
-
-TabsProperty* TabSpectrumWidgetController::get_tab_property()
-{
-	return _tab_property;
 }
 
 int TabSpectrumWidgetController::closeRPC()
@@ -178,8 +171,8 @@ int TabSpectrumWidgetController::createView()
 	}
 
 	m_spectrumWidget->setTab(this);
-	m_spectrumWidget->setId(m_id);
-	m_spectrumWidget->setSpectrumName(m_stationName);
+	m_spectrumWidget->setId(m_station->getId());
+	m_spectrumWidget->setSpectrumName(m_station->getName());
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
@@ -200,7 +193,7 @@ int TabSpectrumWidgetController::createTree()
 	m_view->getTreeView()->setModel(m_treeModel);
 	m_view->getTreeView()->setItemDelegate(m_treeDelegate);
 
-	m_treeModel->setStationsList(QStringList(m_stationName));
+	m_treeModel->setStationsList(QStringList(m_station->getName()));
 
 	return 0;
 }
@@ -218,7 +211,7 @@ double TabSpectrumWidgetController::get_current_frequency()
 {
 	double frequency = 1830;
 
-	QVariant value = m_dbManager->getPropertyValue(m_stationName, DB_FREQUENCY_PROPERTY);
+	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_FREQUENCY_PROPERTY);
 
 	if (value.isValid()) {
 		frequency = value.toDouble();
@@ -271,7 +264,7 @@ void TabSpectrumWidgetController::set_selected_area(const SpectrumSelection& sel
 		center = x2 + dx/2;
 	}
 
-	SettingsNode  settingsNode = m_dbManager->getSettingsNode(m_stationName);
+	SettingsNode  settingsNode = m_dbManager->getSettingsNode(m_station->getName());
 
 	foreach (Property prop, settingsNode.properties) {
 		if (prop.name == DB_SELECTED_PROPERTY) {
@@ -319,7 +312,7 @@ void TabSpectrumWidgetController::set_thershold(double y)
 void TabSpectrumWidgetController::check_status()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	m_tabManager->sendCommand(m_stationName, TypeCommand(TypeGraphicCommand), msg);
+	m_tabManager->sendCommand(m_station->getName(), TypeCommand(TypeGraphicCommand), msg);
 }
 
 void TabSpectrumWidgetController::set_panorama(bool state)
@@ -358,7 +351,7 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 
 	if (isEnabled) {
 
-		SettingsNode settingsNode =  m_dbManager->getSettingsNode(m_stationName);
+		SettingsNode settingsNode =  m_dbManager->getSettingsNode(m_station->getName());
 
 		foreach (Property property, settingsNode.properties) {
 			if (DB_PANORAMA_START_PROPERTY == property.name) {

@@ -44,7 +44,7 @@ public:
 	void setPanorama(bool enabled, double start = 0.0f, double end = 0.0f);
 
 private:
-	void dataProccess(QVector<QPointF>& vecFFT, bool isComplex);
+	void dataProccess(QVector<QPointF>& vecFFT, bool);
 	void setBandwidth(double bandwidth);
 	int findIndex(qreal startx);
 };

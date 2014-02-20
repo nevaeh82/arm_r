@@ -3,7 +3,7 @@
 
 #include "ui_SpectrumWidget.h"
 
-SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags, QString name, int id):
+SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	QWidget(parent, flags), ui(new Ui::SpectrumWidget)
 {
 	ui->setupUi(this);

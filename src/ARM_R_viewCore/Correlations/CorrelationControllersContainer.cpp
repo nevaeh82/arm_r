@@ -1,7 +1,8 @@
 #include "CorrelationControllersContainer.h"
 #include <QDebug>
 
-CorrelationControllersContainer::CorrelationControllersContainer()
+CorrelationControllersContainer::CorrelationControllersContainer(QObject *parent):
+	QObject(parent)
 {
 	m_mapWidgets = new QMap<int, ICorrelationWidget* >;
 }

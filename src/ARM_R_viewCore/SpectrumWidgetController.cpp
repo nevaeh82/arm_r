@@ -175,8 +175,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	if(m_rett == 0)
 	{
-		int ret = QMessageBox::warning(m_view, tr("Attention!"),
-									   tr("Signal was detected!"),
+		QMessageBox::warning(m_view, tr("Attention!"), tr("Signal was detected!"),
 									   QMessageBox::Cancel, QMessageBox::Ok);
 		m_rett = -101;
 
@@ -391,7 +390,7 @@ void SpectrumWidgetController::slotIsShowContextMenu()
 		m_graphicsWidget->contextMenu()->setEnabled(false);
 }
 
-void SpectrumWidgetController::slotDoubleClicked(double d1, double d2)
+void SpectrumWidgetController::slotDoubleClicked(double, double)
 {
 	emit doubleClickedSignal(m_id);
 }

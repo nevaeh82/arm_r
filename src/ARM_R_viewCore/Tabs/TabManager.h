@@ -12,7 +12,7 @@
 
 #include "Correlations/CorrelationControllersContainer.h"
 
-#include "TabsProperty.h"
+#include "Station.h"
 
 #include "TabSpectrumWidget.h"
 
@@ -36,7 +36,7 @@ class TabManager: public QObject, public ITabManager, public IDbChangedListener,
 private:
 	QTabWidget* m_tabWidget;
 
-	QMap<int, TabsProperty *>   m_tabsPropertyMap;
+	QMap<int, Station *>   m_stationsMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
 	ICorrelationControllersContainer*	m_correlationControllers;
 

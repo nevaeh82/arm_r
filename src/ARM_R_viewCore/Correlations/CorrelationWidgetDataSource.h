@@ -6,12 +6,15 @@
 #include "Interfaces/IRpcListener.h"
 #include "Interfaces/ICorrelationControllersContainer.h"
 #include "Interfaces/ITabManager.h"
+#include "IGraphicWidget.h"
+
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RPCClient.h"
 
 class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT
+
 private:
 	IGraphicWidget* m_correlationWidget;
 

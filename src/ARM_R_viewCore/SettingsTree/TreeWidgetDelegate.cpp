@@ -121,6 +121,10 @@ QSize TreeWidgetDelegate::sizeHint(const QStyleOptionViewItem &option, const QMo
 
 bool TreeWidgetDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+	Q_UNUSED(event);
+	Q_UNUSED(model);
+	Q_UNUSED(option);
+
 	QModelIndex ind = index.sibling(index.row(), 0);
 	QString propName = ind.data(Qt::DisplayRole).toString();
 	propName = getRealPropNameFromTranslate(propName);

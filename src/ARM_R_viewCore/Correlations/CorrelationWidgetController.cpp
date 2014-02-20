@@ -16,7 +16,7 @@ bool CorrelationWidgetController::isGraphicVisible()
 	return m_view->isVisible();
 }
 
-void CorrelationWidgetController::setZeroFrequency(double val)
+void CorrelationWidgetController::setZeroFrequency(double)
 {
 }
 

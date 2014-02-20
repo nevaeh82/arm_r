@@ -13,7 +13,6 @@
 
 #include "Interfaces/ISpectrumWidget.h"
 
-#include "TabsProperty.h"
 #include "SpectrumWidget.h"
 #include "SpectrumWidgetController.h"
 

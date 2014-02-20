@@ -234,7 +234,7 @@ void RPCServer::rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage)
 
 
 /// send command to prm300 for set central freq
-void RPCServer::rpcSlotPrmSetFreq(quint64 client, int id, short freq)
+void RPCServer::rpcSlotPrmSetFreq(quint64, int id, short freq)
 {
     QByteArray *ba = new QByteArray();
     QDataStream ds(ba, QIODevice::ReadWrite);
