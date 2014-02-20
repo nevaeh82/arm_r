@@ -9,7 +9,7 @@ class IGraphicWidget
 	public:
 		virtual ~IGraphicWidget(){}
 		virtual bool isGraphicVisible() = 0;
-
+		virtual quint32 getId() = 0;
 		virtual void setZeroFrequency(double val) = 0;
 };
 

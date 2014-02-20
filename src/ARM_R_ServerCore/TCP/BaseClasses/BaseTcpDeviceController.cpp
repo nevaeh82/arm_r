@@ -119,13 +119,13 @@ void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argumen
 		return;
 	}
 
-	if (m_splitter == 10) {
+//	if (m_splitter == 10) {
 		foreach (ITcpListener* receiver, m_receiversList) {
 			receiver->onMessageReceived(m_tcpDeviceName, message);
 		}
-		m_splitter = 1;
-	}
-	else {
-		m_splitter++;
-	}
+//		m_splitter = 1;
+//	}
+//	else {
+//		m_splitter++;
+//	}
 }

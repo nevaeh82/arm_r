@@ -30,6 +30,7 @@ public:
 	explicit CorrelationWidgetController(QObject *parent = 0);
 
 	bool isGraphicVisible();
+	quint32 getId();
 	void setZeroFrequency(double val);
 
 	void appendView(CorrelationWidget *view);

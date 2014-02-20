@@ -94,10 +94,12 @@ QObject* CoordinateCounter::asQObject()
 
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation &aData)
 {
+
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+
 	dataStream << aData.timeHMSMs.at(aLastItem);
 	dataStream << 1;								/*aData.StateMassive_.at(aLastItem)*/
 	dataStream << aData.latLonStdDev.at(aLastItem);
@@ -105,9 +107,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	dataStream << aData.airspeed.at(aLastItem);
 	dataStream << aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
-
-//	QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA_AUTO, ba));
-//	_subscriber->data_ready(FLAKON_BPLA_AUTO, msg);
 
 	IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend);
 
@@ -130,9 +129,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	dataStream << aData.airspeed.at(aLastItem);
 	dataStream << m_alt;									//aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
-
-//	QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA, ba));
-//	_subscriber->data_ready(FLAKON_BPLA, msg);
 
 	IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend);
 

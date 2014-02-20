@@ -94,6 +94,11 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		QList<QVariant> list = arg.toList();
+
+		unsigned int id = list.at(0).toUInt(); // m_header.id;
+
+		qDebug() << "IIIIIIIIIIIIIIIIIIIIID2: " << id << " | " << m_id;
+
 		float* spectrum = list.at(0).value<float*>();
 		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
 
@@ -194,6 +199,11 @@ bool SpectrumWidgetController::isGraphicVisible()
 	return m_view->isVisible();
 }
 
+quint32 SpectrumWidgetController::getId()
+{
+	return m_id;
+}
+
 void SpectrumWidgetController::setLabelName(QString base, QString second)
 {
 	m_graphicsWidget->SetLabel(m_bandwidth/2, base);
@@ -205,8 +215,17 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 		return;
 	}
 
+	unsigned int id; // m_header.id
+
 	QVector<QPointF> vec;
 	QDataStream stream(vecBA);
+
+	stream >> id; // m_header.id
+
+	if (id != m_id) {
+		return;
+	}
+
 	stream >> vec;
 
 	m_graphicsWidget->ClearAllDetectedAreas();

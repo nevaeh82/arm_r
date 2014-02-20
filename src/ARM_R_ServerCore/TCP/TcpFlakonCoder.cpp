@@ -171,9 +171,10 @@ IMessage<QByteArray>* TcpFlakonCoder::messageFromPreparedData()
 
 IMessage<QByteArray>* TcpFlakonCoder::pointers(QVector<QPointF> vec)
 {
+	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << vec;
+	dataStream << m_header.id << vec;
 
 	return new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba);
 }
@@ -182,18 +183,17 @@ IMessage<QByteArray>* TcpFlakonCoder::correlation(quint32 point1, quint32 point2
 {
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << point1;
-	dataStream << point2;
-	dataStream << vec;
+	dataStream << point1 << point2 << vec;
 
 	return new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba);
 }
 
 IMessage<QByteArray>* TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)
 {
+	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << vec;
+	dataStream << m_header.id << vec;
 
 	return new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba);
 }
