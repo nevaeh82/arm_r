@@ -12,7 +12,7 @@
 
 #include "Correlations/CorrelationControllersContainer.h"
 
-#include "TabsProperty.h"
+#include "Station.h"
 
 #include "TabSpectrumWidget.h"
 

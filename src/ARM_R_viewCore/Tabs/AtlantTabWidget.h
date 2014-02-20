@@ -16,7 +16,7 @@
 
 #include <QHostAddress>
 
-#include "TabsProperty.h"
+#include "Station.h"
 #include "RPC/RPCAtlant.h"
 
 #include "ITabAtlant.h"

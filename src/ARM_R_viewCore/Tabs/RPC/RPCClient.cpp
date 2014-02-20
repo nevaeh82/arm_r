@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-RPCClient::RPCClient(Station *prop, IDbManager *db_manager,
+RPCClient::RPCClient(IStation *prop, IDbManager *db_manager,
 					 ITabSpectrum* parent_tab,
 					 IControlPRM* control_prm, QObject *parent) :
 	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
@@ -241,7 +241,7 @@ void RPCClient::rpcSlotGettingModulation(QString modulation)
 	//m_grData->set_def_modulation(modulation);
 }
 
-void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points)
+void RPCClient::rpcSlotServerSendCorrelation(uint, uint point2, QByteArray points)
 {
 	QList<QVariant> list;
 	QVariant pointsVariant(points);

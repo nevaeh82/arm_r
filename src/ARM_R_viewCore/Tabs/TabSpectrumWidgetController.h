@@ -23,7 +23,7 @@ private:
 	SpectrumWidgetDataSource* m_spectrumDataSource;
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
-	Station*		    m_station;
+	IStation*		    m_station;
 	ICorrelationControllersContainer*  m_correlationControllers;
 
 	IDbManager*          m_dbManager;
@@ -49,7 +49,7 @@ private:
 
 
 public:
-	explicit TabSpectrumWidgetController(Station* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(IStation* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);

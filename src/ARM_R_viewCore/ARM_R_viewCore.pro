@@ -18,7 +18,7 @@ INCLUDEPATH += $$PWD
 SOURCES += \
         Correlations/CorrelationWidget.cpp \
 	Tabs/TabManager.cpp \
-	Tabs/TabsProperty.cpp \
+        Station.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
 	Tabs/Controls/ControlPRM.cpp \
@@ -52,7 +52,7 @@ HEADERS += \
         stdafx.h \
         Interfaces/ICorrelationControllersContainer.h \
 	Tabs/TabManager.h \
-	Tabs/TabsProperty.h \
+        Station.h \
 	Common/IMessage.h \
 	Common/CommandMessage.h \
 	Tabs/ITabSpectrum.h \
@@ -96,7 +96,8 @@ HEADERS += \
     Interfaces/IControlPanelController.h \
     Correlations/CorrelationWidgetController.h \
     Interfaces/ICorrelationWidget.h \
-    Correlations/CorrelationControllersContainer.h
+    Correlations/CorrelationControllersContainer.h \
+    Interfaces/IStation.h
 
 FORMS += \
     ControlPanel.ui \

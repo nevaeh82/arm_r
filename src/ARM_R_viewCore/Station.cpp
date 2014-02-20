@@ -1,4 +1,4 @@
-#include "TabsProperty.h"
+#include "Station.h"
 
 Station::Station(QObject *parent):
 	QObject(parent)

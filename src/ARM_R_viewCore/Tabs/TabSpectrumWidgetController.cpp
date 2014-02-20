@@ -3,7 +3,7 @@
 
 #define DEFAULT_RPC_PORT		24500
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(Station* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;

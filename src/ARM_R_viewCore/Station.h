@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QString>
-#include <QMap>
+
+#include "Interfaces/IStation.h"
 
 #define INVALID_STATION_ID		-1
 
-class Station: public QObject
+class Station: public QObject, public IStation
 {
 	Q_OBJECT
 
@@ -24,7 +25,7 @@ private:
 
 public:
 	Station(QObject* parent = NULL);
-	~Station();
+	virtual ~Station();
 
 	int  getId() const;
 	QString getName() const;

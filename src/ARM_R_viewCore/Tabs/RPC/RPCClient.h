@@ -19,7 +19,7 @@
 #include "Common/IMessage.h"
 #include "Common/CommandMessage.h"
 
-#include "Tabs/TabsProperty.h"
+#include "Interfaces/IStation.h"
 #include "Interfaces/IDBManager.h"
 #include "Tabs/ITabSpectrum.h"
 
@@ -38,7 +38,7 @@ private:
 	IControlPRM*	m_controlPrm;
 	IMessage*		m_commandMsg;
 	IDbManager*		m_dbManager;
-	Station*		m_station;
+	IStation*		m_station;
 	ITabSpectrum*	m_parentTab;
 
 	float*	m_spectrum;
@@ -48,7 +48,7 @@ private:
 	bool	m_needSetup;
 
 public:
-	RPCClient(Station *prop, IDbManager *db_manager,
+	RPCClient(IStation *prop, IDbManager *db_manager,
 			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
 			  QObject *parent);
     ~RPCClient();
@@ -108,7 +108,7 @@ public slots:
 	void rpcSlotGettingPoints(QByteArray points);
 	void rpcSlotGettingDetectedBandwidth(QByteArray points);
 	void rpcSlotGettingModulation(QString modulation);
-	void rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArray points);
+	void rpcSlotServerSendCorrelation(uint, uint point2, QByteArray points);
 
 	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
 
