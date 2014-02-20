@@ -50,7 +50,7 @@ private:
 
 
 public:
-	explicit TabSpectrumWidgetController(IStation* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, IDbManager*, ITabManager*, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -85,7 +85,16 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
-	TabsProperty* getTabProperty();
+	IStation *getTabProperty();
+
+private:
+	int init();
+	void readSettings(const QString& settingsFile);
+
+	int createRPC();
+	int closeRPC();
+	int createView();
+	int createTree();
 
 signals:
 	void signalStartRPC();
@@ -103,15 +112,6 @@ private slots:
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);
-
-private:
-	int init();
-	void readSettings(const QString& settingsFile);
-
-	int createRPC();
-	int closeRPC();
-	int createView();
-	int createTree();
 };
 
 #endif // TABSPECTRUMWIDGETCONTROLLER_H

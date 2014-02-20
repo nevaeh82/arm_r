@@ -3,7 +3,7 @@
 
 #define DEFAULT_RPC_PORT		24500
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* prop,
+TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 														 ICorrelationControllersContainer* correlationControllers,
 														 IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
@@ -21,7 +21,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* prop,
 
 	m_mapCorrelationWidget = new QMap<int, IGraphicWidget *>;
 
-	m_station = prop;
+	m_station = station;
 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
@@ -142,10 +142,12 @@ int TabSpectrumWidgetController::createRPC()
 	return 0;
 }
 
-TabsProperty* TabSpectrumWidgetController::getTabProperty()
+IStation* TabSpectrumWidgetController::getTabProperty()
 {
-	return m_tabProperty;
-}int TabSpectrumWidgetController::closeRPC()
+	return m_station;
+}
+
+int TabSpectrumWidgetController::closeRPC()
 {
 	emit signalFinishRPC();
 	return 0;
@@ -343,7 +345,7 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 {
 	QString stationName = m_dbManager->getObjectName(property.pid);
 
-	if (stationName != m_stationName){
+	if (stationName != m_station->getName()){
 		return;
 	}
 
