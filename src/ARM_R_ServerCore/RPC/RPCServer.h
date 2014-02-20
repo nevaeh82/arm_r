@@ -58,7 +58,7 @@ public slots:
 	void rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage);
 
     ///prm300 from rpc client
-	void rpcSlotPrmSetFreq(quint64 client, int id, short freq);
+	void rpcSlotPrmSetFreq(quint64, int id, short freq);
 	void rpcSlotPrmRequestFreq(quint64 client, int id);
 	void rpcSlotPrmSetAtt1(quint64 client, int id, int value);
 	void rpcSlotPrmSetAtt2(quint64 client, int id, int value);

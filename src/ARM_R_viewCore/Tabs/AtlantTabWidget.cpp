@@ -9,14 +9,14 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 {
 	ui->setupUi(this);
 
-	_tab_property = new TabsProperty(this);
-	_tab_property->set_id(_id);
-	_tab_property->set_name(tr("Atlant"));
+	m_station = new Station(this);
+	m_station->setId(_id);
+	m_station->setName(tr("Atlant"));
 
 	connect(ui->sendPB, SIGNAL(clicked()), this, SLOT(_slot_send()));
 	connect(this, SIGNAL(signalAddLog(QString)), ui->logsTE, SLOT(append(QString)));
-	createRPC();
 
+	createRPC();
 }
 
 AtlantTabWidget::~AtlantTabWidget()
@@ -79,7 +79,7 @@ int AtlantTabWidget::createRPC()
 	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
 	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
 
-	_rpc_client = new RPCAtlant(_tab_property->get_id(), this, this);
+	_rpc_client = new RPCAtlant(m_station->getId(), this, this);
 	_rpc_client->start(portRpc, QHostAddress(ipRpc));
 	/*QThread *thread_rpc_client = new QThread;
 

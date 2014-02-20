@@ -23,9 +23,7 @@ private:
 	SpectrumWidgetDataSource* m_spectrumDataSource;
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
-	int                 m_id;
-	QString             m_stationName;
-	TabsProperty*       _tab_property;
+	Station*		    m_station;
 	ICorrelationControllersContainer*  m_correlationControllers;
 
 	IDbManager*          m_dbManager;
@@ -51,7 +49,7 @@ private:
 
 
 public:
-	explicit TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(Station* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -89,8 +87,6 @@ public:
 	virtual void onSettingsNodeChanged(const SettingsNode &);
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
-
-	TabsProperty* get_tab_property();
 
 signals:
 	void signalStartRPC();

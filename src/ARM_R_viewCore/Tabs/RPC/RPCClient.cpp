@@ -2,14 +2,14 @@
 
 #include <QDebug>
 
-RPCClient::RPCClient(TabsProperty *prop, IDbManager *db_manager,
+RPCClient::RPCClient(Station *prop, IDbManager *db_manager,
 					 ITabSpectrum* parent_tab,
 					 IControlPRM* control_prm, QObject *parent) :
 	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
 {
 	m_controlPrm = control_prm;
 	m_parentTab = parent_tab;
-	m_tabProperty = prop;
+	m_station = prop;
 	m_dbManager = db_manager;
 
 	m_spectrum = new float[1];
@@ -117,42 +117,42 @@ void RPCClient::formCommand(IMessage *msg)
 
 void RPCClient::prmSetFreq(short freq)
 {
-	emit signalPRMSetFreq(m_tabProperty->get_id(), freq);
+	emit signalPRMSetFreq(m_station->getId(), freq);
 }
 
 void RPCClient::prmRequestFreq()
 {
-	emit signalPRMRequestFreq(m_tabProperty->get_id());
+	emit signalPRMRequestFreq(m_station->getId());
 }
 
 void RPCClient::prmSetAtt1(int att1)
 {
-	emit signalPRMSetAtt1(m_tabProperty->get_id(), att1);
+	emit signalPRMSetAtt1(m_station->getId(), att1);
 }
 
 void RPCClient::prmSetAtt2(int att2)
 {
-	emit signalPRMSetAtt2(m_tabProperty->get_id(), att2);
+	emit signalPRMSetAtt2(m_station->getId(), att2);
 }
 
 void RPCClient::prmSetFilter(int index)
 {
-	emit signalPRMSetFilter(m_tabProperty->get_id(), index);
+	emit signalPRMSetFilter(m_station->getId(), index);
 }
 
 void RPCClient::flakonSetMainStationCor(int value)
 {
-	emit signalSetMainStationCor(m_tabProperty->get_id(), value);
+	emit signalSetMainStationCor(m_station->getId(), value);
 }
 
 void RPCClient::flakonSetAvarage(int value)
 {
-	emit signalSetAvarageSpectrum(m_tabProperty->get_id(), value);
+	emit signalSetAvarageSpectrum(m_station->getId(), value);
 }
 
 void RPCClient::requestSatatus()
 {
-	emit signalRequestStatus(m_tabProperty->get_id());
+	emit signalRequestStatus(m_station->getId());
 }
 
 void RPCClient::recognize()
@@ -160,34 +160,34 @@ void RPCClient::recognize()
 	float bandwidth = 0;
 	float shift = 0;
 
-	QVariant value = m_dbManager->getPropertyValue(m_tabProperty->get_name(), DB_SELECTED_PROPERTY);
+	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_SELECTED_PROPERTY);
 
 	if (value.isValid()) {
 		bandwidth = value.toFloat();
 	}
 
-	value = m_dbManager->getPropertyValue(m_tabProperty->get_name(), DB_CENTER_PROPERTY);
+	value = m_dbManager->getPropertyValue(m_station->getName(), DB_CENTER_PROPERTY);
 
 	if (value.isValid()) {
 		shift = value.toFloat();
 	}
 
-	emit signalSetBandwidth(m_tabProperty->get_id(), bandwidth);
-	emit signalSetShift(m_tabProperty->get_id(), shift);
+	emit signalSetBandwidth(m_station->getId(), bandwidth);
+	emit signalSetShift(m_station->getId(), shift);
 	int s_type = 104;
-	emit signalRecognize(m_tabProperty->get_id(), s_type);
+	emit signalRecognize(m_station->getId(), s_type);
 }
 
 void RPCClient::ssCorrelation(bool enable)
 {
 	//    int type = 103;
-	emit signalSSCorrelation(m_tabProperty->get_id(), enable);
+	emit signalSSCorrelation(m_station->getId(), enable);
 }
 
 /// slot when connection complete
 void RPCClient::slotRpcConnetion()
 {
-	emit signalSetClientId(m_tabProperty->get_id());
+	emit signalSetClientId(m_station->getId());
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_REQUEST_FREQ, QVariant());
 	setCommand(msg);
 }

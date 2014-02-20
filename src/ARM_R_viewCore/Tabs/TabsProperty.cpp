@@ -1,103 +1,87 @@
 #include "TabsProperty.h"
 
-TabsProperty::TabsProperty(QObject *parent):
+Station::Station(QObject *parent):
 	QObject(parent)
 {
-	_grafic_widget = NULL;
+	m_stationId = INVALID_STATION_ID;
+	m_stationName = tr("Unknown");
+	m_stationLatitude = 0;
+	m_stationLongitude = 0;
+	m_prm300Ip = "127.0.0.1";
+	m_adcIp = "127.0.0.1";
+	m_adcPort = 0;
 }
 
-TabsProperty::~TabsProperty()
+Station::~Station()
 {
-
 }
 
-
-void TabsProperty::set_id(int id)
+void Station::setId(int id)
 {
-    _id = id;
+	m_stationId = id;
 }
 
-void TabsProperty::set_name(QString name)
+void Station::setName(const QString& name)
 {
-    _name = name;
+	m_stationName = name;
 }
 
-void TabsProperty::set_graphic_widget(SpectrumWidget *gr)
+void Station::setLatitude(const double lat)
 {
-    _grafic_widget = gr;
+	m_stationLatitude = lat;
 }
 
-void TabsProperty::set_latitude(double lat)
+void Station::setLongitude(const double lon)
 {
-    _latitude = lat;
+	m_stationLongitude = lon;
 }
 
-void TabsProperty::set_longitude(double lon)
+void Station::setPrm300Ip(const QString &ip)
 {
-    _longitude = lon;
+	m_prm300Ip = ip;
 }
 
-void TabsProperty::set_ip_prm300(QString ip)
+void Station::setAdcIp(const QString& ip)
 {
-    _ip_prm300 = ip;
+	m_adcIp = ip;
 }
 
-void TabsProperty::set_ip_adc(QString ip)
+void Station::setAdcPort(const quint16 port)
 {
-    _ip_ADC = ip;
+	m_adcPort = port;
 }
 
-void TabsProperty::set_port_adc(quint16 port)
+int Station::getId() const
 {
-    _port_ADC = port;
+	return m_stationId;
 }
 
-int TabsProperty::get_id()
+QString Station::getName() const
 {
-    return _id;
+	return m_stationName;
 }
 
-QString TabsProperty::get_name()
+double Station::getLatitude() const
 {
-    return _name;
+	return m_stationLatitude;
 }
 
-double TabsProperty::get_latitude()
+double Station::getLongitude() const
 {
-    return _latitude;
+	return m_stationLongitude;
 }
 
-double TabsProperty::get_longitude()
+QString Station::getPrm300Ip() const
 {
-    return _longitude;
+	return m_prm300Ip;
 }
 
-QString TabsProperty::get_ip_prm300()
+QString Station::getAdcIp() const
 {
-    return _ip_prm300;
+	return m_adcIp;
 }
 
-QString TabsProperty::get_ip_adc()
+quint16 Station::getAdcPort() const
 {
-    return _ip_ADC;
-}
-
-quint16 TabsProperty::get_port_adc()
-{
-    return _port_ADC;
-}
-
-SpectrumWidget *TabsProperty::get_graphic_widget()
-{
-    return _grafic_widget;
-}
-
-void TabsProperty::set_graphic_widget_correlation(int id, SpectrumWidget *gr_corr)
-{
-    _map_correlations.insert(id, gr_corr);
-}
-
-QMap<int, SpectrumWidget *> &TabsProperty::get_correlations()
-{
-    return _map_correlations;
+	return m_adcPort;
 }

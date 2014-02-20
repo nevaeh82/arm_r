@@ -38,7 +38,7 @@ private:
 	IControlPRM*	m_controlPrm;
 	IMessage*		m_commandMsg;
 	IDbManager*		m_dbManager;
-	TabsProperty*	m_tabProperty;
+	Station*		m_station;
 	ITabSpectrum*	m_parentTab;
 
 	float*	m_spectrum;
@@ -48,7 +48,7 @@ private:
 	bool	m_needSetup;
 
 public:
-	RPCClient(TabsProperty *prop, IDbManager *db_manager,
+	RPCClient(Station *prop, IDbManager *db_manager,
 			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
 			  QObject *parent);
     ~RPCClient();

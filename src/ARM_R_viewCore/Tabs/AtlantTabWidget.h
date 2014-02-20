@@ -43,7 +43,7 @@ public:
 private:
 	int                 _id;
 
-	TabsProperty*       _tab_property;
+	Station*       m_station;
 	RPCAtlant*          _rpc_client;
 
 

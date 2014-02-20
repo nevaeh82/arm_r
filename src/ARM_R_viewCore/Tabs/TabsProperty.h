@@ -1,61 +1,46 @@
-#ifndef TABSPROPERTY_H
-#define TABSPROPERTY_H
+#ifndef STATION_H
+#define STATION_H
 
 #include <QObject>
 #include <QString>
 #include <QMap>
 
-#include "SpectrumWidget.h"
+#define INVALID_STATION_ID		-1
 
-class TabsProperty: public QObject
+class Station: public QObject
 {
-public:
-	TabsProperty(QObject* parent = NULL);
-	~TabsProperty();
+	Q_OBJECT
 
 private:
-    /// punkt Id
-    int                 _id;
-    /// name
-    QString             _name;
-    /// latitude
-    double              _latitude;
-    /// longitude
-    double              _longitude;
-    /// IP PRM300
-    QString             _ip_prm300;
-    /// IP ADC
-    QString             _ip_ADC;
-    /// port ADC
-    quint16             _port_ADC;
+	int m_stationId;
+	QString m_stationName;
 
+	double m_stationLatitude;
+	double m_stationLongitude;
 
-	SpectrumWidget*              _grafic_widget;
-
-	QMap<int, SpectrumWidget *>  _map_correlations;
+	QString m_prm300Ip;
+	QString m_adcIp;
+	quint16 m_adcPort;
 
 public:
-    int                 get_id();
-    QString             get_name();
-	SpectrumWidget       *get_graphic_widget();
-    double              get_latitude();
-    double              get_longitude();
-    QString             get_ip_prm300();
-    QString             get_ip_adc();
-    quint16             get_port_adc();
-	QMap<int, SpectrumWidget *> &get_correlations();
+	Station(QObject* parent = NULL);
+	~Station();
 
+	int  getId() const;
+	QString getName() const;
+	double getLatitude() const;
+	double getLongitude() const;
+	QString getPrm300Ip() const;
+	QString getAdcIp() const;
+	quint16 getAdcPort() const;
 
-    void set_id(int id);
-    void set_name(QString name);
-    void set_latitude(double lat);
-    void set_longitude(double lon);
-    void set_ip_prm300(QString ip);
-    void set_ip_adc(QString ip);
-    void set_port_adc(quint16 port);
-
-	void set_graphic_widget(SpectrumWidget *gr);
-	void set_graphic_widget_correlation(int id, SpectrumWidget *gr_corr);
+	void setId(int id);
+	void setName(const QString& name);
+	void setLatitude(const double lat);
+	void setLongitude(const double lon);
+	void setPrm300Ip(const QString& ip);
+	void setAdcIp(const QString& ip);
+	void setAdcPort(const quint16 port);
 };
 
-#endif // TABSPROPERTY_H
+#endif // STATION_H

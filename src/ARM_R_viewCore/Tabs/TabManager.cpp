@@ -18,27 +18,6 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 
 TabManager::~TabManager()
 {
-	if(m_tabsPropertyMap.count() > 0)
-	{
-		QMap<int, TabsProperty *>::iterator it;
-		for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
-		{
-			delete it.value();
-		}
-	}
-	if(m_tabWidgetsMap.count() > 0)
-	{
-		QMap<QString, ITabWidget*>::iterator its;
-		for(its = m_tabWidgetsMap.begin(); its != m_tabWidgetsMap.end(); ++its)
-		{
-			delete its.value();
-		}
-	}
-
-	if(m_correlationControllers != NULL)
-	{
-		delete m_correlationControllers;
-	}
 }
 
 void TabManager::start()
@@ -48,24 +27,22 @@ void TabManager::start()
 
 int TabManager::createSubModules(const QString& settingsFile)
 {
-	m_correlationControllers = new CorrelationControllersContainer();
+	m_correlationControllers = new CorrelationControllersContainer(this);
 
 	int submodulesCount = readSettings(settingsFile);
 
-	m_correlationControllers->init(m_tabsPropertyMap.count() - 1);
+	m_correlationControllers->init(m_stationsMap.count() - 1);
 
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
-	QMap<int, TabsProperty* >::iterator it;
-	for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
-	{
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(it.value(), m_correlationControllers, m_dbManager, this);
+	foreach (Station* station, m_stationsMap) {
+		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(station, m_correlationControllers, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		tabController->appendView(tabSpectrumWidget);
 
-		int index = m_tabWidget->addTab(tabSpectrumWidget, it.value()->get_name());
+		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
 		QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
@@ -73,8 +50,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 			tabBar->setTabButton(index, QTabBar::LeftSide, tabSpectrumWidget->getIndicator());
 		}
 
-		m_tabWidgetsMap.insert(it.value()->get_name(), tabController);
-
+		m_tabWidgetsMap.insert(station->getName(), tabController);
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
 	}
 
@@ -105,8 +81,8 @@ void TabManager::setDbManager(IDbManager *dbManager)
 
 QString TabManager::getStationName(const int id)
 {
-	TabsProperty *t = m_tabsPropertyMap.value(id);
-	return t->get_name();
+	Station *t = m_stationsMap.value(id);
+	return t->getName();
 }
 
 /// call this method when data in tree has changed
@@ -156,7 +132,7 @@ void TabManager::changeTabSlot(int index)
 /// read settings for generated submodules (tabs)
 int TabManager::readSettings(const QString& settingsFile)
 {
-	int count = 0;
+	m_stationsMap.clear();
 	
 	QSettings settings(settingsFile, QSettings::IniFormat);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
@@ -166,27 +142,26 @@ int TabManager::readSettings(const QString& settingsFile)
 	{
 		settings.beginGroup(childKey);
 
-		TabsProperty *prop = new TabsProperty(this);
+		Station *station = new Station(this);
 
-		prop->set_id(settings.value("Id", 0).toInt());
-		prop->set_name(settings.value("Name", 0).toString());
-		prop->set_latitude(settings.value("Latitude", "0").toDouble());
-		prop->set_longitude(settings.value("Longitude", "0").toDouble());
-		prop->set_ip_prm300(settings.value("IPprm300", "127.0.0.1").toString());
-		prop->set_ip_adc(settings.value("IPADC", "127.0.0.1").toString());
-		prop->set_port_adc(settings.value("portADC", 1030).toInt());
+		station->setId(settings.value("Id", 0).toInt());
+		station->setName(settings.value("Name", "Unknown").toString());
+		station->setLatitude(settings.value("Latitude", 0).toDouble());
+		station->setLongitude(settings.value("Longitude", 0).toDouble());
+		station->setPrm300Ip(settings.value("IPprm300", "127.0.0.1").toString());
+		station->setAdcIp(settings.value("IPADC", "127.0.0.1").toString());
+		station->setAdcPort(settings.value("portADC", 1030).toInt());
 
-		m_tabsPropertyMap.insert(settings.value("Id", 0).toInt(), prop);
+		m_stationsMap.insert(station->getId(), station);
+
 		settings.endGroup();
-		count++;
 	}
 
-	return count;
+	return m_stationsMap.count();
 }
 
 void TabManager::checkStatus()
 {
-
 	///TODO: update
 	/*QMap<int, ITabWidget* >::iterator it;
 	for(it = tabWidgetsMap.begin(); it != tabWidgetsMap.end(); ++it)

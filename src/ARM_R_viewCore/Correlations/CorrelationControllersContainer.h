@@ -11,11 +11,13 @@
 #include "Correlations/CorrelationWidgetController.h"
 #include "IGraphicWidget.h"
 
-class CorrelationControllersContainer : public ICorrelationControllersContainer
+class CorrelationControllersContainer : public QObject, public ICorrelationControllersContainer
 {
+	Q_OBJECT
+
 public:
-	CorrelationControllersContainer();
-	~CorrelationControllersContainer();
+	CorrelationControllersContainer(QObject* parent = NULL);
+	virtual ~CorrelationControllersContainer();
 
 public:
 	virtual int init(int count);

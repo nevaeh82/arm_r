@@ -94,7 +94,6 @@ HEADERS += \
     Defines.h \
     Interfaces/IControlPanelListener.h \
     Interfaces/IControlPanelController.h \
-    Correlations/CorrelationWidgetDataSource.h \
     Correlations/CorrelationWidgetController.h \
     Interfaces/ICorrelationWidget.h \
     Correlations/CorrelationControllersContainer.h

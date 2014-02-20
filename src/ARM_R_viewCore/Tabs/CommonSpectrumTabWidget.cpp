@@ -102,7 +102,7 @@ int CommonSpectrumTabWidget::closeRPC()
 	return 0;
 }
 
-int CommonSpectrumTabWidget::createView(QWidget *view)
+int CommonSpectrumTabWidget::createView(QWidget*)
 {
 	return 0;
 }
