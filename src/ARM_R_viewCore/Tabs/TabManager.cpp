@@ -97,7 +97,7 @@ void TabManager::sendCommand(const QString &stationName, TypeCommand type, IMess
 	///TODO: update in future
 
 	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
-	tabController1->set_command(type, msg);
+	tabController1->sendCommand(type, msg);
 }
 
 void TabManager::setActiveTab(const int id)
@@ -177,8 +177,7 @@ void TabManager::onSettingsNodeChanged(const SettingsNode &)
 
 void TabManager::onPropertyChanged(const Property & property)
 {
-
-	Property inProperty = property;
+	/*Property inProperty = property;
 
 	TypeCommand commandType = TypeUnknownCommand;
 
@@ -210,7 +209,7 @@ void TabManager::onPropertyChanged(const Property & property)
 	QString stationName = m_dbManager->getObjectName(property.pid);
 
 	/// TODO: update
-	sendCommand(stationName, commandType, msg);
+	sendCommand(stationName, commandType, msg);*/
 }
 
 void TabManager::onCleanSettings()

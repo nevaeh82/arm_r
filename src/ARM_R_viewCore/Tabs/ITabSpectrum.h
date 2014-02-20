@@ -20,25 +20,18 @@ class ITabSpectrum
 public:
 	virtual ~ITabSpectrum(){}
 
-	virtual void set_selected_area(const SpectrumSelection& selection)        = 0; //1 - selection, 2 - central freq, 3 - begin freq, 4 - end freq
+	virtual void setSelectedArea(const SpectrumSelection& selection) = 0; //1 - selection, 2 - central freq, 3 - begin freq, 4 - end freq
+	virtual void sendCommand(TypeCommand type, IMessage *msg) = 0;
+	virtual void setPointsRpc(QVector<QPointF> points) = 0;
+	virtual void setThreshold(double y) = 0;
+	virtual void setIndicator(int state) = 0;
+	virtual void setShowControlPrm(bool state) = 0;
+	virtual void setDoubleClicked(int id, double, double) = 0;
+	virtual void setPanorama(bool state) = 0;
 
-	virtual void set_command(TypeCommand type, IMessage *msg)       = 0;
+	virtual void checkStatus() = 0;
 
-    virtual void set_points_rpc(QVector<QPointF> points)            = 0;
-    virtual void set_thershold(double y)                            = 0;
-
-    virtual void set_indicator(int state)                           = 0;
-	//virtual QLabel* get_indicator()                                 = 0;
-
-    virtual void set_show_controlPRM(bool state)                    = 0;
-
-    virtual void set_double_clicked(int id, double, double)         = 0;
-
-    virtual void check_status()                                     = 0;
-
-	virtual void set_panorama(bool state)							= 0;
-
-	virtual double get_current_frequency()							= 0;
+	virtual double getCurrentFrequency() = 0;
 };
 
 #endif // ITABSPECTRUM_H
