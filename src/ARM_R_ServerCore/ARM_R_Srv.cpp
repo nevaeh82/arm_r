@@ -75,13 +75,14 @@ ARM_R_Srv::ARM_R_Srv()
 	_rpc_server->start(24500);
 
 	m_tcpManager = new TcpManager;
-	m_tcpManager->setRpcServer(_rpc_server);
 
 	QThread* tcpManagerThread = new QThread;
 	connect(tcpManagerThread, SIGNAL(finished()), m_tcpManager, SLOT(deleteLater()));
 	connect(tcpManagerThread, SIGNAL(finished()), tcpManagerThread, SLOT(deleteLater()));
 	m_tcpManager->moveToThread(tcpManagerThread);
 	tcpManagerThread->start();
+
+	m_tcpManager->setRpcServer(_rpc_server);
 
 	ITcpSettingsManager* settingsManager = new TcpSettingsManager;
 	settingsManager->setIniFile("./TCP/coders.ini");

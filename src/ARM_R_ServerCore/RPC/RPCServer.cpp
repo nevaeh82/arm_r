@@ -276,6 +276,14 @@ void RPCServer::rpcSlotSetBandwidth(quint64 client, int id, float bandwidth)
 
 	QSharedPointer<IMessageOld> msg(new MessageOld(id, RCP_BANDWIDTH_TYPE, ba));
 	m_subscriber->data_ready(RCP_BANDWIDTH_TYPE, msg);
+#else
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << bandwidth;
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_SET_BANDWIDTH, QVariant(byteArray));
+	}
 #endif
 }
 
@@ -289,6 +297,14 @@ void RPCServer::rpcSlotSetShift(quint64 client, int id, float shift)
 
 	QSharedPointer<IMessageOld> msg(new MessageOld(id, RCP_SHIFT_TYPE, ba));
 	m_subscriber->data_ready(RCP_SHIFT_TYPE, msg);
+#else
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << shift;
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_SET_SHIFT, QVariant(byteArray));
+	}
 #endif
 }
 
@@ -303,6 +319,14 @@ void RPCServer::rpcSlotRecognize(quint64 client, int id, int type)
 
 	QSharedPointer<IMessageOld> msg(new MessageOld(id, RCP_COMMAND_RECOGNIZE, ba));
 	m_subscriber->data_ready(RCP_COMMAND_RECOGNIZE, msg);
+#else
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << id;
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_RECOGNIZE, QVariant(byteArray));
+	}
 #endif
 }
 
@@ -317,6 +341,14 @@ void RPCServer::rpcSlotSsCorrelation(quint64 client, int id, bool enable)
 
 	QSharedPointer<IMessageOld> msg(new MessageOld(id, RPC_SS_CORRELATION, ba));
 	m_subscriber->data_ready(RPC_SS_CORRELATION, msg);
+#else
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << enable;
+
+	foreach (IRpcListener* listener, m_listeners) {
+		listener->onMethodCalled(RPC_SLOT_SS_CORRELATION, QVariant(byteArray));
+	}
 #endif
 }
 

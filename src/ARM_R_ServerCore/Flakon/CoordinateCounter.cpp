@@ -7,7 +7,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 
-	initSolver();
+//	initSolver();
 	m_likeADeviceName = deviceName;
 	m_logger->debug(QString("Created %1").arg(m_likeADeviceName));
 }

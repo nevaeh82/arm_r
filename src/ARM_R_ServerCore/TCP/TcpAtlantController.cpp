@@ -3,7 +3,6 @@
 TcpAtlantController::TcpAtlantController(QObject* parent) :
 	BaseTcpDeviceController(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpAtlantController)), parent)
 {
-	m_tcpDeviceCoder = new TcpAtlantCoder(this);
 	m_tcpDeviceName = ATLANT_TCP_DEVICE;
 	m_logger->debug(QString("Created %1").arg(m_tcpDeviceName));
 }
@@ -11,11 +10,15 @@ TcpAtlantController::TcpAtlantController(QObject* parent) :
 TcpAtlantController::TcpAtlantController(const QString& tcpDeviceName, QObject* parent) :
 	BaseTcpDeviceController(tcpDeviceName, Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpAtlantController)), parent)
 {
-	m_tcpDeviceCoder = new TcpAtlantCoder(this);
 }
 
 TcpAtlantController::~TcpAtlantController()
 {
+}
+
+void TcpAtlantController::createTcpDeviceCoder()
+{
+	m_tcpDeviceCoder = new TcpAtlantCoder(this);
 }
 
 QObject* TcpAtlantController::asQObject()

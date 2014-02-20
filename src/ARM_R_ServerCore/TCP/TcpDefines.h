@@ -22,6 +22,10 @@
 #define TCP_FLAKON_ANSWER_CORRELATION					"tcpFlakonAnswerCorrelation"
 #define TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION		"tcpFlakonRequestMainStationCorrelation"
 #define TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM				"tcpFlakonRequestAverageSpectrum"
+#define TCP_FLAKON_REQUEST_SET_BANDWIDTH				"tcpFlakonRequestSetBandwidth"
+#define TCP_FLAKON_REQUEST_SET_SHIFT					"tcpFlakonRequestSetShift"
+#define TCP_FLAKON_REQUEST_RECOGNIZE					"tcpFlakonRequestRecognize"
+#define TCP_FLAKON_REQUEST_SS_CORRELATION				"tcpFlakonRequestSSCorrelation"
 
 /// Flakon Coordinates Counter
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA					"tcpFlakonCoordinatesCounterAnswerBPLA"

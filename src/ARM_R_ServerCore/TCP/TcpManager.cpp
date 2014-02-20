@@ -10,6 +10,7 @@ TcpManager::TcpManager(QObject* parent) :
 	m_coordinatesCounter->registerReceiver(this);
 
 	QThread* coordinateCounterThread = new QThread;
+	connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
 	connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
@@ -48,19 +49,25 @@ void TcpManager::addTcpDevice(const QString& deviceType, const QString& host, co
 		return;
 	}
 
-	controller->connectToHost(host, port);
-	controller->registerReceiver(this);
-
 	QThread* controllerThread = new QThread;
 	connect(controller->asQObject(), SIGNAL(destroyed()), controllerThread, SLOT(terminate()));
 	connect(this, SIGNAL(threadTerminateSignal()), controllerThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), controller->asQObject(), SLOT(deleteLater()));
 	connect(this, SIGNAL(threadTerminateSignal()), controllerThread, SLOT(deleteLater()));
 	controller->asQObject()->moveToThread(controllerThread);
+	controllerThread->start();
 
 	m_controllersMap.insert(deviceType, controller);
 
-	controllerThread->start();
+	controller->registerReceiver(this);
+	if (deviceType == FLAKON_TCP_DEVICE) {
+		controller->registerReceiver(m_coordinatesCounter);
+	}
+
+	controller->createTcpDeviceCoder();
+	controller->createTcpClient();
+
+	controller->connectToHost(host, port);
 
 	m_logger->debug(QString("Added device connection for %1 with %2").arg(deviceType).arg(key));
 }
@@ -132,6 +139,22 @@ void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)
 		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, argument.toByteArray());
 		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
 	}
+	else if (method == RPC_SLOT_SET_BANDWIDTH) {
+		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_BANDWIDTH, argument.toByteArray());
+		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
+	}
+	else if (method == RPC_SLOT_SET_SHIFT) {
+		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_SHIFT, argument.toByteArray());
+		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
+	}
+	else if (method == RPC_SLOT_RECOGNIZE) {
+		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_RECOGNIZE, argument.toByteArray());
+		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
+	}
+	else if (method == RPC_SLOT_SS_CORRELATION) {
+		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SS_CORRELATION, argument.toByteArray());
+		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
+	}
 	else if (method == RPC_SLOT_AVARAGE_SPECTRUM) {
 		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, argument.toByteArray());
 		m_controllersMap.value(FLAKON_TCP_DEVICE)->sendData(message);
@@ -168,5 +191,4 @@ void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)
 		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray());
 		m_coordinatesCounter->sendData(message);
 	}
-
 }

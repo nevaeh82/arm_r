@@ -64,6 +64,7 @@ private:
 	void setSolverDataSize(int aSize);
 	void setSolverAnalyzeSize(int aSize);
 
+public slots:
 	void initSolver();
 
 private slots:
