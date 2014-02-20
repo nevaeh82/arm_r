@@ -25,7 +25,7 @@ private:
 
 	int                 m_id;
 	QString             m_stationName;
-	TabsProperty*       _tab_property;
+	TabsProperty*       _tabProperty;
 	ICorrelationControllersContainer*  m_correlationControllers;
 
 	IDbManager*          m_dbManager;
@@ -35,15 +35,15 @@ private:
 
 	RPCClient*          m_rpcClient;
 
-	QMap<int, IGraphicWidget *>*     _map_correlation_widget;
+	QMap<int, IGraphicWidget *>*     m_mapCorrelationWidget;
 	ITabManager*        m_tabManager;
 
-	ControlPRM*         _controlPRM;
+	ControlPRM*         m_controlPRM;
 
-	double              _threshold;
+	double              m_threshold;
 
-	QPixmap*            _pm_round_red;
-	QPixmap*            _pm_round_green;
+	QPixmap*            m_pmRoundRed;
+	QPixmap*            m_pmRoundGreen;
 	QLabel*             m_indicatorLabel;
 
 	QString m_rpcHostAddress;
@@ -72,19 +72,20 @@ public:
 	virtual int createView();
 	virtual int createTree();
 
-	virtual void set_indicator(int state);
+	virtual void setIndicator(int state);
 
-	virtual void set_show_controlPRM(bool state);
-	virtual void set_double_clicked(int id, double, double);
+	virtual void setShowControlPrm(bool state);
+	virtual void setDoubleClicked(int id, double, double);
 
-	virtual void set_selected_area(const SpectrumSelection &selection);
-	virtual void set_command(TypeCommand type, IMessage *msg);
-	virtual void set_points_rpc(QVector<QPointF> points);
+	virtual void setSelectedArea(const SpectrumSelection &selection);
+	virtual void setPointsRpc(QVector<QPointF> points);
 
-	virtual void set_thershold(double y);
-	virtual void check_status();
-	virtual void set_panorama(bool state);
-	virtual double get_current_frequency();
+	virtual void sendCommand(TypeCommand type, IMessage *msg);
+
+	virtual void setThreshold(double y);
+	virtual void checkStatus();
+	virtual void setPanorama(bool state);
+	virtual double getCurrentFrequency();
 
 	virtual void onSettingsNodeChanged(const SettingsNode &);
 	virtual void onPropertyChanged(const Property &);

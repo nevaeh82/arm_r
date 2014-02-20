@@ -219,7 +219,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 void SpectrumWidgetController::setZeroFrequency(double val)
 {
-	double cur_freq = m_tab->get_current_frequency();
+	double cur_freq = m_tab->getCurrentFrequency();
 	m_current_frequency = cur_freq*TO_MHZ;
 	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
 }
@@ -281,7 +281,7 @@ void SpectrumWidgetController::init()
 
 void SpectrumWidgetController::slotSetEnablePanorama(bool state)
 {
-	m_tab->set_panorama(state);
+	m_tab->setPanorama(state);
 }
 
 void SpectrumWidgetController::slotAutoSearch(bool state)
@@ -330,7 +330,7 @@ void SpectrumWidgetController::slotRecognizeSignal()
 {
 	m_centerFreqDefModulation = m_centerFreqSelTemp;
 	CommandMessage *msg = new CommandMessage(COMMAND_RECOGNIZESIGNAL, QVariant());
-	m_tab->set_command(TypeGraphicCommand,msg);
+	m_tab->sendCommand(TypeGraphicCommand,msg);
 }
 
 /// signal for flakon to recognize signal
@@ -338,7 +338,7 @@ void SpectrumWidgetController::slotSSCorrelation()
 {
 	m_enableCorrelation = !m_enableCorrelation;
 	CommandMessage *msg = new CommandMessage(COMMAND_KM, m_enableCorrelation);
-	m_tab->set_command(TypeGraphicCommand,msg);
+	m_tab->sendCommand(TypeGraphicCommand,msg);
 	if(m_enableCorrelation)
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	else
@@ -374,7 +374,7 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	selection.start = QPointF(x1, y1);
 	selection.end = QPointF(x2, y2);
 
-	m_tab->set_selected_area(selection);
+	m_tab->setSelectedArea(selection);
 }
 
 void SpectrumWidgetController::slotSelectionFinishedRedLine(double y)
@@ -404,5 +404,5 @@ void SpectrumWidgetController::slotShowPeaks(bool visible)
 
 void SpectrumWidgetController::slotShowControlPRM(bool state)
 {
-	m_tab->set_show_controlPRM(state);
+	m_tab->setShowControlPrm(state);
 }

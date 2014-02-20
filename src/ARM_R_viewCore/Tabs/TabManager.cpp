@@ -18,27 +18,6 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 
 TabManager::~TabManager()
 {
-	if(m_tabsPropertyMap.count() > 0)
-	{
-		QMap<int, TabsProperty *>::iterator it;
-		for(it = m_tabsPropertyMap.begin(); it != m_tabsPropertyMap.end(); ++it)
-		{
-			delete it.value();
-		}
-	}
-	if(m_tabWidgetsMap.count() > 0)
-	{
-		QMap<QString, ITabWidget*>::iterator its;
-		for(its = m_tabWidgetsMap.begin(); its != m_tabWidgetsMap.end(); ++its)
-		{
-			delete its.value();
-		}
-	}
-
-	if(m_correlationControllers != NULL)
-	{
-		delete m_correlationControllers;
-	}
 }
 
 void TabManager::start()
@@ -121,7 +100,7 @@ void TabManager::sendCommand(const QString &stationName, TypeCommand type, IMess
 	///TODO: update in future
 
 	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
-	tabController1->set_command(type, msg);
+	tabController1->sendCommand(type, msg);
 }
 
 void TabManager::setActiveTab(const int id)
@@ -202,8 +181,7 @@ void TabManager::onSettingsNodeChanged(const SettingsNode &)
 
 void TabManager::onPropertyChanged(const Property & property)
 {
-
-	Property inProperty = property;
+	/*Property inProperty = property;
 
 	TypeCommand commandType = TypeUnknownCommand;
 
@@ -235,7 +213,7 @@ void TabManager::onPropertyChanged(const Property & property)
 	QString stationName = m_dbManager->getObjectName(property.pid);
 
 	/// TODO: update
-	sendCommand(stationName, commandType, msg);
+	sendCommand(stationName, commandType, msg);*/
 }
 
 void TabManager::onCleanSettings()

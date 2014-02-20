@@ -3,7 +3,9 @@
 
 #define DEFAULT_RPC_PORT		24500
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICorrelationControllersContainer* correlationControllers, IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop,
+														 ICorrelationControllersContainer* correlationControllers,
+														 IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
@@ -11,17 +13,17 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop, ICo
 	m_rpcHostAddress = "127.0.0.1";
 	m_rpcHostPort = DEFAULT_RPC_PORT;
 
-	_threshold = -1;
+	m_threshold = -1;
 	m_correlationControllers = correlationControllers;
 	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
 	m_dbManager->registerReceiver(this);
 
-	_map_correlation_widget = new QMap<int, IGraphicWidget *>;
+	m_mapCorrelationWidget = new QMap<int, IGraphicWidget *>;
 
-	_tab_property = prop;
-	m_id = _tab_property->get_id();
-	m_stationName = _tab_property->get_name();
+	_tabProperty = prop;
+	m_id = _tabProperty->get_id();
+	m_stationName = _tabProperty->get_name();
 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
@@ -132,7 +134,7 @@ int TabSpectrumWidgetController::init()
 
 int TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(_tab_property, m_dbManager, this, _controlPRM, this);
+	m_rpcClient = new RPCClient(_tabProperty, m_dbManager, this, m_controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
@@ -146,7 +148,7 @@ int TabSpectrumWidgetController::createRPC()
 
 TabsProperty* TabSpectrumWidgetController::get_tab_property()
 {
-	return _tab_property;
+	return _tabProperty;
 }
 
 int TabSpectrumWidgetController::closeRPC()
@@ -205,7 +207,7 @@ int TabSpectrumWidgetController::createTree()
 	return 0;
 }
 
-void TabSpectrumWidgetController::set_indicator(int state)
+void TabSpectrumWidgetController::setIndicator(int state)
 {
 	if (NULL == m_view) {
 		return;
@@ -214,7 +216,7 @@ void TabSpectrumWidgetController::set_indicator(int state)
 	m_view->setIndicatorState(state);
 }
 
-double TabSpectrumWidgetController::get_current_frequency()
+double TabSpectrumWidgetController::getCurrentFrequency()
 {
 	double frequency = 1830;
 
@@ -227,7 +229,7 @@ double TabSpectrumWidgetController::get_current_frequency()
 	return frequency;
 }
 
-void TabSpectrumWidgetController::set_show_controlPRM(bool state)
+void TabSpectrumWidgetController::setShowControlPrm(bool state)
 {
 	/// TODO: update
 	/*switch(state)
@@ -245,14 +247,14 @@ void TabSpectrumWidgetController::set_show_controlPRM(bool state)
 	}*/
 }
 
-void TabSpectrumWidgetController::set_double_clicked(int id, double d1, double d2)
+void TabSpectrumWidgetController::setDoubleClicked(int id, double d1, double d2)
 {
 	emit signalDoubleClicked(id, d1, d2);
 }
 
 
 
-void TabSpectrumWidgetController::set_selected_area(const SpectrumSelection& selection)
+void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selection)
 {
 	double x1 = selection.start.x();
 	double x2 = selection.end.x();
@@ -271,26 +273,13 @@ void TabSpectrumWidgetController::set_selected_area(const SpectrumSelection& sel
 		center = x2 + dx/2;
 	}
 
-	SettingsNode  settingsNode = m_dbManager->getSettingsNode(m_stationName);
-
-	foreach (Property prop, settingsNode.properties) {
-		if (prop.name == DB_SELECTED_PROPERTY) {
-			prop.value = QString::number(dx, 'f', 3);
-			m_dbManager->updateProperty(prop);
-		} else if (prop.name == DB_CENTER_PROPERTY) {
-			prop.value = QString::number(center, 'f', 3);
-			m_dbManager->updateProperty(prop);
-		} else if (prop.name == DB_START_PROPERTY) {
-			prop.value = QString::number(x1, 'f', 3);
-			m_dbManager->updateProperty(prop);
-		} else if (prop.name == DB_STOP_PROPERTY) {
-			prop.value = QString::number(x2, 'f', 3);
-			m_dbManager->updateProperty(prop);
-		}
-	}
+	m_dbManager->updatePropertyValue(m_stationName, DB_SELECTED_PROPERTY, QString::number(dx, 'f', 3));
+	m_dbManager->updatePropertyValue(m_stationName, DB_CENTER_PROPERTY, QString::number(center, 'f', 3));
+	m_dbManager->updatePropertyValue(m_stationName, DB_START_PROPERTY, QString::number(x1, 'f', 3));
+	m_dbManager->updatePropertyValue(m_stationName, DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
 }
 
-void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
+void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 {
 	if (TypeGraphicCommand != type) {
 		return;
@@ -302,7 +291,7 @@ void TabSpectrumWidgetController::set_command(TypeCommand type, IMessage *msg)
 
 ///getting points from rpc (flakon)
 // METHOD IS NOT USED
-void TabSpectrumWidgetController::set_points_rpc(QVector<QPointF> points)
+void TabSpectrumWidgetController::setPointsRpc(QVector<QPointF> points)
 {
 	/*QByteArray outBA;
 	QDataStream stream(&outBA, QIODevice::WriteOnly);
@@ -311,18 +300,18 @@ void TabSpectrumWidgetController::set_points_rpc(QVector<QPointF> points)
 	emit signalGetPointsFromRPCFlakon(outBA);*/
 }
 
-void TabSpectrumWidgetController::set_thershold(double y)
+void TabSpectrumWidgetController::setThreshold(double y)
 {
-	_threshold = y;
+	m_threshold = y;
 }
 
-void TabSpectrumWidgetController::check_status()
+void TabSpectrumWidgetController::checkStatus()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
 	m_tabManager->sendCommand(m_stationName, TypeCommand(TypeGraphicCommand), msg);
 }
 
-void TabSpectrumWidgetController::set_panorama(bool state)
+void TabSpectrumWidgetController::setPanorama(bool state)
 {
 	emit signalPanoramaState(state);
 }
@@ -357,23 +346,11 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 	double panoramaEndValue = 300;
 
 	if (isEnabled) {
-
-		SettingsNode settingsNode =  m_dbManager->getSettingsNode(m_stationName);
-
-		foreach (Property property, settingsNode.properties) {
-			if (DB_PANORAMA_START_PROPERTY == property.name) {
-				panoramaStartValue = property.value.toDouble();
-			}
-			else if (DB_PANORAMA_END_PROPERTY == property.name) {
-				panoramaEndValue = property.value.toDouble();
-			}
-		}
-		m_spectrumDataSource->setPanorama(true, panoramaStartValue, panoramaEndValue);
-
-	} else {
-		m_spectrumDataSource->setPanorama(false);
+		panoramaStartValue = m_dbManager->getPropertyValue(m_stationName, DB_PANORAMA_START_PROPERTY).toDouble();
+		panoramaEndValue = m_dbManager->getPropertyValue(m_stationName, DB_PANORAMA_END_PROPERTY).toDouble();
 	}
 
+	m_spectrumDataSource->setPanorama(isEnabled, panoramaStartValue, panoramaEndValue);
 }
 
 void TabSpectrumWidgetController::readSettings(const QString &settingsFile)
@@ -387,16 +364,54 @@ void TabSpectrumWidgetController::readSettings(const QString &settingsFile)
 	m_rpcHostPort = settings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toInt();
 }
 
-
-void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode &)
+void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode& property)
 {
 }
 
 void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 {
-	if (DB_FREQUENCY_PROPERTY == property.name) {
-		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
+	QString stationName = m_dbManager->getObjectName(property.pid);
+
+	if (stationName != m_stationName){
+		return;
 	}
+
+	Property inProperty = property;
+
+	TypeCommand commandType = TypeUnknownCommand;
+
+	int commandCode = 0;
+
+	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
+		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
+		commandCode = COMMAND_PRM_SET_FREQ;
+		commandType = TypeGraphicCommand;
+	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
+		commandType = TypeGraphicCommand;
+	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_FLAKON_SET_AVARAGE;
+		commandType = TypeGraphicCommand;
+	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
+		commandType = TypePanoramaCommand;
+	} else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
+		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
+		commandType = TypePanoramaCommand;
+	}
+
+	if (0 == commandCode) {
+		return;
+	}
+
+	CommandMessage *msg = new CommandMessage(commandCode, property.value);
+
+	sendCommand(commandType, msg);
+
+	/////////////////////
+	//if (DB_FREQUENCY_PROPERTY == property.name) {
+	//	m_spectrumWidget->setZeroFrequency(property.value.toDouble());
+	//}
 }
 
 void TabSpectrumWidgetController::onCleanSettings()

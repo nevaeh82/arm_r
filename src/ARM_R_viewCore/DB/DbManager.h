@@ -31,7 +31,7 @@ public:
 
 	SettingsNode getSettingsNode(const QString& objectName);
 	bool updateProperty(const Property& property);
-
+	bool updatePropertyValue(const QString &objectName, const QString &propName, const QVariant& value);
 	bool updatePropertyForAllObjects(const QString& propName, const QVariant &value);
 
 	QString getObjectName(const uint id) const;

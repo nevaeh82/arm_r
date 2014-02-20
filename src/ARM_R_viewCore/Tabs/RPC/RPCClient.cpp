@@ -280,5 +280,5 @@ void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att
 
 void RPCClient::rpcSlotServerStatus(bool state)
 {
-	m_parentTab->set_indicator(state);
+	m_parentTab->setIndicator(state);
 }
