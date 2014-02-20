@@ -552,8 +552,9 @@ void RPCServer::rpcSlotSendAtalntDataPos(quint64 client, QByteArray *data)
 {
 #ifdef OLD_ARM_R_SERVER
 	m_serverPeer->call(client, RPC_SLOT_SERVER_ATLANT_POSITION, QVariant::fromValue(*data));
-}
 #endif
+}
+
 
 void RPCServer::rpcSlotSetAtlantFrequency(quint64 client, QByteArray data)
 {

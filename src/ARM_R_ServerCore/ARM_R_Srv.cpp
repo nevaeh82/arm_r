@@ -18,7 +18,7 @@ ARM_R_Srv::ARM_R_Srv()
     qRegisterMetaTypeStreamOperators<QVector<QPointF> >("QVector<QPointF>");
     qRegisterMetaTypeStreamOperators<QByteArray>("QByteArray");
 
-	qRegisterMetaType<QSharedPointer<IMessageOld> > ("QSharedPointer<IMessage>");
+	qRegisterMetaType<QSharedPointer<IMessageOld> > ("QSharedPointer<IMessageOld>");
     qRegisterMetaType<quint32>("quint32");
 
     qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
@@ -97,10 +97,12 @@ ARM_R_Srv::ARM_R_Srv()
 }
 
 ARM_R_Srv::~ARM_R_Srv()
-{/*
+{
+#ifdef OLD_ARM_R_SERVER
     delete _map_station_property;
     delete _atlant_controller;
-	delete _rpc_server;*/
+	delete _rpc_server;
+#endif
 //    delete _router;
 //    delete _subscriber_up;
 //    delete _tcp_controller;
