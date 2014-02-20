@@ -67,11 +67,6 @@ public:
 	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
-	virtual int createRPC();
-	virtual int closeRPC();
-	virtual int createView();
-	virtual int createTree();
-
 	virtual void setIndicator(int state);
 
 	virtual void setShowControlPrm(bool state);
@@ -114,6 +109,10 @@ private:
 	int init();
 	void readSettings(const QString& settingsFile);
 
+	int createRPC();
+	int closeRPC();
+	int createView();
+	int createTree();
 };
 
 #endif // TABSPECTRUMWIDGETCONTROLLER_H
