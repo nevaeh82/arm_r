@@ -1,4 +1,4 @@
-#include "ParserPRM300.h"
+﻿#include "ParserPRM300.h"
 #include <QDebug>
 
 ParserPRM300::ParserPRM300(IRouter *router, int id):
@@ -31,11 +31,11 @@ void ParserPRM300::distruct()
 
 void ParserPRM300::parsing(QByteArray data)
 {
-//    QTextStream(stdout) << trUtf8("� ћС‚ � їСЂ� ё� µ� ј� Ѕ� ё� є� ° � їСЂ� ёС€� »� ё � ґ� °� Ѕ� ЅС‹� µ") << endl;
+//    QTextStream(stdout) << trUtf8("� ћС‚ � їСЂ� ё� µ� ј� Ѕ� ё� є� ° � їСЂ� ёС€� »� ё � ґ� °� Ѕ� ЅС‹� µ") << endl;
 
     _msg.append(data);
 
-    QVector<quint8> aForCrcCount; //� ”� »СЏ � їСЂ� ѕ� І� µСЂ� є� ё CRC8
+    QVector<quint8> aForCrcCount; //� ”� »СЏ � їСЂ� ѕ� І� µСЂ� є� ё CRC8
     QDataStream in(&data, QIODevice::ReadOnly);
     in.setVersion(QDataStream::Qt_4_7);
     quint8 aFirstByte, aLastByte, aCrc;
@@ -115,16 +115,16 @@ void ParserPRM300::parsing(QByteArray data)
 //        QTextStream(stdout) <<  "Ответ о частоте"<< endl;
         quint16 aFreq;
         quint8 aAt1, aAt2, aAt3, aFltr, aFreqA, aFreqB, aFreqC, aFreqFirst, aFreqLast;
-        bool aChangeCRCFlag = false; //� ¤� »� °� і � ѕ� ±СЂ� °С‚� Ѕ� ѕ� № � ·� °� ј� µ� ЅС‹ � І CRC
+        bool aChangeCRCFlag = false; //� ¤� »� °� і � ѕ� ±СЂ� °С‚� Ѕ� ѕ� № � ·� °� ј� µ� ЅС‹ � І CRC
 
         if(aSizeAll != 12)
         {
-            in >> aFreq; //� •СЃ� »� ё aSizeAll=12, С‚� ѕ � і� ґ� µ-С‚� ѕ � ЅСѓ� ¶� Ѕ� ѕ � ґ� µ� »� °С‚СЊ � ѕ� ±СЂ� °С‚� ЅСѓСЋ � ·� °� ј� µ� ЅСѓ СЃ� ї� µС� СЃ� ё� ј� І� ѕ� »� ѕ� І
+            in >> aFreq; //� •СЃ� »� ё aSizeAll=12, С‚� ѕ � і� ґ� µ-С‚� ѕ � ЅСѓ� ¶� Ѕ� ѕ � ґ� µ� »� °С‚СЊ � ѕ� ±СЂ� °С‚� ЅСѓСЋ � ·� °� ј� µ� ЅСѓ СЃ� ї� µС�� СЃ� ё� ј� І� ѕ� »� ѕ� І
         }
         else
         {
-            //� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС� СЃ� ё� ј� І� ѕ� »� ѕ� І � І С‡� °СЃС‚� ѕС‚� µ
-//            QTextStream(stdout) << "� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС� � ё� °� »СЊ� ЅС‹С… СЃ� ё� ј� І� ѕ� »� ѕ� І" << endl;
+            //� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС�� СЃ� ё� ј� І� ѕ� »� ѕ� І � І С‡� °СЃС‚� ѕС‚� µ
+//            QTextStream(stdout) << "� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС�� � ё� °� »СЊ� ЅС‹С… СЃ� ё� ј� І� ѕ� »� ѕ� І" << endl;
 
             in >> aFreqA >> aFreqB >> aFreqC;
             if (aFreqA == (0x5A))
@@ -177,7 +177,7 @@ void ParserPRM300::parsing(QByteArray data)
                 aChangeCRCFlag = true;
             }
 
-            //� ї� µСЂ� µ� І� ѕ� ґ 2С… quint8 � І quint16
+            //� ї� µСЂ� µ� І� ѕ� ґ 2С… quint8 � І quint16
             if (!aChangeCRCFlag)
             {
                 aFreq = 256 * aFreqFirst + aFreqLast;
@@ -195,7 +195,7 @@ void ParserPRM300::parsing(QByteArray data)
         }
         else
         {
-            //� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС� СЃ� ё� ј� І� ѕ� »� ѕ� І � І CRC
+            //� ћ� ±СЂ� °С‚� Ѕ� °СЏ � ·� °� ј� µ� Ѕ� ° СЃ� ї� µС�� СЃ� ё� ј� І� ѕ� »� ѕ� І � І CRC
             in >> aFltr >> aAt2 >> aAt3 >> aFreqA >> aFreqB;
             if (aFreqA == (0x5A))
             {
@@ -216,7 +216,7 @@ void ParserPRM300::parsing(QByteArray data)
 //        QTextStream(stdout) << "Аттенюатор2 " << aAt2 << endl;
 //        QTextStream(stdout) << "Аттенюатор3 " << aAt3 << endl;
 
-            //� џСЂ� ѕ� І� µСЂ� є� ° CRC
+            //� џСЂ� ѕ� І� µСЂ� є� ° CRC
             aForCrcCount.append(_aAddr);
             aForCrcCount.append(_aSize);
             aForCrcCount.append(_aPacketType);
@@ -226,7 +226,7 @@ void ParserPRM300::parsing(QByteArray data)
             aForCrcCount.append(aAt2);
             aForCrcCount.append(aAt3);
 
-            CRCs crc;
+			CRCsOld crc;
             aCrc = crc.calcCRC(aForCrcCount);
 //            QTextStream(stdout) << "Последний байт " << aLastByte << " CRC8 " << aCrc << endl;
 
@@ -298,6 +298,6 @@ void ParserPRM300::_send_prm_status(quint16 freq, quint8 filter, quint8 att1, qu
     ds << att1;
     ds << att2;
 
-    QSharedPointer<IMessage> msg(new Message(_id, PRM_STATUS, ba));
+    QSharedPointer<IMessageOld> msg(new MessageOld(_id, PRM_STATUS, ba));
     _subscriber->data_ready(PRM_STATUS, msg);
 }

@@ -13,6 +13,8 @@ include(../../specs/Solver.pri)
 include(../../specs/protobuf.pri)
 include(../../specs/logger.pri)
 
+INCLUDEPATH += $$PWD
+
 SOURCES += \
 	RPC/RPCServer.cpp \
 	Common/Subscriber.cpp \
@@ -38,6 +40,18 @@ SOURCES += \
 	Flakon/Correction/ZCoord.cpp \
 	Flakon/Server/PServer.cpp \
 	IBDB/DBIBController.cpp \
+    TCP/BaseClasses/BaseTcpClient.cpp \
+    TCP/BaseClasses/BaseTcpDeviceController.cpp \
+    TCP/BaseClasses/BaseTcpDeviceCoder.cpp \
+    TCP/TcpFlakonController.cpp \
+    TCP/TcpFlakonCoder.cpp \
+    TCP/TcpManager.cpp \
+    TCP/TcpPRM300Controller.cpp \
+    TCP/TcpPRM300Coder.cpp \
+    TCP/TcpAtlantController.cpp \
+    TCP/TcpAtlantCoder.cpp \
+    Flakon/CoordinateCounter.cpp \
+    TCP/TcpSettingsManager.cpp
 
 HEADERS += \
 	RPC/RPCServer.h \
@@ -75,3 +89,24 @@ HEADERS += \
 	Flakon/Server/PServer.h \
 	IBDB/nodb_exports.h \
 	IBDB/DBIBController.h \
+    TCP/BaseClasses/BaseTcpClient.h \
+    TCP/Interfaces/ITcpClient.h \
+    TCP/Interfaces/ITcpDeviceCoder.h \
+    TCP/Interfaces/ITcpDeviceController.h \
+    TCP/Interfaces/ITcpReceiver.h \
+    TCP/BaseClasses/BaseTcpDeviceController.h \
+    TCP/BaseClasses/BaseTcpDeviceCoder.h \
+    TCP/TcpFlakonController.h \
+    TCP/TcpFlakonCoder.h \
+    TCP/Interfaces/ITcpManager.h \
+    TCP/TcpManager.h \
+    TCP/TcpPRM300Controller.h \
+    TCP/TcpPRM300Coder.h \
+    TCP/TcpAtlantController.h \
+    TCP/TcpAtlantCoder.h \
+    TCP/TcpDefines.h \
+    TCP/Interfaces/ITcpListener.h \
+    Flakon/CoordinateCounter.h \
+    Flakon/Interfaces/ICoordinateCounter.h \
+    TCP/TcpSettingsManager.h \
+    TCP/Interfaces/ITcpSettingsManager.h

@@ -20,7 +20,11 @@
 
 #include "Flakon/Server/PServer.h"
 
-typedef QSharedPointer<IMessage>    rpc_flakon_msg;
+#include "TCP/TcpManager.h"
+#include "TCP/TcpSettingsManager.h"
+#include "CommonDefines.h"
+
+typedef QSharedPointer<IMessageOld>    rpc_flakon_msg;
 typedef QVector<QPointF>            rpc_send_points_vector;
 typedef QByteArray                  rpc_send_atlant_data;
 
@@ -39,16 +43,20 @@ public:
 
 private:
     RPCServer*          _rpc_server;
-    Router*             _router;
-    Subscriber*         _subscriber_up;
-    TCPController*      _tcp_controller;
-    AtlantController*   _atlant_controller;
 
-    QMap<int, StationProperty* >*    _map_station_property;
+	Router*             _router;
+	Subscriber*         _subscriber_up;
+	TCPController*      _tcp_controller;
+	AtlantController*   _atlant_controller;
 
-    PServer*                        _pserver;
+	QMap<int, StationProperty* >*    _map_station_property;
+
+	PServer*                        _pserver;
 
     static Pw::Logger::ILogger*            _logger;
+
+
+	TcpManager* m_tcpManager;
 
 private:
     void _read_settings();

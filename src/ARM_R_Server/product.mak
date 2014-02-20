@@ -8,6 +8,7 @@ include ../../specs/get-runtime.mak
 include ../../specs/logger.mak
 
 prebuild::
+	$(cp) -ud *.log4qt $(DESTDIR)
 	$(cp) -ud qt.conf $(DESTDIR)
 	$(mkdir) $(DESTDIR)/DB
 	$(cp) -ud DB/db_model.ini $(DESTDIR)/DB

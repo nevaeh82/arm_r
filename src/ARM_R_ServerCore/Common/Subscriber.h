@@ -19,7 +19,7 @@
 #include <PwLogger/PwLogger.h>
 
 
-typedef QSharedPointer<IMessage> rpc_flakon_msg;
+typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
 
 class Subscriber : public QObject, public ISubscriber
 {
@@ -36,7 +36,7 @@ public:
 
     QVector<IClient *> get_subscribers(int type);
 
-    virtual void data_ready(int type, QSharedPointer<IMessage> msg);
+    virtual void data_ready(int type, QSharedPointer<IMessageOld> msg);
 
 
 private:

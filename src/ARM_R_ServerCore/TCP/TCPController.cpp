@@ -1,4 +1,4 @@
-#include "TCPController.h"
+п»ї#include "TCPController.h"
 
 TCPController::TCPController(QObject* parent, IRouter *router):
 	QObject(parent),
@@ -41,7 +41,7 @@ bool TCPController::add_connection(QString host, quint16 port, IRouter *router)
 
         if(_sockets_container.contains(sig_con))
         {
-            QString error = QObject::tr("Соединение ") + host + ":" + port + QObject::tr("уже существует!");
+            QString error = QObject::tr("РЎРѕРµРґРёРЅРµРЅРёРµ ") + host + ":" + port + QObject::tr("СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚!");
             emit add_error(error);
             return false;
         }

@@ -23,10 +23,10 @@ const char *RecognModulation[] =
     "rmQAM16"//			= 17	//QAM16, непонятно чем отличается от QAM ?
 };
 
-ParserFlakon::ParserFlakon(IRouter *router):
-    _type(0),
-    _restLength(0),
-    _corr_threshold(2)
+ParserFlakon::ParserFlakon(IRouter *router) :
+	_type(0),
+	_restLength(0),
+	_corr_threshold(2)
 {
     _router = router;
     _subscriber = router->get_subscriber();
@@ -180,7 +180,7 @@ void ParserFlakon::_send_pointers(QVector<QPointF> vec)
     QDataStream ds(ba, QIODevice::ReadWrite);
     ds << vec;
 
-    QSharedPointer<IMessage> msg(new Message(_header.id, FLAKON_FFT, ba));
+    QSharedPointer<IMessageOld> msg(new MessageOld(_header.id, FLAKON_FFT, ba));
     _subscriber->data_ready(FLAKON_FFT, msg);
 }
 
@@ -190,7 +190,7 @@ void ParserFlakon::m_sendDetectedBandwidth(QVector<QPointF> vec)
 	QDataStream ds(ba, QIODevice::ReadWrite);
 	ds << vec;
 
-	QSharedPointer<IMessage> msg(new Message(_header.id, FLAKON_DETECTED_BANDWIDTH, ba));
+	QSharedPointer<IMessageOld> msg(new MessageOld(_header.id, FLAKON_DETECTED_BANDWIDTH, ba));
 	_subscriber->data_ready(FLAKON_DETECTED_BANDWIDTH, msg);
 }
 
@@ -257,7 +257,7 @@ void ParserFlakon::_send_correlation(quint32 point1, quint32 point2, QVector<QPo
     ds << vec;
 
 
-    QSharedPointer<IMessage> msg(new Message(point1, FLAKON_CORRELATION, ba));
+    QSharedPointer<IMessageOld> msg(new MessageOld(point1, FLAKON_CORRELATION, ba));
     _subscriber->data_ready(FLAKON_CORRELATION, msg);
 }
 

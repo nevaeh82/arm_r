@@ -11,6 +11,8 @@ class IRPC
 		virtual ~IRPC(){}
 
 		virtual quint64 getClientId(IClient* client)      = 0;
+
+	virtual void sendDataByRpc(const QString& signalType, const QByteArray& data) = 0;
 };
 
 #endif // IRPC_H

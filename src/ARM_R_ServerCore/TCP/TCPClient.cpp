@@ -1,4 +1,4 @@
-#include "TCPClient.h"
+п»ї#include "TCPClient.h"
 #include "assert.h"
 
 Pw::Logger::ILogger* TCPClient::_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TCPClient));
@@ -95,7 +95,7 @@ TCPClient::TCPClient(QString host, quint16 port, IRouter *router)
     }
 
     connect(this, SIGNAL(signalSend(QByteArray)), this, SLOT(_slotWrite(QByteArray)));
-    connect(this, SIGNAL(signalPrepareToWrite(QSharedPointer<IMessage>)), this, SLOT(_slotPrepareToWrite(QSharedPointer<IMessage>)));
+    connect(this, SIGNAL(signalPrepareToWrite(QSharedPointer<IMessageOld>)), this, SLOT(_slotPrepareToWrite(QSharedPointer<IMessageOld>)));
 }
 
 TCPClient::~TCPClient()
@@ -118,11 +118,11 @@ void TCPClient::proccess()
     this->connect(socket_, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocketDisplayError(QAbstractSocket::SocketError))/*, Qt::DirectConnection*/);
     this->connect(socket_, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(slotState(QAbstractSocket::SocketState)));
     this->connect(this, SIGNAL(signalReconnection()), this, SLOT(reconnection()), Qt::QueuedConnection);
-    this->socket_->connectToHost(_host, _port);
+	this->socket_->connectToHost(_host, _port);
     if(!socket_->waitForConnected(100))
     {
         QString thiserror;
-        thiserror.append(("Ошибка! Истекло время ожидания подключния!"));
+        thiserror.append(("РћС€РёР±РєР°! РСЃС‚РµРєР»Рѕ РІСЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РїРѕРґРєР»СЋС‡РЅРёСЏ!"));
         emit error(thiserror);
         finish_connection();
     }
@@ -137,17 +137,17 @@ void TCPClient::onSocketDisplayError(QAbstractSocket::SocketError socketError)
     switch(socketError)
     {
     case QAbstractSocket::RemoteHostClosedError:
-        thiserror.append(("Ошибка! Соеденение с пунктом потеряно!"));
+        thiserror.append(("РћС€РёР±РєР°! РЎРѕРµРґРµРЅРµРЅРёРµ СЃ РїСѓРЅРєС‚РѕРј РїРѕС‚РµСЂСЏРЅРѕ!"));
         return;
         break;
     case QAbstractSocket::HostNotFoundError:
-        thiserror.append(("Ошибка! Не удалось подключиться к пункту!"));
+        thiserror.append(("РћС€РёР±РєР°! РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє РїСѓРЅРєС‚Сѓ!"));
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        thiserror.append(("Ошибка! Отказано в соединении"));
+        thiserror.append(("РћС€РёР±РєР°! РћС‚РєР°Р·Р°РЅРѕ РІ СЃРѕРµРґРёРЅРµРЅРёРё"));
         break;
     default:
-        thiserror.append(("Ошибка! Произошла ошибка: " + socket_->errorString()));
+        thiserror.append(("РћС€РёР±РєР°! РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°: " + socket_->errorString()));
         break;
     }
 //    QTextStream(stdout) << thiserror << endl;
@@ -216,17 +216,17 @@ void TCPClient::set_id(int id)
     _id = id;
 }
 
-void TCPClient::send_data(QSharedPointer<IMessage> msg_ptr)
+void TCPClient::send_data(QSharedPointer<IMessageOld> msg_ptr)
 {    
     emit signalPrepareToWrite(msg_ptr);
 }
 
-void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessage> msg_ptr)
+void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessageOld> msg_ptr)
 {
 
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+    IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream streamprm(dd, QIODevice::ReadOnly);
 
@@ -308,7 +308,7 @@ void TCPClient::_slotPrepareToWrite(QSharedPointer<IMessage> msg_ptr)
     _header.length = dd->size();
     QTextStream(stdout) << "length" << _header.length << endl;
 
-    CRCs crc;
+    CRCsOld crc;
     _header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(dd->data()), dd->length());
     _header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&_header), sizeof(ZaviruhaPayloadPacketHeader) - sizeof(short));
 //    QByteArray ba;
@@ -356,7 +356,7 @@ QByteArray TCPClient::_prm_get_freq()
 
     quint8 aStart, aAddr, aSize, aBodyType, aCrc;
 
-    //Запрос о текущей частоте
+    //Р—Р°РїСЂРѕСЃ Рѕ С‚РµРєСѓС‰РµР№ С‡Р°СЃС‚РѕС‚Рµ
     aStart=170;         //0xAA
     aAddr=255;          //0xFF
     aSize=1;            //0x01
@@ -366,7 +366,7 @@ QByteArray TCPClient::_prm_get_freq()
     aForCrcCount.append(aAddr);
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aCrc;
@@ -382,7 +382,7 @@ QByteArray TCPClient::_prm_set_att1(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Установка аттенюатора 1
+    //РЈСЃС‚Р°РЅРѕРІРєР° Р°С‚С‚РµРЅСЋР°С‚РѕСЂР° 1
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -394,12 +394,12 @@ QByteArray TCPClient::_prm_set_att1(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Проверка специальных символов
+    //РџСЂРѕРІРµСЂРєР° СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -420,7 +420,7 @@ QByteArray TCPClient::_prm_set_att2(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Установка аттенюатора 2
+    //РЈСЃС‚Р°РЅРѕРІРєР° Р°С‚С‚РµРЅСЋР°С‚РѕСЂР° 2
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -432,12 +432,12 @@ QByteArray TCPClient::_prm_set_att2(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Проверка специальных символов
+    //РџСЂРѕРІРµСЂРєР° СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -458,7 +458,7 @@ QByteArray TCPClient::_prm_set_filter(int value)
     quint8 aStart, aAddr, aSize, aBodyType, aBodyData, aCrc;
     quint8 aSpecialB;
 
-    //Установка фильтра
+    //РЈСЃС‚Р°РЅРѕРІРєР° С„РёР»СЊС‚СЂР°
     aStart = 170;         //0xAA
     aAddr = 255;          //0xFF
     aSize = 1+1;
@@ -470,12 +470,12 @@ QByteArray TCPClient::_prm_set_filter(int value)
     aForCrcCount.append(aSize);
     aForCrcCount.append(aBodyType);
     aForCrcCount.append(aBodyData);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite << aStart << aAddr << aSize << aBodyType << aBodyData;
 
-    //Проверка специальных символов
+    //РџСЂРѕРІРµСЂРєР° СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
     if (_specialSymb(aCrc, aSpecialB))
     {
         streamWrite << aCrc << aSpecialB;
@@ -495,7 +495,7 @@ QByteArray TCPClient::_prm_set_freq(unsigned short aFreq)
     quint8 aSpecialB;
     aTemp=0;
 
-    //РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹
+    //Р Р€РЎРѓРЎвЂљР В°Р Р…Р С•Р Р†Р С”Р В° РЎвЂЎР В°РЎРѓРЎвЂљР С•РЎвЂљРЎвЂ№
     aStart=170;         //0xAA
     aAddr=255;          //0xFF
     aSize=1+2;
@@ -511,12 +511,12 @@ QByteArray TCPClient::_prm_set_freq(unsigned short aFreq)
 
     aForCrcCount.append(aFreqFirst);
     aForCrcCount.append(aFreqLast);
-    CRCs crc;
+    CRCsOld crc;
     aCrc = crc.calcCRC(aForCrcCount);
 
     streamWrite<<aStart<<aAddr<<aSize<<aBodyType;
 
-    //РџСЂРѕРІРµСЂРєР° СЃРїРµС†РёР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
+    //Р СџРЎР‚Р С•Р Р†Р ВµРЎР‚Р С”Р В° РЎРѓР С—Р ВµРЎвЂ Р С‘Р В°Р В»РЎРЉР Р…РЎвЂ№РЎвЂ¦ РЎРѓР С‘Р СР Р†Р С•Р В»Р С•Р Р†
     if (_specialSymb(aFreqFirst, aSpecialB)) streamWrite<<aFreqFirst<<aSpecialB;
     else streamWrite<<aFreqFirst;
 
@@ -700,7 +700,7 @@ void TCPClient::_send_status(bool state)
     QDataStream ds(ba, QIODevice::ReadWrite);
     ds << state;
 
-    QSharedPointer<IMessage> msg(new Message(_id, CONNECTION_STATUS, ba));
+    QSharedPointer<IMessageOld> msg(new MessageOld(_id, CONNECTION_STATUS, ba));
     _subscriber->data_ready(CONNECTION_STATUS, msg);
 }
 

@@ -3,14 +3,12 @@
 
 #include <QObject>
 
-/// TODO: add port identification
-
 class IRpcListener
 {
 public:
     virtual ~IRpcListener(){}
 
-	virtual void onMethodCalled(const QString& method, const QVariant& arg) = 0;
+	virtual void onMethodCalled(const QString& method, const QVariant& argument) = 0;
 };
 
 

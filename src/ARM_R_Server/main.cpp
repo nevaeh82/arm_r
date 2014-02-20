@@ -8,7 +8,7 @@
 
 #include "ARM_R_Srv.h"
 
-#define PWLOGGERINIT_AGENTCONFNAME ("ARM_R_view.log4qt")
+#define PWLOGGERINIT_AGENTCONFNAME ("ARM_R_server.log4qt")
 
 int main(int argc, char *argv[])
 {

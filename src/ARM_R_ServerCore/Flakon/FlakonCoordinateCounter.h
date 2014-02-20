@@ -28,7 +28,7 @@
 //typedef DataFromRadioLocation    DataFromRadioLocation;
 //typedef DataFromFlacon    DataFromFlacon;
 
-typedef QSharedPointer<IMessage> rpc_flakon_msg;
+typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
 
 
 class FlakonCoordinateCounter : public QObject, public IClient
@@ -43,7 +43,7 @@ public:
     virtual int get_id();
     virtual void set_type(int type);
     virtual int get_type();
-    virtual void send_data(QSharedPointer<IMessage> msg_ptr);
+    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
 
 private slots:
     void _slotGetData(rpc_flakon_msg msg_ptr);
