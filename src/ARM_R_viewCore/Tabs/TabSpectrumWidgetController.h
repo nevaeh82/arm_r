@@ -25,7 +25,7 @@ private:
 
 	int                 m_id;
 	QString             m_stationName;
-	TabsProperty*       _tabProperty;
+	TabsProperty*       m_tabProperty;
 	ICorrelationControllersContainer*  m_correlationControllers;
 
 	IDbManager*          m_dbManager;
@@ -91,7 +91,7 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
-	TabsProperty* get_tab_property();
+	TabsProperty* getTabProperty();
 
 signals:
 	void signalStartRPC();
@@ -104,8 +104,8 @@ signals:
 	void signalPanoramaState(bool state);
 
 private slots:
-	void _slot_get_points_from_rpc(QByteArray points);
-	void _slot_show_controlPRM(bool state);
+	void slotGetPointsFromRpc(QByteArray points);
+	void slotShowControlPrm(bool state);
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);

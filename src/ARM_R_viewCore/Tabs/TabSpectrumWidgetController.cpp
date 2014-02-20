@@ -21,9 +21,9 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop,
 
 	m_mapCorrelationWidget = new QMap<int, IGraphicWidget *>;
 
-	_tabProperty = prop;
-	m_id = _tabProperty->get_id();
-	m_stationName = _tabProperty->get_name();
+	m_tabProperty = prop;
+	m_id = m_tabProperty->get_id();
+	m_stationName = m_tabProperty->get_name();
 
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
@@ -38,7 +38,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(TabsProperty* prop,
 	settingsFile.append("./Tabs/RPC.ini");
 	readSettings(settingsFile);
 
-	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(_slot_get_points_from_rpc(QByteArray)));
+	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 }
@@ -55,7 +55,6 @@ void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
 
 	init();
 }
-
 
 void TabSpectrumWidgetController::activate()
 {
@@ -81,7 +80,6 @@ void TabSpectrumWidgetController::activate()
 
 void TabSpectrumWidgetController::deactivate()
 {
-
 }
 
 QWidget *TabSpectrumWidgetController::getWidget()
@@ -134,7 +132,7 @@ int TabSpectrumWidgetController::init()
 
 int TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(_tabProperty, m_dbManager, this, m_controlPRM, this);
+	m_rpcClient = new RPCClient(m_tabProperty, m_dbManager, this, m_controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
@@ -146,9 +144,9 @@ int TabSpectrumWidgetController::createRPC()
 	return 0;
 }
 
-TabsProperty* TabSpectrumWidgetController::get_tab_property()
+TabsProperty* TabSpectrumWidgetController::getTabProperty()
 {
-	return _tabProperty;
+	return m_tabProperty;
 }
 
 int TabSpectrumWidgetController::closeRPC()
@@ -159,10 +157,6 @@ int TabSpectrumWidgetController::closeRPC()
 
 int TabSpectrumWidgetController::createView()
 {
-	if(NULL == m_view) {
-		return 0;
-	}
-
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
@@ -193,10 +187,6 @@ int TabSpectrumWidgetController::createView()
 
 int TabSpectrumWidgetController::createTree()
 {
-	if (NULL == m_view) {
-		return 0;
-	}
-
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), m_view->getTreeView(), SLOT(expandAll()));
 
 	m_view->getTreeView()->setModel(m_treeModel);
@@ -209,10 +199,6 @@ int TabSpectrumWidgetController::createTree()
 
 void TabSpectrumWidgetController::setIndicator(int state)
 {
-	if (NULL == m_view) {
-		return;
-	}
-
 	m_view->setIndicatorState(state);
 }
 
@@ -252,8 +238,6 @@ void TabSpectrumWidgetController::setDoubleClicked(int id, double d1, double d2)
 	emit signalDoubleClicked(id, d1, d2);
 }
 
-
-
 void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selection)
 {
 	double x1 = selection.start.x();
@@ -288,7 +272,6 @@ void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 	m_rpcClient->setCommand(msg);
 }
 
-
 ///getting points from rpc (flakon)
 // METHOD IS NOT USED
 void TabSpectrumWidgetController::setPointsRpc(QVector<QPointF> points)
@@ -316,20 +299,14 @@ void TabSpectrumWidgetController::setPanorama(bool state)
 	emit signalPanoramaState(state);
 }
 
-
 /// in this thread set points from rpc
-void TabSpectrumWidgetController::_slot_get_points_from_rpc(QByteArray points)
+void TabSpectrumWidgetController::slotGetPointsFromRpc(QByteArray points)
 {
 	//	_spectrumData->set_data(points, false);
 }
 
-
-void TabSpectrumWidgetController::_slot_show_controlPRM(bool state)
+void TabSpectrumWidgetController::slotShowControlPrm(bool state)
 {
-	if (NULL ==m_view) {
-		return;
-	}
-
 	m_view->getSpectrumWidget()->setControlPrmState(state);
 }
 
