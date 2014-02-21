@@ -182,14 +182,8 @@ void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selec
 	double x1 = selection.start.x() / 1000;
 	double x2 = selection.end.x() / 1000;
 
-	double dx = abs(x1 - x2);
-	double center;
-
-	if(x2 >= x1) {
-		center = x1 + dx / 2;
-	} else {
-		center = x2 + dx / 2;
-	}
+	double dx = qAbs(x1 - x2);
+	double center = qMax(x1, x2) + dx / 2;
 
 	m_dbManager->updatePropertyValue(m_station->getName(), DB_SELECTED_PROPERTY, QString::number(dx, 'f', 3));
 	m_dbManager->updatePropertyValue(m_station->getName(), DB_CENTER_PROPERTY, QString::number(center, 'f', 3));

@@ -34,14 +34,11 @@ private:
 
 	ControlPRM*         m_controlPRM;
 
-	QPixmap*            m_pmRoundRed;
-	QPixmap*            m_pmRoundGreen;
 	QLabel*             m_indicatorLabel;
 
 	double              m_threshold;
 	QString m_rpcHostAddress;
 	quint16 m_rpcHostPort;
-
 
 public:
 	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, IDbManager*, ITabManager*, QObject *parent = 0);
