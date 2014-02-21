@@ -108,8 +108,15 @@ FORMS += \
     AtlantTabWidget.ui \
     Tabs/CommonSpectrumTabWidget.ui \
     SpectrumWidget.ui
+
+
+RESOURCES += \
+        translations.qrc
+
+TRANSLATIONS += ARM-R_en.ts\
+                ARM-R_ru.ts
 	
-LIBS += -luser32
+#LIBS += -luser32
 
 DEFINES += UNICODE
 DEFINES += _UNICODE

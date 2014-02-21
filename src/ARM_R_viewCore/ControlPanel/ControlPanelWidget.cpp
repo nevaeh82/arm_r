@@ -10,7 +10,7 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(autoSearchCheckedSignal(bool)));
 	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SIGNAL(panoramaCheckedSignal(bool)));
 	connect(ui->commonFrequencyPB, SIGNAL(clicked()), this, SLOT(onSetCommonFrequencySlot()));
-	connect(ui->bandWidthPB, SIGNAL(clicked()), this, SLOT(onSetBandWidthSlot()));
+	connect(ui->panoramaPB, SIGNAL(clicked()), this, SLOT(onSetBandWidthSlot()));
 }
 
 ControlPanelWidget::~ControlPanelWidget()

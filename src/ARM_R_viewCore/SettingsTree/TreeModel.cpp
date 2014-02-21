@@ -282,21 +282,26 @@ void TreeModel::setStationsList(const QStringList &stationsList)
 
 QString TreeModel::getTranslateItemNameFromReal(const QString& itemName) const
 {
-	if (itemName == "KTP") {
-		return tr("KTP");
-	}
-	else if (itemName == "Phoenix") {
-		return tr("Phoenix");
-	}
-	else if (itemName == "RoatingAntenna") {
-		return tr("RoatingAntenna");
-	}
-	else if (itemName == "Ip") {
-		return tr("Ip");
-	}
-	else if (itemName == "Frequency") {
+	if (itemName == "Frequency") {
 		return tr("Frequency");
+	} else if (itemName == "Selected") {
+		return tr("Selected");
+	} else if (itemName == "Center") {
+		return tr("Center");
+	} else if (itemName == "Start") {
+		return tr("Start");
+	} else if (itemName == "Stop") {
+		return tr("Stop");
+	} else if (itemName == "Averaging") {
+		return tr("Averaging");
+	} else if (itemName == "Leading OP") {
+		return tr("Leading OP");
+	} else if (itemName == "Panorama start") {
+		return tr("Panorama start");
+	} else if (itemName == "Panorama end") {
+		return tr("Panorama end");
 	}
+
 	return itemName;
 }
 

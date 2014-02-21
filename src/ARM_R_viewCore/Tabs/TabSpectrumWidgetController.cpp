@@ -387,9 +387,6 @@ void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode &)
 
 void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 {
-	if (DB_FREQUENCY_PROPERTY == property.name) {
-		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
-	}
 }
 
 void TabSpectrumWidgetController::onCleanSettings()

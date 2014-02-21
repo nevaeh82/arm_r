@@ -93,7 +93,7 @@
       <number>7000</number>
      </property>
      <property name="value">
-      <number>1820</number>
+      <number>300</number>
      </property>
     </widget>
    </item>
@@ -119,14 +119,14 @@
       <number>7000</number>
      </property>
      <property name="value">
-      <number>1840</number>
+      <number>340</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="bandWidthPB">
+    <widget class="QPushButton" name="panoramaPB">
      <property name="text">
-      <string>Set bandwidth</string>
+      <string>Set panorama</string>
      </property>
     </widget>
    </item>

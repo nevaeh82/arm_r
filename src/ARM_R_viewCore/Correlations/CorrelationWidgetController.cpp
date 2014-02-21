@@ -29,6 +29,8 @@ void CorrelationWidgetController::appendView(CorrelationWidget *view)
 Q_DECLARE_METATYPE(float*)
 void CorrelationWidgetController::onDataArrived(const QString &method, const QVariant &arg)
 {
+	Q_UNUSED(method);
+
 	QList<QVariant> list = arg.toList();
 	float* spectrum = list.at(0).value<float*>();
 	float* spectrumPeakHold = (float*)list.at(1).value<float*>();
