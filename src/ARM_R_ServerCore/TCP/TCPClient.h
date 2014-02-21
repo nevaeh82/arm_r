@@ -53,7 +53,7 @@ public:
     virtual int  get_id();
     virtual void set_type(int type);
     virtual int get_type();
-    virtual void send_data(QSharedPointer<IMessage> msg_ptr);
+    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
 
 
 
@@ -120,7 +120,7 @@ signals:
 
   void signalPing(bool);
 
-  void signalPrepareToWrite(QSharedPointer<IMessage> msg_ptr);
+  void signalPrepareToWrite(QSharedPointer<IMessageOld> msg_ptr);
 
 
 public slots:
@@ -132,7 +132,7 @@ public slots:
 
 private slots:
   void _slotWrite(QByteArray data);
-  void _slotPrepareToWrite(QSharedPointer<IMessage> msg_ptr);
+  void _slotPrepareToWrite(QSharedPointer<IMessageOld> msg_ptr);
 
 private slots:
      void onSocketConnected();

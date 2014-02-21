@@ -29,7 +29,7 @@ private:
 	bool	m_autoSearch;
 	double	m_current_frequency;
 
-	int	m_id;
+	quint32	m_id;
 	float*	m_spectrumPeakHold;
 	float*	m_spectrumPeakHoldCorr;
 
@@ -68,6 +68,7 @@ public:
 	QWidget* getWidget() const;
 
 	bool isGraphicVisible();
+	quint32 getId();
 	void setZeroFrequency(double val);
 
 	void setAutoSearch(bool);

@@ -1,4 +1,4 @@
-#ifndef SOLVERGENERAL_H
+п»ї#ifndef SOLVERGENERAL_H
 #define SOLVERGENERAL_H
 
 
@@ -15,7 +15,7 @@
 class SolverGeo2d;
 class SolverGeo3d;
 
-//получаемые данные
+//РїРѕР»СѓС‡Р°РµРјС‹Рµ РґР°РЅРЅС‹Рµ
 struct DataFromFlacon;
 struct DataFromRadioLocation;
 struct CopyDataFromRadioLocation;
@@ -27,63 +27,63 @@ class SOLVERSHARED_EXPORT Solver:public QObject
 public:
     Solver(const SolverType type=MANUAL_AND_AUTO_HEIGH);
 
-    //задать зону ответственности
+    //Р·Р°РґР°С‚СЊ Р·РѕРЅСѓ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕСЃС‚Рё
     void SetAreaOfResponsibility(const QPointF& bottomLeft,
                                  const QPointF& topRight,const double H=-1.0);
 
-    //задать длину выходных данных
+    //Р·Р°РґР°С‚СЊ РґР»РёРЅСѓ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
     void SetOutDataLength(const int length);
 
-    //задать количество отсчетов, необходимое для определения того,
-    //движется источник или стоит
+    //Р·Р°РґР°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РѕС‚СЃС‡РµС‚РѕРІ, РЅРµРѕР±С…РѕРґРёРјРѕРµ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ С‚РѕРіРѕ,
+    //РґРІРёР¶РµС‚СЃСЏ РёСЃС‚РѕС‡РЅРёРє РёР»Рё СЃС‚РѕРёС‚
     void SetStateAnalizeCount(const int count);
 
-    //Задать высоту, на которой летить цель
+    //Р—Р°РґР°С‚СЊ РІС‹СЃРѕС‚Сѓ, РЅР° РєРѕС‚РѕСЂРѕР№ Р»РµС‚РёС‚СЊ С†РµР»СЊ
     void SetHeighApriori(double heigh);
 
-    //Очистить солвер
+    //РћС‡РёСЃС‚РёС‚СЊ СЃРѕР»РІРµСЂ
     void Clear();
 
     ~Solver();
 
 public slots:
-    //Получить данные
+    //РџРѕР»СѓС‡РёС‚СЊ РґР°РЅРЅС‹Рµ
     void GetData(const DataFromFlacon& data);
-    //посчитать одну порцию данных
+    //РїРѕСЃС‡РёС‚Р°С‚СЊ РѕРґРЅСѓ РїРѕСЂС†РёСЋ РґР°РЅРЅС‹С…
     void GetOneData(const DataFromFlacon& data);
 
 signals:
-    //Отправка рассчитанных данных траектории
+    //РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё
     void signal_sendDataFromRadioLocation(const DataFromRadioLocation& allData);
-    //Отправка рассчитанных данных траектории с автоматическим определением высоты
+    //РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹
     void signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation& allData);
-    //отправка одной порции расчитанных данных
+    //РѕС‚РїСЂР°РІРєР° РѕРґРЅРѕР№ РїРѕСЂС†РёРё СЂР°СЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С…
     void signal_sendOneDataFromRadioLocation(const DataFromRadioLocation& oneData);
 
 private slots:
-    //Получение данных расчета траектории с 2d солвера с ручным заданием высоты
+    //РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… СЂР°СЃС‡РµС‚Р° С‚СЂР°РµРєС‚РѕСЂРёРё СЃ 2d СЃРѕР»РІРµСЂР° СЃ СЂСѓС‡РЅС‹Рј Р·Р°РґР°РЅРёРµРј РІС‹СЃРѕС‚С‹
     void getDataFromRadioLocation2dManualHeigh(const DataFromRadioLocation& allData);
-    //Получение данных расчета траектории с 2d солвера с автоматическим заданием высоты
+    //РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… СЂР°СЃС‡РµС‚Р° С‚СЂР°РµРєС‚РѕСЂРёРё СЃ 2d СЃРѕР»РІРµСЂР° СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј Р·Р°РґР°РЅРёРµРј РІС‹СЃРѕС‚С‹
     void getDataFromRadioLocation2dAutoHeigh(const DataFromRadioLocation& allData);
-    //Получение данных расчета траектории  с 3d солвера
+    //РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… СЂР°СЃС‡РµС‚Р° С‚СЂР°РµРєС‚РѕСЂРёРё  СЃ 3d СЃРѕР»РІРµСЂР°
     void getDataFromRadioLocation3d(const DataFromRadioLocation& allData);
-    //Получение одной порции данных c расчета без истории с 2d солвера
+    //РџРѕР»СѓС‡РµРЅРёРµ РѕРґРЅРѕР№ РїРѕСЂС†РёРё РґР°РЅРЅС‹С… c СЂР°СЃС‡РµС‚Р° Р±РµР· РёСЃС‚РѕСЂРёРё СЃ 2d СЃРѕР»РІРµСЂР°
     void getOneDataFromRadioLocation2d(const DataFromRadioLocation& oneData);
-    //Получение одной порции данных c расчета без истории с 3d солвера
+    //РџРѕР»СѓС‡РµРЅРёРµ РѕРґРЅРѕР№ РїРѕСЂС†РёРё РґР°РЅРЅС‹С… c СЂР°СЃС‡РµС‚Р° Р±РµР· РёСЃС‚РѕСЂРёРё СЃ 3d СЃРѕР»РІРµСЂР°
     void getOneDataFromRadioLocation3d(const DataFromRadioLocation& oneData);
 private:
-    mutable SolverType solverType_;//тип солвера
-    SolverGeo3d* solverGeo3d_;//солвер для трехмерной задачи
-    //солвер для двумерной задачи с ручным заданием высоты
+    mutable SolverType solverType_;//С‚РёРї СЃРѕР»РІРµСЂР°
+    SolverGeo3d* solverGeo3d_;//СЃРѕР»РІРµСЂ РґР»СЏ С‚СЂРµС…РјРµСЂРЅРѕР№ Р·Р°РґР°С‡Рё
+    //СЃРѕР»РІРµСЂ РґР»СЏ РґРІСѓРјРµСЂРЅРѕР№ Р·Р°РґР°С‡Рё СЃ СЂСѓС‡РЅС‹Рј Р·Р°РґР°РЅРёРµРј РІС‹СЃРѕС‚С‹
     SolverGeo2d* solverGeo2dManualHeigh_;
-    //солвер для двумерной задачи с автоматическим определением высоты
+    //СЃРѕР»РІРµСЂ РґР»СЏ РґРІСѓРјРµСЂРЅРѕР№ Р·Р°РґР°С‡Рё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹
     SolverGeo2d* solverGeo2dAutoHeigh_;
-    //рассчитанные данные с использованием истории, с ручным заданием высоты
+    //СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РёСЃС‚РѕСЂРёРё, СЃ СЂСѓС‡РЅС‹Рј Р·Р°РґР°РЅРёРµРј РІС‹СЃРѕС‚С‹
     CopyDataFromRadioLocation* dataManualHeigh_;
-    //рассчитанные данные с использованием истории, с автоматическим определением высоты
+    //СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј РёСЃС‚РѕСЂРёРё, СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹
     CopyDataFromRadioLocation* dataAutoHeigh_;
     std::tuple<QTime,double,double> lastHeighTuple_;
-    DataFromRadioLocation* one_data_;//рассчитанные данные без использования истории
+    DataFromRadioLocation* one_data_;//СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ Р±РµР· РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёСЃС‚РѕСЂРёРё
     double heighApriori_;
 };
 

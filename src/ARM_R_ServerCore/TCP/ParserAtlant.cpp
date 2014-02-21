@@ -76,7 +76,7 @@ void ParserAtlant::_completeMsg()
         ds << ad_struct.motionConfidence;
 
         ///costil in id of message
-        QSharedPointer<IMessage> msg(new Message(6, ATLANT_DIRECTION, ba));
+        QSharedPointer<IMessageOld> msg(new MessageOld(6, ATLANT_DIRECTION, ba));
         _subscriber->data_ready(ATLANT_DIRECTION, msg);
     }
     else if (type == Atlant_Position_MsgA)
@@ -103,7 +103,7 @@ void ParserAtlant::_completeMsg()
         ds << ad_struct.quality;
 
         ///costil in id of message
-        QSharedPointer<IMessage> msg(new Message(6, ATLANT_POSITION, ba));
+        QSharedPointer<IMessageOld> msg(new MessageOld(6, ATLANT_POSITION, ba));
         _subscriber->data_ready(ATLANT_POSITION, msg);
     }
 

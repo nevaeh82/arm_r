@@ -1,6 +1,6 @@
 #include "CRCs.h"
 
-const char CRCs::_magic[] = {0xFF, 0xEE, 0xCC, 0xFF};
+const char CRCsOld::_magic[] = {0xFF, 0xEE, 0xCC, 0xFF};
 
 const unsigned char Crc8Table[256] = {
     0x00, 0x31, 0x62, 0x53, 0xC4, 0xF5, 0xA6, 0x97,
@@ -71,11 +71,11 @@ const unsigned short Crc16Table[256] = {
     0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 };
 
-CRCs::CRCs()
+CRCsOld::CRCsOld()
 {
 }
 
-unsigned char CRCs::crc8(unsigned char *data, int len)
+unsigned char CRCsOld::crc8(unsigned char *data, int len)
 {
     unsigned char crc = 0xFF;
     int i = 0;
@@ -86,7 +86,7 @@ unsigned char CRCs::crc8(unsigned char *data, int len)
     return crc;
 }
 
-unsigned short CRCs::crc16(unsigned char *data, int len)
+unsigned short CRCsOld::crc16(unsigned char *data, int len)
 {
     int i = 0;
     unsigned short crc = 0xFFFF;
@@ -97,7 +97,7 @@ unsigned short CRCs::crc16(unsigned char *data, int len)
     return crc;
 }
 
-quint8 CRCs::calcCRC(QVector<quint8> aForCrcCount)
+quint8 CRCsOld::calcCRC(QVector<quint8> aForCrcCount)
 {
     int i, aSize;
     quint8 c = 0;

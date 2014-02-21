@@ -67,7 +67,7 @@ int PServer::get_type()
     return _type;
 }
 
-void PServer::send_data(QSharedPointer<IMessage> msg_ptr)
+void PServer::send_data(QSharedPointer<IMessageOld> msg_ptr)
 {
     emit signalGetData(msg_ptr);
 }
@@ -112,7 +112,7 @@ void PServer::_slotGetData(rpc_flakon_msg msg_ptr)
 {
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+    IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
     QDataStream ds(*dd);
 

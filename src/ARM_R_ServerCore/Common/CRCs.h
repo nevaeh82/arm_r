@@ -1,13 +1,13 @@
-#ifndef CRCS_H
-#define CRCS_H
+#ifndef CRCS_OLD_H
+#define CRCS_OLD_H
 
 #include <QVector>
 
 /// all implementaion of count checksum
-class CRCs
+class CRCsOld
 {
 public:
-    CRCs();
+	CRCsOld();
 
 public:
         unsigned char crc8(unsigned char *data, int len);
@@ -19,4 +19,4 @@ private:
         static const char             _magic[];
 };
 
-#endif // CRCS_H
+#endif // CRCS_OLD_H

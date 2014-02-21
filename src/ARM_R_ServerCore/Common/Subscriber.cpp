@@ -95,7 +95,7 @@ QVector<IClient *> Subscriber::get_subscribers(int type)
 
 
 /// signal data ready in some type
-void Subscriber::data_ready(int type, QSharedPointer<IMessage> msg_ptr)
+void Subscriber::data_ready(int type, QSharedPointer<IMessageOld> msg_ptr)
 {
     emit signalGetData(type, msg_ptr);
 }
@@ -104,7 +104,7 @@ void Subscriber::_slotGetData(int type, rpc_flakon_msg msg_ptr)
 {
     int type1 = 1;
     int id = 0;
-    IMessage *f = (msg_ptr.data());
+    IMessageOld *f = (msg_ptr.data());
     QByteArray* dd = f->get(id, type1);
 
 //    _mux.lock();

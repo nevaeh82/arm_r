@@ -31,17 +31,26 @@
 #include "Rpc/RpcDefines.h"
 #include "Rpc/RpcServerBase.h"
 
+#include "CommonDefines.h"
+
 class RPCServer : public RpcServerBase, public IRPC
 {
     Q_OBJECT
 public:
-	RPCServer(IRouter* router, QObject *parent = 0);
+#ifdef OLD_ARM_R_SERVER
+	RPCServer(IRouter* router, QObject* parent = 0);
+#else
+	RPCServer(/*IRouter* router,*/ QObject *parent = 0);
+#endif
+
     ~RPCServer();
 
 public:
 	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
 
 	virtual quint64 getClientId(IClient* client);
+
+	virtual void sendDataByRpc(const QString& signalType, const QByteArray& data);
 
 private slots:
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
@@ -105,6 +114,16 @@ private:
 
 signals:
     void finished();
+
+	/// Rpc signals
+	void serverSendPointsRpcSignal(QByteArray);
+	void serverSendDetectedBandwidthRpcSignal(QByteArray);
+	void serverSendCorrelationRpcSignal(uint, uint, QByteArray);
+	void serverSendAtlantDirectionRpcSignal(QByteArray);
+	void serverSendAtlantPositionRpcSignal(QByteArray);
+	void serverSendPrmStatusRpcSignal(int, int, int, int);
+	void serverSendBplaDefRpcSignal(QByteArray);
+	void serverSendBplaDefAutoRpcSignal(QByteArray);
 
 public slots:
     void aboutToQuitApp();

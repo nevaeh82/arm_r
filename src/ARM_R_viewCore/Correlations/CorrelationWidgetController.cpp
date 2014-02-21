@@ -16,6 +16,11 @@ bool CorrelationWidgetController::isGraphicVisible()
 	return m_view->isVisible();
 }
 
+quint32 CorrelationWidgetController::getId()
+{
+	return 0;
+}
+
 void CorrelationWidgetController::setZeroFrequency(double)
 {
 }
