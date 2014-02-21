@@ -12,12 +12,17 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	m_rpcClient = NULL;
 	m_treeModel = NULL;
 	m_dbManager = NULL;
+	m_controlPRM = NULL;
+	m_indicatorLabel = NULL;
+
+	m_spectrumDataSource = NULL;
+	m_spectrumWidget = NULL;
 
 	m_threshold = -1;
-	m_correlationControllers = correlationControllers;
-	m_tabManager = tab_manager;
 
 	m_station = station;
+	m_correlationControllers = correlationControllers;
+	m_tabManager = tab_manager;
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
 
