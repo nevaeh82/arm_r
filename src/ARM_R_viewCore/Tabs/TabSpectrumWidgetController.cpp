@@ -43,8 +43,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
-	emit signalStopRPC();
-	closeRPC();
 }
 
 void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
@@ -142,17 +140,6 @@ int TabSpectrumWidgetController::createRPC()
 	return 0;
 }
 
-IStation* TabSpectrumWidgetController::getTabProperty()
-{
-	return m_station;
-}
-
-int TabSpectrumWidgetController::closeRPC()
-{
-	emit signalFinishRPC();
-	return 0;
-}
-
 int TabSpectrumWidgetController::createView()
 {
 	for(int i = 0; i < m_correlationControllers->count(); i++){
@@ -216,19 +203,7 @@ double TabSpectrumWidgetController::getCurrentFrequency()
 void TabSpectrumWidgetController::setShowControlPrm(bool state)
 {
 	/// TODO: update
-	/*switch(state)
-	{
-	case true:
-		_dock_controlPRM->show();
-		break;
-	case false:
-		_dock_controlPRM->hide();
-		break;
-	default:
-		_dock_controlPRM->show();
-		break;
-
-	}*/
+	//_dock_controlPRM->show();
 }
 
 void TabSpectrumWidgetController::setDoubleClicked(int id, double d1, double d2)
@@ -238,27 +213,24 @@ void TabSpectrumWidgetController::setDoubleClicked(int id, double d1, double d2)
 
 void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selection)
 {
-	double x1 = selection.start.x();
-	double x2 = selection.end.x();
+	/// To HZ
+	double x1 = selection.start.x() / 1000;
+	double x2 = selection.end.x() / 1000;
 
-	/// Ho HZ
-	x1 /= 1000;
-	x2 /= 1000;
-	double dx;
+	double dx = abs(x1 - x2);
 	double center;
 
 	if(x2 >= x1) {
-		dx = x2 - x1;
-		center = x1 + dx/2;
+		center = x1 + dx / 2;
 	} else {
-		dx = x1 - x2;
-		center = x2 + dx/2;
+		center = x2 + dx / 2;
 	}
 
 	m_dbManager->updatePropertyValue(m_station->getName(), DB_SELECTED_PROPERTY, QString::number(dx, 'f', 3));
 	m_dbManager->updatePropertyValue(m_station->getName(), DB_CENTER_PROPERTY, QString::number(center, 'f', 3));
 	m_dbManager->updatePropertyValue(m_station->getName(), DB_START_PROPERTY, QString::number(x1, 'f', 3));
-	m_dbManager->updatePropertyValue(m_station->getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));}
+	m_dbManager->updatePropertyValue(m_station->getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
+}
 
 void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 {
@@ -296,7 +268,8 @@ void TabSpectrumWidgetController::setPanorama(bool state)
 	emit signalPanoramaState(state);
 }
 
-/// in this thread set points from rpc
+/// in this thread set points from rpc (flakon)
+// METHOD IS NOT USED
 void TabSpectrumWidgetController::slotGetPointsFromRpc(QByteArray points)
 {
 	//	_spectrumData->set_data(points, false);
@@ -321,7 +294,8 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 
 	if (isEnabled) {
 		panoramaStartValue = m_dbManager->getPropertyValue(m_station->getName(), DB_PANORAMA_START_PROPERTY).toDouble();
-		panoramaEndValue = m_dbManager->getPropertyValue(m_station->getName(), DB_PANORAMA_END_PROPERTY).toDouble();	}
+		panoramaEndValue = m_dbManager->getPropertyValue(m_station->getName(), DB_PANORAMA_END_PROPERTY).toDouble();
+	}
 
 	m_spectrumDataSource->setPanorama(isEnabled, panoramaStartValue, panoramaEndValue);
 }
@@ -380,11 +354,6 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	CommandMessage *msg = new CommandMessage(commandCode, property.value);
 
 	sendCommand(commandType, msg);
-
-	/////////////////////
-	//if (DB_FREQUENCY_PROPERTY == property.name) {
-	//	m_spectrumWidget->setZeroFrequency(property.value.toDouble());
-	//}
 }
 
 void TabSpectrumWidgetController::onCleanSettings()

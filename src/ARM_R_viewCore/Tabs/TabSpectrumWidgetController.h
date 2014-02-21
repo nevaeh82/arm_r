@@ -85,21 +85,15 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
-	IStation *getTabProperty();
-
 private:
 	int init();
 	void readSettings(const QString& settingsFile);
 
 	int createRPC();
-	int closeRPC();
 	int createView();
 	int createTree();
 
 signals:
-	void signalStartRPC();
-	void signalStopRPC();
-	void signalFinishRPC();
 	void signalGetPointsFromRPCFlakon(QByteArray points);
 	void signalChangeIndicator(int state);
 	void signalDoubleClicked(int id, double, double);
