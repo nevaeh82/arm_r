@@ -5,14 +5,13 @@
 #include <QVariant>
 #include "Interfaces/IController.h"
 #include "Interfaces/ICorrelationWidget.h"
-#include "Interfaces/IDataSourceListener.h"
 
 #include "modules/gui/multi_graphics/components_relation.h"
 #include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
 class CorrelationWidget;
 
-class CorrelationWidgetController : public QObject, public ICorrelationWidget, public IController<CorrelationWidget>, public IDataSourceListener
+class CorrelationWidgetController : public QObject, public ICorrelationWidget, public IController<CorrelationWidget>
 {
 	Q_OBJECT
 private:

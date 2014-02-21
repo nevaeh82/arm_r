@@ -54,6 +54,18 @@ bool DbManager::updateProperty(const Property &property)
 	return true;
 }
 
+bool DbManager::updatePropertyValue(const QString &objectName, const QString &propName, const QVariant &value)
+{
+	Property prop = getProperty(objectName, propName);
+
+	if (INVALID_INDEX == prop.id) {
+		return false;
+	}
+
+	prop.value = value;
+	return updateProperty(prop);
+}
+
 bool DbManager::updatePropertyForAllObjects(const QString &propName, const QVariant& value)
 {
 	ObjectsList objects = m_dbController->getAllObjects();

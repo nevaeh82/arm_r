@@ -33,13 +33,15 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	m_correlationControllers->init(m_stationsMap.count() - 1);
 
-	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
+	commonTabSpectrumWidget->setDbManager(m_dbManager);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
 	foreach (Station* station, m_stationsMap) {
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(station, m_correlationControllers, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
+		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
+		tabController->setDbManager(m_dbManager);
 		tabController->appendView(tabSpectrumWidget);
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
@@ -66,7 +68,6 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
-
 
 	AtlantTabWidget* atlant = new AtlantTabWidget(m_tabWidget);
 	m_tabWidget->addTab(atlant, tr("Atlant"));
@@ -97,7 +98,7 @@ void TabManager::sendCommand(const QString &stationName, TypeCommand type, IMess
 	///TODO: update in future
 
 	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
-	tabController1->set_command(type, msg);
+	tabController1->sendCommand(type, msg);
 }
 
 void TabManager::setActiveTab(const int id)
@@ -169,54 +170,6 @@ void TabManager::checkStatus()
 		it.value()->check_status();
 	}*/
 }
-
-
-void TabManager::onSettingsNodeChanged(const SettingsNode &)
-{
-}
-
-void TabManager::onPropertyChanged(const Property & property)
-{
-
-	Property inProperty = property;
-
-	TypeCommand commandType = TypeUnknownCommand;
-
-	int commandCode = 0;
-
-	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_PRM_SET_FREQ;
-		commandType = TypeGraphicCommand;
-	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
-		commandType = TypeGraphicCommand;
-	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_AVARAGE;
-		commandType = TypeGraphicCommand;
-	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
-		commandType = TypePanoramaCommand;
-	} else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
-		commandType = TypePanoramaCommand;
-	}
-
-	if (0 == commandCode) {
-		return;
-	}
-
-	CommandMessage *msg = new CommandMessage(commandCode, property.value);
-
-	QString stationName = m_dbManager->getObjectName(property.pid);
-
-	/// TODO: update
-	sendCommand(stationName, commandType, msg);
-}
-
-void TabManager::onCleanSettings()
-{
-}
-
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
 {

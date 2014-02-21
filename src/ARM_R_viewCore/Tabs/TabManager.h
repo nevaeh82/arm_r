@@ -17,19 +17,15 @@
 #include "TabSpectrumWidget.h"
 
 #include "Interfaces/IDBManager.h"
-//#include "SettingsTree/TreeModel.h"
-
 #include "Interfaces/ITabManager.h"
+#include "Interfaces/IControlPanelListener.h"
 
 #include "TabSpectrumWidgetController.h"
-
-#include "Interfaces/IDbChangedListener.h"
-#include "Interfaces/IControlPanelListener.h"
 
 /// ATLANT
 #include "AtlantTabWidget.h"
 
-class TabManager: public QObject, public ITabManager, public IDbChangedListener, public IControlPanelListener
+class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
 	Q_OBJECT
 
@@ -56,10 +52,6 @@ public:
 	virtual QString getStationName(const int id);
 	virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
 	virtual void setActiveTab(const int id);
-
-	virtual void onSettingsNodeChanged(const SettingsNode &);
-	virtual void onPropertyChanged(const Property &);
-	virtual void onCleanSettings();
 
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);

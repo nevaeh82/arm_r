@@ -6,7 +6,7 @@
 #include "SpectrumWidget.h"
 
 #include "Interfaces/ICorrelationControllersContainer.h"
-#include "Abstracts/ITabWidget.h"
+#include "Interfaces/ITabWidget.h"
 
 #include "SettingsTree/TreeModel.h"
 
@@ -31,7 +31,7 @@ private:
 
 
 public:
-	explicit CommonSpectrumTabWidget(IDbManager *dbManager, QWidget *parent = 0);
+	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
 	~CommonSpectrumTabWidget();
 
 	//void insertSpectrumWidget(GraphicWidget* widget);
@@ -47,6 +47,8 @@ public:
 
 	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual TypeTabWidgetEnum getWidgetType() const;
+
+	virtual void setDbManager(IDbManager* dbManager);
 
 	QLabel* getIndicator();
 

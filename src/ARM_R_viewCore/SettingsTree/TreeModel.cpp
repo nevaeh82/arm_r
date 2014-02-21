@@ -9,8 +9,6 @@ TreeModel::TreeModel(IDbManager *dbManager, const QStringList &headers, QObject 
 {
 	m_dbManager = dbManager;
 
-	m_dbManager = dbManager;
-
 	m_headersList= headers;
 
 	m_rootItem = new TreeItem(NULL);
