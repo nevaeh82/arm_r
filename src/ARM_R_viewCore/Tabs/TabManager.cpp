@@ -171,53 +171,6 @@ void TabManager::checkStatus()
 	}*/
 }
 
-
-void TabManager::onSettingsNodeChanged(const SettingsNode &)
-{
-}
-
-void TabManager::onPropertyChanged(const Property & property)
-{
-	/*Property inProperty = property;
-
-	TypeCommand commandType = TypeUnknownCommand;
-
-	int commandCode = 0;
-
-	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_PRM_SET_FREQ;
-		commandType = TypeGraphicCommand;
-	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
-		commandType = TypeGraphicCommand;
-	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_AVARAGE;
-		commandType = TypeGraphicCommand;
-	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
-		commandType = TypePanoramaCommand;
-	} else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
-		commandType = TypePanoramaCommand;
-	}
-
-	if (0 == commandCode) {
-		return;
-	}
-
-	CommandMessage *msg = new CommandMessage(commandCode, property.value);
-
-	QString stationName = m_dbManager->getObjectName(property.pid);
-
-	/// TODO: update
-	sendCommand(stationName, commandType, msg);*/
-}
-
-void TabManager::onCleanSettings()
-{
-}
-
-
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
 {
 	foreach (ITabWidget* tabWidget, m_tabWidgetsMap) {

@@ -53,10 +53,6 @@ public:
 	virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
 	virtual void setActiveTab(const int id);
 
-	void onSettingsNodeChanged(const SettingsNode &);
-	void onPropertyChanged(const Property &);
-	void onCleanSettings();
-
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
