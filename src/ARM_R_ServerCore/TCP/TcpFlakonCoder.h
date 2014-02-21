@@ -24,15 +24,15 @@ public:
 
 	// ITcpDeviceCoder interface
 public:
-	virtual IMessage<QByteArray>* encode(const QByteArray& data);
+	virtual MessageSP encode(const QByteArray& data);
 	virtual QByteArray decode(const IMessage<QByteArray>* message);
 	virtual QObject* asQObject();
 
 private:
-	IMessage<QByteArray>* messageFromPreparedData();
-	IMessage<QByteArray>* pointers(QVector<QPointF> vec);
-	IMessage<QByteArray>* correlation(quint32 point1, quint32 point2, QVector<QPointF> vec);
-	IMessage<QByteArray>* detectedBandwidth(QVector<QPointF> vec);
+	MessageSP messageFromPreparedData();
+	MessageSP pointers(QVector<QPointF> vec);
+	MessageSP correlation(quint32 point1, quint32 point2, QVector<QPointF> vec);
+	MessageSP detectedBandwidth(QVector<QPointF> vec);
 };
 
 #endif // TCPFLAKONCODER_H

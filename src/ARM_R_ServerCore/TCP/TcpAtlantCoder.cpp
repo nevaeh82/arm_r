@@ -10,10 +10,12 @@ TcpAtlantCoder::~TcpAtlantCoder()
 {
 }
 
-IMessage<QByteArray>* TcpAtlantCoder::encode(const QByteArray& data)
+MessageSP TcpAtlantCoder::encode(const QByteArray& data)
 {
 	m_dataFromTcpSocket.append(data);
-	IMessage<QByteArray>* dataToSend = NULL;
+
+	/// TODO: recheck
+	MessageSP dataToSend;
 
 	/// WTF??
 	if (m_residueLength == 0) {
@@ -34,7 +36,7 @@ IMessage<QByteArray>* TcpAtlantCoder::encode(const QByteArray& data)
 	return dataToSend;
 }
 
-QByteArray TcpAtlantCoder::decode(const IMessage<QByteArray>* message)
+QByteArray TcpAtlantCoder::decode(const MessageSP message)
 {
 	QByteArray dataToSend;
 	if (message->type() == TCP_ATLANT_REQUEST_SET_FREQUENCY) {
@@ -48,7 +50,7 @@ QObject* TcpAtlantCoder::asQObject()
 	return this;
 }
 
-IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
+MessageSP TcpAtlantCoder::messageFromPreparedData()
 {
 	EMS::EagleMessage e_msg;
 	e_msg.ParseFromArray(m_dataFromTcpSocket.constData(), m_dataFromTcpSocket.size());
@@ -94,7 +96,7 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		dataStream << ad_struct.motionType;
 		dataStream << ad_struct.motionConfidence;
 
-		return new Message<QByteArray>(TCP_ATLANT_ANSWER_DIRECTION, dataToSend);
+		return MessageSP(new Message<QByteArray>(TCP_ATLANT_ANSWER_DIRECTION, dataToSend));
 	}
 	else if (type == Atlant_Position_MsgA) {
 		Storm::PositionAnswerMessage d_msg;
@@ -117,10 +119,10 @@ IMessage<QByteArray>* TcpAtlantCoder::messageFromPreparedData()
 		dataStream << ad_struct.latitude;
 		dataStream << ad_struct.quality;
 
-		return new Message<QByteArray>(TCP_ATLANT_ANSWER_POSITION, dataToSend);
+		return MessageSP(new Message<QByteArray>(TCP_ATLANT_ANSWER_POSITION, dataToSend));
 	}
 
-	return NULL;
+	return MessageSP();
 }
 
 QByteArray TcpAtlantCoder::atlantSetFrequency(const QByteArray& data)

@@ -1,7 +1,7 @@
 #ifndef ICOORDINATECOUNTER_H
 #define ICOORDINATECOUNTER_H
 
-#include "Message.h"
+#include "MessageSP.h"
 
 class ICoordinateCounter
 {
@@ -9,7 +9,7 @@ class ICoordinateCounter
 public:
 	virtual ~ICoordinateCounter(){}
 
-	virtual void sendData(const IMessage<QByteArray>* message)	= 0;
+	virtual void sendData(const MessageSP message)	= 0;
 	virtual QObject* asQObject()	= 0;
 };
 

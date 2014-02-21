@@ -27,13 +27,13 @@ public:
 
 	// ITcpDeviceCoder interface
 public:
-	virtual IMessage<QByteArray>* encode(const QByteArray& data);
+	virtual MessageSP encode(const QByteArray& data);
 	virtual QByteArray decode(const IMessage<QByteArray>* message);
 	virtual QObject* asQObject();
 
 private:
 	bool findPreamble();
-	IMessage<QByteArray>* sendPRMStatus(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
+	MessageSP sendPRMStatus(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
 
 	QByteArray prmSetFrequency(unsigned short aFreq);
 	bool specialSymb(quint8 &aByteA, quint8 &aByteB);

@@ -100,7 +100,7 @@ QObject* TcpManager::asQObject()
 	return this;
 }
 
-void TcpManager::onMessageReceived(const QString& device, const IMessage<QByteArray>* argument)
+void TcpManager::onMessageReceived(const QString& device, const MessageSP argument)
 {
 	/// TODO : refactor it. It's bad.
 
@@ -151,12 +151,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SET_BANDWIDTH) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(FLAKON_TCP_DEVICE, NULL);
@@ -164,12 +159,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_BANDWIDTH, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_BANDWIDTH, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SET_SHIFT) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(FLAKON_TCP_DEVICE, NULL);
@@ -177,25 +167,14 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_SHIFT, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_SET_SHIFT, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_RECOGNIZE) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(FLAKON_TCP_DEVICE, NULL);
 		if (controller == NULL) {
 			return;
 		}
-
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_RECOGNIZE, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_RECOGNIZE, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SS_CORRELATION) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(FLAKON_TCP_DEVICE, NULL);
@@ -203,12 +182,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_SS_CORRELATION, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_SS_CORRELATION, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_AVARAGE_SPECTRUM) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(FLAKON_TCP_DEVICE, NULL);
@@ -216,12 +190,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_PRM_SET_FREQ) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(PRM300_TCP_DEVICE, NULL);
@@ -229,12 +198,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_PRM300_REQUEST_SET_FREQUENCY, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_PRM300_REQUEST_SET_FREQUENCY, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_PRM_REQUEST_FREQ) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(PRM300_TCP_DEVICE, NULL);
@@ -242,12 +206,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_PRM300_REQUEST_GET_FREQUENCY, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_PRM300_REQUEST_GET_FREQUENCY, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_PRM_SET_ATT1) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(PRM300_TCP_DEVICE, NULL);
@@ -255,12 +214,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_PRM300_REQUEST_SET_ATTENUER_ONE, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_PRM300_REQUEST_SET_ATTENUER_ONE, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_PRM_SET_ATT2) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(PRM300_TCP_DEVICE, NULL);
@@ -268,8 +222,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_PRM300_REQUEST_SET_ATTENUER_TWO, argument.toByteArray());
-		m_controllersMap.value(PRM300_TCP_DEVICE)->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_PRM300_REQUEST_SET_ATTENUER_TWO, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_PRM_SET_FILTER) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(PRM300_TCP_DEVICE, NULL);
@@ -277,12 +230,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_PRM300_REQUEST_SET_FILTER, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_PRM300_REQUEST_SET_FILTER, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SET_ATLANT_FREQUENCY) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(ATLANT_TCP_DEVICE, NULL);
@@ -290,35 +238,20 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_ATLANT_REQUEST_SET_FREQUENCY, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		controller->sendData(message);
+		controller->sendData(MessageSP(new Message<QByteArray>(TCP_ATLANT_REQUEST_SET_FREQUENCY, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SET_DATA_TO_SOLVER) {
 		if (m_coordinatesCounter == NULL) {
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		m_coordinatesCounter->sendData(message);
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
 	}
 	else if (method == RPC_SLOT_SET_CLEAR_TO_SOLVER) {
 		if (m_coordinatesCounter == NULL) {
 			return;
 		}
 
-		IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray());
-		if (message == NULL) {
-			return;
-		}
-
-		m_coordinatesCounter->sendData(message);
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
 	}
 }

@@ -11,6 +11,8 @@ ARM_R_Srv::ARM_R_Srv()
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForLocale(codec);
 
+	qRegisterMetaType<MessageSP>("MessageSP");
+
     qRegisterMetaType<rpc_flakon_msg> ("rpc_flakon_msg");
     qRegisterMetaType<QVector<QPointF> >("rpc_send_points_vector");
     qRegisterMetaType<QByteArray>("rpc_send_atlant_data");

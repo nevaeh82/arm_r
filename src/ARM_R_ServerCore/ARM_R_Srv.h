@@ -67,6 +67,7 @@ private:
 Q_DECLARE_METATYPE(rpc_flakon_msg)
 Q_DECLARE_METATYPE(quint32)
 Q_DECLARE_METATYPE(rpc_send_atlant_data)
+Q_DECLARE_METATYPE(MessageSP)
 //Q_DECLARE_METATYPE(rpc_send_points_vector)
 //Q_DECLARE_METATYPE(DataFromFlacon)
 

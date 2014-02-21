@@ -11,10 +11,12 @@ TcpPRM300Coder::~TcpPRM300Coder()
 {
 }
 
-IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
+MessageSP TcpPRM300Coder::encode(const QByteArray& data)
 {
 	/// What does the fucking magic happen here?!
-	IMessage<QByteArray>* message = NULL;
+
+	/// TODO: recheck
+	MessageSP message;
 	m_dataFromTcpSocket.append(data);
 
 	QByteArray inputData = data;
@@ -28,13 +30,13 @@ IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 	if (!m_needBytes) {
 		bool found = findPreamble();
 		if (!found) {
-			return new Message<QByteArray>(TCP_EMPTY_MESSAGE, data);
+			return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, data));
 		}
 	}
 
 	if (m_dataFromTcpSocket.size() < 3 && m_residueLength == 0) {
 		m_needBytes = true;
-		return new Message<QByteArray>(TCP_EMPTY_MESSAGE, data);
+		return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, data));
 	}
 
 	if (m_residueLength == 0) {
@@ -45,12 +47,12 @@ IMessage<QByteArray>* TcpPRM300Coder::encode(const QByteArray& data)
 			m_residueLength = m_aSize;
 			inputDataSream >> m_aPacketType;
 		} else {
-			return new Message<QByteArray>(TCP_EMPTY_MESSAGE, data);
+			return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, data));
 		}
 	}
 
 	if (m_dataFromTcpSocket.size() < m_residueLength) {
-		return new Message<QByteArray>(TCP_EMPTY_MESSAGE, data);
+		return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, data));
 	}
 
 	if (m_aPacketType == (quint8)PRM300External::TypeFrequencyChangedAnswer /*2*/) {
@@ -216,7 +218,7 @@ bool TcpPRM300Coder::findPreamble()
 }
 
 /// send freq to rpc
-IMessage<QByteArray>* TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter, quint8 att1, quint8 att2)
+MessageSP TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter, quint8 att1, quint8 att2)
 {
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
@@ -225,7 +227,7 @@ IMessage<QByteArray>* TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter,
 	dataStream << att1;
 	dataStream << att2;
 
-	return new Message<QByteArray>(TCP_PRM300_ANSWER_STATUS, byteArray);
+	return MessageSP(new Message<QByteArray>(TCP_PRM300_ANSWER_STATUS, byteArray));
 }
 
 QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)

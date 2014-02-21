@@ -1,5 +1,7 @@
 #include "TcpFlakonCoder.h"
 
+#include "TCPPacketStruct.h"
+
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
 	BaseTcpDeviceCoder(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpFlakonCoder)), parent)
 {
@@ -10,9 +12,9 @@ TcpFlakonCoder::~TcpFlakonCoder()
 {
 }
 
-IMessage<QByteArray>* TcpFlakonCoder::encode(const QByteArray& data)
+MessageSP TcpFlakonCoder::encode(const QByteArray& data)
 {
-	IMessage<QByteArray>* message = NULL;
+	MessageSP message;
 
 	m_dataFromTcpSocket.append(data);
 	if (m_residueLength == 0) {
@@ -109,7 +111,7 @@ QObject* TcpFlakonCoder::asQObject()
 	return this;
 }
 
-IMessage<QByteArray>* TcpFlakonCoder::messageFromPreparedData()
+MessageSP TcpFlakonCoder::messageFromPreparedData()
 {
 	QDataStream stream(m_dataFromTcpSocket);
 	stream.setVersion(QDataStream::Qt_4_7);
@@ -121,9 +123,8 @@ IMessage<QByteArray>* TcpFlakonCoder::messageFromPreparedData()
 	quint32 id1 = 0;
 	quint32 id2 = 0;
 
-//	QString str = "";
-
-	IMessage<QByteArray>* message = NULL;
+	/// TODO: reckeck
+	MessageSP message;
 
 	FlakonExternal::TypeFlakonExternalEnum type = (FlakonExternal::TypeFlakonExternalEnum)m_header.type;
 	switch(type)
@@ -169,31 +170,31 @@ IMessage<QByteArray>* TcpFlakonCoder::messageFromPreparedData()
 	return message;
 }
 
-IMessage<QByteArray>* TcpFlakonCoder::pointers(QVector<QPointF> vec)
+MessageSP TcpFlakonCoder::pointers(QVector<QPointF> vec)
 {
 	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
 	dataStream << m_header.id << vec;
 
-	return new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba);
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
 
-IMessage<QByteArray>* TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> vec)
+MessageSP TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> vec)
 {
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
 	dataStream << point1 << point2 << vec;
 
-	return new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba);
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba));
 }
 
-IMessage<QByteArray>* TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)
+MessageSP TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)
 {
 	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
 	dataStream << m_header.id << vec;
 
-	return new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba);
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba));
 }

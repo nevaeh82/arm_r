@@ -52,11 +52,11 @@ public:
 
 	// ITcpListener interface
 public:
-	virtual void onMessageReceived(const QString& device, const IMessage<QByteArray>* argument);
+	virtual void onMessageReceived(const QString& device, const MessageSP argument);
 
 	// ICoordinateCounter interface
 public:
-	virtual void sendData(const IMessage<QByteArray>* message);
+	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
 
 private:

@@ -11,7 +11,7 @@ BaseTcpDeviceController::BaseTcpDeviceController(Pw::Logger::ILogger* logger, QO
 
 	connect(this, SIGNAL(connectToHostInternalSignal(QString,quint32)), this, SLOT(connectToHostInternalSlot(QString,quint32)));
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
-	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
+	connect(this, SIGNAL(sendDataInternalSignal(const MessageSP)), this, SLOT(sendDataInternalSlot(const MessageSP)));
 	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
 	connect(this, SIGNAL(createTcpClientInternalSignal()), this, SLOT(createTcpClientInternalSlot()));
 	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
@@ -30,7 +30,7 @@ BaseTcpDeviceController::BaseTcpDeviceController(const QString& tcpDeviceName, P
 
 	connect(this, SIGNAL(connectToHostInternalSignal(QString,quint32)), this, SLOT(connectToHostInternalSlot(QString,quint32)));
 	connect(this, SIGNAL(disconnectFromHostInternalSignal()), this, SLOT(disconnectFromHostInternalSlot()));
-	connect(this, SIGNAL(sendDataInternalSignal(const IMessage<QByteArray>*)), this, SLOT(sendDataInternalSlot(const IMessage<QByteArray>*)));
+	connect(this, SIGNAL(sendDataInternalSignal(const MessageSP)), this, SLOT(sendDataInternalSlot(const MessageSP)));
 	connect(this, SIGNAL(onDataReceivedInternalSignal(QVariant)), this, SLOT(onDataReceivedInternalSlot(QVariant)));
 	connect(this, SIGNAL(createTcpClientInternalSignal()), this, SLOT(createTcpClientInternalSlot()));
 	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
@@ -73,7 +73,7 @@ QString BaseTcpDeviceController::getHost()
 	return m_tcpClient->getHost();
 }
 
-void BaseTcpDeviceController::sendData(const IMessage<QByteArray>* message)
+void BaseTcpDeviceController::sendData(const MessageSP message)
 {
 	emit sendDataInternalSignal(message);
 }
@@ -86,9 +86,9 @@ QObject* BaseTcpDeviceController::asQObject()
 void BaseTcpDeviceController::onDataReceived(const QVariant& argument)
 {
 //	emit onDataReceivedInternalSignal(argument);
-	IMessage<QByteArray>* message = m_tcpDeviceCoder->encode(argument.toByteArray());
+	MessageSP message = m_tcpDeviceCoder->encode(argument.toByteArray());
 
-	if (message == NULL) {
+	if (message.isNull()) {
 //		m_logger->debug(QString("message == NULL for %1").arg(m_tcpDeviceName));
 		return;
 	}
@@ -108,7 +108,7 @@ void BaseTcpDeviceController::disconnectFromHostInternalSlot()
 	m_tcpClient->disconnectFromHost();
 }
 
-void BaseTcpDeviceController::sendDataInternalSlot(const IMessage<QByteArray>* message)
+void BaseTcpDeviceController::sendDataInternalSlot(const MessageSP message)
 {
 	QByteArray decodedData = m_tcpDeviceCoder->decode(message);
 
@@ -122,7 +122,7 @@ void BaseTcpDeviceController::sendDataInternalSlot(const IMessage<QByteArray>* m
 
 void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argument)
 {
-	IMessage<QByteArray>* message = m_tcpDeviceCoder->encode(argument.toByteArray());
+	MessageSP message = m_tcpDeviceCoder->encode(argument.toByteArray());
 
 	if (message == NULL) {
 //		m_logger->debug(QString("message == NULL for %1").arg(m_tcpDeviceName));

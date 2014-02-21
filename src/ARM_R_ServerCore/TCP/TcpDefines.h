@@ -60,7 +60,7 @@ typedef enum TypeFlakonExternalEnum {
 }
 
 
-#define PAYLOAD_PREAMBULE		0xFFEECCFF
+//#define PAYLOAD_PREAMBULE		0xFFEECCFF
 #define PAYLOAD_MAX_DATA_LEN	200000
 #define PAYLOAD_HEADER_LENGTH	40
 

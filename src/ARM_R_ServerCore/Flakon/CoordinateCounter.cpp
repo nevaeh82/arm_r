@@ -17,7 +17,7 @@ CoordinateCounter::~CoordinateCounter()
 	emit signalFinished();
 }
 
-void CoordinateCounter::onMessageReceived(const QString& device, const IMessage<QByteArray>* argument)
+void CoordinateCounter::onMessageReceived(const QString& device, const MessageSP argument)
 {
 	if (device != FLAKON_TCP_DEVICE) {
 		return;
@@ -65,7 +65,7 @@ void CoordinateCounter::onMessageReceived(const QString& device, const IMessage<
 	m_prevStation = point2;
 }
 
-void CoordinateCounter::sendData(const IMessage<QByteArray>* message)
+void CoordinateCounter::sendData(const MessageSP message)
 {
 	QString messageType = message->type();
 
@@ -108,7 +108,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	dataStream << aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
 
-	IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend);
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(m_likeADeviceName, message);
@@ -130,7 +130,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	dataStream << m_alt;									//aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
 
-	IMessage<QByteArray>* message = new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend);
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(m_likeADeviceName, message);

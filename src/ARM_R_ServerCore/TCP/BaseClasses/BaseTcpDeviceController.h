@@ -39,7 +39,7 @@ public:
 	virtual void disconnectFromHost();
 	virtual bool isConnected();
 	virtual QString getHost();
-	virtual void sendData(const IMessage<QByteArray>* message);
+	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
 
 	// ITcpReceiver interface
@@ -49,7 +49,7 @@ public:
 signals:
 	void connectToHostInternalSignal(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSignal();
-	void sendDataInternalSignal(const IMessage<QByteArray>* message);
+	void sendDataInternalSignal(const MessageSP message);
 	void onDataReceivedInternalSignal(const QVariant& argument);
 	void createTcpClientInternalSignal();
 	void createTcpDeviceCoderInternalSignal();
@@ -57,7 +57,7 @@ signals:
 private slots:
 	void connectToHostInternalSlot(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSlot();
-	void sendDataInternalSlot(const IMessage<QByteArray>* message);
+	void sendDataInternalSlot(const MessageSP message);
 	void onDataReceivedInternalSlot(const QVariant& argument);
 	void createTcpClientInternalSlot();
 	void createTcpDeviceCoderInternalSlot();

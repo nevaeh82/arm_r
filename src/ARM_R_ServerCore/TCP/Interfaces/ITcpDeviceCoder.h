@@ -1,7 +1,9 @@
 #ifndef ITCPDEVICECODER_H
 #define ITCPDEVICECODER_H
 
-#include "Message.h"
+#include <QSharedPointer>
+
+#include "MessageSP.h"
 
 class ITcpDeviceCoder
 {
@@ -9,8 +11,8 @@ class ITcpDeviceCoder
 public:
 	virtual ~ITcpDeviceCoder() {}
 
-	virtual IMessage<QByteArray>* encode(const QByteArray& data)	= 0;
-	virtual QByteArray decode(const IMessage<QByteArray>* message)	= 0;
+	virtual MessageSP encode(const QByteArray& data)	= 0;
+	virtual QByteArray decode(const MessageSP message)	= 0;
 	virtual QObject* asQObject()	= 0;
 };
 

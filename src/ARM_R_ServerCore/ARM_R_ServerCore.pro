@@ -109,4 +109,5 @@ HEADERS += \
     Flakon/CoordinateCounter.h \
     Flakon/Interfaces/ICoordinateCounter.h \
     TCP/TcpSettingsManager.h \
-    TCP/Interfaces/ITcpSettingsManager.h
+    TCP/Interfaces/ITcpSettingsManager.h \
+    MessageSP.h

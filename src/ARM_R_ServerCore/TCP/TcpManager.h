@@ -52,7 +52,7 @@ public:
 
 	// ITcpListener interface
 public:
-	virtual void onMessageReceived(const QString& device, const IMessage<QByteArray>* argument);
+	virtual void onMessageReceived(const QString& device, const MessageSP argument);
 
 	// IRpcListener interface
 public:
