@@ -1,7 +1,5 @@
 #include "TcpFlakonCoder.h"
 
-#include "TCPPacketStruct.h"
-
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
 	BaseTcpDeviceCoder(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpFlakonCoder)), parent)
 {

@@ -19,8 +19,6 @@
 #include "../TCP/TcpDefines.h"
 #include "Message.h"
 
-#include "StationProperty.h"
-
 #include "RadiolocationInterface.h"
 #include "Solver.h"
 #include "Solver_global.h"

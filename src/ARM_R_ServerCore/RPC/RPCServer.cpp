@@ -1,6 +1,6 @@
 #include "RPCServer.h"
 
-RPCServer::RPCServer(QObject *parent) :
+RPCServer::RPCServer(QObject* parent) :
 	RpcServerBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCServer)), parent)
 {
 }

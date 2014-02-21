@@ -22,7 +22,7 @@ public:
 
 private:
 	static Pw::Logger::ILogger* m_logger;
-	RPCServer* _rpcServer;
+	RPCServer* m_rpcServer;
 	TcpManager* m_tcpManager;
 };
 
