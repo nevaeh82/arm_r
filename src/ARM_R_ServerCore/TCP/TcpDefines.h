@@ -52,20 +52,31 @@ typedef enum TypePRM300ExternalEnum {
 /// Flakon device external
 namespace FlakonExternal {
 typedef enum TypeFlakonExternalEnum {
+	// From server to client
+	TypePing						= 0,
 	TypePointsReceivedAnswer		= 1,
 	TypeDetectedBandWidthAnswer		= 2,
-	TypeUnknownForUs				= 3,
-	TypeCorrelationReceivedAnswer	= 4
+	TypeStringAnswer				= 3,
+	TypeCorrelationReceivedAnswer	= 4,
+	TypeSignalTypeAnswer			= 5,
+
+	// From client to server
+	TypeSetMainStationCorrelationRequest	= 100,
+	TypeSetBandWidthRequest					= 101,
+	TypeSetShiftRequest						= 102,
+	TypeStartCorrelationRequest				= 103,
+	TypeRecognizeSignalRequest				= 104,
+	TypeSetSpectrumAverageParametrRequest	= 105
+
 } TypeFlakonExternalEnum;
 }
 
-
-//#define PAYLOAD_PREAMBULE		0xFFEECCFF
+#define PAYLOAD_PREAMBULE		0xFFEECCFF
 #define PAYLOAD_MAX_DATA_LEN	200000
 #define PAYLOAD_HEADER_LENGTH	40
 
 #pragma pack(push, 1)
-typedef struct ZaviruhaPayloadPacketHeader_redefenition
+typedef struct ZaviruhaPayloadPacketHeader
 {
 	//! Преамбула, всегда 0xFFEECCFF
 	unsigned int magic;
@@ -103,7 +114,7 @@ typedef struct ZaviruhaPayloadPacketHeader_redefenition
 	unsigned short messageCRC;
 	//! CRC8 заголовка
 	unsigned short headerCRC;
-} ZaviruhaPayloadPacketHeader_redefenition;
+} ZaviruhaPayloadPacketHeader;
 #pragma pack(pop)
 
 #endif // TCPDEFINES_H

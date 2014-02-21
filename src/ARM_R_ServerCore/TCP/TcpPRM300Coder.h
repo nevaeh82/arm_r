@@ -28,7 +28,7 @@ public:
 	// ITcpDeviceCoder interface
 public:
 	virtual MessageSP encode(const QByteArray& data);
-	virtual QByteArray decode(const IMessage<QByteArray>* message);
+	virtual QByteArray decode(const MessageSP message);
 	virtual QObject* asQObject();
 
 private:

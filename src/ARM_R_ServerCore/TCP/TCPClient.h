@@ -35,6 +35,8 @@
 
 #include "../Flakon/FlakonCoordinateCounter.h"
 
+#include "TcpDefines.h"
+
 class TCPClient : public ITCPClient, public IClient
 {
     Q_OBJECT

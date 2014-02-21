@@ -48,10 +48,10 @@ MessageSP TcpFlakonCoder::encode(const QByteArray& data)
 	return message;
 }
 
-QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
+QByteArray TcpFlakonCoder::decode(const MessageSP message)
 {
 	/// WTF magic??
-	ZaviruhaPayloadPacketHeader_redefenition header;
+	ZaviruhaPayloadPacketHeader header;
 
 	header.magic = PAYLOAD_PREAMBULE;
 	header.number = 0;
@@ -59,6 +59,27 @@ QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
 	header.flags = 0;
 	header.timestamp = 0;
 	header.type = -1;
+
+	QString messageType = message->type();
+
+	if (messageType == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
+		header.type = (quint32)FlakonExternal::TypeSetMainStationCorrelationRequest;
+	}
+	else if (messageType == TCP_FLAKON_REQUEST_SET_BANDWIDTH) {
+		header.type = (quint32)FlakonExternal::TypeSetBandWidthRequest;
+	}
+	else if (messageType == TCP_FLAKON_REQUEST_SET_SHIFT) {
+		header.type = (quint32)FlakonExternal::TypeSetShiftRequest;
+	}
+	else if (messageType == TCP_FLAKON_REQUEST_SS_CORRELATION) {
+		header.type = (quint32)FlakonExternal::TypeStartCorrelationRequest;
+	}
+	else if (messageType == TCP_FLAKON_REQUEST_RECOGNIZE) {
+		header.type = (quint32)FlakonExternal::TypeRecognizeSignalRequest;
+	}
+	else if (messageType == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM) {
+		header.type = (quint32)FlakonExternal::TypeSetSpectrumAverageParametrRequest;
+	}
 
 	/// TODO: recheck _header.type = type1;
 
@@ -70,7 +91,7 @@ QByteArray TcpFlakonCoder::decode(const IMessage<QByteArray>* message)
 
 	CRCs crc;
 	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(inputData.data()), inputData.length());
-	header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&header), sizeof(ZaviruhaPayloadPacketHeader_redefenition) - sizeof(short));
+	header.headerCRC = crc.crc8(reinterpret_cast<unsigned char *>(&header), sizeof(ZaviruhaPayloadPacketHeader) - sizeof(short));
 
 	QByteArray dataToSend;
 	QDataStream stream(&dataToSend, QIODevice::WriteOnly);
@@ -122,6 +143,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 
 	quint32 id1 = 0;
 	quint32 id2 = 0;
+	QString stringFromServer;
 
 	/// TODO: reckeck
 	MessageSP message;
@@ -130,7 +152,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 	switch(type)
 	{
 		case FlakonExternal::TypePointsReceivedAnswer:
-			for(int i = 0; i < m_header.length; i += sizeof(QPointF)) {
+			for(quint32 i = 0; i < m_header.length; i += sizeof(QPointF)) {
 				stream >> x >> y;
 				point.setX(x*1000);
 				point.setY(y);
@@ -140,23 +162,21 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 			break;
 		case FlakonExternal::TypeDetectedBandWidthAnswer:
 			//2 – обнаруженный сигнал на текущем id пункте (QVector<QPointF>, например (-1.0,5.2) - сигнал с шириной полосы от -1 МГц до 5.2 МГц ),
-			for(int i = 0; i < m_header.length; i += sizeof(QPointF)) {
+			for(quint32 i = 0; i < m_header.length; i += sizeof(QPointF)) {
 				stream >> point;
 				vec.append(point);
 //				m_logger->debug(QString("header.id = %1 detected signal = %2 %3").arg(QString::number(m_header.id)).arg(QString::number(point.x())).arg(QString::number(point.y())));
 			}
 			message = detectedBandwidth(vec);
 			break;
-		case FlakonExternal::TypeUnknownForUs:
-//			QTextStream(stdout) << "Received type" << endl;
-//			stream >> str;
-//			qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! = " << str;
-//			QTextStream(stdout) << str.toLocal8Bit() << endl;
+		case FlakonExternal::TypeStringAnswer:
+			stream >> stringFromServer;
+			m_logger->info(QString("Flakon: %1").arg(stringFromServer));
 			break;
 		case FlakonExternal::TypeCorrelationReceivedAnswer:
 			stream >> id1;
 			stream >> id2;
-			for(int i = 0; i < m_header.length; i += sizeof(QPointF)) {
+			for(quint32 i = 0; i < m_header.length; i += sizeof(QPointF)) {
 				stream >> x >> y;
 				point.setX(x);
 				point.setY(y);

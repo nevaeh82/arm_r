@@ -166,7 +166,7 @@ MessageSP TcpPRM300Coder::encode(const QByteArray& data)
 	return message;
 }
 
-QByteArray TcpPRM300Coder::decode(const IMessage<QByteArray>* message)
+QByteArray TcpPRM300Coder::decode(const MessageSP message)
 {
 	QByteArray inputData = message->data();
 	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);

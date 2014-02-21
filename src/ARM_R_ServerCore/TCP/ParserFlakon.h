@@ -19,7 +19,7 @@
 
 #include "../Flakon/StationProperty.h"
 
-
+#include "TcpDefines.h"
 
 ///Parser for flakon messages
 class ParserFlakon : public QObject, public ITCPParser
