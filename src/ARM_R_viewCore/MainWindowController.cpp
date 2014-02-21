@@ -53,14 +53,12 @@ void MainWindowController::stop()
 void MainWindowController::init()
 {
 	m_dbManager = new DbManager(this);
-
-	m_tabManager =  new TabManager(m_view->getWorkTabsWidget(), this);
+	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
 
 	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
 	tabsSettingsFile.append("./Tabs/Tabs.ini");
 
 	m_tabManager->setDbManager(m_dbManager);
-	m_dbManager->registerReceiver(m_tabManager);
 
 	m_tabManager->createSubModules(tabsSettingsFile);
 	m_tabManager->start();
