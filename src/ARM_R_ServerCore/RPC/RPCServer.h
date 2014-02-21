@@ -118,7 +118,7 @@ signals:
 	/// Rpc signals
 	void serverSendPointsRpcSignal(QByteArray);
 	void serverSendDetectedBandwidthRpcSignal(QByteArray);
-	void serverSendCorrelationRpcSignal(QByteArray);
+	void serverSendCorrelationRpcSignal(uint, uint, QByteArray);
 	void serverSendAtlantDirectionRpcSignal(QByteArray);
 	void serverSendAtlantPositionRpcSignal(QByteArray);
 	void serverSendPrmStatusRpcSignal(int, int, int, int);

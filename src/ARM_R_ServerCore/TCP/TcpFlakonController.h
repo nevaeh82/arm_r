@@ -17,6 +17,12 @@ public:
 public:
 	virtual void createTcpDeviceCoder();
 	virtual QObject* asQObject();
+
+signals:
+	void createTcpFlakonCoderInternalSignal();
+
+private slots:
+	void createTcpFlakonCoderInternalSlot();
 };
 
 #endif // TCPFLAKONCONTROLLER_H

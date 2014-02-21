@@ -16,6 +16,12 @@ public:
 public:
 	virtual void createTcpDeviceCoder();
 	virtual QObject* asQObject();
+
+signals:
+	void createTcpAtlantCoderInternalSignal();
+
+private slots:
+	void createTcpAtlantCoderInternalSlot();
 };
 
 #endif // TCPATLANTCONTROLLER_H

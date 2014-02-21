@@ -42,7 +42,7 @@ public:
 public:
 
 private:
-    RPCServer*          _rpc_server;
+	RPCServer*          m_rpcServer;
 
 	Router*             _router;
 	Subscriber*         _subscriber_up;

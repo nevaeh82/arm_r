@@ -16,6 +16,12 @@ public:
 public:
 	virtual void createTcpDeviceCoder();
 	virtual QObject* asQObject();
+
+signals:
+	void createTcpPRM300CoderInternalSignal();
+
+private slots:
+	void createTcpPRM300CoderInternalSlot();
 };
 
 #endif // TCPPRM300CONTROLLER_H

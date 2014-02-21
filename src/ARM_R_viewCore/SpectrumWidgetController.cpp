@@ -95,10 +95,6 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		QList<QVariant> list = arg.toList();
 
-		unsigned int id = list.at(0).toUInt(); // m_header.id;
-
-		qDebug() << "IIIIIIIIIIIIIIIIIIIIID2: " << id << " | " << m_id;
-
 		float* spectrum = list.at(0).value<float*>();
 		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
 

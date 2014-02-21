@@ -26,8 +26,6 @@ protected:
 
 	Pw::Logger::ILogger* m_logger;
 
-	quint8 m_splitter;
-
 public:
 	explicit BaseTcpDeviceController(Pw::Logger::ILogger* logger, QObject* parent = NULL);
 	explicit BaseTcpDeviceController(const QString& tcpDeviceName, Pw::Logger::ILogger* logger, QObject* parent = NULL);
@@ -53,13 +51,16 @@ signals:
 	void disconnectFromHostInternalSignal();
 	void sendDataInternalSignal(const IMessage<QByteArray>* message);
 	void onDataReceivedInternalSignal(const QVariant& argument);
+	void createTcpClientInternalSignal();
+	void createTcpDeviceCoderInternalSignal();
 
 private slots:
 	void connectToHostInternalSlot(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSlot();
 	void sendDataInternalSlot(const IMessage<QByteArray>* message);
 	void onDataReceivedInternalSlot(const QVariant& argument);
-
+	void createTcpClientInternalSlot();
+	void createTcpDeviceCoderInternalSlot();
 
 };
 

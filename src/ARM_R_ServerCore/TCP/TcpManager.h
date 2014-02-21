@@ -60,6 +60,10 @@ public:
 
 signals:
 	void threadTerminateSignal();
+	void onMethodCalledInternalSignal(const QString& method, const QVariant& argument);
+
+private slots:
+	void onMethodCalledInternalSlot(const QString &method, const QVariant &argument);
 
 };
 

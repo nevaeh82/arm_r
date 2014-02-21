@@ -71,8 +71,8 @@ ARM_R_Srv::ARM_R_Srv()
 
 #else
 
-	_rpc_server = new RPCServer;
-	_rpc_server->start(24500);
+	m_rpcServer = new RPCServer;
+	m_rpcServer->start(24500, QHostAddress("127.0.0.1"));
 
 	m_tcpManager = new TcpManager;
 
@@ -82,7 +82,8 @@ ARM_R_Srv::ARM_R_Srv()
 	m_tcpManager->moveToThread(tcpManagerThread);
 	tcpManagerThread->start();
 
-	m_tcpManager->setRpcServer(_rpc_server);
+	m_rpcServer->registerReceiver(m_tcpManager);
+	m_tcpManager->setRpcServer(m_rpcServer);
 
 	ITcpSettingsManager* settingsManager = new TcpSettingsManager;
 	settingsManager->setIniFile("./TCP/coders.ini");

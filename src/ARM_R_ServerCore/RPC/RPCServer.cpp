@@ -57,7 +57,7 @@ bool RPCServer::start(quint16 port, QHostAddress address)
 
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendPointsRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_POINTS);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendDetectedBandwidthRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH);
-	m_serverPeer->attachSignal(this, SIGNAL(serverSendCorrelationRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_CORRELATION);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendCorrelationRpcSignal(uint, uint, QByteArray)), RPC_SLOT_SERVER_SEND_CORRELATION);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantDirectionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_DIRECTION);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantPositionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_POSITION);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendPrmStatusRpcSignal(int,int,int,int)), RPC_SLOT_SERVER_PRM_STATUS);
@@ -191,7 +191,7 @@ void RPCServer::rpcSlotSetMainStationCor(quint64 client, int id, int station)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << station;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_MAIN_STATION_COR, QVariant(byteArray));
 	}
 #endif
@@ -225,7 +225,7 @@ void RPCServer::sendDataByRpc(const QString& signalType, const QByteArray& data)
 		QDataStream outputDataStream(&outputData, QIODevice::WriteOnly);
 		outputDataStream << points;
 
-		emit serverSendCorrelationRpcSignal(outputData);
+		emit serverSendCorrelationRpcSignal(point1, point2, outputData);
 	}
 	else if (signalType == RPC_SLOT_SERVER_ATLANT_DIRECTION) {
 		emit serverSendAtlantDirectionRpcSignal(data);
@@ -281,7 +281,7 @@ void RPCServer::rpcSlotSetBandwidth(quint64 client, int id, float bandwidth)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << bandwidth;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_BANDWIDTH, QVariant(byteArray));
 	}
 #endif
@@ -302,7 +302,7 @@ void RPCServer::rpcSlotSetShift(quint64 client, int id, float shift)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << shift;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_SHIFT, QVariant(byteArray));
 	}
 #endif
@@ -324,7 +324,7 @@ void RPCServer::rpcSlotRecognize(quint64 client, int id, int type)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << id;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_RECOGNIZE, QVariant(byteArray));
 	}
 #endif
@@ -346,7 +346,7 @@ void RPCServer::rpcSlotSsCorrelation(quint64 client, int id, bool enable)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << enable;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SS_CORRELATION, QVariant(byteArray));
 	}
 #endif
@@ -367,7 +367,7 @@ void RPCServer::rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << avarage;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_AVARAGE_SPECTRUM, QVariant(byteArray));
 	}
 #endif
@@ -389,7 +389,7 @@ void RPCServer::rpcSlotPrmSetFreq(quint64, int id, short freq)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << freq;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_PRM_SET_FREQ, QVariant(byteArray));
 	}
 #endif
@@ -401,7 +401,7 @@ void RPCServer::rpcSlotPrmRequestFreq(quint64 client, int id)
 	QSharedPointer<IMessageOld> msg(new MessageOld(id, PRM_REQUEST_FREQ, NULL));
 	m_subscriber->data_ready(PRM_REQUEST_FREQ, msg);
 #else
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_PRM_REQUEST_FREQ, QVariant());
 	}
 #endif
@@ -421,7 +421,7 @@ void RPCServer::rpcSlotPrmSetAtt1(quint64 client, int id, int value)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << value;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_PRM_SET_ATT1, QVariant(byteArray));
 	}
 #endif
@@ -441,7 +441,7 @@ void RPCServer::rpcSlotPrmSetAtt2(quint64 client, int id, int value)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << value;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_PRM_SET_ATT2, QVariant(byteArray));
 	}
 #endif
@@ -461,7 +461,7 @@ void RPCServer::rpcSlotPrmSetFilter(quint64 client, int id, int index)
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << index;
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_PRM_SET_FILTER, QVariant(byteArray));
 	}
 #endif
@@ -478,7 +478,7 @@ void RPCServer::rpcSlotSetDataToSolver(quint64 client, QByteArray data)
 	QByteArray byteArray;
 	byteArray.append(data);
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_DATA_TO_SOLVER, QVariant(byteArray));
 	}
 #endif
@@ -495,7 +495,7 @@ void RPCServer::rpcSlotSetClearToSolver(quint64 client, QByteArray data)
 	QByteArray byteArray;
 	byteArray.append(data);
 
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_CLEAR_TO_SOLVER, QVariant(byteArray));
 	}
 #endif
@@ -596,7 +596,7 @@ void RPCServer::rpcSlotSetAtlantFrequency(quint64 client, QByteArray data)
 	QSharedPointer<IMessageOld> msg(new MessageOld(6, ATLANT_SET_FREQ, ba));
 	m_subscriber->data_ready(ATLANT_SET_FREQ, msg);
 #else
-	foreach (IRpcListener* listener, m_listeners) {
+	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_SLOT_SET_ATLANT_FREQUENCY, QVariant(data));
 	}
 #endif
