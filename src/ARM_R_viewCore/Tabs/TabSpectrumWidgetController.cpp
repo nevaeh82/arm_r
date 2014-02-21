@@ -5,24 +5,19 @@
 
 TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 														 ICorrelationControllersContainer* correlationControllers,
-														 IDbManager* db_manager, ITabManager* tab_manager, QObject *parent) :
+														 ITabManager* tab_manager, QObject *parent) :
 	QObject(parent)
 {
 	m_view = NULL;
 	m_rpcClient = NULL;
+	m_treeModel = NULL;
+	m_dbManager = NULL;
 
 	m_threshold = -1;
 	m_correlationControllers = correlationControllers;
 	m_tabManager = tab_manager;
-	m_dbManager = db_manager;
-	m_dbManager->registerReceiver(this);
 
 	m_station = station;
-
-	QStringList headers;
-	headers << tr("Name") << tr("Property");
-	m_treeModel = new TreeModel(m_dbManager, headers, this);
-	m_dbManager->registerReceiver(m_treeModel);
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
 
@@ -92,6 +87,16 @@ void TabSpectrumWidgetController::insertSpectrumWidget(ISpectrumWidget *spectrum
 TypeTabWidgetEnum TabSpectrumWidgetController::getWidgetType() const
 {
 	return TypeSignleSpectrum;
+}
+
+void TabSpectrumWidgetController::setDbManager(IDbManager* dbManager)
+{
+	m_dbManager = dbManager;
+
+	QStringList headers;
+	headers << tr("Name") << tr("Property");
+	m_treeModel = new TreeModel(m_dbManager, headers, this);
+	m_dbManager->registerReceiver(m_treeModel);
 }
 
 void TabSpectrumWidgetController::init()

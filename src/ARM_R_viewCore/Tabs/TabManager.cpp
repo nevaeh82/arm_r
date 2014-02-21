@@ -33,13 +33,15 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	m_correlationControllers->init(m_stationsMap.count() - 1);
 
-	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_dbManager, m_tabWidget);
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
+	commonTabSpectrumWidget->setDbManager(m_dbManager);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
 	foreach (Station* station, m_stationsMap) {
-		TabSpectrumWidgetController* tabController =  new TabSpectrumWidgetController(station, m_correlationControllers, m_dbManager, this);
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
+		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
+		tabController->setDbManager(m_dbManager);
 		tabController->appendView(tabSpectrumWidget);
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
@@ -66,7 +68,6 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
-
 
 	AtlantTabWidget* atlant = new AtlantTabWidget(m_tabWidget);
 	m_tabWidget->addTab(atlant, tr("Atlant"));

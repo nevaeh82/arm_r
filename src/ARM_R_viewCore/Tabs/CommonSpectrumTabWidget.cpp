@@ -1,24 +1,15 @@
 #include "CommonSpectrumTabWidget.h"
 #include "ui_CommonSpectrumTabWidget.h"
 
-CommonSpectrumTabWidget::CommonSpectrumTabWidget(IDbManager* dbManager, QWidget *parent) :
+CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::CommonSpectrumTabWidget)
 {
 	ui->setupUi(this);
 
-	m_dbManager = dbManager;
-
 	m_correlationControllers = NULL;
-
-	QStringList headers;
-	headers << tr("Name") << tr("Property");
-	m_treeModel = new TreeModel(m_dbManager, headers, this);
-	m_dbManager->registerReceiver(m_treeModel);
-
-	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
-
-	ui->settingsTreeView->setModel(m_treeModel);
+	m_treeModel = NULL;
+	m_dbManager = NULL;
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
@@ -26,6 +17,18 @@ CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
 	delete ui;
 }
 
+void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
+{
+	m_dbManager = dbManager;
+
+	QStringList headers;
+	headers << tr("Name") << tr("Property");
+	m_treeModel = new TreeModel(m_dbManager, headers, this);
+	ui->settingsTreeView->setModel(m_treeModel);
+
+	m_dbManager->registerReceiver(m_treeModel);
+	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+}
 //void CommonSpectrumTabWidget::insertSpectrumWidget(GraphicWidget *widget)
 //{
 //	if (NULL ==widget) {

@@ -6,11 +6,16 @@
 #include <QList>
 
 #include "Interfaces/IController.h"
+#include "Interfaces/ITabWidget.h"
 #include "TabSpectrumWidget.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
 
+#include "Db/DbManager.h"
+#include "SettingsTree/TreeModel.h"
+
 #include "SpectrumWidgetDataSource.h"
 #include "Correlations/CorrelationWidgetDataSource.h"
+#include "Controls/ControlPRM.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum,
 		public IDbChangedListener
@@ -25,7 +30,7 @@ private:
 
 	IStation*		    m_station;
 	ICorrelationControllersContainer*  m_correlationControllers;
-	IDbManager*          m_dbManager;
+	IDbManager*         m_dbManager;
 	ITabManager*        m_tabManager;
 
 	TreeModel*          m_treeModel;
@@ -41,7 +46,7 @@ private:
 	quint16 m_rpcHostPort;
 
 public:
-	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, IDbManager*, ITabManager*, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, ITabManager*, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -56,6 +61,8 @@ public:
 
 	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual TypeTabWidgetEnum getWidgetType() const;
+
+	virtual void setDbManager(IDbManager*);
 
 	virtual void setIndicator(int state);
 

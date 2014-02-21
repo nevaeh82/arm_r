@@ -71,7 +71,7 @@ HEADERS += \
     Correlations/CorrelationGroupWidget.h \
     Tabs/AtlantTabWidget.h \
     Tabs/CommonSpectrumTabWidget.h \
-    Abstracts/ITabWidget.h \
+    Interfaces/ITabWidget.h \
     SpectrumWidget.h \
     Tabs/TabSpectrumWidgetController.h \
     DB/DbController.h \
