@@ -9,17 +9,13 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	QObject(parent)
 {
 	m_view = NULL;
-
-	m_rpcHostAddress = "127.0.0.1";
-	m_rpcHostPort = DEFAULT_RPC_PORT;
+	m_rpcClient = NULL;
 
 	m_threshold = -1;
 	m_correlationControllers = correlationControllers;
 	m_tabManager = tab_manager;
 	m_dbManager = db_manager;
 	m_dbManager->registerReceiver(this);
-
-	m_mapCorrelationWidget = new QMap<int, IGraphicWidget *>;
 
 	m_station = station;
 
@@ -30,14 +26,9 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
 
-	m_rpcClient = NULL;
-
-	QString settingsFile = QCoreApplication::applicationDirPath();
-	settingsFile.append("./Tabs/RPC.ini");
-	readSettings(settingsFile);
+	readSettings();
 
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
-
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 }
 
@@ -274,8 +265,11 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 	m_spectrumDataSource->setPanorama(isEnabled, panoramaStartValue, panoramaEndValue);
 }
 
-void TabSpectrumWidgetController::readSettings(const QString &settingsFile)
+void TabSpectrumWidgetController::readSettings()
 {
+	QString settingsFile = QCoreApplication::applicationDirPath();
+	settingsFile.append("./Tabs/RPC.ini");
+
 	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
 	QSettings settings(settingsFile, QSettings::IniFormat);
 

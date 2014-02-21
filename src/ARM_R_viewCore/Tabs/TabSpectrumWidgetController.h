@@ -24,27 +24,21 @@ private:
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
 	IStation*		    m_station;
-
 	ICorrelationControllersContainer*  m_correlationControllers;
-
 	IDbManager*          m_dbManager;
+	ITabManager*        m_tabManager;
 
 	TreeModel*          m_treeModel;
 	TreeWidgetDelegate* m_treeDelegate;
-
 	RPCClient*          m_rpcClient;
 
-	QMap<int, IGraphicWidget *>*     m_mapCorrelationWidget;
-	ITabManager*        m_tabManager;
-
 	ControlPRM*         m_controlPRM;
-
-	double              m_threshold;
 
 	QPixmap*            m_pmRoundRed;
 	QPixmap*            m_pmRoundGreen;
 	QLabel*             m_indicatorLabel;
 
+	double              m_threshold;
 	QString m_rpcHostAddress;
 	quint16 m_rpcHostPort;
 
@@ -87,7 +81,7 @@ public:
 
 private:
 	void init();
-	void readSettings(const QString& settingsFile);
+	void readSettings();
 
 	void createRPC();
 	void createView();
