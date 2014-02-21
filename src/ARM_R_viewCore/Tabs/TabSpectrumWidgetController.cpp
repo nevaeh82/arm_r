@@ -130,7 +130,7 @@ void TabSpectrumWidgetController::createView()
 		m_view->insertCorrelationWidget(correlationWidget);
 
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
-		correlationDataSource->registerReceiver(dynamic_cast<IDataSourceListener*>(correlationWidget));
+		correlationDataSource->registerReceiver(correlationWidget);
 
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}
