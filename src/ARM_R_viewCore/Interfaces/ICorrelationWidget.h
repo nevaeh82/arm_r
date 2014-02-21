@@ -3,9 +3,10 @@
 
 class QWidget;
 
+#include "Interfaces/IDataSourceListener.h"
 #include "IGraphicWidget.h"
 
-class ICorrelationWidget: public IGraphicWidget
+class ICorrelationWidget: public IGraphicWidget, public IDataSourceListener
 {
 	public:
 		virtual ~ICorrelationWidget(){}

@@ -8,25 +8,12 @@
 
 #include <QThread>
 
-#include "Abstracts/ITabWidget.h"
-#include "Interfaces/ICorrelationControllersContainer.h"
-
 #include "Interfaces/ISpectrumWidget.h"
 
 #include "SpectrumWidget.h"
 #include "SpectrumWidgetController.h"
 
 #include "Correlations/CorrelationWidget.h"
-
-#include "Db/DbManager.h"
-#include "SettingsTree/TreeModel.h"
-
-#include "Interfaces/ITabManager.h"
-#include "ITabSpectrum.h"
-
-#include "RPC/RPCClient.h"
-
-#include "Controls/ControlPRM.h"
 
 
 namespace Ui {
@@ -38,7 +25,7 @@ class TabSpectrumWidget: public QWidget
 	Q_OBJECT
 
 private:
-	Ui::TabSpectrumWidget*     ui;
+	Ui::TabSpectrumWidget* ui;
 
 	QList<ISpectrumWidget*> m_spectrumWidgetsList;
 	QList<ICorrelationWidget*> m_correlationWidgetsList;
@@ -46,9 +33,9 @@ private:
 	SpectrumWidget* m_spectrumWidget;
 	SpectrumWidgetController* m_spectrumWidgetController;
 
-	QPixmap*            _pm_round_red;
-	QPixmap*            _pm_round_green;
-	QLabel*             m_indicatorLabel;
+	QPixmap* m_pmRoundRed;
+	QPixmap* m_pmRoundGreen;
+	QLabel* m_indicatorLabel;
 
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);

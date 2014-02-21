@@ -16,11 +16,11 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	insertSpectrumWidget(m_spectrumWidgetController);
 
-	_pm_round_red = new QPixmap(":/images/signals/images/bullet_red.png");
-	_pm_round_green = new QPixmap(":/images/signals/images/bullet_green.png");
+	m_pmRoundRed = new QPixmap(":/images/signals/images/bullet_red.png");
+	m_pmRoundGreen = new QPixmap(":/images/signals/images/bullet_green.png");
 	m_indicatorLabel = new QLabel(this);
 	m_indicatorLabel->setFixedSize(16, 16);
-	m_indicatorLabel->setPixmap(_pm_round_red->scaled(16,16,Qt::KeepAspectRatio));
+	m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 
 	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
 
@@ -40,7 +40,6 @@ void TabSpectrumWidget::activate()
 	ui->correlationsGroupWidget->clearWidgetContainer();
 
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
-
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}
 
@@ -67,12 +66,6 @@ QLabel *TabSpectrumWidget::getIndicator()
 ISpectrumWidget *TabSpectrumWidget::getSpectrumWidget()
 {
 	return m_spectrumWidgetController;
-	/*
-	if (m_spectrumWidgetsList.isEmpty()) {
-		return NULL;
-	}
-
-	return m_spectrumWidgetsList.at(0);*/
 }
 
 void TabSpectrumWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidget)
@@ -107,19 +100,18 @@ void TabSpectrumWidget::insertCorrelationWidget(ICorrelationWidget *correlationW
 	ui->correlationsGroupWidget->insertCorrelationWidget(correlationWidget);
 }
 
-
 void TabSpectrumWidget::setIndicatorStateSlot(int state)
 {
 	switch(state)
 	{
 		case 1:
-			m_indicatorLabel->setPixmap(_pm_round_green->scaled(16,16,Qt::KeepAspectRatio));
+			m_indicatorLabel->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
 			break;
 		case 0:
-			m_indicatorLabel->setPixmap(_pm_round_red->scaled(16,16,Qt::KeepAspectRatio));
+			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
 		default:
-			m_indicatorLabel->setPixmap(_pm_round_red->scaled(16,16,Qt::KeepAspectRatio));
+			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
 	}
 }

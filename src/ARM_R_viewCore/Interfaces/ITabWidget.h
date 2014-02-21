@@ -6,6 +6,7 @@ class QLabel;
 class SpectrumWidget;
 class QString;
 class ISpectrumWidget;
+class IDbManager;
 
 typedef enum TypeTabWidgetEnum
 {
@@ -30,6 +31,8 @@ public:
 	virtual void insertSpectrumWidget(ISpectrumWidget* spectrumWidget) = 0;
 
 	virtual TypeTabWidgetEnum getWidgetType() const = 0;
+
+	virtual void setDbManager(IDbManager*) = 0;
 };
 
 #endif // ISUBMODULE_H
