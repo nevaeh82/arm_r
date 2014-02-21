@@ -1,10 +1,7 @@
 #include <QtGui/QApplication>
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QGraphicsObject>
+#include <QTranslator>
 
 #include <PwLogger/PwLogger.h>
-
 
 #include "MainWindow.h"
 #include "MainWindowController.h"
@@ -17,8 +14,6 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-	//QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	//QTextCodec::setCodecForTr(codec);
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
@@ -26,11 +21,11 @@ int main(int argc, char *argv[])
 	QCoreApplication::setApplicationName("Zaviruha");
 	QApplication::setGraphicsSystem("opengl");
 
-//	Q_INIT_RESOURCE(translations);
+	Q_INIT_RESOURCE(translations);
 
-//	QTranslator translator;
-//	translator.load(":/SkyHobbitLandClient_ru.qm");
-//	a.installTranslator(&translator);
+	QTranslator translator;
+	translator.load(":/ARM-R_ru.qm");
+	a.installTranslator(&translator);
 
 	MainWindow view;
 

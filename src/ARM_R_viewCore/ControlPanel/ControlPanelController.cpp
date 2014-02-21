@@ -55,6 +55,6 @@ void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 
 void ControlPanelController::onBandWidthChangedSlot(int start, int end)
 {
-	m_dbManager->updatePropertyForAllObjects(DB_START_PROPERTY, start);
-	m_dbManager->updatePropertyForAllObjects(DB_STOP_PROPERTY, end);
+	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_START_PROPERTY, start);
+	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_END_PROPERTY, end);
 }
