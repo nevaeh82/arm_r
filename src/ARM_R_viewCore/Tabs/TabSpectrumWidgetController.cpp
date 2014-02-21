@@ -103,30 +103,14 @@ TypeTabWidgetEnum TabSpectrumWidgetController::getWidgetType() const
 	return TypeSignleSpectrum;
 }
 
-int TabSpectrumWidgetController::init()
+void TabSpectrumWidgetController::init()
 {
-	int error = createView();
-	if(error != 0)
-	{
-		return error;
-	}
-
-	error = createTree();
-	if(error != 0)
-	{
-		return error;
-	}
-
-	error = createRPC();
-	if(error != 0)
-	{
-		return error;
-	}
-
-	return 0;
+	createView();
+	createTree();
+	createRPC();
 }
 
-int TabSpectrumWidgetController::createRPC()
+void TabSpectrumWidgetController::createRPC()
 {
 	m_rpcClient = new RPCClient(m_station, m_dbManager, this, m_controlPRM, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
@@ -136,11 +120,9 @@ int TabSpectrumWidgetController::createRPC()
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
 		m_rpcClient->registerReceiver(correlationWidgetDataSource);
 	}
-
-	return 0;
 }
 
-int TabSpectrumWidgetController::createView()
+void TabSpectrumWidgetController::createView()
 {
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
@@ -154,10 +136,6 @@ int TabSpectrumWidgetController::createView()
 
 	m_spectrumWidget = m_view->getSpectrumWidget();
 
-	if (NULL == m_spectrumWidget) {
-		return 0;
-	}
-
 	m_spectrumWidget->setTab(this);
 	m_spectrumWidget->setId(m_station->getId());
 	m_spectrumWidget->setSpectrumName(m_station->getName());
@@ -166,11 +144,9 @@ int TabSpectrumWidgetController::createView()
 
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
-
-	return 0;
 }
 
-int TabSpectrumWidgetController::createTree()
+void TabSpectrumWidgetController::createTree()
 {
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), m_view->getTreeView(), SLOT(expandAll()));
 
@@ -178,8 +154,6 @@ int TabSpectrumWidgetController::createTree()
 	m_view->getTreeView()->setItemDelegate(m_treeDelegate);
 
 	m_treeModel->setStationsList(QStringList(m_station->getName()));
-
-	return 0;
 }
 
 void TabSpectrumWidgetController::setIndicator(int state)

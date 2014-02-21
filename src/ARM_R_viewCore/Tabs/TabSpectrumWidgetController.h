@@ -86,12 +86,12 @@ public:
 	virtual void onCleanSettings();
 
 private:
-	int init();
+	void init();
 	void readSettings(const QString& settingsFile);
 
-	int createRPC();
-	int createView();
-	int createTree();
+	void createRPC();
+	void createView();
+	void createTree();
 
 signals:
 	void signalGetPointsFromRPCFlakon(QByteArray points);
