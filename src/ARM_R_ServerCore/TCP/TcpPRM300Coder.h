@@ -6,8 +6,6 @@
 #include <QIODevice>
 #include <QDebug>
 
-#include "../Common/CRCs.h"
-
 class TcpPRM300Coder : public BaseTcpDeviceCoder
 {
 	Q_OBJECT
@@ -41,6 +39,8 @@ private:
 	QByteArray prmSetAttenuerOne(int value);
 	QByteArray prmSetAttenuerTwo(int value);
 	QByteArray prmSetFilter(int value);
+
+	quint8 calcCRC(QVector<quint8> aForCrcCount);
 };
 
 #endif // TCPPRM300CODER_H
