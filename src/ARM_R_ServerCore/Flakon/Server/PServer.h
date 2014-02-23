@@ -33,7 +33,7 @@
     Класс для отправки текста и QVector<QPointF> TCP.
 */
 
-typedef QSharedPointer<IMessage> rpc_flakon_msg;
+typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
 
 class PServer : public QObject, public IClient
 {
@@ -46,7 +46,7 @@ public:
     virtual int get_id();
     virtual void set_type(int type);
     virtual int get_type();
-    virtual void send_data(QSharedPointer<IMessage> msg_ptr);
+    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
 
 signals:
     void signalGetData(rpc_flakon_msg nsg);

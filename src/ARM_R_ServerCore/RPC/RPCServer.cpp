@@ -1,18 +1,8 @@
 #include "RPCServer.h"
 
-#include <QDebug>
-
-RPCServer::RPCServer(IRouter* router, QObject *parent) :
+RPCServer::RPCServer(QObject* parent) :
 	RpcServerBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCServer)), parent)
 {
-	m_router = router;
-	m_subscriber = router->get_subscriber();
-
-	//qRegisterMetaType<QVector<QPointF> >("rpc_send_points_vector");
-	//qRegisterMetaType<QVector<QPointF> >("QVector<QPointF>");
-	//qRegisterMetaTypeStreamOperators<QVector<QPointF> >("QVector<QPointF>");
-	//qRegisterMetaType<quint32>("quint32");
-	//qRegisterMetaType<QByteArray>("rpc_send_atlant_data");
 }
 
 RPCServer::~RPCServer()
@@ -25,8 +15,6 @@ bool RPCServer::start(quint16 port, QHostAddress address)
 	connect(m_serverPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 	connect(m_serverPeer, SIGNAL(clientDisconnected(quint64)), this, SLOT(slotRPCDisconnected(quint64)));
 
-
-	m_serverPeer->attachSlot(RPC_SLOT_SET_CLIENT_ID, this, SLOT(rpcSlotSetClientId(quint64,int)));
 	m_serverPeer->attachSlot(RPC_SLOT_SET_MAIN_STATION_COR, this, SLOT(rpcSlotSetMainStationCor(quint64,int,int)));
 	m_serverPeer->attachSlot(RPC_SLOT_SET_BANDWIDTH, this, SLOT(rpcSlotSetBandwidth(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_SLOT_SET_SHIFT, this, SLOT(rpcSlotSetShift(quint64, int, float)));
@@ -46,369 +34,260 @@ bool RPCServer::start(quint16 port, QHostAddress address)
 
 	m_serverPeer->attachSlot(RPC_SLOT_REQUEST_STATUS, this, SLOT(rpcSlotRequestStatus(quint64, int)));
 
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendPointsRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_POINTS);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendDetectedBandwidthRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendCorrelationRpcSignal(uint, uint, QByteArray)), RPC_SLOT_SERVER_SEND_CORRELATION);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantDirectionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_DIRECTION);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendAtlantPositionRpcSignal(QByteArray)), RPC_SLOT_SERVER_ATLANT_POSITION);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendPrmStatusRpcSignal(int,int,int,int)), RPC_SLOT_SERVER_PRM_STATUS);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendBplaDefRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_BPLA_DEF);
+	m_serverPeer->attachSignal(this, SIGNAL(serverSendBplaDefAutoRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO);
+
 	return RpcServerBase::start(port, address);
 }
 
 /// slot if have some error while connetiting
 void RPCServer::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 {
-    QTextStream(stdout) << "Have error in connection " << endl;
-    QString thiserror;
-    switch(socketError)
-    {
-    case QAbstractSocket::RemoteHostClosedError:
-        thiserror.append(("Ошибка! Соеденение с пунктом потеряно!"));
-        return;
-        break;
-    case QAbstractSocket::HostNotFoundError:
-        thiserror.append(("Ошибка! Не удалось подключиться к пункту!"));
-        break;
-    case QAbstractSocket::ConnectionRefusedError:
-        thiserror.append(("Ошибка! Отказано в соединении"));
-        break;
-    default:
-//        thiserror.append(("Ошибка! Произошла ошибка: " + _rpc_client->->errorString()));
-        break;
-    }
-    QTextStream(stdout) << thiserror << endl;
+	m_logger->debug("Have error in connection");
+
+	QString thiserror;
+	switch(socketError)
+	{
+		case QAbstractSocket::RemoteHostClosedError:
+			thiserror.append(("Ошибка! Соеденение с пунктом потеряно!"));
+			return;
+			break;
+		case QAbstractSocket::HostNotFoundError:
+			thiserror.append(("Ошибка! Не удалось подключиться к пункту!"));
+			break;
+		case QAbstractSocket::ConnectionRefusedError:
+			thiserror.append(("Ошибка! Отказано в соединении"));
+			break;
+		default:
+			//			thiserror.append(("Ошибка! Произошла ошибка: " + _rpc_client->->errorString()));
+			break;
+	}
+	m_logger->debug(thiserror);
 }
 
-/// slot when connection complete
 void RPCServer::slotRPCConnetion(quint64 client)
 {
-    QTextStream(stdout) << "Client connection" << client << endl;
+	m_logger->debug(QString("Client %1 connected").arg(client));
 }
 
 void RPCServer::slotRPCDisconnected(quint64 client)
 {
-	IClient *cl = m_mapClients.value(client);
-	m_subscriber->remove_subscription(cl);
-    delete cl;
-
-	m_mapClients.remove(client);
-}
-
-/// add client identification to QMap for assosiating with client sender
-void RPCServer::rpcSlotSetClientId(quint64 client, int id)
-{
-	if(m_mapClients.contains(client))
-    {
-		delete m_mapClients.value(client);
-    }
-
-    if(id == 6)
-    {
-		AtlantController* atlant_controller = new AtlantController(m_router, this);
-		m_mapClients.insert(client, atlant_controller);
-		connect(atlant_controller, SIGNAL(signalSendToRPCAtlantDirection(quint64,QByteArray*)), this, SLOT(rpcSlotSendAtalntData(quint64, QByteArray*)));
-		m_subscriber->add_subscription(ATLANT_DIRECTION, atlant_controller);
-		m_subscriber->add_subscription(ATLANT_POSITION, atlant_controller);
-        atlant_controller->set_id(id);
-        atlant_controller->set_type(3);
-        QTextStream(stdout) << "set id = " << id << "for client = " << client << endl;
-        return;
-    }
-    if(id == 701)
-    {
-		RPCClient_OD* cl = new RPCClient_OD(m_router, this);
-		m_mapClients.insert(client, cl);
-		m_subscriber->add_subscription(FLAKON_BPLA, cl);
-		m_subscriber->add_subscription(FLAKON_BPLA_AUTO, cl);
-		m_subscriber->add_subscription(ATLANT_DIRECTION, cl);
-		m_subscriber->add_subscription(ATLANT_POSITION, cl);
-        cl->set_id(id);
-        cl->set_type(1);
-		connect(cl, SIGNAL(signalSendToRPCODBpla(quint64,QByteArray*)), this, SLOT(rpcSlotSendBpla(quint64,QByteArray*)));
-		connect(cl, SIGNAL(signalSendToRPCODBplaAuto(quint64,QByteArray*)), this, SLOT(rpcSlotSendBplaAuto(quint64,QByteArray*)));
-		connect(cl, SIGNAL(signalSendRPCODAtlantDirection(quint64, QByteArray*)), this, SLOT(rpcSlotSendAtlantDirection(quint64, QByteArray*)));
-		connect(cl, SIGNAL(signalSendRPCODAtlantPosition(quint64,QByteArray*)), this, SLOT(rpcSlotSendAtalntDataPos(quint64,QByteArray*)));
-        return;
-    }
-
-	RPCClientFlakon* cl = new RPCClientFlakon(m_router, this);
-	m_mapClients.insert(client, cl);
-	connect(cl, SIGNAL(signalSendToRPCPoints(quint64,rpc_send_points_vector)), this, SLOT(rpcSlotSendFft(quint64,rpc_send_points_vector)));
-	connect(cl, SIGNAL(signalSendToRPCDetectedBandwidth(quint64,rpc_send_points_vector)), this,SLOT(rpcSlotsenddetectedbandwidth(quint64,rpc_send_points_vector)));
-	connect(cl, SIGNAL(signalResponseModulationType(quint64,QString)), this, SLOT(rpcSlotSendRespModulation(quint64,QString)));
-	connect(cl, SIGNAL(signalSendToRPCCorPoints(quint64,quint32,quint32,rpc_send_points_vector)), this, SLOT(rpcSlotSendCorr(quint64,quint32,quint32,rpc_send_points_vector)));
-	connect(cl, SIGNAL(signalPRMStatus(quint64,QByteArray*)), this, SLOT(rpcSlotPrmStatus(quint64,QByteArray*)));
-
-	connect(cl, SIGNAL(signalStatus(quint64, QByteArray*)), this, SLOT(rpcSlotStatus(quint64,QByteArray*)));
-
-    cl->set_id(id);
-    cl->set_type(2);
-    QTextStream(stdout) << "set id = " << id << "for client = " << client << endl;
-
-    /// added subscription with type == 1001
-	m_subscriber->add_subscription(FLAKON_FFT, cl);
-	m_subscriber->add_subscription(FLAKON_DETECTED_BANDWIDTH, cl);
-	m_subscriber->add_subscription(FLAKON_CORRELATION, cl);
-	m_subscriber->add_subscription(FLAKON_SIGNAL_TYPE, cl);
-	m_subscriber->add_subscription(PRM_STATUS, cl);
-	m_subscriber->add_subscription(CONNECTION_STATUS, cl);
 }
 
 void RPCServer::rpcSlotSetMainStationCor(quint64 client, int id, int station)
 {
-    QTextStream(stdout) << "received " << station << "from client" << client << "id = " << id << endl;
-	if(!m_mapClients.contains(client))
-    {
-        QTextStream(stdout) << "this client doesn't registered!" << endl;
-    }
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << station;
 
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << station;
-
-    QSharedPointer<IMessage> msg(new Message(id, RPC_MAIN_STATION_COR, ba));
-	m_subscriber->data_ready(RPC_MAIN_STATION_COR, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_MAIN_STATION_COR, QVariant(byteArray));
+	}
 }
 
-quint64 RPCServer::getClientId(IClient *client)
+void RPCServer::sendDataByRpc(const QString& signalType, const QByteArray& data)
 {
-	return m_mapClients.key(client);
+	if (signalType == RPC_SLOT_SERVER_SEND_POINTS) {
+		emit serverSendPointsRpcSignal(data);
+	}
+	else if (signalType == RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH) {
+		emit serverSendDetectedBandwidthRpcSignal(data);
+	}
+	else if (signalType == RPC_SLOT_SERVER_SEND_CORRELATION) {
+		QByteArray inputData = data;
+		QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
+		quint32 point1, point2;
+		QVector<QPointF> points;
+		inputDataStream >> point1 >> point2 >> points;
+
+		QByteArray outputData;
+		QDataStream outputDataStream(&outputData, QIODevice::WriteOnly);
+		outputDataStream << points;
+
+		emit serverSendCorrelationRpcSignal(point1, point2, outputData);
+	}
+	else if (signalType == RPC_SLOT_SERVER_ATLANT_DIRECTION) {
+		emit serverSendAtlantDirectionRpcSignal(data);
+	}
+	else if (signalType == RPC_SLOT_SERVER_ATLANT_POSITION) {
+		/// TODO: no connection in view
+		emit serverSendAtlantPositionRpcSignal(data);
+	}
+	else if (signalType == RPC_SLOT_SERVER_PRM_STATUS) {
+		/// WTF?! TODO: refactor
+		QByteArray inputData = data;
+		QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
+
+		quint16 freq;
+		quint8 filter;
+		quint8 att1;
+		quint8 att2;
+
+		inputDataStream >> freq;
+		inputDataStream >> filter;
+		inputDataStream >> att1;
+		inputDataStream >> att2;
+
+		emit serverSendPrmStatusRpcSignal((int)freq, (int)filter, (int)att1, (int)att2);
+	}
+	/// TODO: Not used in UI
+	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF) {
+		emit serverSendBplaDefRpcSignal(data);
+	}
+	/// TODO: Not used in UI
+	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO) {
+		emit serverSendBplaDefAutoRpcSignal(data);
+	}
 }
 
 void RPCServer::rpcSlotSetBandwidth(quint64 client, int id, float bandwidth)
 {
-    QTextStream(stdout) << "received " << bandwidth << "from client" << client << "id = " << id << endl;
-	if(!m_mapClients.contains(client))
-    {
-        QTextStream(stdout) << "this client doesn't registered!" << endl;
-    }
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << bandwidth;
 
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << bandwidth;
-
-    QSharedPointer<IMessage> msg(new Message(id, RCP_BANDWIDTH_TYPE, ba));
-	m_subscriber->data_ready(RCP_BANDWIDTH_TYPE, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_BANDWIDTH, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSetShift(quint64 client, int id, float shift)
 {
-    QTextStream(stdout) << "received " << shift << "from client" << client << endl;
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << shift;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << shift;
 
-    QSharedPointer<IMessage> msg(new Message(id, RCP_SHIFT_TYPE, ba));
-	m_subscriber->data_ready(RCP_SHIFT_TYPE, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_SHIFT, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotRecognize(quint64 client, int id, int type)
 {
-    QTextStream(stdout) << "received " << type << "from client" << client << endl;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << id;
 
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << id;
-
-    QSharedPointer<IMessage> msg(new Message(id, RCP_COMMAND_RECOGNIZE, ba));
-	m_subscriber->data_ready(RCP_COMMAND_RECOGNIZE, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_RECOGNIZE, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSsCorrelation(quint64 client, int id, bool enable)
 {
-    QTextStream(stdout) << "received " << enable << "from client" << client << endl;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << enable;
 
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << enable;
-
-    QSharedPointer<IMessage> msg(new Message(id, RPC_SS_CORRELATION, ba));
-	m_subscriber->data_ready(RPC_SS_CORRELATION, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SS_CORRELATION, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage)
 {
-    QTextStream(stdout) << "received " << avarage << "from client" << client << endl;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << avarage;
 
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << avarage;
-
-    QSharedPointer<IMessage> msg(new Message(id, RPC_AVARAGE_SPECTRUM, ba));
-	m_subscriber->data_ready(RPC_AVARAGE_SPECTRUM, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_AVARAGE_SPECTRUM, QVariant(byteArray));
+	}
 }
-
 
 /// send command to prm300 for set central freq
 void RPCServer::rpcSlotPrmSetFreq(quint64, int id, short freq)
 {
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << freq;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << freq;
 
-    QSharedPointer<IMessage> msg(new Message(id, PRM_SET_FREQ, ba));
-	m_subscriber->data_ready(PRM_SET_FREQ, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_PRM_SET_FREQ, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotPrmRequestFreq(quint64 client, int id)
 {
-    QSharedPointer<IMessage> msg(new Message(id, PRM_REQUEST_FREQ, NULL));
-	m_subscriber->data_ready(PRM_REQUEST_FREQ, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_PRM_REQUEST_FREQ, QVariant());
+	}
 }
 
 void RPCServer::rpcSlotPrmSetAtt1(quint64 client, int id, int value)
 {
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << value;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << value;
 
-    QSharedPointer<IMessage> msg(new Message(id, PRM_SET_ATT1, ba));
-	m_subscriber->data_ready(PRM_SET_ATT1, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_PRM_SET_ATT1, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotPrmSetAtt2(quint64 client, int id, int value)
 {
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << value;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << value;
 
-    QSharedPointer<IMessage> msg(new Message(id, PRM_SET_ATT2, ba));
-	m_subscriber->data_ready(PRM_SET_ATT2, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_PRM_SET_ATT2, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotPrmSetFilter(quint64 client, int id, int index)
 {
-    QByteArray *ba = new QByteArray();
-    QDataStream ds(ba, QIODevice::ReadWrite);
-    ds << index;
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << index;
 
-    QSharedPointer<IMessage> msg(new Message(id, PRM_SET_FILTER, ba));
-	m_subscriber->data_ready(PRM_SET_FILTER, msg);
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_PRM_SET_FILTER, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSetDataToSolver(quint64 client, QByteArray data)
 {
-    QByteArray* ba = new QByteArray();
-    ba->append(data);
-    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER, ba));
-	m_subscriber->data_ready(SET_SOLVER, msg);
+	QByteArray byteArray;
+	byteArray.append(data);
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_DATA_TO_SOLVER, QVariant(byteArray));
+	}
 }
 
 void RPCServer::rpcSlotSetClearToSolver(quint64 client, QByteArray data)
 {
-    QByteArray* ba = new QByteArray();
-    ba->append(data);
-    QSharedPointer<IMessage> msg(new Message(701, SET_SOLVER_CLEAR, ba));
-	m_subscriber->data_ready(SET_SOLVER_CLEAR, msg);
+	QByteArray byteArray;
+	byteArray.append(data);
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_CLEAR_TO_SOLVER, QVariant(byteArray));
+	}
 }
 
-void RPCServer::rpcSlotSendFft(quint64 client, rpc_send_points_vector points)
-{
-	QByteArray outBA;
-	QDataStream stream(&outBA, QIODevice::WriteOnly);
-	stream << points;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_POINTS, outBA);
-}
-
-void RPCServer::rpcSlotsenddetectedbandwidth(quint64 client, rpc_send_points_vector points)
-{
-	QByteArray outBA;
-	QDataStream stream(&outBA, QIODevice::WriteOnly);
-	stream << points;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, outBA);
-}
-
-void RPCServer::rpcSlotSendCorr(quint64 client, quint32 point1, quint32 point2, rpc_send_points_vector points)
-{
-	QByteArray outBA;
-	QDataStream stream(&outBA, QIODevice::WriteOnly);
-	stream << points;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_CORRELATION, point1, point2, outBA);
-}
 
 void RPCServer::rpcSlotSendRespModulation(quint64 client, QString modulation)
 {
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, modulation);
-}
-
-void RPCServer::rpcSlotPrmStatus(quint64 client, QByteArray *data)
-{
-    QDataStream ds(data, QIODevice::ReadOnly);
-    quint16 freq;
-    quint8  filter;
-    quint8 att1;
-    quint8 att2;
-
-    ds >> freq;
-    ds >> filter;
-    ds >> att1;
-    ds >> att2;
-	m_serverPeer->call(client, RPC_SLOT_SERVER_PRM_STATUS, QVariant::fromValue((int)freq),  QVariant::fromValue((int)filter), \
-                      QVariant::fromValue((int)att1), QVariant::fromValue((int)att2));
-}
-
-void RPCServer::rpcSlotStatus(quint64 client, QByteArray *data)
-{
-    QDataStream ds(data, QIODevice::ReadOnly);
-    bool state;
-
-    ds >> state;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_STATUS, QVariant::fromValue((bool)state));
-}
-
-void RPCServer::rpcSlotSendAtalntData(quint64 client, QByteArray *data)
-{
-	m_serverPeer->call(client, RPC_SLOT_SERVER_ATLANT_DIRECTION, QVariant::fromValue(*data));
-}
-
-void RPCServer::rpcSlotSendAtalntDataPos(quint64 client, QByteArray *data)
-{
-	m_serverPeer->call(client, RPC_SLOT_SERVER_ATLANT_POSITION, QVariant::fromValue(*data));
+	/// TODO
+	//	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, modulation);
 }
 
 void RPCServer::rpcSlotSetAtlantFrequency(quint64 client, QByteArray data)
 {
-    QByteArray* ba = new QByteArray(data);
-
-    QSharedPointer<IMessage> msg(new Message(6, ATLANT_SET_FREQ, ba));
-	m_subscriber->data_ready(ATLANT_SET_FREQ, msg);
-}
-
-void RPCServer::rpcSlotSendBpla(quint64 client, QByteArray *data)
-{
-    QDataStream ds(data, QIODevice::ReadOnly);
-    rpc_send_atlant_data msg;
-    ds >> msg;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_BPLA_DEF, QVariant::fromValue(*data));
-}
-
-void RPCServer::rpcSlotSendBplaAuto(quint64 client, QByteArray *data)
-{
-    QDataStream ds(data, QIODevice::ReadOnly);
-    rpc_send_atlant_data msg;
-    ds >> msg;
-
-	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO, QVariant::fromValue(*data));
-}
-
-/// to OD
-void RPCServer::rpcSlotSendAtlantDirection(quint64 client, QByteArray *data)
-{
-	m_serverPeer->call(client, RPC_SLOT_SERVER_ATLANT_DIRECTION, QVariant::fromValue(*data));
-}
-
-void RPCServer::rpcSlotSendAtlantPosition(quint64 client, QByteArray *data)
-{
-	m_serverPeer->call(client, RPC_SLOT_SERVER_ATLANT_POSITION, QVariant::fromValue(*data));
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_SET_ATLANT_FREQUENCY, QVariant(data));
+	}
 }
 
 void RPCServer::rpcSlotRequestStatus(quint64 client, int id)
 {
-    QByteArray* ba = new QByteArray();
-
-    QSharedPointer<IMessage> msg(new Message(id, REQUEST_STATUS, ba));
-	m_subscriber->data_ready(REQUEST_STATUS, msg);
-}
-
-void RPCServer::aboutToQuitApp()
-{
+	/// TODO
 }

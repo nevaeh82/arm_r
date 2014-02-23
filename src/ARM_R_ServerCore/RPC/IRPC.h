@@ -1,16 +1,15 @@
 #ifndef IRPC_H
 #define IRPC_H
 
-#include <QtGlobal>
-
-class IClient;
+class QString;
+class QByteArray;
 
 class IRPC
 {
-	public:
-		virtual ~IRPC(){}
+public:
+	virtual ~IRPC(){}
 
-		virtual quint64 getClientId(IClient* client)      = 0;
+	virtual void sendDataByRpc(const QString& signalType, const QByteArray& data) = 0;
 };
 
 #endif // IRPC_H

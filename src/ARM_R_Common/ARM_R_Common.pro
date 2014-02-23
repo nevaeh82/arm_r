@@ -22,7 +22,8 @@ SOURCES += \
     ServiceHandler/ServiceHandler.cpp \
     ServiceHandler/CommonCodes.cpp \
     Rpc/RpcClientBase.cpp \
-    Rpc/RpcServerBase.cpp
+    Rpc/RpcServerBase.cpp \
+    CRCs.cpp
 
 HEADERS += \
     ServiceHandler/ServiceTerminateCause.h \
@@ -44,4 +45,11 @@ HEADERS += \
     BaseSubject.h \
     Interfaces/IRpcControllerBase.h \
     Interfaces/IRpcListener.h \
-    Rpc/RpcDefines.h  
+    Rpc/RpcDefines.h \  
+    TcpDevicesDefines.h \
+    Message.h \
+    Interfaces/IMessage.h \
+    CRCs.h \
+    SingletonTemplate.h \
+    SingletonTemplate.hpp \
+    CommonDefines.h

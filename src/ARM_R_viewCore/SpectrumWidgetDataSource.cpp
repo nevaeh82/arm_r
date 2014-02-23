@@ -35,13 +35,26 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 
 		QVector<QPointF> vecFFT;
 		QDataStream stream(vecFFTBA);
+
+		unsigned int id; // m_header.id;
+		stream >> id;
+		if (id != m_spectrumWidget->getId()) {
+			return;
+		}
+
 		stream >> vecFFT;
 
 		dataProccess(vecFFT, isComplex);
 
 		QList<QVariant> list;
+
+//		QVariant headerId(id); // m_header.id;
+
 		QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
 		QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
+
+//		list.append(headerId); // m_header.id;
+
 		list.append(spectrumVariant);
 		list.append(peaksSpectrumVariant);
 

@@ -26,19 +26,3 @@ void RpcServerBase::stop()
 	m_serverPeer->stopListening();
 	m_serverPeer->disconnectAll();
 }
-
-void RpcServerBase::registerListener(IRpcListener* listener)
-{
-	m_listeners.append(listener);
-}
-
-void RpcServerBase::deregisterListener(IRpcListener* listener)
-{
-	int index = m_listeners.indexOf(listener);
-
-	if (index < 0){
-		return;
-	}
-
-	m_listeners.removeAt(index);
-}
