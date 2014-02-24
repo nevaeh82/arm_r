@@ -129,11 +129,11 @@ bool TreeWidgetDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 	QString propName = ind.data(Qt::DisplayRole).toString();
 	propName = getRealPropNameFromTranslate(propName);
 
-	if(propName == tr(DB_FREQUENCY_PROPERTY)) {
+	if(propName == DB_FREQUENCY_PROPERTY) {
 		m_mode = FrequencyMode;
-	} else if(propName == tr(DB_AVERAGING_PROPERTY)) {
+	} else if(propName == DB_AVERAGING_PROPERTY) {
 		m_mode = AveragingMode;
-	} else if(propName == tr(DB_LEADING_OP_PROPERTY)) {
+	} else if(propName == DB_LEADING_OP_PROPERTY) {
 		m_mode = LeadingOPMode;
 	} else {
 		m_mode = DefaultMode;
@@ -151,9 +151,10 @@ void TreeWidgetDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptio
 
 QString TreeWidgetDelegate::getRealPropNameFromTranslate(const QString& propName) const
 {
-	QString temp1 = tr(DB_FREQUENCY_PROPERTY);
-	QString temp2 = tr(DB_AVERAGING_PROPERTY);
-	QString temp3 = tr(DB_LEADING_OP_PROPERTY);
+	///DO NOT TOUCH
+	QString temp1 = tr("Frequency");
+	QString temp2 = tr("Averaging");
+	QString temp3 = tr("Leading OP");
 
 	if (propName == temp1) {
 		return DB_FREQUENCY_PROPERTY;
@@ -169,9 +170,10 @@ QString TreeWidgetDelegate::getRealPropNameFromTranslate(const QString& propName
 
 QString TreeWidgetDelegate::getTranslatePropNameFromReal(const QString& propName) const
 {
-	QString temp1 = tr(DB_FREQUENCY_PROPERTY);
-	QString temp2 = tr(DB_AVERAGING_PROPERTY);
-	QString temp3 = tr(DB_LEADING_OP_PROPERTY);
+	///DO NOT TOUCH
+	QString temp1 = tr("Frequency");
+	QString temp2 = tr("Averaging");
+	QString temp3 = tr("Leading OP");
 
 	if (propName == DB_FREQUENCY_PROPERTY) {
 		return temp1;

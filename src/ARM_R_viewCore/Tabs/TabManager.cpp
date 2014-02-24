@@ -42,6 +42,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
 		tabController->setDbManager(m_dbManager);
+		m_dbManager->registerReceiver(tabController);
 		tabController->appendView(tabSpectrumWidget);
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
