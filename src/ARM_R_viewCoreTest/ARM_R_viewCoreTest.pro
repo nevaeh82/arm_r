@@ -2,7 +2,7 @@
 TARGET   = ARM_R_viewCoreTest
 TEMPLATE = app
 
-QT     +=  core network
+QT     +=  core network sql
 QT     += gui
 CONFIG += console
 CONFIG += qtestlib
@@ -12,7 +12,8 @@ ProjectDir=$$PWD
 INCLUDEPATH += ../../tools/cxxtest
 
 HEADERS += \
-    testGraphicsData.h
+    testGraphicsData.h \
+    testDBStation.h
 
 include(../../specs/project.pri)
 include(../ARM_R_viewCore/reference.pri)

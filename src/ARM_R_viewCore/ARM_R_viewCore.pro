@@ -43,7 +43,8 @@ SOURCES += \
     SpectrumWidgetDataSource.cpp \
     Correlations/CorrelationWidgetDataSource.cpp \
     Correlations/CorrelationWidgetController.cpp \
-    Correlations/CorrelationControllersContainer.cpp
+    Correlations/CorrelationControllersContainer.cpp \
+    DBStation/dbstationcontroller.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -97,7 +98,9 @@ HEADERS += \
     Correlations/CorrelationWidgetController.h \
     Interfaces/ICorrelationWidget.h \
     Correlations/CorrelationControllersContainer.h \
-    Interfaces/IStation.h
+    Interfaces/IStation.h \
+    DBStation/dbstationcontroller.h \
+    DBStation/DBConnectionParameters.h
 
 FORMS += \
     ControlPanel.ui \
