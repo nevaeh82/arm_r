@@ -44,7 +44,7 @@ SOURCES += \
     Correlations/CorrelationWidgetDataSource.cpp \
     Correlations/CorrelationWidgetController.cpp \
     Correlations/CorrelationControllersContainer.cpp \
-    DBStation/dbstationcontroller.cpp
+    DBStation/dbStationController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -99,8 +99,9 @@ HEADERS += \
     Interfaces/ICorrelationWidget.h \
     Correlations/CorrelationControllersContainer.h \
     Interfaces/IStation.h \
-    DBStation/dbstationcontroller.h \
-    DBStation/DBConnectionParameters.h
+    DBStation/dbStationController.h \
+    DBStation/dbConnectionParameters.h \
+    DBStation/dbFilTables.h
 
 FORMS += \
     ControlPanel.ui \

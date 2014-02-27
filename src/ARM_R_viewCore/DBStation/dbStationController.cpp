@@ -20,13 +20,13 @@ DBStationController::DBStationController(QObject *parent) :
 
 DBStationController::~DBStationController()
 {
-	if(m_openDB())
+	if(openDB())
 	{
 		m_db.close();
 	}
 }
 
-bool DBStationController::setDatabases(DBConnectionStruct parameters)
+bool DBStationController::connectToDB(const DBConnectionStruct& parameters)
 {
 	m_db.setHostName(parameters.host);
 	m_db.setPort(parameters.port);
@@ -44,9 +44,9 @@ bool DBStationController::setDatabases(DBConnectionStruct parameters)
 
 }
 
-int DBStationController::addStation(QString name, QString ip)
+int DBStationController::addStation(const QString& name, const QString& ip)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -71,9 +71,9 @@ int DBStationController::addStation(QString name, QString ip)
 	return INVALID_INDEX;
 }
 
-int DBStationController::addStationDevice(QString name, unsigned short port)
+int DBStationController::addStationDevice(const QString& name, const unsigned short& port)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -98,9 +98,9 @@ int DBStationController::addStationDevice(QString name, unsigned short port)
 	return INVALID_INDEX;
 }
 
-int DBStationController::addSignalType(QString name)
+int DBStationController::addSignalType(const QString& name)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -126,9 +126,9 @@ int DBStationController::addSignalType(QString name)
 	return INVALID_INDEX;
 }
 
-int DBStationController::addCategory(QString name)
+int DBStationController::addCategory(const QString& name)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -152,9 +152,9 @@ int DBStationController::addCategory(QString name)
 	return INVALID_INDEX;
 }
 
-int DBStationController::addStationData(stationData data)
+int DBStationController::addStationData(const stationData& data)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -187,9 +187,9 @@ int DBStationController::addStationData(stationData data)
 	return INVALID_INDEX;
 }
 
-int DBStationController::getLastIndex(QString table)
+int DBStationController::getLastIndex(const QString& table)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -221,9 +221,9 @@ int DBStationController::getLastIndex(QString table)
 	return INVALID_INDEX;
 }
 
-int DBStationController::getStationID(QString name)
+int DBStationController::getStationID(const QString& name)
 {
-	if(!m_openDB())
+	if(!openDB())
 	{
 		return INVALID_INDEX;
 	}
@@ -255,7 +255,7 @@ int DBStationController::getStationID(QString name)
 	return INVALID_INDEX;
 }
 
-bool DBStationController::m_openDB()
+bool DBStationController::openDB()
 {
 	if(!m_db.isOpen())
 	{

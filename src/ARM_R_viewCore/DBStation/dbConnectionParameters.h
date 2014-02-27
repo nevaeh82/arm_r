@@ -3,6 +3,7 @@
 
 #include <QString>
 
+/// parameters for connect to mysql
 typedef struct DBConnectionStruct
 {
 	QString host;
@@ -11,15 +12,5 @@ typedef struct DBConnectionStruct
 	QString password;
 	QString dbName;
 }DBConnectionStruct;
-
-typedef struct stationData
-{
-	QString stationName;
-	unsigned short port;
-	QString category;
-	double frequency;
-	double bandwidth;
-	QString signalType;
-}stationData;
 
 #endif // DBCONNECTIONPARAMETERS_H

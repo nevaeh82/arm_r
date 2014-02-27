@@ -4,7 +4,7 @@
 #include <cxxtest/TestSuite.h>
 #include <QtGlobal>
 
-#include "DBStation/dbstationcontroller.h"
+#include "DBStation/dbStationController.h"
 
 class dbStationTest: public CxxTest::TestSuite
 {
@@ -19,7 +19,7 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->setDatabases(param);
+		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("station");
 //		TS_ASSERT_DIFFERS(0, lastID);
@@ -44,7 +44,7 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->setDatabases(param);
+		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("station");
 //		TS_ASSERT_DIFFERS(0, lastID);
@@ -70,7 +70,7 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->setDatabases(param);
+		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("signalType");
 //		TS_ASSERT_DIFFERS(0, lastID);
@@ -96,7 +96,7 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->setDatabases(param);
+		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("category");
 
@@ -136,7 +136,7 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->setDatabases(param);
+		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("stationData");
 

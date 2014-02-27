@@ -10,7 +10,8 @@
 
 #include <QDateTime>
 
-#include "DBConnectionParameters.h"
+#include "dbConnectionParameters.h"
+#include "dbFilTables.h"
 
 #define INVALID_INDEX 0
 
@@ -22,17 +23,17 @@ public:
 	virtual ~DBStationController();
 
 public:
-	virtual bool setDatabases(DBConnectionStruct parameters);
-	virtual int addStation(QString name, QString ip);
-	virtual int addStationDevice(QString name, unsigned short port);
-	virtual int addSignalType(QString name);
-	virtual int addCategory(QString name);
-	virtual int addStationData(stationData data);
-	virtual int getLastIndex(QString table);
-	virtual int getStationID(QString name);
+	virtual bool connectToDB(const DBConnectionStruct& parameters);
+	virtual int addStation(const QString& name, const QString& ip);
+	virtual int addStationDevice(const QString& name, const unsigned short& port);
+	virtual int addSignalType(const QString& name);
+	virtual int addCategory(const QString& name);
+	virtual int addStationData(const stationData& data);
+	virtual int getLastIndex(const QString& table);
+	virtual int getStationID(const QString& name);
 
 private:
-	bool m_openDB();
+	bool openDB();
 
 private:
 	QSqlDatabase m_db;
