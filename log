@@ -1,8 +1,0 @@
-Invalid arguments. Please verify.
-
-branchlog (branchlog, bl): get log for specified branch.
-This command provides good service for retrieving log for branch before mer                                                                                                                                ge
-usage: brlog BRANCH_PATH
-
-   PROJECT_PATH should be presended by full URL
-
