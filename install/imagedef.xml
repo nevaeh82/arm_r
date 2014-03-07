@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<imagedef>
+	<product name="Zaviruha" version="1.0.0.0" code="zaviruha"/>
+	<files path="build\tmprel\bin\*.*"/>
+	<link  name="$DESKTOP\Завируха-АРМ-ОД" target="$INSTDIR\ARM_OD_view.exe"/>
+	<imagefile path="build\tmprel\image\ARM_OD_Setup.exe"/>
+	<installdir path="c:\Zaviruha\ARM-OD\"/>
+</imagedef>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\ARM_OD_Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\ARM_OD_Srv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\AIS\Ais.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\Common\Simulators\AtlantSimulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAControllerParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAParser2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLASimulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\Common\CRCs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\RPC\Message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\NIIPP\NIIPPController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\NIIPP\NIIPPParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\RPC\RPCClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\RPC\Client\RPCClient_R.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\RPC\RPCServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\Common\Router.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\Common\Subscriber.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\TCPClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\TCPController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\AIS\parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ARM_OD_ServerCore\TCP\source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\ARM_OD_Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\ARM_OD_Srv.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\AIS\Ais.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\Common\Simulators\AtlantSimulator.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLA.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAController.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAControllerParser.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAParser.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLAParser2.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\BLASimulator.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\CRCs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\UAV\IBLAController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\IClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\IMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\NIIPP\INIIPPController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\IQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\RPC\IRPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\RPC\Client\IRPC_R.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\IRouter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\Common\ISubscriber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\ITCPClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\ITCPController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\ITCPParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\RPC\Message.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\NIIPP\NIIPPController.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\NIIPP\NIIPPParser.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\RPC\RPCClient.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\RPC\Client\RPCClient_R.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\RPC\RPCServer.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\Common\Router.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\Common\Subscriber.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\TCPClient.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\TCP\TCPController.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="..\..\..\src\ARM_OD_ServerCore\TCP\TCPPacketStruct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="..\..\..\src\ARM_OD_ServerCore\AIS\parser.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_ARM_OD_Srv.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_ARM_OD_Srv.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_Ais.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_Ais.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_AtlantSimulator.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_AtlantSimulator.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLA.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLA.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLAController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLAController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLAControllerParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLAControllerParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLAParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLAParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLAParser2.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLAParser2.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_BLASimulator.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_BLASimulator.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_NIIPPController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_NIIPPController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_NIIPPParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_NIIPPParser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_RPCClient.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_RPCClient.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_RPCClient_R.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_RPCClient_R.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_RPCServer.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_RPCServer.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_Router.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_Router.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_Subscriber.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_Subscriber.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_TCPClient.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_TCPClient.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_TCPController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_TCPController.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCore\moc_parser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\obj\msvc\ARM_OD_ServerCored\moc_parser.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

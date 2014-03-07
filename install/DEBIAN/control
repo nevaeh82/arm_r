@@ -1,0 +1,7 @@
+Package: SkyHobbit
+Version: __VERSION__
+Maintainer: nppntt
+Architecture: amd64
+Section: misc
+Description: skyhobbit
+ skyhobbit

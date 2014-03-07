@@ -1,0 +1,63 @@
+<RCC>
+    <qresource prefix="/images/signals">
+        <file>images/bullet_green.png</file>
+        <file>images/bullet_red.png</file>
+    </qresource>
+    <qresource prefix="/images/punkts">
+        <file>images/Punkts/stac.png</file>
+        <file>images/Punkts/BLA.png</file>
+        <file>images/Punkts/BPLA.png</file>
+        <file>images/Punkts/StationBlue16.png</file>
+        <file>images/Punkts/StationBlue24.png</file>
+        <file>images/Punkts/StationBlue36.png</file>
+        <file>images/Punkts/StationBlue48.png</file>
+        <file>images/Punkts/StationBlue64.png</file>
+        <file>images/Punkts/StationBlue128.png</file>
+    </qresource>
+    <qresource prefix="/images/tabs">
+        <file>images/Tabs/tabs_manager.png</file>
+        <file>images/Tabs/map.png</file>
+        <file>images/Tabs/spectrum.png</file>
+        <file>images/Tabs/spectra.png</file>
+        <file>images/Punkts/StationRed16.png</file>
+        <file>images/Punkts/StationRed24.png</file>
+        <file>images/Punkts/StationRed36.png</file>
+        <file>images/Punkts/StationRed48.png</file>
+        <file>images/Punkts/StationRed64.png</file>
+        <file>images/Punkts/StationRed128.png</file>
+    </qresource>
+    <qresource prefix="/images/UAV">
+        <file>images/UAV/BLA.png</file>
+        <file>images/UAV/BPLA.png</file>
+        <file>images/UAV/BLA16.png</file>
+        <file>images/UAV/BLA24.png</file>
+        <file>images/UAV/BLA36.png</file>
+        <file>images/UAV/BLA64.png</file>
+        <file>images/UAV/BLA128.png</file>
+        <file>images/UAV/BLA48.png</file>
+        <file>images/UAV/BPLA16.png</file>
+        <file>images/UAV/BPLA24.png</file>
+        <file>images/UAV/BPLA36.png</file>
+        <file>images/UAV/BPLA48.png</file>
+        <file>images/UAV/BPLA64.png</file>
+        <file>images/UAV/BPLA128.png</file>
+    </qresource>
+    <qresource prefix="/images/map">
+        <file>images/Tabs/bank_128.png</file>
+        <file>images/Tabs/fix_128.png</file>
+        <file>images/Tabs/spiral_zoom_128.png</file>
+        <file>images/Tabs/tablet_128.png</file>
+        <file>images/Tabs/web_mail_128.png</file>
+        <file>images/Tabs/map.png</file>
+    </qresource>
+    <qresource prefix="/images/ais">
+        <file>images/AIS/PostPlaneYellow.png</file>
+        <file>images/AIS/PostPlaneBlack.png</file>
+    </qresource>
+    <qresource prefix="/images/Points">
+        <file>images/Points/redmark16.png</file>
+        <file>images/Points/redmark24.png</file>
+        <file>images/Points/redmark32.png</file>
+        <file>images/Points/redmark48.png</file>
+    </qresource>
+</RCC>

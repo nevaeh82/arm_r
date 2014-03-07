@@ -1,0 +1,56 @@
+OziExplorer Map Data File Version 2.2
+Created by SAS.Planet
+абхазия1.jpg
+1 ,Map Code,
+WGS 84,,   0.0000,   0.0000,WGS 84
+Reserved 1
+Reserved 2
+Magnetic Variation,,,E
+Map Projection,Mercator,PolyCal,No,AutoCalOnly,No,BSBUseWPX,No
+Point01,xy,    0, 0,in, deg, 42, 43.592350484069,N, 41, 12.088623046875,E, grid,   ,           ,           ,N
+Point02,xy,    6720, 3648,in, deg, 42, 15.7868518091189,N, 42, 21.302490234375,E, grid,   ,           ,           ,N
+Point03,xy,    0, 3648,in, deg, 42, 15.7868518091189,N, 41, 12.088623046875,E, grid,   ,           ,           ,N
+Point04,xy,    6720, 0,in, deg, 42, 43.592350484069,N, 42, 21.302490234375,E, grid,   ,           ,           ,N
+Point05,xy,    3360, 1824,in, deg, 42, 29.7155450364238,N, 41, 46.695556640625,E, grid,   ,           ,           ,N
+Point06,xy,    3360, 0,in, deg, 42, 43.592350484069,N, 41, 46.695556640625,E, grid,   ,           ,           ,N
+Point07,xy,    0, 1824,in, deg, 42, 29.7155450364238,N, 41, 12.088623046875,E, grid,   ,           ,           ,N
+Point08,xy,    6720, 1824,in, deg, 42, 29.7155450364238,N, 42, 21.302490234375,E, grid,   ,           ,           ,N
+Point09,xy,    3360, 3648,in, deg, 42, 15.7868518091189,N, 41, 46.695556640625,E, grid,   ,           ,           ,N
+Point10,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point11,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point12,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point13,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point14,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point15,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point16,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point17,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point18,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point19,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point20,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point21,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point22,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point23,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point24,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point25,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point26,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point27,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point28,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point29,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Point30,xy,     ,     ,in, deg,    ,        ,N,    ,        ,W, grid,   ,           ,           ,N
+Projection Setup,,,,,,,,,,
+Map Feature = MF ; Map Comment = MC     These follow if they exist
+Track File = TF      These follow if they exist
+Moving Map Parameters = MM?    These follow if they exist
+MM0,Yes
+MMPNUM,4
+MMPXY,1,0,0
+MMPXY,2,6720,0
+MMPXY,3,6720,3648
+MMPXY,4,0,3648
+MMPLL,1, 41.2014770507813, 42.7265391747345
+MMPLL,2, 42.3550415039063, 42.7265391747345
+MMPLL,3, 42.3550415039063, 42.2631141968186
+MMPLL,4, 41.2014770507813, 42.2631141968186
+MM1B,14.0898903486608
+MOP,Map Open Position,0,0
+IWH,Map Image Width/Height,6720,3648

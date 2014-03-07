@@ -1,0 +1,16 @@
+[RUSSIAN]
+Descr=Карта Грузии
+Folder=Южный округ России и Закавказье
+
+[Map]
+Codifier=PLAN
+Map=gruzia.chart
+Lookup=topo32bit.lup
+RouteObj1=41??????,42??????
+
+[ENGLISH]
+Descr=Map of Georgia
+Folder=South okrug of Russia and Zakavkaz'e
+
+
+

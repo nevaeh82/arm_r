@@ -1,0 +1,1 @@
+This folder contans shared files for all test suites.

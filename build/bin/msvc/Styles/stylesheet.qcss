@@ -1,0 +1,38 @@
+QCheckBox {
+     spacing: 5px;
+ }
+
+ QCheckBox::indicator {
+     width: 13px;
+     height: 13px;
+ }
+
+ QCheckBox::indicator:unchecked {
+     image: url(:/images/signals/images/bullet_red.png);
+ }
+ QCheckBox::indicator:checked {
+     image: url(:/images/signals/images/bullet_green.png);
+ }
+
+
+QTreeView::indicator:checked {
+image: url(:/images/signals/images/bullet_red.png);
+}
+QTreeView::indicator:unchecked {
+image: url(:/images/signals/images/bullet_green.png);
+}
+
+QAbstractItemView::indicator:enabled:checked
+{
+image: url(:/images/signals/images/bullet_red.png);
+}
+
+QAbstractItemView::indicator:enabled:unchecked
+{
+ image: url(:/images/signals/images/bullet_green.png);
+}
+
+QAbstractItemView::indicator:disabled:checked
+{
+ image: url(:/images/signals/images/bullet_red.png);
+}

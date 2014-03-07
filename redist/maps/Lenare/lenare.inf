@@ -1,0 +1,17 @@
+[RUSSIAN]
+Descr=Ленинградская область
+Folder=Северо-Западный округ России
+
+[Map]
+Map=lenare.chart
+Lookup=topo32bit.lup
+Prj=
+RouteObj1=41??????,42??????
+
+
+
+[ENGLISH]
+Descr=Leningradskaya oblast'
+Folder=North-West okrug of Russia
+
+

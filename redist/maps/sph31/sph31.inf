@@ -1,0 +1,18 @@
+[RUSSIAN]
+Descr=Санкт-Петербург
+Folder=Северо-Западный округ России
+Address=sph31.atb;204;Санкт-Петербург
+
+[Map]
+Map=sph31.chart
+Lookup=city32bit.lup
+prj=
+Streets=ST;01
+RouteObj1=CT,RC
+
+
+
+[ENGLISH]
+Descr=Saint-Petersburg (city)
+Folder=North-West okrug of Russia
+Address=sph31.atb;204;Санкт-Петербург

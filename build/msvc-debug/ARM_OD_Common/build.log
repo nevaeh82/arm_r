@@ -1,0 +1,37 @@
+﻿Построение начато 06.03.2014 15:50:08.
+Проект "E:\Projects\Qt\Zaviruha\ARM-OD\trunk\build\msvc-debug\ARM_OD_Common\project.vcxproj" в узле 1 (целевые объекты по умолчанию).
+InitializeBuildStatus:
+  Создание "..\..\obj\msvc\ARM_R_Commond\debug\project.unsuccessfulbuild", так как было задано "AlwaysCreate".
+PreBuildEvent:
+  Description: mingw32-make -f product.mak -C E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common MAKE_DESTDIR_TARGET=E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/ARM_R_Commond HOST=win32 MAKE_PLATFORM=msvc HEADERS="" REFERENCES="" BUILD_PROFILE=debug prebuild
+  mingw32-make -f product.mak -C E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common MAKE_DESTDIR_TARGET=E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/ARM_R_Commond HOST=win32 MAKE_PLATFORM=msvc HEADERS="" REFERENCES="" BUILD_PROFILE=debug prebuild
+  :VCEnd
+  mingw32-make[2]: Entering directory `E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common'
+  Deploy logger libs
+  c:\QtPlatform\\unxutils\usr\local\wbin\cp.exe -u  -ud E:/Projects/Qt/Zaviruha/ARM-OD/trunk/redist/PwLogger-win32/lib_msvc/*.dll E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/.
+  c:\QtPlatform\\unxutils\usr\local\wbin\cp.exe -u  -ud E:/Projects/Qt/Zaviruha/ARM-OD/trunk/redist/QXT/lib_msvc/*.dll E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/.
+  mingw32-make[2]: Leaving directory `E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common'
+CustomBuild:
+  Для всех выходных данных обновления не требуется.
+ClCompile:
+  Для всех выходных данных обновления не требуется.
+Lib:
+  Для всех выходных данных обновления не требуется.
+  project.vcxproj -> E:\Projects\Qt\Zaviruha\ARM-OD\trunk\build\msvc-debug\ARM_OD_Common\..\..\bin\msvc\ARM_R_Commond.lib
+PostBuildEvent:
+  Description: mingw32-make -f product.mak -C E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common DESTDIR_TARGET=E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/ARM_R_Commond HOST=win32 MAKE_PLATFORM=msvc BUILD_PROFILE=debug postbuild
+  mingw32-make -f product.mak -C E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common DESTDIR_TARGET=E:/Projects/Qt/Zaviruha/ARM-OD/trunk/build/bin/msvc/ARM_R_Commond HOST=win32 MAKE_PLATFORM=msvc BUILD_PROFILE=debug postbuild
+  :VCEnd
+  mingw32-make[2]: Entering directory `E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common'
+  mingw32-make[2]: Nothing to be done for `postbuild'.
+  mingw32-make[2]: Leaving directory `E:/Projects/Qt/Zaviruha/ARM-OD/trunk/src/ARM_OD_Common'
+FinalizeBuildStatus:
+  Файл "..\..\obj\msvc\ARM_R_Commond\debug\project.unsuccessfulbuild" удаляется.
+  Обращение к "..\..\obj\msvc\ARM_R_Commond\debug\project.lastbuildstate".
+Построение проекта "E:\Projects\Qt\Zaviruha\ARM-OD\trunk\build\msvc-debug\ARM_OD_Common\project.vcxproj" завершено (целевые объекты по умолчанию).
+
+Построение успешно завершено.
+    Предупреждений: 0
+    Ошибок: 0
+
+Затраченное время: 00:00:01.42
