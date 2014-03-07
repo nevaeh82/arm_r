@@ -14,7 +14,7 @@ public:
 	{
 		DBStationController* stationController = new DBStationController(NULL);
 		DBConnectionStruct param;
-		param.dbName = "stations";
+		param.dbName = "testStations";
 		param.host = "127.0.0.1";
 		param.login = "root";
 		param.port = 3306;
@@ -22,11 +22,11 @@ public:
 		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("station");
-//		TS_ASSERT_DIFFERS(0, lastID);
+		TS_ASSERT_DIFFERS(0, ++lastID);
 		qDebug() << lastID;
 
 		QString stationName("Station");
-		stationName.append(QString::number(++lastID));
+		stationName.append(QString::number(lastID));
 		int index = stationController->addStation(stationName, "192.168.1.1");
 
 		qDebug() << index;
@@ -39,7 +39,7 @@ public:
 	{
 		DBStationController* stationController = new DBStationController(NULL);
 		DBConnectionStruct param;
-		param.dbName = "stations";
+		param.dbName = "testStations";
 		param.host = "127.0.0.1";
 		param.login = "root";
 		param.port = 3306;
@@ -47,7 +47,7 @@ public:
 		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("station");
-//		TS_ASSERT_DIFFERS(0, lastID);
+		TS_ASSERT_DIFFERS(0, lastID);
 		qDebug() << lastID;
 
 		QString stationName("Station");
@@ -65,7 +65,7 @@ public:
 	{
 		DBStationController* stationController = new DBStationController(NULL);
 		DBConnectionStruct param;
-		param.dbName = "stations";
+		param.dbName = "testStations";
 		param.host = "127.0.0.1";
 		param.login = "root";
 		param.port = 3306;
@@ -73,7 +73,7 @@ public:
 		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("signalType");
-//		TS_ASSERT_DIFFERS(0, lastID);
+		TS_ASSERT_DIFFERS(0, ++lastID);
 		qDebug() << lastID;
 
 		QString signalName("Signal");
@@ -91,7 +91,7 @@ public:
 	{
 		DBStationController* stationController = new DBStationController(NULL);
 		DBConnectionStruct param;
-		param.dbName = "stations";
+		param.dbName = "testStations";
 		param.host = "127.0.0.1";
 		param.login = "root";
 		param.port = 3306;
@@ -109,10 +109,7 @@ public:
 		}
 
 		QString categoryName("White");
-//		categoryName.append(QString::number(lastID));
 		int index = stationController->addCategory(categoryName);
-
-		qDebug() << index;
 
 		TS_ASSERT_EQUALS(1, index);
 
@@ -131,7 +128,7 @@ public:
 	{
 		DBStationController* stationController = new DBStationController(NULL);
 		DBConnectionStruct param;
-		param.dbName = "stations";
+		param.dbName = "testStations";
 		param.host = "127.0.0.1";
 		param.login = "root";
 		param.port = 3306;
@@ -140,16 +137,9 @@ public:
 		TS_ASSERT_EQUALS(true, err);
 		int lastID = stationController->getLastIndex("stationData");
 
-		qDebug() << lastID;
-
-//		if(lastID == 2)
-//		{
-//			delete stationController;
-//			return;
-//		}
-
+		TS_ASSERT_DIFFERS(0, ++lastID);
 		stationData data;
-		data.stationName = "Station3";
+		data.stationName = "Station1";
 		data.port = 1024;
 		data.category = "White";
 		data.signalType = "Signal1";
@@ -161,6 +151,32 @@ public:
 		qDebug() << index;
 
 		TS_ASSERT_DIFFERS(0, index);
+
+
+		delete stationController;
+	}
+
+	void testGetStationInfo()
+	{
+		DBStationController* stationController = new DBStationController(NULL);
+		DBConnectionStruct param;
+		param.dbName = "testStations";
+		param.host = "127.0.0.1";
+		param.login = "root";
+		param.port = 3306;
+		param.password = "qwerty12345";
+		bool err = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, err);
+
+		QList<StationDataFull> list;
+
+		err = stationController->getStationInfo("Station1", list);
+
+		qDebug() << err;
+
+		TS_ASSERT_EQUALS(true, err);
+		TS_ASSERT_DIFFERS(0, list.count());
+
 
 
 		delete stationController;

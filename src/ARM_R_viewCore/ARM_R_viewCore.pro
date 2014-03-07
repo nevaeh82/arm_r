@@ -44,7 +44,9 @@ SOURCES += \
     Correlations/CorrelationWidgetDataSource.cpp \
     Correlations/CorrelationWidgetController.cpp \
     Correlations/CorrelationControllersContainer.cpp \
-    DBStation/dbStationController.cpp
+    DBStation/dbStationController.cpp \
+    ListsForm.cpp \
+    DBStation/ListsController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -101,7 +103,10 @@ HEADERS += \
     Interfaces/IStation.h \
     DBStation/dbStationController.h \
     DBStation/dbConnectionParameters.h \
-    DBStation/dbFilTables.h
+    DBStation/dbFillTables.h \
+    DBStation/IDBStation.h \
+    ListsForm.h \
+    DBStation/ListsController.h
 
 FORMS += \
     ControlPanel.ui \
@@ -111,7 +116,8 @@ FORMS += \
     Correlations/CorrelationGroupWidget.ui \
     AtlantTabWidget.ui \
     Tabs/CommonSpectrumTabWidget.ui \
-    SpectrumWidget.ui
+    SpectrumWidget.ui \
+    listsForm.ui
 
 
 RESOURCES += \

@@ -43,6 +43,7 @@ void MainWindow::init()
 	connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
+	connect(ui->actionLists, SIGNAL(triggered()), this, SIGNAL(signalShowLists()));
 	//connect(ui->actionAtlantSetup, SIGNAL(triggered()), _diag_txt, SLOT(slotShow()));
 
 }

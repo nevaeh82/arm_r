@@ -9,13 +9,15 @@
 #include <QtSql/QSqlRecord>
 
 #include <QDateTime>
+#include <QList>
 
+#include "IDBStation.h"
 #include "dbConnectionParameters.h"
-#include "dbFilTables.h"
+#include "dbFillTables.h"
 
 #define INVALID_INDEX 0
 
-class DBStationController : public QObject
+class DBStationController : public QObject, public IDBStation
 {
 	Q_OBJECT
 public:
@@ -23,6 +25,7 @@ public:
 	virtual ~DBStationController();
 
 public:
+	virtual QSqlDatabase getDataBase();
 	virtual bool connectToDB(const DBConnectionStruct& parameters);
 	virtual int addStation(const QString& name, const QString& ip);
 	virtual int addStationDevice(const QString& name, const unsigned short& port);
@@ -31,6 +34,9 @@ public:
 	virtual int addStationData(const stationData& data);
 	virtual int getLastIndex(const QString& table);
 	virtual int getStationID(const QString& name);
+//	virtual QString getStationIP(const QString& name);
+	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
+
 
 private:
 	bool openDB();

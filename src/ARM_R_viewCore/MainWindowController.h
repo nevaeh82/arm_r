@@ -13,6 +13,12 @@
 #include "Tabs/TabManager.h"
 #include "ControlPanel/ControlPanelController.h"
 
+#include "DBStation/dbStationController.h"
+#include "listsForm.h"
+#include "DBStation/listsController.h"
+
+
+
 class MainWindowController : public QObject, public IController<MainWindow>
 {
 	Q_OBJECT
@@ -29,6 +35,9 @@ private:
 	IDbManager*         m_dbManager;
 	ControlPanelController* m_controlPanelController;
 
+	DBStationController*	m_dbStationController;
+
+
 public:
 	explicit MainWindowController(QObject *parent = 0);
 	virtual ~MainWindowController();
@@ -42,6 +51,7 @@ signals:
 private slots:
 	void serverFailedToStartSlot();
 	void serverStartedSlot();
+	void slotShowLists();
 
 private:
 
