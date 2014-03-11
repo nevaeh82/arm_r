@@ -67,15 +67,15 @@ void CommonSpectrumTabWidget::activate()
 	}
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
-
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
 	}
 }
 
 void CommonSpectrumTabWidget::deactivate()
 {
-	foreach (ISpectrumWidget* widget , m_widgetList) {
+	ui->correlationsGroupWidget->clearWidgetContainer();
 
+	foreach (ISpectrumWidget* widget , m_widgetList) {
 		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
 	}
 }
@@ -124,7 +124,7 @@ void CommonSpectrumTabWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidg
 
 	m_widgetList.append(spectrumWidget);
 
-	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
+//	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 
 	m_treeModel->onCleanSettings();
 

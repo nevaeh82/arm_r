@@ -34,11 +34,8 @@ TabSpectrumWidget::~TabSpectrumWidget()
 {
 }
 
-
 void TabSpectrumWidget::activate()
 {
-	ui->correlationsGroupWidget->clearWidgetContainer();
-
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}
@@ -50,7 +47,11 @@ void TabSpectrumWidget::activate()
 
 void TabSpectrumWidget::deactivate()
 {
+	ui->correlationsGroupWidget->clearWidgetContainer();
 
+	foreach (ISpectrumWidget* spectrumWidget , m_spectrumWidgetsList) {
+		ui->spectumWidgetsContainer->removeWidget(spectrumWidget->getWidget());
+	}
 }
 
 QWidget *TabSpectrumWidget::getWidget()
