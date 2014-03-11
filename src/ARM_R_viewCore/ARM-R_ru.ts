@@ -127,14 +127,87 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="200"/>
+        <location filename="DBStation/dbStationController.cpp" line="208"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="234"/>
+        <location filename="DBStation/dbStationController.cpp" line="242"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ListsController</name>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="78"/>
+        <location filename="DBStation/ListsController.cpp" line="150"/>
+        <source>Station Name</source>
+        <translation>Пост</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="79"/>
+        <location filename="DBStation/ListsController.cpp" line="151"/>
+        <source>IP</source>
+        <translation>IP адрес</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="80"/>
+        <location filename="DBStation/ListsController.cpp" line="152"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="81"/>
+        <source>Type</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="82"/>
+        <location filename="DBStation/ListsController.cpp" line="154"/>
+        <source>Frequency</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="83"/>
+        <location filename="DBStation/ListsController.cpp" line="155"/>
+        <source>Bandwidth</source>
+        <translation>Полоса</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="84"/>
+        <location filename="DBStation/ListsController.cpp" line="156"/>
+        <source>Signal Type</source>
+        <translation>Модуляция</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="85"/>
+        <location filename="DBStation/ListsController.cpp" line="157"/>
+        <source>Date</source>
+        <translation>МДВ</translation>
+    </message>
+</context>
+<context>
+    <name>ListsForm</name>
+    <message>
+        <location filename="ListsForm.ui" line="14"/>
+        <source>Form</source>
+        <translation>Списки</translation>
+    </message>
+    <message>
+        <location filename="ListsForm.ui" line="23"/>
+        <source>All</source>
+        <translation>Все</translation>
+    </message>
+    <message>
+        <location filename="ListsForm.ui" line="28"/>
+        <source>White</source>
+        <translation>Белый</translation>
+    </message>
+    <message>
+        <location filename="ListsForm.ui" line="33"/>
+        <source>Black</source>
+        <translation>Черный</translation>
     </message>
 </context>
 <context>
@@ -183,12 +256,12 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="74"/>
+        <location filename="MainWindowController.cpp" line="87"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="74"/>
+        <location filename="MainWindowController.cpp" line="87"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>

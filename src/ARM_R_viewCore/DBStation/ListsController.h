@@ -34,6 +34,7 @@ private:
 
 private:
 	QSqlQuery getAllStationsInfo();
+	QSqlQuery getStationsInfoByCategory(int type);
 	void adjustTableSize();
 
 private slots:
