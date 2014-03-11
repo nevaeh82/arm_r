@@ -8,7 +8,10 @@ ListsController::ListsController(const QSqlDatabase& db, QObject* parent):
 	m_db = db;
 	m_model = new QSqlQueryModel(this);
 
+	m_proxyModel = new ListsProxyModel(m_model, this);
+
 	m_model->setQuery(getAllStationsInfo());
+
 
 //	m_model->setTable("StationData");
 //	m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -30,6 +33,7 @@ ListsController::ListsController(const QSqlDatabase& db, QObject* parent):
 	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
 	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
 	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
+
 }
 
 ListsController::~ListsController()
@@ -41,11 +45,14 @@ ListsController::~ListsController()
 void ListsController::appendView(ListsForm *widget)
 {
 	m_view = widget->getTableView();
-	m_view->setModel(m_model);
+	m_view->setModel(m_proxyModel);
+	m_view->setSortingEnabled(true);
 //	m_view->hideColumn(0);
 
-	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
+	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+	adjustTableSize();
+	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
 }
 
 QSqlQuery ListsController::getAllStationsInfo()
@@ -67,6 +74,17 @@ QSqlQuery ListsController::getAllStationsInfo()
 	}
 	query.exec();
 	return query;
+}
+
+void ListsController::adjustTableSize()
+{
+	m_view->resizeColumnsToContents();
+
+	int width = (m_view->model()->columnCount() - 1) + m_view->verticalHeader()->width();
+	for(int column = 0; column < m_view->model()->columnCount(); column++)
+		width = width + m_view->columnWidth(column);
+	m_view->setMinimumWidth(width);
+
 }
 
 void ListsController::m_slotChooseTypeList(int type)

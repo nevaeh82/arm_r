@@ -8,9 +8,14 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+
+#include <QHeaderView>
+
 #include "Interfaces/IController.h"
 
 #include "ListsForm.h"
+
+#include "ListsProxyModel.h"
 
 class ListsController: public QObject, public IController<ListsForm>
 {
@@ -25,13 +30,14 @@ private:
 	QSqlQueryModel*				m_model;
 	QSqlDatabase				m_db;
 	QTableView*					m_view;
+	ListsProxyModel*			m_proxyModel;
 
 private:
 	QSqlQuery getAllStationsInfo();
+	void adjustTableSize();
 
 private slots:
 	void m_slotChooseTypeList(int type);
-
 };
 
 #endif // LISTSCONTROLLER_H
