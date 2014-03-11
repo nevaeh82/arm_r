@@ -17,6 +17,7 @@ public:
 	~ListsForm();
 
 	QTableView* getTableView();
+	QPushButton*	getPushButtonAdd();
 
 private:
 	Ui::ListsForm *ui;

@@ -47,7 +47,9 @@ SOURCES += \
     DBStation/dbStationController.cpp \
     ListsForm.cpp \
     DBStation/ListsController.cpp \
-    DBStation/ListsProxyModel.cpp
+    DBStation/ListsProxyModel.cpp \
+    DBStation/ListsAdd.cpp \
+    DBStation/ListsAddController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -108,7 +110,9 @@ HEADERS += \
     DBStation/IDBStation.h \
     ListsForm.h \
     DBStation/ListsController.h \
-    DBStation/ListsProxyModel.h
+    DBStation/ListsProxyModel.h \
+    DBStation/ListsAdd.h \
+    DBStation/ListsAddController.h
 
 FORMS += \
     ControlPanel.ui \
@@ -119,7 +123,8 @@ FORMS += \
     AtlantTabWidget.ui \
     Tabs/CommonSpectrumTabWidget.ui \
     SpectrumWidget.ui \
-    ListsForm.ui
+    ListsForm.ui \
+    DBStation/ListsAdd.ui
 
 
 RESOURCES += \

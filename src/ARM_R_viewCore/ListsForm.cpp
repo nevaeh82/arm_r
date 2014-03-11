@@ -19,6 +19,11 @@ QTableView *ListsForm::getTableView()
 	return ui->tvLists;
 }
 
+QPushButton *ListsForm::getPushButtonAdd()
+{
+	return ui->pbAdd;
+}
+
 void ListsForm::slotShow()
 {
 	this->show();

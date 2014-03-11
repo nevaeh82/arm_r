@@ -14,8 +14,10 @@
 #include "Interfaces/IController.h"
 
 #include "ListsForm.h"
-
 #include "ListsProxyModel.h"
+
+#include "ListsAdd.h"
+#include "ListsAddController.h"
 
 class ListsController: public QObject, public IController<ListsForm>
 {
@@ -39,6 +41,7 @@ private:
 
 private slots:
 	void m_slotChooseTypeList(int type);
+	void m_slotAdd();
 };
 
 #endif // LISTSCONTROLLER_H

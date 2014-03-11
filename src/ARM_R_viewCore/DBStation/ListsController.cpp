@@ -12,18 +12,6 @@ ListsController::ListsController(const QSqlDatabase& db, QObject* parent):
 
 	m_model->setQuery(getAllStationsInfo());
 
-
-//	m_model->setTable("StationData");
-//	m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-////	m_model->setRelation(1, QSqlRelation("stationDevices", "id", "Port"));
-
-////	m_model->setQuery("SELECT id FROM Station");
-//	bool res = m_model->select();
-//	QString error = m_model->lastError().text();
-//	qDebug() << error;
-//	qDebug() <<  "res = " << res;
-
-
 	m_model->setHeaderData(0,Qt::Horizontal, tr("id"));
 	m_model->setHeaderData(1,Qt::Horizontal, tr("Station Name"));
 	m_model->setHeaderData(2,Qt::Horizontal, tr("IP"));
@@ -33,14 +21,11 @@ ListsController::ListsController(const QSqlDatabase& db, QObject* parent):
 	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
 	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
 	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
-
 }
 
 ListsController::~ListsController()
 {
-
 }
-
 
 void ListsController::appendView(ListsForm *widget)
 {
@@ -53,6 +38,7 @@ void ListsController::appendView(ListsForm *widget)
 
 	adjustTableSize();
 	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
+	connect(widget->getPushButtonAdd(), SIGNAL(clicked()), this, SLOT(m_slotAdd()));
 }
 
 QSqlQuery ListsController::getAllStationsInfo()
@@ -73,16 +59,6 @@ QSqlQuery ListsController::getAllStationsInfo()
 		return QSqlQuery();
 	}
 	query.exec();
-
-////	m_model->setHeaderData(0,Qt::Horizontal, tr("id"));
-//	m_model->setHeaderData(1,Qt::Horizontal, tr("Station Name"));
-//	m_model->setHeaderData(2,Qt::Horizontal, tr("IP"));
-//	m_model->setHeaderData(3,Qt::Horizontal, tr("Port"));
-//	m_model->setHeaderData(4,Qt::Horizontal, tr("Type"));
-//	m_model->setHeaderData(5,Qt::Horizontal, tr("Frequency"));
-//	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
-//	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
-//	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
 
 	return query;
 }
@@ -113,7 +89,15 @@ void ListsController::m_slotChooseTypeList(int type)
 	adjustTableSize();
 
 	m_view->hideColumn(0);
-//	m_view->show();
+}
+
+void ListsController::m_slotAdd()
+{
+	ListsAdd* listAdd = new ListsAdd(m_view);
+	ListsAddController* listAddController = new ListsAddController(m_db, this);
+	bool isOpen = m_db.isOpen();
+	listAddController->appendView(listAdd);
+	listAdd->show();
 }
 
 QSqlQuery ListsController::getStationsInfoByCategory(int type)
@@ -147,17 +131,6 @@ QSqlQuery ListsController::getStationsInfoByCategory(int type)
 	}
 
 	query.exec();
-
-////	m_model->setHeaderData(0,Qt::Horizontal, tr("id"));
-//	m_model->setHeaderData(1,Qt::Horizontal, tr("Station Name"));
-//	m_model->setHeaderData(2,Qt::Horizontal, tr("IP"));
-//	m_model->setHeaderData(3,Qt::Horizontal, tr("Port"));
-//	m_model->setHeaderData(4,Qt::Horizontal, tr("Type"));
-//	m_model->setHeaderData(5,Qt::Horizontal, tr("Frequency"));
-//	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
-//	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
-//	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
-
 
 	return query;
 }
