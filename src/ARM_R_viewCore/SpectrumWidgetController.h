@@ -111,6 +111,7 @@ private slots:
 	void slotSSCorrelation();
 	void slotClearLabels();
 
+	void slotSelectionCleared();
 	void slotSelectionFinished(double x1, double y1, double x2, double y2);
 	void slotSelectionFinishedRedLine(double y);
 

@@ -279,6 +279,7 @@ void SpectrumWidgetController::init()
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
 
+	connect(m_graphicsWidget, SIGNAL(SelectionCleared()), this, SLOT(slotSelectionCleared()));
 	connect(m_graphicsWidget, SIGNAL(SelectionFinished(double,double,double,double)), this, SLOT(slotSelectionFinished(double,double,double,double)));
 	connect(m_graphicsWidget, SIGNAL(selectionFinishedRedLine(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
 	connect(m_graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
@@ -362,6 +363,16 @@ void SpectrumWidgetController::slotSSCorrelation()
 void SpectrumWidgetController::slotClearLabels()
 {
 	m_graphicsWidget->ClearAllLabels();
+}
+
+void SpectrumWidgetController::slotSelectionCleared()
+{
+	double coordinateZero = (double)0;
+	SpectrumSelection selection;
+	selection.start = QPointF(coordinateZero, coordinateZero);
+	selection.end = QPointF(coordinateZero, coordinateZero);
+
+	m_tab->setSelectedArea(selection);
 }
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)
