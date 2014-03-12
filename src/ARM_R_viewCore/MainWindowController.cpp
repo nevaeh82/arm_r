@@ -102,6 +102,7 @@ void MainWindowController::slotShowLists()
 		QMessageBox msgBox;
 		msgBox.setText(tr("DataBase is not opened!"));
 		msgBox.exec();
+		return;
 	}
 	listController->appendView(listForm);
 	listForm->show();

@@ -58,7 +58,13 @@ QSqlQuery ListsDialogController::getAllStationsInfo()
 		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QSqlQuery();
 	}
-	query.exec();
+
+	succeeded = query.exec();
+
+	if (!succeeded) {
+		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		return QSqlQuery();
+	}
 
 	return query;
 }
@@ -101,6 +107,7 @@ void ListsDialogController::m_slotAdd()
 		QMessageBox msgBox;
 		msgBox.setText(tr("DataBase is not opened!"));
 		msgBox.exec();
+		return;
 	}
 	listAddController->appendView(listAdd);
 	connect(listAdd, SIGNAL(signalUpdateList()), this, SLOT(m_slotAddClose()));
@@ -143,7 +150,12 @@ QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 			break;
 	}
 
-	query.exec();
+	succeeded = query.exec();
+
+	if (!succeeded) {
+		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		return QSqlQuery();
+	}
 
 	return query;
 }
