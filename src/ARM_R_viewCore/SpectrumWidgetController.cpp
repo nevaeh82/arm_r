@@ -22,8 +22,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 	m_id = 0;
 	m_tab = NULL;
 
-	m_spectrumPeakHold = new float[1];
-	m_spectrumPeakHoldCorr = new float[1];
+//	m_spectrumPeakHold = new float[1];
+//	m_spectrumPeakHoldCorr = new float[1];
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
@@ -343,6 +343,7 @@ void SpectrumWidgetController::slotCMAddBlackList()
 /// signal for flakon to recognize signal
 void SpectrumWidgetController::slotRecognizeSignal()
 {
+	/// TODO: recheck new Message to memory leak
 	m_centerFreqDefModulation = m_centerFreqSelTemp;
 	CommandMessage *msg = new CommandMessage(COMMAND_RECOGNIZESIGNAL, QVariant());
 	m_tab->sendCommand(TypeGraphicCommand,msg);
@@ -351,6 +352,7 @@ void SpectrumWidgetController::slotRecognizeSignal()
 /// signal for flakon to recognize signal
 void SpectrumWidgetController::slotSSCorrelation()
 {
+	/// TODO: recheck new Message to memory leak
 	m_enableCorrelation = !m_enableCorrelation;
 	CommandMessage *msg = new CommandMessage(COMMAND_KM, m_enableCorrelation);
 	m_tab->sendCommand(TypeGraphicCommand,msg);

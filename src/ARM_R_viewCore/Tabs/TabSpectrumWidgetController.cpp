@@ -67,6 +67,7 @@ void TabSpectrumWidgetController::activate()
 
 void TabSpectrumWidgetController::deactivate()
 {
+	m_view->deactivate();
 }
 
 QWidget *TabSpectrumWidgetController::getWidget()

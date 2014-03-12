@@ -26,19 +26,18 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	connect(m_spectrumWidgetController, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
 
+	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TabSpectrumWidget));
 	///TODO: recheck
-	activate();
+//	activate();
 }
 
 TabSpectrumWidget::~TabSpectrumWidget()
 {
 }
 
-
 void TabSpectrumWidget::activate()
 {
-	ui->correlationsGroupWidget->clearWidgetContainer();
-
+	m_logger->debug("Activate tab");
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}
@@ -46,11 +45,20 @@ void TabSpectrumWidget::activate()
 	foreach (ISpectrumWidget* spectrumWidget, m_spectrumWidgetsList) {
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 	}
+
+	m_logger->debug(QString::number(ui->spectumWidgetsContainer->count()));
 }
 
 void TabSpectrumWidget::deactivate()
 {
+	m_logger->debug("Deactivate tab");
+	ui->correlationsGroupWidget->clearWidgetContainer();
 
+	foreach (ISpectrumWidget* spectrumWidget , m_spectrumWidgetsList) {
+		ui->spectumWidgetsContainer->removeWidget(spectrumWidget->getWidget());
+	}
+
+	m_logger->debug(QString::number(ui->spectumWidgetsContainer->count()));
 }
 
 QWidget *TabSpectrumWidget::getWidget()

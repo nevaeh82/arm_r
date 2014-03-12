@@ -15,6 +15,7 @@
 
 #include "Correlations/CorrelationWidget.h"
 
+#include <PwLogger/PwLogger.h>
 
 namespace Ui {
 class TabSpectrumWidget;
@@ -37,6 +38,7 @@ private:
 	QPixmap* m_pmRoundGreen;
 	QLabel* m_indicatorLabel;
 
+	Pw::Logger::ILogger* m_logger;
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
 	virtual ~TabSpectrumWidget();

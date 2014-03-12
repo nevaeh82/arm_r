@@ -30,8 +30,8 @@ private:
 	double	m_current_frequency;
 
 	quint32	m_id;
-	float*	m_spectrumPeakHold;
-	float*	m_spectrumPeakHoldCorr;
+//	float*	m_spectrumPeakHold;
+//	float*	m_spectrumPeakHoldCorr;
 
 	ITabSpectrum*	m_tab;
 

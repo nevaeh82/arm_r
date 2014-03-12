@@ -45,6 +45,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 		m_dbManager->registerReceiver(tabController);
 		tabController->appendView(tabSpectrumWidget);
 
+//		tabController->deactivate();
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
 		QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
