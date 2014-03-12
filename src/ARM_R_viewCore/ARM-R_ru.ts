@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru_RU">
 <context>
+    <name>AddStationDataDialog</name>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Добавить запись</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="24"/>
+        <source>Station</source>
+        <translation>Пост</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="34"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="51"/>
+        <source>Category</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="61"/>
+        <source>Frequency</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="81"/>
+        <source>Bandwidth</source>
+        <translation>Полоса</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="95"/>
+        <source>Signal Type</source>
+        <translation>Модуляция</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="122"/>
+        <source>Accept</source>
+        <translation>Принять</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="129"/>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="136"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
     <name>AtlantTabWidget</name>
     <message>
         <location filename="AtlantTabWidget.ui" line="14"/>
@@ -127,12 +180,12 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="208"/>
+        <location filename="DBStation/DBStationController.cpp" line="208"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="242"/>
+        <location filename="DBStation/DBStationController.cpp" line="242"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation></translation>
     </message>
@@ -140,135 +193,196 @@
 <context>
     <name>ListsAdd</name>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Добавить запись</translation>
+        <translation type="obsolete">Добавить запись</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="24"/>
         <source>Station</source>
-        <translation>Пост</translation>
+        <translation type="obsolete">Пост</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="34"/>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation type="obsolete">Порт</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="51"/>
         <source>Category</source>
-        <translation>Категория</translation>
+        <translation type="obsolete">Категория</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="61"/>
         <source>Frequency</source>
-        <translation>Частота</translation>
+        <translation type="obsolete">Частота</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="81"/>
         <source>Bandwidth</source>
-        <translation>Полоса</translation>
+        <translation type="obsolete">Полоса</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="95"/>
         <source>Signal Type</source>
-        <translation>Модуляция</translation>
+        <translation type="obsolete">Модуляция</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="122"/>
         <source>Accept</source>
-        <translation>Принять</translation>
+        <translation type="obsolete">Принять</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="129"/>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="obsolete">Очистить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="136"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation type="obsolete">Закрыть</translation>
     </message>
 </context>
 <context>
     <name>ListsController</name>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="15"/>
+        <source>id</source>
+        <translation type="obsolete">ИД</translation>
+    </message>
+    <message>
+        <source>Station Name</source>
+        <translation type="obsolete">Пост</translation>
+    </message>
+    <message>
+        <source>IP</source>
+        <translation type="obsolete">IP адрес</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="obsolete">Порт</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="obsolete">Категория</translation>
+    </message>
+    <message>
+        <source>Frequency</source>
+        <translation type="obsolete">Частота</translation>
+    </message>
+    <message>
+        <source>Bandwidth</source>
+        <translation type="obsolete">Полоса</translation>
+    </message>
+    <message>
+        <source>Signal Type</source>
+        <translation type="obsolete">Модуляция</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="obsolete">МДВ</translation>
+    </message>
+</context>
+<context>
+    <name>ListsDialog</name>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="14"/>
+        <source>Form</source>
+        <translation>Списки</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="23"/>
+        <source>All</source>
+        <translation>Все</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="28"/>
+        <source>White</source>
+        <translation>Белый</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="33"/>
+        <source>Black</source>
+        <translation>Черный</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="61"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>ListsDialogController</name>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
         <source>id</source>
         <translation>ИД</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="16"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
         <source>Station Name</source>
         <translation>Пост</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>IP</source>
         <translation>IP адрес</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>Type</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
         <source>Bandwidth</source>
         <translation>Полоса</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="22"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
         <source>Signal Type</source>
         <translation>Модуляция</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="23"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
         <source>Date</source>
         <translation>МДВ</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="102"/>
+        <source>DataBase is not opened!</source>
+        <translation>Не удалось открыть базу данных!</translation>
     </message>
 </context>
 <context>
     <name>ListsForm</name>
     <message>
-        <location filename="ListsForm.ui" line="14"/>
         <source>Form</source>
-        <translation>Списки</translation>
+        <translation type="obsolete">Списки</translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="23"/>
         <source>All</source>
-        <translation>Все</translation>
+        <translation type="obsolete">Все</translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="28"/>
         <source>White</source>
-        <translation>Белый</translation>
+        <translation type="obsolete">Белый</translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="33"/>
         <source>Black</source>
-        <translation>Черный</translation>
+        <translation type="obsolete">Черный</translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="61"/>
         <source>Add</source>
-        <translation>Добавить</translation>
+        <translation type="obsolete">Добавить</translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="68"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation type="obsolete">Закрыть</translation>
     </message>
 </context>
 <context>
@@ -325,6 +439,11 @@
         <location filename="MainWindowController.cpp" line="87"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
+    </message>
+    <message>
+        <location filename="MainWindowController.cpp" line="103"/>
+        <source>DataBase is not opened!</source>
+        <translation>Не удалось открыть базу данных!</translation>
     </message>
 </context>
 <context>

@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_US">
 <context>
+    <name>AddStationDataDialog</name>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="24"/>
+        <source>Station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="34"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="51"/>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="61"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="81"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="95"/>
+        <source>Signal Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="122"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="129"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="136"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AtlantTabWidget</name>
     <message>
         <location filename="AtlantTabWidget.ui" line="14"/>
@@ -127,147 +180,99 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="208"/>
+        <location filename="DBStation/DBStationController.cpp" line="208"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/dbStationController.cpp" line="242"/>
+        <location filename="DBStation/DBStationController.cpp" line="242"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>ListsAdd</name>
+    <name>ListsDialog</name>
     <message>
-        <location filename="DBStation/ListsAdd.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="24"/>
-        <source>Station</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="34"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="51"/>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="61"/>
-        <source>Frequency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="81"/>
-        <source>Bandwidth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="95"/>
-        <source>Signal Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="122"/>
-        <source>Accept</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="129"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsAdd.ui" line="136"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ListsController</name>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="15"/>
-        <source>id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="16"/>
-        <source>Station Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="17"/>
-        <source>IP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="18"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="19"/>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="20"/>
-        <source>Frequency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="21"/>
-        <source>Bandwidth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="22"/>
-        <source>Signal Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="23"/>
-        <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ListsForm</name>
-    <message>
-        <location filename="ListsForm.ui" line="14"/>
+        <location filename="DBStation/ListsDialog.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="23"/>
+        <location filename="DBStation/ListsDialog.ui" line="23"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="28"/>
+        <location filename="DBStation/ListsDialog.ui" line="28"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="33"/>
+        <location filename="DBStation/ListsDialog.ui" line="33"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="61"/>
+        <location filename="DBStation/ListsDialog.ui" line="61"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ListsForm.ui" line="68"/>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListsDialogController</name>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
+        <source>id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <source>Station Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <source>IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <source>Signal Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="102"/>
+        <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -324,6 +329,11 @@
     <message>
         <location filename="MainWindowController.cpp" line="87"/>
         <source>Please try to restart application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindowController.cpp" line="103"/>
+        <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
