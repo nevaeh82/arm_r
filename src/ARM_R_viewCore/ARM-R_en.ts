@@ -2,6 +2,59 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_US">
 <context>
+    <name>AddStationDataDialog</name>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="24"/>
+        <source>Station</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="34"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="51"/>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="61"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="81"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="95"/>
+        <source>Signal Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="122"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="129"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="136"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AtlantTabWidget</name>
     <message>
         <location filename="AtlantTabWidget.ui" line="14"/>
@@ -125,6 +178,105 @@
     </message>
 </context>
 <context>
+    <name>DBStationController</name>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="208"/>
+        <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="242"/>
+        <source>SELECT %1 FROM station WHERE name=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListsDialog</name>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="23"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="28"/>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="33"/>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="61"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListsDialogController</name>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
+        <source>id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <source>Station Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <source>IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <source>Signal Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="108"/>
+        <source>DataBase is not opened!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="MainWindow.ui" line="14"/>
@@ -142,18 +294,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="62"/>
+        <location filename="MainWindow.ui" line="63"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="67"/>
+        <location filename="MainWindow.ui" line="68"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="72"/>
+        <location filename="MainWindow.ui" line="73"/>
         <source>Atlant setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="78"/>
+        <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -165,13 +322,18 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="74"/>
+        <location filename="MainWindowController.cpp" line="87"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="74"/>
+        <location filename="MainWindowController.cpp" line="87"/>
         <source>Please try to restart application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindowController.cpp" line="103"/>
+        <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -267,7 +429,7 @@
     </message>
     <message>
         <location filename="SpectrumWidgetController.cpp" line="270"/>
-        <location filename="SpectrumWidgetController.cpp" line="359"/>
+        <location filename="SpectrumWidgetController.cpp" line="360"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -277,7 +439,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="357"/>
+        <location filename="SpectrumWidgetController.cpp" line="358"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>

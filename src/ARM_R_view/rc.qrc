@@ -16,4 +16,9 @@
         <file>images/UAV/BLA.jpg</file>
         <file>images/UAV/BPLA.jpg</file>
     </qresource>
+    <qresource prefix="/">
+        <file>images/icons/AddStationDataDialog.png</file>
+        <file>images/icons/ListsDialog.png</file>
+        <file>images/icons/ARM_R.png</file>
+    </qresource>
 </RCC>

@@ -52,6 +52,7 @@
      <string>Settings</string>
     </property>
     <addaction name="actionAtlantSetup"/>
+    <addaction name="actionLists"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
@@ -70,6 +71,11 @@
   <action name="actionAtlantSetup">
    <property name="text">
     <string>Atlant setup</string>
+   </property>
+  </action>
+  <action name="actionLists">
+   <property name="text">
+    <string>Lists</string>
    </property>
   </action>
  </widget>
