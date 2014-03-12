@@ -32,9 +32,12 @@ private:
     /// logger
 	Pw::Logger::ILogger* m_logger;
 
-
 private:
 	void init();
+
+signals:
+	void signalShowLists();
+
 };
 
 

@@ -67,6 +67,19 @@ void MainWindowController::init()
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbManager(m_dbManager);
 	m_controlPanelController->registerReceiver(m_tabManager);
+
+	m_dbStationController = new DBStationController(this);
+	DBConnectionStruct param;
+	param.dbName = "Stations";
+	param.host = "127.0.0.1";
+	param.login = "root";
+	param.port = 3306;
+	param.password = "qwerty12345";
+	bool err = m_dbStationController->connectToDB(param);
+
+
+	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
+//	(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 }
 
 void MainWindowController::serverFailedToStartSlot()
@@ -77,5 +90,21 @@ void MainWindowController::serverFailedToStartSlot()
 void MainWindowController::serverStartedSlot()
 {
 	//startRpc();
+}
+
+void MainWindowController::slotShowLists()
+{
+	ListsDialog* listForm = new ListsDialog(m_view);
+	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
+	bool isOpen = m_dbStationController->getDataBase().isOpen();
+	if(!isOpen)
+	{
+		QMessageBox msgBox;
+		msgBox.setText(tr("DataBase is not opened!"));
+		msgBox.exec();
+		return;
+	}
+	listController->appendView(listForm);
+	listForm->show();
 }
 
