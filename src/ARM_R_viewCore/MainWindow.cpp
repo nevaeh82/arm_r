@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_logger->info("Started");
 
 	this->setWindowTitle(tr("Zaviruha"));
+	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));
+
 
     this->showMaximized();
 

@@ -1,33 +1,33 @@
-#ifndef LISTSFORM_H
-#define LISTSFORM_H
+#ifndef LISTSDIALOG_H
+#define LISTSDIALOG_H
 
 #include <QDialog>
 #include <QTableView>
 
 namespace Ui {
-class ListsForm;
+class ListsDialog;
 }
 
-class ListsForm : public QDialog
+class ListsDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit ListsForm(QWidget *parent = 0);
-	~ListsForm();
+	explicit ListsDialog(QWidget *parent = 0);
+	~ListsDialog();
 
 	QTableView* getTableView();
-	QPushButton*	getPushButtonAdd();
 
 private:
-	Ui::ListsForm *ui;
+	Ui::ListsDialog *ui;
 
 signals:
 	void signalTypeList(int);
+	void signalAddClicked();
 
 public slots:
 	void slotShow();
 //	void slotClose();
 };
 
-#endif // LISTSFORM_H
+#endif // LISTSDIALOG_H

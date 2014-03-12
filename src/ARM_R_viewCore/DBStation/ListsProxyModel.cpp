@@ -40,6 +40,7 @@ bool ListsProxyModel::lessThan ( const QModelIndex & left, const QModelIndex & r
 	{
 		return leftData.toDouble() < rightData.toDouble();
 	}
+	return false;
 }
 
 bool ListsProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const

@@ -1,4 +1,4 @@
-#include "dbstationcontroller.h"
+#include "DBStationController.h"
 #include <QDebug>
 
 DBStationController::DBStationController(QObject *parent) :
@@ -159,7 +159,7 @@ int DBStationController::addCategory(const QString& name)
 	return INVALID_INDEX;
 }
 
-int DBStationController::addStationData(const stationData& data)
+int DBStationController::addStationData(const StationData& data)
 {
 	if(!openDB())
 	{

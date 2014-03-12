@@ -5,6 +5,8 @@
 
 #include <PwLogger/PwLogger.h>
 
+#include <QMessageBox>
+
 #include "Interfaces/IController.h"
 #include "MainWindow.h"
 
@@ -13,11 +15,9 @@
 #include "Tabs/TabManager.h"
 #include "ControlPanel/ControlPanelController.h"
 
-#include "DBStation/dbStationController.h"
-#include "listsForm.h"
-#include "DBStation/listsController.h"
-
-
+#include "DBStation/DBStationController.h"
+#include "DBStation/ListsDialog.h"
+#include "DBStation/ListsDialogController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>
 {
@@ -31,12 +31,10 @@ private:
 
 	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;
 
-	TabManager*         m_tabManager;
-	IDbManager*         m_dbManager;
+	TabManager*				m_tabManager;
+	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
-
 	DBStationController*	m_dbStationController;
-
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

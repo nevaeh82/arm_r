@@ -12,8 +12,8 @@
 #include <QList>
 
 #include "IDBStation.h"
-#include "dbConnectionParameters.h"
-#include "dbFillTables.h"
+#include "DBConnectionParameters.h"
+#include "DBFillTables.h"
 
 #define INVALID_INDEX 0
 
@@ -31,7 +31,7 @@ public:
 	virtual int addStationDevice(const QString& name, const unsigned short& port);
 	virtual int addSignalType(const QString& name);
 	virtual int addCategory(const QString& name);
-	virtual int addStationData(const stationData& data);
+	virtual int addStationData(const StationData& data);
 	virtual int getLastIndex(const QString& table);
 	virtual int getStationID(const QString& name);
 //	virtual QString getStationIP(const QString& name);

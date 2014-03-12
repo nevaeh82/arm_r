@@ -4,7 +4,7 @@
 #include <cxxtest/TestSuite.h>
 #include <QtGlobal>
 
-#include "DBStation/dbStationController.h"
+#include "DBStation/DBStationController.h"
 
 class dbStationTest: public CxxTest::TestSuite
 {
@@ -138,7 +138,7 @@ public:
 		int lastID = stationController->getLastIndex("stationData");
 
 		TS_ASSERT_DIFFERS(0, ++lastID);
-		stationData data;
+		StationData data;
 		data.stationName = "Station1";
 		data.port = 1024;
 		data.category = "White";

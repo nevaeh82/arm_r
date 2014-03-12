@@ -3,8 +3,8 @@
 
 #include <QString>
 #include <QSqlDatabase>
-#include "dbConnectionParameters.h"
-#include "dbFillTables.h"
+#include "DBConnectionParameters.h"
+#include "DBFillTables.h"
 
 
 class IDBStation
@@ -17,7 +17,7 @@ public:
 	virtual int addStationDevice(const QString& name, const unsigned short& port)	= 0;
 	virtual int addSignalType(const QString& name)						= 0;
 	virtual int addCategory(const QString& name)						= 0;
-	virtual int addStationData(const stationData& data)					= 0;
+	virtual int addStationData(const StationData& data)					= 0;
 	virtual int getLastIndex(const QString& table)						= 0;
 	virtual int getStationID(const QString& name)						= 0;
 //	virtual QString getStationIP(const QString& name);

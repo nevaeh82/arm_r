@@ -94,9 +94,15 @@ void MainWindowController::serverStartedSlot()
 
 void MainWindowController::slotShowLists()
 {
-	ListsForm* listForm = new ListsForm(m_view);
-	ListsController* listController = new ListsController(m_dbStationController->getDataBase(), this);
+	ListsDialog* listForm = new ListsDialog(m_view);
+	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
 	bool isOpen = m_dbStationController->getDataBase().isOpen();
+	if(!isOpen)
+	{
+		QMessageBox msgBox;
+		msgBox.setText(tr("DataBase is not opened!"));
+		msgBox.exec();
+	}
 	listController->appendView(listForm);
 	listForm->show();
 }

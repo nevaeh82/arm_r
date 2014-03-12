@@ -44,12 +44,13 @@ SOURCES += \
     Correlations/CorrelationWidgetDataSource.cpp \
     Correlations/CorrelationWidgetController.cpp \
     Correlations/CorrelationControllersContainer.cpp \
-    DBStation/dbStationController.cpp \
-    ListsForm.cpp \
-    DBStation/ListsController.cpp \
+    DBStation/ListsDialogController.cpp \
     DBStation/ListsProxyModel.cpp \
-    DBStation/ListsAdd.cpp \
-    DBStation/ListsAddController.cpp
+    DBStation/DBStationController.cpp \
+    DBStation/AddStationDataDialog.cpp \
+    DBStation/AddStationDataDialogController.cpp \
+    DBStation/ListsDialog.cpp \
+    DBStation/ListsDialogController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -104,15 +105,16 @@ HEADERS += \
     Interfaces/ICorrelationWidget.h \
     Correlations/CorrelationControllersContainer.h \
     Interfaces/IStation.h \
-    DBStation/dbStationController.h \
-    DBStation/dbConnectionParameters.h \
-    DBStation/dbFillTables.h \
     DBStation/IDBStation.h \
-    ListsForm.h \
-    DBStation/ListsController.h \
+    DBStation/ListsDialogController.h \
     DBStation/ListsProxyModel.h \
-    DBStation/ListsAdd.h \
-    DBStation/ListsAddController.h
+    DBStation/DBStationController.h \
+    DBStation/DBFillTables.h \
+    DBStation/DBConnectionParameters.h \
+    DBStation/AddStationDataDialog.h \
+    DBStation/AddStationDataDialogController.h \
+    DBStation/ListsDialog.h \
+    DBStation/ListsDialogController.h
 
 FORMS += \
     ControlPanel.ui \
@@ -123,8 +125,8 @@ FORMS += \
     AtlantTabWidget.ui \
     Tabs/CommonSpectrumTabWidget.ui \
     SpectrumWidget.ui \
-    ListsForm.ui \
-    DBStation/ListsAdd.ui
+    DBStation/AddStationDataDialog.ui \
+    DBStation/ListsDialog.ui
 
 
 RESOURCES += \

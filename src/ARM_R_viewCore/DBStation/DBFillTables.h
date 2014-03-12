@@ -5,7 +5,7 @@
 #include <QDateTime>
 
 /// fill stationData table
-typedef struct stationData
+typedef struct StationData
 {
 	QString stationName;
 	unsigned short port;
@@ -13,12 +13,12 @@ typedef struct stationData
 	double frequency;
 	double bandwidth;
 	QString signalType;
-}stationData;
+}StationData;
 
 /// full info
 typedef struct StationDataFull
 {
-	stationData stationShortInfo;
+	StationData stationShortInfo;
 	QString		stationIP;
 	QDateTime	date;
 }StationDataFull;
