@@ -159,7 +159,7 @@ void ListsAddController::slotAccept(const QStringList &list)
 	int signalTypeID = query.value(0).toInt();
 
 	/// check for the same record
-	succeeded = query.prepare("SELECT id FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency AND bandwidth=:objectBandwidth)");
+	succeeded = query.prepare("SELECT bandwidth FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency)");
 
 	if (!succeeded) {
 		qDebug() << "SQL is wrong!" <<  query.lastError();
@@ -169,15 +169,55 @@ void ListsAddController::slotAccept(const QStringList &list)
 	query.bindValue(":objectDeviceID", deviceID);
 	query.bindValue(":objectCategoryID", categoryID);
 	query.bindValue(":objectFrequency", list.at(3).toDouble());
-	query.bindValue(":objectBandwidth", list.at(4).toDouble());
+//	query.bindValue(":objectBandwidth", list.at(4).toDouble());
 
 	succeeded = query.exec();
 	if (!succeeded) {
 		qDebug() << "SQL is wrong!" <<  query.lastError();
 		return;
 	}
+
 	if(query.next())
 	{
+		if(query.value(0).toDouble() < list.at(4).toDouble())
+		{
+			succeeded = query.prepare("SELECT id FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency)");
+
+			if (!succeeded) {
+				qDebug() << "SQL is wrong!" <<  query.lastError();
+				return;
+			}
+
+			query.bindValue(":objectDeviceID", deviceID);
+			query.bindValue(":objectCategoryID", categoryID);
+			query.bindValue(":objectFrequency", list.at(3).toDouble());
+		//	query.bindValue(":objectBandwidth", list.at(4).toDouble());
+
+			succeeded = query.exec();
+			if (!succeeded) {
+				qDebug() << "SQL is wrong!" <<  query.lastError();
+				return;
+			}
+
+			query.next();
+			int sid = query.value(0).toInt();
+
+			succeeded = query.prepare("UPDATE stationData SET bandwidth=:objectBandwidth1 WHERE id=:objectID");
+
+			if (!succeeded) {
+				qDebug() << "SQL is wrong!" <<  query.lastError();
+				return;
+			}
+
+			query.bindValue(":objectBandwidth1", list.at(4).toDouble());
+			query.bindValue(":objectID", sid);
+
+			succeeded = query.exec();
+			if (!succeeded) {
+				qDebug() << "SQL is wrong!" <<  query.lastError();
+				return;
+			}
+		}
 		return;
 	}
 
