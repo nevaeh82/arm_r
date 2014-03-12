@@ -37,6 +37,7 @@ private:
 
 public:
 	explicit SpectrumWidgetDataSource(IGraphicWidget*, QObject *parent = 0);
+	virtual ~SpectrumWidgetDataSource();
 
 	void onMethodCalled(const QString&, const QVariant&);
 	void sendCommand(int);
