@@ -97,7 +97,14 @@ void ListsController::m_slotAdd()
 	ListsAddController* listAddController = new ListsAddController(m_db, this);
 	bool isOpen = m_db.isOpen();
 	listAddController->appendView(listAdd);
+	connect(listAdd, SIGNAL(signalUpdateList()), this, SLOT(m_slotAddClose()));
 	listAdd->show();
+}
+
+void ListsController::m_slotAddClose()
+{
+	m_model->query().exec();
+	m_model->setQuery(m_model->query());
 }
 
 QSqlQuery ListsController::getStationsInfoByCategory(int type)

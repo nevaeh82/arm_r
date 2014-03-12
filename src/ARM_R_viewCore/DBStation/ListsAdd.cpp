@@ -41,14 +41,23 @@ void ListsAdd::slotAccept()
 	list.append(ui->dsbBandwidth->text());
 	list.append(ui->cbSignalType->currentText());
 	emit signalAccept(list);
+	emit signalUpdateList();
+
 }
 
 void ListsAdd::slotClear()
 {
+	ui->cbStation->setCurrentIndex(DEFAULT_INDEX);
+	ui->sbPort->setValue(DEFAULT_PORT);
+	ui->cbCategory->setCurrentIndex(DEFAULT_INDEX);
+	ui->dsbFrequency->setValue(DEFAULT_FREQUENCY);
+	ui->dsbBandwidth->setValue(DEFAULT_BANDWIDTH);
+	ui->cbSignalType->setCurrentIndex(DEFAULT_INDEX);
 
 }
 
 void ListsAdd::slotClose()
 {
 	this->close();
+	emit signalUpdateList();
 }

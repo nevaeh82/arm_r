@@ -27,6 +27,7 @@ signals:
 
 public slots:
 	void slotShow();
+//	void slotClose();
 };
 
 #endif // LISTSFORM_H

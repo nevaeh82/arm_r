@@ -42,6 +42,7 @@ private:
 private slots:
 	void m_slotChooseTypeList(int type);
 	void m_slotAdd();
+	void m_slotAddClose();
 };
 
 #endif // LISTSCONTROLLER_H

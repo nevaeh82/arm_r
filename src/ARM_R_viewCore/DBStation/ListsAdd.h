@@ -4,6 +4,11 @@
 #include <QDialog>
 #include <QPushButton>
 
+#define DEFAULT_INDEX		0
+#define DEFAULT_FREQUENCY	300
+#define DEFAULT_BANDWIDTH	0
+#define DEFAULT_PORT		1024
+
 namespace Ui {
 class ListsAdd;
 }
@@ -30,6 +35,7 @@ private slots:
 
 signals:
 	void signalAccept(const QStringList& list);
+	void signalUpdateList();
 
 };
 

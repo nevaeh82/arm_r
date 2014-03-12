@@ -7,6 +7,7 @@ ListsForm::ListsForm(QWidget *parent) :
 {
 	ui->setupUi(this);
 	connect(ui->cbLists, SIGNAL(activated(int)), this, SIGNAL(signalTypeList(int)));
+	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 ListsForm::~ListsForm()

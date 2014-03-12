@@ -8,6 +8,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include <QDateTime>
+
 #include "Interfaces/IController.h"
 
 #include "ListsAdd.h"

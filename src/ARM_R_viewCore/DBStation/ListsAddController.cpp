@@ -105,6 +105,101 @@ void ListsAddController::slotAccept(const QStringList &list)
 
 		deviceID = queryInsert.lastInsertId().toInt();
 	}
+	else
+	{
+		deviceID = query.value(0).toInt();
+	}
 
-	deviceID = query.value(0).toInt();
+//	QSqlQuery query;
+//	QString str1 = QString("SELECT id FROM Station WHERE name=%1")
+	succeeded = query.prepare("SELECT id FROM Category WHERE name=:objectName");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	query.bindValue(":objectName", list.at(2));
+
+	succeeded = query.exec();
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	if(!query.next())
+	{
+		return;
+	}
+
+	int categoryID = query.value(0).toInt();
+
+
+	///signal type
+	succeeded = query.prepare("SELECT id FROM signalType WHERE name=:objectName");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	query.bindValue(":objectName", list.at(5));
+
+	succeeded = query.exec();
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	if(!query.next())
+	{
+		return;
+	}
+
+	int signalTypeID = query.value(0).toInt();
+
+	/// check for the same record
+	succeeded = query.prepare("SELECT id FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency AND bandwidth=:objectBandwidth)");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	query.bindValue(":objectDeviceID", deviceID);
+	query.bindValue(":objectCategoryID", categoryID);
+	query.bindValue(":objectFrequency", list.at(3).toDouble());
+	query.bindValue(":objectBandwidth", list.at(4).toDouble());
+
+	succeeded = query.exec();
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+	if(query.next())
+	{
+		return;
+	}
+
+	/// insert new record
+
+	succeeded = query.prepare("INSERT INTO stationData VALUES(NULL, :objectDeviceID, :objectCategoryID, :objectFrequency, :objectBandwidth, :objectSignalType, :objectDate)");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	query.bindValue(":objectDeviceID", deviceID);
+	query.bindValue(":objectCategoryID", categoryID);
+	query.bindValue(":objectFrequency", list.at(3).toDouble());
+	query.bindValue(":objectBandwidth", list.at(4).toDouble());
+	query.bindValue(":objectSignalType", signalTypeID);
+	query.bindValue(":objectDate", QDateTime::currentDateTime());
+
+	succeeded = query.exec();
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
 }

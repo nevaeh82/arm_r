@@ -138,51 +138,102 @@
     </message>
 </context>
 <context>
-    <name>ListsController</name>
+    <name>ListsAdd</name>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="78"/>
-        <location filename="DBStation/ListsController.cpp" line="150"/>
-        <source>Station Name</source>
+        <location filename="DBStation/ListsAdd.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Добавить запись</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsAdd.ui" line="24"/>
+        <source>Station</source>
         <translation>Пост</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="79"/>
-        <location filename="DBStation/ListsController.cpp" line="151"/>
-        <source>IP</source>
-        <translation>IP адрес</translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsController.cpp" line="80"/>
-        <location filename="DBStation/ListsController.cpp" line="152"/>
+        <location filename="DBStation/ListsAdd.ui" line="34"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="81"/>
-        <source>Type</source>
+        <location filename="DBStation/ListsAdd.ui" line="51"/>
+        <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="82"/>
-        <location filename="DBStation/ListsController.cpp" line="154"/>
+        <location filename="DBStation/ListsAdd.ui" line="61"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="83"/>
-        <location filename="DBStation/ListsController.cpp" line="155"/>
+        <location filename="DBStation/ListsAdd.ui" line="81"/>
         <source>Bandwidth</source>
         <translation>Полоса</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="84"/>
-        <location filename="DBStation/ListsController.cpp" line="156"/>
+        <location filename="DBStation/ListsAdd.ui" line="95"/>
         <source>Signal Type</source>
         <translation>Модуляция</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsController.cpp" line="85"/>
-        <location filename="DBStation/ListsController.cpp" line="157"/>
+        <location filename="DBStation/ListsAdd.ui" line="122"/>
+        <source>Accept</source>
+        <translation>Принять</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsAdd.ui" line="129"/>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsAdd.ui" line="136"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>ListsController</name>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="15"/>
+        <source>id</source>
+        <translation>ИД</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="16"/>
+        <source>Station Name</source>
+        <translation>Пост</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="17"/>
+        <source>IP</source>
+        <translation>IP адрес</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="18"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="19"/>
+        <source>Type</source>
+        <translation>Категория</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="20"/>
+        <source>Frequency</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="21"/>
+        <source>Bandwidth</source>
+        <translation>Полоса</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="22"/>
+        <source>Signal Type</source>
+        <translation>Модуляция</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsController.cpp" line="23"/>
         <source>Date</source>
         <translation>МДВ</translation>
     </message>
@@ -208,6 +259,16 @@
         <location filename="ListsForm.ui" line="33"/>
         <source>Black</source>
         <translation>Черный</translation>
+    </message>
+    <message>
+        <location filename="ListsForm.ui" line="61"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="ListsForm.ui" line="68"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
