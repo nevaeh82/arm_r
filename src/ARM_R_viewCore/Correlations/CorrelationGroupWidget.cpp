@@ -6,6 +6,7 @@ CorrelationGroupWidget::CorrelationGroupWidget(QWidget *parent) :
 	ui(new Ui::CorrelationGroupWidget)
 {
 	ui->setupUi(this);
+	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(CorrelationGroupWidget));
 }
 
 CorrelationGroupWidget::~CorrelationGroupWidget()
@@ -21,7 +22,8 @@ void CorrelationGroupWidget::insertCorrelationWidget(ICorrelationWidget *widget)
 
 	m_widgetList.append(widget);
 
-	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget->getWidget());
+	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget->getWidget());	
+	m_logger->debug(QString::number(ui->correlationWidgetsContainer->count()));
 }
 
 void CorrelationGroupWidget::clearWidgetContainer()
@@ -32,4 +34,5 @@ void CorrelationGroupWidget::clearWidgetContainer()
 	}
 
 	m_widgetList.clear();
+	m_logger->debug(QString::number(ui->correlationWidgetsContainer->count()));
 }

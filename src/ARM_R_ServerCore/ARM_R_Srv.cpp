@@ -32,9 +32,11 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	port = settingsManager->getAtlantPort().toUInt();
 	m_tcpManager->addTcpDevice(ATLANT_TCP_DEVICE, host, port);
 
+	delete settingsManager;
 }
 
 ARM_R_Srv::~ARM_R_Srv()
 {
+
 }
 

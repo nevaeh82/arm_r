@@ -5,6 +5,8 @@
 #include "CorrelationWidget.h"
 #include "CorrelationWidgetController.h"
 
+#include <PwLogger/PwLogger.h>
+
 namespace Ui {
 class CorrelationGroupWidget;
 }
@@ -17,6 +19,8 @@ private:
 	Ui::CorrelationGroupWidget *ui;
 
 	QList<ICorrelationWidget*> m_widgetList;
+
+	Pw::Logger::ILogger* m_logger;
 
 public:
 	explicit CorrelationGroupWidget(QWidget *parent = 0);
