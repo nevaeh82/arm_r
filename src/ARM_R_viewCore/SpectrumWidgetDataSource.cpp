@@ -20,6 +20,12 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 	m_spectrumPeakHold = new float[1];
 }
 
+SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
+{
+	delete[] m_spectrum;
+	delete[] m_spectrumPeakHold;
+}
+
 Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {

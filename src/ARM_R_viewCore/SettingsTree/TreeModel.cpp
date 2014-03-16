@@ -272,7 +272,6 @@ void TreeModel::onCleanSettings()
 void TreeModel::setStationsList(const QStringList &stationsList)
 {
 	foreach (QString stationName, stationsList) {
-
 		SettingsNode settingsNode = m_dbManager->getSettingsNode(stationName);
 		onSettingsNodeChanged(settingsNode);
 	}
