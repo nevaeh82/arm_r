@@ -100,12 +100,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="25"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="25"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>
@@ -538,7 +538,7 @@
     </message>
     <message>
         <location filename="SpectrumWidgetController.cpp" line="270"/>
-        <location filename="SpectrumWidgetController.cpp" line="360"/>
+        <location filename="SpectrumWidgetController.cpp" line="362"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
@@ -548,7 +548,7 @@
         <translation>Очистить текстовые данные</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="358"/>
+        <location filename="SpectrumWidgetController.cpp" line="360"/>
         <source>Disable correlation</source>
         <translation>Отключить корреляцию</translation>
     </message>
@@ -564,12 +564,12 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="68"/>
+        <location filename="Tabs/TabManager.cpp" line="69"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="74"/>
+        <location filename="Tabs/TabManager.cpp" line="75"/>
         <source>Atlant</source>
         <translation>Атлант</translation>
     </message>
@@ -585,12 +585,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="102"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="103"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="102"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="103"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>
@@ -598,47 +598,47 @@
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="284"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="283"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="286"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="285"/>
         <source>Selected</source>
         <translation>Выделено</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="288"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="287"/>
         <source>Center</source>
         <translation>Центр</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="290"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="289"/>
         <source>Start</source>
         <translation>Начало</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="292"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="291"/>
         <source>Stop</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="294"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="293"/>
         <source>Averaging</source>
         <translation>Усреднение</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="296"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="295"/>
         <source>Leading OP</source>
         <translation>Ведуший ОП</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="298"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="297"/>
         <source>Panorama start</source>
         <translation>Панорама начало</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="300"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="299"/>
         <source>Panorama end</source>
         <translation>Панорама конец</translation>
     </message>
