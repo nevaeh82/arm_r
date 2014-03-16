@@ -204,6 +204,10 @@ void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selec
 
 void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 {
+	if (TypePanoramaCommand == type) {
+		emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
+	}
+
 	if (TypeGraphicCommand != type) {
 		return;
 	}
