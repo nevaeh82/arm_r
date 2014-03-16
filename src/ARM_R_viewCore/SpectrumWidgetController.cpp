@@ -384,18 +384,8 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	/// To HZ
 	x1 /= 1000;
 	x2 /= 1000;
-	double dx;
-	double center;
-	if(x2 >= x1) {
-		dx = x2 - x1;
-		center = x1 + dx/2;
-	}
-	else {
-		dx = x1 - x2;
-		center = x2 + dx/2;
-	}
 
-	m_centerFreqSelTemp = center;
+	m_centerFreqSelTemp = (x1 + x2)/2;
 
 	SpectrumSelection selection;
 	selection.start = QPointF(x1, y1);
