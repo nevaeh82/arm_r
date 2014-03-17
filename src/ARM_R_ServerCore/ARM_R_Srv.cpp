@@ -21,7 +21,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	m_rpcServer->registerReceiver(m_tcpManager);
 	m_tcpManager->setRpcServer(m_rpcServer);
 
-	ITcpSettingsManager* settingsManager = new TcpSettingsManager;
+	ITcpSettingsManager* settingsManager = new TcpSettingsManager(this);
 	settingsManager->setIniFile("./TCP/coders.ini");
 
 	QString host = settingsManager->getFlakonHost();
@@ -31,8 +31,6 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	host = settingsManager->getAtlantHost();
 	port = settingsManager->getAtlantPort().toUInt();
 	m_tcpManager->addTcpDevice(ATLANT_TCP_DEVICE, host, port);
-
-	delete settingsManager;
 }
 
 ARM_R_Srv::~ARM_R_Srv()

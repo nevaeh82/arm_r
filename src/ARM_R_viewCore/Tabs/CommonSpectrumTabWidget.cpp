@@ -128,8 +128,6 @@ void CommonSpectrumTabWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidg
 
 	m_widgetList.append(spectrumWidget);
 
-//	ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
-
 	m_treeModel->onCleanSettings();
 
 	QStringList stationsList;

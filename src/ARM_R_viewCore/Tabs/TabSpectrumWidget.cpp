@@ -27,8 +27,6 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	connect(m_spectrumWidgetController, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
 
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TabSpectrumWidget));
-	///TODO: recheck
-//	activate();
 }
 
 TabSpectrumWidget::~TabSpectrumWidget()
