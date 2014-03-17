@@ -19,8 +19,8 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 		int lastID = stationController->getLastIndex("station");
 		TS_ASSERT_DIFFERS(0, ++lastID);
 		qDebug() << lastID;
@@ -44,8 +44,8 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 		int lastID = stationController->getLastIndex("station");
 		TS_ASSERT_DIFFERS(0, lastID);
 		qDebug() << lastID;
@@ -70,8 +70,8 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 		int lastID = stationController->getLastIndex("signalType");
 		TS_ASSERT_DIFFERS(0, ++lastID);
 		qDebug() << lastID;
@@ -96,8 +96,8 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 		int lastID = stationController->getLastIndex("category");
 
 		qDebug() << lastID;
@@ -133,8 +133,8 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 		int lastID = stationController->getLastIndex("stationData");
 
 		TS_ASSERT_DIFFERS(0, ++lastID);
@@ -165,19 +165,17 @@ public:
 		param.login = "root";
 		param.port = 3306;
 		param.password = "qwerty12345";
-		bool err = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, err);
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
 
 		QList<StationDataFull> list;
 
-		err = stationController->getStationInfo("Station1", list);
+		bool isGetOk = stationController->getStationInfo("Station1", list);
 
-		qDebug() << err;
+		qDebug() << isGetOk;
 
-		TS_ASSERT_EQUALS(true, err);
+		TS_ASSERT_EQUALS(true, isGetOk);
 		TS_ASSERT_DIFFERS(0, list.count());
-
-
 
 		delete stationController;
 	}
