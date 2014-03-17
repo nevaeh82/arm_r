@@ -14,6 +14,8 @@
 
 #include <PwLogger/PwLogger.h>
 
+#include "Rpc/RpcMessageStruct.h"
+
 #include "IRPC.h"
 
 #include "Rpc/RpcDefines.h"
@@ -32,7 +34,7 @@ public:
 
 public:
 	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
-	virtual void sendDataByRpc(const QString& signalType, const QByteArray& data);
+	virtual void sendDataByRpc(const QString& signalType, const QString& deviceName,const QByteArray& data);
 
 private slots:
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
@@ -48,11 +50,11 @@ public slots:
 	void rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage);
 
 	///prm300 from rpc client
-	void rpcSlotPrmSetFreq(quint64, int id, short freq);
-	void rpcSlotPrmRequestFreq(quint64 client, int id);
-	void rpcSlotPrmSetAtt1(quint64 client, int id, int value);
-	void rpcSlotPrmSetAtt2(quint64 client, int id, int value);
-	void rpcSlotPrmSetFilter(quint64 client, int id, int index);
+	void rpcSlotPrmSetFreq(quint64, QString name, short freq);
+	void rpcSlotPrmRequestFreq(quint64 client, QString name);
+	void rpcSlotPrmSetAtt1(quint64 client, QString name, int value);
+	void rpcSlotPrmSetAtt2(quint64 client, QString name, int value);
+	void rpcSlotPrmSetFilter(quint64 client, QString name, int index);
 
 	/// solver
 	void rpcSlotSetDataToSolver(quint64 client, QByteArray data);
@@ -72,6 +74,7 @@ signals:
 	void serverSendAtlantDirectionRpcSignal(QByteArray);
 	void serverSendAtlantPositionRpcSignal(QByteArray);
 	void serverSendPrmStatusRpcSignal(int, int, int, int);
+	void serverSendPrmStatusRpcSignalBool(QByteArray);
 	void serverSendBplaDefRpcSignal(QByteArray);
 	void serverSendBplaDefAutoRpcSignal(QByteArray);
 

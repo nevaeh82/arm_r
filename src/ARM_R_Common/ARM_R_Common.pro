@@ -52,4 +52,9 @@ HEADERS += \
     CRCs.h \
     SingletonTemplate.h \
     SingletonTemplate.hpp \
-    CommonDefines.h
+    CommonDefines.h \
+    Info/BaseSettings.h \
+    Info/FlakonSettings.h \
+    Info/AtlantSettings.h \
+    Info/Prm300Settings.h \
+    Rpc/RpcMessageStruct.h

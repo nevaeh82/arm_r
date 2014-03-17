@@ -50,7 +50,7 @@ public:
 
 	// ITcpListener interface
 public:
-	virtual void onMessageReceived(const QString& device, const MessageSP argument);
+	virtual void onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument);
 
 	// ICoordinateCounter interface
 public:

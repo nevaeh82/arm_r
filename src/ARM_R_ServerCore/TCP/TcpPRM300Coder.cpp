@@ -229,6 +229,15 @@ MessageSP TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter, quint8 att1
 	return MessageSP(new Message<QByteArray>(TCP_PRM300_ANSWER_STATUS, byteArray));
 }
 
+MessageSP TcpPRM300Coder::sendPRMStatus(bool status)
+{
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << status;
+
+	return MessageSP(new Message<QByteArray>(TCP_PRM300_STATUS, byteArray));
+}
+
 QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)
 {
 	/// WTF?! Magic again

@@ -36,11 +36,11 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSignal(this, SIGNAL(signalSSCorrelation(int, bool)), RPC_SLOT_SS_CORRELATION);
 	m_clientPeer->attachSignal(this, SIGNAL(signalSetAvarageSpectrum(int,int)), RPC_SLOT_AVARAGE_SPECTRUM);
 
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFreq(int, short)), RPC_SLOT_PRM_SET_FREQ);
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMRequestFreq(int)), RPC_SLOT_PRM_REQUEST_FREQ);
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(int, int)), RPC_SLOT_PRM_SET_ATT1);
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(int, int)), RPC_SLOT_PRM_SET_ATT2);
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(int,int)), RPC_SLOT_PRM_SET_FILTER);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFreq(QString, short)), RPC_SLOT_PRM_SET_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMRequestFreq(QString)), RPC_SLOT_PRM_REQUEST_FREQ);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(QString, int)), RPC_SLOT_PRM_SET_ATT1);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(QString, int)), RPC_SLOT_PRM_SET_ATT2);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(QString,int)), RPC_SLOT_PRM_SET_FILTER);
 	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
 
 	///server
@@ -51,7 +51,7 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(rpcSlotServerSendCorrelation(uint, uint, QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(bool)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(QByteArray)));
 
 	m_logger->debug("Start RPCClient");
 	return RpcClientBase::start(port, ipAddress);
@@ -117,27 +117,28 @@ void RPCClient::formCommand(IMessage *msg)
 
 void RPCClient::prmSetFreq(short freq)
 {
-	emit signalPRMSetFreq(m_station->getId(), freq);
+	emit signalPRMSetFreq(m_station->getName(), freq);
 }
 
 void RPCClient::prmRequestFreq()
 {
-	emit signalPRMRequestFreq(m_station->getId());
+	m_logger->debug(QString("Station Name = %1").arg(m_station->getName()));
+	emit signalPRMRequestFreq(m_station->getName());
 }
 
 void RPCClient::prmSetAtt1(int att1)
 {
-	emit signalPRMSetAtt1(m_station->getId(), att1);
+	emit signalPRMSetAtt1(m_station->getName(), att1);
 }
 
 void RPCClient::prmSetAtt2(int att2)
 {
-	emit signalPRMSetAtt2(m_station->getId(), att2);
+	emit signalPRMSetAtt2(m_station->getName(), att2);
 }
 
 void RPCClient::prmSetFilter(int index)
 {
-	emit signalPRMSetFilter(m_station->getId(), index);
+	emit signalPRMSetFilter(m_station->getName(), index);
 }
 
 void RPCClient::flakonSetMainStationCor(int value)
@@ -216,8 +217,14 @@ void RPCClient::slotRpcConnetion()
 /// getting points from server
 void RPCClient::rpcSlotGettingPoints(QByteArray points)
 {
+	RpcMessageStruct messageStruct;
+
+	QDataStream dataStream(&points, QIODevice::ReadOnly);
+	dataStream >> messageStruct.name;
+	dataStream >> messageStruct.data;
+
 	foreach (IRpcListener* listener, m_receiversList) {
-		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_POINTS, points);
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_POINTS, messageStruct.data);
 	}
 
 	//m_grData->set_data(points, true);
@@ -225,8 +232,14 @@ void RPCClient::rpcSlotGettingPoints(QByteArray points)
 
 void RPCClient::rpcSlotGettingDetectedBandwidth(QByteArray points)
 {
+	RpcMessageStruct messageStruct;
+
+	QDataStream dataStream(&points, QIODevice::ReadOnly);
+	dataStream >> messageStruct.name;
+	dataStream >> messageStruct.data;
+
 	foreach (IRpcListener* listener, m_receiversList) {
-		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, points);
+		listener->onMethodCalled(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, messageStruct.data);
 	}
 
 	//m_grData->setDetectedAreas(points);
@@ -262,6 +275,8 @@ void RPCClient::rpcSlotServerSendCorrelation(uint, uint point2, QByteArray point
 
 void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
 {
+//	m_parentTab->setIndicator(true);
+
 	///TODO: update
 
 	/*QMap<QString, QVariant>* data = _db_manager->get(0, _tab_property->get_id());
@@ -278,7 +293,22 @@ void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att
 
 }
 
-void RPCClient::rpcSlotServerStatus(bool state)
+void RPCClient::rpcSlotServerStatus(QByteArray message)
 {
-	m_parentTab->setIndicator(state);
+	RpcMessageStruct messageStruct;
+
+	QDataStream dataStream(&message, QIODevice::ReadOnly);
+	dataStream >> messageStruct.name;
+	dataStream >> messageStruct.data;
+
+	QDataStream dataStream1(&messageStruct.data, QIODevice::ReadOnly);
+	bool state;
+	dataStream1 >> state;
+
+	m_logger->debug(QString("NAMWS = %1 %2").arg(messageStruct.name).arg(m_station->getName()));
+
+	if(messageStruct.name == m_station->getName())
+	{
+		m_parentTab->setIndicator(state);
+	}
 }

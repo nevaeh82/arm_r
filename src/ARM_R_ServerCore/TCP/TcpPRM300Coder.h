@@ -32,6 +32,7 @@ public:
 private:
 	bool findPreamble();
 	MessageSP sendPRMStatus(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
+	MessageSP sendPRMStatus(bool status);
 
 	QByteArray prmSetFrequency(unsigned short aFreq);
 	bool specialSymb(quint8 &aByteA, quint8 &aByteB);
