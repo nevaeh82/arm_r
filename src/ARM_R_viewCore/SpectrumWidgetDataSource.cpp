@@ -213,6 +213,11 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 	setBandwidth(bandwidth);
 }
 
+bool SpectrumWidgetDataSource::isPanoramaEnabled()
+{
+	return m_isPanoramaStart;
+}
+
 void SpectrumWidgetDataSource::sendCommand(int)
 {
 }

@@ -22,9 +22,6 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 	m_id = 0;
 	m_tab = NULL;
 
-//	m_spectrumPeakHold = new float[1];
-//	m_spectrumPeakHoldCorr = new float[1];
-
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
 }

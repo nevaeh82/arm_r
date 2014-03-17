@@ -43,6 +43,7 @@ public:
 	void sendCommand(int);
 
 	void setPanorama(bool enabled, double start = 0.0f, double end = 0.0f);
+	bool isPanoramaEnabled();
 
 private:
 	void dataProccess(QVector<QPointF>& vecFFT, bool);
