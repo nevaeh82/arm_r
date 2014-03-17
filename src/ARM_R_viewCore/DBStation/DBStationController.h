@@ -37,10 +37,6 @@ public:
 //	virtual QString getStationIP(const QString& name);
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
 
-
-private:
-	bool openDB();
-
 private:
 	QSqlDatabase m_db;
 

@@ -70,17 +70,17 @@ void MainWindowController::init()
 
 	/// Problem here:
 
-//	m_dbStationController = new DBStationController(this);
-//	DBConnectionStruct param;
-//	param.dbName = "Stations";
-//	param.host = "127.0.0.1";
-//	param.login = "root";
-//	param.port = 3306;
-//	param.password = "qwerty12345";
-//	bool err = m_dbStationController->connectToDB(param);
+	m_dbStationController = new DBStationController(this);
+	DBConnectionStruct param;
+	param.dbName = "Stations";
+	param.host = "127.0.0.1";
+	param.login = "root";
+	param.port = 3306;
+	param.password = "qwerty12345";
+	bool err = m_dbStationController->connectToDB(param);
 
 
-//	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
+	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 
 //	(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 }
@@ -99,17 +99,17 @@ void MainWindowController::slotShowLists()
 {
 	/// Uncomment, when resolve problem with databases
 
-//	ListsDialog* listForm = new ListsDialog(m_view);
-//	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
-//	bool isOpen = m_dbStationController->getDataBase().isOpen();
-//	if(!isOpen)
-//	{
-//		QMessageBox msgBox;
-//		msgBox.setText(tr("DataBase is not opened!"));
-//		msgBox.exec();
-//		return;
-//	}
-//	listController->appendView(listForm);
-//	listForm->show();
+	ListsDialog* listForm = new ListsDialog(m_view);
+	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
+	bool isOpen = m_dbStationController->getDataBase().isOpen();
+	if(!isOpen)
+	{
+		QMessageBox msgBox;
+		msgBox.setText(tr("DataBase is not opened!"));
+		msgBox.exec();
+		return;
+	}
+	listController->appendView(listForm);
+	listForm->show();
 }
 

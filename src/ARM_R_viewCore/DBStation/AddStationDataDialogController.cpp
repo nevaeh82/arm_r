@@ -25,7 +25,7 @@ void AddStationDataDialogController::appendView(AddStationDataDialog *widget)
 
 QStringList AddStationDataDialogController::getNames(QString table)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 
 	QString str = QString("SELECT name FROM %1 GROUP BY name").arg(table);
 
@@ -55,7 +55,7 @@ QStringList AddStationDataDialogController::getNames(QString table)
 
 void AddStationDataDialogController::slotAccept(const QStringList &list)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("SELECT sd.id FROM stationDevices AS sd "\
 								   "WHERE sd.port=:objectPort " \
 								   "AND sd.stationID=(SELECT id FROM station WHERE name=:objectStationName)");
@@ -78,7 +78,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 	int deviceID = -1;
 	if(!query.next())
 	{
-		QSqlQuery queryInsert;
+		QSqlQuery queryInsert(m_db);
 
 		bool succeeded = queryInsert.prepare("INSERT INTO stationDevices VALUES(NULL, :objectPort, (SELECT id FROM station WHERE name=:objectStationName))");
 

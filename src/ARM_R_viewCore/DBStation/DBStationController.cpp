@@ -4,22 +4,13 @@
 DBStationController::DBStationController(QObject *parent) :
 	QObject(parent)
 {
-//	if(QSqlDatabase::contains(QSqlDatabase::defaultConnection))
-//	{
-//		m_db =  QSqlDatabase::database();
-//	}
-//	else
-//	{
-		m_db = QSqlDatabase::addDatabase("QMYSQL");
-//	}
+	m_db = QSqlDatabase::addDatabase("QMYSQL", "DATACONNECTION");
 }
 
 DBStationController::~DBStationController()
 {
-	if(openDB())
-	{
+	if(m_db.isOpen()){
 		m_db.close();
-//		m_db.removeDatabase("QMYSQL");
 	}
 }
 
@@ -30,17 +21,17 @@ QSqlDatabase DBStationController::getDataBase()
 
 bool DBStationController::connectToDB(const DBConnectionStruct& parameters)
 {
-	if(openDB())
-	{
+	if(m_db.isOpen()){
 		m_db.close();
 	}
+
 	m_db.setHostName(parameters.host);
 	m_db.setPort(parameters.port);
 	m_db.setPassword(parameters.password);
 	m_db.setUserName(parameters.login);
 	m_db.setDatabaseName(parameters.dbName);
 
-	if (!(m_db.open())) {
+	if (!m_db.open()) {
 		QString resErrorString = m_db.lastError().databaseText() + "\n" + m_db.lastError().driverText();
 		qDebug() << resErrorString;
 		return false;
@@ -52,12 +43,12 @@ bool DBStationController::connectToDB(const DBConnectionStruct& parameters)
 
 int DBStationController::addStation(const QString& name, const QString& ip)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO station VALUES(NULL, :objectName, :objectIP);");
 
 	if (!succeeded) {
@@ -79,12 +70,12 @@ int DBStationController::addStation(const QString& name, const QString& ip)
 
 int DBStationController::addStationDevice(const QString& name, const unsigned short& port)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO stationDevices VALUES(0, :objectPort, (SELECT id FROM station WHERE name=:objectStationName));");
 
 	if (!succeeded) {
@@ -106,12 +97,12 @@ int DBStationController::addStationDevice(const QString& name, const unsigned sh
 
 int DBStationController::addSignalType(const QString& name)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO signalType VALUES(NULL, :objectName);");
 
 	if (!succeeded) {
@@ -134,12 +125,12 @@ int DBStationController::addSignalType(const QString& name)
 
 int DBStationController::addCategory(const QString& name)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO category VALUES(NULL, :objectName);");
 
 	if (!succeeded) {
@@ -161,12 +152,12 @@ int DBStationController::addCategory(const QString& name)
 
 int DBStationController::addStationData(const StationData& data)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO stationData VALUES(NULL, "\
 								   "(SELECT id FROM stationDevices WHERE stationID=(SELECT id from station WHERE name=:objectStationName) AND port=:objectPort), "\
 								   "(SELECT id FROM category WHERE name=:objectCategory), :objectFrequency, :objectBandwidth, " \
@@ -199,12 +190,12 @@ int DBStationController::addStationData(const StationData& data)
 
 int DBStationController::getLastIndex(const QString& table)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare(tr("SELECT id FROM %1 ORDER BY id DESC LIMIT 1").arg(table));
 
 	if (!succeeded) {
@@ -233,12 +224,12 @@ int DBStationController::getLastIndex(const QString& table)
 
 int DBStationController::getStationID(const QString& name)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare(tr("SELECT %1 FROM station WHERE name=%1").arg(name));
 
 	if (!succeeded) {
@@ -267,12 +258,12 @@ int DBStationController::getStationID(const QString& name)
 
 bool DBStationController::getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)
 {
-	if(!openDB())
+	if(!m_db.isOpen())
 	{
 		return false;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("SELECT sdi.id, st.name AS stationName, " \
 					"st.ip AS stationIP, sd.port, cat.name AS CategoryName, " \
 					"sdi.frequency, sdi.bandwidth, sigType.name AS signalType, " \
@@ -327,14 +318,3 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 	return false;
 }
 
-bool DBStationController::openDB()
-{
-	if(!m_db.isOpen())
-	{
-		if(!m_db.open())
-		{
-			return false;
-		}
-	}
-	return true;
-}

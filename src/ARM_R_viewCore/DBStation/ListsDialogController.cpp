@@ -43,7 +43,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 
 QSqlQuery ListsDialogController::getAllStationsInfo()
 {
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("SELECT sdi.id, st.name AS stationName, " \
 					"st.ip AS stationIP, sd.port, cat.name AS CategoryName, " \
 					"sdi.frequency, sdi.bandwidth, sigType.name AS signalType, " \
@@ -122,7 +122,7 @@ void ListsDialogController::m_slotAddClose()
 
 QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("SELECT sdi.id, st.name AS stationName, " \
 					"st.ip AS stationIP, sd.port, cat.name AS CategoryName," \
 					"sdi.frequency, sdi.bandwidth, sigType.name AS signalType, " \

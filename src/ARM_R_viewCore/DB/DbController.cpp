@@ -11,12 +11,12 @@ DbController::DbController(const QString& dbFile, QObject *parent) :
 
 	qDebug() << "Is DB opened: " << isOpened;
 
-	QSqlQuery("PRAGMA page_size = 4096");
-	QSqlQuery("PRAGMA cache_size = 16384");
-	QSqlQuery("PRAGMA temp_store = MEMORY");
-	QSqlQuery("PRAGMA journal_mode = OFF");
-	QSqlQuery("PRAGMA locking_mode = EXCLUSIVE");
-	QSqlQuery("PRAGMA synchronous = OFF");
+	QSqlQuery("PRAGMA page_size = 4096", m_sdb);
+	QSqlQuery("PRAGMA cache_size = 16384", m_sdb);
+	QSqlQuery("PRAGMA temp_store = MEMORY", m_sdb);
+	QSqlQuery("PRAGMA journal_mode = OFF", m_sdb);
+	QSqlQuery("PRAGMA locking_mode = EXCLUSIVE", m_sdb);
+	QSqlQuery("PRAGMA synchronous = OFF", m_sdb);
 }
 
 DbController::~DbController()
@@ -28,7 +28,7 @@ PropertiesList DbController::getProperties(const uint objectID)
 {
 	PropertiesList propsList;
 
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("SELECT * FROM Properties WHERE OBJECT_ID = :objectID;");
 
 	if (!succeeded) {
@@ -66,7 +66,7 @@ Property DbController::getProperty(const uint propID)
 {
 	Property prop;
 
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("SELECT * FROM Properties WHERE ID = :id;");
 
 	if (!succeeded) {
@@ -110,7 +110,7 @@ ObjectsList DbController::getAllObjects()
 {
 	ObjectsList objectsList;
 
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	QString sql = QString("SELECT * FROM Objects");
 	bool succeeded = query.prepare(sql);
 
@@ -143,7 +143,7 @@ ObjectsList DbController::getAllObjects()
 
 uint DbController::addObject(const Object &object)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("INSERT INTO Objects VALUES (NULL, :objectName, :pid, :state, :editable);");
 
 	if (!succeeded) {
@@ -183,7 +183,7 @@ uint DbController::addProperty(const Property& property)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("INSERT INTO Properties VALUES (NULL, :objectId, :propId, :propValue, :state, :isEditable);");
 
 	if (!succeeded) {
@@ -227,7 +227,7 @@ bool DbController::createConnection(const QString& dbFile)
 {
 	bool isOpened = false;
 
-	m_sdb = QSqlDatabase::addDatabase("QSQLITE");
+	m_sdb = QSqlDatabase::addDatabase("QSQLITE", "SETTINGSCONNECTION");
 	m_sdb.setDatabaseName(dbFile);
 
 	isOpened = m_sdb.open();
@@ -248,7 +248,7 @@ void DbController::closeConnection()
 
 uint DbController::addPropToDictionaty(const QString &propName)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("INSERT INTO PropertyDictionary VALUES (NULL, :propName);");
 
 	if (!succeeded) {
@@ -269,7 +269,7 @@ uint DbController::addPropToDictionaty(const QString &propName)
 
 uint DbController::isPropInDictionary(const QString &propName)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("SELECT ID FROM PropertyDictionary WHERE PROP_NAME = :propName;");
 
 	if (!succeeded) {
@@ -294,7 +294,7 @@ uint DbController::isPropInDictionary(const QString &propName)
 
 QString DbController::getPropNameById(const uint propId)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("SELECT PROP_NAME FROM PropertyDictionary WHERE ID = :id;");
 
 	if (!succeeded) {
@@ -319,7 +319,7 @@ QString DbController::getPropNameById(const uint propId)
 
 bool DbController::setPropertyParam(const uint propId, const QString &paramName, const QVariant value)
 {
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	QString sql = QString("UPDATE Properties SET %1 = :value WHERE ID = :id").arg(paramName);
 	bool succeeded = query.prepare(sql);
 
@@ -344,7 +344,7 @@ Object DbController::getObjectByParam(const QString &paramName, const QVariant v
 {
 	Object obj;
 
-	QSqlQuery query;
+	QSqlQuery query(m_sdb);
 	QString sql = QString("SELECT * FROM Objects WHERE %1 = :value;").arg(paramName);
 	bool succeeded = query.prepare(sql);
 
