@@ -174,8 +174,8 @@ void ServiceHandler::onReadProcessError()
 void ServiceHandler::startService()
 {
 	_state = ProcessState::IsRunnung;
-	//_process->startDetached(_cmdline);
-	_process->start( _cmdline, QProcess::ReadOnly);
+	_process->startDetached(_cmdline);
+	//_process->start( _cmdline, QProcess::ReadOnly);
 }
 
 QString ServiceHandler::getServicePath()
