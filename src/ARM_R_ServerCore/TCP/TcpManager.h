@@ -19,6 +19,8 @@
 
 #include "../Flakon/CoordinateCounter.h"
 
+#include "Interfaces/Tcp/ITcpServer.h"
+
 #include "Rpc/RpcDefines.h"
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
@@ -28,6 +30,7 @@ class TcpManager : public QObject, public ITcpManager, public ITcpListener, publ
 private:
 	Pw::Logger::ILogger* m_logger;
 	IRPC* m_rpcServer;
+	ITcpServer* m_tcpServer;
 	QMap< QString, BaseTcpDeviceController* > m_controllersMap;
 	/**
 	 * key = deviceType
@@ -46,6 +49,7 @@ public:
 	virtual void addTcpDevice(const QString& deviceType, const QString& host, const quint32& port);
 	virtual void removeTcpDevice(const QString& deviceType, const QString& host, const quint32& port);
 	virtual void setRpcServer(IRPC* rpcServer);
+	virtual void setTcpServer(ITcpServer* tcpServer);
 	virtual QObject* asQObject();
 
 	/// TODO: add sendDataToDevice from some internal message

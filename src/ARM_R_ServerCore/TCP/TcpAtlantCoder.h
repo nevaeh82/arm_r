@@ -9,6 +9,8 @@
 #include "../Atlant/EMS/proto/EagleMessageProto.pb.h"
 #include "../Atlant/EMS/storm.pb.h"
 
+#include "Protobuf/ARMR_OD/ZVPacket.pb.h"
+
 #include "RPC/RpcDefines.h"
 
 class TcpAtlantCoder : public BaseTcpDeviceCoder
@@ -32,6 +34,9 @@ public:
 private:
 	MessageSP messageFromPreparedData();
 	QByteArray atlantSetFrequency(const QByteArray& data);
+
+	QByteArray toProtobuf(const Storm::DirectionAnswerMessage&);
+	QByteArray toProtobuf(const Storm::PositionAnswerMessage&);
 };
 
 #endif // TCPATLANTCODER_H

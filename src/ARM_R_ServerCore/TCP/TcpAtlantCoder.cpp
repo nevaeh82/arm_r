@@ -61,64 +61,14 @@ MessageSP TcpAtlantCoder::messageFromPreparedData()
 		Storm::DirectionAnswerMessage d_msg;
 		d_msg.ParseFromArray(ba.constData(), ba.size());
 
-		A_Dir_Ans_msg ad_struct;
-		ad_struct.requestId			= d_msg.requestid();
-		ad_struct.sourceId			= d_msg.sourceid();
-		ad_struct.dateTime			= d_msg.datetime();
-		ad_struct.post				= QString::fromStdString(d_msg.post());
-		ad_struct.postLatitude		= d_msg.postlatitude();
-		ad_struct.postLongitude		= d_msg.postlongitude();
-		ad_struct.postHeight		= d_msg.postheight();
-		ad_struct.frequency			= d_msg.frequency();
-		ad_struct.widht				= d_msg.widht();
-		ad_struct.direction			= d_msg.direction();
-		ad_struct.angle				= d_msg.angle();
-		ad_struct.level				= d_msg.level();
-		ad_struct.quality			= d_msg.quality();
-		ad_struct.motionType		= d_msg.motiontype();
-		ad_struct.motionConfidence	= d_msg.motionconfidence();
-
-		QByteArray dataToSend;
-		QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
-		dataStream << ad_struct.requestId;
-		dataStream << ad_struct.sourceId;
-		dataStream << ad_struct.dateTime;
-		dataStream << ad_struct.post;
-		dataStream << ad_struct.postLatitude;
-		dataStream << ad_struct.postLongitude;
-		dataStream << ad_struct.postHeight;
-		dataStream << ad_struct.frequency;
-		dataStream << ad_struct.widht;
-		dataStream << ad_struct.direction;
-		dataStream << ad_struct.angle;
-		dataStream << ad_struct.level;
-		dataStream << ad_struct.quality;
-		dataStream << ad_struct.motionType;
-		dataStream << ad_struct.motionConfidence;
-
+		QByteArray dataToSend = toProtobuf(d_msg);
 		return MessageSP(new Message<QByteArray>(TCP_ATLANT_ANSWER_DIRECTION, dataToSend));
 	}
 	else if (type == Atlant_Position_MsgA) {
 		Storm::PositionAnswerMessage d_msg;
 		d_msg.ParseFromArray(ba.constData(), ba.size());
 
-		A_Pos_Ans_msg ad_struct;
-		ad_struct.requestId			= d_msg.requestid();
-		ad_struct.sourceId			= d_msg.sourceid();
-		ad_struct.dateTime			= d_msg.datetime();
-		ad_struct.longitude			= d_msg.longitude();
-		ad_struct.latitude			= d_msg.latitude();
-		ad_struct.quality			= d_msg.quality();
-
-		QByteArray dataToSend;
-		QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
-		dataStream << ad_struct.requestId;
-		dataStream << ad_struct.sourceId;
-		dataStream << ad_struct.dateTime;
-		dataStream << ad_struct.longitude;
-		dataStream << ad_struct.latitude;
-		dataStream << ad_struct.quality;
-
+		QByteArray dataToSend = toProtobuf(d_msg);
 		return MessageSP(new Message<QByteArray>(TCP_ATLANT_ANSWER_POSITION, dataToSend));
 	}
 
@@ -177,4 +127,122 @@ QByteArray TcpAtlantCoder::atlantSetFrequency(const QByteArray& data)
 	dataToReturn.append(message.c_str(), message.size());
 
 	return dataToReturn;
+}
+
+QByteArray TcpAtlantCoder::toProtobuf(const Storm::DirectionAnswerMessage& d_msg)
+{
+	Zaviruha::Packet packet;
+	Zaviruha::Packet::Command* packetCommand = new Zaviruha::Packet::Command();
+	Zaviruha::Packet::ArgumentVariant* packetArgs = new Zaviruha::Packet::ArgumentVariant();
+	Zaviruha::Packet::ArgumentVariant::Header* packetHeader = new Zaviruha::Packet::ArgumentVariant::Header();
+	Zaviruha::Packet::ArgumentVariant::AtlantDirection* packetAtlDir = packetArgs->add_atlantdirection();
+
+	packet.set_allocated_command(packetCommand);
+	packetCommand->set_allocated_arguments(packetArgs);
+	packetCommand->set_command(Zaviruha::sendAtlantDirection);
+	packetAtlDir->set_allocated_header(packetHeader);
+
+	packetHeader->set_requestid(d_msg.requestid());
+	packetHeader->set_sourceid(d_msg.sourceid());
+	packetHeader->set_datetime(d_msg.datetime());
+
+	packetAtlDir->set_postname(d_msg.post());
+	packetAtlDir->set_postlatitude(d_msg.postlatitude());
+	packetAtlDir->set_postlongitude(d_msg.postlongitude());
+	packetAtlDir->set_postheight(d_msg.postheight());
+	packetAtlDir->set_frequency(d_msg.frequency());
+	packetAtlDir->set_width(d_msg.widht());
+	packetAtlDir->set_direction(d_msg.direction());
+	packetAtlDir->set_angle(d_msg.angle());
+	packetAtlDir->set_level(d_msg.level());
+	packetAtlDir->set_quality(d_msg.quality());
+	packetAtlDir->set_motiontype(d_msg.motiontype());
+	packetAtlDir->set_motionconfidence(d_msg.motionconfidence());
+
+	QByteArray dataToSend;
+	unsigned int size = packet.ByteSize();
+	dataToSend.resize(size);
+	packet.SerializeToArray(dataToSend.data(), size);
+
+	return dataToSend;
+
+	/*A_Dir_Ans_msg ad_struct;
+	ad_struct.requestId			= d_msg.requestid();
+	ad_struct.sourceId			= d_msg.sourceid();
+	ad_struct.dateTime			= d_msg.datetime();
+	ad_struct.post				= QString::fromStdString(d_msg.post());
+	ad_struct.postLatitude		= d_msg.postlatitude();
+	ad_struct.postLongitude		= d_msg.postlongitude();
+	ad_struct.postHeight		= d_msg.postheight();
+	ad_struct.frequency			= d_msg.frequency();
+	ad_struct.widht				= d_msg.widht();
+	ad_struct.direction			= d_msg.direction();
+	ad_struct.angle				= d_msg.angle();
+	ad_struct.level				= d_msg.level();
+	ad_struct.quality			= d_msg.quality();
+	ad_struct.motionType		= d_msg.motiontype();
+	ad_struct.motionConfidence	= d_msg.motionconfidence();*/
+
+	/*QByteArray dataToSend;
+	QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
+	dataStream << ad_struct.requestId;
+	dataStream << ad_struct.sourceId;
+	dataStream << ad_struct.dateTime;
+	dataStream << ad_struct.post;
+	dataStream << ad_struct.postLatitude;
+	dataStream << ad_struct.postLongitude;
+	dataStream << ad_struct.postHeight;
+	dataStream << ad_struct.frequency;
+	dataStream << ad_struct.widht;
+	dataStream << ad_struct.direction;
+	dataStream << ad_struct.angle;
+	dataStream << ad_struct.level;
+	dataStream << ad_struct.quality;
+	dataStream << ad_struct.motionType;
+	dataStream << ad_struct.motionConfidence;*/
+}
+
+QByteArray TcpAtlantCoder::toProtobuf(const Storm::PositionAnswerMessage& d_msg)
+{
+	Zaviruha::Packet packet;
+	Zaviruha::Packet::Command* packetCommand = new Zaviruha::Packet::Command();
+	Zaviruha::Packet::ArgumentVariant* packetArgs = new Zaviruha::Packet::ArgumentVariant();
+	Zaviruha::Packet::ArgumentVariant::Header* packetHeader = new Zaviruha::Packet::ArgumentVariant::Header();
+	Zaviruha::Packet::ArgumentVariant::AtlantPosition* packetAtlPos = packetArgs->add_atlantposition();
+
+	packet.set_allocated_command(packetCommand);
+	packetCommand->set_allocated_arguments(packetArgs);
+	packetCommand->set_command(Zaviruha::sendAtlantDirection);
+	packetAtlPos->set_allocated_header(packetHeader);
+
+	packetHeader->set_requestid(d_msg.requestid());
+	packetHeader->set_sourceid(d_msg.sourceid());
+	packetHeader->set_datetime(d_msg.datetime());
+
+	packetAtlPos->set_latitude(d_msg.latitude());
+	packetAtlPos->set_longitude(d_msg.longitude());
+	packetAtlPos->set_quality(d_msg.quality());
+
+	QByteArray dataToSend;
+	unsigned int size = packet.ByteSize();
+	dataToSend.resize(size);
+	packet.SerializeToArray(dataToSend.data(), size);
+
+	return dataToSend;
+	/*A_Pos_Ans_msg ad_struct;
+	ad_struct.requestId			= d_msg.requestid();
+	ad_struct.sourceId			= d_msg.sourceid();
+	ad_struct.dateTime			= d_msg.datetime();
+	ad_struct.longitude			= d_msg.longitude();
+	ad_struct.latitude			= d_msg.latitude();
+	ad_struct.quality			= d_msg.quality();*/
+
+	/*QByteArray dataToSend;
+	QDataStream dataStream(&dataToSend, QIODevice::ReadWrite);
+	dataStream << ad_struct.requestId;
+	dataStream << ad_struct.sourceId;
+	dataStream << ad_struct.dateTime;
+	dataStream << ad_struct.longitude;
+	dataStream << ad_struct.latitude;
+	dataStream << ad_struct.quality;*/
 }

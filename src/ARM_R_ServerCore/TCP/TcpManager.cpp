@@ -95,6 +95,11 @@ void TcpManager::setRpcServer(IRPC* rpcServer)
 
 }
 
+void TcpManager::setTcpServer(ITcpServer *tcpServer)
+{
+	m_tcpServer = tcpServer;
+}
+
 QObject* TcpManager::asQObject()
 {
 	return this;
@@ -126,9 +131,12 @@ void TcpManager::onMessageReceived(const QString& device, const MessageSP argume
 		}
 	} else if (device == ATLANT_TCP_DEVICE) {
 		if (messageType == TCP_ATLANT_ANSWER_DIRECTION) {
+			/*TODO: REMOVE RPCSERVER USAGE*/
+			m_tcpServer->sendData(messageData);
 			m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_ATLANT_DIRECTION, messageData);
 		}
 		else if (messageType == TCP_ATLANT_ANSWER_POSITION) {
+			m_tcpServer->sendData(messageData);
 			m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_ATLANT_POSITION, messageData);
 		}
 	} else if (device == PRM300_TCP_DEVICE) {
@@ -136,6 +144,21 @@ void TcpManager::onMessageReceived(const QString& device, const MessageSP argume
 			m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_PRM_STATUS, messageData);
 		}
 	}
+
+	/*else if (method == RPC_SLOT_SET_DATA_TO_SOLVER) {
+		if (m_coordinatesCounter == NULL) {
+			return;
+		}
+
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
+	}
+	else if (method == RPC_SLOT_SET_CLEAR_TO_SOLVER) {
+		if (m_coordinatesCounter == NULL) {
+			return;
+		}
+
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
+	}*/
 }
 
 void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)

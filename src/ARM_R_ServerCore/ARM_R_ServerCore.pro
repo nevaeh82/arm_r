@@ -11,6 +11,7 @@ include(../ARM_R_Common/reference.pri)
 include(../../specs/qxt.pri)
 include(../../specs/Solver.pri)
 include(../../specs/protobuf.pri)
+include($$SolutionDir/specs/CISCommonLib.pri )
 include(../../specs/logger.pri)
 
 INCLUDEPATH += $$PWD
@@ -35,7 +36,8 @@ SOURCES += \
     TCP/TcpAtlantController.cpp \
     TCP/TcpAtlantCoder.cpp \
     Flakon/CoordinateCounter.cpp \
-    TCP/TcpSettingsManager.cpp
+    TCP/TcpSettingsManager.cpp \
+    TCP/Server/TcpServer.cpp
 
 HEADERS += \
     RPC/RPCServer.h \
@@ -68,4 +70,5 @@ HEADERS += \
     Flakon/Interfaces/ICoordinateCounter.h \
     TCP/TcpSettingsManager.h \
     TCP/Interfaces/ITcpSettingsManager.h \
-    MessageSP.h
+    MessageSP.h \
+    TCP/Server/TcpServer.h

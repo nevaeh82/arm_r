@@ -5,6 +5,6 @@
 
 #include "Message.h"
 
-typedef QSharedPointer<IMessage<QByteArray>> MessageSP;
+typedef QSharedPointer<IMessage<QByteArray> > MessageSP;
 
 #endif // MESSAGESP_H
