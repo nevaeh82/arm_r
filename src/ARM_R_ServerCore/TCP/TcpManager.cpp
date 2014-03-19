@@ -175,12 +175,12 @@ QString TcpManager::getNameFromArgument(const QVariant& argument)
 
 QString TcpManager::getAtlantName()
 {
-	return "Анлант";
+	return QString("Атлант");
 }
 
 QString TcpManager::getFlakonName()
 {
-	return "Флакон";
+	return QString("Флакон");
 }
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)

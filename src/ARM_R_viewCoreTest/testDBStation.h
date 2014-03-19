@@ -168,6 +168,8 @@ public:
 		bool err = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, err);
 
+		qDebug() << err;
+
 		QList<StationDataFull> list;
 
 		err = stationController->getStationInfo("Station1", list);

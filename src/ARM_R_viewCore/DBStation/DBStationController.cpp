@@ -4,14 +4,14 @@
 DBStationController::DBStationController(QObject *parent) :
 	QObject(parent)
 {
-//	if(QSqlDatabase::contains(QSqlDatabase::defaultConnection))
-//	{
-//		m_db =  QSqlDatabase::database();
-//	}
-//	else
-//	{
-		m_db = QSqlDatabase::addDatabase("QMYSQL");
-//	}
+	if(QSqlDatabase::contains("DATACONNECTION"))
+	{
+		m_db =  QSqlDatabase::database("DATACONNECTION");
+	}
+	else
+	{
+		m_db = QSqlDatabase::addDatabase("QMYSQL", "DATACONNECTION");
+	}
 }
 
 DBStationController::~DBStationController()
@@ -57,7 +57,7 @@ int DBStationController::addStation(const QString& name, const QString& ip)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO station VALUES(NULL, :objectName, :objectIP);");
 
 	if (!succeeded) {
@@ -84,7 +84,7 @@ int DBStationController::addStationDevice(const QString& name, const unsigned sh
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO stationDevices VALUES(0, :objectPort, (SELECT id FROM station WHERE name=:objectStationName));");
 
 	if (!succeeded) {
@@ -111,7 +111,7 @@ int DBStationController::addSignalType(const QString& name)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO signalType VALUES(NULL, :objectName);");
 
 	if (!succeeded) {
@@ -139,7 +139,7 @@ int DBStationController::addCategory(const QString& name)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO category VALUES(NULL, :objectName);");
 
 	if (!succeeded) {
@@ -166,7 +166,7 @@ int DBStationController::addStationData(const StationData& data)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("INSERT INTO stationData VALUES(NULL, "\
 								   "(SELECT id FROM stationDevices WHERE stationID=(SELECT id from station WHERE name=:objectStationName) AND port=:objectPort), "\
 								   "(SELECT id FROM category WHERE name=:objectCategory), :objectFrequency, :objectBandwidth, " \
@@ -204,7 +204,7 @@ int DBStationController::getLastIndex(const QString& table)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare(tr("SELECT id FROM %1 ORDER BY id DESC LIMIT 1").arg(table));
 
 	if (!succeeded) {
@@ -272,7 +272,7 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 		return false;
 	}
 
-	QSqlQuery query;
+	QSqlQuery query(m_db);
 	bool succeeded = query.prepare("SELECT sdi.id, st.name AS stationName, " \
 					"st.ip AS stationIP, sd.port, cat.name AS CategoryName, " \
 					"sdi.frequency, sdi.bandwidth, sigType.name AS signalType, " \

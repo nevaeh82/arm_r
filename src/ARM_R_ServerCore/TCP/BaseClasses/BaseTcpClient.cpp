@@ -102,7 +102,7 @@ void BaseTcpClient::onSocketDisplayError(QAbstractSocket::SocketError socketErro
 	m_logger->debug(QString("Host = %1, Port = %2").arg(m_host).arg(m_port));
 	m_reconnectTimer->start(1000);
 
-	emit signalConnectedToHost(false);
+//	emit signalConnectedToHost(false);
 }
 
 void BaseTcpClient::connectToHostInternalSlot(const QString& host, const quint32& port)
@@ -124,7 +124,7 @@ void BaseTcpClient::disconnectFromHostInternalSlot()
 	m_reconnectTimer->stop();
 	m_tcpSocket->disconnectFromHost();
 	m_tcpSocket->abort();
-	emit signalConnectedToHost(false);
+//	emit signalConnectedToHost(false);
 }
 
 void BaseTcpClient::writeDataInternalSlot(const QByteArray& data)
