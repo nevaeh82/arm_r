@@ -139,7 +139,7 @@ QByteArray TcpAtlantCoder::toProtobuf(const Storm::DirectionAnswerMessage& d_msg
 
 	packet.set_allocated_command(packetCommand);
 	packetCommand->set_allocated_arguments(packetArgs);
-	packetCommand->set_command(Zaviruha::sendAtlantDirection);
+	packetCommand->set_action(Zaviruha::sendAtlantDirection);
 	packetAtlDir->set_allocated_header(packetHeader);
 
 	packetHeader->set_requestid(d_msg.requestid());
@@ -212,7 +212,7 @@ QByteArray TcpAtlantCoder::toProtobuf(const Storm::PositionAnswerMessage& d_msg)
 
 	packet.set_allocated_command(packetCommand);
 	packetCommand->set_allocated_arguments(packetArgs);
-	packetCommand->set_command(Zaviruha::sendAtlantDirection);
+	packetCommand->set_action(Zaviruha::sendAtlantPosition);
 	packetAtlPos->set_allocated_header(packetHeader);
 
 	packetHeader->set_requestid(d_msg.requestid());
