@@ -8,7 +8,9 @@
 
 #include "RPC/RPCServer.h"
 #include "TCP/TcpManager.h"
+#include "TcpDevicesDefines.h"
 #include "TCP/TcpSettingsManager.h"
+#include "TCP/Server/TcpServerController.h"
 
 Q_DECLARE_METATYPE(MessageSP)
 
@@ -23,6 +25,7 @@ public:
 private:
 	static Pw::Logger::ILogger* m_logger;
 	RPCServer* m_rpcServer;
+	BaseTcpServerController* m_tcpServer;
 	TcpManager* m_tcpManager;
 };
 

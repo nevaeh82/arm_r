@@ -9,4 +9,6 @@
 
 #define FLAKON_COORDINATE_COUNTER "flakonCoordinateCounter"
 
+#define ARMR_TCP_SERVER "armrTcpServer"
+
 #endif // TCPDEVICESDEFINES_H

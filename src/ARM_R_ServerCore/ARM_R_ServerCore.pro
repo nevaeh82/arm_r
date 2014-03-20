@@ -25,9 +25,9 @@ SOURCES += \
     Flakon/Correction/ZDR.cpp \
     Flakon/Correction/ZCorrector.cpp \
     Flakon/Correction/ZCoord.cpp \
-    TCP/BaseClasses/BaseTcpClient.cpp \
-    TCP/BaseClasses/BaseTcpDeviceController.cpp \
-    TCP/BaseClasses/BaseTcpDeviceCoder.cpp \
+#    TCP/BaseClasses/BaseTcpClient.cpp \
+#    TCP/BaseClasses/BaseTcpDeviceController.cpp \
+#    TCP/BaseClasses/BaseTcpDeviceCoder.cpp \
     TCP/TcpFlakonController.cpp \
     TCP/TcpFlakonCoder.cpp \
     TCP/TcpManager.cpp \
@@ -37,7 +37,8 @@ SOURCES += \
     TCP/TcpAtlantCoder.cpp \
     Flakon/CoordinateCounter.cpp \
     TCP/TcpSettingsManager.cpp \
-    TCP/Server/TcpServer.cpp
+    TCP/Server/TcpServerCoder.cpp \
+    TCP/Server/TcpServerController.cpp
 
 HEADERS += \
     RPC/RPCServer.h \
@@ -49,13 +50,13 @@ HEADERS += \
     Flakon/Correction/ZDR.h \
     Flakon/Correction/ZCorrector.h \
     Flakon/Correction/ZCoord.h \
-    TCP/BaseClasses/BaseTcpClient.h \
+#    TCP/BaseClasses/BaseTcpClient.h \
     TCP/Interfaces/ITcpClient.h \
     TCP/Interfaces/ITcpDeviceCoder.h \
     TCP/Interfaces/ITcpDeviceController.h \
     TCP/Interfaces/ITcpReceiver.h \
-    TCP/BaseClasses/BaseTcpDeviceController.h \
-    TCP/BaseClasses/BaseTcpDeviceCoder.h \
+#   TCP/BaseClasses/BaseTcpDeviceController.h \
+#    TCP/BaseClasses/BaseTcpDeviceCoder.h \
     TCP/TcpFlakonController.h \
     TCP/TcpFlakonCoder.h \
     TCP/Interfaces/ITcpManager.h \
@@ -71,4 +72,5 @@ HEADERS += \
     TCP/TcpSettingsManager.h \
     TCP/Interfaces/ITcpSettingsManager.h \
     MessageSP.h \
-    TCP/Server/TcpServer.h
+    TCP/Server/TcpServerCoder.h \
+    TCP/Server/TcpServerController.h

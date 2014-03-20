@@ -1,7 +1,8 @@
 #ifndef TCPFLAKONCODER_H
 #define TCPFLAKONCODER_H
 
-#include "BaseClasses/BaseTcpDeviceCoder.h"
+#include "Tcp/BaseTcpDeviceCoder.h"
+#include "TCP/TcpDefines.h"
 
 #include <QDataStream>
 #include <QPointF>
@@ -9,6 +10,7 @@
 
 #include "CRCs.h"
 
+#include "Logger.h"
 class TcpFlakonCoder : public BaseTcpDeviceCoder
 {
 	Q_OBJECT

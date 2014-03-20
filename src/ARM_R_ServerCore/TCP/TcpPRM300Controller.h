@@ -1,9 +1,10 @@
 #ifndef TCPPRM300CONTROLLER_H
 #define TCPPRM300CONTROLLER_H
 
-#include "BaseClasses/BaseTcpDeviceController.h"
+#include "Tcp/BaseTcpDeviceController.h"
 #include "TcpPRM300Coder.h"
 
+#include "Logger.h"
 class TcpPRM300Controller : public BaseTcpDeviceController
 {
 	Q_OBJECT

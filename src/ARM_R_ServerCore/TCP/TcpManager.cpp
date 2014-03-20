@@ -28,25 +28,25 @@ TcpManager::~TcpManager()
 
 void TcpManager::addTcpDevice(const QString& deviceType, const QString& host, const quint32& port)
 {
-	m_logger->debug(QString("Creating %1").arg(deviceType));
+	debug(QString("Creating %1").arg(deviceType));
 	QString key = host + ":" + QString::number(port);
 
 	BaseTcpDeviceController* controller = NULL;
 
 	if (deviceType == FLAKON_TCP_DEVICE) {
 		controller = new TcpFlakonController(FLAKON_TCP_DEVICE);
-		m_logger->debug(QString("Created TcpFlakonController"));
+		debug(QString("Created TcpFlakonController"));
 	} else if (deviceType == ATLANT_TCP_DEVICE) {
 		controller = new TcpAtlantController(ATLANT_TCP_DEVICE);
-		m_logger->debug(QString("Created TcpAtlantController"));
+		debug(QString("Created TcpAtlantController"));
 	} else if (deviceType == PRM300_TCP_DEVICE) {
 		controller = new TcpPRM300Controller(PRM300_TCP_DEVICE);
-		m_logger->debug(QString("Created TcpPRM300Controller"));
+		debug(QString("Created TcpPRM300Controller"));
 	}
 	/// if something else, create new Tcp%Device%Controller with new name and/or class
 
 	if (controller == NULL) {
-		m_logger->debug(QString("Unable to create %1 with %2").arg(deviceType).arg(key));
+		debug(QString("Unable to create %1 with %2").arg(deviceType).arg(key));
 		return;
 	}
 
@@ -69,13 +69,13 @@ void TcpManager::addTcpDevice(const QString& deviceType, const QString& host, co
 	controller->createTcpClient();
 	controller->connectToHost(host, port);
 
-	m_logger->debug(QString("Added device connection for %1 with %2").arg(deviceType).arg(key));
+	debug(QString("Added device connection for %1 with %2").arg(deviceType).arg(key));
 }
 
 void TcpManager::removeTcpDevice(const QString& deviceType, const QString& host, const quint32& port)
 {
 	if (!m_controllersMap.contains(deviceType)) {
-		m_logger->debug(QString("Map doesn't contain %1").arg(deviceType));
+		debug(QString("Map doesn't contain %1").arg(deviceType));
 		return;
 	}
 
@@ -95,7 +95,7 @@ void TcpManager::setRpcServer(IRPC* rpcServer)
 
 }
 
-void TcpManager::setTcpServer(ITcpServer *tcpServer)
+void TcpManager::setTcpServer(ITcpServerController *tcpServer)
 {
 	m_tcpServer = tcpServer;
 }
@@ -132,11 +132,12 @@ void TcpManager::onMessageReceived(const QString& device, const MessageSP argume
 	} else if (device == ATLANT_TCP_DEVICE) {
 		if (messageType == TCP_ATLANT_ANSWER_DIRECTION) {
 			/*TODO: REMOVE RPCSERVER USAGE*/
-			m_tcpServer->sendData(messageData);
+			m_tcpServer->sendData(MessageSP(new Message<QByteArray>(QString(ARM_R_SERVER_ATLANT_DIRECTION), messageData)));
 			m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_ATLANT_DIRECTION, messageData);
 		}
 		else if (messageType == TCP_ATLANT_ANSWER_POSITION) {
-			m_tcpServer->sendData(messageData);
+			/*TODO: REMOVE RPCSERVER USAGE*/
+			m_tcpServer->sendData(MessageSP(new Message<QByteArray>(QString(ARM_R_SERVER_ATLANT_POSITION), messageData)));
 			m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_ATLANT_POSITION, messageData);
 		}
 	} else if (device == PRM300_TCP_DEVICE) {
@@ -275,6 +276,6 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR, argument.toByteArray())));
 	}
 }

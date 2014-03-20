@@ -1,26 +1,26 @@
 #include "BaseTcpDeviceCoder.h"
 
-BaseTcpDeviceCoder::BaseTcpDeviceCoder(Pw::Logger::ILogger* logger, QObject* parent) :
+BaseTcpDeviceCoderOLD::BaseTcpDeviceCoderOLD(Pw::Logger::ILogger* logger, QObject* parent) :
 	QObject(parent)
 {
 	m_logger = logger;
 }
 
-BaseTcpDeviceCoder::~BaseTcpDeviceCoder()
+BaseTcpDeviceCoderOLD::~BaseTcpDeviceCoderOLD()
 {
 }
 
-MessageSP BaseTcpDeviceCoder::encode(const QByteArray& data)
+MessageSP BaseTcpDeviceCoderOLD::encode(const QByteArray& data)
 {
 	return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, data));
 }
 
-QByteArray BaseTcpDeviceCoder::decode(const MessageSP message)
+QByteArray BaseTcpDeviceCoderOLD::decode(const MessageSP message)
 {
 	return message->data();
 }
 
-QObject* BaseTcpDeviceCoder::asQObject()
+QObject* BaseTcpDeviceCoderOLD::asQObject()
 {
 	return this;
 }

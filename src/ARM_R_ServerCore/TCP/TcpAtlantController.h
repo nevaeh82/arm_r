@@ -1,9 +1,10 @@
 #ifndef TCPATLANTCONTROLLER_H
 #define TCPATLANTCONTROLLER_H
 
-#include "BaseClasses/BaseTcpDeviceController.h"
+#include "Tcp/BaseTcpDeviceController.h"
 #include "TcpAtlantCoder.h"
 
+#include "Logger.h"
 class TcpAtlantController : public BaseTcpDeviceController
 {
 	Q_OBJECT

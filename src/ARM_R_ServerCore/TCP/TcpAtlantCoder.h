@@ -1,7 +1,7 @@
 #ifndef TCPATLANTCODER_H
 #define TCPATLANTCODER_H
 
-#include "BaseClasses/BaseTcpDeviceCoder.h"
+#include "Tcp/BaseTcpDeviceCoder.h"
 
 #include <QDataStream>
 #include <QDateTime>
@@ -12,6 +12,10 @@
 #include "Protobuf/ARMR_OD/ZVPacket.pb.h"
 
 #include "RPC/RpcDefines.h"
+#include "TcpDevicesDefines.h"
+#include "TCP/TcpDefines.h"
+
+#include "Logger.h"
 
 class TcpAtlantCoder : public BaseTcpDeviceCoder
 {

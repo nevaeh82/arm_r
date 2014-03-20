@@ -1,7 +1,7 @@
 #include "TcpFlakonCoder.h"
 
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
-	BaseTcpDeviceCoder(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpFlakonCoder)), parent)
+	BaseTcpDeviceCoder(parent)
 {
 	m_residueLength = 0;
 }
@@ -85,7 +85,7 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
 
 	header.length = inputData.size();
-	m_logger->debug(QString("length = %1").arg(header.length));
+	debug(QString("length = %1").arg(header.length));
 
 	CRCs crc;
 	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(inputData.data()), inputData.length());
@@ -109,13 +109,13 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 		int poin;
 		inputDataStream >> poin;
 		QString s(inputData);
-		m_logger->debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
+		debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
 		stream << poin;
 	}
 	else if (message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM) {
 		int average;
 		inputDataStream >> average;
-		m_logger->debug(QString("average %1").arg(QString::number(average)));
+		debug(QString("average %1").arg(QString::number(average)));
 		stream << average;
 	}
 	else {
@@ -169,7 +169,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 			break;
 		case FlakonExternal::TypeStringAnswer:
 			stream >> stringFromServer;
-			m_logger->info(QString("Flakon: %1").arg(stringFromServer));
+			info(QString("Flakon: %1").arg(stringFromServer));
 			break;
 		case FlakonExternal::TypeCorrelationReceivedAnswer:
 			stream >> id1;

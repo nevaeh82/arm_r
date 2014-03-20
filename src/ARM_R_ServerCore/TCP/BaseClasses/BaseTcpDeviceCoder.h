@@ -1,5 +1,5 @@
-#ifndef BASETCPDEVICECODER_H
-#define BASETCPDEVICECODER_H
+#ifndef BASETCPDEVICECODEROLD_H
+#define BASETCPDEVICECODEROLD_H
 
 #include <QObject>
 #include <PwLogger/PwLogger.h>
@@ -7,7 +7,7 @@
 #include "../Interfaces/ITcpDeviceCoder.h"
 #include "../TcpDefines.h"
 
-class BaseTcpDeviceCoder : public QObject, public ITcpDeviceCoder
+class BaseTcpDeviceCoderOLD : public QObject, public ITcpDeviceCoder
 {
 	Q_OBJECT
 
@@ -15,8 +15,8 @@ protected:
 	Pw::Logger::ILogger* m_logger;
 
 public:
-	explicit BaseTcpDeviceCoder(Pw::Logger::ILogger* logger, QObject* parent = NULL);
-	virtual ~BaseTcpDeviceCoder();
+	explicit BaseTcpDeviceCoderOLD(Pw::Logger::ILogger* logger, QObject* parent = NULL);
+	virtual ~BaseTcpDeviceCoderOLD();
 
 	// ITcpDeviceCoder interface
 public:
@@ -25,4 +25,4 @@ public:
 	virtual QObject* asQObject();
 };
 
-#endif // BASETCPDEVICECODER_H
+#endif // BASETCPDEVICECODEROLD_H

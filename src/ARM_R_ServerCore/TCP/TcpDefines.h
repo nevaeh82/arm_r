@@ -1,7 +1,21 @@
 #ifndef TCPDEFINES_H
 #define TCPDEFINES_H
 
+#define TCP_ZAVIRUHA_PREAMBULA "ZAV"
+#define TCP_ZAVIRUHA_PREAMBULA_LEN 7
+
 #define TCP_EMPTY_MESSAGE	"tcpEmptyMessage"
+
+#define TCP_ARMR_SEND_SOLVER_DATA		"tcpArmrSendSolverData"
+#define TCP_ARMR_SEND_SOLVER_CLEAR		"tcpArmrSendSolverClear"
+
+/// COORDINATES
+#define ARM_R_SERVER_BPLA_COORDS        5001
+#define ARM_R_SERVER_BPLA_COORDS_AUTO   5002
+
+/// ATLANT
+#define ARM_R_SERVER_ATLANT_DIRECTION   7001
+#define ARM_R_SERVER_ATLANT_POSITION    7002
 
 /// Atlant device internal
 #define TCP_ATLANT_ANSWER_DIRECTION			"tcpAtlantAnswerDirection"
@@ -108,7 +122,7 @@ typedef struct ZaviruhaPayloadPacketHeader
 	unsigned int type;
 	//! Длина сообщения
 	unsigned int length;
-	//! Резервные данные (можно ничего не передавать)
+	//! � езервные данные (можно ничего не передавать)
 	int reserved;
 	//! CRC16 данных
 	unsigned short messageCRC;

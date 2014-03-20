@@ -1,9 +1,11 @@
 #ifndef TCPFLAKONCONTROLLER_H
 #define TCPFLAKONCONTROLLER_H
 
-#include "BaseClasses/BaseTcpDeviceController.h"
+#include "Tcp/BaseTcpDeviceController.h"
+#include "TcpDevicesDefines.h"
 #include "TcpFlakonCoder.h"
 
+#include "Logger.h"
 class TcpFlakonController : public BaseTcpDeviceController
 {
 	Q_OBJECT
