@@ -15,3 +15,8 @@ void TcpServerController::createTcpServerCoder()
 	debug("Creating TcpServerCoder...");
 	m_tcpServerCoder = new TcpServerCoder(this);
 }
+
+QObject* TcpServerController::asQObject()
+{
+	return this;
+}
