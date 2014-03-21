@@ -11,6 +11,11 @@ QWidget *CorrelationWidgetController::getWidget() const
 	return m_view;
 }
 
+void CorrelationWidgetController::setVisible(const bool isVisible)
+{
+	m_view->setVisible(isVisible);
+}
+
 bool CorrelationWidgetController::isGraphicVisible()
 {
 	return m_view->isVisible();

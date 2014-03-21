@@ -18,7 +18,7 @@ class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 private:
 	IGraphicWidget* m_correlationWidget;
 
-	ICorrelationControllersContainer*	m_commonCorrelations;
+	//ICorrelationControllersContainer*	m_commonCorrelations;
 	ITabManager*	m_tabManager;
 	int	m_id;
 
@@ -36,7 +36,7 @@ public:
 	void sendCommand(int);
 
 private:
-	void setCorData(quint32 point2, QByteArray &vecFFTBA, bool);
+	void setCorData(quint32 point1, quint32 point2, QByteArray &vecFFTBA, bool);
 };
 
 #endif // CORRELATIONWIDGETDATASOURCE_H

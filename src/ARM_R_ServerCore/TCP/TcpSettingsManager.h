@@ -5,6 +5,9 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QSettings>
+#include <QStringList>
+
+#include <PwLogger/PwLogger.h>
 
 #include "Interfaces/ITcpSettingsManager.h"
 #include "SingletonTemplate.h"
@@ -16,6 +19,8 @@ class TcpSettingsManager : public QObject, public ITcpSettingsManager, public Si
 private:
 	QString m_settingsFile;
 	QMutex m_mutex;
+	Pw::Logger::ILogger* m_logger;
+
 
 public:
 	explicit TcpSettingsManager(QObject* parent = NULL);
@@ -24,6 +29,8 @@ public:
 	// ITcpSettingsManager interface
 public:
 	virtual void setIniFile(const QString& filePath);
+
+	virtual QMap<QString, int> getAllInfo();
 
 	virtual QString getFlakonHost();
 	virtual QString getFlakonPort();

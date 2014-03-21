@@ -168,6 +168,8 @@ public:
 		bool isConnected = stationController->connectToDB(param);
 		TS_ASSERT_EQUALS(true, isConnected);
 
+		qDebug() << isConnected;
+
 		QList<StationDataFull> list;
 
 		bool isGetOk = stationController->getStationInfo("Station1", list);

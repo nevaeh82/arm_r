@@ -23,8 +23,15 @@ protected:
 	BaseTcpClient* m_tcpClient;
 	BaseTcpDeviceCoder* m_tcpDeviceCoder;
 	QString m_tcpDeviceName;
+	quint32 m_deviceType;
 
 	Pw::Logger::ILogger* m_logger;
+
+	QString	m_host;
+	quint32	m_port;
+
+	QByteArray m_deviceBaseInfo;
+	QByteArray m_deviceFullInfo;
 
 public:
 	explicit BaseTcpDeviceController(Pw::Logger::ILogger* logger, QObject* parent = NULL);
@@ -36,12 +43,16 @@ public:
 	virtual void createTcpClient();
 	virtual void createTcpDeviceCoder();
 	virtual void connectToHost(const QString& host, const quint32& port);
+	virtual void connectToHost();
 	virtual void disconnectFromHost();
 	virtual bool isConnected();
 	virtual QString getHost();
 	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
 
+	virtual void setDeviceInfo(const QByteArray& baseInfo, const QByteArray& fullInfo);
+	virtual QByteArray getFullInfo();
+	virtual bool init();
 	// ITcpReceiver interface
 public:
 	virtual void onDataReceived(const QVariant& argument); // from BaseTcpClient
@@ -53,6 +64,7 @@ signals:
 	void onDataReceivedInternalSignal(const QVariant& argument);
 	void createTcpClientInternalSignal();
 	void createTcpDeviceCoderInternalSignal();
+	void signalTcpDeviceConnectedToHost(bool state);
 
 private slots:
 	void connectToHostInternalSlot(const QString& host, const quint32& port);

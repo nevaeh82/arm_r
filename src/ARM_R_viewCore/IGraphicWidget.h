@@ -11,6 +11,7 @@ class IGraphicWidget
 		virtual bool isGraphicVisible() = 0;
 		virtual quint32 getId() = 0;
 		virtual void setZeroFrequency(double val) = 0;
+		virtual void setVisible(const bool isVisible) = 0;
 };
 
 #endif // IGRAPHICWIDGET_H

@@ -31,7 +31,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 	int submodulesCount = readSettings(settingsFile);
 
-	m_correlationControllers->init(m_stationsMap.count() - 1);
+	m_correlationControllers->init(m_stationsMap.count());
 
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
 	commonTabSpectrumWidget->setDbManager(m_dbManager);

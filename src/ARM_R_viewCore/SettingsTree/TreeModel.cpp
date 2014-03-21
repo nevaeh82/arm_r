@@ -194,6 +194,8 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value,
 
 	item->updateData(data);
 
+//	QString name1 = data.value.toString();
+
 	m_dbManager->updateProperty(Property(item->data()));
 
 	emit dataChanged(index, index);

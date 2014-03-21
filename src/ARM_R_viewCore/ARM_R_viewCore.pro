@@ -50,7 +50,8 @@ SOURCES += \
     DBStation/AddStationDataDialog.cpp \
     DBStation/AddStationDataDialogController.cpp \
     DBStation/ListsDialog.cpp \
-    DBStation/ListsDialogController.cpp
+    DBStation/ListsDialogController.cpp \
+    Prm300ControlWidget.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -114,7 +115,8 @@ HEADERS += \
     DBStation/AddStationDataDialog.h \
     DBStation/AddStationDataDialogController.h \
     DBStation/ListsDialog.h \
-    DBStation/ListsDialogController.h
+    DBStation/ListsDialogController.h \
+    Prm300ControlWidget.h
 
 FORMS += \
     ControlPanel.ui \
@@ -126,7 +128,8 @@ FORMS += \
     Tabs/CommonSpectrumTabWidget.ui \
     SpectrumWidget.ui \
     DBStation/AddStationDataDialog.ui \
-    DBStation/ListsDialog.ui
+    DBStation/ListsDialog.ui \
+    Prm300ControlWidget.ui
 
 
 RESOURCES += \

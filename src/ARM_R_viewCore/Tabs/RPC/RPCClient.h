@@ -15,6 +15,8 @@
 #include <QVariant>
 #include <QList>
 
+#include "Rpc/RpcMessageStruct.h"
+
 #include "IRPC.h"
 #include "Common/IMessage.h"
 #include "Common/CommandMessage.h"
@@ -68,7 +70,7 @@ private:
 	void prmSetAtt2(int att2);
 	void prmSetFilter(int index);
 
-	void flakonSetMainStationCor(int value);
+	void flakonSetMainStationCor(QString value);
 	void flakonSetAvarage(int value);
 
 	void requestSatatus();
@@ -83,20 +85,20 @@ signals:
 
 	///RPC signals
     void signalSetClientId(int id);
-    void signalSetMainStationCor(int id, int station);
+	void signalSetMainStationCor(int id, QString station);
     void signalSetBandwidth(int id, float db);
     void signalSetShift(int id, float shift);
     void signalRecognize(int id, int type);
     void signalSSCorrelation(int id, bool enable);
     void signalSetAvarageSpectrum(int id, int avarage);
 
-    void signalPRMSetFreq(int id, short freq);
-    void signalPRMRequestFreq(int id);
-    void signalPRMSetAtt1(int id, int att1);
-    void signalPRMSetAtt2(int id, int att2);
-    void signalPRMSetFilter(int id, int index);
+	void signalPRMSetFreq(QString name, short freq);
+	void signalPRMRequestFreq(QString name);
+	void signalPRMSetAtt1(QString name, int att1);
+	void signalPRMSetAtt2(QString name, int att2);
+	void signalPRMSetFilter(QString name, int index);
 
-    void signalRequestStatus(int id);
+	void signalRequestStatus(int id);
 
     void signalReconnection();
 
@@ -112,7 +114,7 @@ public slots:
 
 	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
 
-	void rpcSlotServerStatus(bool state);
+	void rpcSlotServerStatus(QByteArray message);
 
 private slots:
 	void slotRpcConnetion();

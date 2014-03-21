@@ -2,6 +2,8 @@
 
 #include "Rpc/RpcDefines.h"
 
+#include "Interfaces/ICorrelationWidget.h"
+
 CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent) :
 	BaseDataSource(parent)
 {
@@ -17,31 +19,55 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correla
 
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
+
+	/// TODO this is hack for visible and unvisible widge. Need to refactor architechture
 	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
 
-		if(!m_correlationWidget->isGraphicVisible()) {
-			return;
-		}
+//		if(!m_correlationWidget->isGraphicVisible()) {
+//			return;
+//		}
 
 		QList<QVariant> list = data.toList();
-		quint32 point2 = list.at(1).toUInt();
+		quint32 point1 = list.at(1).toUInt();
+		quint32 point2 = list.at(2).toUInt();
 
-		if (point2 - 1 != m_id){
+		if(point1 == m_id) {
+			m_correlationWidget->setVisible(false);
 			return;
 		}
 
-		setCorData(point2, list.at(0).toByteArray(), true);
+		if (point2 != m_id){
+			return;
+		}
+		m_correlationWidget->setVisible(true);
+
+
+
+//		if(point1 == m_id) {
+//			if(point2 >= point1){
+//				point2 -= 1;
+//			}
+//		}
+//		else {
+//			return;
+//		}
+		//		if(point2 > m_id)
+		//		{
+		//			point2--;
+		//		}
+
+		setCorData(point1, point2, list.at(0).toByteArray(), true);
 	}
 }
 
 Q_DECLARE_METATYPE(float*)
-void CorrelationWidgetDataSource::setCorData(quint32 point2, QByteArray& vecFFTBA, bool /*isComplex*/)
+void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, QByteArray& vecFFTBA, bool /*isComplex*/)
 {
 	QVector<QPointF> vecFFT;
 	QDataStream stream(vecFFTBA);
 	stream >> vecFFT;
 
-	QString base = m_tabManager->getStationName(m_id);
+	QString base = m_tabManager->getStationName(point1);//m_id);
 	QString second = m_tabManager->getStationName(point2);
 
 	float* spCorrelation = m_mapSpectrumCorelation;

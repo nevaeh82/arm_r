@@ -60,12 +60,15 @@ QObject* BaseTcpClient::asQObject()
 
 void BaseTcpClient::onSocketConnected()
 {
+	m_reconnectTimer->stop();
 	m_logger->debug("Socket connected");
+	emit signalConnectedToHost(true);
 }
 
 void BaseTcpClient::onSocketDisconnected()
 {
 	m_logger->debug("Socket disconnected");
+	emit signalConnectedToHost(false);
 }
 
 void BaseTcpClient::onSocketReadyRead()
@@ -83,7 +86,6 @@ void BaseTcpClient::onSocketDisplayError(QAbstractSocket::SocketError socketErro
 	switch(socketError)
 	{
 		case QAbstractSocket::RemoteHostClosedError:
-			m_reconnectTimer->start(1000);
 			m_logger->debug("Error! Connection with TCP device was lost");
 			break;
 		case QAbstractSocket::HostNotFoundError:
@@ -96,6 +98,11 @@ void BaseTcpClient::onSocketDisplayError(QAbstractSocket::SocketError socketErro
 			m_logger->debug(QString("Error! Error text: %1").arg(m_tcpSocket->errorString()));
 			break;
 	}
+
+	m_logger->debug(QString("Host = %1, Port = %2").arg(m_host).arg(m_port));
+	m_reconnectTimer->start(1000);
+
+//	emit signalConnectedToHost(false);
 }
 
 void BaseTcpClient::connectToHostInternalSlot(const QString& host, const quint32& port)
@@ -109,6 +116,7 @@ void BaseTcpClient::connectToHostInternalSlot(const QString& host, const quint32
 		m_logger->debug(QString("Connect failed to %1:%2").arg(host).arg(QString::number(port)));
 	}
 	m_logger->debug(QString("Connectection established to %1:%2").arg(host).arg(QString::number(port)));
+
 }
 
 void BaseTcpClient::disconnectFromHostInternalSlot()
@@ -116,9 +124,26 @@ void BaseTcpClient::disconnectFromHostInternalSlot()
 	m_reconnectTimer->stop();
 	m_tcpSocket->disconnectFromHost();
 	m_tcpSocket->abort();
+//	emit signalConnectedToHost(false);
 }
 
 void BaseTcpClient::writeDataInternalSlot(const QByteArray& data)
 {
 	m_tcpSocket->write(data);
+}
+
+void BaseTcpClient::reconnectSlot()
+{
+	if(m_tcpSocket->state() != QAbstractSocket::UnconnectedState)
+		return;
+
+	m_tcpSocket->reset();
+	if(!m_tcpSocket->isValid())
+	{
+		m_tcpSocket->disconnectFromHost();
+		QTextStream(stdout) << "socket_->isNOTValid()" << endl;
+
+	}
+	m_tcpSocket->connectToHost(m_host, m_port);
+	m_tcpSocket->waitForConnected(1000);
 }

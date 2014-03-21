@@ -49,10 +49,13 @@ private slots:
 	void disconnectFromHostInternalSlot();
 	void writeDataInternalSlot(const QByteArray& data);
 
+	void reconnectSlot();
+
 signals:
 	void connectToHostInternalSignal(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSignal();
 	void writeDataInternalSignal(const QByteArray& data);
+	void signalConnectedToHost(bool state);
 };
 
 #endif // BASETCPCLIENT_H

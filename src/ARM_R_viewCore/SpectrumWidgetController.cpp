@@ -235,6 +235,11 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
 }
 
+void SpectrumWidgetController::setVisible(const bool isVisible)
+{
+	m_view->setVisible(isVisible);
+}
+
 void SpectrumWidgetController::setAutoSearch(bool enabled)
 {
 	m_view->setAutoSearch(enabled);

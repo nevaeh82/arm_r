@@ -68,6 +68,7 @@ public:
 	bool isGraphicVisible();
 	quint32 getId();
 	void setZeroFrequency(double val);
+	void setVisible(const bool isVisible);
 
 	void setAutoSearch(bool);
 	void setPanorama(bool);
