@@ -13,7 +13,7 @@ TcpPRM300Controller::TcpPRM300Controller(const QString& tcpDeviceName, QObject* 
 {
 	bool err = init();
 	connect(this, SIGNAL(createTcpPRM300CoderInternalSignal()), this, SLOT(createTcpPRM300CoderInternalSlot()));
-	connect(this, SIGNAL(signalTcpDeviceConnectedToHost(bool)), this, SLOT(slotTcpConnectionStatus(bool)));
+	connect(this, SIGNAL(signalTcpDeviceConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
 }
 
 TcpPRM300Controller::~TcpPRM300Controller()
@@ -82,7 +82,7 @@ void TcpPRM300Controller::createTcpPRM300CoderInternalSlot()
 	m_tcpDeviceCoder = new TcpPRM300Coder(this);
 }
 
-void TcpPRM300Controller::slotTcpConnectionStatus(bool status)
+void TcpPRM300Controller::slotTcpConnectionStatus(int status)
 {
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);

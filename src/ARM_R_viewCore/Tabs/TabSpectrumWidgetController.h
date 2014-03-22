@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHostAddress>
 #include <QList>
+#include <QTimer>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ITabWidget.h"
@@ -44,6 +45,10 @@ private:
 	double              m_threshold;
 	QString m_rpcHostAddress;
 	quint16 m_rpcHostPort;
+
+	/// connection status
+//	int		m_connectionStatus;
+	QTimer	m_timerStatus;
 
 public:
 	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, ITabManager*, QObject *parent = 0);
@@ -104,6 +109,7 @@ private slots:
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);
+	void slotCheckStatus();
 };
 
 #endif // TABSPECTRUMWIDGETCONTROLLER_H

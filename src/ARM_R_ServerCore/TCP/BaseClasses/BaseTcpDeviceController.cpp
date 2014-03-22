@@ -161,7 +161,7 @@ void BaseTcpDeviceController::createTcpClientInternalSlot()
 	m_logger->debug("Creating BaseTcpClient...");
 	m_tcpClient = new BaseTcpClient(this);
 	m_tcpClient->registerReceiver(this);
-	connect(m_tcpClient, SIGNAL(signalConnectedToHost(bool)), this, SIGNAL(signalTcpDeviceConnectedToHost(bool)));
+	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SIGNAL(signalTcpDeviceConnectedToHost(int)));
 }
 
 void BaseTcpDeviceController::createTcpDeviceCoderInternalSlot()

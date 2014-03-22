@@ -63,7 +63,7 @@ public slots:
 	/// ATLANT from client
 	void rpcSlotSetAtlantFrequency(quint64 clint, QByteArray data);
 
-	void rpcSlotRequestStatus(quint64 client, int id);
+	void rpcSlotRequestStatus(quint64 client, QString name);
 	void rpcSlotSendRespModulation(quint64 client, QString modulation);
 
 signals:

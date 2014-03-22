@@ -30,7 +30,7 @@ signals:
 
 private slots:
 	void createTcpPRM300CoderInternalSlot();
-	void slotTcpConnectionStatus(bool status);
+	void slotTcpConnectionStatus(int status);
 
 private:
 	Prm300Settings prmSettings;

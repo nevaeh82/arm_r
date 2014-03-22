@@ -231,7 +231,7 @@ MessageSP TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter, quint8 att1
 	return MessageSP(new Message<QByteArray>(TCP_PRM300_ANSWER_STATUS, byteArray));
 }
 
-MessageSP TcpPRM300Coder::sendPRMStatus(bool status)
+MessageSP TcpPRM300Coder::sendPRMStatus(int status)
 {
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);

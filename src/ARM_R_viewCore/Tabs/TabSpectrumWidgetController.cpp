@@ -30,6 +30,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
+	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
 }
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
@@ -63,6 +64,8 @@ void TabSpectrumWidgetController::activate()
 	}
 
 	m_view->getSpectrumWidget()->setSelection(start, end);
+
+	m_timerStatus.start(2000);
 }
 
 void TabSpectrumWidgetController::deactivate()
@@ -161,6 +164,20 @@ void TabSpectrumWidgetController::createTree()
 void TabSpectrumWidgetController::setIndicator(int state)
 {
 	m_view->setIndicatorState(state);
+	if(state < 1)
+	{
+		if(!m_timerStatus.isActive())
+		{
+			m_timerStatus.start(2000);
+		}
+	}
+	else
+	{
+		if(m_timerStatus.isActive())
+		{
+			m_timerStatus.stop();
+		}
+	}
 }
 
 double TabSpectrumWidgetController::getCurrentFrequency()
@@ -272,6 +289,11 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 	}
 
 	m_spectrumDataSource->setPanorama(isEnabled, panoramaStartValue, panoramaEndValue);
+}
+
+void TabSpectrumWidgetController::slotCheckStatus()
+{
+	checkStatus();
 }
 
 void TabSpectrumWidgetController::readSettings()

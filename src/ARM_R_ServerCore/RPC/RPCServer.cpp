@@ -32,7 +32,7 @@ bool RPCServer::start(quint16 port, QHostAddress address)
 	m_serverPeer->attachSlot(RPC_SLOT_SET_DATA_TO_SOLVER, this, SLOT(rpcSlotSetDataToSolver(quint64,QByteArray)));
 	m_serverPeer->attachSlot(RPC_SLOT_SET_CLEAR_TO_SOLVER, this, SLOT(rpcSlotSetClearToSolver(quint64,QByteArray)));
 
-	m_serverPeer->attachSlot(RPC_SLOT_REQUEST_STATUS, this, SLOT(rpcSlotRequestStatus(quint64, int)));
+	m_serverPeer->attachSlot(RPC_SLOT_REQUEST_STATUS, this, SLOT(rpcSlotRequestStatus(quint64, QString)));
 
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendPointsRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_POINTS);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendDetectedBandwidthRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH);
@@ -153,7 +153,7 @@ void RPCServer::sendDataByRpc(const QString& signalType, const QString& deviceNa
 		/// TODO change signal and parse qbytearray
 		QByteArray inputData = data;
 		QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
-		bool status = false;
+		int status = 0;
 		inputDataStream >> status;
 		emit serverSendPrmStatusRpcSignalBool(baMessage);
 //		emit serverSendPrmStatusRpcSignal((int)freq, (int)filter, (int)att1, (int)att2);
@@ -328,7 +328,13 @@ void RPCServer::rpcSlotSetAtlantFrequency(quint64 client, QByteArray data)
 	}
 }
 
-void RPCServer::rpcSlotRequestStatus(quint64 client, int id)
+void RPCServer::rpcSlotRequestStatus(quint64 client, QString name)
 {
-	/// TODO
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << name;
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_SLOT_REQUEST_STATUS, QVariant(byteArray));
+	}
 }

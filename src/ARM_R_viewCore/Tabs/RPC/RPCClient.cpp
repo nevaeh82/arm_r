@@ -41,7 +41,7 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(QString, int)), RPC_SLOT_PRM_SET_ATT1);
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(QString, int)), RPC_SLOT_PRM_SET_ATT2);
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(QString,int)), RPC_SLOT_PRM_SET_FILTER);
-	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(int)), RPC_SLOT_REQUEST_STATUS);
+	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(QString)), RPC_SLOT_REQUEST_STATUS);
 
 	///server
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(rpcSlotGettingPoints(QByteArray)));
@@ -106,7 +106,7 @@ void RPCClient::formCommand(IMessage *msg)
 			flakonSetAvarage(data.toInt());
 			break;
 		case COMMAND_REQUEST_STATUS:
-			requestSatatus();
+			requestStatus();
 			break;
 
 		default:
@@ -151,9 +151,9 @@ void RPCClient::flakonSetAvarage(int value)
 	emit signalSetAvarageSpectrum(m_station->getId(), value);
 }
 
-void RPCClient::requestSatatus()
+void RPCClient::requestStatus()
 {
-	emit signalRequestStatus(m_station->getId());
+	emit signalRequestStatus(m_station->getName());
 }
 
 void RPCClient::recognize()
@@ -304,7 +304,7 @@ void RPCClient::rpcSlotServerStatus(QByteArray message)
 	dataStream >> messageStruct.data;
 
 	QDataStream dataStream1(&messageStruct.data, QIODevice::ReadOnly);
-	bool state;
+	int state;
 	dataStream1 >> state;
 
 	m_logger->debug(QString("NAMWS = %1 %2").arg(messageStruct.name).arg(m_station->getName()));

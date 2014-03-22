@@ -73,7 +73,7 @@ private:
 	void flakonSetMainStationCor(QString value);
 	void flakonSetAvarage(int value);
 
-	void requestSatatus();
+	void requestStatus();
 
 signals:
     void signalSetCommand(IMessage *msg);
@@ -98,7 +98,7 @@ signals:
 	void signalPRMSetAtt2(QString name, int att2);
 	void signalPRMSetFilter(QString name, int index);
 
-	void signalRequestStatus(int id);
+	void signalRequestStatus(QString name);
 
     void signalReconnection();
 

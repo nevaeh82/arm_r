@@ -39,6 +39,19 @@ void BaseTcpClient::disconnectFromHost()
 
 bool BaseTcpClient::isConnected()
 {
+	switch(m_tcpSocket->state())
+	{
+		case QAbstractSocket::ConnectedState:
+			emit signalConnectedToHost(1);
+		break;
+		case QAbstractSocket::UnconnectedState:
+			emit signalConnectedToHost(0);
+			break;
+		default:
+			emit signalConnectedToHost(0);
+		break;
+	}
+
 	return m_tcpSocket->state() == QAbstractSocket::ConnectedState;
 }
 
@@ -62,13 +75,13 @@ void BaseTcpClient::onSocketConnected()
 {
 	m_reconnectTimer->stop();
 	m_logger->debug("Socket connected");
-	emit signalConnectedToHost(true);
+	emit signalConnectedToHost(1);
 }
 
 void BaseTcpClient::onSocketDisconnected()
 {
 	m_logger->debug("Socket disconnected");
-	emit signalConnectedToHost(false);
+	emit signalConnectedToHost(0);
 }
 
 void BaseTcpClient::onSocketReadyRead()

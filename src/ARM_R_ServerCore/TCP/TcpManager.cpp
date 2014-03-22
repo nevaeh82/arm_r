@@ -320,5 +320,12 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		}
 
 		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
+	}else if (method == RPC_SLOT_REQUEST_STATUS) {
+		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
+		if (controller == NULL) {
+			return;
+		}
+		bool connectionState = controller->isConnected();
+		m_logger->info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
 	}
 }

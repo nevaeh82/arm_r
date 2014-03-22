@@ -64,7 +64,7 @@ signals:
 	void onDataReceivedInternalSignal(const QVariant& argument);
 	void createTcpClientInternalSignal();
 	void createTcpDeviceCoderInternalSignal();
-	void signalTcpDeviceConnectedToHost(bool state);
+	void signalTcpDeviceConnectedToHost(int state);
 
 private slots:
 	void connectToHostInternalSlot(const QString& host, const quint32& port);
