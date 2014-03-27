@@ -3,9 +3,10 @@
 
 #include "Rpc/RpcDefines.h"
 
-SpectrumWidgetController::SpectrumWidgetController(QObject *parent)
-	: QObject(parent)
-	, TIMER_CLICK_DELAY(500)
+//DoubleClick waiting time
+#define TIMER_CLICK_DELAY 500
+
+SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
 	m_rpcClient = NULL;
 	m_current_frequency = 0;

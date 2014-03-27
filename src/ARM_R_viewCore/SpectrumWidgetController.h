@@ -59,7 +59,6 @@ private:
 
 	RPCClient* m_rpcClient;
 
-	const int TIMER_CLICK_DELAY;
 	QTimer *m_clickDelay;
 	bool flagDoubleClick;
 
