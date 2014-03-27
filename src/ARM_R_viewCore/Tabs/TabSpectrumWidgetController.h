@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHostAddress>
 #include <QList>
+#include <QTimer>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ITabWidget.h"
@@ -15,7 +16,6 @@
 
 #include "SpectrumWidgetDataSource.h"
 #include "Correlations/CorrelationWidgetDataSource.h"
-#include "Controls/ControlPRM.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum,
 		public IDbChangedListener
@@ -37,13 +37,14 @@ private:
 	TreeWidgetDelegate* m_treeDelegate;
 	RPCClient*          m_rpcClient;
 
-	ControlPRM*         m_controlPRM;
-
 	QLabel*             m_indicatorLabel;
 
 	double              m_threshold;
 	QString m_rpcHostAddress;
 	quint16 m_rpcHostPort;
+
+	/// connection status
+	QTimer	m_timerStatus;
 
 public:
 	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, ITabManager*, QObject *parent = 0);
@@ -63,6 +64,7 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager*);
+	virtual void setStationNamesList(const QStringList &stationsList);
 
 	virtual void setIndicator(int state);
 
@@ -104,6 +106,9 @@ private slots:
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);
+
+	void slotCheckStatus();
+
 };
 
 #endif // TABSPECTRUMWIDGETCONTROLLER_H

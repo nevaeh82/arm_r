@@ -23,14 +23,13 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 
 	ITcpSettingsManager* settingsManager = new TcpSettingsManager(this);
 	settingsManager->setIniFile("./TCP/coders.ini");
+	QMap<QString, int> mapInfo = settingsManager->getAllInfo();
 
-	QString host = settingsManager->getFlakonHost();
-	quint32 port = settingsManager->getFlakonPort().toUInt();
-	m_tcpManager->addTcpDevice(FLAKON_TCP_DEVICE, host, port);
-
-	host = settingsManager->getAtlantHost();
-	port = settingsManager->getAtlantPort().toUInt();
-	m_tcpManager->addTcpDevice(ATLANT_TCP_DEVICE, host, port);
+	foreach(QString key, mapInfo.keys())
+	{
+		m_logger->debug(QString(key));
+		m_tcpManager->addTcpDevice(key, mapInfo.value(key));
+	}
 }
 
 ARM_R_Srv::~ARM_R_Srv()

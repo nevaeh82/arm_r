@@ -9,6 +9,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 {
 	ui->setupUi(this);
 
+	m_rpcClient = NULL;
+
 	m_spectrumWidget = new SpectrumWidget(this);
 
 	m_spectrumWidgetController = new SpectrumWidgetController(m_spectrumWidget);
@@ -104,6 +106,17 @@ void TabSpectrumWidget::insertCorrelationWidget(ICorrelationWidget *correlationW
 	m_correlationWidgetsList.append(correlationWidget);
 
 	ui->correlationsGroupWidget->insertCorrelationWidget(correlationWidget);
+}
+
+void TabSpectrumWidget::setRpcClient(RPCClient* rpcClient)
+{
+	m_rpcClient = rpcClient;
+	m_spectrumWidgetController->setRpcClient(m_rpcClient);
+}
+
+RPCClient *TabSpectrumWidget::getRpcClient()
+{
+	return m_rpcClient;
 }
 
 void TabSpectrumWidget::setIndicatorStateSlot(int state)

@@ -58,6 +58,11 @@ void BaseTcpDeviceController::connectToHost(const QString& host, const quint32& 
 	emit connectToHostInternalSignal(host, port);
 }
 
+void BaseTcpDeviceController::connectToHost()
+{
+	emit connectToHostInternalSignal(m_host, m_port);
+}
+
 void BaseTcpDeviceController::disconnectFromHost()
 {
 	emit disconnectFromHostInternalSignal();
@@ -83,6 +88,22 @@ QObject* BaseTcpDeviceController::asQObject()
 	return this;
 }
 
+void BaseTcpDeviceController::setDeviceInfo(const QByteArray &info, const QByteArray& fullInfo)
+{
+	//	m_deviceInfo = info;
+}
+
+QByteArray BaseTcpDeviceController::getFullInfo()
+{
+	return QByteArray();
+	/// Realesed in inherite classes
+}
+
+bool BaseTcpDeviceController::init()
+{
+	return false;
+}
+
 void BaseTcpDeviceController::onDataReceived(const QVariant& argument)
 {
 //	emit onDataReceivedInternalSignal(argument);
@@ -93,8 +114,9 @@ void BaseTcpDeviceController::onDataReceived(const QVariant& argument)
 		return;
 	}
 
+
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(m_tcpDeviceName, message);
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
 	}
 }
 
@@ -130,7 +152,7 @@ void BaseTcpDeviceController::onDataReceivedInternalSlot(const QVariant& argumen
 	}
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(m_tcpDeviceName, message);
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
 	}
 }
 
@@ -139,6 +161,7 @@ void BaseTcpDeviceController::createTcpClientInternalSlot()
 	m_logger->debug("Creating BaseTcpClient...");
 	m_tcpClient = new BaseTcpClient(this);
 	m_tcpClient->registerReceiver(this);
+	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SIGNAL(signalTcpDeviceConnectedToHost(int)));
 }
 
 void BaseTcpDeviceController::createTcpDeviceCoderInternalSlot()

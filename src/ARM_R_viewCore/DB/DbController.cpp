@@ -227,7 +227,15 @@ bool DbController::createConnection(const QString& dbFile)
 {
 	bool isOpened = false;
 
-	m_sdb = QSqlDatabase::addDatabase("QSQLITE", "SETTINGSCONNECTION");
+	if(QSqlDatabase::contains("SETTINGSCONNECTION"))
+	{
+		m_sdb =  QSqlDatabase::database("SETTINGSCONNECTION");
+	}
+	else
+	{
+		m_sdb = QSqlDatabase::addDatabase("QSQLITE", "SETTINGSCONNECTION");
+	}
+	
 	m_sdb.setDatabaseName(dbFile);
 
 	isOpened = m_sdb.open();

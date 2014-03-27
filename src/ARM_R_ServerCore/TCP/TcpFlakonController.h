@@ -1,8 +1,12 @@
 #ifndef TCPFLAKONCONTROLLER_H
 #define TCPFLAKONCONTROLLER_H
 
+#include <QSettings>
+#include <QStringList>
 #include "BaseClasses/BaseTcpDeviceController.h"
 #include "TcpFlakonCoder.h"
+
+#include "Info/FlakonSettings.h"
 
 class TcpFlakonController : public BaseTcpDeviceController
 {
@@ -18,11 +22,18 @@ public:
 	virtual void createTcpDeviceCoder();
 	virtual QObject* asQObject();
 
+	virtual bool init();
+
+	virtual QByteArray getFullInfo();
+
 signals:
 	void createTcpFlakonCoderInternalSignal();
 
 private slots:
 	void createTcpFlakonCoderInternalSlot();
+
+private:
+	FlakonSettings m_flakonSettingStruct;
 };
 
 #endif // TCPFLAKONCONTROLLER_H

@@ -5,6 +5,7 @@ class QWidget;
 class QLabel;
 class SpectrumWidget;
 class QString;
+class QStringList;
 class ISpectrumWidget;
 class IDbManager;
 
@@ -33,6 +34,7 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const = 0;
 
 	virtual void setDbManager(IDbManager*) = 0;
+	virtual void setStationNamesList(const QStringList& stationsList) = 0;
 };
 
 #endif // ISUBMODULE_H

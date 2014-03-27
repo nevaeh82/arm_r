@@ -8,6 +8,8 @@
 #include "Common/CommandMessage.h"
 #include "SpectrumWidgetController.h"
 
+#include "Prm300ControlWidget.h"
+
 namespace Ui {
 class SpectrumWidget;
 }
@@ -33,6 +35,10 @@ public:
 	Q_MG_SpectrumInterface* getGraphicsWidget();
 
 	void setControlPrmState(bool state);
+
+	Prm300ControlWidget* getPrm300Widget();
+
+
 
 public slots:
 

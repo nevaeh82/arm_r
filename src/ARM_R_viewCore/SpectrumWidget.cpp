@@ -53,6 +53,11 @@ void SpectrumWidget::setControlPrmState(bool state)
 	ui->prmControlCB->setChecked(state);
 }
 
+Prm300ControlWidget *SpectrumWidget::getPrm300Widget()
+{
+	return ui->PrmControlWidget;
+}
+
 void SpectrumWidget::slotEnableKM(bool state)
 {
 	/// not yet realazed signal

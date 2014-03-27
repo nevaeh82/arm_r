@@ -16,6 +16,10 @@
 #include "modules/gui/multi_graphics/components_relation.h"
 #include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
+#include "Prm300ControlWidgetController.h"
+
+#include "Tabs/RPC/RPCClient.h"
+
 #define TO_MHZ	1000000
 
 class SpectrumWidget;
@@ -51,6 +55,11 @@ private:
 
 	Q_MG_SpectrumInterface* m_graphicsWidget;
 
+	Prm300ControlWidgetController* m_prm300WidgetController;
+
+	RPCClient* m_rpcClient;
+
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 
@@ -68,6 +77,7 @@ public:
 	bool isGraphicVisible();
 	quint32 getId();
 	void setZeroFrequency(double val);
+	void setVisible(const bool isVisible);
 
 	void setAutoSearch(bool);
 	void setPanorama(bool);
@@ -78,6 +88,8 @@ public:
 	void setControlPrmState(bool state);
 
 	void onDataArrived(const QString& method, const QVariant& arg);
+
+	void setRpcClient(RPCClient* rpcClient);
 
 private:
 	void init();

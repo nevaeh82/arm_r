@@ -9,6 +9,7 @@
 #include "Interfaces/ITabWidget.h"
 
 #include "SettingsTree/TreeModel.h"
+#include "SettingsTree/TreeWidgetDelegate.h"
 
 #include <PwLogger/PwLogger.h>
 
@@ -28,6 +29,7 @@ private:
 	ICorrelationControllersContainer* m_correlationControllers;
 
 	TreeModel*          m_treeModel;
+	TreeWidgetDelegate* m_treeDelegate;
 
 	IDbManager* m_dbManager;
 	Pw::Logger::ILogger* m_logger;
@@ -51,6 +53,7 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager* dbManager);
+	virtual void setStationNamesList(const QStringList &stationsList);
 
 	QLabel* getIndicator();
 

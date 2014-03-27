@@ -15,20 +15,17 @@ TreeWidgetDelegate::TreeWidgetDelegate(QObject *parent) :
 {
 	m_mode = DefaultMode;
 
-	m_stationNamesList.push_back(tr("Gal"));
-	m_stationNamesList.push_back(tr("Pichora"));
-	m_stationNamesList.push_back(tr("Nabakia"));
-	m_stationNamesList.push_back(tr("Taglan"));
-	m_stationNamesList.push_back(tr("Ochamchir"));
-	m_stationNamesList.push_back(tr("Papinrhua"));
-	m_stationNamesList.push_back(tr("Auto"));
-
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TreeWidgetDelegate));
 }
 
 TreeWidgetDelegate::~TreeWidgetDelegate()
 {
 
+}
+
+void TreeWidgetDelegate::setStationNamesList(const QStringList &stationsList)
+{
+	m_stationNamesList = stationsList;
 }
 
 QWidget *TreeWidgetDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const

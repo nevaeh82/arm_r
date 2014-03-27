@@ -175,6 +175,8 @@ QByteArray TcpPRM300Coder::decode(const MessageSP message)
 	unsigned short avalue;
 	int int_value = 0;
 	if (message->type() == TCP_PRM300_REQUEST_SET_FREQUENCY) {
+		QString name;
+		inputDataStream >> name;
 		inputDataStream >> avalue;
 		dataToSend = prmSetFrequency(avalue);
 	} else if (message->type() == TCP_PRM300_REQUEST_GET_FREQUENCY) {
@@ -227,6 +229,15 @@ MessageSP TcpPRM300Coder::sendPRMStatus(quint16 freq, quint8 filter, quint8 att1
 	dataStream << att2;
 
 	return MessageSP(new Message<QByteArray>(TCP_PRM300_ANSWER_STATUS, byteArray));
+}
+
+MessageSP TcpPRM300Coder::sendPRMStatus(int status)
+{
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << status;
+
+	return MessageSP(new Message<QByteArray>(TCP_PRM300_STATUS, byteArray));
 }
 
 QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)

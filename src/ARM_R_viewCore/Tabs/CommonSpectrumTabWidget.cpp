@@ -11,6 +11,8 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 	m_treeModel = NULL;
 	m_dbManager = NULL;
 
+	m_treeDelegate = new TreeWidgetDelegate(this);
+
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(CommonSpectrumTabWidget));
 }
 
@@ -27,6 +29,7 @@ void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
 	headers << tr("Name") << tr("Property");
 	m_treeModel = new TreeModel(m_dbManager, headers, this);
 	ui->settingsTreeView->setModel(m_treeModel);
+	ui->settingsTreeView->setItemDelegate(m_treeDelegate);
 
 	m_dbManager->registerReceiver(m_treeModel);
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
@@ -143,4 +146,10 @@ void CommonSpectrumTabWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidg
 TypeTabWidgetEnum CommonSpectrumTabWidget::getWidgetType() const
 {
 	return TypeCommonSpectrum;
+}
+
+
+void CommonSpectrumTabWidget::setStationNamesList(const QStringList &stationsList)
+{
+	m_treeDelegate->setStationNamesList(stationsList);
 }

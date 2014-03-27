@@ -68,4 +68,6 @@ HEADERS += \
     Flakon/Interfaces/ICoordinateCounter.h \
     TCP/TcpSettingsManager.h \
     TCP/Interfaces/ITcpSettingsManager.h \
-    MessageSP.h
+    MessageSP.h \
+    RPC/RPCStructs.h \
+    RPC/RPCBaseItem.h
