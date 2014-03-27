@@ -1,16 +1,16 @@
 #include "TcpAtlantController.h"
 
 TcpAtlantController::TcpAtlantController(QObject* parent) :
-	BaseTcpDeviceController(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpAtlantController)), parent)
+	BaseTcpDeviceController(parent)
 {
 	m_tcpDeviceName = ATLANT_TCP_DEVICE;
-	m_logger->debug(QString("Created %1").arg(m_tcpDeviceName));
+	debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
 }
 
 TcpAtlantController::TcpAtlantController(const QString& tcpDeviceName, QObject* parent) :
-	BaseTcpDeviceController(tcpDeviceName, Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpAtlantController)), parent)
+	BaseTcpDeviceController(tcpDeviceName, parent)
 {
 	bool err = init();
 	connect(this, SIGNAL(createTcpAtlantCoderInternalSignal()), this, SLOT(createTcpAtlantCoderInternalSlot()));
@@ -70,6 +70,6 @@ QByteArray TcpAtlantController::getFullInfo()
 
 void TcpAtlantController::createTcpAtlantCoderInternalSlot()
 {
-	m_logger->debug("Creating TcpAtlantCoder...");
+	debug("Creating TcpAtlantCoder...");
 	m_tcpDeviceCoder = new TcpAtlantCoder(this);
 }

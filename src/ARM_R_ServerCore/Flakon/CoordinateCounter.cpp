@@ -19,7 +19,7 @@ CoordinateCounter::~CoordinateCounter()
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
 {
-	if (deviceType != DeviceTypesEnum::FLAKON_TCP_DEVICE) {
+	if (deviceType != FLAKON_TCP_DEVICE) {
 		return;
 	}
 
@@ -111,7 +111,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 }
 
@@ -133,7 +133,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 }
 
@@ -156,7 +156,7 @@ void CoordinateCounter::initSolver()
 	//Solver
 	m_solver = new Solver;
 
-	//Размер приходящих данных
+	//� азмер приходящих данных
 	setSolverDataSize(100);
 
 	//Кол-во данных для определения движения

@@ -5,6 +5,8 @@
 #include "Tcp/BaseTcpServerController.h"
 #include "TcpServerCoder.h"
 
+#include "TcpDevicesDefines.h"
+
 #include "Logger.h"
 
 #include "Info/BaseSettings.h"
@@ -13,6 +15,7 @@ class TcpServerController : public BaseTcpServerController
 {
 public:
 	explicit TcpServerController(QObject *parent = 0);
+	explicit TcpServerController(const QString& tcpServerName = BASE_TCP_SERVER, QObject *parent = 0);
 	virtual ~TcpServerController();
 
 	// ITcpServerController interface

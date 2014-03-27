@@ -3,7 +3,7 @@
 
 #include <QSettings>
 #include <QStringList>
-#include "BaseClasses/BaseTcpDeviceController.h"
+#include "Tcp/BaseTcpDeviceController.h"
 #include "TcpAtlantCoder.h"
 
 #include <Info/AtlantSettings.h>

@@ -1,13 +1,15 @@
 #ifndef TCPFLAKONCODER_H
 #define TCPFLAKONCODER_H
 
-#include "BaseClasses/BaseTcpDeviceCoder.h"
+#include "Tcp/BaseTcpDeviceCoder.h"
 
 #include <QDataStream>
 #include <QPointF>
 #include <QVector>
 
 #include "CRCs.h"
+
+#include "TcpDefines.h"
 
 class TcpFlakonCoder : public BaseTcpDeviceCoder
 {

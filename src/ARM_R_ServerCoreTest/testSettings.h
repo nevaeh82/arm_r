@@ -3,7 +3,7 @@
 
 #include <cxxtest/TestSuite.h>
 #include <TCP/TcpSettingsManager.h>
-#include <TCP/TcpPRM300Controller.h>
+//#include <TCP/TcpPRM300Controller.h>
 #include <QDebug>
 
 class testSettings : public CxxTest::TestSuite

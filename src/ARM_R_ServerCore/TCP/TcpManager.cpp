@@ -35,17 +35,17 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 	switch(type)
 	{
-		case DeviceTypesEnum::RETRRANSLATOR_TCP_DEVICE:
+		case RETRRANSLATOR_TCP_DEVICE:
 			break;
-		case DeviceTypesEnum::FLAKON_TCP_DEVICE:
+		case FLAKON_TCP_DEVICE:
 			controller = new TcpFlakonController(deviceName);
 			debug(QString("Created TcpFlakonController"));
 			break;
-		case DeviceTypesEnum::ATLANT_TCP_DEVICE:
+		case ATLANT_TCP_DEVICE:
 			controller = new TcpAtlantController(deviceName);
 			debug(QString("Created TcpAtlantController"));
 			break;
-		case DeviceTypesEnum::PRM300_TCP_DEVICE:
+		case PRM300_TCP_DEVICE:
 			controller = new TcpPRM300Controller(deviceName);
 			debug(QString("Created TcpPRM300Controller"));
 			break;
@@ -72,7 +72,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	m_controllersMap.insert(deviceName, controller);
 
 	controller->registerReceiver(this);
-	if (type == DeviceTypesEnum::FLAKON_TCP_DEVICE) {
+	if (type == FLAKON_TCP_DEVICE) {
 		controller->registerReceiver(m_coordinatesCounter);
 	}
 
@@ -104,6 +104,8 @@ void TcpManager::removeTcpDevice(const QString& deviceName)
 void TcpManager::setRpcServer(IRPC* rpcServer)
 {
 	m_rpcServer = rpcServer;
+}
+
 void TcpManager::setTcpServer(ITcpServerController *tcpServer)
 {
 	m_tcpServer = tcpServer;
@@ -121,7 +123,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 
 	switch(deviceType)
 	{
-		case DeviceTypesEnum::FLAKON_TCP_DEVICE:
+		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
 			}
@@ -359,6 +361,6 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 		bool connectionState = controller->isConnected();
-		m_logger->info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
+		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
 	}
 }

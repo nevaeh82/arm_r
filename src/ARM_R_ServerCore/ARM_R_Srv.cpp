@@ -10,7 +10,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	m_rpcServer = new RPCServer;
 	m_rpcServer->start(24500, QHostAddress("127.0.0.1"));
 
-	m_tcpServer = new TcpServerController();
+	m_tcpServer = new TcpServerController(this);
 	m_tcpServer->createTcpServer();
 	m_tcpServer->createTcpServerCoder();
 	m_tcpServer->start(QHostAddress::Any, 6662);
