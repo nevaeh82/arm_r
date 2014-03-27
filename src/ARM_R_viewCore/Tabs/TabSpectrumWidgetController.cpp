@@ -63,7 +63,9 @@ void TabSpectrumWidgetController::activate()
 		end = value.toDouble();
 	}
 
-	m_view->getSpectrumWidget()->setSelection(start, end);
+	if(start || end) {
+		m_view->getSpectrumWidget()->setSelection(start, end);
+	}
 
 	m_timerStatus.start(2000);
 }
