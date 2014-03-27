@@ -1,0 +1,50 @@
+Слот, который принимает графики корреляции от флакона
+
+void MainWindow::slotGetCorrelation2(uint aNumA, uint aNumB, QVector<QPointF> aLine)
+{
+    //Вычислить номер графика корреляции aNum
+    int aNum;
+    if (aNumA>aNumB) aNum=aNumB;
+    else aNum=aNumB-1;
+
+    //Накопление данных происходит тут
+	//QVector<QVector<QPointF>> mCorrelationLine,   mAmountOfRDSPoints - кол-во РДС пунктов	
+    if (mCorrelationLine.size()<(mAmountOfRDSPoints-1)) mCorrelationLine.append(aLine);
+
+	//Если уже пришло 5 графиков корреляций и индекс последнего графика = 4, то
+    //Отправка на расчет
+    if (aNum>mAmountOfRDSPoints-3 && mCorrelationLine.size()>4)
+    {
+        double aThrethold=ui->doubleSpinBox_threthold->value();
+        QVector<double> aDR; aDR.clear(); //Вектор с разностями расстояний, который пойдет в солвер
+        //Вычисление разностей с корректировкой, в результате которой уже откорректированные максимумы кладем сюда: aDR
+		//aThrethold - порог, который задает оператор, можно по-умолчанию поставить 5, но желательно менять из интерфейса
+		//aNumA - номер опорного датчика
+		//mCorrelationLine - QVector<QVector<QPointF>> вектор с пятью графиками корреляций
+		
+		//Вычисление aDR и внесение всех корректировок
+		//ZRD mZDR
+        mZDR->getDataFromFlackon(aNumA, mCorrelationLine, aThrethold, aDR);
+
+		//Очистка вектора с графиками корреляций, т.к. они нам не нужны, aDR мы уже вычислили по ним
+        mCorrelationLine.clear();
+
+		//Если имеем 5 разностей, то можно отправить их в солвер
+        if (aDR.size()==5)
+        {
+        //Заполнение данных и отправка на вычисление координат
+        DataFromFlacon aData;
+        aData.numOfReferenceDetector_=aNumA; //Номер опорного
+        aData.time_=QTime::currentTime();    //Время
+        aData.ranges_=aDR;                   //Откорректированные разности расстояний (максимумы графиков корреляции)
+
+        qDebug()<<"Отправляю в солвер "<<aData.ranges_.size();
+        solver_->GetData(aData);
+        
+        }
+    }
+}
+
+
+DRCorrection.ini - файл с корректировкой систематических ошибок
+Классы ZDR, ZCoord, ZCorrection лежат в корне

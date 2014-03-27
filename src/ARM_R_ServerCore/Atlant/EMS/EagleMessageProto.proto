@@ -1,0 +1,19 @@
+package EMS;
+
+option java_package = "EMS";
+option java_outer_classname = "EagleMessageProto";
+
+message EagleMessage
+{
+	//"SERVICE_MESSAGE"
+	//"TEST_MESSAGE"
+	required string type = 1;
+
+	required int64 dateTime = 4;
+	required string senderName = 5;
+	repeated string label = 6;
+	optional string recipientName = 7;
+
+	optional bytes innerMessage = 8;
+}
+

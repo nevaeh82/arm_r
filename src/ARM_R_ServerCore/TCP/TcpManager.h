@@ -1,0 +1,74 @@
+#ifndef TCPMANAGER_H
+#define TCPMANAGER_H
+
+#include <QObject>
+#include <QThread>
+#include <QMap>
+
+#include <PwLogger/PwLogger.h>
+
+#include "Interfaces/ITcpManager.h"
+#include "Interfaces/ITcpListener.h"
+#include "../RPC/IRPC.h"
+#include "Interfaces/IRpcListener.h"
+
+#include "TcpDevicesDefines.h"
+#include "TcpFlakonController.h"
+#include "TcpAtlantController.h"
+#include "TcpPRM300Controller.h"
+
+#include "../Flakon/CoordinateCounter.h"
+
+#include "Rpc/RpcDefines.h"
+
+class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
+{
+	Q_OBJECT
+
+private:
+	Pw::Logger::ILogger* m_logger;
+	IRPC* m_rpcServer;
+	QMap< QString, BaseTcpDeviceController* > m_controllersMap;
+	/**
+	 * key = deviceType
+	 * Define own deviceType in TcpDevicesDefines
+	 *
+	 **/
+
+	CoordinateCounter* m_coordinatesCounter;
+
+public:
+	explicit TcpManager(QObject* parent = NULL);
+	virtual ~TcpManager();
+
+	// ITcpManager interface
+public:
+	virtual void addTcpDevice(const QString& deviceName, const int& type);
+	virtual void removeTcpDevice(const QString& deviceName);
+	virtual void setRpcServer(IRPC* rpcServer);
+	virtual QObject* asQObject();
+
+	/// TODO: add sendDataToDevice from some internal message
+
+	// ITcpListener interface
+public:
+	virtual void onMessageReceived(const quint32 type, const QString& deviceType, const MessageSP argument);
+
+	// IRpcListener interface
+public:
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+private:
+	QString getNameFromArgument(const QVariant& argument);
+	QString getAtlantName();
+	QString getFlakonName();
+signals:
+	void threadTerminateSignal();
+	void onMethodCalledInternalSignal(const QString& method, const QVariant& argument);
+
+private slots:
+	void onMethodCalledInternalSlot(const QString &method, const QVariant &argument);
+
+};
+
+#endif // TCPMANAGER_H

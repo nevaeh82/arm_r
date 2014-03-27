@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/images/signals">
+        <file>images/bullet_green.png</file>
+        <file>images/bullet_red.png</file>
+    </qresource>
+    <qresource prefix="/images/punkts">
+        <file>images/Punkts/stac.png</file>
+    </qresource>
+    <qresource prefix="/images/tabs">
+        <file>images/Tabs/tabs_manager.png</file>
+        <file>images/Tabs/map.png</file>
+        <file>images/Tabs/spectrum.png</file>
+        <file>images/Tabs/spectra.png</file>
+    </qresource>
+    <qresource prefix="/new/UAV">
+        <file>images/UAV/BLA.jpg</file>
+        <file>images/UAV/BPLA.jpg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/icons/AddStationDataDialog.png</file>
+        <file>images/icons/ListsDialog.png</file>
+        <file>images/icons/ARM_R.png</file>
+    </qresource>
+</RCC>
