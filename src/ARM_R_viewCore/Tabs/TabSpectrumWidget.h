@@ -15,6 +15,8 @@
 
 #include "Correlations/CorrelationWidget.h"
 
+#include "RPC/RPCClient.h"
+
 #include <PwLogger/PwLogger.h>
 
 namespace Ui {
@@ -39,6 +41,8 @@ private:
 	QLabel* m_indicatorLabel;
 
 	Pw::Logger::ILogger* m_logger;
+
+	RPCClient*	m_rpcClient;
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
 	virtual ~TabSpectrumWidget();
@@ -57,6 +61,9 @@ public:
 
 	QTreeView *getTreeView() const;
 	void insertCorrelationWidget(ICorrelationWidget *correlationWidget);
+
+	void setRpcClient(RPCClient* rpcClient);
+	RPCClient* getRpcClient();
 
 signals:
 	void setIndicatorStateSignal(int state);

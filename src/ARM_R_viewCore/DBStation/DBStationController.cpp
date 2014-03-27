@@ -4,7 +4,14 @@
 DBStationController::DBStationController(QObject *parent) :
 	QObject(parent)
 {
-	m_db = QSqlDatabase::addDatabase("QMYSQL", "DATACONNECTION");
+	if(QSqlDatabase::contains("DATACONNECTION"))
+	{
+		m_db =  QSqlDatabase::database("DATACONNECTION");
+	}
+	else
+	{
+		m_db = QSqlDatabase::addDatabase("QMYSQL", "DATACONNECTION");
+	}
 }
 
 DBStationController::~DBStationController()

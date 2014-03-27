@@ -25,16 +25,31 @@ void TabManager::start()
 	changeTabSlot(m_tabWidget->currentIndex());
 }
 
+QStringList TabManager::createStationNamesList()
+{
+	QStringList stationNamesList;
+
+	foreach (Station* station, m_stationsMap) {
+		stationNamesList.append(station->getName());
+	}
+	stationNamesList.append(tr("Auto"));
+
+	return stationNamesList;
+}
+
 int TabManager::createSubModules(const QString& settingsFile)
 {
 	m_correlationControllers = new CorrelationControllersContainer(this);
 
 	int submodulesCount = readSettings(settingsFile);
 
-	m_correlationControllers->init(m_stationsMap.count() - 1);
+	m_correlationControllers->init(m_stationsMap.count());
+
+	QStringList stationNamesList = createStationNamesList();
 
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
 	commonTabSpectrumWidget->setDbManager(m_dbManager);
+	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
 	foreach (Station* station, m_stationsMap) {
@@ -42,6 +57,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
 		tabController->setDbManager(m_dbManager);
+		tabController->setStationNamesList(stationNamesList);
 		m_dbManager->registerReceiver(tabController);
 		tabController->appendView(tabSpectrumWidget);
 
@@ -109,6 +125,7 @@ void TabManager::setActiveTab(const int id)
 	if (tabBar != NULL) {
 		tabBar->setCurrentIndex(id);
 	}
+	checkStatus();
 
 	//    emit signalChangeTab(id);
 }
@@ -128,6 +145,7 @@ void TabManager::changeTabSlot(int index)
 	}
 
 	m_currentTabWidget->activate();
+	checkStatus();
 
 }
 

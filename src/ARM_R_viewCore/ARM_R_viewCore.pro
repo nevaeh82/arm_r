@@ -21,7 +21,6 @@ SOURCES += \
         Station.cpp \
 	Common/CommandMessage.cpp \
 	Tabs/RPC/RPCClient.cpp \
-	Tabs/Controls/ControlPRM.cpp \
 	Tabs/RPC/RPCAtlant.cpp \
     MainWindow.cpp \
     MainWindowController.cpp \
@@ -50,7 +49,9 @@ SOURCES += \
     DBStation/AddStationDataDialog.cpp \
     DBStation/AddStationDataDialogController.cpp \
     DBStation/ListsDialog.cpp \
-    DBStation/ListsDialogController.cpp
+    DBStation/ListsDialogController.cpp \
+    Prm300ControlWidget.cpp \
+    Prm300ControlWidgetController.cpp
 
 HEADERS += \
         Correlations/CorrelationWidget.h \
@@ -66,7 +67,6 @@ HEADERS += \
 	Tabs/RPC/IRPC.h \
 	Tabs/RPC/RPCClient.h \
         Interfaces/ITabManager.h \
-	Tabs/Controls/ControlPRM.h \
 	Tabs/Controls/IControlPRM.h \
 	Tabs/RPC/RPCAtlant.h \
 	Tabs/ITabAtlant.h \
@@ -114,7 +114,9 @@ HEADERS += \
     DBStation/AddStationDataDialog.h \
     DBStation/AddStationDataDialogController.h \
     DBStation/ListsDialog.h \
-    DBStation/ListsDialogController.h
+    DBStation/ListsDialogController.h \
+    Prm300ControlWidget.h \
+    Prm300ControlWidgetController.h
 
 FORMS += \
     ControlPanel.ui \
@@ -126,7 +128,8 @@ FORMS += \
     Tabs/CommonSpectrumTabWidget.ui \
     SpectrumWidget.ui \
     DBStation/AddStationDataDialog.ui \
-    DBStation/ListsDialog.ui
+    DBStation/ListsDialog.ui \
+    Prm300ControlWidget.ui
 
 
 RESOURCES += \

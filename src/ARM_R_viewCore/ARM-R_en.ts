@@ -100,12 +100,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>
@@ -180,12 +180,12 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="208"/>
+        <location filename="DBStation/DBStationController.cpp" line="199"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="242"/>
+        <location filename="DBStation/DBStationController.cpp" line="233"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,17 +322,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="87"/>
+        <location filename="MainWindowController.cpp" line="90"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="87"/>
+        <location filename="MainWindowController.cpp" line="90"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="103"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -383,63 +383,63 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="65"/>
+        <location filename="SpectrumWidgetController.cpp" line="62"/>
         <source>File error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="65"/>
+        <location filename="SpectrumWidgetController.cpp" line="62"/>
         <source>Very small file or file not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="148"/>
+        <location filename="SpectrumWidgetController.cpp" line="145"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="179"/>
+        <location filename="SpectrumWidgetController.cpp" line="176"/>
         <source>Attention!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="179"/>
+        <location filename="SpectrumWidgetController.cpp" line="176"/>
         <source>Signal was detected!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="264"/>
+        <location filename="SpectrumWidgetController.cpp" line="261"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="267"/>
+        <location filename="SpectrumWidgetController.cpp" line="264"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="268"/>
+        <location filename="SpectrumWidgetController.cpp" line="265"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="269"/>
+        <location filename="SpectrumWidgetController.cpp" line="266"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="270"/>
-        <location filename="SpectrumWidgetController.cpp" line="362"/>
+        <location filename="SpectrumWidgetController.cpp" line="267"/>
+        <location filename="SpectrumWidgetController.cpp" line="359"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="271"/>
+        <location filename="SpectrumWidgetController.cpp" line="268"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="360"/>
+        <location filename="SpectrumWidgetController.cpp" line="357"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -455,12 +455,17 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="69"/>
+        <location filename="Tabs/TabManager.cpp" line="35"/>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="84"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="75"/>
+        <location filename="Tabs/TabManager.cpp" line="90"/>
         <source>Atlant</source>
         <translation type="unfinished"></translation>
     </message>
@@ -537,55 +542,20 @@
 <context>
     <name>TreeWidgetDelegate</name>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="18"/>
-        <source>Gal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="19"/>
-        <source>Pichora</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="20"/>
-        <source>Nabakia</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="21"/>
-        <source>Taglan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="22"/>
-        <source>Ochamchir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="23"/>
-        <source>Papinrhua</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="24"/>
-        <source>Auto</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="155"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="174"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="152"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="171"/>
         <source>Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="156"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="175"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="153"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="172"/>
         <source>Averaging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="157"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="176"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="154"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="173"/>
         <source>Leading OP</source>
         <translation type="unfinished"></translation>
     </message>

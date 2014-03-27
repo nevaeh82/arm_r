@@ -38,6 +38,7 @@ public:
 
 	void clear();
 	QWidget* getWidget() const;
+	void setVisible(const bool isVisible);
 
 private:
 	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);

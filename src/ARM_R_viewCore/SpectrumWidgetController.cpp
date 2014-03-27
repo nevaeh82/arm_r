@@ -6,6 +6,7 @@
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 	QObject(parent)
 {
+	m_rpcClient = NULL;
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
@@ -106,6 +107,13 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 		return;
 	}
+}
+
+void SpectrumWidgetController::setRpcClient(RPCClient *rpcClient)
+{
+	m_rpcClient = rpcClient;
+	m_prm300WidgetController->setRpcClient(m_rpcClient);
+	m_rpcClient->registerReceiver(m_prm300WidgetController);
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -235,6 +243,11 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
 }
 
+void SpectrumWidgetController::setVisible(const bool isVisible)
+{
+	m_view->setVisible(isVisible);
+}
+
 void SpectrumWidgetController::setAutoSearch(bool enabled)
 {
 	m_view->setAutoSearch(enabled);
@@ -289,6 +302,9 @@ void SpectrumWidgetController::init()
 
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
+
+	m_prm300WidgetController = new Prm300ControlWidgetController(this);
+	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
 }
 
 void SpectrumWidgetController::slotSetEnablePanorama(bool state)
@@ -419,4 +435,15 @@ void SpectrumWidgetController::slotShowPeaks(bool visible)
 void SpectrumWidgetController::slotShowControlPRM(bool state)
 {
 	m_tab->setShowControlPrm(state);
+	switch(state)
+	{
+		case false:
+			m_view->getPrm300Widget()->hide();
+			break;
+		case true:
+			m_view->getPrm300Widget()->show();
+			break;
+		default:
+			break;
+	}
 }

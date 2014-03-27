@@ -9,6 +9,7 @@
 #define TCP_ATLANT_REQUEST_SET_FREQUENCY	"tcpAtlantRequestSetFrequency"
 
 /// PRM300 device internal
+#define TCP_PRM300_STATUS						"tcpPRM300Status"
 #define TCP_PRM300_ANSWER_STATUS				"tcpPRM300AnswerStatus"
 #define TCP_PRM300_REQUEST_SET_FREQUENCY		"tcpPRM300RequestSetFrequency"
 #define TCP_PRM300_REQUEST_GET_FREQUENCY		"tcpPRM300RequestGetFrequency"

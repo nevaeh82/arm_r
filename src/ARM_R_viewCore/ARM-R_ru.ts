@@ -100,12 +100,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>
@@ -180,12 +180,12 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="208"/>
+        <location filename="DBStation/DBStationController.cpp" line="199"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="242"/>
+        <location filename="DBStation/DBStationController.cpp" line="233"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation></translation>
     </message>
@@ -431,17 +431,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="87"/>
+        <location filename="MainWindowController.cpp" line="90"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="87"/>
+        <location filename="MainWindowController.cpp" line="90"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="103"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -492,63 +492,63 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="65"/>
+        <location filename="SpectrumWidgetController.cpp" line="62"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="65"/>
+        <location filename="SpectrumWidgetController.cpp" line="62"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="148"/>
+        <location filename="SpectrumWidgetController.cpp" line="145"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="179"/>
+        <location filename="SpectrumWidgetController.cpp" line="176"/>
         <source>Attention!</source>
         <translation>Внимание!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="179"/>
+        <location filename="SpectrumWidgetController.cpp" line="176"/>
         <source>Signal was detected!</source>
         <translation>Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="264"/>
+        <location filename="SpectrumWidgetController.cpp" line="261"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="267"/>
+        <location filename="SpectrumWidgetController.cpp" line="264"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="268"/>
+        <location filename="SpectrumWidgetController.cpp" line="265"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="269"/>
+        <location filename="SpectrumWidgetController.cpp" line="266"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="270"/>
-        <location filename="SpectrumWidgetController.cpp" line="362"/>
+        <location filename="SpectrumWidgetController.cpp" line="267"/>
+        <location filename="SpectrumWidgetController.cpp" line="359"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="271"/>
+        <location filename="SpectrumWidgetController.cpp" line="268"/>
         <source>Cleanup text fields</source>
         <translation>Очистить текстовые данные</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="360"/>
+        <location filename="SpectrumWidgetController.cpp" line="357"/>
         <source>Disable correlation</source>
         <translation>Отключить корреляцию</translation>
     </message>
@@ -564,12 +564,17 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="69"/>
+        <location filename="Tabs/TabManager.cpp" line="35"/>
+        <source>Auto</source>
+        <translation>Авто</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="84"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="75"/>
+        <location filename="Tabs/TabManager.cpp" line="90"/>
         <source>Atlant</source>
         <translation>Атлант</translation>
     </message>
@@ -646,55 +651,48 @@
 <context>
     <name>TreeWidgetDelegate</name>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="18"/>
         <source>Gal</source>
-        <translation>Гал</translation>
+        <translation type="obsolete">Гал</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="19"/>
         <source>Pichora</source>
-        <translation>Пичора</translation>
+        <translation type="obsolete">Пичора</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="20"/>
         <source>Nabakia</source>
-        <translation>Набакиа</translation>
+        <translation type="obsolete">Набакиа</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="21"/>
         <source>Taglan</source>
-        <translation>Таглан</translation>
+        <translation type="obsolete">Таглан</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="22"/>
         <source>Ochamchir</source>
-        <translation>Очамчир</translation>
+        <translation type="obsolete">Очамчир</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="23"/>
         <source>Papinrhua</source>
-        <translation>Папынрхуа</translation>
+        <translation type="obsolete">Папынрхуа</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="24"/>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="155"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="174"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="152"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="171"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="156"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="175"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="153"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="172"/>
         <source>Averaging</source>
         <translation>Усреднение</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="157"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="176"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="154"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="173"/>
         <source>Leading OP</source>
         <translation>Ведуший ОП</translation>
     </message>

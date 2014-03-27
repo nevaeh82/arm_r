@@ -56,6 +56,7 @@ public:
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
+        QStringList createStationNamesList();
 private:
 	int readSettings(const QString &settingsFile);
 	void checkStatus();

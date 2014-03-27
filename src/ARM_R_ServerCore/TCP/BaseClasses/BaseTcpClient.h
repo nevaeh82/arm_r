@@ -13,6 +13,10 @@
 #include "../Interfaces/ITcpReceiver.h"
 #include "../Interfaces/ITcpClient.h"
 
+#define CONNECTEDTOHOST		 1
+#define DISCONNECTEDFROMHOST 0
+
+
 class BaseTcpClient : public QObject, public ITcpClient, public BaseSubject<ITcpReceiver>
 {
 	Q_OBJECT
@@ -49,10 +53,13 @@ private slots:
 	void disconnectFromHostInternalSlot();
 	void writeDataInternalSlot(const QByteArray& data);
 
+	void reconnectSlot();
+
 signals:
 	void connectToHostInternalSignal(const QString& host, const quint32& port);
 	void disconnectFromHostInternalSignal();
 	void writeDataInternalSignal(const QByteArray& data);
+	void signalConnectedToHost(int state);
 };
 
 #endif // BASETCPCLIENT_H

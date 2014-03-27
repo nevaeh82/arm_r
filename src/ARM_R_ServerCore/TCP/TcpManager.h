@@ -43,8 +43,8 @@ public:
 
 	// ITcpManager interface
 public:
-	virtual void addTcpDevice(const QString& deviceType, const QString& host, const quint32& port);
-	virtual void removeTcpDevice(const QString& deviceType, const QString& host, const quint32& port);
+	virtual void addTcpDevice(const QString& deviceName, const int& type);
+	virtual void removeTcpDevice(const QString& deviceName);
 	virtual void setRpcServer(IRPC* rpcServer);
 	virtual QObject* asQObject();
 
@@ -52,12 +52,16 @@ public:
 
 	// ITcpListener interface
 public:
-	virtual void onMessageReceived(const QString& device, const MessageSP argument);
+	virtual void onMessageReceived(const quint32 type, const QString& deviceType, const MessageSP argument);
 
 	// IRpcListener interface
 public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
+private:
+	QString getNameFromArgument(const QVariant& argument);
+	QString getAtlantName();
+	QString getFlakonName();
 signals:
 	void threadTerminateSignal();
 	void onMethodCalledInternalSignal(const QString& method, const QVariant& argument);
