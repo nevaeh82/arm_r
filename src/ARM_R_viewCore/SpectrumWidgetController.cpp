@@ -145,7 +145,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	float minv = 0.0;
 	m_mux.lock();
 
-	m_graphicsWidget->SetAutoscaleY(true);
+	m_graphicsWidget->SetAutoscaleY(false);
 	m_graphicsWidget->SetAlign(0);
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
@@ -161,7 +161,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	float maxv = 0.0;
 	float minv = 0.0;
 
-	m_graphicsWidget->SetAutoscaleY(true);
+	m_graphicsWidget->SetAutoscaleY(false);
 	m_graphicsWidget->SetAlign(0);
 	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
@@ -187,7 +187,8 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	}
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
-	m_graphicsWidget->ZoomOutY();
+	/// Next line creates new Scale event to widget which exec grid moving
+	//m_graphicsWidget->ZoomOutY();
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
