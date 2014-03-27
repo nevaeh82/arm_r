@@ -25,6 +25,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
+	nextClearState = false;
 }
 
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
@@ -387,6 +388,9 @@ void SpectrumWidgetController::slotSelectionCleared()
 	selection.start = QPointF(coordinateZero, coordinateZero);
 	selection.end = QPointF(coordinateZero, coordinateZero);
 
+	m_graphicsWidget->SetSelection(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+
 	m_tab->setSelectedArea(selection);
 }
 
@@ -404,6 +408,20 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	selection.start = QPointF(x1, y1);
 	selection.end = QPointF(x2, y2);
 
+	if(x1 == 0 && x2 ==0 && y1 == 0 && y2 == 0) {
+		if(!nextClearState) {
+			nextClearState = true;
+		}
+		else {
+			double coordinateZero = (double)0;
+			tmpSelection.start = QPointF(coordinateZero, coordinateZero);
+			tmpSelection.end = QPointF(coordinateZero, coordinateZero);
+		}
+	}
+	else {
+		tmpSelection = selection;
+		nextClearState = false;
+	}
 	m_tab->setSelectedArea(selection);
 }
 
@@ -423,6 +441,11 @@ void SpectrumWidgetController::slotIsShowContextMenu()
 
 void SpectrumWidgetController::slotDoubleClicked(double, double)
 {
+	//Return creating selection when doubleClicked
+	m_graphicsWidget->SetSelection(tmpSelection.start.x()*1000, 0, tmpSelection.end.x()*1000, 0);
+	slotSelectionFinished(tmpSelection.start.x()*1000, 0, tmpSelection.end.x()*1000, 0);
+	nextClearState = false;
+
 	emit doubleClickedSignal(m_id);
 }
 

@@ -59,6 +59,8 @@ private:
 
 	RPCClient* m_rpcClient;
 
+	SpectrumSelection tmpSelection;
+	bool nextClearState;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
