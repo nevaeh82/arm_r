@@ -59,6 +59,8 @@ private:
 
 	RPCClient* m_rpcClient;
 
+	QTimer *m_clickDelay;
+	bool flagDoubleClick;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -130,6 +132,8 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
+	void processClick();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

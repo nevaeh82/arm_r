@@ -3,8 +3,10 @@
 
 #include "Rpc/RpcDefines.h"
 
-SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
-	QObject(parent)
+//DoubleClick waiting time
+#define TIMER_CLICK_DELAY 500
+
+SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
 	m_rpcClient = NULL;
 	m_current_frequency = 0;
@@ -25,6 +27,11 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) :
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
+	flagDoubleClick = false;
+
+	m_clickDelay = new QTimer(this);
+	m_clickDelay->setInterval(TIMER_CLICK_DELAY);
+	connect(m_clickDelay, SIGNAL(timeout()), this, SLOT(processClick()));
 }
 
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
@@ -290,7 +297,7 @@ void SpectrumWidgetController::init()
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
 
-	connect(m_graphicsWidget, SIGNAL(SelectionCleared()), this, SLOT(slotSelectionCleared()));
+	connect(m_graphicsWidget, SIGNAL(SelectionCleared()), m_clickDelay, SLOT(start()));
 	connect(m_graphicsWidget, SIGNAL(SelectionFinished(double,double,double,double)), this, SLOT(slotSelectionFinished(double,double,double,double)));
 	connect(m_graphicsWidget, SIGNAL(selectionFinishedRedLine(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
 	connect(m_graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
@@ -393,6 +400,7 @@ void SpectrumWidgetController::slotSelectionCleared()
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)
 {
+	m_clickDelay->stop();
 	///TODO: fix
 
 	/// To HZ
@@ -424,6 +432,7 @@ void SpectrumWidgetController::slotIsShowContextMenu()
 
 void SpectrumWidgetController::slotDoubleClicked(double, double)
 {
+	flagDoubleClick = true;
 	emit doubleClickedSignal(m_id);
 }
 
@@ -447,4 +456,14 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
+}
+
+void SpectrumWidgetController::processClick()
+{
+	m_clickDelay->stop();
+	if(!flagDoubleClick) {
+		slotSelectionCleared();
+	}
+
+	flagDoubleClick = false;
 }
