@@ -15,6 +15,8 @@
 #include <QVariant>
 #include <QList>
 
+#include <Rpc/RpcClientBase.h>
+
 #include "Rpc/RpcMessageStruct.h"
 
 #include "IRPC.h"
@@ -29,13 +31,12 @@
 
 #include "UiDefines.h"
 #include "Rpc/RpcDefines.h"
-#include "Rpc/RpcClientBase.h"
 
 #include "Interfaces/IDbManager.h"
 
 class RPCClient : public RpcClientBase
 {
-    Q_OBJECT
+	Q_OBJECT
 private:
 //	IControlPRM*	m_controlPrm;
 	IMessage*		m_commandMsg;
@@ -53,7 +54,7 @@ public:
 	RPCClient(IStation *prop, IDbManager *db_manager,
 			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
 			  QObject *parent);
-    ~RPCClient();
+	~RPCClient();
 
 	void setCommand(IMessage* msg);
 
@@ -76,21 +77,21 @@ private:
 	void requestStatus();
 
 signals:
-    void signalSetCommand(IMessage *msg);
-    void signalFinished();
+	void signalSetCommand(IMessage *msg);
+	void signalFinished();
 
-    void signalStart();
-    void signalStop();
-    void signalFinishRPC();
+	void signalStart();
+	void signalStop();
+	void signalFinishRPC();
 
 	///RPC signals
-    void signalSetClientId(int id);
+	void signalSetClientId(int id);
 	void signalSetMainStationCor(int id, QString station);
-    void signalSetBandwidth(int id, float db);
-    void signalSetShift(int id, float shift);
-    void signalRecognize(int id, int type);
-    void signalSSCorrelation(int id, bool enable);
-    void signalSetAvarageSpectrum(int id, int avarage);
+	void signalSetBandwidth(int id, float db);
+	void signalSetShift(int id, float shift);
+	void signalRecognize(int id, int type);
+	void signalSSCorrelation(int id, bool enable);
+	void signalSetAvarageSpectrum(int id, int avarage);
 
 	void signalPRMSetFreq(QString name, short freq);
 	void signalPRMRequestFreq(QString name);
@@ -100,13 +101,13 @@ signals:
 
 	void signalRequestStatus(QString name);
 
-    void signalReconnection();
+	void signalReconnection();
 
 	void signalDataS(float*, float*);
 	void signalData(float*, float*);
 
 public slots:
-    ///rpc_server
+	///rpc_server
 	void rpcSlotGettingPoints(QByteArray points);
 	void rpcSlotGettingDetectedBandwidth(QByteArray points);
 	void rpcSlotGettingModulation(QString modulation);

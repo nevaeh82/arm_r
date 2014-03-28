@@ -1,17 +1,17 @@
-#include "ARM_R_Srv.h"
+#include <Logger.h>
 
-Pw::Logger::ILogger* ARM_R_Srv::m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ARM_R_Srv));
+#include "ARM_R_Srv.h"
 
 ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	QObject(parent)
 {
 	qRegisterMetaType<MessageSP>("MessageSP");
-    qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
-    qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
-    qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
+	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
+	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
+	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
 
 
-	m_rpcServer = new RPCServer;
+	m_rpcServer = new RpcServer;
 	m_rpcServer->start(24500, QHostAddress("127.0.0.1"));
 
 	m_tcpServer = new TcpServerController(this);

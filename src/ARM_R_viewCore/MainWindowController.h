@@ -2,9 +2,6 @@
 #define MAINWINDOWCONTROLLER_H
 
 #include <QObject>
-
-#include <PwLogger/PwLogger.h>
-
 #include <QMessageBox>
 
 #include "Interfaces/IController.h"
@@ -24,9 +21,6 @@ class MainWindowController : public QObject, public IController<MainWindow>
 	Q_OBJECT
 
 private:
-	/// logger
-	Pw::Logger::ILogger* m_logger;
-
 	MainWindow* m_view;
 
 	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;

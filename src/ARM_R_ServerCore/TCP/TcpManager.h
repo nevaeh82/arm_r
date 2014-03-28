@@ -5,8 +5,6 @@
 #include <QThread>
 #include <QMap>
 
-#include <PwLogger/PwLogger.h>
-
 #include "Interfaces/ITcpManager.h"
 #include "Interfaces/ITcpListener.h"
 #include "../RPC/IRPC.h"
@@ -26,7 +24,6 @@ class TcpManager : public QObject, public ITcpManager, public ITcpListener, publ
 	Q_OBJECT
 
 private:
-	Pw::Logger::ILogger* m_logger;
 	IRPC* m_rpcServer;
 	ITcpServerController* m_tcpServer;
 	QMap< QString, BaseTcpDeviceController* > m_controllersMap;

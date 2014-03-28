@@ -12,8 +12,6 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 	m_dbManager = NULL;
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
-
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(CommonSpectrumTabWidget));
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
@@ -72,7 +70,7 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersCon
 
 void CommonSpectrumTabWidget::activate()
 {
-	m_logger->debug("Activate common tab");
+	debug("Activate common tab");
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
@@ -84,7 +82,7 @@ void CommonSpectrumTabWidget::activate()
 
 void CommonSpectrumTabWidget::deactivate()
 {
-	m_logger->debug("Deactivate common tab");
+	debug("Deactivate common tab");
 	ui->correlationsGroupWidget->clearWidgetContainer();
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {

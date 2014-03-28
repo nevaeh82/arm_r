@@ -4,10 +4,7 @@
 #include <QObject>
 #include <QThread>
 
-#include <PwLogger/PwLogger.h>
-
 #include "Interfaces/IDbManager.h"
-
 #include "Interfaces/IDbController.h"
 #include "DbController.h"
 #include "UiDefines.h"
@@ -20,8 +17,6 @@ class DbManager : public QObject, public IDbManager
 	Q_OBJECT
 
 private:
-	Pw::Logger::ILogger* m_logger;
-
 	DbController*       m_dbController;
 
 public:

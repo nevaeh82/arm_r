@@ -4,47 +4,42 @@
 #include <QObject>
 #include <QCoreApplication>
 #include <QtNetwork/QHostAddress>
-#include <QxtRPCPeer>
 #include <QAbstractSocket>
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
 #include <QDataStream>
 #include <QHostAddress>
-
 #include <QTime>
 
-#include <PwLogger/PwLogger.h>
-
-#include "Rpc/RpcMessageStruct.h"
+#include <Rpc/RpcRoutedServer.h>
 
 #include "IRPC.h"
-
+#include "Rpc/RpcMessageStruct.h"
 #include "Rpc/RpcDefines.h"
-#include "Rpc/RpcServerBase.h"
 
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(QVector<QPointF>)
 
-class RPCServer : public RpcServerBase, public IRPC
+class RpcServer : public RpcRoutedServer
 {
 	Q_OBJECT
+
 public:
 
-	RPCServer(QObject* parent = NULL);
-	virtual ~RPCServer();
+	RpcServer(QObject* parent = NULL);
+	virtual ~RpcServer();
 
 public:
 	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
-	virtual void sendDataByRpc(const QString& signalType, const QString& deviceName,const QByteArray& data);
 
 private slots:
-	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-	void slotRPCConnetion(quint64 client);
-	void slotRPCDisconnected(quint64 client);
+	void logConnectionError(QAbstractSocket::SocketError socketError);
+	void logConnectionSuccess(quint64 client);
+	void logClientDisconected(quint64 client);
 
 public slots:
-	void rpcSlotSetMainStationCor(quint64 client, int id, QString station);
+	void setMainStationCorrelation(quint64 client, int id, QString station);
 	void rpcSlotSetBandwidth(quint64 client, int id, float bandwidth);
 	void rpcSlotSetShift(quint64 client, int id, float shift);
 	void rpcSlotRecognize(quint64 client, int id, int type);

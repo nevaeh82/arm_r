@@ -5,8 +5,6 @@
 MainWindowController::MainWindowController(QObject *parent) :
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindowController));
-
 	m_view = NULL;
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;

@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpPRM300Controller.h"
 
 TcpPRM300Controller::TcpPRM300Controller(QObject* parent) :

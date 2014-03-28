@@ -1,9 +1,10 @@
+#include <Logger.h>
+
 #include "CoordinateCounter.h"
 
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(CoordinateCounter));
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 
@@ -14,7 +15,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
     initSolver();
 	m_likeADeviceName = deviceName;
-	m_logger->debug(QString("Created %1").arg(m_likeADeviceName));
+	debug(QString("Created %1").arg(m_likeADeviceName));
 }
 
 CoordinateCounter::~CoordinateCounter()

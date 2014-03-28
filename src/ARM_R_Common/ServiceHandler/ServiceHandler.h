@@ -7,8 +7,6 @@
 
 #include "Interfaces/ITerminateRpcController.h"
 
-#include <PwLogger/PwLogger.h>
-
 #include "IServiceHandler.h"
 #include <QMutex>
 
@@ -52,7 +50,6 @@ protected:
 	ProcessState::Enum _state;
 	Pw::Common::ServiceControl::ServiceErrorCodes::Enum _lastServiceError;
 
-	Pw::Logger::ILogger* _logger;
 	QMutex _syncRoot;
 
 	ITerminateRpcController* m_agentRpcController;

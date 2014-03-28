@@ -1,9 +1,10 @@
+#include <Logger.h>
+
 #include "TcpManager.h"
 
 TcpManager::TcpManager(QObject* parent) :
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TcpManager));
 	m_rpcServer = NULL;
 
 	m_coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
@@ -125,15 +126,15 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	{
 		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
-                m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
+				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_CORRELATION) {
 				/// send data to FlakonCoordinatesCounter
-                m_logger->warn("GOT FLAKON");
-                m_rpcServer->sendDataByRpc(FLAKON_COORDINATE_COUNTER, deviceName, messageData);
+				m_logger->warn("GOT FLAKON");
+				m_rpcServer->sendDataByRpc(FLAKON_COORDINATE_COUNTER, deviceName, messageData);
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_CORRELATION, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {
@@ -194,17 +195,17 @@ QString TcpManager::getNameFromArgument(const QVariant& argument)
 
 QString TcpManager::getAtlantName()
 {
-	return QString("Àòëàíò");
+	return QString("ÐÑ‚Ð»Ð°Ð½Ñ‚");
 }
 
 QString TcpManager::getFlakonName()
 {
-	return QString("Ôëàêîí");
+	return QString("Ð¤Ð»Ð°ÐºÐ¾Ð½");
 }
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)
 {
-	if (method == RPC_SLOT_SET_MAIN_STATION_COR) {
+	if (method == RPC_METHOD_SET_MAIN_STATION_CORRELATION) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(getFlakonName(), NULL);
 		if (controller == NULL) {
 			return;
@@ -214,7 +215,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		QString station;
 		dataStream1 >> station;
 
-		if(station == "Àâòî")
+		if(station == "ÐÐ²Ñ‚Ð¾")
 		{
 			int id = 6;
 			QByteArray ba1;
@@ -361,8 +362,8 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
 		if (controller == NULL) {
 			return;
-		}
+	}
 		bool connectionState = controller->isConnected();
 		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
-	}
+}
 }

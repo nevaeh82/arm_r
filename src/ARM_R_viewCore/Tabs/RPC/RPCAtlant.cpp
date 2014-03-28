@@ -1,7 +1,7 @@
 #include "RPCAtlant.h"
 
 RPCAtlant::RPCAtlant(int id, ITabAtlant* parent_tab, QObject *parent) :
-	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCAtlant)), parent)
+	RpcClientBase(parent)
 {
 	m_id = id;
 	m_parentTab = parent_tab;
@@ -85,7 +85,7 @@ bool RPCAtlant::start(quint16 port, QHostAddress address)
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_ATLANT_DIRECTION, this, SLOT(rpcSlotServerAtlantDirection(QByteArray)));
 
-	m_logger->debug("Start RPCAtlant");
+	debug("Start RPCAtlant");
 	return RpcClientBase::start(port, address);
 }
 

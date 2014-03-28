@@ -3,11 +3,9 @@
 Prm300ControlWidgetController::Prm300ControlWidgetController(const QString name, QObject *parent) :
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(Prm300ControlWidgetController));
-
 	m_view = NULL;
 	m_rpcClient = NULL;
-    m_stationName = name;
+	m_stationName = name;
 }
 
 Prm300ControlWidgetController::~Prm300ControlWidgetController()
@@ -26,8 +24,8 @@ void Prm300ControlWidgetController::onMethodCalled(const QString &method, const 
 		if(m_view)
 		{
 			m_view->setData(freq, filter, att1, att2);
-		}        
-        m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
+		}
+		m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
 	}
 }
 

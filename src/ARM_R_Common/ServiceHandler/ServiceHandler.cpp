@@ -3,6 +3,8 @@
 #include <QDateTime>
 #include <QMutexLocker>
 
+#include <Logger.h>
+
 #include "ProcessStateEnumsToString.h"
 #include "CommonCodesEnumsToString.h"
 #include "ServiceTerminateCauseEnumsToString.h"
@@ -12,7 +14,7 @@
 #include "ServiceHandler.h"
 #include "CommonCodes.h"
 
-#ifndef	__linux__
+#ifndef __linux__
 #define SUFFIX  ".exe"
 #else
 #define SUFFIX
@@ -47,7 +49,6 @@ ServiceHandler::ServiceHandler(const QString& servicePath, const QStringList& ar
 	_terminating(false),
 	_state(ProcessState::NotRunning),
 	_lastServiceError( ServiceError::Success ),
-	_logger(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ServiceHandler))),
 	_syncRoot(QMutex::Recursive)
 {
 
@@ -111,7 +112,7 @@ void ServiceHandler::errorCodesProcessing(int code)
 	_state = Pw::Common::ServiceControl::ProcessState::Error;
 	_lastServiceError = (ServiceError::Enum) code;
 
-	_logger->debug(QString("Service %2: %1 (Process State: %3)")
+	debug(QString("Service %2: %1 (Process State: %3)")
 					.arg(ServiceErrorEnumsToString::enumToString(_lastServiceError))
 					.arg(serviceName())
 					.arg(ProcessStateEnumsToString::enumToString(_state)));
@@ -148,7 +149,7 @@ void ServiceHandler::onProcessStartFailed(QProcess::ProcessError error)
 void ServiceHandler::onProcessDestroyed(int code, QProcess::ExitStatus status)
 {
 	QMutexLocker locker(&_syncRoot);
-	_logger->debug(QString("onProcessDestroyed. Service %4 destroyed: rc:%1 status:%2 isexpected:%3")
+	debug(QString("onProcessDestroyed. Service %4 destroyed: rc:%1 status:%2 isexpected:%3")
 				   .arg(code)
 				   .arg((status == QProcess::CrashExit ? "crash" : "normal" ))
 				   .arg(( _terminating ? "expected" : "not expected" ))
@@ -163,12 +164,12 @@ void ServiceHandler::onProcessDestroyed(int code, QProcess::ExitStatus status)
 
 void ServiceHandler::onReadProcessOutput()
 {
-	_logger->debug(QString("Service %2:%1").arg(QString(_process->readAllStandardOutput())).arg(serviceName()));
+	debug(QString("Service %2:%1").arg(QString(_process->readAllStandardOutput())).arg(serviceName()));
 }
 
 void ServiceHandler::onReadProcessError()
 {
-	_logger->debug(QString("Service %2:%1").arg(QString(_process->readAllStandardError())).arg(serviceName()));
+	debug(QString("Service %2:%1").arg(QString(_process->readAllStandardError())).arg(serviceName()));
 }
 
 void ServiceHandler::startService()
@@ -197,7 +198,7 @@ QString ServiceHandler::getServicePath()
 	foreach( QString path, paths ){
 		foreach( QString name, names ) {
 			QString fullname = QDir::toNativeSeparators(path + QDir::separator() + name);
-			_logger->debugFormat("Checking %s", fullname.toLocal8Bit().data());
+			debug( QString("Checking %1").arg(fullname) );
 
 			if ( QFile(fullname ).exists()) {
 				_servicePath = fullname ;
@@ -234,7 +235,7 @@ QString ServiceHandler::serviceName()
 
 int ServiceHandler::terminate()
 {
-	_logger->debug(" terminate >>>");
+	debug(" terminate >>>");
 	QMutexLocker locker(&_syncRoot);
 
 	_terminating = true;
@@ -254,7 +255,7 @@ int ServiceHandler::terminate()
 	qApp->processEvents();
 
 	if ( _process->waitForFinished(c_terminateTimeout)) {
-		_logger->debug(" waitForFinished = true");
+		debug(" waitForFinished = true");
 		//_process->deleteLater();
 		//_process = NULL;
 		return ServiceTerminateCause::ByCommand;
@@ -272,7 +273,7 @@ int ServiceHandler::terminate()
 }
 void ServiceHandler::kill()
 {
-	_logger->debug(" kill >>");
+	debug(" kill >>");
 	QMutexLocker locker(&_syncRoot);
 
 	_terminating = true;

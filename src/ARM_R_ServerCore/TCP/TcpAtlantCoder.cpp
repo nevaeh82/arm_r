@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpAtlantCoder.h"
 
 TcpAtlantCoder::TcpAtlantCoder(QObject* parent) :

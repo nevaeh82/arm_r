@@ -2,7 +2,7 @@
 #define RPCDEFINES_H
 
 #define RPC_SLOT_SET_CLIENT_ID          "rpc_slot_set_client_id"
-#define RPC_SLOT_SET_MAIN_STATION_COR   "rpc_slot_set_main_station_cor"
+#define RPC_METHOD_SET_MAIN_STATION_CORRELATION   "rpc_slot_set_main_station_cor"
 #define RPC_SLOT_SET_BANDWIDTH          "rpc_slot_set_bandwidth"
 #define RPC_SLOT_SET_SHIFT              "rpc_slot_set_shift"
 #define RPC_SLOT_RECOGNIZE              "rpc_slot_recognize"

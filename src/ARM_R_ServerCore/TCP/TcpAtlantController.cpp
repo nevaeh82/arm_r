@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpAtlantController.h"
 
 TcpAtlantController::TcpAtlantController(QObject* parent) :

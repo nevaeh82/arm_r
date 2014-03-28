@@ -17,8 +17,6 @@
 
 #include "RPC/RPCClient.h"
 
-#include <PwLogger/PwLogger.h>
-
 namespace Ui {
 class TabSpectrumWidget;
 }
@@ -39,8 +37,6 @@ private:
 	QPixmap* m_pmRoundRed;
 	QPixmap* m_pmRoundGreen;
 	QLabel* m_indicatorLabel;
-
-	Pw::Logger::ILogger* m_logger;
 
 	RPCClient*	m_rpcClient;
 public:

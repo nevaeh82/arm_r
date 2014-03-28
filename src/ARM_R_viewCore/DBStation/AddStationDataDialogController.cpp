@@ -1,9 +1,10 @@
+#include <Logger.h>
+
 #include "AddStationDataDialogController.h"
 
 AddStationDataDialogController::AddStationDataDialogController(const QSqlDatabase& db, QObject* parent):
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(AddStationDataDialogController));
 	m_db = db;
 }
 
@@ -31,7 +32,7 @@ QStringList AddStationDataDialogController::getNames(QString table)
 
 	bool succeeded = query.prepare(str);
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QStringList();
 	}
 
@@ -40,7 +41,7 @@ QStringList AddStationDataDialogController::getNames(QString table)
 	succeeded = query.exec();
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QStringList();
 	}
 
@@ -61,7 +62,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 								   "AND sd.stationID=(SELECT id FROM station WHERE name=:objectStationName)");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -71,7 +72,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 	succeeded = query.exec();
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -83,7 +84,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 		bool succeeded = queryInsert.prepare("INSERT INTO stationDevices VALUES(NULL, :objectPort, (SELECT id FROM station WHERE name=:objectStationName))");
 
 		if (!succeeded) {
-			m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+			log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 			return;
 		}
 		queryInsert.bindValue(":objectPort", list.at(1));
@@ -92,7 +93,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 		succeeded = queryInsert.exec();
 		if (!succeeded) {
-			m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+			log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 			return;
 		}
 
@@ -106,7 +107,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 	succeeded = query.prepare("SELECT id FROM Category WHERE name=:objectName");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -114,7 +115,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 	succeeded = query.exec();
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -130,7 +131,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 	succeeded = query.prepare("SELECT id FROM signalType WHERE name=:objectName");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -138,7 +139,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 	succeeded = query.exec();
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -153,7 +154,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 	succeeded = query.prepare("SELECT bandwidth FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency)");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -164,7 +165,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 	succeeded = query.exec();
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -175,7 +176,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 			succeeded = query.prepare("SELECT id FROM stationData WHERE (deviceID=:objectDeviceID AND categoryID=:objectCategoryID AND frequency=:objectFrequency)");
 
 			if (!succeeded) {
-				m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+				log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 				return;
 			}
 
@@ -186,7 +187,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 			succeeded = query.exec();
 			if (!succeeded) {
-				m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+				log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 				return;
 			}
 
@@ -196,7 +197,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 			succeeded = query.prepare("UPDATE stationData SET bandwidth=:objectBandwidth1 WHERE id=:objectID");
 
 			if (!succeeded) {
-				m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+				log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 				return;
 			}
 
@@ -205,7 +206,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 			succeeded = query.exec();
 			if (!succeeded) {
-				m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+				log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 				return;
 			}
 		}
@@ -217,7 +218,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 	succeeded = query.prepare("INSERT INTO stationData VALUES(NULL, :objectDeviceID, :objectCategoryID, :objectFrequency, :objectBandwidth, :objectSignalType, :objectDate)");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 
@@ -230,7 +231,7 @@ void AddStationDataDialogController::slotAccept(const QStringList &list)
 
 	succeeded = query.exec();
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return;
 	}
 }

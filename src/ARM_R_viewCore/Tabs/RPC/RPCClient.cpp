@@ -5,7 +5,7 @@
 RPCClient::RPCClient(IStation *prop, IDbManager *db_manager,
 					 ITabSpectrum* parent_tab,
 					 IControlPRM* control_prm, QObject *parent) :
-	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCClient)), parent)
+	RpcClientBase(parent)
 {
 //	m_controlPrm = control_prm;
 	m_parentTab = parent_tab;
@@ -29,7 +29,7 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 
 	m_clientPeer->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
-	m_clientPeer->attachSignal(this, SIGNAL(signalSetMainStationCor(int,QString)), RPC_SLOT_SET_MAIN_STATION_COR);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetMainStationCor(int,QString)), RPC_METHOD_SET_MAIN_STATION_CORRELATION);
 	m_clientPeer->attachSignal(this, SIGNAL(signalSetBandwidth(int, float)), RPC_SLOT_SET_BANDWIDTH);
 	m_clientPeer->attachSignal(this, SIGNAL(signalSetShift(int, float)), RPC_SLOT_SET_SHIFT);
 	m_clientPeer->attachSignal(this, SIGNAL(signalRecognize(int, int)), RPC_SLOT_RECOGNIZE);
@@ -53,7 +53,7 @@ bool RPCClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(QByteArray)));
 
-	m_logger->debug("Start RPCClient");
+	debug("Start RPCClient");
 	return RpcClientBase::start(port, ipAddress);
 }
 
@@ -122,7 +122,7 @@ void RPCClient::prmSetFreq(short freq)
 
 void RPCClient::prmRequestFreq()
 {
-	m_logger->debug(QString("Station Name = %1").arg(m_station->getName()));
+	debug(QString("Station Name = %1").arg(m_station->getName()));
 	emit signalPRMRequestFreq(m_station->getName());
 }
 
@@ -278,7 +278,7 @@ void RPCClient::rpcSlotServerSendCorrelation(uint point1, uint point2, QByteArra
 void RPCClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
 {
 
-	m_logger->info(QString("PRM Status = %1 %1 %3 %4").arg(prm_freq).arg(prm_filter).arg(prm_att1).arg(prm_att2));
+	info(QString("PRM Status = %1 %1 %3 %4").arg(prm_freq).arg(prm_filter).arg(prm_att1).arg(prm_att2));
 	QList<QVariant> list;
 
 	list.append(QVariant(prm_freq));
@@ -322,7 +322,7 @@ void RPCClient::rpcSlotServerStatus(QByteArray message)
 	int state;
 	dataStream1 >> state;
 
-	m_logger->debug(QString("NAMWS = %1 %2").arg(messageStruct.name).arg(m_station->getName()));
+	debug(QString("NAMWS = %1 %2").arg(messageStruct.name).arg(m_station->getName()));
 
 	if(messageStruct.name == m_station->getName())
 	{

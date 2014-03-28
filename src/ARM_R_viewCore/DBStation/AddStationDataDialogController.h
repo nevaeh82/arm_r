@@ -7,10 +7,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
-
 #include <QDateTime>
-
-#include <PwLogger/PwLogger.h>
 
 #include "Interfaces/IController.h"
 
@@ -26,8 +23,6 @@ public:
 	void appendView(AddStationDataDialog* widget);
 
 private:
-	Pw::Logger::ILogger* m_logger;
-
 	QSqlDatabase				m_db;
 	AddStationDataDialog*					m_view;
 

@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpFlakonController.h"
 
 TcpFlakonController::TcpFlakonController(QObject* parent) :

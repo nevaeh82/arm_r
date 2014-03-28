@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpFlakonCoder.h"
 
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
@@ -163,7 +165,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 			for(quint32 i = 0; i < m_header.length; i += sizeof(QPointF)) {
 				stream >> point;
 				vec.append(point);
-//				m_logger->debug(QString("header.id = %1 detected signal = %2 %3").arg(QString::number(m_header.id)).arg(QString::number(point.x())).arg(QString::number(point.y())));
+//				debug(QString("header.id = %1 detected signal = %2 %3").arg(QString::number(m_header.id)).arg(QString::number(point.x())).arg(QString::number(point.y())));
 			}
 			message = detectedBandwidth(vec);
 			break;
