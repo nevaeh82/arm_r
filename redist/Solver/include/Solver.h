@@ -5,76 +5,111 @@
 
 ///////////////////////////////   S O L V E R   ///////////////////////////////
 
-#include <QObject>
-#include <QVector>
-#include <QTime>
-#include "Solver_global.h"
+#include "RadiolocationInterface.h"
+#include "solver_global.h"
+#include <tuple>
+#include <set>
 
-class SolverGeo2d;
-class SolverGeo3d;
+/* Предъобявление реализации солвера */
+class SolverImpl;
 
-//получаемые данные
-struct DataFromFlacon;
-struct DataFromRadioLocation;
-struct CopyDataFromRadioLocation;
-class QPointF;
+/**
+ * @enum SolverType
+ * Возможные типы решателя
+ * @param AUTO_HEIGH - решатель вычисляющий траекторию с автоматическим определением
+					   высоты, генерирует сигналы signal_sendDataFromRadioLocation
+ * @param MANUAL_HEIGH - решатель вычисляющий траекторию с ручным определением высоты,
+                         генерирует сигналы signal_sendDataFromRadioLocationManualHeigh
+ * @param ONE_DATA - решатель вычисляющий одинарночные отметки с координатами, 
+                     генерирует сигналы signal_sendOneDataFromRadioLocation
+ */
+enum SolverType { AUTO_HEIGH, MANUAL_HEIGH, ONE_DATA };
 
-class SOLVERSHARED_EXPORT Solver:public QObject
+
+/**
+ *@class Solver
+ * класс решателя задачи местоопределения по разностно-дальномерному методу
+ * @note принимает на вход данные типа DataFromFlacon через слот GetData
+ * @note выдает результаты расчетов с по средствам сигналов 
+		 signal_sendDataFromRadioLocation, signal_sendDataFromRadioLocationManualHeigh и
+		 signal_sendOneDataFromRadioLocation
+ * @note то, какие сигналы будет генерировать решатель задается с помощью SolverType 
+ */
+class SOLVERSHARED_EXPORT Solver : public QObject
 {
     Q_OBJECT
 public:
-    Solver();
 
-    //задать зону ответственности
+	/**
+	 * Конструктор по умолчанию
+	 * @note используются все возможные типы решателей
+	 */
+	Solver();
+	/**
+	 * Конструктор
+	 * @param types - список типов решателей, которые будут использоваться
+	 */
+	Solver(const std::set<SolverType>& types);
+
+	/**
+	 * Задать зону ответственности
+	 * @param bottomLeft - левая нижняя точка зоны ответсвенности [Lat, Lon]
+	 * @param topRight - правая верхняя точка зоны ответсвенности [Lat, Lon]
+	 * @param H - максимально возможная высота цели над уровнем моря [м]
+	 */
     void SetAreaOfResponsibility(const QPointF& bottomLeft,
-                                 const QPointF& topRight,const double H=-1.0);
+                                 const QPointF& topRight,const double H=9000.0);
 
-    //задать длину выходных данных
-    void SetOutDataLength(const int length);
+	/* Добавить какой-либо тип решателя */
+	void AddSolverType(const SolverType& type);
 
-    //задать количество отсчетов, необходимое для определения того,
-    //движется источник или стоит
-    void SetStateAnalizeCount(const int count);
+	/* Убрать какой-либо имеющийся тип решателя */
+	void RemoveSolverType(const SolverType& type);
 
-    //Очистить солвер
+	/**
+	 * Задать длину выходных данных
+	 * @param length - максимальный размер контейнеров в DataFromRadioLocation
+	 */
+    void SetOutDataLength(const size_t length);
+
+	/**
+	 * Задать высоту, на которой летить цель
+	 * @param heigh - заранее известная высота цели над уровнем моря [м]
+	 */
+    void SetHeighApriori(const double heigh);
+
+    /* Очистить историю наблюдений солвера */
     void Clear();
 
-    ~Solver();
+	/* деструктор */
+	~Solver(){}
+private:
+	/* инициализирующий метод */
+	void Init();
 
 public slots:
-    //Получить данные
-    void GetData(DataFromFlacon& data);
-    //посчитать одну порцию данных
-    void GetOneData(DataFromFlacon& data);
+
+	/**
+	 * Получить данные
+	 * @param data - данные с разностями расстояний
+	 */
+    void GetData(const DataFromFlacon& data);
 
 signals:
-    //Отправка рассчитанных данных траектории
-    void signal_sendDataFromRadioLocation(const DataFromRadioLocation& allData);
-    //отправка одной порции расчитанных данных
-    void signal_sendOneDataFromRadioLocation(const DataFromRadioLocation& oneData);
 
-private slots:
-    //Получение данных расчета траектории с 2d солвера
-    void getDataFromRadioLocation2d(const DataFromRadioLocation& allData);
-    //Получение данных расчета траектории  с 3d солвера
-    void getDataFromRadioLocation3d(const DataFromRadioLocation& allData);
-    //Получение одной порции данных c расчета без истории с 2d солвера
-    void getOneDataFromRadioLocation2d(const DataFromRadioLocation& oneData);
-    //Получение одной порции данных c расчета без истории с 3d солвера
-    void getOneDataFromRadioLocation3d(const DataFromRadioLocation& oneData);
+	/* Отправка рассчитанных данных траектории с автоматическим определением высоты */
+    void signal_sendDataFromRadioLocation(const DataFromRadioLocation& allData);
+
+    /* Отправка рассчитанных данных траектории с автоматическим определением высоты */
+    void signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation& allData);
+
+	/* Отправка одной отметки рассчитанных данных */
+    void signal_sendOneDataFromRadioLocation(const OneDataFromRadioLocation& oneData);
+
 private:
-    //скопировать рассчитанные данные из двумерной задачи
-    void CopyData2d(const DataFromRadioLocation& allData);
-    //скопировать рассчитанные данные из трехмерной задачи
-    void CopyData3d(const DataFromRadioLocation& allData);
-    //скорректировать координаты с помощью высоты
-    void CorrectCoordinatesByHeigh();
-    SolverGeo3d* solverGeo3d_;//солвер для трехмерной задачи
-    SolverGeo2d* solverGeo2d_;//солвер для двумерной задачи
-    CopyDataFromRadioLocation* data_;//рассчитанные данные с использованием истории
-    //рассчитанные данные с использованием истории, с корректировкой координат по высоте
-    CopyDataFromRadioLocation* data_corrected_heigh_;
-    DataFromRadioLocation* one_data_;//рассчитанные данные без использования истории
+	/* реализация солвера */
+	std::shared_ptr<SolverImpl> solverImpl_;
+
 };
 
 #endif // SOLVER_H

@@ -24,8 +24,8 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
     //Р’РµРєС‚РѕСЂ СЂР°Р·РЅРѕСЃС‚РµР№ СЂР°СЃСЃС‚РѕСЏРЅРёР№
     QVector<double> aDR;
 
-    if (aCorrel.size()<5) isCount=false; //Р•СЃР»Рё РЅРµС‚ 5С‚Рё СЂР°Р·РЅРѕСЃС‚РµР№ - РІС‹С…РѕРґРёРј
-    if (aNumMain<0 || aNumMain>5) isCount=false; //Р•СЃР»Рё РЅРµРІРµСЂРµРЅ РЅРѕРјРµСЂ РѕСЃРЅРѕРІРЅРѕРіРѕ РїСѓРЅРєС‚Р° - РІС‹С…РѕРґРёРј
+    if (aCorrel.size()<2) isCount=false; //Р•СЃР»Рё РЅРµС‚ 5С‚Рё СЂР°Р·РЅРѕСЃС‚РµР№ - РІС‹С…РѕРґРёРј
+    if (aNumMain<0 || aNumMain>2) isCount=false; //Р•СЃР»Рё РЅРµРІРµСЂРµРЅ РЅРѕРјРµСЂ РѕСЃРЅРѕРІРЅРѕРіРѕ РїСѓРЅРєС‚Р° - РІС‹С…РѕРґРёРј
     if (aThreshold<0 || aThreshold>10000) aThreshold=0;
 
 //    qDebug()<<"РљРѕСЂСЂРµР»СЏС†РёР№ РїСЂРёС€Р»Рѕ "<<aCorrel.size();
@@ -88,7 +88,7 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
             aBenchmark.append(aTempBenchmark);
             aDR.append(aCurrentDr);
         }
-        if (aDR.size()==5)
+        if (aDR.size()==2)
         {
 
         //РџСЂРѕРІРµСЂРєР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚Рё РґР°РЅРЅС‹С…

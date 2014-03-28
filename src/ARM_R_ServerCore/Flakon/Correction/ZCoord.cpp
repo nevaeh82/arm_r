@@ -78,7 +78,7 @@ void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
     {
         convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(i), lDataOfPoints.aHeight.at(i), aTempX, aTempY, aTempZ);
         countDistanceOfPoints(aX, aY, aZ, aTempX, aTempY, aTempZ, aTempDistance);
-        if (i==5) aTempDistance=retransmissionSaberio(); //ПОП� АВКА ДЛЯ САБЕ� ИО
+//        if (i==5) aTempDistance=retransmissionSaberio(); //ПОП� АВКА ДЛЯ САБЕ� ИО
 
         //Добавить поправку на провода
         aTempDistance=aTempDistance+aWire.at(i);
@@ -256,12 +256,12 @@ double ZCoord::retransmissionSaberio()
 
 void ZCoord::setSolverDataSize(int aSize)
 {
-    if ((aSize>10) && (aSize<2000)) mSolver->SetOutDataLength(aSize);
+//    if ((aSize>10) && (aSize<2000)) mSolver->SetOutDataLength(aSize);
 }
 
 void ZCoord::setSolverAnalyzeSize(int aSize)
 {
-    if ((aSize>10) && (aSize<200)) mSolver->SetStateAnalizeCount(aSize);
+//    if ((aSize>10) && (aSize<200)) mSolver->SetStateAnalizeCount(aSize);
 }
 
 

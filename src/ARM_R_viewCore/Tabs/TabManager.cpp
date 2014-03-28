@@ -14,6 +14,7 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
 	m_correlationControllers = NULL;
 	m_currentTabWidget = NULL;
 	m_dbManager = NULL;
+    m_dbStationController = NULL;
 }
 
 TabManager::~TabManager()
@@ -57,6 +58,7 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
 		tabController->setDbManager(m_dbManager);
+        tabController->setDbStationController(m_dbStationController);
 		tabController->setStationNamesList(stationNamesList);
 		m_dbManager->registerReceiver(tabController);
 		tabController->appendView(tabSpectrumWidget);
@@ -94,7 +96,12 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 void TabManager::setDbManager(IDbManager *dbManager)
 {
-	m_dbManager = dbManager;
+    m_dbManager = dbManager;
+}
+
+void TabManager::setDbStationController(DBStationController *controller)
+{
+    m_dbStationController = controller;
 }
 
 QString TabManager::getStationName(const int id)

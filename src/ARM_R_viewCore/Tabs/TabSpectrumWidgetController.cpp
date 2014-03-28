@@ -12,6 +12,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	m_rpcClient = NULL;
 	m_treeModel = NULL;
 	m_dbManager = NULL;
+    m_dbStationController = NULL;
 //	m_controlPRM = NULL;
 	m_indicatorLabel = NULL;
 
@@ -105,7 +106,12 @@ void TabSpectrumWidgetController::setDbManager(IDbManager* dbManager)
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
 	m_treeModel = new TreeModel(m_dbManager, headers, this);
-	m_dbManager->registerReceiver(m_treeModel);
+    m_dbManager->registerReceiver(m_treeModel);
+}
+
+void TabSpectrumWidgetController::setDbStationController(DBStationController *controller)
+{
+    m_dbStationController = controller;
 }
 
 void TabSpectrumWidgetController::init()
@@ -146,6 +152,8 @@ void TabSpectrumWidgetController::createView()
 	m_spectrumWidget->setTab(this);
 	m_spectrumWidget->setId(m_station->getId());
 	m_spectrumWidget->setSpectrumName(m_station->getName());
+    m_spectrumWidget->setDbManager(m_dbManager);
+    m_spectrumWidget->setDbStationController(m_dbStationController);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
