@@ -28,6 +28,7 @@ class TcpManager : public QObject, public ITcpManager, public ITcpListener, publ
 private:
 	Pw::Logger::ILogger* m_logger;
 	IRPC* m_rpcServer;
+	ITcpServerController* m_tcpServer;
 	QMap< QString, BaseTcpDeviceController* > m_controllersMap;
 	/**
 	 * key = deviceType
@@ -45,7 +46,8 @@ public:
 public:
 	virtual void addTcpDevice(const QString& deviceName, const int& type);
 	virtual void removeTcpDevice(const QString& deviceName);
-	virtual void setRpcServer(IRPC* rpcServer);
+	virtual void setRpcServer(IRPC*);
+	virtual	void setTcpServer(ITcpServerController*);
 	virtual QObject* asQObject();
 
 	/// TODO: add sendDataToDevice from some internal message

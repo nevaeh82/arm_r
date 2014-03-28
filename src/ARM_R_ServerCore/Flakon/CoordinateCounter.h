@@ -25,6 +25,8 @@
 
 #include "Correction/ZDR.h"
 
+#include "Protobuf/ARMR_OD/ZVPacket.pb.h"
+
 class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter
 {
 	Q_OBJECT

@@ -3,8 +3,10 @@
 
 #include <QSettings>
 #include <QStringList>
-#include "BaseClasses/BaseTcpDeviceController.h"
+#include "Tcp/BaseTcpDeviceController.h"
 #include "TcpFlakonCoder.h"
+
+#include "TcpDevicesDefines.h"
 
 #include "Info/FlakonSettings.h"
 

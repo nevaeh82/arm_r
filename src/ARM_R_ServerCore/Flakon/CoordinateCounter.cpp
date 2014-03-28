@@ -24,7 +24,7 @@ CoordinateCounter::~CoordinateCounter()
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
 {
-	if (deviceType != DeviceTypesEnum::FLAKON_TCP_DEVICE) {
+	if (deviceType != FLAKON_TCP_DEVICE) {
 		return;
 	}
 
@@ -58,10 +58,10 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		m_map_vec_corr.clear();
 
         if (aDR.size() == 5) {
-			//Заполнение данных и отправка на вычисление координат
-			m_aData.numOfReferenceDetector_= m_main_point; //Номер опорного
-			m_aData.time_ = QTime::currentTime();	//Время
-			m_aData.ranges_ = aDR;					//Откорректированные разности расстояний (максимумы графиков корреляции)
+			// form data and calculate coordinates
+			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
+			m_aData.time_ = QTime::currentTime();	//Time
+			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
 
 			m_solver->GetData(m_aData);
 		}
@@ -76,13 +76,17 @@ void CoordinateCounter::sendData(const MessageSP message)
 
 	if (messageType == TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER) {
 		QByteArray messageData = message->data();
-		QDataStream dataStream(&messageData, QIODevice::ReadOnly);
+		Zaviruha::Packet packet;
+		if (!packet.ParseFromArray(messageData, messageData.size())){
+			return;
+		}
 
-		int id;
-		double alt;
-		int track_length = 0;
+		//QDataStream dataStream(&messageData, QIODevice::ReadOnly);
+		//dataStream >> id >> track_length >> alt;
 
-		dataStream >> id >> track_length >> alt;
+		int id = packet.command().arguments().solverdata(0).id();
+		double alt = packet.command().arguments().solverdata(0).altitude();
+		int track_length = packet.command().arguments().solverdata(0).tracklength();
 
 		m_solver->SetHeighApriori(alt);
 		m_alt = alt;
@@ -118,7 +122,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 }
 
@@ -140,7 +144,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 }
 
@@ -194,10 +198,10 @@ void CoordinateCounter::initSolver()
 	//Solver
     m_solver = new Solver();
 
-	//Размер приходящих данных
+	//incoming data size
     setSolverDataSize(100);
 
-	//Кол-во данных для определения движения
+	//data count for motion detection
 //	setSolverAnalyzeSize(60);
 
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));

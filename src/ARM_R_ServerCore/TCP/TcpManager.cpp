@@ -28,26 +28,26 @@ TcpManager::~TcpManager()
 
 void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 {
-	m_logger->debug(QString("Creating %1 with type %2").arg(QString(deviceName)).arg(type));
+	debug(QString("Creating %1 with type %2").arg(QString(deviceName)).arg(type));
 //	QString key = host + ":" + QString::number(port);
 
 	BaseTcpDeviceController* controller = NULL;
 
 	switch(type)
 	{
-		case DeviceTypesEnum::RETRRANSLATOR_TCP_DEVICE:
+		case RETRRANSLATOR_TCP_DEVICE:
 			break;
-		case DeviceTypesEnum::FLAKON_TCP_DEVICE:
+		case FLAKON_TCP_DEVICE:
 			controller = new TcpFlakonController(deviceName);
-			m_logger->debug(QString("Created TcpFlakonController"));
+			debug(QString("Created TcpFlakonController"));
 			break;
-		case DeviceTypesEnum::ATLANT_TCP_DEVICE:
+		case ATLANT_TCP_DEVICE:
 			controller = new TcpAtlantController(deviceName);
-			m_logger->debug(QString("Created TcpAtlantController"));
+			debug(QString("Created TcpAtlantController"));
 			break;
-		case DeviceTypesEnum::PRM300_TCP_DEVICE:
+		case PRM300_TCP_DEVICE:
 			controller = new TcpPRM300Controller(deviceName);
-			m_logger->debug(QString("Created TcpPRM300Controller"));
+			debug(QString("Created TcpPRM300Controller"));
 			break;
 		default:
 			return;
@@ -57,7 +57,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	/// if something else, create new Tcp%Device%Controller with new name and/or class
 
 	if (controller == NULL) {
-		m_logger->debug(QString("Unable to create %1 with %2").arg(deviceName).arg(type));
+		debug(QString("Unable to create %1 with %2").arg(deviceName).arg(type));
 		return;
 	}
 
@@ -72,7 +72,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	m_controllersMap.insert(deviceName, controller);
 
 	controller->registerReceiver(this);
-	if (type == DeviceTypesEnum::FLAKON_TCP_DEVICE) {
+	if (type == FLAKON_TCP_DEVICE) {
 		controller->registerReceiver(m_coordinatesCounter);
 	}
 
@@ -81,13 +81,13 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	controller->createTcpClient();
 	controller->connectToHost();
 
-	m_logger->debug(QString("Added device connection for %1 with %2").arg(deviceName).arg(type));
+	debug(QString("Added device connection for %1 with %2").arg(deviceName).arg(type));
 }
 
 void TcpManager::removeTcpDevice(const QString& deviceName)
 {
 	if (!m_controllersMap.contains(deviceName)) {
-		m_logger->debug(QString("Map doesn't contain %1").arg(deviceName));
+		debug(QString("Map doesn't contain %1").arg(deviceName));
 		return;
 	}
 
@@ -106,6 +106,11 @@ void TcpManager::setRpcServer(IRPC* rpcServer)
 	m_rpcServer = rpcServer;
 }
 
+void TcpManager::setTcpServer(ITcpServerController *tcpServer)
+{
+	m_tcpServer = tcpServer;
+}
+
 QObject* TcpManager::asQObject()
 {
 	return this;
@@ -118,7 +123,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 
 	switch(deviceType)
 	{
-		case DeviceTypesEnum::FLAKON_TCP_DEVICE:
+		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
                 m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
 			}
@@ -153,6 +158,18 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_STATUS, deviceName, messageData);
 			}
 			break;
+		case ARMR_TCP_SERVER:
+			if (messageType == TCP_ARMR_SEND_SOLVER_DATA) {
+				if (m_coordinatesCounter == NULL) {
+					return;
+				}
+				m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, messageData)));
+			} else if (messageType == TCP_ARMR_SEND_SOLVER_CLEAR) {
+				if (m_coordinatesCounter == NULL) {
+					return;
+				}
+				m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR, messageData)));
+			}
 
 		default:
 			break;
@@ -171,18 +188,18 @@ QString TcpManager::getNameFromArgument(const QVariant& argument)
 	dataStream >> name;
 
 //	QString name = argument.toString();
-	m_logger->debug(QString("StName = %1").arg(name));
+	debug(QString("StName = %1").arg(name));
 	return name;
 }
 
 QString TcpManager::getAtlantName()
 {
-	return QString("ÐÑ‚Ð»Ð°Ð½Ñ‚");
+	return QString("Àòëàíò");
 }
 
 QString TcpManager::getFlakonName()
 {
-	return QString("Ð¤Ð»Ð°ÐºÐ¾Ð½");
+	return QString("Ôëàêîí");
 }
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)
@@ -197,7 +214,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		QString station;
 		dataStream1 >> station;
 
-		if(station == "ÐÐ²Ñ‚Ð¾")
+		if(station == "Àâòî")
 		{
 			int id = 6;
 			QByteArray ba1;
@@ -274,11 +291,11 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 	}
 	else if (method == RPC_SLOT_PRM_REQUEST_FREQ) {
 		QString name = getNameFromArgument(argument);
-		m_logger->debug(QString(name));
+		debug(QString(name));
 
 		if(!m_controllersMap.contains(name))
 		{
-			m_logger->info(QString("Could't find station = %1").arg(name));
+			info(QString("Could't find station = %1").arg(name));
 			return;
 		}
 		BaseTcpDeviceController* controller = m_controllersMap.value(name, NULL);
@@ -332,13 +349,20 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 			return;
 		}
 
-		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER, argument.toByteArray())));
+		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR, argument.toByteArray())));
 	}else if (method == RPC_SLOT_REQUEST_STATUS) {
 		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
 		if (controller == NULL) {
 			return;
 		}
 		bool connectionState = controller->isConnected();
-		m_logger->info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
+		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
+	}else if (method == RPC_SLOT_REQUEST_STATUS) {
+		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
+		if (controller == NULL) {
+			return;
+		}
+		bool connectionState = controller->isConnected();
+		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
 	}
 }

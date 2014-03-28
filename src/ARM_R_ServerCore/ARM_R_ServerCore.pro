@@ -8,9 +8,10 @@ CONFIG += staticlib
 
 include(../../specs/project.pri)
 include(../ARM_R_Common/reference.pri)
+include(../../specs/protobuf.pri)
+include($$SolutionDir/specs/CISCommonLib.pri )
 include(../../specs/qxt.pri)
 include(../../specs/Solver.pri)
-include(../../specs/protobuf.pri)
 include(../../specs/logger.pri)
 
 INCLUDEPATH += $$PWD
@@ -24,9 +25,6 @@ SOURCES += \
     Flakon/Correction/ZDR.cpp \
     Flakon/Correction/ZCorrector.cpp \
     Flakon/Correction/ZCoord.cpp \
-    TCP/BaseClasses/BaseTcpClient.cpp \
-    TCP/BaseClasses/BaseTcpDeviceController.cpp \
-    TCP/BaseClasses/BaseTcpDeviceCoder.cpp \
     TCP/TcpFlakonController.cpp \
     TCP/TcpFlakonCoder.cpp \
     TCP/TcpManager.cpp \
@@ -34,6 +32,8 @@ SOURCES += \
     TCP/TcpPRM300Coder.cpp \
     TCP/TcpAtlantController.cpp \
     TCP/TcpAtlantCoder.cpp \
+    TCP/Server/TcpServerCoder.cpp \
+    TCP/Server/TcpServerController.cpp \
     Flakon/CoordinateCounter.cpp \
     TCP/TcpSettingsManager.cpp
 
@@ -47,13 +47,10 @@ HEADERS += \
     Flakon/Correction/ZDR.h \
     Flakon/Correction/ZCorrector.h \
     Flakon/Correction/ZCoord.h \
-    TCP/BaseClasses/BaseTcpClient.h \
     TCP/Interfaces/ITcpClient.h \
     TCP/Interfaces/ITcpDeviceCoder.h \
     TCP/Interfaces/ITcpDeviceController.h \
     TCP/Interfaces/ITcpReceiver.h \
-    TCP/BaseClasses/BaseTcpDeviceController.h \
-    TCP/BaseClasses/BaseTcpDeviceCoder.h \
     TCP/TcpFlakonController.h \
     TCP/TcpFlakonCoder.h \
     TCP/Interfaces/ITcpManager.h \
@@ -64,6 +61,8 @@ HEADERS += \
     TCP/TcpAtlantCoder.h \
     TCP/TcpDefines.h \
     TCP/Interfaces/ITcpListener.h \
+    TCP/Server/TcpServerCoder.h \
+    TCP/Server/TcpServerController.h \
     Flakon/CoordinateCounter.h \
     Flakon/Interfaces/ICoordinateCounter.h \
     TCP/TcpSettingsManager.h \

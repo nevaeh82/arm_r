@@ -3,8 +3,12 @@
 
 #include <QSettings>
 #include <QStringList>
-#include "BaseClasses/BaseTcpDeviceController.h"
+//#include <Tcp/BaseTcpDeviceController.h>
+#include "Tcp/BaseTcpDeviceController.h"
 #include "TcpPRM300Coder.h"
+
+#include "TcpDevicesDefines.h"
+#include "TcpDefines.h"
 
 #include <Info/Prm300Settings.h>
 
