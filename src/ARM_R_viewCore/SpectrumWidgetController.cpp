@@ -9,6 +9,7 @@
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
     m_dbManager = NULL;
+    m_rpcClient = NULL;
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
@@ -437,7 +438,7 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	x1 /= 1000;
 	x2 /= 1000;
 
-    m_centerFreqSelTemp = qAbs(x1 - x2)/2;
+    m_centerFreqSelTemp = (x1 + x2)/2;
     m_bandwidhtTemp = qAbs(x2-x1);
 
 	SpectrumSelection selection;

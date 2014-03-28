@@ -57,7 +57,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
 		m_map_vec_corr.clear();
 
-        if (aDR.size() == 2) {
+        if (aDR.size() == 5) {
 			//Заполнение данных и отправка на вычисление координат
 			m_aData.numOfReferenceDetector_= m_main_point; //Номер опорного
 			m_aData.time_ = QTime::currentTime();	//Время
