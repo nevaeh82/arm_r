@@ -1,13 +1,16 @@
 #ifndef TCPATLANTCODER_H
 #define TCPATLANTCODER_H
 
-#include "BaseClasses/BaseTcpDeviceCoder.h"
+#include "Tcp/BaseTcpDeviceCoder.h"
 
 #include <QDataStream>
 #include <QDateTime>
 
 #include "../Atlant/EMS/proto/EagleMessageProto.pb.h"
 #include "../Atlant/EMS/storm.pb.h"
+
+#include "TcpDevicesDefines.h"
+#include "TcpDefines.h"
 
 #include "RPC/RpcDefines.h"
 

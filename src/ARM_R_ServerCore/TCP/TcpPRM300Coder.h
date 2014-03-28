@@ -1,7 +1,9 @@
 #ifndef TCPPRM300CODER_H
 #define TCPPRM300CODER_H
 
-#include "BaseClasses/BaseTcpDeviceCoder.h"
+#include "Tcp/BaseTcpDeviceCoder.h"
+
+#include "TcpDefines.h"
 
 #include <QIODevice>
 #include <QDebug>
