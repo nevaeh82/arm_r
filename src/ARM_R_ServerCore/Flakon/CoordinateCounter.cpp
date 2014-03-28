@@ -53,10 +53,10 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		m_map_vec_corr.clear();
 
 		if (aDR.size() == 5) {
-			//Заполнение данных и отправка на вычисление координат
-			m_aData.numOfReferenceDetector_= m_main_point; //Номер опорного
-			m_aData.time_ = QTime::currentTime();	//Время
-			m_aData.ranges_ = aDR;					//Откорректированные разности расстояний (максимумы графиков корреляции)
+			// form data and calculate coordinates
+			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
+			m_aData.time_ = QTime::currentTime();	//Time
+			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
 
 			m_solver->GetData(m_aData);
 		}
@@ -160,10 +160,10 @@ void CoordinateCounter::initSolver()
 	//Solver
 	m_solver = new Solver;
 
-	//� азмер приходящих данных
+	//incoming data size
 	setSolverDataSize(100);
 
-	//Кол-во данных для определения движения
+	//data count for motion detection
 	setSolverAnalyzeSize(60);
 
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
