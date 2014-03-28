@@ -12,6 +12,8 @@
 #include <QDataStream>
 #include <QHostAddress>
 
+#include <QTime>
+
 #include <PwLogger/PwLogger.h>
 
 #include "Rpc/RpcMessageStruct.h"

@@ -26,8 +26,12 @@ private:
 
 	RPCClient* m_rpcClient;
 
+    IDbManager* m_dbManager;
+
+    QString m_stationName;
+
 public:
-	explicit Prm300ControlWidgetController(QObject *parent = 0);
+    explicit Prm300ControlWidgetController(const QString name, QObject *parent = 0);
 	virtual ~Prm300ControlWidgetController();
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
@@ -35,6 +39,8 @@ public:
 	void appendView(Prm300ControlWidget *view);
 
 	void setRpcClient(RPCClient* rpcClient);
+
+    virtual void setDbManager(IDbManager*);
 
 private:
 	void init();

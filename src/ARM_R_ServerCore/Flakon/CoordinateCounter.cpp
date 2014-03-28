@@ -7,7 +7,12 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 
-//	initSolver();
+    qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
+    qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
+    qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
+
+
+    initSolver();
 	m_likeADeviceName = deviceName;
 	m_logger->debug(QString("Created %1").arg(m_likeADeviceName));
 }
@@ -52,7 +57,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
 		m_map_vec_corr.clear();
 
-		if (aDR.size() == 5) {
+        if (aDR.size() == 5) {
 			//Заполнение данных и отправка на вычисление координат
 			m_aData.numOfReferenceDetector_= m_main_point; //Номер опорного
 			m_aData.time_ = QTime::currentTime();	//Время
@@ -108,6 +113,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	dataStream << aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
 
+
+
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
@@ -137,31 +144,64 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	}
 }
 
+
+void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const OneDataFromRadioLocation &aData)
+{
+    QByteArray ba;
+    QDataStream ds(&ba, QIODevice::ReadWrite);
+
+    QVector<QPointF> vec;
+    vec.append(aData.coordLatLon);
+    ds << aData.timeHMSMs;
+    ds << 1/*aData.StateMassive_.at(aLastItem)*/;
+    ds << aData.latLonStdDev;
+    ds << vec;
+    ds << 0;
+    ds << 100;
+    ds << 1;
+
+    MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
+
+    foreach (ITcpListener* receiver, m_receiversList) {
+        receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+    }
+
+
+//    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA_AUTO, ba));
+//    _subscriber->data_ready(FLAKON_BPLA_AUTO, msg);
+
+    m_logger->warn("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+}
+
+
 void CoordinateCounter::setSolverDataSize(int aSize)
 {
 	if ((aSize>10) && (aSize<2000)) {
-		m_solver->SetOutDataLength(aSize);
+        m_solver->SetOutDataLength(aSize);
 	}
 }
 
 void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 {
 	if ((aSize>10) && (aSize<200)) {
-		m_solver->SetStateAnalizeCount(aSize);
+//		m_solver->SetStateAnalizeCount(aSize);
 	}
 }
 
 void CoordinateCounter::initSolver()
 {
 	//Solver
-	m_solver = new Solver;
+    m_solver = new Solver();
 
 	//Размер приходящих данных
-	setSolverDataSize(100);
+    setSolverDataSize(100);
 
 	//Кол-во данных для определения движения
-	setSolverAnalyzeSize(60);
+//	setSolverAnalyzeSize(60);
 
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
+    connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
+
 }

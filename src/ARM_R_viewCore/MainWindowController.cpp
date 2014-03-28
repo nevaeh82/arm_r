@@ -53,7 +53,21 @@ void MainWindowController::stop()
 void MainWindowController::init()
 {
 	m_dbManager = new DbManager(this);
+
+    m_dbStationController = new DBStationController(this);
+    DBConnectionStruct param;
+    param.dbName = "Stations";
+    param.host = "127.0.0.1";
+    param.login = "root";
+    param.port = 3306;
+    param.password = "qwerty12345";
+    bool err = m_dbStationController->connectToDB(param);
+
+
+
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
+
+    m_tabManager->setDbStationController(m_dbStationController);
 
 	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
 	tabsSettingsFile.append("./Tabs/Tabs.ini");
@@ -70,14 +84,6 @@ void MainWindowController::init()
 
 	/// Problem here:
 
-	m_dbStationController = new DBStationController(this);
-	DBConnectionStruct param;
-	param.dbName = "Stations";
-	param.host = "127.0.0.1";
-	param.login = "root";
-	param.port = 3306;
-	param.password = "qwerty12345";
-	bool err = m_dbStationController->connectToDB(param);
 
 
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));

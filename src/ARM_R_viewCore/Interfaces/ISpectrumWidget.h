@@ -7,6 +7,8 @@ class QWidget;
 
 #include "IGraphicWidget.h"
 #include "Interfaces/IDataSourceListener.h"
+#include "IDbManager.h"
+#include "DBStation/DBStationController.h"
 
 class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 {
@@ -27,6 +29,9 @@ class ISpectrumWidget: public IGraphicWidget, public IDataSourceListener
 
 		virtual QString getSpectrumName() const = 0;
 		virtual QWidget* getWidget() const = 0;
+        virtual void setDbManager(IDbManager* dbManager) = 0;
+        virtual void setDbStationController(DBStationController* controller) = 0;
+
 };
 
 #endif // ISPECTRUMWIDGET_H

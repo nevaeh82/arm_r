@@ -106,7 +106,7 @@ void RPCServer::sendDataByRpc(const QString& signalType, const QString& deviceNa
 	dataStream << message;
 
 	if (signalType == RPC_SLOT_SERVER_SEND_POINTS) {
-		emit serverSendPointsRpcSignal(baMessage);
+        emit serverSendPointsRpcSignal(baMessage);
 	}
 	else if (signalType == RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH) {
 		emit serverSendDetectedBandwidthRpcSignal(baMessage);
@@ -162,11 +162,15 @@ void RPCServer::sendDataByRpc(const QString& signalType, const QString& deviceNa
 
 	/// TODO: Not used in UI
 	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF) {
-		emit serverSendBplaDefRpcSignal(baMessage);
+        QByteArray data1 = data;
+
+        emit serverSendBplaDefRpcSignal(data1);
 	}
 	/// TODO: Not used in UI
 	else if (signalType == RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO) {
-		emit serverSendBplaDefAutoRpcSignal(baMessage);
+        QByteArray data1 = data;
+
+        emit serverSendBplaDefAutoRpcSignal(data1);
 	}
 }
 

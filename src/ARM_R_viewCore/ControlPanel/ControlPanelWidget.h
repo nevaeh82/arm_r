@@ -34,9 +34,16 @@ signals:
 	void panoramaCheckedSignal(bool isChecked);
 	void autoSearchCheckedSignal(bool isChecked);
 
+    void signalManualMode();
+    void signalScanMode(int start, int finish);
+    void signalCheckMode();
+    void signalViewMode();
+
 private slots:
 	void onSetCommonFrequencySlot();
 	void onSetBandWidthSlot();
+    void slotChangeMode(int index);
+
 
 };
 
