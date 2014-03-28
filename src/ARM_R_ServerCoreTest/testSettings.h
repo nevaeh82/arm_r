@@ -9,15 +9,15 @@
 class testSettings : public CxxTest::TestSuite
 {
 public:
-	void testGetAllInfo()
-	{
-		TcpSettingsManager settingsManager;
-		settingsManager.setIniFile("./TCP/coders.ini");
+//	void testGetAllInfo()
+//	{
+//		TcpSettingsManager settingsManager;
+//		settingsManager.setIniFile("./TCP/coders.ini");
 
-		QMap<QString, int> mapInfo = settingsManager.getAllInfo();
+//		QMap<QString, int> mapInfo = settingsManager.getAllInfo();
 
-        TS_ASSERT_EQUALS(4, mapInfo.count());
-	}
+//		TS_ASSERT_EQUALS(8, mapInfo.count());
+//	}
 
 //	void testInit()
 //	{
