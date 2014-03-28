@@ -1,12 +1,13 @@
 #include "Prm300ControlWidgetController.h"
 
-Prm300ControlWidgetController::Prm300ControlWidgetController(QObject *parent) :
+Prm300ControlWidgetController::Prm300ControlWidgetController(const QString name, QObject *parent) :
 	QObject(parent)
 {
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(Prm300ControlWidgetController));
 
 	m_view = NULL;
 	m_rpcClient = NULL;
+    m_stationName = name;
 }
 
 Prm300ControlWidgetController::~Prm300ControlWidgetController()
@@ -25,8 +26,8 @@ void Prm300ControlWidgetController::onMethodCalled(const QString &method, const 
 		if(m_view)
 		{
 			m_view->setData(freq, filter, att1, att2);
-		}
-
+		}        
+        m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
 	}
 }
 
@@ -38,7 +39,12 @@ void Prm300ControlWidgetController::appendView(Prm300ControlWidget *view)
 
 void Prm300ControlWidgetController::setRpcClient(RPCClient *rpcClient)
 {
-	m_rpcClient = rpcClient;
+    m_rpcClient = rpcClient;
+}
+
+void Prm300ControlWidgetController::setDbManager(IDbManager *dbManager)
+{
+    m_dbManager = dbManager;
 }
 
 void Prm300ControlWidgetController::init()

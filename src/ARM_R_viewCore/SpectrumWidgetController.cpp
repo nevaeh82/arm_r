@@ -8,7 +8,7 @@
 
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
-	m_rpcClient = NULL;
+    m_dbManager = NULL;
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
@@ -268,7 +268,18 @@ void SpectrumWidgetController::setPanorama(bool enabled)
 
 void SpectrumWidgetController::setSelection(double start, double end)
 {
-	m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+    m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+}
+
+void SpectrumWidgetController::setDbManager(IDbManager *dbManager)
+{
+    m_dbManager = dbManager;
+    m_prm300WidgetController->setDbManager(m_dbManager);
+}
+
+void SpectrumWidgetController::setDbStationController(DBStationController *controller)
+{
+    m_dbStationController = controller;
 }
 
 void SpectrumWidgetController::init()
@@ -311,7 +322,7 @@ void SpectrumWidgetController::init()
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
 
-	m_prm300WidgetController = new Prm300ControlWidgetController(this);
+    m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
 	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
 }
 
@@ -352,12 +363,31 @@ void SpectrumWidgetController::slotRequestData(bool state)
 /// add selection to white list
 void SpectrumWidgetController::slotCMAddWhiteList()
 {
+    StationData data;
+    data.stationName = m_view->getSpectrumName();
+    data.port = 155;
+    data.category = "White";
+    data.signalType = "Unknown";
+    data.frequency = m_centerFreqSelTemp;
+    data.bandwidth= m_bandwidhtTemp;
+
+    int index = m_dbStationController->addStationData(data);
 	emit signalAddSelToLists(1);
 }
 
 /// add selection to black list
 void SpectrumWidgetController::slotCMAddBlackList()
 {
+    StationData data;
+    data.stationName = m_view->getSpectrumName();
+    data.port = 155;
+    data.category = "Black";
+    data.signalType = "Unknown";
+    data.frequency = m_centerFreqSelTemp;
+    data.bandwidth= m_bandwidhtTemp;
+
+    int index = m_dbStationController->addStationData(data);
+
 	emit signalAddSelToLists(2);
 }
 
@@ -407,7 +437,8 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	x1 /= 1000;
 	x2 /= 1000;
 
-	m_centerFreqSelTemp = (x1 + x2)/2;
+    m_centerFreqSelTemp = qAbs(x1 - x2)/2;
+    m_bandwidhtTemp = qAbs(x2-x1);
 
 	SpectrumSelection selection;
 	selection.start = QPointF(x1, y1);

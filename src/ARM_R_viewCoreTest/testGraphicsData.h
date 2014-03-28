@@ -29,77 +29,77 @@ public:
 //	{
 //	}
 
-	void testGraphicsList()
-	{
-		SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
-		grData->m_listStartx.append(1.23);
-		grData->m_listStartx.append(8.97);
+    void testGraphicsList()
+    {
+        SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
+        grData->m_listStartx.append(1.23);
+        grData->m_listStartx.append(8.97);
 
-		qDebug() << grData->m_listStartx.size() << grData->m_listStartx.at(1);
+        qDebug() << grData->m_listStartx.size() << grData->m_listStartx.at(1);
 
-		TS_ASSERT_EQUALS(1, grData->findIndex(8.97));
-		TS_ASSERT_EQUALS(1, grData->findIndex(8));
-		TS_ASSERT_EQUALS(0, grData->findIndex(0.99));
+        TS_ASSERT_EQUALS(1, grData->findIndex(8.97));
+        TS_ASSERT_EQUALS(1, grData->findIndex(8));
+        TS_ASSERT_EQUALS(0, grData->findIndex(0.99));
 
-		delete grData;
-	}
+        delete grData;
+    }
 
-	void testGraphicsIncomeData()
-	{
-		SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
+    void testGraphicsIncomeData()
+    {
+        SpectrumWidgetDataSource* grData = new SpectrumWidgetDataSource(NULL, NULL);
 
-		QVector<QPointF> vecFFT1;
-		bool isComplex = true;
-		int N = 100;
-		int K = 99;
-		for(int i = 0; i < 21; i++)
-		{
-			QPointF point;
-			point.setX(i*1000);
-			qreal val =  (qrand() % N - K);
-			qDebug() << val;
-			point.setY(val);
-			vecFFT1.append(point);
-			qDebug() << point.x() << point.y();
-		}
-
-
-		grData->dataProccess(vecFFT1, isComplex);
-
-		grData->setPanorama(true, 0, 40);
-
-		grData->dataProccess(vecFFT1, isComplex);
+        QVector<QPointF> vecFFT1;
+        bool isComplex = true;
+        int N = 100;
+        int K = 99;
+        for(int i = 0; i < 21; i++)
+        {
+            QPointF point;
+            point.setX(i*1000);
+            qreal val =  (qrand() % N - K);
+            qDebug() << val;
+            point.setY(val);
+            vecFFT1.append(point);
+            qDebug() << point.x() << point.y();
+        }
 
 
-		QVector<QPointF> vecFFT2;
-		for(int i = 21; i < 41; i++)
-		{
-			QPointF point;
-			point.setX(i*1000);
-			qreal val =  (qrand() % N - K);
-			point.setY(val);
-			vecFFT2.append(point);
-		}
+        grData->dataProccess(vecFFT1, isComplex);
 
-		grData->dataProccess(vecFFT2, isComplex);
+        grData->setPanorama(true, 0, 40);
 
-		for(int i = 0; i < 40; i++)
-		{
-			if(i < 20)
-			{
-				qDebug() << i << vecFFT1.at(i).y() << grData->m_spectrum[i];
-				TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->m_spectrum[i]);
-			}
-			else
-			{
-				qDebug() << i << vecFFT2.at(i-20).y() << grData->m_spectrum[i];
-				TS_ASSERT_EQUALS(vecFFT2.at(i-20).y(), grData->m_spectrum[i]);
-			}
+        grData->dataProccess(vecFFT1, isComplex);
 
-		}
 
-		delete grData;
-	}
+        QVector<QPointF> vecFFT2;
+        for(int i = 21; i < 41; i++)
+        {
+            QPointF point;
+            point.setX(i*1000);
+            qreal val =  (qrand() % N - K);
+            point.setY(val);
+            vecFFT2.append(point);
+        }
+
+        grData->dataProccess(vecFFT2, isComplex);
+
+        for(int i = 0; i < 40; i++)
+        {
+            if(i < 20)
+            {
+                qDebug() << i << vecFFT1.at(i).y() << grData->m_spectrum[i];
+                TS_ASSERT_EQUALS(vecFFT1.at(i).y(), grData->m_spectrum[i]);
+            }
+            else
+            {
+                qDebug() << i << vecFFT2.at(i-20).y() << grData->m_spectrum[i];
+                TS_ASSERT_EQUALS(vecFFT2.at(i-20).y(), grData->m_spectrum[i]);
+            }
+
+        }
+
+        delete grData;
+    }
 };
 
 #endif // TESTSTREAMING_H

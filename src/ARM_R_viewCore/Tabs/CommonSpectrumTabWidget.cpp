@@ -32,7 +32,12 @@ void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
 	ui->settingsTreeView->setItemDelegate(m_treeDelegate);
 
 	m_dbManager->registerReceiver(m_treeModel);
-	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+    connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+}
+
+void CommonSpectrumTabWidget::setDbStationController(DBStationController *)
+{
+
 }
 //void CommonSpectrumTabWidget::insertSpectrumWidget(GraphicWidget *widget)
 //{

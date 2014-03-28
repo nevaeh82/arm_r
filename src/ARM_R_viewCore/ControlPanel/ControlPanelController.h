@@ -9,6 +9,10 @@
 #include "Interfaces/IControlPanelController.h"
 #include "Interfaces/IControlPanelListener.h"
 
+#include <QTimer>
+
+#define INTERVAL 20
+
 class ControlPanelController : public QObject, public IControlPanelController
 {
 	Q_OBJECT
@@ -17,6 +21,13 @@ private:
 	ControlPanelWidget* m_view;
 
 	IDbManager* m_dbManager;
+
+    QTimer m_timer;
+
+    int m_startFreq;
+    int m_finishFreq;
+    int m_currentFreq;
+
 
 public:
 	explicit ControlPanelController(QObject *parent = 0);
@@ -37,6 +48,13 @@ private slots:
 
 	void onCommonFrequencyChangedSlot(int value);
 	void onBandWidthChangedSlot(int start, int end);
+
+    void slotManualMode();
+    void slotScanMode(int start, int finish);
+    void slotCheckMode();
+    void slotViewMode();
+
+    void slotChangeFreq();
 
 };
 

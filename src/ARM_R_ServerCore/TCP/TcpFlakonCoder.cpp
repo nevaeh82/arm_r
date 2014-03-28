@@ -156,7 +156,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 				point.setY(y);
 				vec.append(point);
 			}
-			message = pointers(vec);
+            message = pointers(vec);
 			break;
 		case FlakonExternal::TypeDetectedBandWidthAnswer:
 			//2 – обнаруженный сигнал на текущем id пункте (QVector<QPointF>, например (-1.0,5.2) - сигнал с шириной полосы от -1 МГц до 5.2 МГц ),

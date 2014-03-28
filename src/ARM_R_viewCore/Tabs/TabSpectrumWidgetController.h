@@ -16,6 +16,7 @@
 
 #include "SpectrumWidgetDataSource.h"
 #include "Correlations/CorrelationWidgetDataSource.h"
+#include "DBStation/DBStationController.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum,
 		public IDbChangedListener
@@ -46,6 +47,8 @@ private:
 	/// connection status
 	QTimer	m_timerStatus;
 
+    DBStationController* m_dbStationController;
+
 public:
 	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, ITabManager*, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
@@ -64,6 +67,7 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager*);
+    virtual void setDbStationController(DBStationController* controller);
 	virtual void setStationNamesList(const QStringList &stationsList);
 
 	virtual void setIndicator(int state);

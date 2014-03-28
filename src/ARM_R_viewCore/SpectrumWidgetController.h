@@ -20,6 +20,8 @@
 
 #include "Tabs/RPC/RPCClient.h"
 
+#include "DBStation/DBStationController.h"
+
 #define TO_MHZ	1000000
 
 class SpectrumWidget;
@@ -46,6 +48,7 @@ private:
 	QMenu*	m_graphicsContextMenu;
 
 	double	m_centerFreqSelTemp;
+    double  m_bandwidhtTemp;
 	double	m_centerFreqDefModulation;
 
 	bool	m_peakVisible;
@@ -61,6 +64,10 @@ private:
 
 	QTimer *m_clickDelay;
 	bool flagDoubleClick;
+
+    IDbManager* m_dbManager;
+
+    DBStationController* m_dbStationController;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -85,6 +92,9 @@ public:
 	void setPanorama(bool);
 
 	void setSelection(double start, double end);
+
+    virtual void setDbManager(IDbManager* dbManager);
+    virtual void setDbStationController(DBStationController* controller);
 
 	void setup();
 	void setControlPrmState(bool state);

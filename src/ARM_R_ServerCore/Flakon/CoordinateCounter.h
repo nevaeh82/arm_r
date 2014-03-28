@@ -67,7 +67,9 @@ public slots:
 
 private slots:
 	void slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&);
-	void slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&);\
+    void slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&);
+    void slotOneCatchDataFromRadioLocationManual(const OneDataFromRadioLocation&);
+
 
 signals:
 	void signalFinished();

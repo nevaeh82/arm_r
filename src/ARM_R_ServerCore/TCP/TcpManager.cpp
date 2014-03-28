@@ -120,13 +120,15 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	{
 		case DeviceTypesEnum::FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
-				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
+                m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_POINTS, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_CORRELATION) {
 				/// send data to FlakonCoordinatesCounter
+                m_logger->warn("GOT FLAKON");
+                m_rpcServer->sendDataByRpc(FLAKON_COORDINATE_COUNTER, deviceName, messageData);
 				m_rpcServer->sendDataByRpc(RPC_SLOT_SERVER_SEND_CORRELATION, deviceName, messageData);
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {

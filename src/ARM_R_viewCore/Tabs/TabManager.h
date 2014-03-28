@@ -25,6 +25,9 @@
 /// ATLANT
 #include "AtlantTabWidget.h"
 
+
+#include "DBStation/DBStationController.h"
+
 class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
 	Q_OBJECT
@@ -41,6 +44,8 @@ private:
 
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
+    DBStationController* m_dbStationController;
+
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
@@ -48,6 +53,7 @@ public:
 	void start();
 	int createSubModules(const QString& settingsFile);
 	void setDbManager(IDbManager* dbManager);
+    void setDbStationController(DBStationController* controller);
 
 	virtual QString getStationName(const int id);
 	virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
@@ -56,7 +62,7 @@ public:
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
-        QStringList createStationNamesList();
+    QStringList createStationNamesList();
 private:
 	int readSettings(const QString &settingsFile);
 	void checkStatus();

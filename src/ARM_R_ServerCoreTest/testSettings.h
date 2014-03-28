@@ -16,7 +16,7 @@ public:
 
 		QMap<QString, int> mapInfo = settingsManager.getAllInfo();
 
-		TS_ASSERT_EQUALS(8, mapInfo.count());
+        TS_ASSERT_EQUALS(4, mapInfo.count());
 	}
 
 //	void testInit()
