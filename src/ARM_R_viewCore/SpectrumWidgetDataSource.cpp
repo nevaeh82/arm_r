@@ -32,7 +32,7 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 	bool isComplex = false;
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		if(!m_spectrumWidget->isGraphicVisible())
+		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum)
 			return;
 
 		isComplex = true;
@@ -205,7 +205,7 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 		return;
 
 	double bandwidth = end - start;
-	if(bandwidth < 20){
+	if(bandwidth < 20) {
 		bandwidth = 20;
 	}
 
