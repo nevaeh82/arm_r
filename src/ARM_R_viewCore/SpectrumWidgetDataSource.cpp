@@ -11,7 +11,7 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 	m_spectrumWidget = spectrumWidget;
 
 	m_bandwidth = 0;
-
+	m_pointCount = 0;
 	m_bandwidthSingleSample = 0;
 	m_isPanoramaStart = false;
 	m_needSetupSpectrum = true;
