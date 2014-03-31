@@ -12,8 +12,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	m_rpcClient = NULL;
 	m_treeModel = NULL;
 	m_dbManager = NULL;
-    m_dbStationController = NULL;
-//	m_controlPRM = NULL;
+	m_dbStationController = NULL;
 	m_indicatorLabel = NULL;
 
 	m_spectrumDataSource = NULL;
@@ -125,7 +124,7 @@ void TabSpectrumWidgetController::init()
 
 void TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(m_station, m_dbManager, this, NULL/*m_controlPRM*/, this);
+	m_rpcClient = new RPCClient(m_station, m_dbManager, this, NULL, this);
 	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
 
 	m_rpcClient->registerReceiver(m_spectrumDataSource);
@@ -233,15 +232,14 @@ void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selec
 
 void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 {
-	if (TypePanoramaCommand == type) {
-		emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
+	switch (type){
+		case TypePanoramaCommand :
+			emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
+			return;
+		case TypeGraphicCommand :
+			m_rpcClient->setCommand(msg);
+			return;
 	}
-
-	if (TypeGraphicCommand != type) {
-		return;
-	}
-
-	m_rpcClient->setCommand(msg);
 }
 
 ///getting points from rpc (flakon)
@@ -263,7 +261,7 @@ void TabSpectrumWidgetController::setThreshold(double y)
 void TabSpectrumWidgetController::checkStatus()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	m_tabManager->sendCommand(m_station->getName(), TypeCommand(TypeGraphicCommand), msg);
+	sendCommand(TypeGraphicCommand, msg);
 }
 
 void TabSpectrumWidgetController::setPanorama(bool state)

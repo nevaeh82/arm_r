@@ -56,16 +56,16 @@ public:
     void setDbStationController(DBStationController* controller);
 
 	virtual QString getStationName(const int id);
-	virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
+	//virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
 	virtual void setActiveTab(const int id);
 
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
     QStringList createStationNamesList();
+
 private:
 	int readSettings(const QString &settingsFile);
-	void checkStatus();
 
 private slots:
 	void changeTabSlot(int index);

@@ -75,13 +75,6 @@ int TabManager::createSubModules(const QString& settingsFile)
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
 	}
 
-	checkStatus();
-
-	/// FOR FUTURE
-	//	TabSpectrumWidgetController* commonTabController =  new TabSpectrumWidgetController(it.value(), _common_spectra, _common_correlations, _model_spectrum, _db_manager_spectrum, this);
-	//	TabSpectrumWidget* commonTabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
-	//	commonTabController->appendView(commonTabSpectrumWidget);
-
 	commonTabSpectrumWidget->deactivate();
 	int index = m_tabWidget->addTab(commonTabSpectrumWidget, tr("Common"));
 
@@ -110,21 +103,6 @@ QString TabManager::getStationName(const int id)
 	return t->getName();
 }
 
-/// call this method when data in tree has changed
-void TabManager::sendCommand(const QString &stationName, TypeCommand type, IMessage *msg)
-{
-	ITabWidget* tabController = m_tabWidgetsMap.value(stationName, NULL);
-
-	if (NULL == tabController) {
-		return;
-	}
-
-	///TODO: update in future
-
-	TabSpectrumWidgetController* tabController1 = static_cast<TabSpectrumWidgetController*>(tabController);
-	tabController1->sendCommand(type, msg);
-}
-
 void TabManager::setActiveTab(const int id)
 {
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
@@ -132,9 +110,6 @@ void TabManager::setActiveTab(const int id)
 	if (tabBar != NULL) {
 		tabBar->setCurrentIndex(id);
 	}
-	checkStatus();
-
-	//    emit signalChangeTab(id);
 }
 
 /// slot tab change
@@ -152,8 +127,6 @@ void TabManager::changeTabSlot(int index)
 	}
 
 	m_currentTabWidget->activate();
-	checkStatus();
-
 }
 
 /// read settings for generated submodules (tabs)
@@ -185,16 +158,6 @@ int TabManager::readSettings(const QString& settingsFile)
 	}
 
 	return m_stationsMap.count();
-}
-
-void TabManager::checkStatus()
-{
-	///TODO: update
-	/*QMap<int, ITabWidget* >::iterator it;
-	for(it = tabWidgetsMap.begin(); it != tabWidgetsMap.end(); ++it)
-	{
-		it.value()->check_status();
-	}*/
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
