@@ -264,7 +264,6 @@ void EMS::EmsClient::DescribeByLabels(std::vector<std::string> &labels_)
 		F(std::vector<std::string> &labels_) :
 			labels(labels_)
 		{
-			this->labels = labels;
 		}
 		bool operator ()(std::vector<std::string> it)
 		{

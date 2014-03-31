@@ -1,6 +1,11 @@
 #include "PServer.h"
 
-PServer::PServer(int nPort, QObject* parent) : QObject(parent)
+PServer::PServer(int nPort, QObject* parent) 
+	: QObject(parent)
+	, tcpServer(0)
+	, server_status(0)
+	, blockSize(0)
+	, newData(false)
 {
     _id = -1;
     _type = 1;

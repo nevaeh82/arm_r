@@ -48,7 +48,6 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
             float aMean;
 
             //Р’С‹С‡РёСЃР»РёС‚СЊ РЅРѕРјРµСЂ РіСЂР°С„РёРєР° РєРѕСЂСЂРµР»СЏС†РёРё
-            int aNum=i;
 
             //РќРѕРјРµСЂ РїРµСЂРІРѕРіРѕ РїСѓРЅС‚РєР°
             int aNumA=aNumMain;
