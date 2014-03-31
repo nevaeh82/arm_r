@@ -56,7 +56,6 @@ public:
     void setDbStationController(DBStationController* controller);
 
 	virtual QString getStationName(const int id);
-	//virtual void sendCommand(const QString& stationName, TypeCommand type, IMessage* msg);
 	virtual void setActiveTab(const int id);
 
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
