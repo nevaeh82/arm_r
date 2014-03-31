@@ -157,7 +157,7 @@ private:
 
     static bool __stdcall DEVICE_callback (t_nodb_device *device, void* user_data)
     {
-        DBIBController *db = DBIBController::getInstance();
+        DBIBController *db = getInstance();
         db->_set_station(device);
     return true;
     }
