@@ -11,7 +11,7 @@ TcpPRM300Controller::TcpPRM300Controller(QObject* parent) :
 TcpPRM300Controller::TcpPRM300Controller(const QString& tcpDeviceName, QObject* parent) :
 	BaseTcpDeviceController(tcpDeviceName, parent)
 {
-	bool err = init();
+	init();
 	connect(this, SIGNAL(createTcpPRM300CoderInternalSignal()), this, SLOT(createTcpPRM300CoderInternalSlot()));
 	connect(this, SIGNAL(signalTcpDeviceConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
 }

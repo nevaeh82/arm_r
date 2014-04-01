@@ -218,9 +218,9 @@ void QSpectrItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     double viewFreqRange = endViewFreq - startViewFreq;
     double stepNum = viewFreqRange/numMainAxesY;
     painter->setFont(axeFont);
-    int tempFreq = 0;
     for(i = 0; i < numMainAxesY + 1; i++)
     {
+		int tempFreq = 0;
 //		painter->setPen(mainAxePen); ////
         tempFreq=startViewFreq + stepNum*i;
         qstr.setNum(tempFreq*VIEW_LABEL_SCALE); //## 16.09.13 для учета в подписи 10КГц  //qstr.setNum(tempFreq);
@@ -277,7 +277,7 @@ void QSpectrItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     double temp, temp1;
     if(rSpectr != 0)
     {
-        step = (width - lf - rt)/(endViewFreq - startViewFreq);
+        //step = (width - lf - rt)/(endViewFreq - startViewFreq);
         painter->setPen(spectrPen);
         int widthFreq = selfRectF.width();
         double scaleGetSpectr = (endViewFreq - startViewFreq)/selfRectF.width();
@@ -328,7 +328,7 @@ void QSpectrItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     {
         if(rSpectr != 0)
         {
-            step = (width - lf - rt)/(endViewFreq - startViewFreq);
+            //step = (width - lf - rt)/(endViewFreq - startViewFreq);
             painter->setPen(maxLevelPen);
             int widthFreq = selfRectF.width();
             double scaleGetSpectr = (endViewFreq - startViewFreq)/selfRectF.width();
@@ -522,7 +522,7 @@ void QSpectrItem::wheelEvent( QGraphicsSceneWheelEvent * ev )
                 {
                     stepX-=10;
                 }
-                if(stepX<0)
+                if(stepX == 0)
                 {
                     stepX=1; ///## 16/09/13
                 }

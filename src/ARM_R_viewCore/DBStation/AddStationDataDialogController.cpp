@@ -1,7 +1,8 @@
 #include "AddStationDataDialogController.h"
 
-AddStationDataDialogController::AddStationDataDialogController(const QSqlDatabase& db, QObject* parent):
-	QObject(parent)
+AddStationDataDialogController::AddStationDataDialogController(const QSqlDatabase& db, QObject* parent)
+	: QObject(parent)
+	, m_view(0)
 {
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(AddStationDataDialogController));
 	m_db = db;

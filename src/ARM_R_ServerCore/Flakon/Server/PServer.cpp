@@ -190,9 +190,11 @@ void PServer::_slotGetData(rpc_flakon_msg msg_ptr)
 
             if ((clientSocket->bytesToWrite())>(100*1024*1024))
             {
-                SClients.erase(i);
+				QMap<int,QTcpSocket *>::iterator temp = i;
+				++i;
+				SClients.erase(temp);
+				continue;
             }
-
             ++i;
         }
     }

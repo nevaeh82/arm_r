@@ -1,13 +1,14 @@
 #include "Prm300ControlWidgetController.h"
 
-Prm300ControlWidgetController::Prm300ControlWidgetController(const QString name, QObject *parent) :
-	QObject(parent)
+Prm300ControlWidgetController::Prm300ControlWidgetController(const QString& name, QObject *parent)
+	: QObject(parent)
+	, m_dbManager(0)
 {
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(Prm300ControlWidgetController));
 
 	m_view = NULL;
 	m_rpcClient = NULL;
-    m_stationName = name;
+	m_stationName = name;
 }
 
 Prm300ControlWidgetController::~Prm300ControlWidgetController()

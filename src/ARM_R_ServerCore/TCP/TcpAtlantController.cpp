@@ -12,7 +12,7 @@ TcpAtlantController::TcpAtlantController(QObject* parent) :
 TcpAtlantController::TcpAtlantController(const QString& tcpDeviceName, QObject* parent) :
 	BaseTcpDeviceController(tcpDeviceName, parent)
 {
-	bool err = init();
+	init();
 	connect(this, SIGNAL(createTcpAtlantCoderInternalSignal()), this, SLOT(createTcpAtlantCoderInternalSlot()));
 }
 

@@ -2,6 +2,7 @@
 
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
 	BaseTcpDeviceCoder(parent)
+	, 	m_header(0)
 {
 	m_residueLength = 0;
 }

@@ -2,8 +2,11 @@
 
 #define SERVER_NAME "ARM_R_Server"
 
-MainWindowController::MainWindowController(QObject *parent) :
-	QObject(parent)
+MainWindowController::MainWindowController(QObject *parent) 
+	: QObject(parent)
+	, m_serverHandler(0)
+	, m_dbManager(0)
+	, m_dbStationController(0)
 {
 	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindowController));
 
@@ -61,7 +64,7 @@ void MainWindowController::init()
     param.login = "root";
     param.port = 3306;
     param.password = "qwerty12345";
-    bool err = m_dbStationController->connectToDB(param);
+    m_dbStationController->connectToDB(param);
 
 
 

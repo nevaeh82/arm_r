@@ -357,12 +357,5 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		}
 		bool connectionState = controller->isConnected();
 		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
-	}else if (method == RPC_SLOT_REQUEST_STATUS) {
-		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
-		if (controller == NULL) {
-			return;
-		}
-		bool connectionState = controller->isConnected();
-		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
 	}
 }

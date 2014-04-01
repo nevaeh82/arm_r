@@ -95,7 +95,7 @@ void ListsController::m_slotAdd()
 {
 	ListsAdd* listAdd = new ListsAdd(m_view);
 	ListsAddController* listAddController = new ListsAddController(m_db, this);
-	bool isOpen = m_db.isOpen();
+	m_db.isOpen();
 	listAddController->appendView(listAdd);
 	connect(listAdd, SIGNAL(signalUpdateList()), this, SLOT(m_slotAddClose()));
 	listAdd->show();

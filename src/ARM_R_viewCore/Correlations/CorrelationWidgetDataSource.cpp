@@ -4,8 +4,9 @@
 
 #include "Interfaces/ICorrelationWidget.h"
 
-CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent) :
-	BaseDataSource(parent)
+CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent)
+	: BaseDataSource(parent)
+	, m_needSetup(false)
 {
 	m_correlationWidget = correlationWidget;
 
