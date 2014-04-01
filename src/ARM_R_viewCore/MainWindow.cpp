@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	info("Started");
+	log_info("Started");
 
 	this->setWindowTitle(tr("Zaviruha"));
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));

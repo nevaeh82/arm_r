@@ -3,7 +3,7 @@
 
 #include <qglobal.h>
 
-class IRPC;
+class IRpcControllerBase;
 class ITcpServerController;
 class QObject;
 
@@ -15,7 +15,7 @@ public:
 
 	virtual void addTcpDevice(const QString& deviceName, const int& type)	= 0;
 	virtual void removeTcpDevice(const QString& deviceName)	= 0;
-	virtual void setRpcServer(IRPC* rpcServer)	= 0;
+	virtual void setRpcServer(IRpcControllerBase* rpcServer)	= 0;
 	virtual void setTcpServer(ITcpServerController* tcpServer)	= 0;
 	virtual QObject* asQObject()	= 0;
 

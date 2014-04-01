@@ -1,15 +1,18 @@
+#include "UiDefines.h"
+
 #include "Station.h"
 
-Station::Station(QObject *parent):
-	QObject(parent)
+Station::Station(IDbManager* dbManager, QObject *parent)
+	: QObject( parent )
+	, m_dbManager( dbManager )
+	, m_stationId( INVALID_STATION_ID )
+	, m_stationName( tr("Unknown") )
+	, m_stationLatitude( 0 )
+	, m_stationLongitude( 0 )
+	, m_prm300Ip( "127.0.0.1" )
+	, m_adcIp( "127.0.0.1" )
+	, m_adcPort( 0 )
 {
-	m_stationId = INVALID_STATION_ID;
-	m_stationName = tr("Unknown");
-	m_stationLatitude = 0;
-	m_stationLongitude = 0;
-	m_prm300Ip = "127.0.0.1";
-	m_adcIp = "127.0.0.1";
-	m_adcPort = 0;
 }
 
 Station::~Station()
@@ -51,6 +54,31 @@ void Station::setAdcPort(const quint16 port)
 	m_adcPort = port;
 }
 
+void Station::setSelectedArea(const SpectrumSelection& selection)
+{
+	/// To HZ
+	double x1 = selection.start.x() / 1000;
+	double x2 = selection.end.x() / 1000;
+
+	double dx = qAbs(x1 - x2);
+	double center = (x1 + x2)/ 2;
+
+	m_dbManager->updatePropertyValue( getName(), DB_SELECTED_PROPERTY, QString::number(dx, 'f', 3));
+	m_dbManager->updatePropertyValue( getName(), DB_CENTER_PROPERTY, QString::number(center, 'f', 3));
+	m_dbManager->updatePropertyValue( getName(), DB_START_PROPERTY, QString::number(x1, 'f', 3));
+	m_dbManager->updatePropertyValue( getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
+}
+
+void Station::recognize()
+{
+	float bandwidth = getBandwidth();
+	float shift = getShift();
+
+	m_rpcFlakonClient->sendBandwidth( this, bandwidth );
+	m_rpcFlakonClient->sendShift( this, shift );
+	m_rpcFlakonClient->recognize( this, 104 );
+}
+
 int Station::getId() const
 {
 	return m_stationId;
@@ -84,4 +112,30 @@ QString Station::getAdcIp() const
 quint16 Station::getAdcPort() const
 {
 	return m_adcPort;
+}
+
+float Station::getBandwidth() const
+{
+	float bandwidth = 0;
+
+	// try to get correct value from DB
+	QVariant value = m_dbManager->getPropertyValue( getName(), DB_SELECTED_PROPERTY );
+	if( value.canConvert( QVariant::Double ) ) {
+		bandwidth = value.toFloat();
+	}
+
+	return bandwidth;
+}
+
+float Station::getShift() const
+{
+	float shift = 0;
+
+	// try to get correct value from DB
+	QVariant value = m_dbManager->getPropertyValue( getName(), DB_CENTER_PROPERTY );
+	if( value.canConvert( QVariant::Double ) ) {
+		shift = value.toFloat();
+	}
+
+	return shift;
 }

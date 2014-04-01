@@ -24,7 +24,7 @@ bool ARM_R_Application::notify(QObject* receiver, QEvent* event)
 
   } catch (...)
   {
-	info("Terminated by fatal error!");
+	log_info("Terminated by fatal error!");
   }
   return done;
 }

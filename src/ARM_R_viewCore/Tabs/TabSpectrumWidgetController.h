@@ -8,18 +8,23 @@
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ITabWidget.h"
-#include "TabSpectrumWidget.h"
-#include "SettingsTree/TreeWidgetDelegate.h"
 
-#include "Db/DbManager.h"
+#include "TabSpectrumWidget.h"
+
+#include "SettingsTree/TreeWidgetDelegate.h"
 #include "SettingsTree/TreeModel.h"
 
 #include "SpectrumWidgetDataSource.h"
 #include "Correlations/CorrelationWidgetDataSource.h"
+
+#include "Db/DbManager.h"
 #include "DBStation/DBStationController.h"
 
-class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>, public ITabWidget, public ITabSpectrum,
-		public IDbChangedListener
+#include "Rpc/RpcPrmClient.h"
+#include "Rpc/RpcFlakonClient.h"
+
+class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>,
+		public ITabWidget, public ITabSpectrum, public IDbChangedListener, public IRpcListener
 {
 	Q_OBJECT
 
@@ -36,21 +41,26 @@ private:
 
 	TreeModel*          m_treeModel;
 	TreeWidgetDelegate* m_treeDelegate;
-	RPCClient*          m_rpcClient;
+
+	RpcPrmClient*		m_rpcPrmClient;
+	RpcFlakonClient*	m_rpcFlakonClient;
 
 	QLabel*             m_indicatorLabel;
 
 	double              m_threshold;
-	QString m_rpcHostAddress;
-	quint16 m_rpcHostPort;
+
+	QString m_rpcHost;
+	quint16 m_rpcPort;
 
 	/// connection status
 	QTimer	m_timerStatus;
 
-    DBStationController* m_dbStationController;
+	DBStationController* m_dbStationController;
 
 public:
-	explicit TabSpectrumWidgetController(IStation*, ICorrelationControllersContainer*, ITabManager*, QObject *parent = 0);
+	explicit TabSpectrumWidgetController(
+			IStation*, ICorrelationControllersContainer*, ITabManager*, TabSpectrumWidget*,
+			const QString rpcHost, const quint16 rpcPort, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
 	void appendView(TabSpectrumWidget* view);
@@ -67,8 +77,9 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager*);
-    virtual void setDbStationController(DBStationController* controller);
+	virtual void setDbStationController(DBStationController* controller);
 	virtual void setStationNamesList(const QStringList &stationsList);
+	virtual void setRpcFlakonClient(RpcFlakonClient *client);
 
 	virtual void setIndicator(int state);
 
@@ -80,8 +91,11 @@ public:
 
 	virtual void sendCommand(TypeCommand type, IMessage *msg);
 
+	virtual void enableCorrelation(bool enable = true);
+
 	virtual void setThreshold(double y);
 	virtual void checkStatus();
+	virtual void recognize();
 	virtual void setPanorama(bool state);
 	virtual double getCurrentFrequency();
 
@@ -89,9 +103,11 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
+	// interface IRpcReceiver
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
 private:
 	void init();
-	void readSettings();
 
 	void createRPC();
 	void createView();

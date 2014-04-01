@@ -39,7 +39,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 
 	foreach(QString key, mapInfo.keys())
 	{
-		debug(QString(key));
+		log_debug(QString(key));
 		m_tcpManager->addTcpDevice(key, mapInfo.value(key));
 	}
 }

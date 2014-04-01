@@ -23,7 +23,7 @@
 
 typedef	QByteArray	rpc_send_atlant_data;
 
-class RPCAtlant : public RpcClientBase
+class RpcAtlantClient : public RpcClientBase
 {
 	Q_OBJECT
 private:
@@ -32,8 +32,8 @@ private:
 	ITabAtlant*         m_parentTab;
 
 public:
-	RPCAtlant(int id, ITabAtlant* parent_tab, QObject*  = 0);
-	~RPCAtlant();
+	RpcAtlantClient(int id, ITabAtlant* parent_tab, QObject*  = 0);
+	~RpcAtlantClient();
 
 	bool start(quint16 port, QHostAddress address);
 	void set_command(IMessage* msg);
@@ -43,7 +43,6 @@ private:
 	void sendFreq(QVariant data);
 
 private slots:
-	void slotRCPConnetion();
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
 	void slotSetCommand(IMessage* msg);
 
@@ -59,7 +58,6 @@ signals:
 	void signalFinishRPC();
 
 	///RPC signals
-	void signalSetClientId(int id);
 	void signalSetFreq(QByteArray data);
 	void signalReconnection();
 };

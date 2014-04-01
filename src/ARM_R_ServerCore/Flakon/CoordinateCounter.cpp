@@ -8,14 +8,14 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 
-    qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
-    qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
-    qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
+	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
+	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
+	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
 
 
-    initSolver();
+	initSolver();
 	m_likeADeviceName = deviceName;
-	debug(QString("Created %1").arg(m_likeADeviceName));
+	log_debug(QString("Created %1").arg(m_likeADeviceName));
 }
 
 CoordinateCounter::~CoordinateCounter()
@@ -58,7 +58,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
 		m_map_vec_corr.clear();
 
-        if (aDR.size() == 5) {
+		if (aDR.size() == 5) {
 			// form data and calculate coordinates
 			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
 			m_aData.time_ = QTime::currentTime();	//Time
@@ -152,30 +152,30 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const OneDataFromRadioLocation &aData)
 {
-    QByteArray ba;
-    QDataStream ds(&ba, QIODevice::ReadWrite);
+	QByteArray ba;
+	QDataStream ds(&ba, QIODevice::ReadWrite);
 
-    QVector<QPointF> vec;
-    vec.append(aData.coordLatLon);
-    ds << aData.timeHMSMs;
-    ds << 1/*aData.StateMassive_.at(aLastItem)*/;
-    ds << aData.latLonStdDev;
-    ds << vec;
-    ds << 0;
-    ds << 100;
-    ds << 1;
+	QVector<QPointF> vec;
+	vec.append(aData.coordLatLon);
+	ds << aData.timeHMSMs;
+	ds << 1/*aData.StateMassive_.at(aLastItem)*/;
+	ds << aData.latLonStdDev;
+	ds << vec;
+	ds << 0;
+	ds << 100;
+	ds << 1;
 
-    MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
 
-    foreach (ITcpListener* receiver, m_receiversList) {
-        receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
-    }
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+	}
 
 
 //    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA_AUTO, ba));
 //    _subscriber->data_ready(FLAKON_BPLA_AUTO, msg);
 
-    m_logger->warn("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	log_warning("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 }
 
@@ -183,7 +183,7 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const OneDataFro
 void CoordinateCounter::setSolverDataSize(int aSize)
 {
 	if ((aSize>10) && (aSize<2000)) {
-        m_solver->SetOutDataLength(aSize);
+		m_solver->SetOutDataLength(aSize);
 	}
 }
 
@@ -197,16 +197,16 @@ void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 void CoordinateCounter::initSolver()
 {
 	//Solver
-    m_solver = new Solver();
+	m_solver = new Solver();
 
 	//incoming data size
-    setSolverDataSize(100);
+	setSolverDataSize(100);
 
 	//data count for motion detection
 //	setSolverAnalyzeSize(60);
 
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
-    connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
+	connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
 
 }

@@ -15,7 +15,7 @@ class TcpServerController : public BaseTcpServerController
 {
 public:
 	explicit TcpServerController(QObject *parent = 0);
-	explicit TcpServerController(const QString& tcpServerName = BASE_TCP_SERVER, QObject *parent = 0);
+	explicit TcpServerController(const QString& tcpServerName, QObject *parent = 0);
 	virtual ~TcpServerController();
 
 	// ITcpServerController interface

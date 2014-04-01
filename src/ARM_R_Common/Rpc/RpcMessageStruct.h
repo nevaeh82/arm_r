@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QByteArray>
+#include <QDataStream>
 
 typedef struct RpcMessageStruct
 {

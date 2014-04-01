@@ -7,30 +7,31 @@
 #include "Prm300ControlWidget.h"
 #include "Interfaces/IController.h"
 #include "ServiceHandler/ServiceHandler.h"
-#include "Tabs/RPC/RPCClient.h"
+#include "Tabs/RPC/RpcPrmClient.h"
 
-class Prm300ControlWidgetController : public QObject, public IController<Prm300ControlWidget>, public IRpcListener
+class Prm300ControlWidgetController :
+		public QObject, public IController<Prm300ControlWidget>, public IRpcListener
 {
 	Q_OBJECT
 
 private:
 	Prm300ControlWidget* m_view;
 
-	RPCClient* m_rpcClient;
+	RpcPrmClient* m_rpcPrmClient;
 
 	IDbManager* m_dbManager;
 
 	QString m_stationName;
 
 public:
-    explicit Prm300ControlWidgetController(const QString name, QObject *parent = 0);
+	explicit Prm300ControlWidgetController(const QString name, QObject *parent = 0);
 	virtual ~Prm300ControlWidgetController();
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
 	void appendView(Prm300ControlWidget *view);
 
-	void setRpcClient(RPCClient* rpcClient);
+	void setRpcPrmClient(RpcPrmClient* client);
 
 	virtual void setDbManager(IDbManager*);
 

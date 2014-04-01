@@ -4,14 +4,10 @@
 
 AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 	QWidget(parent),
-	_id(6),
+	m_id(6),
 	ui(new Ui::AtlantTabWidget)
 {
 	ui->setupUi(this);
-
-	m_station = new Station(this);
-	m_station->setId(_id);
-	m_station->setName(tr("Atlant"));
 
 	connect(ui->sendPB, SIGNAL(clicked()), this, SLOT(_slot_send()));
 	connect(this, SIGNAL(signalAddLog(QString)), ui->logsTE, SLOT(append(QString)));
@@ -21,8 +17,8 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 
 AtlantTabWidget::~AtlantTabWidget()
 {
-	if(_rpc_client != NULL) {
-		delete _rpc_client;
+	if(m_rpcClient != NULL) {
+		delete m_rpcClient;
 	}
 }
 
@@ -79,8 +75,8 @@ int AtlantTabWidget::createRPC()
 	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
 	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
 
-	_rpc_client = new RPCAtlant(m_station->getId(), this, this);
-	_rpc_client->start(portRpc, QHostAddress(ipRpc));
+	m_rpcClient = new RpcAtlantClient( m_id, this, this );
+	m_rpcClient->start(portRpc, QHostAddress(ipRpc));
 	/*QThread *thread_rpc_client = new QThread;
 
 	connect(thread_rpc_client, SIGNAL(started()), _rpc_client, SLOT(slotInit()));
@@ -128,6 +124,6 @@ void AtlantTabWidget::_slot_send()
 	rpc_send_atlant_data ba1(*ba);
 
 	CommandMessage* msg = new CommandMessage(COMMAND_ATLANT_SET_FREQ, QVariant::fromValue(ba1));
-	_rpc_client->set_command(msg);
+	m_rpcClient->set_command(msg);
 }
 

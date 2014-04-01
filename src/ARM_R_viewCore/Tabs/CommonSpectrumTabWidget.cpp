@@ -70,7 +70,7 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersCon
 
 void CommonSpectrumTabWidget::activate()
 {
-	debug("Activate common tab");
+	log_debug("Activate common tab");
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
@@ -82,7 +82,7 @@ void CommonSpectrumTabWidget::activate()
 
 void CommonSpectrumTabWidget::deactivate()
 {
-	debug("Deactivate common tab");
+	log_debug("Deactivate common tab");
 	ui->correlationsGroupWidget->clearWidgetContainer();
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {

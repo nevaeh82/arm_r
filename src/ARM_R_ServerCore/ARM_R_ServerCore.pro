@@ -46,26 +46,27 @@ HEADERS += \
 	Flakon/Correction/ZDR.h \
 	Flakon/Correction/ZCorrector.h \
 	Flakon/Correction/ZCoord.h \
+	TCP/TcpDeviceController.h \
+	TCP/TcpSettingsManager.h \
+	TCP/Interfaces/ITcpSettingsManager.h \
+	TCP/Interfaces/ITcpManager.h \
 	TCP/Interfaces/ITcpClient.h \
 	TCP/Interfaces/ITcpDeviceCoder.h \
 	TCP/Interfaces/ITcpDeviceController.h \
 	TCP/Interfaces/ITcpReceiver.h \
+	TCP/Interfaces/ITcpListener.h \
 	TCP/TcpFlakonController.h \
 	TCP/TcpFlakonCoder.h \
-	TCP/Interfaces/ITcpManager.h \
 	TCP/TcpManager.h \
 	TCP/TcpPRM300Controller.h \
 	TCP/TcpPRM300Coder.h \
 	TCP/TcpAtlantController.h \
 	TCP/TcpAtlantCoder.h \
 	TCP/TcpDefines.h \
-	TCP/Interfaces/ITcpListener.h \
 	TCP/Server/TcpServerCoder.h \
 	TCP/Server/TcpServerController.h \
 	Flakon/CoordinateCounter.h \
 	Flakon/Interfaces/ICoordinateCounter.h \
-	TCP/TcpSettingsManager.h \
-	TCP/Interfaces/ITcpSettingsManager.h \
 	MessageSP.h \
 	RPC/RPCStructs.h \
-	RPC/RPCBaseItem.h
+	RPC/RPCBaseItem.h \

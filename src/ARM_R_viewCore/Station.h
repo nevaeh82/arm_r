@@ -5,6 +5,10 @@
 #include <QString>
 
 #include "Interfaces/IStation.h"
+#include "Interfaces/IDbManager.h"
+
+#include "Tabs/Rpc/RpcPrmClient.h"
+#include "Tabs/Rpc/RpcFlakonClient.h"
 
 #define INVALID_STATION_ID		-1
 
@@ -23,17 +27,25 @@ private:
 	QString m_adcIp;
 	quint16 m_adcPort;
 
+	IDbManager *m_dbManager;
+
+	RpcPrmClient *m_rpcPrmClient;
+	RpcFlakonClient *m_rpcFlakonClient;
+
 public:
-	Station(QObject* parent = NULL);
+	Station(IDbManager *dbManager, QObject* parent = NULL);
 	virtual ~Station();
 
-	int  getId() const;
+	int getId() const;
 	QString getName() const;
 	double getLatitude() const;
 	double getLongitude() const;
 	QString getPrm300Ip() const;
 	QString getAdcIp() const;
 	quint16 getAdcPort() const;
+
+	float getBandwidth() const;
+	float getShift() const;
 
 	void setId(int id);
 	void setName(const QString& name);
@@ -42,6 +54,10 @@ public:
 	void setPrm300Ip(const QString& ip);
 	void setAdcIp(const QString& ip);
 	void setAdcPort(const quint16 port);
+
+	void setSelectedArea(const SpectrumSelection& selection);
+
+	void recognize();
 };
 
 #endif // STATION_H

@@ -24,7 +24,7 @@ void CorrelationGroupWidget::insertCorrelationWidget(ICorrelationWidget *widget)
 	m_widgetList.append(widget);
 
 	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget->getWidget());
-	debug(QString::number(ui->correlationWidgetsContainer->count()));
+	log_debug(QString::number(ui->correlationWidgetsContainer->count()));
 }
 
 void CorrelationGroupWidget::clearWidgetContainer()
@@ -35,5 +35,5 @@ void CorrelationGroupWidget::clearWidgetContainer()
 	}
 
 	m_widgetList.clear();
-	debug(QString::number(ui->correlationWidgetsContainer->count()));
+	log_debug(QString::number(ui->correlationWidgetsContainer->count()));
 }
