@@ -116,7 +116,8 @@ HEADERS += \
     DBStation/ListsDialog.h \
     DBStation/ListsDialogController.h \
     Prm300ControlWidget.h \
-    Prm300ControlWidgetController.h
+    Prm300ControlWidgetController.h \
+    DBStation/DbListStructs.h
 
 FORMS += \
     ControlPanel.ui \

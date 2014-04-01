@@ -325,3 +325,43 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 	return false;
 }
 
+void DBStationController::getDataByCategory(const QString& category, QList<FrequencyAndBandwidth> &frequencyRecords)
+{
+	if(!m_db.isOpen())
+	{
+		return;
+	}
+
+	QSqlQuery query(m_db);
+	bool succeeded = query.prepare("SELECT s.frequency, s.bandwidth FROM stationData AS s " \
+					"INNER JOIN category AS cat ON s.categoryID=cat.id " \
+					"WHERE cat.name=:objectName");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return;
+	}
+
+	query.bindValue(":objectName", category);
+
+
+	succeeded = query.exec();
+	if (!succeeded)
+	{
+		qDebug() << "SQL is wrong!";
+		return;
+	}
+
+	while(query.next())
+	{
+		qDebug() << 0 << query.value(0).toDouble();
+		qDebug() << 1 << query.value(1).toDouble();
+
+		FrequencyAndBandwidth data;
+		data.frequency = query.value(0).toDouble();
+		data.bandwidth = query.value(1).toDouble();
+
+		frequencyRecords.append(data);
+	}
+}
+

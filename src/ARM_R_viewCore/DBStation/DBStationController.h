@@ -14,6 +14,7 @@
 #include "IDBStation.h"
 #include "DBConnectionParameters.h"
 #include "DBFillTables.h"
+#include "DbListStructs.h"
 
 #define INVALID_INDEX 0
 
@@ -36,6 +37,7 @@ public:
 	virtual int getStationID(const QString& name);
 //	virtual QString getStationIP(const QString& name);
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
+	virtual void getDataByCategory(const QString& category, QList<FrequencyAndBandwidth>& frequencyRecords);
 
 private:
 	QSqlDatabase m_db;

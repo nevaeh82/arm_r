@@ -77,8 +77,8 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	}
 
 //	controller->init();
-	controller->createTcpDeviceCoder();
 	controller->createTcpClient();
+	controller->createTcpDeviceCoder();
 	controller->connectToHost();
 
 	debug(QString("Added device connection for %1 with %2").arg(deviceName).arg(type));
@@ -194,12 +194,12 @@ QString TcpManager::getNameFromArgument(const QVariant& argument)
 
 QString TcpManager::getAtlantName()
 {
-	return QString("Àòëàíò");
+	return QString("ÐÑ‚Ð»Ð°Ð½Ñ‚");
 }
 
 QString TcpManager::getFlakonName()
 {
-	return QString("Ôëàêîí");
+	return QString("Ð¤Ð»Ð°ÐºÐ¾Ð½");
 }
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)
@@ -214,7 +214,7 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		QString station;
 		dataStream1 >> station;
 
-		if(station == "Àâòî")
+		if(station == "ÐÐ²Ñ‚Ð¾")
 		{
 			int id = 6;
 			QByteArray ba1;
@@ -357,12 +357,12 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		}
 		bool connectionState = controller->isConnected();
 		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
-	}else if (method == RPC_SLOT_REQUEST_STATUS) {
-		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
-		if (controller == NULL) {
-			return;
-		}
-		bool connectionState = controller->isConnected();
-		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
+//	}else if (method == RPC_SLOT_REQUEST_STATUS) {
+//		BaseTcpDeviceController* controller = m_controllersMap.value(getNameFromArgument(argument.toByteArray()), NULL);
+//		if (controller == NULL) {
+//			return;
+//		}
+//		bool connectionState = controller->isConnected();
+//		info(QString("Connection state for %1 = %2").arg(getNameFromArgument(argument.toByteArray())).arg(connectionState));
 	}
 }

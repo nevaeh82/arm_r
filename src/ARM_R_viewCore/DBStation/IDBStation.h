@@ -5,6 +5,7 @@
 #include <QSqlDatabase>
 #include "DBConnectionParameters.h"
 #include "DBFillTables.h"
+#include "DbListStructs.h"
 
 
 class IDBStation
@@ -22,7 +23,7 @@ public:
 	virtual int getStationID(const QString& name)						= 0;
 //	virtual QString getStationIP(const QString& name);
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)	= 0;
-
+	virtual void getDataByCategory(const QString& category, QList<FrequencyAndBandwidth>& frequencyRecords) = 0;
 };
 
 #endif // IDBSTATION_H
