@@ -1,6 +1,11 @@
 #include "PServer.h"
 
-PServer::PServer(int nPort, QObject* parent) : QObject(parent)
+PServer::PServer(int nPort, QObject* parent) 
+	: QObject(parent)
+	, tcpServer(0)
+	, server_status(0)
+	, blockSize(0)
+	, newData(false)
 {
     _id = -1;
     _type = 1;
@@ -185,9 +190,11 @@ void PServer::_slotGetData(rpc_flakon_msg msg_ptr)
 
             if ((clientSocket->bytesToWrite())>(100*1024*1024))
             {
-                SClients.erase(i);
+				QMap<int,QTcpSocket *>::iterator temp = i;
+				++i;
+				SClients.erase(temp);
+				continue;
             }
-
             ++i;
         }
     }

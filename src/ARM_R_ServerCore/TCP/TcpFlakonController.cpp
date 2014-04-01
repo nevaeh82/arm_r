@@ -12,7 +12,7 @@ TcpFlakonController::TcpFlakonController(QObject* parent) :
 TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* parent) :
 	BaseTcpDeviceController(tcpDeviceName, parent)
 {
-	bool err = init();
+	init();
 	connect(this, SIGNAL(createTcpFlakonCoderInternalSignal()), this, SLOT(createTcpFlakonCoderInternalSlot()));
 }
 

@@ -29,10 +29,10 @@ unsigned char NovomarMsg::GetCRC()
 
 unsigned char NovomarMsg::TstCRC()
 {
-    int i;
-    unsigned char ccc = 0;
     if(Size() <= 12)
     {
+		int i;
+		unsigned char ccc = 0;
         for(i = 0; i < Size() + 2; i++)
         {
             ccc += body[i];
@@ -44,10 +44,9 @@ unsigned char NovomarMsg::TstCRC()
 
 int NovomarMsg::ChkCRC()
 {
-    unsigned char cc, rr;
+    unsigned char rr;
     int idx;
     idx = body[1] + 2;
-    cc = body[idx]; //GetCRC();
     rr = TstCRC();
 
     if( body[idx] == rr )
@@ -62,10 +61,10 @@ int NovomarMsg::ChkCRC()
 
 unsigned char NovomarMsg::CalcCRC()
 {
-    int i;
-    unsigned char c = 0;
     if(Size() <= 12)
     {
+		int i;
+		unsigned char c = 0;
         for(i = 0; i < Size() + 2; i++)
         {
             c += body[i];

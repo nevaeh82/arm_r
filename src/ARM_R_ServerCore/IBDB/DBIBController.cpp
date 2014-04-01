@@ -226,7 +226,7 @@ bool DBIBController::deleteAllStations()
 
     qDebug() << "map count = " << _map_stations.count();
     QMap<int, QString>::iterator it;
-    for(it = _map_stations.begin(); it != _map_stations.end(); it++)
+    for(it = _map_stations.begin(); it != _map_stations.end(); ++it)
     {
         qDebug() << it.key();
         res = (ProcAddDeleteDevice)(it.key());
@@ -286,7 +286,7 @@ void DBIBController::_showDllError(nodb_result res)
     QString ss;
     ss = QString::fromStdWString(error);
     qDebug() << ss;
-    bool res2 = _disconnect_from_db();
+    _disconnect_from_db();
 
     return;
 }
@@ -308,7 +308,6 @@ bool  DBIBController::_slot_insert_station(QString name, QString ip)
     memset(device, 0, sizeof(t_nodb_device));
 
 //    nodb_int *id = new nodb_int;
-    nodb_int id = -8;
 //    device->id = 1;
     wchar_t str[] = L"127.0.0.1";
     memcpy(device->mission, str, device->COMMENTS_LEN);
@@ -351,7 +350,6 @@ void  DBIBController::_waitEmptyQueue()
         while (Inserted != Loaded+errors) {
             memset(&ds, 0, sizeof(t_nodb_delivery_system));	//очищаем структуру
             //получаем статистику системы доставки
-            int res = (ProcAddGetStatistics) (&ds);
 //            Check(res == NODB_OK, "Ошибка при получении статистики системы доставки");
             Inserted = ds.Inserted;
             Loaded = ds.Loaded;

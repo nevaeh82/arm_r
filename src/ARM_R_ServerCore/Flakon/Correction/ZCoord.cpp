@@ -88,7 +88,7 @@ void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
 void ZCoord::convertGeogrToGeocentric(QPointF aCoordsOfPoint, float aHeight, float &lX, float &lY, float &lZ)
 {
     float ERadius=6366197.724;
-    float pi=3.14159265359;
+	float pi=M_PI;
     float d = cos(aCoordsOfPoint.x()*pi/180);
     float RzHeight = ERadius + aHeight;
     lX = RzHeight * d * cos(aCoordsOfPoint.y()*pi/180);
@@ -281,7 +281,7 @@ void ZCoord::initSolver()
     connect(mSolver, SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(getDataFromSolver(const DataFromRadioLocation&)));
 }
 
-double ZCoord::distanceAB(QPointF aCoordA, double aHgtA, QPointF aCoordB, double aHgtB)
+double ZCoord::distanceAB(const QPointF& aCoordA, double aHgtA, const QPointF& aCoordB, double aHgtB)
 {
     double aDistance;
     float aX_A, aY_A, aZ_A, aX_B, aY_B, aZ_B;

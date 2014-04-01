@@ -1,9 +1,12 @@
 #include "TCPClientPel.h"
 
 TCPClientPel::TCPClientPel(QString host, quint16 port)
-    : _should_stop(false),
-      _blockSize(0),
-      _isRead(false)
+	: _should_stop(false)
+	, _blockSize(0)
+	, _isRead(false)
+	, socket_(0)
+	, _income_data(0)
+	, _pos(0)
 {
     _host = host;
     _port = port;

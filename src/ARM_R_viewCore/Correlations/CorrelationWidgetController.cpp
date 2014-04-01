@@ -1,8 +1,13 @@
 #include "CorrelationWidgetController.h"
 #include "CorrelationWidget.h"
 
-CorrelationWidgetController::CorrelationWidgetController(QObject *parent) :
-	QObject(parent)
+CorrelationWidgetController::CorrelationWidgetController(QObject *parent) 
+	: QObject(parent)
+	, m_view(0)
+	, m_bandwidth(0)
+	, m_pointCount(0)
+	, m_isComplex(0)
+	, m_graphicsWidget(0)
 {
 }
 

@@ -172,10 +172,10 @@ QByteArray TcpPRM300Coder::decode(const MessageSP message)
 
 	QByteArray dataToSend;
 
-	unsigned short avalue;
 	int int_value = 0;
 	if (message->type() == TCP_PRM300_REQUEST_SET_FREQUENCY) {
 		QString name;
+		unsigned short avalue;
 		inputDataStream >> name;
 		inputDataStream >> avalue;
 		dataToSend = prmSetFrequency(avalue);

@@ -84,9 +84,7 @@ void CoordinateCounter::sendData(const MessageSP message)
 		//QDataStream dataStream(&messageData, QIODevice::ReadOnly);
 		//dataStream >> id >> track_length >> alt;
 
-		int id = packet.command().arguments().solverdata(0).id();
 		double alt = packet.command().arguments().solverdata(0).altitude();
-		int track_length = packet.command().arguments().solverdata(0).tracklength();
 
 		m_solver->SetHeighApriori(alt);
 		m_alt = alt;

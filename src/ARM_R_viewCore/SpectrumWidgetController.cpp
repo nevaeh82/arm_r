@@ -372,7 +372,7 @@ void SpectrumWidgetController::slotCMAddWhiteList()
     data.frequency = m_centerFreqSelTemp;
     data.bandwidth= m_bandwidhtTemp;
 
-    int index = m_dbStationController->addStationData(data);
+	m_dbStationController->addStationData(data);
 	emit signalAddSelToLists(1);
 }
 
@@ -387,7 +387,7 @@ void SpectrumWidgetController::slotCMAddBlackList()
     data.frequency = m_centerFreqSelTemp;
     data.bandwidth= m_bandwidhtTemp;
 
-    int index = m_dbStationController->addStationData(data);
+    m_dbStationController->addStationData(data);
 
 	emit signalAddSelToLists(2);
 }

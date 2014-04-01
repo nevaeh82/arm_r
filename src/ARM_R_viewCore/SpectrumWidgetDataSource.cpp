@@ -5,8 +5,10 @@
 #define TO_HZ				1000000
 #define BANDWIDTH_SINGLE	20000000
 
-SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidget, QObject *parent) :
-	BaseDataSource(parent)
+SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidget, QObject *parent)
+	: BaseDataSource(parent)
+	, m_pointCountWhole(0)
+	, m_needSetup(0)
 {
 	m_spectrumWidget = spectrumWidget;
 
@@ -29,13 +31,11 @@ SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
 Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-	bool isComplex = false;
-
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum)
 			return;
 
-		isComplex = true;
+		bool isComplex = true;
 
 		QByteArray vecFFTBA = data.toByteArray();
 
@@ -95,8 +95,9 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 {
 	m_pointCount = vecFFT.size();
+	QPointF vecFFT_0 = vecFFT.at(0);
 
-	qreal startx = vecFFT.at(0).x();
+	qreal startx = vecFFT_0.x();
 	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
 	double bandwidth = (endx - startx)*TO_KHZ;
 
@@ -107,8 +108,8 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 		m_needSetup = true;
 		if(m_spectrumWidget)
 		{
-			qDebug() << "ZERO FREQ = " << vecFFT.at(0).x();
-			m_spectrumWidget->setZeroFrequency((vecFFT.at(0).x())*TO_KHZ);
+			qDebug() << "ZERO FREQ = " << vecFFT_0.x();
+			m_spectrumWidget->setZeroFrequency((vecFFT_0.x())*TO_KHZ);
 		}
 	}
 

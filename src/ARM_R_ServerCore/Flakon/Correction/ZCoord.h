@@ -151,7 +151,7 @@ public slots:
     /*!
      � асстояние между 2мя точками (геогр. координаты)
      */
-    double distanceAB(QPointF aCoordA, double aHgtA, QPointF aCoordB, double aHgtB);
+	double distanceAB(const QPointF& aCoordA, double aHgtA, const QPointF& aCoordB, double aHgtB);
 
     /*!
         Достать название � ДС пункта по индексу

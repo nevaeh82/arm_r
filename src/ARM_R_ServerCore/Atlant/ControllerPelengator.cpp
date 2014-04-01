@@ -6,7 +6,8 @@ ControllerPelengator *ControllerPelengator::_instance;
 
 ControllerPelengator::ControllerPelengator(QString host, unsigned short port, QString name, IRouter* router) :
     _id_requestion(1),
-    _id_diap_cur(1)
+	_id_diap_cur(1),
+	_port(0)
 {
     _router = router;
     _subscriber = _router->get_subscriber();

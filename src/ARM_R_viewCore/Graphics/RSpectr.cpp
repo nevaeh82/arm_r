@@ -35,9 +35,9 @@ void RSpectr::ResetMax()
 /// write points from minimum (threshold) to buff
 int RSpectr::GetPoints(double freq_min, double freq_step, unsigned num, double *buff)
 {
-    unsigned long i, min_f, /*max_f,*/ temp;
     if(freq_min >= FREQ_MIN)
     {
+		unsigned long i, min_f, /*max_f,*/ temp;
         min_f = (unsigned long)freq_min/freq_step;
         if(min_f + num < FREQ_MAX)
         {
@@ -60,9 +60,9 @@ int RSpectr::GetPoints(double freq_min, double freq_step, unsigned num, double *
 /// must find maxs and mins (have to correct)
 int RSpectr::GetPointsMax(double freq_min, double freq_step, unsigned num, double *buff)
 {
-    unsigned long i, min_f, /*max_f,*/ temp;
     if(freq_min >= FREQ_MIN)
     {
+		unsigned long i, min_f, /*max_f,*/ temp;
         min_f = (unsigned long)freq_min/freq_step;
         if(min_f + num < FREQ_MAX)
         {
@@ -98,9 +98,9 @@ double RSpectr::GetPointMax(double freq)
 /// write points to internam array
 int RSpectr::SetPoints(double freq_min, double freq_step, unsigned num, double *buff)
 {
-    unsigned long i, min_f, /*max_f,*/ temp;
     if(freq_min >= FREQ_MIN)
     {
+		unsigned long i, min_f, /*max_f,*/ temp;
         min_f = (unsigned long)freq_min/freq_step;
         if(min_f + num < FREQ_MAX)
         {
@@ -150,8 +150,6 @@ void RSpectr::SetPoint(double freq, double point)
 /// test data (random)
 void RSpectr::CreateTestData()
 {
-    double temp;
-    temp = 0.0;
     for(int i=1; i<MAX_SPECTR_POINTS; i++)
     {
 //		if(i%2) data[i] = -50.0 - log((double)rand());

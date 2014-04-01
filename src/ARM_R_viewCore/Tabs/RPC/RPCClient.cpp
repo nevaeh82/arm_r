@@ -11,7 +11,8 @@ RPCClient::RPCClient(IStation *prop, IDbManager *db_manager,
 	m_parentTab = parent_tab;
 	m_station = prop;
 	m_dbManager = db_manager;
-
+	m_commandMsg = 0;
+	
 	m_spectrum = new float[1];
 	m_spectrumPeakHold = new float[1];
 	m_bandwidth = 0;
