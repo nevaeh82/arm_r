@@ -33,7 +33,7 @@ public:
 private:
 	MessageSP messageFromPreparedData();
 	MessageSP pointers(QVector<QPointF> vec);
-	MessageSP correlation(quint32 point1, quint32 point2, QVector<QPointF> vec);
+	MessageSP correlation(quint32 point1, quint32 point2, QVector<QPointF> points);
 	MessageSP detectedBandwidth(QVector<QPointF> vec);
 };
 

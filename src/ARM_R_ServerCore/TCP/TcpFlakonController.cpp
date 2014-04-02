@@ -129,12 +129,7 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 	QByteArray data = argument.toByteArray();
 
 	if (method == RPC_METHOD_SET_MAIN_STATION_CORRELATION) {
-		QDataStream stream( &data, QIODevice::ReadOnly );
-
-		QString station;
-		stream >> station;
-
-		requestStationCorellation(station);
+		requestStationCorellation(argument.toString());
 	}
 	else if (method == RPC_METHOD_SET_BANDWIDTH) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );

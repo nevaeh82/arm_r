@@ -36,7 +36,7 @@ public:
 	void sendCommand(int);
 
 private:
-	void setCorData(quint32 point1, quint32 point2, QByteArray &vecFFTBA, bool);
+	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool);
 };
 
 #endif // CORRELATIONWIDGETDATASOURCE_H

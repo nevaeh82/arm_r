@@ -48,10 +48,7 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 			return;
 		}
 
-
 		stream >> vecFFT;
-
-		log_debug( QString( "Result Points count: %1" ).arg( vecFFT.size() ) );
 		if (!vecFFT.size()) return;
 
 		dataProccess(vecFFT, isComplex);

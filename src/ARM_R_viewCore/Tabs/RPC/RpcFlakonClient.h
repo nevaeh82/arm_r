@@ -22,7 +22,7 @@ protected slots:
 	void registerRoute();
 	void pointsReceived(QByteArray data);
 	void bandwidthReceived(QByteArray data);
-	void correlationReceived(uint point1, uint point2, QByteArray points);
+	void correlationReceived(QByteArray data);
 };
 
 #endif // RPCFLAKONCLIENT_H

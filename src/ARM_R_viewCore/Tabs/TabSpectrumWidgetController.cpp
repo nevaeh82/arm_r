@@ -329,6 +329,22 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 		return;
 	}
 
+	if( DB_LEADING_OP_PROPERTY == property.name ) {
+		if (m_rpcFlakonClient == NULL) return;
+
+		log_debug( QString("Property changed: ") + DB_LEADING_OP_PROPERTY );
+
+		m_rpcFlakonClient->sendMainStationCorrelation( m_station, property.value.toString() );
+		return;
+	}
+
+	if( DB_AVERAGING_PROPERTY == property.name ) {
+		if (m_rpcFlakonClient == NULL) return;
+
+		m_rpcFlakonClient->sendAvarageSpectrum( m_station, property.value.toInt() );
+		return;
+	}
+
 	int commandCode = 0;
 	Property inProperty = property;
 	TypeCommand commandType = TypeUnknownCommand;
@@ -337,17 +353,12 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
 		commandCode = COMMAND_PRM_SET_FREQ;
 		commandType = TypeGraphicCommand;
-	} else if( DB_LEADING_OP_PROPERTY == inProperty.name ) {
-		if (m_rpcFlakonClient == NULL) return;
-		m_rpcFlakonClient->sendMainStationCorrelation( m_station, property.value.toString() );
-	} else if( DB_AVERAGING_PROPERTY == inProperty.name ) {
-		if (m_rpcFlakonClient == NULL) return;
-		m_rpcFlakonClient->sendAvarageSpectrum( m_station, property.value.toInt() );
-		return;
-	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+	}
+	else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
 		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
 		commandType = TypePanoramaCommand;
-	} else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
+	}
+	else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
 		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
 		commandType = TypePanoramaCommand;
 	}

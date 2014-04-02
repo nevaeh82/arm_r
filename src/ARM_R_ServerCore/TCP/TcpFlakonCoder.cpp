@@ -200,13 +200,13 @@ MessageSP TcpFlakonCoder::pointers(QVector<QPointF> vec)
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
 
-MessageSP TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> vec)
+MessageSP TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> points)
 {
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << point1 << point2 << vec;
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::WriteOnly);
+	stream << point1 << point2 << points;
 
-	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba));
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, data));
 }
 
 MessageSP TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)

@@ -12,7 +12,7 @@ RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(uint, uint, QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
 }
 
 void RpcFlakonClient::registerRoute()
@@ -64,19 +64,8 @@ void RpcFlakonClient::bandwidthReceived(QByteArray data)
 	}
 }
 
-void RpcFlakonClient::correlationReceived(uint point1, uint point2, QByteArray points)
+void RpcFlakonClient::correlationReceived(QByteArray data)
 {
-	QList<QVariant> list;
-	QVariant pointsVariant( points );
-	QVariant point1Variant( point1 );
-	QVariant point2Variant( point2 );
-
-	list.append( pointsVariant );
-	list.append( point1Variant );
-	list.append( point2Variant );
-
-	QVariant data( list );
-
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_CORRELATION, data );
 	}

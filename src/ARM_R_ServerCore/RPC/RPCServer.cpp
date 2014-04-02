@@ -89,11 +89,7 @@ void RpcServer::setMainStationCorrelation(quint64 client, int id, QString statio
 {
 	Q_UNUSED( id );
 
-	QByteArray byteArray;
-	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
-	dataStream << station;
-
-	dispatch( RPC_METHOD_SET_MAIN_STATION_CORRELATION, QVariant(byteArray), client );
+	dispatch( RPC_METHOD_SET_MAIN_STATION_CORRELATION, station, client );
 }
 
 void RpcServer::setBandwidth(quint64 client, int id, float bandwidth)
