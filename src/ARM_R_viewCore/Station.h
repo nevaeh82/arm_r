@@ -32,6 +32,10 @@ private:
 	RpcPrmClient *m_rpcPrmClient;
 	RpcFlakonClient *m_rpcFlakonClient;
 
+protected:
+	float getBandwidth() const;
+	float getShift() const;
+
 public:
 	Station(IDbManager *dbManager, QObject* parent = NULL);
 	virtual ~Station();
@@ -43,9 +47,6 @@ public:
 	QString getPrm300Ip() const;
 	QString getAdcIp() const;
 	quint16 getAdcPort() const;
-
-	float getBandwidth() const;
-	float getShift() const;
 
 	void setId(int id);
 	void setName(const QString& name);
