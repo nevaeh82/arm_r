@@ -1,7 +1,9 @@
+#include <TcpDevicesDefines.h>
+
 #include "RpcAtlantClient.h"
 
 RpcAtlantClient::RpcAtlantClient(int id, ITabAtlant* parent_tab, QObject *parent) :
-	RpcClientBase(parent)
+	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
 {
 	m_id = id;
 	m_parentTab = parent_tab;
@@ -43,6 +45,11 @@ void RpcAtlantClient::sendFreq(QVariant data)
 	emit signalSetFreq(ba);
 }
 
+void RpcAtlantClient::registerRoute()
+{
+	RpcRoutedClient::registerRoute( ATLANT_ROUTE_ID );
+}
+
 /// slot if have some error while connetiting
 void RpcAtlantClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 {
@@ -69,7 +76,8 @@ void RpcAtlantClient::slotErrorRPCConnection(QAbstractSocket::SocketError socket
 
 bool RpcAtlantClient::start(quint16 port, QHostAddress address)
 {
-	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
+	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
+	connect( m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 
 	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 

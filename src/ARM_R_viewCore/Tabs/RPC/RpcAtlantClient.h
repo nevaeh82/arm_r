@@ -6,24 +6,22 @@
 #include <QtNetwork/QHostAddress>
 #include <QxtRPCPeer>
 #include <QAbstractSocket>
-
 #include <QTextCodec>
 #include <QSettings>
 #include <QStringList>
-
 #include <QHostAddress>
 
-#include "IRPC.h"
+#include <Rpc/RpcDefines.h>
+#include <Rpc/RpcRoutedClient.h>
+
 #include "Common/IMessage.h"
 #include "Common/CommandMessage.h"
 #include "Tabs/ITabAtlant.h"
 
-#include "Rpc/RpcDefines.h"
-#include "Rpc/RpcClientBase.h"
 
 typedef	QByteArray	rpc_send_atlant_data;
 
-class RpcAtlantClient : public RpcClientBase
+class RpcAtlantClient : public RpcRoutedClient
 {
 	Q_OBJECT
 private:
@@ -43,6 +41,7 @@ private:
 	void sendFreq(QVariant data);
 
 private slots:
+	void registerRoute();
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
 	void slotSetCommand(IMessage* msg);
 

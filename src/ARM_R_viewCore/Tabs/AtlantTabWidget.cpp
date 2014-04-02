@@ -17,9 +17,6 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 
 AtlantTabWidget::~AtlantTabWidget()
 {
-	if(m_rpcClient != NULL) {
-		delete m_rpcClient;
-	}
 }
 
 void AtlantTabWidget::setLog(QByteArray data)
@@ -77,22 +74,6 @@ int AtlantTabWidget::createRPC()
 
 	m_rpcClient = new RpcAtlantClient( m_id, this, this );
 	m_rpcClient->start(portRpc, QHostAddress(ipRpc));
-	/*QThread *thread_rpc_client = new QThread;
-
-	connect(thread_rpc_client, SIGNAL(started()), _rpc_client, SLOT(slotInit()));
-	connect(thread_rpc_client, SIGNAL(started()), this, SLOT(_slotStart()));
-
-	connect(this, SIGNAL(signalStartRPC()), _rpc_client, SLOT(slotStart()));
-	connect(_rpc_client, SIGNAL(signalFinished()), thread_rpc_client, SLOT(quit()));
-	connect(thread_rpc_client, SIGNAL(finished()), thread_rpc_client, SLOT(deleteLater()));
-
-	connect(_rpc_client, SIGNAL(signalFinished()), _rpc_client, SLOT(deleteLater()));
-	connect(this, SIGNAL(signalStopRPC()), _rpc_client, SLOT(slotStop()));
-	connect(this, SIGNAL(signalFinishRPC()), _rpc_client, SLOT(slotFinish()));
-
-	_rpc_client->setParent(0);
-	_rpc_client->moveToThread(thread_rpc_client);
-	thread_rpc_client->start();*/
 
 	return 0;
 }
