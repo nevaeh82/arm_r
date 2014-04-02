@@ -14,17 +14,16 @@
 
 #include "Station.h"
 
-#include "TabSpectrumWidget.h"
-
 #include "Interfaces/IDBManager.h"
 #include "Interfaces/ITabManager.h"
 #include "Interfaces/IControlPanelListener.h"
 
+#include "Rpc/RpcFlakonClient.h"
+
 #include "TabSpectrumWidgetController.h"
+#include "TabSpectrumWidget.h"
 
-/// ATLANT
 #include "AtlantTabWidget.h"
-
 
 #include "DBStation/DBStationController.h"
 
@@ -42,9 +41,14 @@ private:
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;
 
+	QString m_rpcHost;
+	uint m_rpcPort;
+
+	RpcFlakonClient *m_rpcFlakonClient;
+
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
-    DBStationController* m_dbStationController;
+	DBStationController* m_dbStationController;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
@@ -53,7 +57,7 @@ public:
 	void start();
 	int createSubModules(const QString& settingsFile);
 	void setDbManager(IDbManager* dbManager);
-    void setDbStationController(DBStationController* controller);
+	void setDbStationController(DBStationController* controller);
 
 	virtual QString getStationName(const int id);
 	virtual void setActiveTab(const int id);
@@ -61,7 +65,8 @@ public:
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
 	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
 
-    QStringList createStationNamesList();
+	QStringList createStationNamesList();
+
 
 private:
 	int readSettings(const QString &settingsFile);

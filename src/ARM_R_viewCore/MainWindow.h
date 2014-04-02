@@ -3,12 +3,8 @@
 
 #include <QMainWindow>
 
-#include <PwLogger/PwLogger.h>
-
 #include "ControlPanel/ControlPanelWidget.h"
-
 #include "Tabs/TabManager.h"
-
 
 namespace Ui {
 class MainWindow;
@@ -28,9 +24,6 @@ public:
     
 private:
 	Ui::MainWindow*     ui;
-
-    /// logger
-	Pw::Logger::ILogger* m_logger;
 
 private:
 	void init();

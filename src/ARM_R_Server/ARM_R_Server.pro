@@ -13,11 +13,5 @@ SOURCES = main.cpp
 
 include(../../specs/project.pri)
 include(../ARM_R_ServerCore/reference.pri)
-include(../ARM_R_Common/reference.pri)
-include(../../specs/protobuf.pri)
-include($$SolutionDir/specs/CISCommonLib.pri )
-include(../../specs/qxt.pri)
-include(../../specs/Solver.pri)
-include(../../specs/logger.pri)
 
 applyReferences()

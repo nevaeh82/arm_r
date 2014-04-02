@@ -8,8 +8,8 @@
 
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
-    m_dbManager = NULL;
-    m_rpcClient = NULL;
+	m_dbManager = NULL;
+	m_rpcClient = NULL;
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
@@ -117,10 +117,10 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 	}
 }
 
-void SpectrumWidgetController::setRpcClient(RPCClient *rpcClient)
+void SpectrumWidgetController::setRpcPrmClient(RpcPrmClient *rpcClient)
 {
 	m_rpcClient = rpcClient;
-	m_prm300WidgetController->setRpcClient(m_rpcClient);
+	m_prm300WidgetController->setRpcPrmClient(m_rpcClient);
 	m_rpcClient->registerReceiver(m_prm300WidgetController);
 }
 
@@ -269,18 +269,18 @@ void SpectrumWidgetController::setPanorama(bool enabled)
 
 void SpectrumWidgetController::setSelection(double start, double end)
 {
-    m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+	m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
 }
 
 void SpectrumWidgetController::setDbManager(IDbManager *dbManager)
 {
-    m_dbManager = dbManager;
-    m_prm300WidgetController->setDbManager(m_dbManager);
+	m_dbManager = dbManager;
+	m_prm300WidgetController->setDbManager(m_dbManager);
 }
 
 void SpectrumWidgetController::setDbStationController(DBStationController *controller)
 {
-    m_dbStationController = controller;
+	m_dbStationController = controller;
 }
 
 void SpectrumWidgetController::init()
@@ -300,11 +300,11 @@ void SpectrumWidgetController::init()
 	m_graphicsContextMenu->addAction(new QAction(tr("Enable correlation"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Cleanup text fields"),this) );
 
-	connect(m_graphicsContextMenu->actions().at(0),SIGNAL(triggered()),SLOT(slotCMAddWhiteList()));
-	connect(m_graphicsContextMenu->actions().at(1),SIGNAL(triggered()),SLOT(slotCMAddBlackList()));
-	connect(m_graphicsContextMenu->actions().at(2),SIGNAL(triggered()),SLOT(slotRecognizeSignal()));
-	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(slotSSCorrelation()));
-	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(slotClearLabels()));
+	connect(m_graphicsContextMenu->actions().at(0),SIGNAL(triggered()),SLOT(addToWhiteList()));
+	connect(m_graphicsContextMenu->actions().at(1),SIGNAL(triggered()),SLOT(addToBlackList()));
+	connect(m_graphicsContextMenu->actions().at(2),SIGNAL(triggered()),SLOT(recognizeSignal()));
+	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(toggleCorrelation()));
+	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(clearLabels()));
 	connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
@@ -323,7 +323,7 @@ void SpectrumWidgetController::init()
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
 
-    m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
+	m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
 	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
 }
 
@@ -362,30 +362,30 @@ void SpectrumWidgetController::slotRequestData(bool state)
 }
 
 /// add selection to white list
-void SpectrumWidgetController::slotCMAddWhiteList()
+void SpectrumWidgetController::addToWhiteList()
 {
-    StationData data;
-    data.stationName = m_view->getSpectrumName();
-    data.port = 155;
-    data.category = "White";
-    data.signalType = "Unknown";
-    data.frequency = m_centerFreqSelTemp;
-    data.bandwidth= m_bandwidhtTemp;
+	StationData data;
+	data.stationName = m_view->getSpectrumName();
+	data.port = 155;
+	data.category = "White";
+	data.signalType = "Unknown";
+	data.frequency = m_centerFreqSelTemp;
+	data.bandwidth= m_bandwidhtTemp;
 
 	m_dbStationController->addStationData(data);
 	emit signalAddSelToLists(1);
 }
 
 /// add selection to black list
-void SpectrumWidgetController::slotCMAddBlackList()
+void SpectrumWidgetController::addToBlackList()
 {
-    StationData data;
-    data.stationName = m_view->getSpectrumName();
-    data.port = 155;
-    data.category = "Black";
-    data.signalType = "Unknown";
-    data.frequency = m_centerFreqSelTemp;
-    data.bandwidth= m_bandwidhtTemp;
+	StationData data;
+	data.stationName = m_view->getSpectrumName();
+	data.port = 155;
+	data.category = "Black";
+	data.signalType = "Unknown";
+	data.frequency = m_centerFreqSelTemp;
+	data.bandwidth= m_bandwidhtTemp;
 
     m_dbStationController->addStationData(data);
 
@@ -393,28 +393,25 @@ void SpectrumWidgetController::slotCMAddBlackList()
 }
 
 /// signal for flakon to recognize signal
-void SpectrumWidgetController::slotRecognizeSignal()
+void SpectrumWidgetController::recognizeSignal()
 {
-	/// TODO: recheck new Message to memory leak
-	m_centerFreqDefModulation = m_centerFreqSelTemp;
-	CommandMessage *msg = new CommandMessage(COMMAND_RECOGNIZESIGNAL, QVariant());
-	m_tab->sendCommand(TypeGraphicCommand,msg);
+	m_tab->recognize();
 }
 
 /// signal for flakon to recognize signal
-void SpectrumWidgetController::slotSSCorrelation()
+void SpectrumWidgetController::toggleCorrelation()
 {
 	/// TODO: recheck new Message to memory leak
 	m_enableCorrelation = !m_enableCorrelation;
-	CommandMessage *msg = new CommandMessage(COMMAND_KM, m_enableCorrelation);
-	m_tab->sendCommand(TypeGraphicCommand,msg);
+	m_tab->enableCorrelation( m_enableCorrelation );
+
 	if(m_enableCorrelation)
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	else
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
-void SpectrumWidgetController::slotClearLabels()
+void SpectrumWidgetController::clearLabels()
 {
 	m_graphicsWidget->ClearAllLabels();
 }
@@ -438,8 +435,8 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	x1 /= 1000;
 	x2 /= 1000;
 
-    m_centerFreqSelTemp = (x1 + x2)/2;
-    m_bandwidhtTemp = qAbs(x2-x1);
+	m_centerFreqSelTemp = (x1 + x2)/2;
+	m_bandwidhtTemp = qAbs(x2-x1);
 
 	SpectrumSelection selection;
 	selection.start = QPointF(x1, y1);

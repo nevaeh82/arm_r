@@ -18,7 +18,7 @@
 
 #include "Prm300ControlWidgetController.h"
 
-#include "Tabs/RPC/RPCClient.h"
+#include "Tabs/RPC/RpcPrmClient.h"
 
 #include "DBStation/DBStationController.h"
 
@@ -48,7 +48,7 @@ private:
 	QMenu*	m_graphicsContextMenu;
 
 	double	m_centerFreqSelTemp;
-    double  m_bandwidhtTemp;
+	double  m_bandwidhtTemp;
 	double	m_centerFreqDefModulation;
 
 	bool	m_peakVisible;
@@ -60,14 +60,14 @@ private:
 
 	Prm300ControlWidgetController* m_prm300WidgetController;
 
-	RPCClient* m_rpcClient;
+	RpcPrmClient* m_rpcClient;
 
 	QTimer *m_clickDelay;
 	bool flagDoubleClick;
 
-    IDbManager* m_dbManager;
+	IDbManager* m_dbManager;
 
-    DBStationController* m_dbStationController;
+	DBStationController* m_dbStationController;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -93,15 +93,15 @@ public:
 
 	void setSelection(double start, double end);
 
-    virtual void setDbManager(IDbManager* dbManager);
-    virtual void setDbStationController(DBStationController* controller);
+	virtual void setDbManager(IDbManager* dbManager);
+	virtual void setDbStationController(DBStationController* controller);
 
 	void setup();
 	void setControlPrmState(bool state);
 
 	void onDataArrived(const QString& method, const QVariant& arg);
 
-	void setRpcClient(RPCClient* rpcClient);
+	void setRpcPrmClient(RpcPrmClient* rpcClient);
 
 private:
 	void init();
@@ -120,18 +120,18 @@ signals:
 	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
 
 public slots:
-	
+
 private slots:
 	void slotSetEnablePanorama(bool);
 	void slotAutoSearch(bool);
 	void slotSelectiontypeChanged(bool);
 	void slotRequestData(bool);
 
-	void slotCMAddWhiteList();
-	void slotCMAddBlackList();
-	void slotRecognizeSignal();
-	void slotSSCorrelation();
-	void slotClearLabels();
+	void addToWhiteList();
+	void addToBlackList();
+	void recognizeSignal();
+	void toggleCorrelation();
+	void clearLabels();
 
 	void slotSelectionCleared();
 	void slotSelectionFinished(double x1, double y1, double x2, double y2);

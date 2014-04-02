@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpAtlantCoder.h"
 
 TcpAtlantCoder::TcpAtlantCoder(QObject* parent) :
@@ -141,7 +143,7 @@ QByteArray TcpAtlantCoder::atlantSetFrequency(const QByteArray& data)
 	dataStream >> freq;
 	dataStream >> width;
 
-	debug(QString("%1 %2 %3").arg(QString::number(id)).arg(QString::number(freq)).arg(QString::number(width)));
+	log_debug(QString("%1 %2 %3").arg(QString::number(id)).arg(QString::number(freq)).arg(QString::number(width)));
 
 	EMS::EagleMessage e_msg;
 	QString type = Atlant_Direction_Finding_Request;
@@ -170,7 +172,7 @@ QByteArray TcpAtlantCoder::atlantSetFrequency(const QByteArray& data)
 
 	QByteArray dataToReturn;
 
-	debug(QString("message size %1").arg(message.size()));
+	log_debug(QString("message size %1").arg(message.size()));
 
 	unsigned int size = message.size();
 	dataToReturn.append(reinterpret_cast<char *>(&size), sizeof(size));

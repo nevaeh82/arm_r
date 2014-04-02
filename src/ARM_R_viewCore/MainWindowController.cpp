@@ -8,8 +8,6 @@ MainWindowController::MainWindowController(QObject *parent)
 	, m_dbManager(0)
 	, m_dbStationController(0)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindowController));
-
 	m_view = NULL;
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;

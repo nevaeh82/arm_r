@@ -12,49 +12,45 @@ TARGET = ARM_R_Common
 TEMPLATE = lib
 CONFIG += staticlib
 
-include(  ../../specs/project.pri )
-include(  ../../specs/qxt.pri )
-include(  ../../specs/logger.pri )
+include( ../../specs/project.pri )
+include( ../../specs/qxt.pri )
+include( ../../specs/CISCommonLib.pri )
 
 INCLUDEPATH += $$PWD
 
 SOURCES += \
-    ServiceHandler/ServiceHandler.cpp \
-    ServiceHandler/CommonCodes.cpp \
-    Rpc/RpcClientBase.cpp \
-    Rpc/RpcServerBase.cpp \
-    CRCs.cpp
+	ServiceHandler/ServiceHandler.cpp \
+	ServiceHandler/CommonCodes.cpp \
+	CRCs.cpp
 
 HEADERS += \
-    ServiceHandler/ServiceTerminateCause.h \
-    ServiceHandler/IServiceHandler.h \
-    ServiceHandler/ServiceHandler.h \
-    ServiceHandler/ProcessState.h \
-    ServiceHandler/CommonCodes.h \
-    ServiceHandler/ServiceTerminateCauseEnumsToString.h \
-    ServiceHandler/CommonCodesEnumsToString.h \
-    ServiceHandler/ProcessStateEnumsToString.h \
-    Rpc/RpcClientBase.h \
-    Rpc/RpcServerBase.h \
-    Interfaces/IController.h \
-    Interfaces/ITerminateRpcController.h \
-    Settings/BaseItem.h \
-    Settings/Object.h \
-    Settings/Property.h \
-    Settings/SettingsNode.h \
-    BaseSubject.h \
-    Interfaces/IRpcControllerBase.h \
-    Interfaces/IRpcListener.h \
-    Rpc/RpcDefines.h \  
-    TcpDevicesDefines.h \
-    Message.h \
-    Interfaces/IMessage.h \
-    CRCs.h \
-    SingletonTemplate.h \
-    SingletonTemplate.hpp \
-    CommonDefines.h \
-    Info/BaseSettings.h \
-    Info/FlakonSettings.h \
-    Info/AtlantSettings.h \
-    Info/Prm300Settings.h \
-    Rpc/RpcMessageStruct.h
+	ServiceHandler/ServiceTerminateCause.h \
+	ServiceHandler/IServiceHandler.h \
+	ServiceHandler/ServiceHandler.h \
+	ServiceHandler/ProcessState.h \
+	ServiceHandler/CommonCodes.h \
+	ServiceHandler/ServiceTerminateCauseEnumsToString.h \
+	ServiceHandler/CommonCodesEnumsToString.h \
+	ServiceHandler/ProcessStateEnumsToString.h \
+	Interfaces/IController.h \
+	Interfaces/ITerminateRpcController.h \
+	Settings/BaseItem.h \
+	Settings/Object.h \
+	Settings/Property.h \
+	Settings/SettingsNode.h \
+	BaseSubject.h \
+	Interfaces/IRpcControllerBase.h \
+	Interfaces/IRpcListener.h \
+	Rpc/RpcDefines.h \
+	TcpDevicesDefines.h \
+	Message.h \
+	Interfaces/IMessage.h \
+	CRCs.h \
+	SingletonTemplate.h \
+	SingletonTemplate.hpp \
+	CommonDefines.h \
+	Info/BaseSettings.h \
+	Info/FlakonSettings.h \
+	Info/AtlantSettings.h \
+	Info/Prm300Settings.h \
+	Rpc/RpcMessageStruct.h

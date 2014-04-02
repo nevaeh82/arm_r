@@ -9,7 +9,7 @@
 #include "IGraphicWidget.h"
 
 #include "Common/BaseDataSource.h"
-#include "Tabs/RPC/RPCClient.h"
+#include "Tabs/RPC/RpcPrmClient.h"
 
 class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 {

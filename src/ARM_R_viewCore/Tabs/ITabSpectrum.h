@@ -6,14 +6,9 @@
 #include <QVariant>
 #include <QLabel>
 
+#include "Interfaces/IStation.h"
 #include "Common/IMessage.h"
 #include "Defines.h"
-
-typedef struct SpectrumSelection
-{
-	QPointF start;
-	QPointF end;
-}SpectrumSelection;
 
 class ITabSpectrum
 {
@@ -28,8 +23,10 @@ public:
 	virtual void setShowControlPrm(bool state) = 0;
 	virtual void setDoubleClicked(int id, double, double) = 0;
 	virtual void setPanorama(bool state) = 0;
+	virtual void enableCorrelation(bool enable = true) = 0;
 
 	virtual void checkStatus() = 0;
+	virtual void recognize() = 0;
 
 	virtual double getCurrentFrequency() = 0;
 };

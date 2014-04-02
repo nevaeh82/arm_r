@@ -5,16 +5,18 @@
 #include "CommonSpectrumTabWidget.h"
 #include "TabSpectrumWidgetController.h"
 
-TabManager::TabManager(QTabWidget *tabWidget, QObject *parent):
-	QObject(parent)
-{
-	m_tabWidget = tabWidget;
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
+#define DEFAULT_RPC_PORT		24500
 
-	m_correlationControllers = NULL;
-	m_currentTabWidget = NULL;
-	m_dbManager = NULL;
-    m_dbStationController = NULL;
+TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
+	: QObject( parent )
+	, m_tabWidget( tabWidget )
+	, m_correlationControllers( NULL )
+	, m_currentTabWidget( NULL )
+	, m_dbManager( NULL )
+	, m_dbStationController( NULL )
+	, m_rpcFlakonClient( NULL )
+{
+	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 TabManager::~TabManager()
@@ -53,15 +55,23 @@ int TabManager::createSubModules(const QString& settingsFile)
 	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
+	m_rpcFlakonClient = new RpcFlakonClient(this);
+	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
+
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
-		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(station, m_correlationControllers, this, tabSpectrumWidget);
+		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(
+					station, m_correlationControllers, this, tabSpectrumWidget,
+					m_rpcHost, m_rpcPort, this);
+
 		tabController->setDbManager(m_dbManager);
-        tabController->setDbStationController(m_dbStationController);
+		tabController->setDbStationController(m_dbStationController);
 		tabController->setStationNamesList(stationNamesList);
-		m_dbManager->registerReceiver(tabController);
+		tabController->setRpcFlakonClient(m_rpcFlakonClient);
 		tabController->appendView(tabSpectrumWidget);
+
+		m_dbManager->registerReceiver(tabController);
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
@@ -89,12 +99,12 @@ int TabManager::createSubModules(const QString& settingsFile)
 
 void TabManager::setDbManager(IDbManager *dbManager)
 {
-    m_dbManager = dbManager;
+	m_dbManager = dbManager;
 }
 
 void TabManager::setDbStationController(DBStationController *controller)
 {
-    m_dbStationController = controller;
+	m_dbStationController = controller;
 }
 
 QString TabManager::getStationName(const int id)
@@ -129,32 +139,39 @@ void TabManager::changeTabSlot(int index)
 	m_currentTabWidget->activate();
 }
 
-/// read settings for generated submodules (tabs)
 int TabManager::readSettings(const QString& settingsFile)
 {
+	// read settings for RPC UI connections
+	QString rpcSettingsFile = QCoreApplication::applicationDirPath() + "/Tabs/RPC.ini";
+	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
+	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
+
+	m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
+	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+
+	// read settings to generate list of stations
 	m_stationsMap.clear();
-	
-	QSettings settings(settingsFile, QSettings::IniFormat);
-	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
-	QStringList childKeys = settings.childGroups();
-	foreach (const QString &childKey, childKeys)
-	{
-		settings.beginGroup(childKey);
+	QSettings stationSettings( settingsFile, QSettings::IniFormat );
+	stationSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-		Station *station = new Station(this);
+	QStringList childKeys = stationSettings.childGroups();
+	foreach( const QString &childKey, childKeys ) {
+		stationSettings.beginGroup(childKey);
 
-		station->setId(settings.value("Id", 0).toInt());
-		station->setName(settings.value("Name", "Unknown").toString());
-		station->setLatitude(settings.value("Latitude", 0).toDouble());
-		station->setLongitude(settings.value("Longitude", 0).toDouble());
-		station->setPrm300Ip(settings.value("IPprm300", "127.0.0.1").toString());
-		station->setAdcIp(settings.value("IPADC", "127.0.0.1").toString());
-		station->setAdcPort(settings.value("portADC", 1030).toInt());
+		Station *station = new Station(m_dbManager, this);
+
+		station->setId(stationSettings.value("Id", 0).toInt());
+		station->setName(stationSettings.value("Name", "Unknown").toString());
+		station->setLatitude(stationSettings.value("Latitude", 0).toDouble());
+		station->setLongitude(stationSettings.value("Longitude", 0).toDouble());
+		station->setPrm300Ip(stationSettings.value("IPprm300", "127.0.0.1").toString());
+		station->setAdcIp(stationSettings.value("IPADC", "127.0.0.1").toString());
+		station->setAdcPort(stationSettings.value("portADC", 1030).toInt());
 
 		m_stationsMap.insert(station->getId(), station);
 
-		settings.endGroup();
+		stationSettings.endGroup();
 	}
 
 	return m_stationsMap.count();

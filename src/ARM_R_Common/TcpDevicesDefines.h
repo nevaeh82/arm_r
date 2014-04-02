@@ -19,4 +19,7 @@ enum DeviceTypesEnum
 
 #define FLAKON_COORDINATE_COUNTER "flakonCoordinateCounter"
 
+#define FLAKON_ROUTE_ID		201
+#define ATLANT_ROUTE_ID		202
+
 #endif // TCPDEVICESDEFINES_H

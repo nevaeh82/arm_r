@@ -15,7 +15,7 @@ typedef struct StationData
 	QString signalType;
 }StationData;
 
-/// full info
+/// full log_info
 typedef struct StationDataFull
 {
 	StationData stationShortInfo;

@@ -11,8 +11,6 @@
 #include "SettingsTree/TreeModel.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
 
-#include <PwLogger/PwLogger.h>
-
 namespace Ui {
 class CommonSpectrumTabWidget;
 }
@@ -32,8 +30,7 @@ private:
 	TreeWidgetDelegate* m_treeDelegate;
 
 	IDbManager* m_dbManager;
-	Pw::Logger::ILogger* m_logger;
-
+	
 public:
 	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
 	~CommonSpectrumTabWidget();

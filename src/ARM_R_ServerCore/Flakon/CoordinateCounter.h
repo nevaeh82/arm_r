@@ -10,8 +10,6 @@
 #include <QTime>
 #include <QMetaType>
 
-#include <PwLogger/PwLogger.h>
-
 #include "Interfaces/ICoordinateCounter.h"
 #include "../TCP/Interfaces/ITcpListener.h"
 #include "BaseSubject.h"
@@ -32,8 +30,6 @@ class CoordinateCounter : public QObject, public ITcpListener, public BaseSubjec
 	Q_OBJECT
 
 private:
-	Pw::Logger::ILogger* m_logger;
-
 	QMap<int, QVector<QPointF> > m_map_vec_corr;
 	int m_main_point;
 	double m_corr_threshold;

@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QThread>
 
-#include <PwLogger/PwLogger.h>
-
 #include "RPC/RPCServer.h"
 #include "TCP/TcpManager.h"
 #include "TCP/TcpSettingsManager.h"
@@ -22,8 +20,7 @@ public:
 	virtual ~ARM_R_Srv();
 
 private:
-	static Pw::Logger::ILogger* m_logger;
-	RPCServer* m_rpcServer;
+	RpcServer* m_rpcServer;
 	BaseTcpServerController* m_tcpServer;
 	TcpManager* m_tcpManager;
 };

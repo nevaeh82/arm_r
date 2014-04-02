@@ -2,19 +2,19 @@
 #define RPCDEFINES_H
 
 #define RPC_SLOT_SET_CLIENT_ID          "rpc_slot_set_client_id"
-#define RPC_SLOT_SET_MAIN_STATION_COR   "rpc_slot_set_main_station_cor"
-#define RPC_SLOT_SET_BANDWIDTH          "rpc_slot_set_bandwidth"
-#define RPC_SLOT_SET_SHIFT              "rpc_slot_set_shift"
-#define RPC_SLOT_RECOGNIZE              "rpc_slot_recognize"
-#define RPC_SLOT_SS_CORRELATION         "rpc_slot_ss_correlation"
-#define RPC_SLOT_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
+#define RPC_METHOD_SET_MAIN_STATION_CORRELATION   "rpc_slot_set_main_station_cor"
+#define RPC_METHOD_SET_BANDWIDTH          "rpc_slot_set_bandwidth"
+#define RPC_METHOD_SET_SHIFT              "rpc_slot_set_shift"
+#define RPC_METHOD_RECOGNIZE              "rpc_slot_recognize"
+#define RPC_METHOD_SS_CORRELATION         "rpc_slot_ss_correlation"
+#define RPC_METHOD_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
 
 ///PRM300 from rpc client
-#define RPC_SLOT_PRM_SET_FREQ       "rpc_slot_prm_set_freq"
-#define RPC_SLOT_PRM_REQUEST_FREQ   "rpc_slot_prm_request_freq"
-#define RPC_SLOT_PRM_SET_ATT1       "rpc_slot_prm_set_att1"
-#define RPC_SLOT_PRM_SET_ATT2       "rpc_slot_prm_set_att2"
-#define RPC_SLOT_PRM_SET_FILTER     "rpc_slot_prm_set_filter"
+#define RPC_METHOD_PRM_SET_FREQUENCY       "rpc_slot_prm_set_freq"
+#define RPC_METHOD_PRM_REQUEST_FREQUENCY   "rpc_slot_prm_request_freq"
+#define RPC_METHOD_PRM_SET_ATT1            "rpc_slot_prm_set_att1"
+#define RPC_METHOD_PRM_SET_ATT2            "rpc_slot_prm_set_att2"
+#define RPC_METHOD_PRM_SET_FILTER          "rpc_slot_prm_set_filter"
 
 ///server
 #define RPC_SLOT_SERVER_SEND_POINTS                 "rpc_slot_server_send_points"
@@ -30,20 +30,22 @@
 #define RPC_SLOT_SERVER_ATLANT_POSITION             "rpc_slot_server_atlant_position"
 
 /// ATLANT from client
-#define RPC_SLOT_SET_ATLANT_FREQUENCY               "rpc_slot_set_atlant_frequency"
+#define RPC_METHOD_SET_ATLANT_FREQUENCY             "rpc_slot_set_atlant_frequency"
 
 /// BPLA
-#define RPC_SLOT_SERVER_SEND_BPLA_DEF                 "rpc_slot_server_send_bpla_def"
-#define RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO            "rpc_slot_server_send_bpla_def_auto"
+#define RPC_SLOT_SERVER_SEND_BPLA_DEF               "rpc_slot_server_send_bpla_def"
+#define RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO          "rpc_slot_server_send_bpla_def_auto"
 
 /// connectiont status
 #define RPC_SLOT_SERVER_STATUS                      "rpc_slot_server_status"
 
-#define RPC_SLOT_REQUEST_STATUS                    "rpc_slot_request_status"
+#define RPC_METHOD_REQUEST_STATUS                   "rpc_slot_request_status"
 
 /// to solver
-#define RPC_SLOT_SET_DATA_TO_SOLVER                "rpc_slot_set_data_to_solver"
-#define RPC_SLOT_SET_CLEAR_TO_SOLVER               "rpc_slot_set_clear_to_solver"
+#define RPC_METHOD_SET_DATA_TO_SOLVER               "rpc_slot_set_data_to_solver"
+#define RPC_METHOD_SET_CLEAR_TO_SOLVER              "rpc_slot_set_clear_to_solver"
+
+#include <QString>
 
 typedef struct A_Dir_Ans_msg
 {

@@ -6,4 +6,5 @@ INCLUDEPATH += $$PWD
 LIBS += $$staticReference( $$basename(PWD) )
 REFERENCES += $$basename(PWD)
 
-
+include( ../../specs/qxt.pri )
+include( ../../specs/CISCommonLib.pri )

@@ -1,18 +1,16 @@
 #include <QtGui/QApplication>
 #include <QTranslator>
 
-#include <PwLogger/PwLogger.h>
+#include <Logger.h>
 
 #include "MainWindow.h"
 #include "MainWindowController.h"
 
-#define PWLOGGERINIT_AGENTCONFNAME ("ARM_R_view.log4qt")
-
 int main(int argc, char *argv[])
 {
-	Pw::Logger::PwLoggerFactory::Instance()->Configure(PWLOGGERINIT_AGENTCONFNAME);
+	Logger().setupLogger("logs/ARM_R_view.log");
 
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
 
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
@@ -36,5 +34,5 @@ int main(int argc, char *argv[])
 
 	controller.startServer();
 
-    return a.exec();
+	return a.exec();
 }
