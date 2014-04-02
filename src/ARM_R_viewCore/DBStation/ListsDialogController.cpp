@@ -1,10 +1,10 @@
+#include <Logger.h>
+
 #include "ListsDialogController.h"
 
 ListsDialogController::ListsDialogController(const QSqlDatabase& db, QObject* parent):
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(ListsDialogController));
-
 	m_db = db;
 	m_model = new QSqlQueryModel(this);
 
@@ -55,14 +55,14 @@ QSqlQuery ListsDialogController::getAllStationsInfo()
 					"ORDER BY stationName");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QSqlQuery();
 	}
 
 	succeeded = query.exec();
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QSqlQuery();
 	}
 
@@ -134,7 +134,7 @@ QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 					"WHERE cat.name=:objectCategory ORDER BY stationName");
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QSqlQuery();
 	}
 
@@ -153,7 +153,7 @@ QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 	succeeded = query.exec();
 
 	if (!succeeded) {
-		m_logger->error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
 		return QSqlQuery();
 	}
 

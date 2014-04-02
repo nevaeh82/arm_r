@@ -1,28 +1,30 @@
-#include "RPCAtlant.h"
+#include <TcpDevicesDefines.h>
 
-RPCAtlant::RPCAtlant(int id, ITabAtlant* parent_tab, QObject *parent) :
-	RpcClientBase(Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(RPCAtlant)), parent)
+#include "RpcAtlantClient.h"
+
+RpcAtlantClient::RpcAtlantClient(int id, ITabAtlant* parent_tab, QObject *parent) :
+	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
 {
 	m_id = id;
 	m_parentTab = parent_tab;
 }
 
-RPCAtlant::~RPCAtlant()
+RpcAtlantClient::~RpcAtlantClient()
 {
 }
 
-void RPCAtlant::set_command(IMessage *msg)
+void RpcAtlantClient::set_command(IMessage *msg)
 {
 	emit signalSetCommand(msg);
 }
 
-void RPCAtlant::slotSetCommand(IMessage *msg)
+void RpcAtlantClient::slotSetCommand(IMessage *msg)
 {
 	m_commandMsg = msg;
 	formCommand(m_commandMsg);
 }
 
-void RPCAtlant::formCommand(IMessage *msg)
+void RpcAtlantClient::formCommand(IMessage *msg)
 {
 	QVariant data;
 	int type = msg->get(data);
@@ -37,20 +39,19 @@ void RPCAtlant::formCommand(IMessage *msg)
 	msg->clenup();
 }
 
-void RPCAtlant::sendFreq(QVariant data)
+void RpcAtlantClient::sendFreq(QVariant data)
 {
 	QByteArray ba  = data.toByteArray();
 	emit signalSetFreq(ba);
 }
 
-/// slot when connection complete
-void RPCAtlant::slotRCPConnetion()
+void RpcAtlantClient::registerRoute()
 {
-	emit signalSetClientId(m_id);
+	RpcRoutedClient::registerRoute( ATLANT_ROUTE_ID );
 }
 
 /// slot if have some error while connetiting
-void RPCAtlant::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
+void RpcAtlantClient::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 {
 	QString thiserror;
 	switch(socketError)
@@ -69,27 +70,26 @@ void RPCAtlant::slotErrorRPCConnection(QAbstractSocket::SocketError socketError)
 			//        thiserror.append(("Ошибка! Произошла ошибка: " + _rpc_client->->errorString()));
 			break;
 	}
-	
+
 	emit signalReconnection();
 }
 
-bool RPCAtlant::start(quint16 port, QHostAddress address)
+bool RpcAtlantClient::start(quint16 port, QHostAddress address)
 {
-	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SLOT(slotRCPConnetion()));
-	connect(m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
+	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
+	connect( m_clientPeer, SIGNAL(serverError(QAbstractSocket::SocketError)), this, SLOT(slotErrorRPCConnection(QAbstractSocket::SocketError)));
 
 	connect(this, SIGNAL(signalSetCommand(IMessage*)), this, SLOT(slotSetCommand(IMessage*)));
 
-	m_clientPeer->attachSignal(this, SIGNAL(signalSetClientId(int)), RPC_SLOT_SET_CLIENT_ID);
-	m_clientPeer->attachSignal(this, SIGNAL(signalSetFreq(QByteArray)), RPC_SLOT_SET_ATLANT_FREQUENCY);
+	m_clientPeer->attachSignal(this, SIGNAL(signalSetFreq(QByteArray)), RPC_METHOD_SET_ATLANT_FREQUENCY);
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_ATLANT_DIRECTION, this, SLOT(rpcSlotServerAtlantDirection(QByteArray)));
 
-	m_logger->debug("Start RPCAtlant");
+	log_debug("Start RpcAtlantClient");
 	return RpcClientBase::start(port, address);
 }
 
-void RPCAtlant::rpcSlotServerAtlantDirection(QByteArray data)
+void RpcAtlantClient::rpcSlotServerAtlantDirection(QByteArray data)
 {
 	QDataStream ds(&data, QIODevice::ReadWrite);
 	A_Dir_Ans_msg msg;

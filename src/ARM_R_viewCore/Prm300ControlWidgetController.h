@@ -2,29 +2,22 @@
 #define PRM300CONTROLWIDGETCONTROLLER_H
 
 #include <QObject>
-
-#include <PwLogger/PwLogger.h>
-
 #include <QMessageBox>
 
-#include "Interfaces/IController.h"
 #include "Prm300ControlWidget.h"
-
+#include "Interfaces/IController.h"
 #include "ServiceHandler/ServiceHandler.h"
+#include "Tabs/RPC/RpcPrmClient.h"
 
-#include "Tabs/RPC/RPCClient.h"
-
-class Prm300ControlWidgetController : public QObject, public IController<Prm300ControlWidget>, public IRpcListener
+class Prm300ControlWidgetController :
+		public QObject, public IController<Prm300ControlWidget>, public IRpcListener
 {
 	Q_OBJECT
 
 private:
-	/// logger
-	Pw::Logger::ILogger* m_logger;
-
 	Prm300ControlWidget* m_view;
 
-	RPCClient* m_rpcClient;
+	RpcPrmClient* m_rpcPrmClient;
 
 	IDbManager* m_dbManager;
 
@@ -38,7 +31,7 @@ public:
 
 	void appendView(Prm300ControlWidget *view);
 
-	void setRpcClient(RPCClient* rpcClient);
+	void setRpcPrmClient(RpcPrmClient* client);
 
 	virtual void setDbManager(IDbManager*);
 

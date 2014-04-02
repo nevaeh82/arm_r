@@ -5,31 +5,32 @@
 #include <QThread>
 #include <QMap>
 
-#include <PwLogger/PwLogger.h>
+#include <Interfaces/IRpcListener.h>
+#include <Interfaces/IRpcControllerBase.h>
+#include <TcpDevicesDefines.h>
+#include <Rpc/RpcDefines.h>
 
-#include "Interfaces/ITcpManager.h"
-#include "Interfaces/ITcpListener.h"
-#include "../RPC/IRPC.h"
-#include "Interfaces/IRpcListener.h"
+#include "Tcp/TcpDeviceController.h"
+#include "Tcp/TcpFlakonController.h"
+#include "Tcp/TcpAtlantController.h"
+#include "Tcp/TcpPRM300Controller.h"
+#include "Tcp/Interfaces/ITcpManager.h"
+#include "Tcp/Interfaces/ITcpListener.h"
 
-#include "TcpDevicesDefines.h"
-#include "TcpFlakonController.h"
-#include "TcpAtlantController.h"
-#include "TcpPRM300Controller.h"
+#include "Flakon/CoordinateCounter.h"
 
-#include "../Flakon/CoordinateCounter.h"
-
-#include "Rpc/RpcDefines.h"
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
 {
 	Q_OBJECT
 
 private:
-	Pw::Logger::ILogger* m_logger;
-	IRPC* m_rpcServer;
+	IRpcControllerBase* m_rpcServer;
 	ITcpServerController* m_tcpServer;
-	QMap< QString, BaseTcpDeviceController* > m_controllersMap;
+	QMap< QString, TcpDeviceController* > m_controllersMap;
+
+	TcpFlakonController *m_flakonController;
+	QMap<QString, BaseTcpDeviceController*> m_flakonStations;
 	/**
 	 * key = deviceType
 	 * Define own deviceType in TcpDevicesDefines
@@ -43,27 +44,23 @@ public:
 	virtual ~TcpManager();
 
 	// ITcpManager interface
-public:
 	virtual void addTcpDevice(const QString& deviceName, const int& type);
 	virtual void removeTcpDevice(const QString& deviceName);
-	virtual void setRpcServer(IRPC*);
+	virtual void setRpcServer(IRpcControllerBase*);
 	virtual	void setTcpServer(ITcpServerController*);
 	virtual QObject* asQObject();
 
 	/// TODO: add sendDataToDevice from some internal message
 
 	// ITcpListener interface
-public:
 	virtual void onMessageReceived(const quint32 type, const QString& deviceType, const MessageSP argument);
 
 	// IRpcListener interface
-public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
 private:
-	QString getNameFromArgument(const QVariant& argument);
-	QString getAtlantName();
-	QString getFlakonName();
+	void addStationToFlakon(QString name, BaseTcpDeviceController* controller);
+
 signals:
 	void threadTerminateSignal();
 	void onMethodCalledInternalSignal(const QString& method, const QVariant& argument);

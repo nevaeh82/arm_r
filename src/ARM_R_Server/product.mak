@@ -5,7 +5,6 @@ include ../../specs/qxt.mak
 include ../../specs/Solver.mak
 include ../../specs/protobuf.mak
 include ../../specs/get-runtime.mak
-include ../../specs/logger.mak
 
 prebuild::
 	$(cp) -ud *.log4qt $(DESTDIR)

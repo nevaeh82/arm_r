@@ -1,16 +1,18 @@
+#include <Logger.h>
+
 #include "TcpAtlantController.h"
 
 TcpAtlantController::TcpAtlantController(QObject* parent) :
-	BaseTcpDeviceController(parent)
+	TcpDeviceController(parent)
 {
 	m_tcpDeviceName = ATLANT_TCP_DEVICE;
-	debug(QString("Created %1").arg(m_tcpDeviceName));
+	log_debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
 }
 
 TcpAtlantController::TcpAtlantController(const QString& tcpDeviceName, QObject* parent) :
-	BaseTcpDeviceController(tcpDeviceName, parent)
+	TcpDeviceController(tcpDeviceName, parent)
 {
 	init();
 	connect(this, SIGNAL(createTcpAtlantCoderInternalSignal()), this, SLOT(createTcpAtlantCoderInternalSlot()));
@@ -68,8 +70,22 @@ QByteArray TcpAtlantController::getFullInfo()
 	return ba;
 }
 
+RpcRoutedServer::RouteId TcpAtlantController::getRouteId() const
+{
+	return ATLANT_ROUTE_ID;
+}
+
+void TcpAtlantController::onMethodCalled(const QString& method, const QVariant& argument)
+{
+	QByteArray data = argument.toByteArray();
+
+	if (method == RPC_METHOD_SET_ATLANT_FREQUENCY) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_ATLANT_REQUEST_SET_FREQUENCY, data ) ) );
+	}
+}
+
 void TcpAtlantController::createTcpAtlantCoderInternalSlot()
 {
-	debug("Creating TcpAtlantCoder...");
+	log_debug("Creating TcpAtlantCoder...");
 	m_tcpDeviceCoder = new TcpAtlantCoder(this);
 }

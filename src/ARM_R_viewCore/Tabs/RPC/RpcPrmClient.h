@@ -1,43 +1,39 @@
-#ifndef RPCCLIENT_H
-#define RPCCLIENT_H
+#ifndef PRMRPCCLIENT_H
+#define PRMRPCCLIENT_H
 
 #include <QObject>
 #include <QCoreApplication>
 #include <QtNetwork/QHostAddress>
-#include <QxtRPCPeer>
 #include <QAbstractSocket>
-
 #include <QTextCodec>
 #include <QSettings>
 #include <QStringList>
-
 #include <QHostAddress>
 #include <QVariant>
 #include <QList>
 
-#include "Rpc/RpcMessageStruct.h"
+#include <Interfaces/IRpcControllerBase.h>
+#include <Rpc/RpcRoutedClient.h>
+#include <Rpc/RpcMessageStruct.h>
+#include <Rpc/RpcDefines.h>
 
-#include "IRPC.h"
 #include "Common/IMessage.h"
 #include "Common/CommandMessage.h"
 
 #include "Interfaces/IStation.h"
 #include "Interfaces/IDBManager.h"
-#include "Tabs/ITabSpectrum.h"
 
+#include "Tabs/ITabSpectrum.h"
 #include "Tabs/Controls/IControlPRM.h"
 
 #include "UiDefines.h"
-#include "Rpc/RpcDefines.h"
-#include "Rpc/RpcClientBase.h"
 
-#include "Interfaces/IDbManager.h"
+#define RPC_PRM_STATE_CHANGED	"PrmRpcClient::stateChanged"
 
-class RPCClient : public RpcClientBase
+class RpcPrmClient : public RpcRoutedClient
 {
-    Q_OBJECT
+	Q_OBJECT
 private:
-//	IControlPRM*	m_controlPrm;
 	IMessage*		m_commandMsg;
 	IDbManager*		m_dbManager;
 	IStation*		m_station;
@@ -50,10 +46,8 @@ private:
 	bool	m_needSetup;
 
 public:
-	RPCClient(IStation *prop, IDbManager *db_manager,
-			  ITabSpectrum *parent_tab, IControlPRM *control_prm,
-			  QObject *parent);
-    ~RPCClient();
+	RpcPrmClient(IStation *prop, IDbManager *db_manager, IControlPRM *, QObject *parent);
+	~RpcPrmClient();
 
 	void setCommand(IMessage* msg);
 
@@ -76,22 +70,14 @@ private:
 	void requestStatus();
 
 signals:
-    void signalSetCommand(IMessage *msg);
-    void signalFinished();
+	void signalSetCommand(IMessage *msg);
+	void signalFinished();
 
-    void signalStart();
-    void signalStop();
-    void signalFinishRPC();
+	void signalStart();
+	void signalStop();
+	void signalFinishRPC();
 
 	///RPC signals
-    void signalSetClientId(int id);
-	void signalSetMainStationCor(int id, QString station);
-    void signalSetBandwidth(int id, float db);
-    void signalSetShift(int id, float shift);
-    void signalRecognize(int id, int type);
-    void signalSSCorrelation(int id, bool enable);
-    void signalSetAvarageSpectrum(int id, int avarage);
-
 	void signalPRMSetFreq(QString name, short freq);
 	void signalPRMRequestFreq(QString name);
 	void signalPRMSetAtt1(QString name, int att1);
@@ -100,20 +86,13 @@ signals:
 
 	void signalRequestStatus(QString name);
 
-    void signalReconnection();
-
 	void signalDataS(float*, float*);
 	void signalData(float*, float*);
 
 public slots:
-    ///rpc_server
-	void rpcSlotGettingPoints(QByteArray points);
-	void rpcSlotGettingDetectedBandwidth(QByteArray points);
+	///rpc_server
 	void rpcSlotGettingModulation(QString modulation);
-	void rpcSlotServerSendCorrelation(uint, uint point2, QByteArray points);
-
 	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
-
 	void rpcSlotServerStatus(QByteArray message);
 
 private slots:
@@ -122,4 +101,4 @@ private slots:
 	void slotSetCommand(IMessage* msg);
 };
 
-#endif // RPCCLIENT_H
+#endif // PRMRPCCLIENT_H

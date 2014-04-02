@@ -49,6 +49,7 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 		}
 
 		stream >> vecFFT;
+		if (!vecFFT.size()) return;
 
 		dataProccess(vecFFT, isComplex);
 

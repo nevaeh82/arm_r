@@ -1,33 +1,33 @@
 #include "TabSpectrumWidgetController.h"
 #include "UiDefines.h"
 
-#define DEFAULT_RPC_PORT		24500
-
-TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
-														 ICorrelationControllersContainer* correlationControllers,
-														 ITabManager* tab_manager, QObject *parent) :
-	QObject(parent)
+TabSpectrumWidgetController::TabSpectrumWidgetController(
+		IStation* station,
+		ICorrelationControllersContainer* correlationControllers,
+		ITabManager* tabManager,
+		TabSpectrumWidget* tabSpectrumWidget,
+		const QString rpcHost,
+		const quint16 rpcPort,
+		QObject *parent)
+	: QObject(parent)
+	, m_view( tabSpectrumWidget )
+	, m_rpcPrmClient( NULL )
+	, m_treeModel( NULL )
+	, m_dbManager( NULL )
+	, m_dbStationController( NULL )
+//	, m_controlPRM( NULL )
+	, m_indicatorLabel( NULL )
+	, m_spectrumDataSource( NULL )
+	, m_spectrumWidget( NULL )
+	, m_threshold( -1 )
+	, m_station( station )
+	, m_correlationControllers( correlationControllers )
+	, m_tabManager( tabManager )
+	, m_treeDelegate( new TreeWidgetDelegate(this) )
+	, m_rpcHost( rpcHost )
+	, m_rpcPort( rpcPort )
+	, m_rpcFlakonClient( NULL )
 {
-	m_view = NULL;
-	m_rpcClient = NULL;
-	m_treeModel = NULL;
-	m_dbManager = NULL;
-	m_dbStationController = NULL;
-	m_indicatorLabel = NULL;
-
-	m_spectrumDataSource = NULL;
-	m_spectrumWidget = NULL;
-
-	m_threshold = -1;
-
-	m_station = station;
-	m_correlationControllers = correlationControllers;
-	m_tabManager = tab_manager;
-
-	m_treeDelegate = new TreeWidgetDelegate(this);
-
-	readSettings();
-
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
@@ -107,12 +107,12 @@ void TabSpectrumWidgetController::setDbManager(IDbManager* dbManager)
 	QStringList headers;
 	headers << tr("Name") << tr("Property");
 	m_treeModel = new TreeModel(m_dbManager, headers, this);
-    m_dbManager->registerReceiver(m_treeModel);
+	m_dbManager->registerReceiver(m_treeModel);
 }
 
 void TabSpectrumWidgetController::setDbStationController(DBStationController *controller)
 {
-    m_dbStationController = controller;
+	m_dbStationController = controller;
 }
 
 void TabSpectrumWidgetController::init()
@@ -124,16 +124,16 @@ void TabSpectrumWidgetController::init()
 
 void TabSpectrumWidgetController::createRPC()
 {
-	m_rpcClient = new RPCClient(m_station, m_dbManager, this, NULL, this);
-	m_rpcClient->start(m_rpcHostPort, QHostAddress(m_rpcHostAddress));
-
-	m_rpcClient->registerReceiver(m_spectrumDataSource);
+	m_rpcPrmClient = new RpcPrmClient( m_station, m_dbManager, NULL, this );
+	m_rpcPrmClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
+	m_rpcPrmClient->registerReceiver( m_spectrumDataSource );
+	m_rpcPrmClient->registerReceiver( this );
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
-		m_rpcClient->registerReceiver(correlationWidgetDataSource);
+		m_rpcPrmClient->registerReceiver(correlationWidgetDataSource);
 	}
 
-	m_view->setRpcClient(m_rpcClient);
+	m_view->setRpcPrmClient(m_rpcPrmClient);
 }
 
 void TabSpectrumWidgetController::createView()
@@ -145,6 +145,10 @@ void TabSpectrumWidgetController::createView()
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
 		correlationDataSource->registerReceiver(correlationWidget);
 
+		if( m_rpcFlakonClient != NULL ) {
+			m_rpcFlakonClient->registerReceiver( correlationDataSource );
+		}
+
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}
 
@@ -153,13 +157,17 @@ void TabSpectrumWidgetController::createView()
 	m_spectrumWidget->setTab(this);
 	m_spectrumWidget->setId(m_station->getId());
 	m_spectrumWidget->setSpectrumName(m_station->getName());
-    m_spectrumWidget->setDbManager(m_dbManager);
-    m_spectrumWidget->setDbStationController(m_dbStationController);
+	m_spectrumWidget->setDbManager(m_dbManager);
+	m_spectrumWidget->setDbStationController(m_dbStationController);
 
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
+
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
+	}
 }
 
 void TabSpectrumWidgetController::createTree()
@@ -217,17 +225,7 @@ void TabSpectrumWidgetController::setDoubleClicked(int id, double d1, double d2)
 
 void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selection)
 {
-	/// To HZ
-	double x1 = selection.start.x() / 1000;
-	double x2 = selection.end.x() / 1000;
-
-	double dx = qAbs(x1 - x2);
-	double center = (x1 + x2)/ 2;
-
-	m_dbManager->updatePropertyValue(m_station->getName(), DB_SELECTED_PROPERTY, QString::number(dx, 'f', 3));
-	m_dbManager->updatePropertyValue(m_station->getName(), DB_CENTER_PROPERTY, QString::number(center, 'f', 3));
-	m_dbManager->updatePropertyValue(m_station->getName(), DB_START_PROPERTY, QString::number(x1, 'f', 3));
-	m_dbManager->updatePropertyValue(m_station->getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
+	m_station->setSelectedArea( selection );
 }
 
 void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
@@ -237,9 +235,16 @@ void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 			emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
 			return;
 		case TypeGraphicCommand :
-			m_rpcClient->setCommand(msg);
+			m_rpcPrmClient->setCommand(msg);
 			return;
 	}
+}
+
+void TabSpectrumWidgetController::enableCorrelation(bool enable)
+{
+	if (m_rpcFlakonClient == NULL) return;
+
+	m_rpcFlakonClient->sendCorrelation( m_station, enable );
 }
 
 ///getting points from rpc (flakon)
@@ -262,6 +267,11 @@ void TabSpectrumWidgetController::checkStatus()
 {
 	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
 	sendCommand(TypeGraphicCommand, msg);
+}
+
+void TabSpectrumWidgetController::recognize()
+{
+	m_station->recognize();
 }
 
 void TabSpectrumWidgetController::setPanorama(bool state)
@@ -307,20 +317,6 @@ void TabSpectrumWidgetController::slotCheckStatus()
 	checkStatus();
 }
 
-void TabSpectrumWidgetController::readSettings()
-{
-	QString settingsFile = QCoreApplication::applicationDirPath();
-	settingsFile.append("./Tabs/RPC.ini");
-
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QSettings settings(settingsFile, QSettings::IniFormat);
-
-	settings.setIniCodec(codec);
-
-	m_rpcHostAddress = settings.value("RPC_UI/IP", "127.0.0.1").toString();
-	m_rpcHostPort = settings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toInt();
-}
-
 void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode& property)
 {
 }
@@ -333,26 +329,36 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 		return;
 	}
 
-	Property inProperty = property;
+	if( DB_LEADING_OP_PROPERTY == property.name ) {
+		if (m_rpcFlakonClient == NULL) return;
 
-	TypeCommand commandType = TypeUnknownCommand;
+		log_debug( QString("Property changed: ") + DB_LEADING_OP_PROPERTY );
+
+		m_rpcFlakonClient->sendMainStationCorrelation( m_station, property.value.toString() );
+		return;
+	}
+
+	if( DB_AVERAGING_PROPERTY == property.name ) {
+		if (m_rpcFlakonClient == NULL) return;
+
+		m_rpcFlakonClient->sendAvarageSpectrum( m_station, property.value.toInt() );
+		return;
+	}
 
 	int commandCode = 0;
+	Property inProperty = property;
+	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
 		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
 		commandCode = COMMAND_PRM_SET_FREQ;
 		commandType = TypeGraphicCommand;
-	} else if(DB_LEADING_OP_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_MAIN_STATION_COR;
-		commandType = TypeGraphicCommand;
-	} else if(DB_AVERAGING_PROPERTY == inProperty.name) {
-		commandCode = COMMAND_FLAKON_SET_AVARAGE;
-		commandType = TypeGraphicCommand;
-	} else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
+	}
+	else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
 		commandCode = COMMAND_SET_PANORAMA_START_VALUE;
 		commandType = TypePanoramaCommand;
-	} else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
+	}
+	else if(DB_PANORAMA_END_PROPERTY == inProperty.name) {
 		commandCode = COMMAND_SET_PANORAMA_END_VALUE;
 		commandType = TypePanoramaCommand;
 	}
@@ -370,8 +376,39 @@ void TabSpectrumWidgetController::onCleanSettings()
 {
 }
 
+void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QVariant& argument)
+{
+	if( method == RPC_PRM_STATE_CHANGED ) {
+		setIndicator( argument.toInt() );
+		return;
+	}
+}
+
 
 void TabSpectrumWidgetController::setStationNamesList(const QStringList &stationsList)
 {
 	m_treeDelegate->setStationNamesList(stationsList);
+}
+
+void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClient* client)
+{
+	RpcFlakonClient *old = client;
+
+	m_rpcFlakonClient = client;
+
+	if( m_spectrumDataSource != NULL ) {
+		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
+
+		if (old != NULL) {
+			old->deregisterReceiver( m_spectrumDataSource );
+		}
+	}
+
+	foreach( CorrelationWidgetDataSource *ds, m_correlationDataSourcesList ) {
+		m_rpcFlakonClient->registerReceiver( ds );
+
+		if( old != NULL ) {
+			old->deregisterReceiver( ds );
+		}
+	}
 }

@@ -9,11 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(MainWindow));
-
-	m_logger->info("Started");
+	log_info("Started");
 
 	this->setWindowTitle(tr("Zaviruha"));
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));

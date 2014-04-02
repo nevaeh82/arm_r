@@ -7,12 +7,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
-
-
 #include <QHeaderView>
 #include <QMessageBox>
-
-#include <PwLogger/PwLogger.h>
 
 #include "Interfaces/IController.h"
 
@@ -32,8 +28,6 @@ public:
 	void appendView(ListsDialog* widget);
 
 private:
-	Pw::Logger::ILogger* m_logger;
-
 	QSqlQueryModel*				m_model;
 	QSqlDatabase				m_db;
 	QTableView*					m_view;

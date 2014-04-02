@@ -4,69 +4,64 @@
 #include <QObject>
 #include <QCoreApplication>
 #include <QtNetwork/QHostAddress>
-#include <QxtRPCPeer>
 #include <QAbstractSocket>
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
 #include <QDataStream>
 #include <QHostAddress>
-
 #include <QTime>
 
-#include <PwLogger/PwLogger.h>
-
-#include "Rpc/RpcMessageStruct.h"
+#include <Rpc/RpcRoutedServer.h>
 
 #include "IRPC.h"
-
+#include "Rpc/RpcMessageStruct.h"
 #include "Rpc/RpcDefines.h"
-#include "Rpc/RpcServerBase.h"
 
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(QVector<QPointF>)
 
-class RPCServer : public RpcServerBase, public IRPC
+class RpcServer : public RpcRoutedServer
 {
 	Q_OBJECT
+
 public:
 
-	RPCServer(QObject* parent = NULL);
-	virtual ~RPCServer();
+	RpcServer(QObject* parent = NULL);
+	virtual ~RpcServer();
 
 public:
 	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
-	virtual void sendDataByRpc(const QString& signalType, const QString& deviceName,const QByteArray& data);
 
 private slots:
-	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
-	void slotRPCConnetion(quint64 client);
-	void slotRPCDisconnected(quint64 client);
+	void logConnectionError(QAbstractSocket::SocketError socketError);
+	void logConnectionSuccess(quint64 client);
+	void logClientDisconected(quint64 client);
 
 public slots:
-	void rpcSlotSetMainStationCor(quint64 client, int id, QString station);
-	void rpcSlotSetBandwidth(quint64 client, int id, float bandwidth);
-	void rpcSlotSetShift(quint64 client, int id, float shift);
-	void rpcSlotRecognize(quint64 client, int id, int type);
-	void rpcSlotSsCorrelation(quint64 client, int id, bool enable);
-	void rpcSlotSetAvarageSpectrum(quint64 client, int id, int avarage);
+	void setMainStationCorrelation(quint64 client, int id, QString station);
+	void setBandwidth(quint64 client, int id, float bandwidth);
+	void setShift(quint64 client, int id, float shift);
+	void recognize(quint64 client, int id, int);
+	void ssCorrelation(quint64 client, int id, bool enable);
+	void setAvarageSpectrum(quint64 client, int id, int avarage);
 
 	///prm300 from rpc client
-	void rpcSlotPrmSetFreq(quint64, QString name, short freq);
-	void rpcSlotPrmRequestFreq(quint64 client, QString name);
-	void rpcSlotPrmSetAtt1(quint64 client, QString name, int value);
-	void rpcSlotPrmSetAtt2(quint64 client, QString name, int value);
-	void rpcSlotPrmSetFilter(quint64 client, QString name, int index);
+	void setPrmFrequency(quint64 client, QString name, short freq);
+	void requestPrmFrequency(quint64 client, QString name);
+	void setPrmAtt1(quint64 client, QString name, int value);
+	void setPrmAtt2(quint64 client, QString name, int value);
+	void setPrmFilter(quint64 client, QString name, int index);
 
 	/// solver
-	void rpcSlotSetDataToSolver(quint64 client, QByteArray data);
-	void rpcSlotSetClearToSolver(quint64 client, QByteArray data);
+	void setDataToSolver(quint64 client, QByteArray data);
+	void setClearToSolver(quint64 client, QByteArray data);
 
 	/// ATLANT from client
-	void rpcSlotSetAtlantFrequency(quint64 clint, QByteArray data);
+	void setAtlantFrequency(quint64 clint, QByteArray data);
 
-	void rpcSlotRequestStatus(quint64 client, QString name);
-	void rpcSlotSendRespModulation(quint64 client, QString modulation);
+	void requestStatus(quint64 client, QString name);
+	void sendResponseModulation(quint64 client, QString modulation);
 
 signals:
 	/// Rpc signals

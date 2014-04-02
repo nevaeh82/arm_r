@@ -1,3 +1,5 @@
+#include <Logger.h>
+
 #include "TcpFlakonCoder.h"
 
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
@@ -85,7 +87,7 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
 
 	header.length = inputData.size();
-	debug(QString("length = %1").arg(header.length));
+	log_debug(QString("length = %1").arg(header.length));
 
 	CRCs crc;
 	header.messageCRC = crc.crc16(reinterpret_cast<unsigned char *>(inputData.data()), inputData.length());
@@ -109,13 +111,13 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 		int poin;
 		inputDataStream >> poin;
 		QString s(inputData);
-		debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
+		log_debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
 		stream << poin;
 	}
 	else if (message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM) {
 		int average;
 		inputDataStream >> average;
-		debug(QString("average %1").arg(QString::number(average)));
+		log_debug(QString("average %1").arg(QString::number(average)));
 		stream << average;
 	}
 	else {
@@ -156,20 +158,20 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 				point.setY(y);
 				vec.append(point);
 			}
-            message = pointers(vec);
+			message = pointers(vec);
 			break;
 		case FlakonExternal::TypeDetectedBandWidthAnswer:
 			//2 – обнаруженный сигнал на текущем id пункте (QVector<QPointF>, например (-1.0,5.2) - сигнал с шириной полосы от -1 МГц до 5.2 МГц ),
 			for(quint32 i = 0; i < m_header.length; i += sizeof(QPointF)) {
 				stream >> point;
 				vec.append(point);
-//				m_logger->debug(QString("header.id = %1 detected signal = %2 %3").arg(QString::number(m_header.id)).arg(QString::number(point.x())).arg(QString::number(point.y())));
+//				log_debug(QString("header.id = %1 detected signal = %2 %3").arg(QString::number(m_header.id)).arg(QString::number(point.x())).arg(QString::number(point.y())));
 			}
 			message = detectedBandwidth(vec);
 			break;
 		case FlakonExternal::TypeStringAnswer:
 			stream >> stringFromServer;
-			info(QString("Flakon: %1").arg(stringFromServer));
+			log_info(QString("Flakon: %1").arg(stringFromServer));
 			break;
 		case FlakonExternal::TypeCorrelationReceivedAnswer:
 			stream >> id1;
@@ -198,13 +200,13 @@ MessageSP TcpFlakonCoder::pointers(QVector<QPointF> vec)
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
 
-MessageSP TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> vec)
+MessageSP TcpFlakonCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> points)
 {
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << point1 << point2 << vec;
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::WriteOnly);
+	stream << point1 << point2 << points;
 
-	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, ba));
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, data));
 }
 
 MessageSP TcpFlakonCoder::detectedBandwidth(QVector<QPointF> vec)

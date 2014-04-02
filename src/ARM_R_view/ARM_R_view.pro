@@ -10,15 +10,9 @@ SOURCES = main.cpp
 
 include(../../specs/project.pri)
 include(../ARM_R_viewCore/reference.pri)
-include(../Graphics_ipp/reference.pri)
-include(../ARM_R_Common/reference.pri)
-include(../../specs/tbb.pri)
-include(../../specs/ipp.pri)
-include(../../specs/qxt.pri)
-include(../../specs/logger.pri)
 
 RESOURCES += \
-        rc.qrc
+		rc.qrc
 
 DEFINES += UNICODE
 DEFINES += _UNICODE

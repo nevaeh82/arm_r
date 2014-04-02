@@ -1,9 +1,10 @@
+#include <Logger.h>
+
 #include "TcpSettingsManager.h"
 
 TcpSettingsManager::TcpSettingsManager(QObject* parent) :
 	QObject(parent)
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(CoordinateCounter));
 }
 
 TcpSettingsManager::~TcpSettingsManager()
@@ -32,7 +33,7 @@ QMap<QString, int> TcpSettingsManager::getAllInfo()
 
 		if(type > 0)
 		{
-			m_logger->info(QString("Name = %1, type =%2, %3").arg(QString(name)).arg(type).arg(childKey));
+			log_info(QString("Name = %1, type =%2, %3").arg(QString(name)).arg(type).arg(childKey));
 			mapInfo.insert(name, type);
 		}
 		m_settings.endGroup();

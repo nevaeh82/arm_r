@@ -3,16 +3,17 @@
 
 #include <QSettings>
 #include <QStringList>
-//#include <Tcp/BaseTcpDeviceController.h>
-#include "Tcp/BaseTcpDeviceController.h"
-#include "TcpPRM300Coder.h"
 
-#include "TcpDevicesDefines.h"
-#include "TcpDefines.h"
-
+#include <Interfaces/IRpcListener.h>
+#include <TcpDevicesDefines.h>
 #include <Info/Prm300Settings.h>
 
-class TcpPRM300Controller : public BaseTcpDeviceController
+#include "TCP/TcpDeviceController.h"
+#include "TCP/TcpPRM300Coder.h"
+#include "TCP/TcpDefines.h"
+
+
+class TcpPRM300Controller : public TcpDeviceController
 {
 	Q_OBJECT
 public:
@@ -29,6 +30,10 @@ public:
 
 	virtual QByteArray getFullInfo();
 
+	virtual RpcRoutedServer::RouteId getRouteId() const;
+
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
 signals:
 	void createTcpPRM300CoderInternalSignal();
 
@@ -37,7 +42,8 @@ private slots:
 	void slotTcpConnectionStatus(int status);
 
 private:
-	Prm300Settings prmSettings;
+	Prm300Settings m_prmSettings;
+	RpcRoutedServer::RouteId m_routeId;
 };
 
 #endif // TCPPRM300CONTROLLER_H

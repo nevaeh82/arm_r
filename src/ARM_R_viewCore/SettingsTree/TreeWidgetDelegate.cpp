@@ -14,8 +14,6 @@ TreeWidgetDelegate::TreeWidgetDelegate(QObject *parent) :
 	QStyledItemDelegate(parent)
 {
 	m_mode = DefaultMode;
-
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TreeWidgetDelegate));
 }
 
 TreeWidgetDelegate::~TreeWidgetDelegate()

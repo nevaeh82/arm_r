@@ -40,7 +40,6 @@ inline QDataStream& operator<<(QDataStream& out, const Prm300Settings &object)
 
 inline QDataStream& operator>>(QDataStream& in, Prm300Settings &object)
 {
-	quint32 type;
 	QString name;
 	QString host;
 	quint32 port;

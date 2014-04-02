@@ -1,14 +1,12 @@
 #include "Prm300ControlWidgetController.h"
 
 Prm300ControlWidgetController::Prm300ControlWidgetController(const QString& name, QObject *parent)
-	: QObject(parent)
-	, m_dbManager(0)
+	: QObject( parent )
+	, m_dbManager( 0 )
+	, m_view( NULL )
+	, m_rpcPrmClient( NULL )
+	, m_stationName( name )
 {
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(Prm300ControlWidgetController));
-
-	m_view = NULL;
-	m_rpcClient = NULL;
-	m_stationName = name;
 }
 
 Prm300ControlWidgetController::~Prm300ControlWidgetController()
@@ -27,8 +25,8 @@ void Prm300ControlWidgetController::onMethodCalled(const QString &method, const 
 		if(m_view)
 		{
 			m_view->setData(freq, filter, att1, att2);
-		}        
-        m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
+		}
+		m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
 	}
 }
 
@@ -38,14 +36,14 @@ void Prm300ControlWidgetController::appendView(Prm300ControlWidget *view)
 	init();
 }
 
-void Prm300ControlWidgetController::setRpcClient(RPCClient *rpcClient)
+void Prm300ControlWidgetController::setRpcPrmClient(RpcPrmClient *client)
 {
-    m_rpcClient = rpcClient;
+	m_rpcPrmClient = client;
 }
 
 void Prm300ControlWidgetController::setDbManager(IDbManager *dbManager)
 {
-    m_dbManager = dbManager;
+	m_dbManager = dbManager;
 }
 
 void Prm300ControlWidgetController::init()
@@ -59,24 +57,24 @@ void Prm300ControlWidgetController::init()
 
 void Prm300ControlWidgetController::slotSetAtt1(int value)
 {
-	if(!m_rpcClient)
+	if(!m_rpcPrmClient)
 		return;
 
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT1, QVariant::fromValue(value));
-	m_rpcClient->setCommand(msg);
+	m_rpcPrmClient->setCommand(msg);
 }
 
 void Prm300ControlWidgetController::slotSetAtt2(int value)
 {
-	if(!m_rpcClient)
+	if(!m_rpcPrmClient)
 		return;
 
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT2, QVariant::fromValue(value));
-	m_rpcClient->setCommand(msg);
+	m_rpcPrmClient->setCommand(msg);
 }
 
 void Prm300ControlWidgetController::slotSetFilter(int index)
 {
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_FILTER, QVariant::fromValue(index));
-	m_rpcClient->setCommand(msg);
+	m_rpcPrmClient->setCommand(msg);
 }

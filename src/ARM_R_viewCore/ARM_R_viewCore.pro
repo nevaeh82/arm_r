@@ -6,138 +6,140 @@ ProjectDir=$$PWD
 CONFIG += staticlib
 
 include(../../specs/project.pri)
-include(../Graphics_ipp/reference.pri)
-include(../ARM_R_Common/reference.pri)
 include(../../specs/tbb.pri)
 include(../../specs/ipp.pri)
 include(../../specs/qxt.pri)
-include(../../specs/logger.pri)
+include(../../specs/CISCommonLib.pri)
+include(../Graphics_ipp/reference.pri)
+include(../ARM_R_Common/reference.pri)
 
 INCLUDEPATH += $$PWD
 
 SOURCES += \
-        Correlations/CorrelationWidget.cpp \
-	Tabs/TabManager.cpp \
-        Station.cpp \
+	Station.cpp \
+	SpectrumWidget.cpp \
+	SpectrumWidgetController.cpp \
+	SpectrumWidgetDataSource.cpp \
+	MainWindow.cpp \
+	MainWindowController.cpp \
+	Correlations/CorrelationWidget.cpp \
+	Correlations/CorrelationGroupWidget.cpp \
+	Correlations/CorrelationWidgetDataSource.cpp \
+	Correlations/CorrelationWidgetController.cpp \
+	Correlations/CorrelationControllersContainer.cpp \
+	Common/BaseDataSource.cpp \
 	Common/CommandMessage.cpp \
-	Tabs/RPC/RPCClient.cpp \
-	Tabs/RPC/RPCAtlant.cpp \
-    MainWindow.cpp \
-    MainWindowController.cpp \
-    ControlPanel/ControlPanelWidget.cpp \
-    ControlPanel/ControlPanelController.cpp \
-    Tabs/TabSpectrumWidget.cpp \
-    Correlations/CorrelationGroupWidget.cpp \
-    Tabs/AtlantTabWidget.cpp \
-    Tabs/CommonSpectrumTabWidget.cpp \
-    SpectrumWidget.cpp \
-    Tabs/TabSpectrumWidgetController.cpp \
-    DB/DbController.cpp \
-    DB/DbManager.cpp \
-    SettingsTree/TreeItem.cpp \
-    SettingsTree/TreeModel.cpp \
-    SettingsTree/TreeWidgetDelegate.cpp \
-    SpectrumWidgetController.cpp \
-    Common/BaseDataSource.cpp \
-    SpectrumWidgetDataSource.cpp \
-    Correlations/CorrelationWidgetDataSource.cpp \
-    Correlations/CorrelationWidgetController.cpp \
-    Correlations/CorrelationControllersContainer.cpp \
-    DBStation/ListsDialogController.cpp \
-    DBStation/ListsProxyModel.cpp \
-    DBStation/DBStationController.cpp \
-    DBStation/AddStationDataDialog.cpp \
-    DBStation/AddStationDataDialogController.cpp \
-    DBStation/ListsDialog.cpp \
-    DBStation/ListsDialogController.cpp \
-    Prm300ControlWidget.cpp \
-    Prm300ControlWidgetController.cpp
+	Tabs/AtlantTabWidget.cpp \
+	Tabs/RPC/RpcPrmClient.cpp \
+	Tabs/RPC/RpcAtlantClient.cpp \
+	Tabs/RPC/RpcFlakonClient.cpp \
+	Tabs/TabManager.cpp \
+	Tabs/TabSpectrumWidget.cpp \
+	Tabs/TabSpectrumWidgetController.cpp \
+	Tabs/CommonSpectrumTabWidget.cpp \
+	ControlPanel/ControlPanelWidget.cpp \
+	ControlPanel/ControlPanelController.cpp \
+	DB/DbController.cpp \
+	DB/DbManager.cpp \
+	DBStation/ListsDialogController.cpp \
+	DBStation/ListsProxyModel.cpp \
+	DBStation/DBStationController.cpp \
+	DBStation/AddStationDataDialog.cpp \
+	DBStation/AddStationDataDialogController.cpp \
+	DBStation/ListsDialog.cpp \
+	DBStation/ListsDialogController.cpp \
+	SettingsTree/TreeItem.cpp \
+	SettingsTree/TreeModel.cpp \
+	SettingsTree/TreeWidgetDelegate.cpp \
+	Prm300ControlWidget.cpp \
+	Prm300ControlWidgetController.cpp \
 
 HEADERS += \
-        Correlations/CorrelationWidget.h \
-        ICorrelationWidget.h \
-        IGraphicWidget.h \
-        stdafx.h \
-        Interfaces/ICorrelationControllersContainer.h \
+	stdafx.h \
+	Station.h \
+	Defines.h \
+	UiDefines.h \
+	SpectrumWidget.h \
+	SpectrumWidgetController.h \
+	SpectrumWidgetDataSource.h \
+	IGraphicWidget.h \
+	ICorrelationWidget.h \
+	MainWindow.h \
+	MainWindowController.h \
 	Tabs/TabManager.h \
-        Station.h \
+	Tabs/ITabSpectrum.h \
+	Tabs/TabSpectrumWidget.h \
+	Tabs/AtlantTabWidget.h \
+	Tabs/CommonSpectrumTabWidget.h \
+	Tabs/Controls/IControlPRM.h \
+	Tabs/RPC/IRPC.h \
+	Tabs/RPC/RpcPrmClient.h \
+	Tabs/RPC/RpcFlakonClient.h \
+	Tabs/RPC/RpcAtlantClient.h \
+	Tabs/ITabAtlant.h \
+	Tabs/TabSpectrumWidgetController.h \
+	ControlPanel/ControlPanelWidget.h \
+	ControlPanel/ControlPanelController.h \
+	DB/DbController.h \
+	DB/DbManager.h \
+	SettingsTree/TreeItem.h \
+	SettingsTree/TreeModel.h \
+	SettingsTree/TreeWidgetDelegate.h \
 	Common/IMessage.h \
 	Common/CommandMessage.h \
-	Tabs/ITabSpectrum.h \
-	Tabs/RPC/IRPC.h \
-	Tabs/RPC/RPCClient.h \
-        Interfaces/ITabManager.h \
-	Tabs/Controls/IControlPRM.h \
-	Tabs/RPC/RPCAtlant.h \
-	Tabs/ITabAtlant.h \
-    MainWindow.h \
-    MainWindowController.h \
-     ControlPanel/ControlPanelWidget.h \
-    ControlPanel/ControlPanelController.h \
-    Tabs/TabSpectrumWidget.h \
-    Correlations/CorrelationGroupWidget.h \
-    Tabs/AtlantTabWidget.h \
-    Tabs/CommonSpectrumTabWidget.h \
-    Interfaces/ITabWidget.h \
-    SpectrumWidget.h \
-    Tabs/TabSpectrumWidgetController.h \
-    DB/DbController.h \
-    DB/DbManager.h \
-    Interfaces/IDbController.h \
-    Interfaces/IDbManager.h \
-    SettingsTree/TreeItem.h \
-    SettingsTree/TreeModel.h \
-    SettingsTree/TreeWidgetDelegate.h \
-    Interfaces/IDbChangedListener.h \
-    Interfaces/ISettingsChangedListener.h \
-    UiDefines.h \
-    SpectrumWidgetController.h \
-    Interfaces/ISpectrumWidget.h \
-    Interfaces/IDataSourceListener.h \
-    Interfaces/IDataSource.h \
-    Common/BaseDataSource.h \
-    SpectrumWidgetDataSource.h \
-    Correlations/CorrelationWidgetDataSource.h \
-    Defines.h \
-    Interfaces/IControlPanelListener.h \
-    Interfaces/IControlPanelController.h \
-    Correlations/CorrelationWidgetController.h \
-    Interfaces/ICorrelationWidget.h \
-    Correlations/CorrelationControllersContainer.h \
-    Interfaces/IStation.h \
-    DBStation/IDBStation.h \
-    DBStation/ListsDialogController.h \
-    DBStation/ListsProxyModel.h \
-    DBStation/DBStationController.h \
-    DBStation/DBFillTables.h \
-    DBStation/DBConnectionParameters.h \
-    DBStation/AddStationDataDialog.h \
-    DBStation/AddStationDataDialogController.h \
-    DBStation/ListsDialog.h \
-    DBStation/ListsDialogController.h \
-    Prm300ControlWidget.h \
-    Prm300ControlWidgetController.h
+	Common/BaseDataSource.h \
+	Correlations/CorrelationGroupWidget.h \
+	Correlations/CorrelationWidget.h \
+	Correlations/CorrelationWidgetDataSource.h \
+	Correlations/CorrelationWidgetController.h \
+	Correlations/CorrelationControllersContainer.h \
+	Interfaces/ICorrelationControllersContainer.h \
+	Interfaces/ITabManager.h \
+	Interfaces/ITabWidget.h \
+	Interfaces/IDbController.h \
+	Interfaces/IDbManager.h \
+	Interfaces/IDbChangedListener.h \
+	Interfaces/ISettingsChangedListener.h \
+	Interfaces/ISpectrumWidget.h \
+	Interfaces/IDataSourceListener.h \
+	Interfaces/IDataSource.h \
+	Interfaces/IControlPanelListener.h \
+	Interfaces/IControlPanelController.h \
+	Interfaces/ICorrelationWidget.h \
+	Interfaces/IStation.h \
+	DBStation/IDBStation.h \
+	DBStation/ListsDialogController.h \
+	DBStation/ListsProxyModel.h \
+	DBStation/DBStationController.h \
+	DBStation/DBFillTables.h \
+	DBStation/DBConnectionParameters.h \
+	DBStation/AddStationDataDialog.h \
+	DBStation/AddStationDataDialogController.h \
+	DBStation/ListsDialog.h \
+	DBStation/ListsDialogController.h \
+	Prm300ControlWidget.h \
+	Prm300ControlWidgetController.h \
 
 FORMS += \
-    ControlPanel.ui \
-    MainWindow.ui \
-    Correlations/CorrelationWidget.ui \
-    TabSpectrumWidget.ui \
-    Correlations/CorrelationGroupWidget.ui \
-    AtlantTabWidget.ui \
-    Tabs/CommonSpectrumTabWidget.ui \
-    SpectrumWidget.ui \
-    DBStation/AddStationDataDialog.ui \
-    DBStation/ListsDialog.ui \
-    Prm300ControlWidget.ui
+	ControlPanel.ui \
+	MainWindow.ui \
+	Correlations/CorrelationWidget.ui \
+	TabSpectrumWidget.ui \
+	Correlations/CorrelationGroupWidget.ui \
+	AtlantTabWidget.ui \
+	Tabs/CommonSpectrumTabWidget.ui \
+	SpectrumWidget.ui \
+	DBStation/AddStationDataDialog.ui \
+	DBStation/ListsDialog.ui \
+	Prm300ControlWidget.ui
 
 
 RESOURCES += \
-        translations.qrc
+	translations.qrc
 
 TRANSLATIONS += ARM-R_en.ts\
-                ARM-R_ru.ts
-	
+	ARM-R_ru.ts
+
 #LIBS += -luser32
 
 DEFINES += UNICODE

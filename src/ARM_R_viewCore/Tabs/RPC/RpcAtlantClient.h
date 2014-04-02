@@ -6,24 +6,22 @@
 #include <QtNetwork/QHostAddress>
 #include <QxtRPCPeer>
 #include <QAbstractSocket>
-
 #include <QTextCodec>
 #include <QSettings>
 #include <QStringList>
-
 #include <QHostAddress>
 
-#include "IRPC.h"
+#include <Rpc/RpcDefines.h>
+#include <Rpc/RpcRoutedClient.h>
+
 #include "Common/IMessage.h"
 #include "Common/CommandMessage.h"
 #include "Tabs/ITabAtlant.h"
 
-#include "Rpc/RpcDefines.h"
-#include "Rpc/RpcClientBase.h"
 
 typedef	QByteArray	rpc_send_atlant_data;
 
-class RPCAtlant : public RpcClientBase
+class RpcAtlantClient : public RpcRoutedClient
 {
 	Q_OBJECT
 private:
@@ -32,8 +30,8 @@ private:
 	ITabAtlant*         m_parentTab;
 
 public:
-	RPCAtlant(int id, ITabAtlant* parent_tab, QObject*  = 0);
-	~RPCAtlant();
+	RpcAtlantClient(int id, ITabAtlant* parent_tab, QObject*  = 0);
+	~RpcAtlantClient();
 
 	bool start(quint16 port, QHostAddress address);
 	void set_command(IMessage* msg);
@@ -43,7 +41,7 @@ private:
 	void sendFreq(QVariant data);
 
 private slots:
-	void slotRCPConnetion();
+	void registerRoute();
 	void slotErrorRPCConnection(QAbstractSocket::SocketError socketError);
 	void slotSetCommand(IMessage* msg);
 
@@ -59,7 +57,6 @@ signals:
 	void signalFinishRPC();
 
 	///RPC signals
-	void signalSetClientId(int id);
 	void signalSetFreq(QByteArray data);
 	void signalReconnection();
 };

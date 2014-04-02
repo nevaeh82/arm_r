@@ -17,7 +17,7 @@
 #include <QHostAddress>
 
 #include "Station.h"
-#include "RPC/RPCAtlant.h"
+#include "RPC/RpcAtlantClient.h"
 
 #include "ITabAtlant.h"
 
@@ -33,22 +33,17 @@ class AtlantTabWidget : public QWidget, public ITabAtlant
 private:
 	Ui::AtlantTabWidget*     ui;
 
+	int m_id;
+	RpcAtlantClient *m_rpcClient;
+
 public:
 	AtlantTabWidget(QWidget* parent = NULL);
 	~AtlantTabWidget();
 
-public:
 	virtual void setLog(QByteArray data);
 
 private:
-	int                 _id;
 
-	Station*       m_station;
-	RPCAtlant*          _rpc_client;
-
-
-
-private:
 	int createRPC();
 	int closeRPC();
 
@@ -61,10 +56,7 @@ signals:
 	void signalFinishRPC();
 	void signalStartRPC();
 	void signalStopRPC();
-
-signals:
 	void signalAddLog(QString str);
-
 };
 
 #endif // ATLANTTABWIDGET

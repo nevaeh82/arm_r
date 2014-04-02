@@ -20,34 +20,34 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correla
 
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-
 	/// TODO this is hack for visible and unvisible widge. Need to refactor architechture
 	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
+		QDataStream stream( data.toByteArray() );
 
-		QList<QVariant> list = data.toList();
-		quint32 point1 = list.at(1).toUInt();
-		quint32 point2 = list.at(2).toUInt();
+		QVector<QPointF> points;
+		quint32 point1, point2;
 
-		if(point1 == m_id) {
+		stream >> point1 >> point2 >> points;
+
+		if( point1 == m_id ) {
 			m_correlationWidget->setVisible(false);
 			return;
 		}
 
-		if (point2 != m_id){
+		if( point2 != m_id ){
 			return;
 		}
+
 		m_correlationWidget->setVisible(true);
 
-		setCorData(point1, point2, list.at(0).toByteArray(), true);
+		setCorData( point1, point2, points, true );
 	}
 }
 
 Q_DECLARE_METATYPE(float*)
-void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, QByteArray& vecFFTBA, bool /*isComplex*/)
+void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool /*isComplex*/)
 {
-	QVector<QPointF> vecFFT;
-	QDataStream stream(vecFFTBA);
-	stream >> vecFFT;
+	log_debug( QString("Points size: %1").arg(points.size() ) );
 
 	QString base = m_tabManager->getStationName(point1);//m_id);
 	QString second = m_tabManager->getStationName(point2);
@@ -55,10 +55,10 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, QBy
 	float* spCorrelation = m_mapSpectrumCorelation;
 	float* peaksCorrelation = m_mapPeaksCorrelation;
 	double bCor = m_mapBandwidthCorelation;
-	int pointCount = vecFFT.size();
+	int pointCount = points.size();
 
-	qreal startx = vecFFT.at(0).x();
-	qreal endx = vecFFT.at(vecFFT.size() - 1).x();
+	qreal startx = points.at(0).x();
+	qreal endx = points.at(points.size() - 1).x();
 	double bandwidth = endx - startx;
 
 	if(bCor != bandwidth)
@@ -74,9 +74,8 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, QBy
 	}
 
 
-	for(int i = 0; i < vecFFT.size(); i++)
-	{
-		spCorrelation[i] = vecFFT.at(i).y();
+	for(int i = 0; i < points.size(); i++) {
+		spCorrelation[i] = points.at(i).y();
 
 		if((m_startxCor != startx) || (spCorrelation[i] > peaksCorrelation[i]))
 		{

@@ -10,8 +10,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <PwLogger/PwLogger.h>
-
 class TreeWidgetDelegate : public QStyledItemDelegate
 {
 	Q_OBJECT
@@ -30,8 +28,6 @@ private:
 	QStringList m_stationNamesList;
 
 	QMutex m_stateMutex;
-
-	Pw::Logger::ILogger* m_logger;
 
 public:
 	TreeWidgetDelegate(QObject *parent = 0);

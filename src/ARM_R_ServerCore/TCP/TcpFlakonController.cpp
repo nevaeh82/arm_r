@@ -1,16 +1,20 @@
+#include <Logger.h>
+#include <Rpc/RpcDefines.h>
+#include <Info/Prm300Settings.h>
+
 #include "TcpFlakonController.h"
 
 TcpFlakonController::TcpFlakonController(QObject* parent) :
-	BaseTcpDeviceController(parent)
+	TcpDeviceController(parent)
 {
 	m_tcpDeviceName = FLAKON_TCP_DEVICE;
-	debug(QString("Created %1").arg(m_tcpDeviceName));
+	log_debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
 }
 
 TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* parent) :
-	BaseTcpDeviceController(tcpDeviceName, parent)
+	TcpDeviceController(tcpDeviceName, parent)
 {
 	init();
 	connect(this, SIGNAL(createTcpFlakonCoderInternalSignal()), this, SLOT(createTcpFlakonCoderInternalSlot()));
@@ -18,6 +22,11 @@ TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* 
 
 TcpFlakonController::~TcpFlakonController()
 {
+}
+
+QMap<QString, BaseTcpDeviceController*>& TcpFlakonController::stations()
+{
+	return m_stations;
 }
 
 void TcpFlakonController::createTcpDeviceCoder()
@@ -74,6 +83,67 @@ QByteArray TcpFlakonController::getFullInfo()
 
 void TcpFlakonController::createTcpFlakonCoderInternalSlot()
 {
-	debug("Creating TcpFlakonCoder...");
+	log_debug("Creating TcpFlakonCoder...");
 	m_tcpDeviceCoder = new TcpFlakonCoder(this);
+}
+
+void TcpFlakonController::requestStationCorellation(QString stationName)
+{
+	// request for "auto" station
+	if(stationName == "Авто") {
+		int id = 6;
+		QByteArray data;
+		QDataStream out( &data, QIODevice::WriteOnly );
+		out << id;
+
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, data ) ) );
+		return;
+	}
+
+	// search station by name
+	BaseTcpDeviceController* station = m_stations.value(stationName, NULL);
+	if(station == NULL) return;
+
+	// load data from station
+	QByteArray info = station->getFullInfo();
+	QDataStream stream( &info, QIODevice::ReadOnly );
+
+	Prm300Settings logInfo;
+	stream >> logInfo;
+
+	// prepare request
+	QByteArray data;
+	QDataStream out(&data, QIODevice::WriteOnly);
+	out << logInfo.id;
+
+	sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, data)));
+}
+
+RpcRoutedServer::RouteId TcpFlakonController::getRouteId() const
+{
+	return FLAKON_ROUTE_ID;
+}
+
+void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& argument)
+{
+	QByteArray data = argument.toByteArray();
+
+	if (method == RPC_METHOD_SET_MAIN_STATION_CORRELATION) {
+		requestStationCorellation(argument.toString());
+	}
+	else if (method == RPC_METHOD_SET_BANDWIDTH) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );
+	}
+	else if (method == RPC_METHOD_SET_SHIFT) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_SHIFT, data ) ) );
+	}
+	else if (method == RPC_METHOD_RECOGNIZE) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_RECOGNIZE, data ) ) );
+	}
+	else if (method == RPC_METHOD_SS_CORRELATION) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, data ) ) );
+	}
+	else if (method == RPC_METHOD_AVARAGE_SPECTRUM) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, data ) ) );
+	}
 }

@@ -9,7 +9,7 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 {
 	ui->setupUi(this);
 
-	m_rpcClient = NULL;
+	m_rpcPrmClient = NULL;
 
 	m_spectrumWidget = new SpectrumWidget(this);
 
@@ -27,8 +27,6 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
 
 	connect(m_spectrumWidgetController, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
-
-	m_logger = Pw::Logger::PwLoggerFactory::Instance()->createLogger(LOGGERCLASSNAME(TabSpectrumWidget));
 }
 
 TabSpectrumWidget::~TabSpectrumWidget()
@@ -37,7 +35,7 @@ TabSpectrumWidget::~TabSpectrumWidget()
 
 void TabSpectrumWidget::activate()
 {
-	m_logger->debug("Activate tab");
+	log_debug("Activate tab");
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}
@@ -46,19 +44,19 @@ void TabSpectrumWidget::activate()
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 	}
 
-	m_logger->debug(QString::number(ui->spectumWidgetsContainer->count()));
+	log_debug(QString::number(ui->spectumWidgetsContainer->count()));
 }
 
 void TabSpectrumWidget::deactivate()
 {
-	m_logger->debug("Deactivate tab");
+	log_debug("Deactivate tab");
 	ui->correlationsGroupWidget->clearWidgetContainer();
 
 	foreach (ISpectrumWidget* spectrumWidget , m_spectrumWidgetsList) {
 		ui->spectumWidgetsContainer->removeWidget(spectrumWidget->getWidget());
 	}
 
-	m_logger->debug(QString::number(ui->spectumWidgetsContainer->count()));
+	log_debug(QString::number(ui->spectumWidgetsContainer->count()));
 }
 
 QWidget *TabSpectrumWidget::getWidget()
@@ -108,15 +106,15 @@ void TabSpectrumWidget::insertCorrelationWidget(ICorrelationWidget *correlationW
 	ui->correlationsGroupWidget->insertCorrelationWidget(correlationWidget);
 }
 
-void TabSpectrumWidget::setRpcClient(RPCClient* rpcClient)
+void TabSpectrumWidget::setRpcPrmClient(RpcPrmClient* client)
 {
-	m_rpcClient = rpcClient;
-	m_spectrumWidgetController->setRpcClient(m_rpcClient);
+	m_rpcPrmClient = client;
+	m_spectrumWidgetController->setRpcPrmClient(m_rpcPrmClient);
 }
 
-RPCClient *TabSpectrumWidget::getRpcClient()
+RpcPrmClient *TabSpectrumWidget::getRpcClient()
 {
-	return m_rpcClient;
+	return m_rpcPrmClient;
 }
 
 void TabSpectrumWidget::setIndicatorStateSlot(int state)
