@@ -5,6 +5,7 @@ RpcConfigReader::RpcConfigReader(QObject* parent) :
 {
 	m_settingsManager = RpcSettingsManager::instance();
 	connect(this, SIGNAL(readStationListInternalSignal(QString)), this, SLOT(readStationListInternalSlot(QString)));
+	connect(this, SIGNAL(readAtlantConfigurationInternalSignal(QString)), this, SLOT(readAtlantConfigurationInternalSlot(QString)));
 }
 
 RpcConfigReader::~RpcConfigReader()

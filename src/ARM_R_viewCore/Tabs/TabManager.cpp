@@ -16,6 +16,11 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_dbStationController( NULL )
 	, m_rpcFlakonClient( NULL )
 {
+	m_settingsManager = RpcSettingsManager::instance();
+	m_settingsManager->setIniFile("./Tabs/RPC.ini");
+	m_rpcHost = m_settingsManager->getRpcHost();
+	m_rpcPort = m_settingsManager->getRpcPort().toUInt();
+
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
@@ -141,13 +146,13 @@ void TabManager::changeTabSlot(int index)
 
 int TabManager::readSettings(const QString& settingsFile)
 {
-	// read settings for RPC UI connections
-	QString rpcSettingsFile = QCoreApplication::applicationDirPath() + "/Tabs/RPC.ini";
-	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
-	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
+//	// read settings for RPC UI connections
+//	QString rpcSettingsFile = QCoreApplication::applicationDirPath() + "/Tabs/RPC.ini";
+//	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
+//	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-	m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
-	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+//	m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
+//	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
 
 	// read settings to generate list of stations
 	m_stationsMap.clear();

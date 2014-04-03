@@ -27,6 +27,8 @@
 
 #include "DBStation/DBStationController.h"
 
+#include "Rpc/RpcSettingsManager.h"
+
 class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
 	Q_OBJECT
@@ -49,6 +51,8 @@ private:
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
 	DBStationController* m_dbStationController;
+
+	IRpcSettingsManager* m_settingsManager;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
