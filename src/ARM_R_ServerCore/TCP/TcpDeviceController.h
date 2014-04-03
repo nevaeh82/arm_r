@@ -14,7 +14,7 @@ protected:
 
 public:
 	explicit TcpDeviceController(QObject *parent = NULL)
-		: BaseTcpDeviceController(parent) {}
+		: BaseTcpDeviceController(BASE_TCP_DEVICE, parent) {}
 
 	explicit TcpDeviceController(const QString& deviceName, QObject *parent = NULL)
 		: BaseTcpDeviceController(deviceName, parent) {}

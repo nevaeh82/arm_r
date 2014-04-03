@@ -32,12 +32,6 @@ public:
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
-signals:
-	void createTcpAtlantCoderInternalSignal();
-
-private slots:
-	void createTcpAtlantCoderInternalSlot();
-
 private:
 	AtlantSettings m_atlantSettingStruct;
 };

@@ -9,15 +9,12 @@ TcpFlakonController::TcpFlakonController(QObject* parent) :
 {
 	m_tcpDeviceName = FLAKON_TCP_DEVICE;
 	log_debug(QString("Created %1").arg(m_tcpDeviceName));
-
-	connect(this, SIGNAL(createTcpDeviceCoderInternalSignal()), this, SLOT(createTcpDeviceCoderInternalSlot()));
 }
 
 TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* parent) :
 	TcpDeviceController(tcpDeviceName, parent)
 {
 	init();
-	connect(this, SIGNAL(createTcpFlakonCoderInternalSignal()), this, SLOT(createTcpFlakonCoderInternalSlot()));
 }
 
 TcpFlakonController::~TcpFlakonController()
@@ -31,7 +28,8 @@ QMap<QString, BaseTcpDeviceController*>& TcpFlakonController::stations()
 
 void TcpFlakonController::createTcpDeviceCoder()
 {
-	emit createTcpFlakonCoderInternalSignal();
+	log_debug("Creating TcpFlakonCoder...");
+	m_tcpDeviceCoder = new TcpFlakonCoder(this);
 }
 
 QObject* TcpFlakonController::asQObject()
@@ -58,7 +56,7 @@ bool TcpFlakonController::init()
 
 			m_host = m_flakonSettingStruct.host;
 			m_port = m_flakonSettingStruct.port;
-			m_deviceType = BaseSettingsType::TypeFlakon;//m_flakonSettingStruct.type;
+			m_deviceType = TypeFlakon;//m_flakonSettingStruct.type;
 
 			QByteArray baseInfo;
 			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
@@ -79,12 +77,6 @@ QByteArray TcpFlakonController::getFullInfo()
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
 	dataStream << m_flakonSettingStruct;
 	return ba;
-}
-
-void TcpFlakonController::createTcpFlakonCoderInternalSlot()
-{
-	log_debug("Creating TcpFlakonCoder...");
-	m_tcpDeviceCoder = new TcpFlakonCoder(this);
 }
 
 void TcpFlakonController::requestStationCorellation(QString stationName)

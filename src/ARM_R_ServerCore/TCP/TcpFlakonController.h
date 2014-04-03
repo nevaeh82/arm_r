@@ -37,12 +37,6 @@ public:
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
-signals:
-	void createTcpFlakonCoderInternalSignal();
-
-private slots:
-	void createTcpFlakonCoderInternalSlot();
-
 private:
 	FlakonSettings m_flakonSettingStruct;
 

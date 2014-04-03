@@ -34,11 +34,7 @@ public:
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
-signals:
-	void createTcpPRM300CoderInternalSignal();
-
 private slots:
-	void createTcpPRM300CoderInternalSlot();
 	void slotTcpConnectionStatus(int status);
 
 private:

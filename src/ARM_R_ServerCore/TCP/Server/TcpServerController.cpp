@@ -1,7 +1,7 @@
 #include "TcpServerController.h"
 
 TcpServerController::TcpServerController(QObject *parent) :
-	BaseTcpServerController(parent)
+	BaseTcpServerController(BASE_TCP_DEVICE, parent)
 {
 	log_debug(QString("Created server %1").arg("TypeArmrTcpServer"));
 	m_tcpServerName = ARMR_TCP_SERVER;

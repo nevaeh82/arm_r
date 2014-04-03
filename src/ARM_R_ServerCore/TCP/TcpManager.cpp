@@ -103,8 +103,9 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	}
 
 //	controller->init();
-	controller->createTcpDeviceCoder();
+
 	controller->createTcpClient();
+	controller->createTcpDeviceCoder();
 	controller->connectToHost();
 
 	// register controller as listener for RPC server
