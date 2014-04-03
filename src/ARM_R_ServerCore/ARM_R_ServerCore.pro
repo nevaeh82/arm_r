@@ -34,11 +34,12 @@ SOURCES += \
 	TCP/Server/TcpServerCoder.cpp \
 	TCP/Server/TcpServerController.cpp \
 	Flakon/CoordinateCounter.cpp \
-	TCP/TcpSettingsManager.cpp
+	TCP/TcpSettingsManager.cpp \
+    RPC/RpcConfigReader.cpp
 
 HEADERS += \
 	RPC/RPCServer.h \
-	RPC/IRPC.h \
+#	RPC/IRPC.h \
 	ARM_R_Srv.h \
 	ARM_R_Application.h \
 	Atlant/EMS/storm.pb.h \
@@ -70,3 +71,5 @@ HEADERS += \
 	MessageSP.h \
 	RPC/RPCStructs.h \
 	RPC/RPCBaseItem.h \
+    RPC/RpcConfigReader.h \
+    RPC/Interfaces/IRpcConfigReader.h
