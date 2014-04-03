@@ -67,9 +67,9 @@ public:
 
 	QStringList createStationNamesList();
 
-
 private:
-	int readSettings(const QString &settingsFile);
+	int readStationSettings(const QString &settingsFile);
+	void readRpcSettings();
 
 private slots:
 	void changeTabSlot(int index);

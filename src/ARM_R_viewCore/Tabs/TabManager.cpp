@@ -44,7 +44,12 @@ int TabManager::createSubModules(const QString& settingsFile)
 {
 	m_correlationControllers = new CorrelationControllersContainer(this);
 
-	int submodulesCount = readSettings(settingsFile);
+	readRpcSettings();
+
+	m_rpcFlakonClient = new RpcFlakonClient(this);
+	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
+
+	int submodulesCount = readStationSettings(settingsFile);
 
 	m_correlationControllers->init(m_stationsMap.count());
 
@@ -55,8 +60,6 @@ int TabManager::createSubModules(const QString& settingsFile)
 	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 
-	m_rpcFlakonClient = new RpcFlakonClient(this);
-	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
 
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
@@ -139,15 +142,20 @@ void TabManager::changeTabSlot(int index)
 	m_currentTabWidget->activate();
 }
 
-int TabManager::readSettings(const QString& settingsFile)
+void TabManager::readRpcSettings()
 {
-	// read settings for RPC UI connections
 	QString rpcSettingsFile = QCoreApplication::applicationDirPath() + "/Tabs/RPC.ini";
 	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
 	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
 	m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
 	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+}
+
+int TabManager::readStationSettings(const QString& settingsFile)
+{
+	// read settings for RPC UI connections
+	readRpcSettings();
 
 	// read settings to generate list of stations
 	m_stationsMap.clear();
