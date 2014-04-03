@@ -53,6 +53,7 @@ SOURCES += \
 	SettingsTree/TreeWidgetDelegate.cpp \
 	Prm300ControlWidget.cpp \
 	Prm300ControlWidgetController.cpp \
+    Tabs/RPC/RpcConfigClient.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -72,7 +73,7 @@ HEADERS += \
 	Tabs/AtlantTabWidget.h \
 	Tabs/CommonSpectrumTabWidget.h \
 	Tabs/Controls/IControlPRM.h \
-	Tabs/RPC/IRPC.h \
+#	Tabs/RPC/IRPC.h \
 	Tabs/RPC/RpcPrmClient.h \
 	Tabs/RPC/RpcFlakonClient.h \
 	Tabs/RPC/RpcAtlantClient.h \
@@ -119,6 +120,7 @@ HEADERS += \
 	DBStation/ListsDialogController.h \
 	Prm300ControlWidget.h \
 	Prm300ControlWidgetController.h \
+    Tabs/RPC/RpcConfigClient.h
 
 FORMS += \
 	ControlPanel.ui \

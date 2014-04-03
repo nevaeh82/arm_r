@@ -21,7 +21,8 @@ INCLUDEPATH += $$PWD
 SOURCES += \
 	ServiceHandler/ServiceHandler.cpp \
 	ServiceHandler/CommonCodes.cpp \
-	CRCs.cpp
+	CRCs.cpp \
+    Rpc/RpcSettingsManager.cpp
 
 HEADERS += \
 	ServiceHandler/ServiceTerminateCause.h \
@@ -53,4 +54,8 @@ HEADERS += \
 	Info/FlakonSettings.h \
 	Info/AtlantSettings.h \
 	Info/Prm300Settings.h \
-	Rpc/RpcMessageStruct.h
+	Rpc/RpcMessageStruct.h \
+    Info/StationConfiguration.h \
+    Rpc/RpcSettingsManager.h \
+    Interfaces/IRpcSettingsManager.h \
+    Info/AtlantConfiguraton.h

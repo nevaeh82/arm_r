@@ -37,6 +37,10 @@ bool RpcServer::start(quint16 port, QHostAddress address)
 
 	m_serverPeer->attachSlot(RPC_METHOD_REQUEST_STATUS, this, SLOT(requestStatus(quint64, QString)));
 
+	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, this, SLOT(requsetGetStationListSlot(quint64,QString)));
+	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, this, SLOT(requestGetAtlantConfiguration(quint64,QString)));
+
+
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendPointsRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_POINTS);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendDetectedBandwidthRpcSignal(QByteArray)), RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH);
 	m_serverPeer->attachSignal(this, SIGNAL(serverSendCorrelationRpcSignal(uint, uint, QByteArray)), RPC_SLOT_SERVER_SEND_CORRELATION);
@@ -83,6 +87,16 @@ void RpcServer::logConnectionSuccess(quint64 client)
 void RpcServer::logClientDisconected(quint64 client)
 {
 	Q_UNUSED( client );
+}
+
+void RpcServer::requsetGetStationListSlot(quint64 client, QString configFilename)
+{
+	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, QVariant(configFilename), client);
+}
+
+void RpcServer::requestGetAtlantConfiguration(quint64 client, QString configFilename)
+{
+	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, QVariant(configFilename), client);
 }
 
 void RpcServer::setMainStationCorrelation(quint64 client, int id, QString station)
