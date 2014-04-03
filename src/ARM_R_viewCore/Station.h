@@ -7,10 +7,9 @@
 #include "Interfaces/IStation.h"
 #include "Interfaces/IDbManager.h"
 
-#include "Tabs/Rpc/RpcPrmClient.h"
 #include "Tabs/Rpc/RpcFlakonClient.h"
 
-#define INVALID_STATION_ID		-1
+#define INVALID_STATION_ID -1
 
 class Station: public QObject, public IStation
 {
@@ -29,7 +28,6 @@ private:
 
 	IDbManager *m_dbManager;
 
-	RpcPrmClient *m_rpcPrmClient;
 	RpcFlakonClient *m_rpcFlakonClient;
 
 protected:
@@ -37,7 +35,7 @@ protected:
 	float getShift() const;
 
 public:
-	Station(IDbManager *dbManager, QObject* parent = NULL);
+	Station(IDbManager *dbManager, RpcFlakonClient *client, QObject* parent = NULL);
 	virtual ~Station();
 
 	int getId() const;

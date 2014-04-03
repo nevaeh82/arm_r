@@ -2,7 +2,7 @@
 
 #include "Station.h"
 
-Station::Station(IDbManager* dbManager, QObject *parent)
+Station::Station(IDbManager* dbManager, RpcFlakonClient* client, QObject *parent)
 	: QObject( parent )
 	, m_dbManager( dbManager )
 	, m_stationId( INVALID_STATION_ID )
@@ -12,6 +12,7 @@ Station::Station(IDbManager* dbManager, QObject *parent)
 	, m_prm300Ip( "127.0.0.1" )
 	, m_adcIp( "127.0.0.1" )
 	, m_adcPort( 0 )
+	, m_rpcFlakonClient( client )
 {
 }
 

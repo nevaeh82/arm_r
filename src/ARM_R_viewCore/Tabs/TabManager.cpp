@@ -159,7 +159,7 @@ int TabManager::readSettings(const QString& settingsFile)
 	foreach( const QString &childKey, childKeys ) {
 		stationSettings.beginGroup(childKey);
 
-		Station *station = new Station(m_dbManager, this);
+		Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
 
 		station->setId(stationSettings.value("Id", 0).toInt());
 		station->setName(stationSettings.value("Name", "Unknown").toString());
