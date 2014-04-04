@@ -3,6 +3,8 @@
 ZCoord::ZCoord(QObject *parent) :
     QObject(parent)
 {
+	mSolver = NULL;
+
     QTextCodec *pCodec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(pCodec);
 
@@ -12,7 +14,14 @@ ZCoord::ZCoord(QObject *parent) :
     QVector<double> aTempHeight;
 
     dataPoint(aTempNumPoints, aTitleOfPoint, aTempCoordsOfPoint, aTempHeight);
-    setDataPoint(aTempNumPoints, aTitleOfPoint, aTempCoordsOfPoint, aTempHeight, mDataOfPoints);
+	setDataPoint(aTempNumPoints, aTitleOfPoint, aTempCoordsOfPoint, aTempHeight, mDataOfPoints);
+}
+
+ZCoord::~ZCoord()
+{
+	if (NULL != mSolver) {
+		delete mSolver;
+	}
 }
 
 void ZCoord::dataPoint(unsigned short &lNumPoints, QVector<QString> &lTitleOfPoint, QVector<QPointF> &lCoordsOfPoint, QVector<double> &lHeight)
@@ -265,8 +274,11 @@ void ZCoord::setSolverAnalyzeSize(int aSize)
 
 void ZCoord::initSolver()
 {
-    //Solver
-    if (mSolver) delete mSolver;
+	//Solver
+	if (mSolver) {
+		delete mSolver;
+	}
+
     mSolver = new Solver();
 
     mCurrentLogName=QTime::currentTime().toString("hh:mm:ss:zzz");

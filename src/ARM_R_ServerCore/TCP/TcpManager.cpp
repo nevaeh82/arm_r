@@ -8,9 +8,9 @@
 TcpManager::TcpManager(QObject* parent)
 	: QObject(parent)
 	, m_rpcServer( NULL )
-	, m_coordinatesCounter( new CoordinateCounter(FLAKON_COORDINATE_COUNTER) )
 	, m_flakonController( NULL )
 {
+	m_coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
 	m_coordinatesCounter->registerReceiver(this);
 
 	QThread* coordinateCounterThread = new QThread;

@@ -2,6 +2,7 @@
 
 #include "ARM_R_Srv.h"
 
+
 ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	QObject(parent)
 {
@@ -9,7 +10,6 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
 	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
 	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
-
 
 	m_rpcServer = new RpcServer;
 	m_rpcServer->start(24500, QHostAddress("127.0.0.1"));

@@ -5,6 +5,8 @@
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent)
 {
+	m_solver = NULL;
+
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 
@@ -20,6 +22,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 CoordinateCounter::~CoordinateCounter()
 {
+	delete m_solver;
 	emit signalFinished();
 }
 
@@ -188,7 +191,7 @@ void CoordinateCounter::setSolverDataSize(int aSize)
 void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 {
 	if ((aSize>10) && (aSize<200)) {
-//		m_solver->SetStateAnalizeCount(aSize);
+		m_solver->SetStateAnalizeCount(aSize);
 	}
 }
 
@@ -206,5 +209,4 @@ void CoordinateCounter::initSolver()
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
 	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
 	connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
-
 }

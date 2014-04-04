@@ -7,10 +7,10 @@ ZDR::ZDR(QObject *parent) :
     QObject(parent)
 {
     //Р”Р»СЏ РєРѕРѕСЂРґРёРЅР°С‚
-    mCoord2 = new ZCoord();
+	mCoord2 = new ZCoord(this);
 
     //Р”Р»СЏ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё СЃРёСЃС‚РµРјР°С‚РёРєРё
-    mCorrector2 = new ZCorrector();
+	mCorrector2 = new ZCorrector(this);
 }
 
 
