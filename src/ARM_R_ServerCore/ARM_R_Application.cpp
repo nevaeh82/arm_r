@@ -28,4 +28,6 @@ bool ARM_R_Application::notify(QObject* receiver, QEvent* event)
 		//  }
 		return done;
 	}
+
+	return done;
 }
