@@ -41,14 +41,12 @@ SOURCES += \
 	ControlPanel/ControlPanelController.cpp \
 	DB/DbController.cpp \
 	DB/DbManager.cpp \
-	DBStation/ListsDialogController.cpp \
 	DBStation/ListsProxyModel.cpp \
 	DBStation/DBStationController.cpp \
 	DBStation/AddStationDataDialog.cpp \
 	DBStation/AddStationDataDialogController.cpp \
 	DBStation/ListsDialog.cpp \
 	DBStation/ListsDialogController.cpp \
-	SettingsTree/TreeItem.cpp \
 	SettingsTree/TreeModel.cpp \
 	SettingsTree/TreeWidgetDelegate.cpp \
 	Prm300ControlWidget.cpp \
@@ -82,7 +80,6 @@ HEADERS += \
 	ControlPanel/ControlPanelController.h \
 	DB/DbController.h \
 	DB/DbManager.h \
-	SettingsTree/TreeItem.h \
 	SettingsTree/TreeModel.h \
 	SettingsTree/TreeWidgetDelegate.h \
 	Common/IMessage.h \
@@ -108,7 +105,6 @@ HEADERS += \
 	Interfaces/ICorrelationWidget.h \
 	Interfaces/IStation.h \
 	DBStation/IDBStation.h \
-	DBStation/ListsDialogController.h \
 	DBStation/ListsProxyModel.h \
 	DBStation/DBStationController.h \
 	DBStation/DBFillTables.h \
