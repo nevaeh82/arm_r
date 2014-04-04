@@ -42,7 +42,7 @@ void TcpManager::addStationToFlakon(QString name, BaseTcpDeviceController* contr
 void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 {
 	log_debug(QString("Creating %1 with type %2").arg(QString(deviceName)).arg(type));
-//	QString key = host + ":" + QString::number(port);
+	//	QString key = host + ":" + QString::number(port);
 
 	TcpDeviceController* controller = NULL;
 
@@ -87,6 +87,9 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 		return;
 	}
 
+	controller->createTcpClient();
+	controller->createTcpDeviceCoder();
+
 	QThread* controllerThread = new QThread;
 	connect(controller->asQObject(), SIGNAL(destroyed()), controllerThread, SLOT(terminate()));
 	connect(this, SIGNAL(threadTerminateSignal()), controllerThread, SLOT(quit()));
@@ -102,17 +105,13 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 		controller->registerReceiver(m_coordinatesCounter);
 	}
 
-//	controller->init();
-
-	controller->createTcpClient();
-	controller->createTcpDeviceCoder();
 	controller->connectToHost();
 
 	// register controller as listener for RPC server
 	RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
 	if (routedServer != NULL) {
 		routedServer->registerReceiver( (IRpcListener*) controller, controller->getRouteId() );
-}
+	}
 
 	log_debug(QString("Added device connection for %1 with %2").arg(deviceName).arg(type));
 }
@@ -167,7 +166,7 @@ void TcpManager::setRpcServer(IRpcControllerBase* rpcServer)
 	if (routedServer != NULL) {
 		foreach (TcpDeviceController *controller, m_controllersMap) {
 			routedServer->registerReceiver( (IRpcListener*) controller, controller->getRouteId() );
-}
+		}
 	}
 }
 
