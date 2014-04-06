@@ -51,8 +51,7 @@ SOURCES += \
 	SettingsTree/TreeWidgetDelegate.cpp \
 	Prm300ControlWidget.cpp \
 	Prm300ControlWidgetController.cpp \
-    Tabs/RPC/RpcConfigClient.cpp \
-    Tabs/RPC/RpcConfigListener.cpp
+    Tabs/RPC/RpcConfigClient.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -118,8 +117,7 @@ HEADERS += \
 	Prm300ControlWidget.h \
 	Prm300ControlWidgetController.h \
     Tabs/RPC/RpcConfigClient.h \
-    Interfaces/IRpcConfigClient.h \
-    Tabs/RPC/RpcConfigListener.h
+    Interfaces/IRpcConfigClient.h
 
 FORMS += \
 	ControlPanel.ui \

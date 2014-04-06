@@ -17,7 +17,6 @@
 #include "DBStation/ListsDialogController.h"
 
 #include "Tabs/RPC/RpcConfigClient.h"
-#include "Tabs/RPC/RpcConfigListener.h"
 #include "Rpc/RpcSettingsManager.h"
 
 #include <Sleeper.h>
@@ -37,7 +36,6 @@ private:
 	DBStationController*	m_dbStationController;
 
 	RpcConfigClient*		m_rpcConfigClient;
-//	RpcConfigListener*		m_rpcConfigListener;
 	IRpcSettingsManager*	m_rpcSettingsManager;
 
 public:
@@ -56,6 +54,7 @@ private slots:
 	void slotShowLists();
 
 	void rpcConnectionEstablished();
+	void startTabManger();
 
 private:
 

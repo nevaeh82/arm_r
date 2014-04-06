@@ -12,7 +12,6 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;
 	m_rpcConfigClient = NULL;
-//	m_rpcConfigListener = NULL;
 	m_rpcSettingsManager = NULL;
 }
 
@@ -62,26 +61,18 @@ void MainWindowController::init()
 
 	m_rpcSettingsManager = RpcSettingsManager::instance();
 
-//	m_rpcConfigListener = new RpcConfigListener(this);
-
 	m_rpcConfigClient = new RpcConfigClient(this);
-//	m_rpcConfigClient->registerReceiver(m_rpcConfigListener);
-
 
 
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
+	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
 
 	m_tabManager->setDbStationController(m_dbStationController);
-
 
 	m_tabManager->setDbManager(m_dbManager);
 
 	m_rpcConfigClient->registerReceiver(m_tabManager);
 
-//	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
-//	tabsSettingsFile.append("./Tabs/Tabs.ini");
-//	m_tabManager->createSubModules(tabsSettingsFile);
-//	m_tabManager->start();
 
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
@@ -104,7 +95,6 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
-	//startRpc();
 	// We need wait for a second after start server
 	Sleeper::msleep(1000);
 
@@ -148,5 +138,10 @@ void MainWindowController::rpcConnectionEstablished()
 {
 	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
 	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
+}
+
+void MainWindowController::startTabManger()
+{
+	m_tabManager->start();
 }
 

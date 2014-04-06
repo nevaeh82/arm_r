@@ -91,6 +91,9 @@ private slots:
 	// IRpcListener interface
 public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+signals:
+	void readyToStart();
 };
 
 #endif // TABMANAGER_H
