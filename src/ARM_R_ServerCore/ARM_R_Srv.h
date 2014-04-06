@@ -8,6 +8,7 @@
 #include "TCP/TcpManager.h"
 #include "TCP/TcpSettingsManager.h"
 #include "TCP/Server/TcpServerController.h"
+#include "Rpc/RpcConfigReader.h"
 
 Q_DECLARE_METATYPE(MessageSP)
 

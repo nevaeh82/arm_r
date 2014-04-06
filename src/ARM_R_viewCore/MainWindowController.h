@@ -16,6 +16,9 @@
 #include "DBStation/ListsDialog.h"
 #include "DBStation/ListsDialogController.h"
 
+#include "Tabs/RPC/RpcConfigClient.h"
+#include "Tabs/RPC/RpcConfigListener.h"
+
 class MainWindowController : public QObject, public IController<MainWindow>
 {
 	Q_OBJECT
@@ -29,6 +32,9 @@ private:
 	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
 	DBStationController*	m_dbStationController;
+
+	RpcConfigClient*		m_rpcConfigClient;
+	RpcConfigListener*		m_rpcConfigListener;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
