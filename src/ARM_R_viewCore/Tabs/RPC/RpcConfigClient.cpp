@@ -3,7 +3,7 @@
 RpcConfigClient::RpcConfigClient(QObject* parent) :
 	RpcRoutedClient(RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent)
 {
-	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal());
+	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION, this, SLOT(receivedAtlantConfigSlot(QByteArray)));
 }
