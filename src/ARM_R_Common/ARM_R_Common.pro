@@ -37,4 +37,5 @@ HEADERS += \
     Info/StationConfiguration.h \
     Rpc/RpcSettingsManager.h \
     Interfaces/IRpcSettingsManager.h \
-    Info/AtlantConfiguraton.h
+    Info/AtlantConfiguraton.h \
+    Info/DBConnectionParameters.h

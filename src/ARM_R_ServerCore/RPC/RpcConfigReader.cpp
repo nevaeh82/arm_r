@@ -6,6 +6,7 @@ RpcConfigReader::RpcConfigReader(QObject* parent) :
 	m_settingsManager = RpcSettingsManager::instance();
 	connect(this, SIGNAL(readStationListInternalSignal(QString)), this, SLOT(readStationListInternalSlot(QString)));
 	connect(this, SIGNAL(readAtlantConfigurationInternalSignal(QString)), this, SLOT(readAtlantConfigurationInternalSlot(QString)));
+	connect(this, SIGNAL(readDbConfigurationInternalSignal(QString)), this, SLOT(readDbConfigurationInternalSlot(QString)));
 }
 
 RpcConfigReader::~RpcConfigReader()
@@ -26,6 +27,8 @@ void RpcConfigReader::onMethodCalled(const QString& method, const QVariant& argu
 		emit readStationListInternalSignal(fileName);
 	} else if (method == RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION) {
 		emit readAtlantConfigurationInternalSignal(fileName);
+	} else if (method == RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION) {
+		emit readDbConfigurationInternalSignal(fileName);
 	}
 }
 
@@ -75,4 +78,21 @@ void RpcConfigReader::readAtlantConfigurationInternalSlot(const QString& filenam
 	dataStream << atlantConfiguration;
 
 	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION, QVariant(dataToSend));
+}
+
+void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)
+{
+	DBConnectionStruct param;
+	QSettings dbConfig(filename, QSettings::IniFormat, this);
+	param.host		= dbConfig.value("DbStations_Config/host", "127.0.0.1").toString();
+	param.port		= dbConfig.value("DbStations_Config/port", "3306").toString().toUShort();
+	param.login		= dbConfig.value("DbStations_Config/login", "root").toString();
+	param.password	= dbConfig.value("DbStations_Config/password", "qwerty12345").toString();
+	param.dbName	= dbConfig.value("DbStations_Config/dbName", "Stations").toString();
+
+	QByteArray dataToSend;
+	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+	dataStream << param;
+
+	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, QVariant(dataToSend));
 }

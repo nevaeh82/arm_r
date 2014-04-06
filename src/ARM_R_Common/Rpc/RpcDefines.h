@@ -21,6 +21,8 @@
 #define RPC_METHOD_CONFIG_ANSWER_STATION_LIST					"rpcMethodConfigAnswerStationList"
 #define RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION		"rpcMethodConfigRequsetGetAtlantConfiguration"
 #define RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION			"rpcMethodConfigAnswerAtlantConfiguration"
+#define RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION			"rpcMethodConfigRequsetGetDBConfiguration"
+#define RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION				"rpcMethodConfigAnswerDBConfiguration"
 
 ///server
 #define RPC_SLOT_SERVER_SEND_POINTS                 "rpc_slot_server_send_points"

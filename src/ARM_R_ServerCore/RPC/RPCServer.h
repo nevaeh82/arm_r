@@ -39,7 +39,8 @@ private slots:
 	void logClientDisconected(quint64 client);
 
 	void requestGetStationListSlot(quint64 client, QString configFilename);
-	void requestGetAtlantConfiguration(quint64 client, QString configFilename);
+	void requestGetAtlantConfigurationSlot(quint64 client, QString configFilename);
+	void requestGetDbConfigurationSlot(quint64 client, QString configFilename);
 
 	void setMainStationCorrelation(quint64 client, int id, QString station);
 	void setBandwidth(quint64 client, int id, float bandwidth);

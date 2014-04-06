@@ -3,7 +3,7 @@
 
 #include <QString>
 #include <QSqlDatabase>
-#include "DBConnectionParameters.h"
+#include "Info/DBConnectionParameters.h"
 #include "DBFillTables.h"
 
 

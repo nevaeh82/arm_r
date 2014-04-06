@@ -18,6 +18,7 @@ public:
 public:
 	virtual void requestGetStationList(const QString& filename);
 	virtual void requestGetAtlantConfiguration(const QString& filename);
+	virtual void requestGetDbConfiguration(const QString& filename);
 
 signals:
 	void getStationListSignal(QString);
@@ -27,6 +28,7 @@ signals:
 private slots:
 	void receivedStationListSlot(QByteArray data);
 	void receivedAtlantConfigSlot(QByteArray data);
+	void receivedDbConfigurationSlot(QByteArray data);
 };
 
 #endif // RPCCONFIGCLIENT_H

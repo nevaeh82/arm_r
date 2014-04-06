@@ -11,6 +11,7 @@ public:
 
 	virtual void requestGetStationList(const QString& filename)			= 0;
 	virtual void requestGetAtlantConfiguration(const QString& filename)	= 0;
+	virtual void requestGetDbConfiguration(const QString& filename)		= 0;
 };
 
 #endif // IRPCCONFIGCLIENT_H

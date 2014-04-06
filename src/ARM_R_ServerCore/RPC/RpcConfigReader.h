@@ -13,6 +13,7 @@
 
 #include "Info/StationConfiguration.h"
 #include "Info/AtlantConfiguraton.h"
+#include "Info/DBConnectionParameters.h"
 #include "Rpc/RpcSettingsManager.h"
 #include "Rpc/RpcDefines.h"
 
@@ -40,10 +41,12 @@ public:
 signals:
 	void readStationListInternalSignal(const QString& fileName);
 	void readAtlantConfigurationInternalSignal(const QString& filename);
+	void readDbConfigurationInternalSignal(const QString& filename);
 
 private slots:
 	void readStationListInternalSlot(const QString& fileName);
 	void readAtlantConfigurationInternalSlot(const QString& filename);
+	void readDbConfigurationInternalSlot(const QString& filename);
 };
 
 #endif // RPCCONFIGREADER_H
