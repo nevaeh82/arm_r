@@ -92,6 +92,8 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
+	Sleeper::msleep(1000);
+
 	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
 	QString host = m_rpcSettingsManager->getRpcHost();
 	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
