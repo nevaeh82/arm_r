@@ -55,14 +55,25 @@ void MainWindowController::init()
 {
 	m_dbManager = new DbManager(this);
 
-    m_dbStationController = new DBStationController(this);
-    DBConnectionStruct param;
-    param.dbName = "Stations";
-    param.host = "127.0.0.1";
-    param.login = "root";
-    param.port = 3306;
-    param.password = "qwerty12345";
-    m_dbStationController->connectToDB(param);
+	m_dbStationController = new DBStationController(this);
+	DBConnectionStruct param;
+	param.dbName = "Stations";
+	param.host = "127.0.0.1";
+	param.login = "root";
+	param.port = 3306;
+	param.password = "qwerty12345";
+	m_dbStationController->connectToDB(param);
+
+
+
+	m_rpcConfigClient = new RpcConfigClient(this);
+	m_rpcConfigListener = new RpcConfigListener(this);
+	m_rpcConfigClient->registerReceiver(m_rpcConfigListener);
+	///TODO: read port host from file and start client connection
+//	m_rpcConfigClient->start(port, host);
+
+	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
+	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
 
 
 

@@ -5,13 +5,19 @@
 
 #include "Info/StationConfiguration.h"
 #include "RPC/RpcDefines.h"
+#include "Interfaces/IRpcConfigClient.h"
 
-class RpcConfigClient : public RpcRoutedClient
+class RpcConfigClient : public RpcRoutedClient, public IRpcConfigClient
 {
 	Q_OBJECT
 public:
 	explicit RpcConfigClient(QObject* parent = NULL);
 	virtual ~RpcConfigClient();
+
+	// IRpcConfigClient interface
+public:
+	virtual void requestGetStationList(const QString& filename);
+	virtual void requestGetAtlantConfiguration(const QString& filename);
 
 signals:
 	void getStationListSignal(QString);

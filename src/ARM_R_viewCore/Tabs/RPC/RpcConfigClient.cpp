@@ -15,9 +15,6 @@ RpcConfigClient::~RpcConfigClient()
 
 void RpcConfigClient::receivedStationListSlot(QByteArray data)
 {
-//	QDataStream dataStream(&data, QIODevice::ReadOnly);
-//	QList<StationConfiguration> stationList;
-//	dataStream >> stationList;
 	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
 	}
@@ -28,4 +25,14 @@ void RpcConfigClient::receivedAtlantConfigSlot(QByteArray data)
 	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION, data);
 	}
+}
+
+void RpcConfigClient::requestGetStationList(const QString& filename)
+{
+	emit getStationListSignal(filename);
+}
+
+void RpcConfigClient::requestGetAtlantConfiguration(const QString& filename)
+{
+	emit getAtlantConfigSignal(filename);
 }
