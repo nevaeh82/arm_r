@@ -28,12 +28,10 @@
 
 #include "DBStation/DBStationController.h"
 
-#include "Rpc/RpcSettingsManager.h"
-
 #include "Info/StationConfiguration.h"
 #include "Info/AtlantConfiguraton.h"
 
-class TabManager: public QObject, public ITabManager, public IControlPanelListener, public IRpcListener
+class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
 	Q_OBJECT
 
@@ -56,8 +54,6 @@ private:
 
 	DBStationController* m_dbStationController;
 
-	IRpcSettingsManager* m_settingsManager;
-
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
@@ -77,20 +73,17 @@ public:
 
 	QStringList createStationNamesList();
 
-private:
-	int readStationSettings(const QString &settingsFile);
-	void readRpcSettings();
-
 	void setStationsConfiguration(const QList<StationConfiguration>& stationList);
 	void setAtlantConfiguration(const AtlantConfiguration& atlantConfig);
+
 	void addStationTabs();
+
+private:
+	int readStationSettings(const QString &settingsFile);
+	void readRpcSettings();	
 
 private slots:
 	void changeTabSlot(int index);
-
-	// IRpcListener interface
-public:
-	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
 signals:
 	void readyToStart();

@@ -103,8 +103,6 @@ void TabManager::setStationsConfiguration(const QList<StationConfiguration>& sta
 
 		m_stationsMap.insert(station->getId(), station);
 	}
-
-	addStationTabs();
 }
 
 void TabManager::setAtlantConfiguration(const AtlantConfiguration& atlantConfig)
@@ -188,27 +186,5 @@ void TabManager::onGlobalPanoramaEnabled(const bool isEnabled)
 		}
 
 		spectrumWidget->setPanorama(isEnabled);
-	}
-}
-
-
-void TabManager::onMethodCalled(const QString& method, const QVariant& argument)
-{
-	QByteArray data = argument.toByteArray();
-	if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		QList<StationConfiguration> stationList;
-		dataStream >> stationList;
-
-		setStationsConfiguration(stationList);
-
-	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		AtlantConfiguration atlantConfiguration;
-		dataStream >> atlantConfiguration;
-
-		setAtlantConfiguration(atlantConfiguration);
 	}
 }

@@ -21,7 +21,7 @@
 
 #include <Sleeper.h>
 
-class MainWindowController : public QObject, public IController<MainWindow>
+class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
 	Q_OBJECT
 
@@ -62,6 +62,10 @@ private:
 	void stop();
 
 	void init();
+
+	// IRpcListener interface
+public:
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };
 
 #endif // MAINWINDOWCONTROLLER_H

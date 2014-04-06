@@ -62,7 +62,7 @@ void MainWindowController::init()
 	m_rpcSettingsManager = RpcSettingsManager::instance();
 
 	m_rpcConfigClient = new RpcConfigClient(this);
-
+	m_rpcConfigClient->registerReceiver(this);
 
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
 	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
@@ -70,9 +70,6 @@ void MainWindowController::init()
 	m_tabManager->setDbStationController(m_dbStationController);
 
 	m_tabManager->setDbManager(m_dbManager);
-
-	m_rpcConfigClient->registerReceiver(m_tabManager);
-
 
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
@@ -145,3 +142,24 @@ void MainWindowController::startTabManger()
 	m_tabManager->start();
 }
 
+void MainWindowController::onMethodCalled(const QString& method, const QVariant& argument)
+{
+	QByteArray data = argument.toByteArray();
+	if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
+
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		QList<StationConfiguration> stationList;
+		dataStream >> stationList;
+
+		m_tabManager->setStationsConfiguration(stationList);
+		m_tabManager->addStationTabs();
+
+	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
+
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		AtlantConfiguration atlantConfiguration;
+		dataStream >> atlantConfiguration;
+
+		m_tabManager->setAtlantConfiguration(atlantConfiguration);
+	}
+}
