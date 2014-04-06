@@ -26,6 +26,7 @@ class ZCoord : public QObject
 public:
     //! РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ (Р·Р°РґР°СЋС‚СЃСЏ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІСЃРµС… РїСѓРЅРєС‚РѕРІ)
     explicit ZCoord(QObject *parent = 0);
+	~ZCoord();
 
     struct DataOfPoints
     {

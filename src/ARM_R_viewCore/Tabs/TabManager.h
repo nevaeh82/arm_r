@@ -9,6 +9,7 @@
 #include <QTextCodec>
 #include <QVBoxLayout>
 #include <QMutex>
+#include <QList>
 
 #include "Correlations/CorrelationControllersContainer.h"
 
@@ -29,7 +30,10 @@
 
 #include "Rpc/RpcSettingsManager.h"
 
-class TabManager: public QObject, public ITabManager, public IControlPanelListener
+#include "Info/StationConfiguration.h"
+#include "Info/AtlantConfiguraton.h"
+
+class TabManager: public QObject, public ITabManager, public IControlPanelListener, public IRpcListener
 {
 	Q_OBJECT
 
@@ -58,6 +62,8 @@ public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
 
+	void setRpcConfig(const quint16& port, const QString& host);
+
 	void start();
 	int createSubModules(const QString& settingsFile);
 	void setDbManager(IDbManager* dbManager);
@@ -75,8 +81,16 @@ private:
 	int readStationSettings(const QString &settingsFile);
 	void readRpcSettings();
 
+	void setStationsConfiguration(const QList<StationConfiguration>& stationList);
+	void setAtlantConfiguration(const AtlantConfiguration& atlantConfig);
+	void addStationTabs();
+
 private slots:
 	void changeTabSlot(int index);
+
+	// IRpcListener interface
+public:
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };
 
 #endif // TABMANAGER_H

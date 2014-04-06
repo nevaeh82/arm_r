@@ -43,7 +43,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 		m_tcpManager->addTcpDevice(key, mapInfo.value(key));
 	}
 
-	IRpcConfigReader* rpcConfigReader = new RpcConfigReader(this);
+	RpcConfigReader* rpcConfigReader = new RpcConfigReader(this);
 	rpcConfigReader->setRpcServer(m_rpcServer);
 }
 

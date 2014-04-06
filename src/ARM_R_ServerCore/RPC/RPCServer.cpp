@@ -91,12 +91,12 @@ void RpcServer::logClientDisconected(quint64 client)
 
 void RpcServer::requestGetStationListSlot(quint64 client, QString configFilename)
 {
-	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, QVariant(configFilename), client);
+	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, QVariant(configFilename));
 }
 
 void RpcServer::requestGetAtlantConfiguration(quint64 client, QString configFilename)
 {
-	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, QVariant(configFilename), client);
+	dispatch(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, QVariant(configFilename));
 }
 
 void RpcServer::setMainStationCorrelation(quint64 client, int id, QString station)

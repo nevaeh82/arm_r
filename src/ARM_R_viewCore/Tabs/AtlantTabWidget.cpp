@@ -12,7 +12,8 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 	connect(ui->sendPB, SIGNAL(clicked()), this, SLOT(_slot_send()));
 	connect(this, SIGNAL(signalAddLog(QString)), ui->logsTE, SLOT(append(QString)));
 
-	createRPC();
+//	createRPC();
+	m_rpcClient = new RpcAtlantClient( m_id, this, this );
 }
 
 AtlantTabWidget::~AtlantTabWidget()
@@ -57,6 +58,11 @@ void AtlantTabWidget::setLog(QByteArray data)
 	str.append(QString::number(quality));
 	emit signalAddLog(str);
 
+}
+
+void AtlantTabWidget::setConfig(const AtlantConfiguration& config)
+{
+	m_rpcClient->start(config.portByRpc, QHostAddress(config.hostByRpc));
 }
 
 int AtlantTabWidget::createRPC()

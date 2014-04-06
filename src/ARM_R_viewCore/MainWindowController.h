@@ -18,6 +18,9 @@
 
 #include "Tabs/RPC/RpcConfigClient.h"
 #include "Tabs/RPC/RpcConfigListener.h"
+#include "Rpc/RpcSettingsManager.h"
+
+#include <Sleeper.h>
 
 class MainWindowController : public QObject, public IController<MainWindow>
 {
@@ -34,7 +37,8 @@ private:
 	DBStationController*	m_dbStationController;
 
 	RpcConfigClient*		m_rpcConfigClient;
-	RpcConfigListener*		m_rpcConfigListener;
+//	RpcConfigListener*		m_rpcConfigListener;
+	IRpcSettingsManager*	m_rpcSettingsManager;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -50,6 +54,8 @@ private slots:
 	void serverFailedToStartSlot();
 	void serverStartedSlot();
 	void slotShowLists();
+
+	void rpcConnectionEstablished();
 
 private:
 

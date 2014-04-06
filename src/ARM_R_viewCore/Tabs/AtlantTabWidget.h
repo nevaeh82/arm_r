@@ -21,6 +21,8 @@
 
 #include "ITabAtlant.h"
 
+#include "Info/AtlantConfiguraton.h"
+
 namespace Ui {
 class AtlantTabWidget;
 }
@@ -41,6 +43,7 @@ public:
 	~AtlantTabWidget();
 
 	virtual void setLog(QByteArray data);
+	void setConfig(const AtlantConfiguration& config);
 
 private:
 

@@ -13,9 +13,11 @@ void RpcConfigListener::onMethodCalled(const QString& method, const QVariant& ar
 		//	QDataStream dataStream(&data, QIODevice::ReadOnly);
 		//	QList<StationConfiguration> stationList;
 		//	dataStream >> stationList;
+		emit onStationListReceived(data);
 	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
 		//	QDataStream dataStream(&data, QIODevice::ReadOnly);
 		//	AtlantConfiguration atlantConfiguration;
 		//	dataStream >> atlantConfiguration;
+		emit onAtlantConfigReceived(data);
 	}
 }

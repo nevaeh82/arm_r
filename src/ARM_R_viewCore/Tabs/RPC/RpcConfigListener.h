@@ -21,6 +21,10 @@ public:
 	// IRpcListener interface
 public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+signals:
+	void onStationListReceived(const QByteArray& data);
+	void onAtlantConfigReceived(const QByteArray& data);
 };
 
 #endif // RPCCONFIGLISTENER_H

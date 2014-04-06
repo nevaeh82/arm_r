@@ -11,6 +11,9 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_view = NULL;
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;
+	m_rpcConfigClient = NULL;
+//	m_rpcConfigListener = NULL;
+	m_rpcSettingsManager = NULL;
 }
 
 MainWindowController::~MainWindowController()
@@ -56,38 +59,29 @@ void MainWindowController::init()
 	m_dbManager = new DbManager(this);
 
 	m_dbStationController = new DBStationController(this);
-	DBConnectionStruct param;
-	param.dbName = "Stations";
-	param.host = "127.0.0.1";
-	param.login = "root";
-	param.port = 3306;
-	param.password = "qwerty12345";
-	m_dbStationController->connectToDB(param);
 
+	m_rpcSettingsManager = RpcSettingsManager::instance();
 
+//	m_rpcConfigListener = new RpcConfigListener(this);
 
 	m_rpcConfigClient = new RpcConfigClient(this);
-	m_rpcConfigListener = new RpcConfigListener(this);
-	m_rpcConfigClient->registerReceiver(m_rpcConfigListener);
-	///TODO: read port host from file and start client connection
-//	m_rpcConfigClient->start(port, host);
-
-	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
-	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
+//	m_rpcConfigClient->registerReceiver(m_rpcConfigListener);
 
 
 
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
 
-    m_tabManager->setDbStationController(m_dbStationController);
+	m_tabManager->setDbStationController(m_dbStationController);
 
-	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
-	tabsSettingsFile.append("./Tabs/Tabs.ini");
 
 	m_tabManager->setDbManager(m_dbManager);
 
-	m_tabManager->createSubModules(tabsSettingsFile);
-	m_tabManager->start();
+	m_rpcConfigClient->registerReceiver(m_tabManager);
+
+//	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
+//	tabsSettingsFile.append("./Tabs/Tabs.ini");
+//	m_tabManager->createSubModules(tabsSettingsFile);
+//	m_tabManager->start();
 
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
@@ -111,11 +105,30 @@ void MainWindowController::serverFailedToStartSlot()
 void MainWindowController::serverStartedSlot()
 {
 	//startRpc();
+	// We need wait for a second after start server
+	Sleeper::msleep(1000);
+
+	DBConnectionStruct param;
+	param.dbName = "Stations";
+	param.host = "127.0.0.1";
+	param.login = "root";
+	param.port = 3306;
+	param.password = "qwerty12345";
+	m_dbStationController->connectToDB(param);
+
+
+	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
+	QString host = m_rpcSettingsManager->getRpcHost();
+	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
+
+	m_tabManager->setRpcConfig(port, host);
+	m_rpcConfigClient->start(port, QHostAddress(host));
+	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
+
 }
 
 void MainWindowController::slotShowLists()
 {
-	/// Uncomment, when resolve problem with databases
 
 	ListsDialog* listForm = new ListsDialog(m_view);
 	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
@@ -129,5 +142,11 @@ void MainWindowController::slotShowLists()
 	}
 	listController->appendView(listForm);
 	listForm->show();
+}
+
+void MainWindowController::rpcConnectionEstablished()
+{
+	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
+	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
 }
 

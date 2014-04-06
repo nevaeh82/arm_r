@@ -22,6 +22,7 @@ public:
 signals:
 	void getStationListSignal(QString);
 	void getAtlantConfigSignal(QString);
+	void connectionEstablishedSignal();
 
 private slots:
 	void receivedStationListSlot(QByteArray data);
