@@ -325,3 +325,49 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 	return false;
 }
 
+bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &category, QList<StationsFrequencyAndBandwith> &list)
+{
+	if(!m_db.isOpen())
+	{
+		return false;
+	}
+
+	QSqlQuery query(m_db);
+	bool succeeded = query.prepare("SELECT s.name, st.frequency, st.bandwidth " \
+					"FROM stationData AS st " \
+					"INNER JOIN stationDevices as sdi on st.deviceID=sdi.id " \
+					"INNER JOIN station as s on s.id=sdi.stationID " \
+					"INNER JOIN category AS cat on st.categoryID=cat.id " \
+					"WHERE cat.name=:objectName");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return false;
+	}
+
+	query.bindValue(":objectName", category);
+
+
+	succeeded = query.exec();
+	if (!succeeded)
+	{
+		qDebug() << "SQL is wrong!";
+		return false;
+	}
+
+	while(query.next())
+	{
+		qDebug() << 0 << query.value(0).toString();
+		qDebug() << 1 << query.value(1).toDouble();
+		qDebug() << 2 << query.value(2).toDouble();
+
+		StationsFrequencyAndBandwith data;
+		data.stationName = query.value(0).toString();
+		data.frequency = query.value(1).toDouble();
+		data.bandwidth = query.value(2).toDouble();
+		list.append(data);
+	}
+
+	return true;
+}
+

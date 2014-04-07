@@ -22,6 +22,8 @@ public:
 	virtual int getStationID(const QString& name)						= 0;
 //	virtual QString getStationIP(const QString& name);
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)	= 0;
+	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list) = 0;
+
 
 };
 

@@ -67,6 +67,9 @@ public:
 
 	QStringList createStationNamesList();
 
+	RpcFlakonClient* getRpcFlakonClient();
+	QMap<int, Station *>& getStations();
+
 
 private:
 	int readSettings(const QString &settingsFile);

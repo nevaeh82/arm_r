@@ -81,6 +81,9 @@ void MainWindowController::init()
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbManager(m_dbManager);
+	m_controlPanelController->setDbStationController(m_dbStationController);
+	m_controlPanelController->setRpcFlakonClient(m_tabManager->getRpcFlakonClient());
+	m_controlPanelController->setMapStations(m_tabManager->getStations());
 	m_controlPanelController->registerReceiver(m_tabManager);
 
 	/// Problem here:

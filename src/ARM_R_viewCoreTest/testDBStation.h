@@ -181,6 +181,31 @@ public:
 
 		delete stationController;
 	}
+	void testGetFrequencyAndBandwidth()
+	{
+		DBStationController* stationController = new DBStationController(NULL);
+		DBConnectionStruct param;
+		param.dbName = "testStations";
+		param.host = "127.0.0.1";
+		param.login = "root";
+		param.port = 3306;
+		param.password = "qwerty12345";
+		bool isConnected = stationController->connectToDB(param);
+		TS_ASSERT_EQUALS(true, isConnected);
+
+		qDebug() << isConnected;
+
+		QList<StationsFrequencyAndBandwith> list;
+
+		bool isGetOk = stationController->getFrequencyAndBandwidthByCategory("White", list);
+
+		qDebug() << isGetOk;
+
+		TS_ASSERT_EQUALS(true, isGetOk);
+		TS_ASSERT_DIFFERS(0, list.count());
+
+		delete stationController;
+	}
 };
 
 #endif // TESTDBSTATION_H

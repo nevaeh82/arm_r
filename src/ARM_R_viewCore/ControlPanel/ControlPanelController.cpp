@@ -2,6 +2,8 @@
 
 #include "UiDefines.h"
 
+#include <Logger.h>
+
 ControlPanelController::ControlPanelController(QObject *parent) :
 	QObject(parent)
 {
@@ -31,12 +33,28 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
     connect(m_view, SIGNAL(signalViewMode()), this, SLOT(slotViewMode()));
 
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
+	connect(&m_timerCheck, SIGNAL(timeout()), this, SLOT(slotCheckModeSetFreq()));
 
 }
 
 void ControlPanelController::setDbManager(IDbManager *dbManager)
 {
 	m_dbManager = dbManager;
+}
+
+void ControlPanelController::setDbStationController(IDBStation *dbStationController)
+{
+	m_dbStation = dbStationController;
+}
+
+void ControlPanelController::setRpcFlakonClient(RpcFlakonClient *rpcFlakonClient)
+{
+	m_rpcFlakonClient = rpcFlakonClient;
+}
+
+void ControlPanelController::setMapStations(QMap<int, Station *> stationsMap)
+{
+	m_stationsMap = stationsMap;
 }
 
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
@@ -71,11 +89,17 @@ void ControlPanelController::onBandWidthChangedSlot(int start, int end)
 
 void ControlPanelController::slotManualMode()
 {
-    m_timer.stop();
+	if(m_timerCheck.isActive())
+		m_timerCheck.stop();
+	if(m_timer.isActive())
+		m_timer.stop();
 }
 
 void ControlPanelController::slotScanMode(int start, int finish)
 {
+	if(m_timerCheck.isActive())
+		m_timerCheck.stop();
+
     m_startFreq = start;
     m_currentFreq = start;
     m_finishFreq = finish;
@@ -83,13 +107,23 @@ void ControlPanelController::slotScanMode(int start, int finish)
 }
 
 void ControlPanelController::slotCheckMode()
-{
-    m_timer.stop();
+{	
+	if(m_timer.isActive())
+		m_timer.stop();
+
+	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
+	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
+	m_itCheckMode = m_listOfFreqs.begin();
+	slotCheckModeSetFreq();
+	m_timerCheck.start(60000);
 }
 
 void ControlPanelController::slotViewMode()
 {
-    m_timer.stop();
+	if(m_timerCheck.isActive())
+		m_timerCheck.stop();
+	if(m_timer.isActive())
+		m_timer.stop();
 }
 
 void ControlPanelController::slotChangeFreq()
@@ -99,5 +133,46 @@ void ControlPanelController::slotChangeFreq()
         m_currentFreq = m_startFreq;
     }
     m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
-    m_currentFreq += INTERVAL;
+	m_currentFreq += INTERVAL;
+}
+
+void ControlPanelController::slotCheckModeSetFreq()
+{
+	m_mainStation = NULL;
+	if(m_itCheckMode == m_listOfFreqs.end())
+	{
+		m_itCheckMode = m_listOfFreqs.begin();
+	}
+
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, (*m_itCheckMode).frequency);
+	m_dbManager->updatePropertyForAllObjects(DB_SELECTED_PROPERTY, (*m_itCheckMode).bandwidth);
+
+	foreach(Station* st, m_stationsMap)
+	{
+		m_rpcFlakonClient->sendBandwidth(st, (*m_itCheckMode).bandwidth);
+		if(st->getName() == (*m_itCheckMode).stationName)
+		{
+			m_mainStation = st;
+		}
+	}
+
+	/// set main station fo correlations
+	QString leadStation;
+	if(m_mainStation)
+	{
+		leadStation = (*m_itCheckMode).stationName;
+	}
+	else
+	{
+		m_mainStation = m_stationsMap.value(0);
+		leadStation = QString("Авто");
+	}
+
+	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation, leadStation);
+
+	m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
+
+	m_rpcFlakonClient->sendCorrelation(m_mainStation, true);
+
+	m_itCheckMode++;
 }
