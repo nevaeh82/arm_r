@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QEventLoop>
+#include <QTimer>
 
 #include "Interfaces/IController.h"
 #include "MainWindow.h"

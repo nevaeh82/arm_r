@@ -94,7 +94,14 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
-	Sleeper::msleep(1000);
+	log_debug("go to sleep");
+	QEventLoop loop;
+	QTimer timer;
+	connect(&timer, SIGNAL(timeout()),&loop, SLOT(quit()));
+	timer.start(5000);
+	loop.exec();
+	timer.stop();
+	log_debug("Sleeper is off");
 
 	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
 	QString host = m_rpcSettingsManager->getRpcHost();
