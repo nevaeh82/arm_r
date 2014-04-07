@@ -98,7 +98,7 @@ void MainWindowController::serverStartedSlot()
 	QEventLoop loop;
 	QTimer timer;
 	connect(&timer, SIGNAL(timeout()),&loop, SLOT(quit()));
-	timer.start(5000);
+	timer.start(1000);
 	loop.exec();
 	timer.stop();
 	log_debug("Sleeper is off");
