@@ -194,9 +194,16 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		m_rett = -101;
 
 	}
+
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
-	/// Next line creates new Scale event to widget which exec grid moving
-	//m_graphicsWidget->ZoomOutY();
+
+	double startHZ, endHZ;
+	double startY, endY;
+	m_graphicsWidget->GetCurrentViewport(startHZ, startY, endHZ, endY);
+	//Control chart out of viewPort - update scale
+	if(*spectrum > startY || *spectrum < endY) {
+		m_graphicsWidget-> SetScaleY_1to1();
+	}
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
