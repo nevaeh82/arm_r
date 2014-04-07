@@ -9,6 +9,7 @@
 #include <QTextCodec>
 #include <QVBoxLayout>
 #include <QMutex>
+#include <QList>
 
 #include "Correlations/CorrelationControllersContainer.h"
 
@@ -26,6 +27,9 @@
 #include "AtlantTabWidget.h"
 
 #include "DBStation/DBStationController.h"
+
+#include "Info/StationConfiguration.h"
+#include "Info/AtlantConfiguraton.h"
 
 class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
@@ -54,6 +58,8 @@ public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
 
+	void setRpcConfig(const quint16& port, const QString& host);
+
 	void start();
 	int createSubModules(const QString& settingsFile);
 	void setDbManager(IDbManager* dbManager);
@@ -67,12 +73,20 @@ public:
 
 	QStringList createStationNamesList();
 
+	void setStationsConfiguration(const QList<StationConfiguration>& stationList);
+	void setAtlantConfiguration(const AtlantConfiguration& atlantConfig);
+
+	void addStationTabs();
+
 private:
 	int readStationSettings(const QString &settingsFile);
-	void readRpcSettings();
+	void readRpcSettings();	
 
 private slots:
 	void changeTabSlot(int index);
+
+signals:
+	void readyToStart();
 };
 
 #endif // TABMANAGER_H

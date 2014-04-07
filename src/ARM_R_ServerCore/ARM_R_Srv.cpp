@@ -33,7 +33,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	m_tcpManager->setRpcServer(m_rpcServer);
 	m_tcpManager->setTcpServer(m_tcpServer);
 
-	ITcpSettingsManager* settingsManager = new TcpSettingsManager(this);
+	ITcpSettingsManager* settingsManager = TcpSettingsManager::instance();
 	settingsManager->setIniFile("./TCP/coders.ini");
 	QMap<QString, int> mapInfo = settingsManager->getAllInfo();
 
@@ -42,6 +42,9 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 		log_debug(QString(key));
 		m_tcpManager->addTcpDevice(key, mapInfo.value(key));
 	}
+
+	RpcConfigReader* rpcConfigReader = new RpcConfigReader(this);
+	rpcConfigReader->setRpcServer(m_rpcServer);
 }
 
 ARM_R_Srv::~ARM_R_Srv()

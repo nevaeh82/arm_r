@@ -11,6 +11,8 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_view = NULL;
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;
+	m_rpcConfigClient = NULL;
+	m_rpcSettingsManager = NULL;
 }
 
 MainWindowController::~MainWindowController()
@@ -55,33 +57,26 @@ void MainWindowController::init()
 {
 	m_dbManager = new DbManager(this);
 
-    m_dbStationController = new DBStationController(this);
-    DBConnectionStruct param;
-    param.dbName = "Stations";
-    param.host = "127.0.0.1";
-    param.login = "root";
-    param.port = 3306;
-    param.password = "qwerty12345";
-    m_dbStationController->connectToDB(param);
+	m_dbStationController = new DBStationController(this);
 
+	m_rpcSettingsManager = RpcSettingsManager::instance();
 
+	m_rpcConfigClient = new RpcConfigClient(this);
+	m_rpcConfigClient->registerReceiver(this);
 
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
+	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
 
-    m_tabManager->setDbStationController(m_dbStationController);
-
-	QString tabsSettingsFile = QCoreApplication::applicationDirPath();
-	tabsSettingsFile.append("./Tabs/Tabs.ini");
+	m_tabManager->setDbStationController(m_dbStationController);
 
 	m_tabManager->setDbManager(m_dbManager);
-
-	m_tabManager->createSubModules(tabsSettingsFile);
-	m_tabManager->start();
 
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbManager(m_dbManager);
 	m_controlPanelController->registerReceiver(m_tabManager);
+
+	m_view->getStackedWidget()->setCurrentIndex(1);
 
 	/// Problem here:
 
@@ -99,12 +94,26 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
-	//startRpc();
+	log_debug("go to sleep");
+	QEventLoop loop;
+	QTimer timer;
+	connect(&timer, SIGNAL(timeout()),&loop, SLOT(quit()));
+	timer.start(1000);
+	loop.exec();
+	timer.stop();
+	log_debug("Sleeper is off");
+
+	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
+	QString host = m_rpcSettingsManager->getRpcHost();
+	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
+
+	m_tabManager->setRpcConfig(port, host);
+	m_rpcConfigClient->start(port, QHostAddress(host));
+	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
 }
 
 void MainWindowController::slotShowLists()
 {
-	/// Uncomment, when resolve problem with databases
 
 	ListsDialog* listForm = new ListsDialog(m_view);
 	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
@@ -120,3 +129,44 @@ void MainWindowController::slotShowLists()
 	listForm->show();
 }
 
+void MainWindowController::rpcConnectionEstablished()
+{
+	m_rpcConfigClient->requestGetDbConfiguration("./Tabs/Db.ini");
+	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
+	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
+}
+
+void MainWindowController::startTabManger()
+{
+	m_view->getStackedWidget()->setCurrentIndex(0);
+	m_tabManager->start();
+}
+
+void MainWindowController::onMethodCalled(const QString& method, const QVariant& argument)
+{
+	QByteArray data = argument.toByteArray();
+	if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
+
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		QList<StationConfiguration> stationList;
+		dataStream >> stationList;
+
+		m_tabManager->setStationsConfiguration(stationList);
+		m_tabManager->addStationTabs();
+
+	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
+
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		AtlantConfiguration atlantConfiguration;
+		dataStream >> atlantConfiguration;
+
+		m_tabManager->setAtlantConfiguration(atlantConfiguration);
+	} else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
+
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		DBConnectionStruct dbConfig;;
+		dataStream >> dbConfig;
+
+		m_dbStationController->connectToDB(dbConfig);
+	}
+}

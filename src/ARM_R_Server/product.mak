@@ -14,6 +14,7 @@ prebuild::
 	$(mkdir) $(DESTDIR)/Tabs
 	$(cp) -ud Tabs/RPC.ini $(DESTDIR)/Tabs
 	$(cp) -ud Tabs/Tabs.ini $(DESTDIR)/Tabs
+	$(cp) -ud Tabs/Db.ini $(DESTDIR)/Tabs
 	$(mkdir) $(DESTDIR)/RDS
 	$(cp) -ud RDS/DRCorrection.ini $(DESTDIR)/RDS
 	$(cp) -ud RDS/RDSpoints.ini $(DESTDIR)/RDS

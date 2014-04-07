@@ -12,7 +12,7 @@
 #include <QList>
 
 #include "IDBStation.h"
-#include "DBConnectionParameters.h"
+#include "Info/DBConnectionParameters.h"
 #include "DBFillTables.h"
 
 #define INVALID_INDEX 0

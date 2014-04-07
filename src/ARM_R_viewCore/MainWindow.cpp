@@ -1,12 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <QDebug>
-
 #define SERVER_NAME "ARM_R_Server"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
@@ -17,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));
 
 
-    this->showMaximized();
+	this->showMaximized();
 
 	init();
 }
@@ -37,6 +35,10 @@ QTabWidget *MainWindow::getWorkTabsWidget() const
 	return ui->worlTabsWidget;
 }
 
+QStackedWidget* MainWindow::getStackedWidget() const
+{
+	return ui->stackedWidget;
+}
 
 void MainWindow::init()
 {

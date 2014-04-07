@@ -21,6 +21,8 @@
 
 #include "ITabAtlant.h"
 
+#include "Info/AtlantConfiguraton.h"
+
 namespace Ui {
 class AtlantTabWidget;
 }
@@ -41,21 +43,12 @@ public:
 	~AtlantTabWidget();
 
 	virtual void setLog(QByteArray data);
-
-private:
-
-	int createRPC();
-	int closeRPC();
+	void setConfig(const AtlantConfiguration& config);
 
 private slots:
-	void _slotStart();
-
 	void _slot_send();
 
 signals:
-	void signalFinishRPC();
-	void signalStartRPC();
-	void signalStopRPC();
 	void signalAddLog(QString str);
 };
 

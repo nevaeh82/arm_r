@@ -14,7 +14,6 @@
 
 #include <Rpc/RpcRoutedServer.h>
 
-#include "IRPC.h"
 #include "Rpc/RpcMessageStruct.h"
 #include "Rpc/RpcDefines.h"
 
@@ -38,7 +37,10 @@ private slots:
 	void logConnectionSuccess(quint64 client);
 	void logClientDisconected(quint64 client);
 
-public slots:
+	void requestGetStationListSlot(quint64 client, QString configFilename);
+	void requestGetAtlantConfigurationSlot(quint64 client, QString configFilename);
+	void requestGetDbConfigurationSlot(quint64 client, QString configFilename);
+
 	void setMainStationCorrelation(quint64 client, int id, QString station);
 	void setBandwidth(quint64 client, int id, float bandwidth);
 	void setShift(quint64 client, int id, float shift);

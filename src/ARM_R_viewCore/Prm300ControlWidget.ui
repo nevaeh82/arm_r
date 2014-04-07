@@ -38,7 +38,7 @@
    <item>
     <widget class="QGroupBox" name="gbAtt1">
      <property name="title">
-      <string>Attuniator1</string>
+      <string>Attenuator 1</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -125,7 +125,7 @@
    <item>
     <widget class="QGroupBox" name="gbAtt2">
      <property name="title">
-      <string>Attuniator2</string>
+      <string>Attenuator 2</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

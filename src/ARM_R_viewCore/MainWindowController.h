@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QEventLoop>
+#include <QTimer>
 
 #include "Interfaces/IController.h"
 #include "MainWindow.h"
@@ -16,7 +18,12 @@
 #include "DBStation/ListsDialog.h"
 #include "DBStation/ListsDialogController.h"
 
-class MainWindowController : public QObject, public IController<MainWindow>
+#include "Tabs/RPC/RpcConfigClient.h"
+#include "Rpc/RpcSettingsManager.h"
+
+#include <Sleeper.h>
+
+class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
 	Q_OBJECT
 
@@ -29,6 +36,9 @@ private:
 	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
 	DBStationController*	m_dbStationController;
+
+	RpcConfigClient*		m_rpcConfigClient;
+	IRpcSettingsManager*	m_rpcSettingsManager;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -45,12 +55,19 @@ private slots:
 	void serverStartedSlot();
 	void slotShowLists();
 
+	void rpcConnectionEstablished();
+	void startTabManger();
+
 private:
 
 	void start();
 	void stop();
 
 	void init();
+
+	// IRpcListener interface
+public:
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };
 
 #endif // MAINWINDOWCONTROLLER_H

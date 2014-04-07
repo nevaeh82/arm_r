@@ -191,7 +191,7 @@ void CoordinateCounter::setSolverDataSize(int aSize)
 void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 {
 	if ((aSize>10) && (aSize<200)) {
-		m_solver->SetStateAnalizeCount(aSize);
+//		m_solver->SetStateAnalizeCount(aSize);
 	}
 }
 
