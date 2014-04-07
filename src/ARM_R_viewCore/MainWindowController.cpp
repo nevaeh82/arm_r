@@ -76,6 +76,8 @@ void MainWindowController::init()
 	m_controlPanelController->setDbManager(m_dbManager);
 	m_controlPanelController->registerReceiver(m_tabManager);
 
+	m_view->getStackedWidget()->setCurrentIndex(1);
+
 	/// Problem here:
 
 
@@ -129,6 +131,7 @@ void MainWindowController::rpcConnectionEstablished()
 
 void MainWindowController::startTabManger()
 {
+	m_view->getStackedWidget()->setCurrentIndex(0);
 	m_tabManager->start();
 }
 

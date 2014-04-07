@@ -12,7 +12,6 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 	connect(ui->sendPB, SIGNAL(clicked()), this, SLOT(_slot_send()));
 	connect(this, SIGNAL(signalAddLog(QString)), ui->logsTE, SLOT(append(QString)));
 
-//	createRPC();
 	m_rpcClient = new RpcAtlantClient( m_id, this, this );
 }
 
@@ -63,36 +62,6 @@ void AtlantTabWidget::setLog(QByteArray data)
 void AtlantTabWidget::setConfig(const AtlantConfiguration& config)
 {
 	m_rpcClient->start(config.portByRpc, QHostAddress(config.hostByRpc));
-}
-
-int AtlantTabWidget::createRPC()
-{
-	QString settingsFile = QCoreApplication::applicationDirPath();
-	settingsFile.append("/Tabs/RPC.ini");
-
-	QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-	QSettings m_settings(settingsFile, QSettings::IniFormat);
-
-	m_settings.setIniCodec(codec);
-
-	QString ipRpc = m_settings.value("RPC_UI/IP", "127.0.0.1").toString();
-	quint16 portRpc = m_settings.value("RPC_UI/Port", 24500).toInt();
-
-	m_rpcClient = new RpcAtlantClient( m_id, this, this );
-	m_rpcClient->start(portRpc, QHostAddress(ipRpc));
-
-	return 0;
-}
-
-int AtlantTabWidget::closeRPC()
-{
-	emit signalFinishRPC();
-	return 0;
-}
-
-void AtlantTabWidget::_slotStart()
-{
-	emit signalStartRPC();
 }
 
 void AtlantTabWidget::_slot_send()

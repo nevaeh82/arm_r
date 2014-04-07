@@ -45,20 +45,10 @@ public:
 	virtual void setLog(QByteArray data);
 	void setConfig(const AtlantConfiguration& config);
 
-private:
-
-	int createRPC();
-	int closeRPC();
-
 private slots:
-	void _slotStart();
-
 	void _slot_send();
 
 signals:
-	void signalFinishRPC();
-	void signalStartRPC();
-	void signalStopRPC();
 	void signalAddLog(QString str);
 };
 

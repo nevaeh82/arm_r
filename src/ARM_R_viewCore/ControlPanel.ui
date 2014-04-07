@@ -152,22 +152,22 @@
     <widget class="QComboBox" name="cbMode">
      <item>
       <property name="text">
-       <string>Ручное</string>
+       <string>Manual</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Сканирование</string>
+       <string>Scanning</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Проверка</string>
+       <string>Checking</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Сопровождение</string>
+       <string>Escorting</string>
       </property>
      </item>
     </widget>

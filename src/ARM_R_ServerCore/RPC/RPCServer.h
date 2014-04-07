@@ -14,7 +14,6 @@
 
 #include <Rpc/RpcRoutedServer.h>
 
-#include "IRPC.h"
 #include "Rpc/RpcMessageStruct.h"
 #include "Rpc/RpcDefines.h"
 

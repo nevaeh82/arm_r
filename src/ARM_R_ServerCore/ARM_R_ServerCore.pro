@@ -38,8 +38,7 @@ SOURCES += \
     RPC/RpcConfigReader.cpp
 
 HEADERS += \
-	RPC/RPCServer.h \
-#	RPC/IRPC.h \
+        RPC/RPCServer.h \
 	ARM_R_Srv.h \
 	ARM_R_Application.h \
 	Atlant/EMS/storm.pb.h \
