@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "Interfaces/IController.h"
 #include "MainWindow.h"
@@ -11,6 +12,8 @@
 
 #include "Tabs/TabManager.h"
 #include "ControlPanel/ControlPanelController.h"
+
+#include "Tabs/Rpc/RpcFlakonClient.h"
 
 #include "DBStation/DBStationController.h"
 #include "DBStation/ListsDialog.h"
@@ -29,6 +32,11 @@ private:
 	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
 	DBStationController*	m_dbStationController;
+
+	RpcFlakonClient *m_rpcFlakonClient;
+	QString m_rpcHost;
+	uint m_rpcPort;
+
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

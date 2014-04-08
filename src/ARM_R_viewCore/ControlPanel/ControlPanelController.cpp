@@ -11,7 +11,10 @@ ControlPanelController::ControlPanelController(QObject *parent) :
 	m_dbManager = NULL;
     m_currentFreq = 0;
     m_startFreq = 0;
-    m_finishFreq = 0;
+    m_finishFreq = 0;	
+	m_dbStation = NULL;
+	m_rpcFlakonClient = NULL;
+	m_mainStation = NULL;
 }
 
 ControlPanelController::~ControlPanelController()

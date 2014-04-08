@@ -35,21 +35,12 @@ void ListWhiteDialogController::appendView(ListWhiteDialog *widget)
 	m_view = widget->getTableView();
 	m_view->setModel(m_model);
 	m_view->setSortingEnabled(true);
-//	m_view->hideColumn(0);
-
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	adjustTableSize();
-//	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
-//	connect(widget, SIGNAL(signalAddClicked()), this, SLOT(m_slotAdd()));
-
 	connect(widget, SIGNAL(signalAccept()), this, SLOT(slotAccept()));
 
 	m_view->setItemDelegateForColumn(0, new CheckBoxDelegate());
-//	m_model->set
-
-
-//	connect(widget, SIGNAL(SignalCancel()), this, SLOT(slotCancel()));
 }
 
 QSqlQuery ListWhiteDialogController::getAllFromWhiteList()
@@ -80,11 +71,6 @@ QSqlQuery ListWhiteDialogController::getAllFromWhiteList()
 void ListWhiteDialogController::adjustTableSize()
 {
 	m_view->resizeColumnsToContents();
-
-//	int width = (m_view->model()->columnCount() - 1) + m_view->verticalHeader()->width();
-//	for(int column = 0; column < m_view->model()->columnCount(); column++)
-//		width = width + m_view->columnWidth(column);
-	//	m_view->setMinimumWidth(width);
 }
 
 void ListWhiteDialogController::slotAccept()
@@ -94,5 +80,4 @@ void ListWhiteDialogController::slotAccept()
 
 void ListWhiteDialogController::slotCancel()
 {
-//	m_view->close();
 }

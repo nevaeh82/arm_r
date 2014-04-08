@@ -13,7 +13,7 @@ ListWhiteDialog::ListWhiteDialog(QWidget *parent) :
 	flags = flags & (~helpFlag);
 
 	setWindowFlags(flags);
-//	setWindowIcon(QIcon(":/images/icons/ListsDialog.png"));
+	setWindowIcon(QIcon(":/images/icons/ListWhiteDialog.png"));
 
 	connect(ui->pbAccept, SIGNAL(clicked()), this, SIGNAL(signalAccept()));
 	connect(ui->pbCancel, SIGNAL(clicked()), this, SLOT(close()));
