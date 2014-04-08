@@ -53,6 +53,9 @@ SOURCES += \
 	SettingsTree/TreeWidgetDelegate.cpp \
 	Prm300ControlWidget.cpp \
 	Prm300ControlWidgetController.cpp \
+    ControlPanel/ListWhiteDialog.cpp \
+    ControlPanel/ListWhiteDialogController.cpp \
+    ControlPanel/CheckBoxDelegate.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -119,6 +122,9 @@ HEADERS += \
 	DBStation/ListsDialogController.h \
 	Prm300ControlWidget.h \
 	Prm300ControlWidgetController.h \
+    ControlPanel/ListWhiteDialog.h \
+    ControlPanel/ListWhiteDialogController.h \
+    ControlPanel/CheckBoxDelegate.h
 
 FORMS += \
 	ControlPanel.ui \
@@ -131,7 +137,8 @@ FORMS += \
 	SpectrumWidget.ui \
 	DBStation/AddStationDataDialog.ui \
 	DBStation/ListsDialog.ui \
-	Prm300ControlWidget.ui
+	Prm300ControlWidget.ui \
+    ControlPanel/ListWhiteDialog.ui
 
 
 RESOURCES += \

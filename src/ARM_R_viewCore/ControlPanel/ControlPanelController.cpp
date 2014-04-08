@@ -124,6 +124,27 @@ void ControlPanelController::slotViewMode()
 		m_timerCheck.stop();
 	if(m_timer.isActive())
 		m_timer.stop();
+
+	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
+	log_debug(QString("data for leading = %1").arg(m_listOfFreqs.count()));
+	m_itCheckMode = m_listOfFreqs.begin();
+	slotCheckModeSetFreq();
+	m_timerCheck.start(60000);
+
+	/// TODo in next release
+//	ListWhiteDialog* listView = new ListWhiteDialog(m_view);
+//	ListWhiteDialogController* listController = new ListWhiteDialogController(m_dbStation->getDataBase(), this);
+//	bool isOpen = m_dbStation->getDataBase().isOpen();
+//	if(!isOpen)
+//	{
+//		QMessageBox msgBox;
+//		msgBox.setText(tr("DataBase is not opened!"));
+//		msgBox.exec();
+//		return;
+//	}
+
+//	listController->appendView(listView);
+//	listView->show();
 }
 
 void ControlPanelController::slotChangeFreq()
@@ -165,7 +186,7 @@ void ControlPanelController::slotCheckModeSetFreq()
 	else
 	{
 		m_mainStation = m_stationsMap.value(0);
-		leadStation = QString("Авто");
+		leadStation = tr("Auto");
 	}
 
 	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation, leadStation);

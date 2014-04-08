@@ -14,6 +14,11 @@
 #include "Tabs/Rpc/RpcFlakonClient.h"
 #include "Station.h"
 
+#include "ListWhiteDialog.h"
+#include "ListWhiteDialogController.h"
+
+#include <QMessageBox>
+
 #include <QTimer>
 
 #define INTERVAL 20
