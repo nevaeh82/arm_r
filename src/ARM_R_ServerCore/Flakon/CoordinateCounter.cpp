@@ -6,6 +6,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	QObject(parent)
 {
 	m_solver = NULL;
+	m_sloverListener = NULL;
 
 	m_corr_threshold = 3;
 	m_prevStation = 0;
@@ -22,7 +23,10 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 CoordinateCounter::~CoordinateCounter()
 {
-	delete m_solver;
+	if(m_solver != NULL)
+		delete m_solver;
+	if(m_sloverListener != NULL)
+		delete m_sloverListener;
 	emit signalFinished();
 }
 
@@ -200,13 +204,46 @@ void CoordinateCounter::initSolver()
 	//Solver
 	m_solver = new Solver();
 
-	//incoming data size
-	setSolverDataSize(100);
+	QString stationsSettingsFile = QCoreApplication::applicationDirPath();
+	stationsSettingsFile.append("./TCP/coders.ini");
+	QSettings stationSettings( stationsSettingsFile, QSettings::IniFormat );
+	stationSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-	//data count for motion detection
-//	setSolverAnalyzeSize(60);
+	QStringList childKeys = stationSettings.childGroups();
+	foreach( const QString &childKey, childKeys ) {
+		stationSettings.beginGroup(childKey);
 
-	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
-	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
-	connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
+		int type = stationSettings.value("type", 0).toInt();
+		if(type == 0)
+		{
+			continue;
+		}
+
+		double latitude = stationSettings.value("latitude", 0).toDouble();
+		double longitude = stationSettings.value("longitude", 0).toDouble();
+		int altitude = stationSettings.value("altitude", 0).toInt();
+
+		int id = m_solver->AddStation(latitude, longitude, altitude);
+		stationSettings.endGroup();
+	}
+
+	m_solver->AddSolverType(ONE_DATA);
+	m_solver->AddSolverType(HYPERBOLES);
+	m_solver->AddSolverType(AUTO_HEIGH);
+	m_solver->AddSolverType(MANUAL_HEIGH);
+
+	m_sloverListener = new SolverListener(this);
+	m_solver->RegisterListener(m_sloverListener);
+
+
+
+//	//incoming data size
+//	setSolverDataSize(100);
+
+//	//data count for motion detection
+////	setSolverAnalyzeSize(60);
+
+//	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
+//	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
+//	connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
 }

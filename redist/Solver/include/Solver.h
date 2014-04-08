@@ -5,109 +5,109 @@
 
 ///////////////////////////////   S O L V E R   ///////////////////////////////
 
-#include "RadiolocationInterface.h"
+#include "ISolver.h"
+#include "ISolverListener.h"
 #include "solver_global.h"
 #include <tuple>
 #include <set>
 
-/* РџСЂРµРґСЉРѕР±СЏРІР»РµРЅРёРµ СЂРµР°Р»РёР·Р°С†РёРё СЃРѕР»РІРµСЂР° */
+/* Предъобявление реализации солвера */
 class SolverImpl;
 
 /**
- * @enum SolverType
- * Р’РѕР·РјРѕР¶РЅС‹Рµ С‚РёРїС‹ СЂРµС€Р°С‚РµР»СЏ
- * @param AUTO_HEIGH - СЂРµС€Р°С‚РµР»СЊ РІС‹С‡РёСЃР»СЏСЋС‰РёР№ С‚СЂР°РµРєС‚РѕСЂРёСЋ СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј
-					   РІС‹СЃРѕС‚С‹, РіРµРЅРµСЂРёСЂСѓРµС‚ СЃРёРіРЅР°Р»С‹ signal_sendDataFromRadioLocation
- * @param MANUAL_HEIGH - СЂРµС€Р°С‚РµР»СЊ РІС‹С‡РёСЃР»СЏСЋС‰РёР№ С‚СЂР°РµРєС‚РѕСЂРёСЋ СЃ СЂСѓС‡РЅС‹Рј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹,
-                         РіРµРЅРµСЂРёСЂСѓРµС‚ СЃРёРіРЅР°Р»С‹ signal_sendDataFromRadioLocationManualHeigh
- * @param ONE_DATA - СЂРµС€Р°С‚РµР»СЊ РІС‹С‡РёСЃР»СЏСЋС‰РёР№ РѕРґРёРЅР°СЂРЅРѕС‡РЅС‹Рµ РѕС‚РјРµС‚РєРё СЃ РєРѕРѕСЂРґРёРЅР°С‚Р°РјРё, 
-                     РіРµРЅРµСЂРёСЂСѓРµС‚ СЃРёРіРЅР°Р»С‹ signal_sendOneDataFromRadioLocation
- */
-enum SolverType { AUTO_HEIGH, MANUAL_HEIGH, ONE_DATA };
-
-
-/**
  *@class Solver
- * РєР»Р°СЃСЃ СЂРµС€Р°С‚РµР»СЏ Р·Р°РґР°С‡Рё РјРµСЃС‚РѕРѕРїСЂРµРґРµР»РµРЅРёСЏ РїРѕ СЂР°Р·РЅРѕСЃС‚РЅРѕ-РґР°Р»СЊРЅРѕРјРµСЂРЅРѕРјСѓ РјРµС‚РѕРґСѓ
- * @note РїСЂРёРЅРёРјР°РµС‚ РЅР° РІС…РѕРґ РґР°РЅРЅС‹Рµ С‚РёРїР° DataFromFlacon С‡РµСЂРµР· СЃР»РѕС‚ GetData
- * @note РІС‹РґР°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚С‹ СЂР°СЃС‡РµС‚РѕРІ СЃ РїРѕ СЃСЂРµРґСЃС‚РІР°Рј СЃРёРіРЅР°Р»РѕРІ 
-		 signal_sendDataFromRadioLocation, signal_sendDataFromRadioLocationManualHeigh Рё
-		 signal_sendOneDataFromRadioLocation
- * @note С‚Рѕ, РєР°РєРёРµ СЃРёРіРЅР°Р»С‹ Р±СѓРґРµС‚ РіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ СЂРµС€Р°С‚РµР»СЊ Р·Р°РґР°РµС‚СЃСЏ СЃ РїРѕРјРѕС‰СЊСЋ SolverType 
+ * класс решателя задачи местоопределения по разностно-дальномерному методу
+ * @note принимает на вход данные типа DataFromFlacon через слот GetData
+ * @note выдает результаты расчетов с по средствам сигналов 
+		 signal_sendDataFromRadioLocation, signal_sendDataFromRadioLocationManualHeigh,
+		 signal_sendOneDataFromRadioLocation и signal_sendHyperbolesFromRadioLocation
+ * @note то, какие сигналы будет генерировать решатель задается с помощью SolverType 
  */
-class SOLVERSHARED_EXPORT Solver : public QObject
+class SOLVERSHARED_EXPORT Solver : public QObject, public ISolver
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
 
 	/**
-	 * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
-	 * @note РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІСЃРµ РІРѕР·РјРѕР¶РЅС‹Рµ С‚РёРїС‹ СЂРµС€Р°С‚РµР»РµР№
+	 * Конструктор по умолчанию
+	 * @note создается пустой солвер
 	 */
-	Solver();
-	/**
-	 * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
-	 * @param types - СЃРїРёСЃРѕРє С‚РёРїРѕРІ СЂРµС€Р°С‚РµР»РµР№, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ
-	 */
-	Solver(const std::set<SolverType>& types);
+	Solver(QObject* parent = 0);
 
 	/**
-	 * Р—Р°РґР°С‚СЊ Р·РѕРЅСѓ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕСЃС‚Рё
-	 * @param bottomLeft - Р»РµРІР°СЏ РЅРёР¶РЅСЏСЏ С‚РѕС‡РєР° Р·РѕРЅС‹ РѕС‚РІРµС‚СЃРІРµРЅРЅРѕСЃС‚Рё [Lat, Lon]
-	 * @param topRight - РїСЂР°РІР°СЏ РІРµСЂС…РЅСЏСЏ С‚РѕС‡РєР° Р·РѕРЅС‹ РѕС‚РІРµС‚СЃРІРµРЅРЅРѕСЃС‚Рё [Lat, Lon]
-	 * @param H - РјР°РєСЃРёРјР°Р»СЊРЅРѕ РІРѕР·РјРѕР¶РЅР°СЏ РІС‹СЃРѕС‚Р° С†РµР»Рё РЅР°Рґ СѓСЂРѕРІРЅРµРј РјРѕСЂСЏ [Рј]
+	 * Задать зону ответственности
+	 * @param bottomLeft - левая нижняя точка зоны ответсвенности [Lat, Lon]
+	 * @param topRight - правая верхняя точка зоны ответсвенности [Lat, Lon]
+	 * @param H - максимально возможная высота цели над уровнем моря [м]
 	 */
-    void SetAreaOfResponsibility(const QPointF& bottomLeft,
-                                 const QPointF& topRight,const double H=9000.0);
+    virtual void SetAreaOfResponsibility(const QPointF& bottomLeft,
+										 const QPointF& topRight,
+										 const double H=9000.0);
 
-	/* Р”РѕР±Р°РІРёС‚СЊ РєР°РєРѕР№-Р»РёР±Рѕ С‚РёРї СЂРµС€Р°С‚РµР»СЏ */
-	void AddSolverType(const SolverType& type);
+	/* Добавить какой-либо тип решателя */
+	virtual void AddSolverType(const SolverType& type);
 
-	/* РЈР±СЂР°С‚СЊ РєР°РєРѕР№-Р»РёР±Рѕ РёРјРµСЋС‰РёР№СЃСЏ С‚РёРї СЂРµС€Р°С‚РµР»СЏ */
-	void RemoveSolverType(const SolverType& type);
+	/* Убрать какой-либо имеющийся тип решателя */
+	virtual void RemoveSolverType(const SolverType& type);
 
 	/**
-	 * Р—Р°РґР°С‚СЊ РґР»РёРЅСѓ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
-	 * @param length - РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РєРѕРЅС‚РµР№РЅРµСЂРѕРІ РІ DataFromRadioLocation
+	 * Задать длину выходных данных
+	 * @param length - максимальный размер контейнеров в DataFromRadioLocation
 	 */
-    void SetOutDataLength(const size_t length);
+    virtual void SetOutDataLength(const size_t length);
 
 	/**
-	 * Р—Р°РґР°С‚СЊ РІС‹СЃРѕС‚Сѓ, РЅР° РєРѕС‚РѕСЂРѕР№ Р»РµС‚РёС‚СЊ С†РµР»СЊ
-	 * @param heigh - Р·Р°СЂР°РЅРµРµ РёР·РІРµСЃС‚РЅР°СЏ РІС‹СЃРѕС‚Р° С†РµР»Рё РЅР°Рґ СѓСЂРѕРІРЅРµРј РјРѕСЂСЏ [Рј]
+	 * Задать высоту, на которой летить цель
+	 * @param heigh - заранее известная высота цели над уровнем моря [м]
 	 */
-    void SetHeighApriori(const double heigh);
+	virtual void SetHeighApriori(const double heigh);
 
-    /* РћС‡РёСЃС‚РёС‚СЊ РёСЃС‚РѕСЂРёСЋ РЅР°Р±Р»СЋРґРµРЅРёР№ СЃРѕР»РІРµСЂР° */
-    void Clear();
+    /* Очистить историю наблюдений солвера */
+    virtual void Clear();
+	
+	/**
+	 * Добавить станцию решателю
+	 * @param lat - широта станции 
+	 * @param lon - долгота станции 
+	 * @param alt - высота станции 
+	 * @note в случае неуспеха возвращает -1
+	 * @return id - внутренний идентификатор станции 
+	 */
+	virtual int AddStation(const double lat, const double lon, const double alt);
+	
+	/**
+	 * Удалить станцию решателю
+	 * @return признак успеха операции 
+	 */
+	virtual bool RemoveStation(const int id) ;
+	
+	/**
+	 * Зарегистрировать слушателя
+	 * @param listener - слушатель 
+	 * @note одновременно может подключиться только один слушатель
+	 * @return признак успеха операции 
+	 */
+	virtual bool RegisterListener(ISolverListener* listener);
+	
+	/**
+	 * Дерегистрировать слушателя
+	 * @param listener - слушатель 
+	 * @return признак успеха операции 
+	 */
+	virtual bool DeregisterListener(ISolverListener* listener);
 
-	/* РґРµСЃС‚СЂСѓРєС‚РѕСЂ */
+	/**
+	 * Получить данные
+	 * @param data - данные с разностями расстояний
+	 */
+    virtual void GetData(const DataFromFlacon& data);
+
+	/* деструктор */
 	~Solver(){}
-private:
-	/* РёРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РјРµС‚РѕРґ */
-	void Init();
-
-public slots:
-
-	/**
-	 * РџРѕР»СѓС‡РёС‚СЊ РґР°РЅРЅС‹Рµ
-	 * @param data - РґР°РЅРЅС‹Рµ СЃ СЂР°Р·РЅРѕСЃС‚СЏРјРё СЂР°СЃСЃС‚РѕСЏРЅРёР№
-	 */
-    void GetData(const DataFromFlacon& data);
-
-signals:
-
-	/* РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹ */
-    void signal_sendDataFromRadioLocation(const DataFromRadioLocation& allData);
-
-    /* РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹ */
-    void signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation& allData);
-
-	/* РћС‚РїСЂР°РІРєР° РѕРґРЅРѕР№ РѕС‚РјРµС‚РєРё СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… */
-    void signal_sendOneDataFromRadioLocation(const OneDataFromRadioLocation& oneData);
 
 private:
-	/* СЂРµР°Р»РёР·Р°С†РёСЏ СЃРѕР»РІРµСЂР° */
+
+	/* реализация солвера */
 	std::shared_ptr<SolverImpl> solverImpl_;
 
 };

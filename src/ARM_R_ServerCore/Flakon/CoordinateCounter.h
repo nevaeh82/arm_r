@@ -20,10 +20,14 @@
 #include "RadiolocationInterface.h"
 #include "Solver.h"
 #include "Solver_global.h"
+#include "ISolver.h"
+#include "ISolverListener.h"
 
 #include "Correction/ZDR.h"
 
 #include "Protobuf/ARMR_OD/ZVPacket.pb.h"
+
+#include "SolverListener.h"
 
 class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter
 {
@@ -35,12 +39,14 @@ private:
 	double m_corr_threshold;
 	int m_prevStation;
 
-	Solver* m_solver;
+	ISolver* m_solver;
 
 	double m_alt;
 	DataFromFlacon m_aData;
 
 	QString m_likeADeviceName;
+
+	ISolverListener* m_sloverListener;
 
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);
