@@ -3,9 +3,6 @@
 
 #include "Rpc/RpcDefines.h"
 
-//DoubleClick waiting time
-#define TIMER_CLICK_DELAY 500
-
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
 	m_dbManager = NULL;
@@ -28,11 +25,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
-	flagDoubleClick = false;
 
-	m_clickDelay = new QTimer(this);
-	m_clickDelay->setInterval(TIMER_CLICK_DELAY);
-	connect(m_clickDelay, SIGNAL(timeout()), this, SLOT(processClick()));
+	nextClearState = false;
 }
 
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
@@ -203,7 +197,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	//Control chart out of viewPort - update scale
 	if( *spectrum > startY || *spectrum < endY ) {
 		m_graphicsWidget->SetScaleY_1to1();
-	}
+}
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
@@ -316,7 +310,7 @@ void SpectrumWidgetController::init()
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
 
-	connect(m_graphicsWidget, SIGNAL(SelectionCleared()), m_clickDelay, SLOT(start()));
+	connect(m_graphicsWidget, SIGNAL(SelectionCleared()), this, SLOT(slotSelectionCleared()));
 	connect(m_graphicsWidget, SIGNAL(SelectionFinished(double,double,double,double)), this, SLOT(slotSelectionFinished(double,double,double,double)));
 	connect(m_graphicsWidget, SIGNAL(selectionFinishedRedLine(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
 	connect(m_graphicsWidget, SIGNAL(DoubleClicked(double,double)), this, SLOT(slotDoubleClicked(double, double)));
@@ -430,12 +424,15 @@ void SpectrumWidgetController::slotSelectionCleared()
 	selection.start = QPointF(coordinateZero, coordinateZero);
 	selection.end = QPointF(coordinateZero, coordinateZero);
 
+	//Setting null selection
+	m_graphicsWidget->SetSelection(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+
 	m_tab->setSelectedArea(selection);
 }
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)
 {
-	m_clickDelay->stop();
 	///TODO: fix
 
 	/// To HZ
@@ -448,6 +445,23 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 	SpectrumSelection selection;
 	selection.start = QPointF(x1, y1);
 	selection.end = QPointF(x2, y2);
+
+	//if no selection
+	if(x1 == 0 && x2 ==0 && y1 == 0 && y2 == 0) {
+		if(!nextClearState) {
+			nextClearState = true;
+		}
+		else {
+			double coordinateZero = (double)0;
+			tmpSelection.start = QPointF(coordinateZero, coordinateZero);
+			tmpSelection.end = QPointF(coordinateZero, coordinateZero);
+		}
+	}
+	//if any selection exist
+	else {
+		tmpSelection = selection;
+		nextClearState = false;
+	}
 
 	m_tab->setSelectedArea(selection);
 }
@@ -466,9 +480,13 @@ void SpectrumWidgetController::slotIsShowContextMenu()
 		m_graphicsWidget->contextMenu()->setEnabled(false);
 }
 
-void SpectrumWidgetController::slotDoubleClicked(double, double)
+void SpectrumWidgetController::slotDoubleClicked(double a, double b)
 {
-	flagDoubleClick = true;
+	//Create selection back when doubleClicked
+	m_graphicsWidget->SetSelection(tmpSelection.start.x()*1000, 0, tmpSelection.end.x()*1000, 0);
+	slotSelectionFinished(tmpSelection.start.x()*1000, 0, tmpSelection.end.x()*1000, 0);
+	nextClearState = false;
+
 	emit doubleClickedSignal(m_id);
 }
 
@@ -492,14 +510,4 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
-}
-
-void SpectrumWidgetController::processClick()
-{
-	m_clickDelay->stop();
-	if(!flagDoubleClick) {
-		slotSelectionCleared();
-	}
-
-	flagDoubleClick = false;
 }
