@@ -201,8 +201,8 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	double startY, endY;
 	m_graphicsWidget->GetCurrentViewport(startHZ, startY, endHZ, endY);
 	//Control chart out of viewPort - update scale
-	if(*spectrum > startY || *spectrum < endY) {
-		m_graphicsWidget-> SetScaleY_1to1();
+	if( *spectrum > startY || *spectrum < endY ) {
+		m_graphicsWidget->SetScaleY_1to1();
 	}
 }
 
