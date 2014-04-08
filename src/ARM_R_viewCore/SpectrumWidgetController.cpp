@@ -474,10 +474,13 @@ void SpectrumWidgetController::slotSelectionFinishedRedLine(double y)
 
 void SpectrumWidgetController::slotIsShowContextMenu()
 {
-	if(m_graphicsWidget->IsSomethingSelected())
-		m_graphicsWidget->contextMenu()->setEnabled(true);
-	else
+	QList<QPointF> selectionList = m_graphicsWidget->GetAllHorSelections();
+	if(selectionList.isEmpty()
+			|| (selectionList.count() == 1 && selectionList.first().x() == 0
+				&& selectionList.first().y() == 0))
 		m_graphicsWidget->contextMenu()->setEnabled(false);
+	else
+		m_graphicsWidget->contextMenu()->setEnabled(true);
 }
 
 void SpectrumWidgetController::slotDoubleClicked(double a, double b)
