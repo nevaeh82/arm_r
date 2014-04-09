@@ -51,10 +51,10 @@ SOURCES += \
 	SettingsTree/TreeWidgetDelegate.cpp \
 	Prm300ControlWidget.cpp \
 	Prm300ControlWidgetController.cpp \
-    Tabs/RPC/RpcConfigClient.cpp
+    Tabs/RPC/RpcConfigClient.cpp \
+    ControlPanel/CheckBoxDelegate.cpp \
     ControlPanel/ListWhiteDialog.cpp \
-    ControlPanel/ListWhiteDialogController.cpp \
-    ControlPanel/CheckBoxDelegate.cpp
+    ControlPanel/ListWhiteDialogController.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -118,10 +118,10 @@ HEADERS += \
 	Prm300ControlWidget.h \
 	Prm300ControlWidgetController.h \
     Tabs/RPC/RpcConfigClient.h \
-    Interfaces/IRpcConfigClient.h
+    Interfaces/IRpcConfigClient.h \
+    ControlPanel/CheckBoxDelegate.h \
     ControlPanel/ListWhiteDialog.h \
-    ControlPanel/ListWhiteDialogController.h \
-    ControlPanel/CheckBoxDelegate.h
+    ControlPanel/ListWhiteDialogController.h
 
 FORMS += \
 	ControlPanel.ui \
