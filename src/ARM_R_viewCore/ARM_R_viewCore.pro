@@ -52,6 +52,9 @@ SOURCES += \
 	Prm300ControlWidget.cpp \
 	Prm300ControlWidgetController.cpp \
     Tabs/RPC/RpcConfigClient.cpp
+    ControlPanel/ListWhiteDialog.cpp \
+    ControlPanel/ListWhiteDialogController.cpp \
+    ControlPanel/CheckBoxDelegate.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -70,7 +73,7 @@ HEADERS += \
 	Tabs/TabSpectrumWidget.h \
 	Tabs/AtlantTabWidget.h \
 	Tabs/CommonSpectrumTabWidget.h \
-        Tabs/Controls/IControlPRM.h \
+    Tabs/Controls/IControlPRM.h \
 	Tabs/RPC/RpcPrmClient.h \
 	Tabs/RPC/RpcFlakonClient.h \
 	Tabs/RPC/RpcAtlantClient.h \
@@ -107,7 +110,7 @@ HEADERS += \
 	DBStation/IDBStation.h \
 	DBStation/ListsProxyModel.h \
 	DBStation/DBStationController.h \
-        DBStation/DBFillTables.h \
+    DBStation/DBFillTables.h \
 	DBStation/AddStationDataDialog.h \
 	DBStation/AddStationDataDialogController.h \
 	DBStation/ListsDialog.h \
@@ -116,6 +119,9 @@ HEADERS += \
 	Prm300ControlWidgetController.h \
     Tabs/RPC/RpcConfigClient.h \
     Interfaces/IRpcConfigClient.h
+    ControlPanel/ListWhiteDialog.h \
+    ControlPanel/ListWhiteDialogController.h \
+    ControlPanel/CheckBoxDelegate.h
 
 FORMS += \
 	ControlPanel.ui \
@@ -128,7 +134,8 @@ FORMS += \
 	SpectrumWidget.ui \
 	DBStation/AddStationDataDialog.ui \
 	DBStation/ListsDialog.ui \
-	Prm300ControlWidget.ui
+	Prm300ControlWidget.ui \
+    ControlPanel/ListWhiteDialog.ui
 
 
 RESOURCES += \
