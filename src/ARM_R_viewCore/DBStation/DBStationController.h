@@ -36,6 +36,7 @@ public:
 	virtual int getStationID(const QString& name);
 //	virtual QString getStationIP(const QString& name);
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
+	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list);
 
 private:
 	QSqlDatabase m_db;

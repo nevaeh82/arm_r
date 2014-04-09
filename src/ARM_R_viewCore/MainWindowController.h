@@ -6,6 +6,8 @@
 #include <QEventLoop>
 #include <QTimer>
 
+
+
 #include "Interfaces/IController.h"
 #include "MainWindow.h"
 
@@ -13,6 +15,8 @@
 
 #include "Tabs/TabManager.h"
 #include "ControlPanel/ControlPanelController.h"
+
+#include "Tabs/Rpc/RpcFlakonClient.h"
 
 #include "DBStation/DBStationController.h"
 #include "DBStation/ListsDialog.h"
@@ -39,6 +43,10 @@ private:
 
 	RpcConfigClient*		m_rpcConfigClient;
 	IRpcSettingsManager*	m_rpcSettingsManager;
+
+	RpcFlakonClient *m_rpcFlakonClient;
+	QString m_rpcHost;
+	uint m_rpcPort;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

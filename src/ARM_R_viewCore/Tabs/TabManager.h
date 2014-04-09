@@ -64,6 +64,7 @@ public:
 	int createSubModules(const QString& settingsFile);
 	void setDbManager(IDbManager* dbManager);
 	void setDbStationController(DBStationController* controller);
+	void setFlakonRpc(RpcFlakonClient* rpcFlakonClient, QString rpcHost, uint rpcPort);
 
 	virtual QString getStationName(const int id);
 	virtual void setActiveTab(const int id);
@@ -75,6 +76,9 @@ public:
 
 	void setStationsConfiguration(const QList<StationConfiguration>& stationList);
 	void setAtlantConfiguration(const AtlantConfiguration& atlantConfig);
+
+	RpcFlakonClient* getRpcFlakonClient();
+	QMap<int, Station *>& getStations();
 
 	void addStationTabs();
 
