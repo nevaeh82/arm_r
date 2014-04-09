@@ -3,6 +3,7 @@
 RpcServer::RpcServer(QObject* parent) :
 	RpcRoutedServer( parent )
 {
+
 }
 
 RpcServer::~RpcServer()
@@ -146,6 +147,7 @@ void RpcServer::recognize(quint64 client, int id, int)
 
 void RpcServer::ssCorrelation(quint64 client, int id, bool enable)
 {
+	log_debug(id);
 	Q_UNUSED( id );
 
 	QByteArray byteArray;

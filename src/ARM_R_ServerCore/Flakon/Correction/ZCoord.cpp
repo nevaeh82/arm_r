@@ -3,8 +3,6 @@
 ZCoord::ZCoord(QObject *parent) :
     QObject(parent)
 {
-	mSolver = NULL;
-
     QTextCodec *pCodec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(pCodec);
 
@@ -19,9 +17,6 @@ ZCoord::ZCoord(QObject *parent) :
 
 ZCoord::~ZCoord()
 {
-	if (NULL != mSolver) {
-		delete mSolver;
-	}
 }
 
 void ZCoord::dataPoint(unsigned short &lNumPoints, QVector<QString> &lTitleOfPoint, QVector<QPointF> &lCoordsOfPoint, QVector<double> &lHeight)
@@ -50,15 +45,10 @@ void ZCoord::setDataPoint(unsigned short aNumPoints, QVector<QString> aTitleOfPo
     lDataOfPoints.aHeight.resize(aNumPoints);
     lDataOfPoints.aDistance.resize(aNumPoints);
 
-    //РљРѕР»-РІРѕ РїСѓРЅРєС‚РѕРІ
     lDataOfPoints.aNumPoints=aNumPoints;
-    //РќР°Р·РІР°РЅРёСЏ РїСѓРЅРєС‚РѕРІ
     lDataOfPoints.aTitleOfPoint=aTitleOfPoint;
-    //РљРѕРѕСЂРґРёРЅР°С‚С‹ РїСѓРЅРєС‚РѕРІ
     lDataOfPoints.aCoordsOfPoint=aCoordsOfPoint;
-    //Р’С‹СЃРѕС‚С‹ РїСѓРЅРєС‚РѕРІ
     lDataOfPoints.aHeight=aHeight;
-    //Р Р°СЃСЃС‚РѕСЏРЅРёСЏ РјРµР¶РґСѓ 0 (РЅР° РєРѕС‚РѕСЂС‹Р№ РїСЂРёС…РѕРґСЏС‚ РІСЃРµ СЃРёРіРЅР°Р»С‹) Рё i РїСѓРЅРєС‚Р°РјРё
     countDistanceOfPoints(lDataOfPoints);
 }
 
@@ -69,9 +59,6 @@ void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
     float aTempDistance;
 
     QVector<float> aWire;//РџРѕРїСЂР°РІРєРё РЅР° РґР»РёРЅС‹ РїСЂРѕРІРѕРґРѕРІ
-//    aWire.append(0);//РЎРѕС„СЊСЏ
-//    aWire.append(0);//РўРѕРєСЃРѕРІРѕ
-//    aWire.append(0);//Р’СЃРµРІРѕР»Р¶СЃРє
 
     aWire.append(70);//Р“Р°Р»
     aWire.append(140);//РџРёС‡РѕСЂРё
@@ -85,12 +72,8 @@ void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
     {
         convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(i), lDataOfPoints.aHeight.at(i), aTempX, aTempY, aTempZ);
         countDistanceOfPoints(aX, aY, aZ, aTempX, aTempY, aTempZ, aTempDistance);
-//        if (i==5) aTempDistance=retransmissionSaberio(); //РџРћРџР РђР’РљРђ Р”Р›РЇ РЎРђР‘Р•Р РРћ
-
-        //Р”РѕР±Р°РІРёС‚СЊ РїРѕРїСЂР°РІРєСѓ РЅР° РїСЂРѕРІРѕРґР°
         aTempDistance=aTempDistance+aWire.at(i);
         lDataOfPoints.aDistance.replace(i, -aTempDistance);
-//        qDebug()<<"РЎРѕС„СЊСЏ - "<<i<<" "<<lDataOfPoints.aDistance.at(i)<<" РјРµС‚СЂРѕРІ";
     }
 }
 
@@ -109,39 +92,6 @@ void ZCoord::countDistanceOfPoints(float aX1, float aY1, float aZ1, float aX2, f
 {
     lDistance = sqrt((aX1 - aX2) * (aX1 - aX2) + (aY1 - aY2) * (aY1 - aY2) + (aZ1 - aZ2) * (aZ1 - aZ2));
 }
-
-//void ZCoord::countDecartCoord(QVector<QPointF> aCoordsOfPoint, unsigned int aNumMainPoint, QVector<QPointF> &lDecartCoordsOfPoint)
-//{
-//    unsigned int aNumOfPoints=aCoordsOfPoint.size();
-//    qDebug()<<"РљРѕР»-РІРѕ РїСѓРЅРєС‚РѕРІ "<<aNumOfPoints;
-
-//    QPointF aTemp;
-
-//    lDecartCoordsOfPoint.clear();
-
-//    for (int i=0; i<aNumOfPoints; i++)
-//    {
-//        geogrToDecart(aCoordsOfPoint.at(i), aTemp, aCoordsOfPoint.at(aNumMainPoint));
-//        lDecartCoordsOfPoint.append(aTemp);
-//        qDebug()<<"i="<<i<<" Lat="<<aCoordsOfPoint.at(i).x()<<" Lon="<<aCoordsOfPoint.at(i).y();
-//        qDebug()<<"Р¦РµРЅС‚СЂ РІ 0 "<<lDecartCoordsOfPoint.at(i).x()<<" "<<lDecartCoordsOfPoint.at(i).y()<<" ";
-//    }
-//}
-
-//void ZCoord::countDecartCoord(unsigned int aNumMainPoint)
-//{
-//    unsigned int aNumOfPoints=mDataOfPoints.aCoordsOfPoint.size();
-//    QPointF aTemp;
-
-//    mDecartCoords.clear();
-
-//    for (int i=0; i<aNumOfPoints; i++)
-//    {
-//        geogrToDecart(mDataOfPoints.aCoordsOfPoint.at(i), aTemp, mDataOfPoints.aCoordsOfPoint.at(aNumMainPoint));
-//        mDecartCoords.append(aTemp);
-//        qDebug()<<"Р Р°СЃС‡РµС‚ РґРµРєР°СЂС‚РѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ "<<i<<" "<<" "<<mDecartCoords.at(i).x()<<" "<<mDecartCoords.at(i).y()<<" ";
-//    }
-//}
 
 void ZCoord::geogrToDecart(QPointF aGeogrCoord,QPointF &lDecartCoord, QPointF aCentrCoord)
 {
@@ -167,7 +117,6 @@ void ZCoord::decartToGeogr(QPointF aDecartCoord, QPointF &lGeogrCoord, QPointF a
 
 float ZCoord::getPointsDistance(int aNumOfPoint)
 {
-
     return mDataOfPoints.aDistance.at(aNumOfPoint);
 }
 
@@ -189,42 +138,28 @@ void ZCoord::checkData(int aNumMain, QVector<double> &lDR, QVector<float> aBench
     float aDistance;
 
 
-    for (int i=0;i<mDataOfPoints.aHeight.size();i++) //РќРѕРјРµСЂ РїСѓРЅРєС‚Р°, СЃ РєРѕС‚РѕСЂС‹Рј СЃРІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ РѕСЃРЅРѕРІРЅРѕР№
+	for (int i = 0; i < mDataOfPoints.aHeight.size(); i++) //РќРѕРјРµСЂ РїСѓРЅРєС‚Р°, СЃ РєРѕС‚РѕСЂС‹Рј СЃРІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ РѕСЃРЅРѕРІРЅРѕР№
     {
-        if (i!=aNumMain)
+		if (i != aNumMain)
         {
             int aTemp; //РќРѕРјРµСЂ СЂР°Р·РЅРѕСЃС‚Рё
-            if (i<aNumMain) aTemp=i;
-            else aTemp=i-1;
+			if (i < aNumMain) {
+				aTemp = i;
+			} else {
+				aTemp = i - 1;
+			}
 
-//            qDebug()<<aTemp<<" СЂР°Р·РЅРѕСЃС‚СЊ РґРѕ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё "<<lDR.at(aTemp);
-
-
-            aDistance=qAbs(getPointsDistance(aNumMain, i));
-            if ((lDR.at(aTemp)<-aDistance*1.2) || (lDR.at(aTemp)>aDistance*1.2)) lDR.replace(aTemp, std::numeric_limits<double>::quiet_NaN());
-            if (aBenchmark.at(aTemp)<aThreshold) lDR.replace(aTemp, std::numeric_limits<double>::quiet_NaN());
+			aDistance = qAbs(getPointsDistance(aNumMain, i));
+			if ((lDR.at(aTemp) < -aDistance*1.2) || (lDR.at(aTemp) > aDistance*1.2)) {
+				lDR.replace(aTemp, std::numeric_limits<double>::quiet_NaN());
+			}
+			if (aBenchmark.at(aTemp) < aThreshold) {
+				lDR.replace(aTemp, std::numeric_limits<double>::quiet_NaN());
+			}
         }
     }
 }
 
-
-void ZCoord::getDataFromSolver(const DataFromRadioLocation& aData)
-{
-
-//    qDebug()<<"РџСЂРёС€РµР» СЃРёРіРЅР°Р» РѕС‚ РЎРѕР»РІРµСЂ";
-    int aLastItem=aData.timeHMSMs.size()-1;
-    if (aData.StateMassive_.at(aLastItem)==STAND) qDebug()<<("РСЃС‚РѕС‡РЅРёРє РЅРµРїРѕРґРІРёР¶РµРЅ");
-    if (aData.StateMassive_.at(aLastItem)==FLY) qDebug()<<("РџРѕРґРІРёР¶РЅС‹Р№ РёСЃС‚РѕС‡РЅРёРє");
-    if (aData.StateMassive_.at(aLastItem)==UNKNOWN) qDebug()<<("РўРёРї РёСЃС‚РѕС‡РЅРёРєР° РЅРµРѕРїСЂРµРґРµР»РµРЅ");
-//    qDebug()<<(QString("Lat=%1    Lon=%2").arg(aData.coordLatLon.at(aLastItem).x()).arg(aData.coordLatLon.at(aLastItem).y()));
-    if (aLastItem>20) qDebug()<<(QString("Р’С‹СЃРѕС‚Р°=%1").arg(aData.heigh.at(aLastItem-15)));
-//    qDebug()<<(QString("РљСѓСЂСЃ=%1").arg(aData.relativeBearing.at(aLastItem)));
-//    qDebug()<<(QString("РЎРєРѕСЂРѕСЃС‚СЊ=%1").arg(aData.airspeed.at(aLastItem)));
-//    qDebug()<<(QString("\nР Р°Р·РјРµСЂ РґР°РЅРЅС‹С…=%1").arg(aLastItem+1));
-
-    emit signal_sendCoordData(aData);
-//    mLogger->saveCoord("Р»РѕРіРєРѕРѕСЂРґРёРЅР°С‚.txt", aData);
-}
 
 double ZCoord::retransmissionSaberio()
 {
@@ -259,38 +194,6 @@ double ZCoord::retransmissionSaberio()
 //    qDebug()<<" РўРђР“Р›РђРќ - Р“РђР› "<<aTempDistance;
 
     return aSumDist;
-}
-
-void ZCoord::setSolverDataSize(int aSize)
-{
-//    if ((aSize>10) && (aSize<2000)) mSolver->SetOutDataLength(aSize);
-}
-
-void ZCoord::setSolverAnalyzeSize(int aSize)
-{
-//    if ((aSize>10) && (aSize<200)) mSolver->SetStateAnalizeCount(aSize);
-}
-
-
-void ZCoord::initSolver()
-{
-	//Solver
-	if (mSolver) {
-		delete mSolver;
-	}
-
-    mSolver = new Solver();
-
-    mCurrentLogName=QTime::currentTime().toString("hh:mm:ss:zzz");
-
-    //Р Р°Р·РјРµСЂ РїСЂРёС…РѕРґСЏС‰РёС… РґР°РЅРЅС‹С…
-    setSolverDataSize(300);
-
-    //РљРѕР»-РІРѕ РґР°РЅРЅС‹С… РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ
-    //setSolverAnalyzeSize(10);
-
-    connect(this, SIGNAL(signal_sendDataFromFlackon(const DataFromFlacon&)), mSolver, SLOT(GetData(const DataFromFlacon&)));
-    connect(mSolver, SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(getDataFromSolver(const DataFromRadioLocation&)));
 }
 
 double ZCoord::distanceAB(const QPointF& aCoordA, double aHgtA, const QPointF& aCoordB, double aHgtB)

@@ -35,8 +35,7 @@ SOURCES += \
 	TCP/Server/TcpServerController.cpp \
 	Flakon/CoordinateCounter.cpp \
 	TCP/TcpSettingsManager.cpp \
-    RPC/RpcConfigReader.cpp \
-    Flakon/SolverListener.cpp
+    RPC/RpcConfigReader.cpp
 
 HEADERS += \
         RPC/RPCServer.h \
@@ -72,5 +71,4 @@ HEADERS += \
 	RPC/RPCStructs.h \
 	RPC/RPCBaseItem.h \
     RPC/RpcConfigReader.h \
-    RPC/Interfaces/IRpcConfigReader.h \
-    Flakon/SolverListener.h
+    RPC/Interfaces/IRpcConfigReader.h

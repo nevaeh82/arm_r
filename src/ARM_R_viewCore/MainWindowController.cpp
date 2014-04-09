@@ -29,6 +29,7 @@ void MainWindowController::appendView(MainWindow *view)
 
 void MainWindowController::startServer()
 {
+//	serverStartedSlot();
 	start();
 }
 
