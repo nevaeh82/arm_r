@@ -121,7 +121,8 @@ bool SpectrumMaterial::ExtViewPortChange(Q_MG_MaterialElement* NewEl,unsigned __
 	{
 		cur_PX = f/key_kf_x_;
 
-		if (key_kf_x_ > 4)
+		//disable this if. Solve bug of disappearing straight lines
+		if (false)
 		{
 			OneMomentCurCachElement = CurCachCluster->ElListCach[f];
 			if (OneMomentCurCachElement != NULL)//нашли кэш
