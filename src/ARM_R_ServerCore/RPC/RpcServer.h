@@ -25,12 +25,8 @@ class RpcServer : public RpcRoutedServer
 	Q_OBJECT
 
 public:
-
 	RpcServer(QObject* parent = NULL);
 	virtual ~RpcServer();
-
-public:
-	virtual bool start(quint16 port, QHostAddress address = QHostAddress::Any);
 
 private slots:
 	void logConnectionError(QAbstractSocket::SocketError socketError);
@@ -64,19 +60,6 @@ private slots:
 
 	void requestStatus(quint64 client, QString name);
 	void sendResponseModulation(quint64 client, QString modulation);
-
-signals:
-	/// Rpc signals
-	void serverSendPointsRpcSignal(QByteArray);
-	void serverSendDetectedBandwidthRpcSignal(QByteArray);
-	void serverSendCorrelationRpcSignal(uint, uint, QByteArray);
-	void serverSendAtlantDirectionRpcSignal(QByteArray);
-	void serverSendAtlantPositionRpcSignal(QByteArray);
-	void serverSendPrmStatusRpcSignal(int, int, int, int);
-	void serverSendPrmStatusRpcSignalBool(QByteArray);
-	void serverSendBplaDefRpcSignal(QByteArray);
-	void serverSendBplaDefAutoRpcSignal(QByteArray);
-
 };
 
 

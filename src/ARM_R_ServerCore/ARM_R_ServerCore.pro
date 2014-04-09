@@ -16,7 +16,6 @@ include(../ARM_R_Common/reference.pri)
 INCLUDEPATH += $$PWD
 
 SOURCES += \
-	RPC/RPCServer.cpp \
 	ARM_R_Srv.cpp \
 	ARM_R_Application.cpp \
 	Atlant/EMS/storm.pb.cc \
@@ -31,14 +30,14 @@ SOURCES += \
 	TCP/TcpPRM300Coder.cpp \
 	TCP/TcpAtlantController.cpp \
 	TCP/TcpAtlantCoder.cpp \
+	TCP/TcpSettingsManager.cpp \
 	TCP/Server/TcpServerCoder.cpp \
 	TCP/Server/TcpServerController.cpp \
 	Flakon/CoordinateCounter.cpp \
-	TCP/TcpSettingsManager.cpp \
-    RPC/RpcConfigReader.cpp
+	RPC/RpcConfigReader.cpp \
+	RPC/RpcServer.cpp \
 
 HEADERS += \
-        RPC/RPCServer.h \
 	ARM_R_Srv.h \
 	ARM_R_Application.h \
 	Atlant/EMS/storm.pb.h \
@@ -70,5 +69,6 @@ HEADERS += \
 	MessageSP.h \
 	RPC/RPCStructs.h \
 	RPC/RPCBaseItem.h \
-    RPC/RpcConfigReader.h \
-    RPC/Interfaces/IRpcConfigReader.h
+	RPC/RpcConfigReader.h \
+	RPC/RpcServer.h \
+	RPC/Interfaces/IRpcConfigReader.h \

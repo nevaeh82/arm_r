@@ -202,7 +202,6 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				/// send data to FlakonCoordinatesCounter
 				m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender );
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_CORRELATION, data, sender );
-				log_warning("GOT FLAKON");
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF, data, sender );
