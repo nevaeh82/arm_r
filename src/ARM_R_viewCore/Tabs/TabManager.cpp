@@ -171,7 +171,6 @@ void TabManager::clearAllInformation()
 {
 	m_currentTabWidget = NULL;
 	m_tabWidget->setEnabled(false);
-//	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));

@@ -93,6 +93,8 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
+	m_view->getStackedWidget()->setCurrentIndex(1);
+
 	log_debug("go to sleep");
 	QEventLoop loop;
 	QTimer timer;
