@@ -185,12 +185,10 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		}
 	}
 
+	//TODO: Write signals values over m_threshold. Task 6186
 	if(m_rett == 0)
 	{
-		QMessageBox::warning(m_view, tr("Attention!"), tr("Signal was detected!"),
-									   QMessageBox::Cancel, QMessageBox::Ok);
 		m_rett = -101;
-
 	}
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
@@ -433,6 +431,7 @@ void SpectrumWidgetController::slotSelectionCleared()
 	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
 
 	m_tab->setSelectedArea(selection);
+	m_threshold = -1000;
 }
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)
