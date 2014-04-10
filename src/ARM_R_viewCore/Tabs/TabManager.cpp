@@ -48,11 +48,6 @@ QStringList TabManager::createStationNamesList()
 	return stationNamesList;
 }
 
-RpcFlakonClient *TabManager::getRpcFlakonClient()
-{
-	return m_rpcFlakonClient;
-}
-
 QMap<int, Station *> &TabManager::getStations()
 {
 	return m_stationsMap;
