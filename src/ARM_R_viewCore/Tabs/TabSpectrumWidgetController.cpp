@@ -35,7 +35,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
-
 	m_dbManager->deregisterReceiver(m_treeModel);
 
 	m_rpcPrmClient->deregisterReceiver( m_spectrumDataSource );
@@ -43,15 +42,15 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
 		m_rpcPrmClient->deregisterReceiver(correlationWidgetDataSource);
-//		if (m_rpcFlakonClient != NULL) {
-//			m_rpcFlakonClient->deregisterReceiver(correlationWidgetDataSource);
-//		}
+		if (m_rpcFlakonClient != NULL) {
+			m_rpcFlakonClient->deregisterReceiver(correlationWidgetDataSource);
+		}
 	}
 
 	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);
-//	if (m_rpcFlakonClient != NULL) {
-//		m_rpcFlakonClient->deregisterReceiver( m_spectrumDataSource );
-//	}
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->deregisterReceiver( m_spectrumDataSource );
+	}
 }
 
 void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
