@@ -23,4 +23,13 @@ typedef struct StationDataFull
 	QDateTime	date;
 }StationDataFull;
 
+
+/// info about frequency and bandwidth
+typedef struct StationsFrequencyAndBandwith
+{
+	QString stationName;
+	double frequency;
+	double bandwidth;
+}StationsFrequencyAndBandwith;
+
 #endif // DBFILLTABLES_H

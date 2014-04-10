@@ -100,6 +100,8 @@ public:
 
         delete grData;
     }
+
+
 };
 
 #endif // TESTSTREAMING_H

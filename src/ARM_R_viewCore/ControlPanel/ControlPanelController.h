@@ -7,7 +7,17 @@
 #include "Interfaces/IDbManager.h"
 #include "ControlPanelWidget.h"
 #include "Interfaces/IControlPanelController.h"
-#include "Interfaces/IControlPanelListener.h"
+#include "Interfaces/IControlPanelListener.h".
+
+#include "DBStation/IDBStation.h"
+
+#include "Tabs/Rpc/RpcFlakonClient.h"
+#include "Station.h"
+
+#include "ListWhiteDialog.h"
+#include "ListWhiteDialogController.h"
+
+#include <QMessageBox>
 
 #include <QTimer>
 
@@ -21,12 +31,22 @@ private:
 	ControlPanelWidget* m_view;
 
 	IDbManager* m_dbManager;
+	IDBStation* m_dbStation;
 
     QTimer m_timer;
+	QTimer m_timerCheck;
 
     int m_startFreq;
     int m_finishFreq;
     int m_currentFreq;
+
+	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
+	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
+
+	RpcFlakonClient* m_rpcFlakonClient;
+	QMap<int, Station *> m_stationsMap;
+
+	Station* m_mainStation;
 
 
 public:
@@ -36,6 +56,9 @@ public:
 	void appendView(ControlPanelWidget* view);
 
 	void setDbManager(IDbManager* dbManager);
+	void setDbStationController(IDBStation* dbStationController);
+	void setRpcFlakonClient(RpcFlakonClient* rpcFlakonClient);
+	void setMapStations(QMap<int, Station *> stationsMap);
 
 
 signals:
@@ -55,6 +78,7 @@ private slots:
     void slotViewMode();
 
     void slotChangeFreq();
+	void slotCheckModeSetFreq();
 
 };
 
