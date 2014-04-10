@@ -9,6 +9,7 @@ include ../../specs/sqldrivers.mak
 prebuild::
 	$(cp) -ud *.log4qt $(DESTDIR)
 	-$(cp) -ud qt.conf $(DESTDIR)
+	-$(cp) -ud ../../version.ini $(DESTDIR)
 	$(call begin-build, Prebuild OK )
 	
 postbuild::
