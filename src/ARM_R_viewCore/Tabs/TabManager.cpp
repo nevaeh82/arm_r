@@ -15,13 +15,13 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
 {
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	m_rpcFlakonClient = NULL;
+	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 TabManager::~TabManager()
 {
-	clearAllInformation();
+	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 void TabManager::setRpcConfig(const quint16& port, const QString& host)
@@ -33,6 +33,7 @@ void TabManager::setRpcConfig(const quint16& port, const QString& host)
 void TabManager::start()
 {
 	changeTabSlot(m_tabWidget->currentIndex());
+	m_tabWidget->setEnabled(true);
 }
 
 QStringList TabManager::createStationNamesList()
@@ -168,27 +169,39 @@ void TabManager::addStationTabs()
 
 void TabManager::clearAllInformation()
 {
+	m_currentTabWidget = NULL;
+	m_tabWidget->setEnabled(false);
+//	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
+
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));
 		if (tabController != NULL){
 			if (m_dbManager != NULL) {
 				m_dbManager->deregisterReceiver(tabController);
 			}
-			tabController->deleteLater();
+			delete tabController;
+			tabController = NULL;
 		}
 	}
 
 	for (qint32 index = 0; index < m_tabWidget->count(); ++index) {
-		QWidget* tabSpectrumWidget = m_tabWidget->widget(index);
-		if (tabSpectrumWidget != NULL){
-			tabSpectrumWidget->deleteLater();
+		QWidget* tabWidget = m_tabWidget->widget(index);
+		if (tabWidget != NULL){
+			delete tabWidget;
+			tabWidget = NULL;
 		}
-		m_tabWidget->removeTab(index);;
+		m_tabWidget->removeTab(index);
+	}
+
+	if (m_correlationControllers != NULL) {
+		delete m_correlationControllers;
+		m_correlationControllers = NULL;
 	}
 
 	foreach (Station* station, m_stationsMap) {
 		if (station != NULL) {
-			station->deleteLater();
+			delete station;
+			station = NULL;
 		}
 	}
 
@@ -198,7 +211,8 @@ void TabManager::clearAllInformation()
 
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->stop();
-		m_rpcFlakonClient->deleteLater();
+		delete m_rpcFlakonClient;
+		m_rpcFlakonClient = NULL;
 	}
 }
 

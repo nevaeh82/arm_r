@@ -35,6 +35,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
+
 	m_dbManager->deregisterReceiver(m_treeModel);
 
 	m_rpcPrmClient->deregisterReceiver( m_spectrumDataSource );

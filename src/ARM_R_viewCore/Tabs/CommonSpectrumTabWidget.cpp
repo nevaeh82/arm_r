@@ -18,6 +18,7 @@ CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
 {
 	delete ui;
 	m_dbManager->deregisterReceiver(m_treeModel);
+
 }
 
 void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)

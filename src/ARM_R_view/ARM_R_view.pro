@@ -1,6 +1,6 @@
 QT += core gui network sql
 CONFIG   += gui
-#CONFIG   += console
+CONFIG   += console
 
 TARGET   = ARM_R_view
 TEMPLATE = app

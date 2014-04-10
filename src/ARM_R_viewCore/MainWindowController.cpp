@@ -18,6 +18,7 @@ MainWindowController::MainWindowController(QObject *parent)
 MainWindowController::~MainWindowController()
 {
 	stop();
+	m_tabManager->clearAllInformation();
 }
 
 void MainWindowController::appendView(MainWindow *view)
