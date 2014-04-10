@@ -14,6 +14,8 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_currentTabWidget( NULL )
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
+	, m_rpcHost( "127.0.0.1" )
+	, m_rpcPort( 24500 )
 {
 	m_rpcFlakonClient = NULL;
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
@@ -48,6 +50,11 @@ QStringList TabManager::createStationNamesList()
 	return stationNamesList;
 }
 
+QMap<int, Station *> &TabManager::getStations()
+{
+	return m_stationsMap;
+}
+
 void TabManager::setDbManager(IDbManager *dbManager)
 {
 	m_dbManager = dbManager;
@@ -56,6 +63,13 @@ void TabManager::setDbManager(IDbManager *dbManager)
 void TabManager::setDbStationController(DBStationController *controller)
 {
 	m_dbStationController = controller;
+}
+
+void TabManager::setFlakonRpc(RpcFlakonClient *rpcFlakonClient, QString rpcHost, uint rpcPort)
+{
+	m_rpcFlakonClient = rpcFlakonClient;
+	m_rpcHost = rpcHost;
+	m_rpcPort = rpcPort;
 }
 
 QString TabManager::getStationName(const int id)

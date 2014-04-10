@@ -2,17 +2,34 @@
 
 #define SERVER_NAME "ARM_R_Server"
 
+#define DEFAULT_RPC_PORT		24500
+
+
 MainWindowController::MainWindowController(QObject *parent) 
 	: QObject(parent)
 	, m_serverHandler(0)
 	, m_dbManager(0)
 	, m_dbStationController(0)
+	, m_rpcPort(24500)
+	, m_rpcHost("127.0.0.1")
 {
 	m_view = NULL;
 	m_tabManager = NULL;
 	m_controlPanelController = NULL;
 	m_rpcConfigClient = NULL;
 	m_rpcSettingsManager = NULL;
+
+	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
+	rpcSettingsFile.append("./Tabs/RPC.ini");
+	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
+	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
+
+	m_rpcHost = rpcSettings.value("RPC_UI/IP", "192.168.0.1").toString();
+	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+
+
+	m_rpcFlakonClient = new RpcFlakonClient(this);
+	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
 }
 
 MainWindowController::~MainWindowController()
@@ -68,8 +85,16 @@ void MainWindowController::init()
 	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
 	m_tabManager->setDbStationController(m_dbStationController);
 
+	m_tabManager->setFlakonRpc(m_rpcFlakonClient, m_rpcHost, m_rpcPort);
+
+	//m_tabManager->createSubModules(tabsSettingsFile);
+
+
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
+	m_controlPanelController->setDbStationController(m_dbStationController);
+	m_controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
+	m_controlPanelController->setMapStations(m_tabManager->getStations());
 	m_controlPanelController->registerReceiver(m_tabManager);
 
 	m_dbManager = new DbManager(this);
