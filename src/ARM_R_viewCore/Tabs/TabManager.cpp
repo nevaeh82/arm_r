@@ -16,11 +16,12 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_dbStationController( NULL )
 {
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
-	m_rpcFlakonClient = new RpcFlakonClient(this);
+	m_rpcFlakonClient = NULL;
 }
 
 TabManager::~TabManager()
 {
+	clearAllInformation();
 }
 
 void TabManager::setRpcConfig(const quint16& port, const QString& host)
@@ -90,6 +91,8 @@ void TabManager::changeTabSlot(int index)
 
 void TabManager::setStationsConfiguration(const QList<StationConfiguration>& stationList)
 {
+	m_rpcFlakonClient = new RpcFlakonClient(this);
+
 	foreach (StationConfiguration stationConf, stationList) {
 		Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
 
@@ -161,6 +164,42 @@ void TabManager::addStationTabs()
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
 
 	emit readyToStart();
+}
+
+void TabManager::clearAllInformation()
+{
+	foreach (Station* station, m_stationsMap) {
+		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));
+		if (tabController != NULL){
+			if (m_dbManager != NULL) {
+				m_dbManager->deregisterReceiver(tabController);
+			}
+			tabController->deleteLater();
+		}
+	}
+
+	for (qint32 index = 0; index < m_tabWidget->count(); ++index) {
+		QWidget* tabSpectrumWidget = m_tabWidget->widget(index);
+		if (tabSpectrumWidget != NULL){
+			tabSpectrumWidget->deleteLater();
+		}
+		m_tabWidget->removeTab(index);;
+	}
+
+	foreach (Station* station, m_stationsMap) {
+		if (station != NULL) {
+			station->deleteLater();
+		}
+	}
+
+	m_tabWidgetsMap.clear();
+	m_tabWidget->clear();
+	m_stationsMap.clear();
+
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->stop();
+		m_rpcFlakonClient->deleteLater();
+	}
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)

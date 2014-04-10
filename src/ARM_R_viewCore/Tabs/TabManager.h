@@ -77,6 +77,7 @@ public:
 	void setAtlantConfiguration(const AtlantConfiguration& atlantConfig);
 
 	void addStationTabs();
+	void clearAllInformation();
 
 private:
 	int readStationSettings(const QString &settingsFile);

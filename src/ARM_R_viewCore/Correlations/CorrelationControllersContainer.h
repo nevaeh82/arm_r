@@ -25,7 +25,7 @@ public:
 	virtual int count();
 
 private:
-	QMap<int, ICorrelationWidget* >*	m_mapWidgets;
+	QMap<int, ICorrelationWidget* > m_mapWidgets;
 	QMutex	m_mux;
 };
 

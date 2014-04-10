@@ -29,6 +29,10 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	nextClearState = false;
 }
 
+SpectrumWidgetController::~SpectrumWidgetController()
+{
+}
+
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
 {
 	m_view = view;

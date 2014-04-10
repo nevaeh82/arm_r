@@ -35,6 +35,22 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
+	m_dbManager->deregisterReceiver(m_treeModel);
+
+	m_rpcPrmClient->deregisterReceiver( m_spectrumDataSource );
+	m_rpcPrmClient->deregisterReceiver( this );
+
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		m_rpcPrmClient->deregisterReceiver(correlationWidgetDataSource);
+//		if (m_rpcFlakonClient != NULL) {
+//			m_rpcFlakonClient->deregisterReceiver(correlationWidgetDataSource);
+//		}
+	}
+
+	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);
+//	if (m_rpcFlakonClient != NULL) {
+//		m_rpcFlakonClient->deregisterReceiver( m_spectrumDataSource );
+//	}
 }
 
 void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
@@ -392,7 +408,7 @@ void TabSpectrumWidgetController::setStationNamesList(const QStringList &station
 
 void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClient* client)
 {
-	RpcFlakonClient *old = client;
+	RpcFlakonClient *old = m_rpcFlakonClient;
 
 	m_rpcFlakonClient = client;
 
