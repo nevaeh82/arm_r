@@ -18,6 +18,7 @@ MainWindowController::MainWindowController(QObject *parent)
 MainWindowController::~MainWindowController()
 {
 	stop();
+	m_tabManager->clearAllInformation();
 }
 
 void MainWindowController::appendView(MainWindow *view)
@@ -55,8 +56,6 @@ void MainWindowController::stop()
 
 void MainWindowController::init()
 {
-	m_dbManager = new DbManager(this);
-
 	m_dbStationController = new DBStationController(this);
 
 	m_rpcSettingsManager = RpcSettingsManager::instance();
@@ -66,15 +65,15 @@ void MainWindowController::init()
 
 	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
 	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
-
 	m_tabManager->setDbStationController(m_dbStationController);
-
-	m_tabManager->setDbManager(m_dbManager);
 
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
-	m_controlPanelController->setDbManager(m_dbManager);
 	m_controlPanelController->registerReceiver(m_tabManager);
+
+	m_dbManager = new DbManager(this);
+	m_tabManager->setDbManager(m_dbManager);
+	m_controlPanelController->setDbManager(m_dbManager);
 
 	m_view->getStackedWidget()->setCurrentIndex(1);
 
@@ -94,6 +93,8 @@ void MainWindowController::serverFailedToStartSlot()
 
 void MainWindowController::serverStartedSlot()
 {
+	m_view->getStackedWidget()->setCurrentIndex(1);
+
 	log_debug("go to sleep");
 	QEventLoop loop;
 	QTimer timer;
@@ -151,6 +152,7 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 		QList<StationConfiguration> stationList;
 		dataStream >> stationList;
 
+		m_tabManager->clearAllInformation();
 		m_tabManager->setStationsConfiguration(stationList);
 		m_tabManager->addStationTabs();
 

@@ -70,6 +70,7 @@ private:
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
+	virtual ~SpectrumWidgetController();
 
 	void appendView(SpectrumWidget* view);
 

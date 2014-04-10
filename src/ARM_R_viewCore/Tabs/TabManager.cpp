@@ -15,12 +15,13 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
 {
+	m_rpcFlakonClient = NULL;
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
-	m_rpcFlakonClient = new RpcFlakonClient(this);
 }
 
 TabManager::~TabManager()
 {
+	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 void TabManager::setRpcConfig(const quint16& port, const QString& host)
@@ -32,6 +33,7 @@ void TabManager::setRpcConfig(const quint16& port, const QString& host)
 void TabManager::start()
 {
 	changeTabSlot(m_tabWidget->currentIndex());
+	m_tabWidget->setEnabled(true);
 }
 
 QStringList TabManager::createStationNamesList()
@@ -90,6 +92,8 @@ void TabManager::changeTabSlot(int index)
 
 void TabManager::setStationsConfiguration(const QList<StationConfiguration>& stationList)
 {
+	m_rpcFlakonClient = new RpcFlakonClient(this);
+
 	foreach (StationConfiguration stationConf, stationList) {
 		Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
 
@@ -161,6 +165,54 @@ void TabManager::addStationTabs()
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
 
 	emit readyToStart();
+}
+
+void TabManager::clearAllInformation()
+{
+	m_currentTabWidget = NULL;
+	m_tabWidget->setEnabled(false);
+
+	foreach (Station* station, m_stationsMap) {
+		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));
+		if (tabController != NULL){
+			if (m_dbManager != NULL) {
+				m_dbManager->deregisterReceiver(tabController);
+			}
+			delete tabController;
+			tabController = NULL;
+		}
+	}
+
+	for (qint32 index = 0; index < m_tabWidget->count(); ++index) {
+		QWidget* tabWidget = m_tabWidget->widget(index);
+		if (tabWidget != NULL){
+			delete tabWidget;
+			tabWidget = NULL;
+		}
+		m_tabWidget->removeTab(index);
+	}
+
+	if (m_correlationControllers != NULL) {
+		delete m_correlationControllers;
+		m_correlationControllers = NULL;
+	}
+
+	foreach (Station* station, m_stationsMap) {
+		if (station != NULL) {
+			delete station;
+			station = NULL;
+		}
+	}
+
+	m_tabWidgetsMap.clear();
+	m_tabWidget->clear();
+	m_stationsMap.clear();
+
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->stop();
+		delete m_rpcFlakonClient;
+		m_rpcFlakonClient = NULL;
+	}
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
