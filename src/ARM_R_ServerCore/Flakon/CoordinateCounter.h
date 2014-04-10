@@ -20,12 +20,15 @@
 #include "RadiolocationInterface.h"
 #include "Solver.h"
 #include "Solver_global.h"
+#include "ISolver.h"
+#include "ISolverListener.h"
 
 #include "Correction/ZDR.h"
 
 #include "Protobuf/ARMR_OD/ZVPacket.pb.h"
 
-class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter
+
+class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter, public ISolverListener
 {
 	Q_OBJECT
 
@@ -35,7 +38,7 @@ private:
 	double m_corr_threshold;
 	int m_prevStation;
 
-	Solver* m_solver;
+	ISolver* m_solver;
 
 	double m_alt;
 	DataFromFlacon m_aData;
@@ -49,6 +52,22 @@ public:
 	// ITcpListener interface
 public:
 	virtual void onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument);
+
+	/// ISolverListener
+public:
+	void onSendDataFromRadioLocation(const SolveResult& result, const DataFromRadioLocation& allData);
+	void onSendDataFromRadioLocationManualHeigh(const SolveResult& result, const DataFromRadioLocation& allData);
+	void onSendOneDataFromRadioLocation(const SolveResult& result, const OneDataFromRadioLocation& oneData_1, const OneDataFromRadioLocation& oneData_2);
+	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
+	void onErrorOccured(const ErrorType& error_type, const QString& str);
+
+signals:
+	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
+	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
+	void signalGetOneDataFromRadioLocation(const SolveResult&, const OneDataFromRadioLocation&, const OneDataFromRadioLocation&);
+	void signalGetHyperbolesDataFromRadioLocation(const SolveResult&, const HyperbolesFromRadioLocation&);
+	void signalError(const ErrorType&, const QString&);
+
 
 	// ICoordinateCounter interface
 public:
@@ -64,9 +83,11 @@ public slots:
 	void initSolver();
 
 private slots:
-	void slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&);
-    void slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&);
-    void slotOneCatchDataFromRadioLocationManual(const OneDataFromRadioLocation&);
+	void slotCatchDataFromRadioLocationAuto(const SolveResult& result, const DataFromRadioLocation& aData);
+	void slotCatchDataFromRadioLocationManual(const SolveResult& result, const DataFromRadioLocation& aData);
+	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
+	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
+	void slotErrorOccured(const ErrorType& error_type, const QString& str);
 
 
 signals:

@@ -7,6 +7,8 @@
 #define RPC_METHOD_SET_SHIFT              "rpc_slot_set_shift"
 #define RPC_METHOD_RECOGNIZE              "rpc_slot_recognize"
 #define RPC_METHOD_SS_CORRELATION         "rpc_slot_ss_correlation"
+#define RPC_METHOD_SS_CORRELATION1         "rpc_slot_ss_correlation1"
+
 #define RPC_METHOD_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
 
 ///PRM300 from rpc client

@@ -13,16 +13,18 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
 	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
 	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
+	qRegisterMetaType<ErrorType> ("ErrorType");
+	qRegisterMetaType<SolveResult> ("SolveResult");
+	qRegisterMetaType<HyperbolesFromRadioLocation> ("HyperbolesFromRadioLocation");
 
-
-	initSolver();
 	m_likeADeviceName = deviceName;
 	log_debug(QString("Created %1").arg(m_likeADeviceName));
 }
 
 CoordinateCounter::~CoordinateCounter()
 {
-	delete m_solver;
+	if(m_solver != NULL)
+		delete m_solver;
 	emit signalFinished();
 }
 
@@ -74,6 +76,32 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 	m_prevStation = point2;
 }
 
+void CoordinateCounter::onSendDataFromRadioLocation(const SolveResult &result, const DataFromRadioLocation &allData)
+{
+	emit signalGetDataFromRadioLocation(result, allData);
+}
+
+void CoordinateCounter::onSendDataFromRadioLocationManualHeigh(const SolveResult &result, const DataFromRadioLocation &allData)
+{
+	emit signalGetDataFromRadioLocationManualHeight(result, allData);
+
+}
+
+void CoordinateCounter::onSendOneDataFromRadioLocation(const SolveResult &result, const OneDataFromRadioLocation &oneData_1, const OneDataFromRadioLocation &oneData_2)
+{
+	emit signalGetOneDataFromRadioLocation(result, oneData_1, oneData_2);
+}
+
+void CoordinateCounter::onSendHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
+{
+	emit signalGetHyperbolesDataFromRadioLocation(result, hyperb);
+}
+
+void CoordinateCounter::onErrorOccured(const ErrorType &error_type, const QString &str)
+{
+	emit signalError(error_type, str);
+}
+
 void CoordinateCounter::sendData(const MessageSP message)
 {
 	QString messageType = message->type();
@@ -103,9 +131,8 @@ QObject* CoordinateCounter::asQObject()
 	return this;
 }
 
-void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation &aData)
+void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
 {
-
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
 	QByteArray dataToSend;
@@ -119,8 +146,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	dataStream << aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
 
-
-
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
@@ -128,7 +153,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const DataFromRadioLo
 	}
 }
 
-void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadioLocation &aData)
+void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
 {
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
@@ -150,17 +175,16 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const DataFromRadio
 	}
 }
 
-
-void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const OneDataFromRadioLocation &aData)
+void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
 {
 	QByteArray ba;
 	QDataStream ds(&ba, QIODevice::ReadWrite);
 
 	QVector<QPointF> vec;
-	vec.append(aData.coordLatLon);
-	ds << aData.timeHMSMs;
+	vec.append(aData_1.coordLatLon);
+	ds << aData_1.timeHMSMs;
 	ds << 1/*aData.StateMassive_.at(aLastItem)*/;
-	ds << aData.latLonStdDev;
+	ds << aData_1.latLonStdDev;
 	ds << vec;
 	ds << 0;
 	ds << 100;
@@ -171,13 +195,16 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const OneDataFro
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
+}
 
+void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
+{
+	log_debug("Hyperboles");
+}
 
-//    QSharedPointer<IMessage> msg(new Message(_id, FLAKON_BPLA_AUTO, ba));
-//    _subscriber->data_ready(FLAKON_BPLA_AUTO, msg);
-
-	log_warning("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
+void CoordinateCounter::slotErrorOccured(const ErrorType &error_type, const QString &str)
+{
+	log_debug(QString("ERROR = ").arg(error_type));
 }
 
 
@@ -198,15 +225,42 @@ void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 void CoordinateCounter::initSolver()
 {
 	//Solver
-	m_solver = new Solver();
+	m_solver = new Solver(this);
 
-	//incoming data size
-	setSolverDataSize(100);
+	QString stationsSettingsFile = QCoreApplication::applicationDirPath();
+	stationsSettingsFile.append("./TCP/coders.ini");
+	QSettings stationSettings( stationsSettingsFile, QSettings::IniFormat );
+	stationSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-	//data count for motion detection
-//	setSolverAnalyzeSize(60);
+	QStringList childKeys = stationSettings.childGroups();
+	foreach( const QString &childKey, childKeys ) {
+		stationSettings.beginGroup(childKey);
 
-	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocation(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationAuto(const DataFromRadioLocation&)));
-	connect(m_solver,SIGNAL(signal_sendDataFromRadioLocationManualHeigh(const DataFromRadioLocation&)), this, SLOT(slotCatchDataFromRadioLocationManual(const DataFromRadioLocation&)));
-	connect(m_solver,SIGNAL(signal_sendOneDataFromRadioLocation(OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(OneDataFromRadioLocation)));
+		int type = stationSettings.value("type", 0).toInt();
+		if(type == 0)
+		{
+			continue;
+		}
+
+		double latitude = stationSettings.value("latitude", 0).toDouble();
+		double longitude = stationSettings.value("longitude", 0).toDouble();
+		int altitude = stationSettings.value("altitude", 0).toInt();
+
+		int id = m_solver->AddStation(latitude, longitude, altitude);
+		stationSettings.endGroup();
+	}
+
+	m_solver->AddSolverType(ONE_DATA);
+	m_solver->AddSolverType(HYPERBOLES);
+	m_solver->AddSolverType(AUTO_HEIGH);
+	m_solver->AddSolverType(MANUAL_HEIGH);
+
+	m_solver->RegisterListener(this);
+
+	connect(this, SIGNAL(signalGetDataFromRadioLocation(SolveResult,DataFromRadioLocation)), this, SLOT(slotCatchDataFromRadioLocationAuto(SolveResult,DataFromRadioLocation)));
+	connect(this, SIGNAL(signalGetDataFromRadioLocationManualHeight(SolveResult,DataFromRadioLocation)), this, SLOT(slotCatchDataFromRadioLocationManual(SolveResult,DataFromRadioLocation)));
+	connect(this, SIGNAL(signalGetHyperbolesDataFromRadioLocation(SolveResult,HyperbolesFromRadioLocation)), this, SLOT(slotCatchDataHyperbolesFromRadioLocation(SolveResult,HyperbolesFromRadioLocation)));
+	connect(this, SIGNAL(signalGetOneDataFromRadioLocation(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)));
+	connect(this, SIGNAL(signalError(ErrorType,QString)), this, SLOT(slotErrorOccured(ErrorType,QString)));
+
 }

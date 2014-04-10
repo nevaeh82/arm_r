@@ -18,11 +18,20 @@ public:
 	void sendCorrelation(IStation *station, const bool enable);
 	void sendAvarageSpectrum(IStation *station, const int avarage);
 
+	bool start(quint16 port, QHostAddress ipAddress);
+
+
 protected slots:
 	void registerRoute();
 	void pointsReceived(QByteArray data);
 	void bandwidthReceived(QByteArray data);
 	void correlationReceived(QByteArray data);
+
+signals:
+	void signalEnableCorrelation(int, bool);
+
+private slots:
+	void slotEnableCorrelation(int, bool);
 };
 
 #endif // RPCFLAKONCLIENT_H
