@@ -7,12 +7,10 @@
 //возможные состо€ни€ движени€ самолета: летит, стоит, неизвестно
 enum State {FLY,STAND,UNKNOWN};
 
-
 ///////////////   D A T A  F R O M  R A D I O L O C A T I O N   ///////////////
 
 //—труктура дл€ выходных данных
-struct DataFromRadioLocation
-{
+struct DataFromRadioLocation {
     //вектор координат
     QVector<QPointF> coordLatLon;
     //вектор высот
@@ -34,11 +32,10 @@ struct DataFromRadioLocation
 };
 
 
-///////////   O N E  D A T A   F R O M  R A D I O L O C A T I O N   ///////////
+///////////////   D A T A  F R O M  R A D I O L O C A T I O N   ///////////////
 
 //—труктура дл€ выходных данных расчета одной порции данных
-struct OneDataFromRadioLocation
-{
+struct OneDataFromRadioLocation {
     //координаты [Lat; Lon], град
     QPointF coordLatLon;
     //высота над уровнем мор€, м
@@ -49,23 +46,60 @@ struct OneDataFromRadioLocation
     double heighStdDev;
     //врем€ получени€ измерений
     QTime timeHMSMs;
-
 };
 
 
 //////////////////////   D A T A  F R O M  F L A C O N   //////////////////////
 
 //получаемые данные
-struct DataFromFlacon
-{
-    //вектор разностей рассто€ний
-    QVector<double> ranges_;
-    //Ќомер опорного датчика
-    int numOfReferenceDetector_;
-    //врем€ получени€ измерений
-    QTime time_;
-
+struct DataFromFlacon {
+	//вектор разностей рассто€ний
+	QVector<double> ranges_;
+	//Ќомер опорного датчика
+	int numOfReferenceDetector_;
+	//врем€ получени€ измерений
+	QTime time_;
 };
+
+////////   H Y P E R B O L E S   F R O M   R A D I O L O C A T I O N   ////////
+
+//—труктура дл€ выходных данных расчета гипербол
+struct HyperbolesFromRadioLocation {
+	//—писок гипербол, которые представлены векторами точек [Lat,Lon]
+	QList<QVector<QPointF> > hyperboles_list;
+	//врем€ получени€ измерений, дл€ которых рассчитаны гиперболы
+	QTime timeHMSMs;
+};
+
+
+/**
+ * @enum ErrorType
+ * ¬озможные типы ошибок решател€
+ * @param SETUP_ERROR - ошибка, возникша€ при настройке солвера
+ * @param INPUT_DATA_ERROR - ошибка, возникша€ при неудачной попытке
+                             обработать входные данные
+ * @param INTERNAL_ERROR - внутренн€€ ошибка солвера
+ */
+enum ErrorType { SETUP_ERROR, INPUT_DATA_ERROR, INTERNAL_ERROR };
+
+/**
+ * @enum SolveResult
+ * –езультат расчета 
+ * @param SOLVED - данные благополучно обработаны 
+ * @param ERROR_OCCURED - в ходе вычислений по€вились ошибки
+ * @param NOT_ENOUGH_DATA - в солвер добавлено недостаточно данных дл€ анализа их точности
+ * @param THERE_IS_NO_SOLUTION - решени€ не существует
+ * @param CANT_DETERMINE_REAL_TRAJECTORY - солвер не может определить реальную траекторию из двух возможных
+ * @param TOO_FEW_RANGES - слишком мало корректных разностей рассто€ний дл€ расчета 
+ * @param TOO_LOW_SOLUTION_ACCURACY - слишком низка€ точность получаемого решени€
+ * @param TOO_LOW_DATA_ACCURACY - слишком низка€ точность входных данных
+ * @param COORDS_DOES_NOT_HIT_IN_AREA - рассчитанные координаты не попадают в зону ответственности
+ * @param COORDS_DOES_NOT_HIT_IN_STROB -  рассчитанные координаты не попадают в строб захвата
+ */
+enum SolveResult { SOLVED, ERROR_OCCURED, NOT_ENOUGH_DATA, THERE_IS_NO_SOLUTION,
+				   CANT_DETERMINE_REAL_TRAJECTORY, TOO_LOW_DATA_ACCURACY,
+	               TOO_FEW_RANGES, TOO_LOW_SOLUTION_ACCURACY, 
+				   COORDS_DOES_NOT_HIT_IN_AREA, COORDS_DOES_NOT_HIT_IN_STROB };
 
 
 #endif // RADIOLOCATIONINTERFACE_H

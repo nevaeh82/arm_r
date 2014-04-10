@@ -10,10 +10,7 @@
 #include <QDebug>
 #include <QSettings>
 
-//#include "ZLogger.h"
 #include "ZCorrector.h"
-#include <RadiolocationInterface.h>
-#include <Solver.h>
 
 #include <qmath.h>
 
@@ -42,9 +39,6 @@ public:
         QVector<float> aDistance;
     };
 
-    //! РРЅРёС†РёР°Р»СЊР·Р°С†РёСЏ SOLVER
-    void initSolver();
-
     /*!
         РџРµСЂРµРІРѕРґ РіРµРѕРіСЂР°С„РёС‡РµСЃРєРёС… РєРѕРѕСЂРґРёРЅР°С‚ РІ РґРµРєР°СЂС‚РѕРІС‹ (РґР»СЏ 1 С‚РѕС‡РєРё).
         \param aGeogrCoord - РіРµРѕРіСЂР°С„РёС‡РµСЃРєРёРµ РєРѕРѕСЂРґРёРЅР°С‚С‹.
@@ -53,28 +47,11 @@ public:
     */
     void geogrToDecart(QPointF aGeogrCoord,QPointF &lDecartCoord, QPointF aCentrCoord);
 
-    /*!
-        Р—Р°РґР°С‚СЊ РєРѕР»-РІРѕ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С… Solver (РѕРіСЂР°РЅРёС‡РµРЅРёРµ 2000).
-        \param aSize - РєРѕР»-РІРѕ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С… РґР»СЏ Solver.
-    */
-    void setSolverDataSize(int aSize);
-
-    /*!
-        Р—Р°РґР°С‚СЊ РєРѕР»-РІРѕ РґР°РЅРЅС‹С… РґР»СЏ Solver РїРѕ РєРѕС‚РѕСЂС‹Рј Р±СѓРґРµС‚ РѕРїСЂРµРґРµР»РµРЅРѕ СЃС‚РѕРёС‚ РёСЃС‚РѕС‡РЅРёРє РёР»Рё РґРІРёРіР°РµС‚СЃСЏ.
-        \param aSize - РєРѕР»-РІРѕ РґР°РЅРЅС‹С… РґР»СЏ Solver.
-    */
-    void setSolverAnalyzeSize(int aSize);
-
 
     //! Р”Р°РЅРЅС‹Рµ Рѕ РїСЂРёРјРµРЅС‹С… РїСѓРЅРєС‚Р°С…
     DataOfPoints mDataOfPoints;
 
 signals:
-    /*!
-        РЎРёРіРЅР°Р» РґР»СЏ РѕС‚РїСЂР°РІРєРё РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РІ Solver.
-        \param aItem - РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЌР»РµРјРµРЅС‚.
-    */
-    void signal_sendDataFromFlackon(const DataFromFlacon& aData);
 
     /*!
         РЎРёРіРЅР°Р» РґР»СЏ РѕС‚РїСЂР°РІРєРё С‚РµРєСЃС‚Р° РЅР° С„РѕСЂРјСѓ.
@@ -82,11 +59,6 @@ signals:
     */
     void signal_sendText(QString aText);
     
-    /*!
-        РЎРёРіРЅР°Р» РґР»СЏ РѕС‚РїСЂР°РІРєРё РґР°РЅРЅС‹С… Рѕ РєРѕРѕСЂРґРёРЅР°С‚Р°С… С†РµР»Рё РЅР° С„РѕСЂРјСѓ.
-        \param allData - РґР°РЅРЅС‹Рµ.
-    */
-    void signal_sendCoordData(const DataFromRadioLocation& allData);
 
     /*!
         РЎРёРіРЅР°Р» РґР»СЏ РІРµРєС‚РѕСЂР° РґРѕСЃС‚РѕРІРµСЂРЅРѕСЃС‚РµР№ РЅР° С„РѕСЂРјСѓ.
@@ -95,11 +67,6 @@ signals:
     void signal_sendBenchmark(QVector<float>);
 
 public slots:
-    /*!
-        РЎР»РѕС‚ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… РёР· Solver.
-        \param aData
-    */
-    void getDataFromSolver(const DataFromRadioLocation& aData);
 
     /*!
         Р”РѕСЃС‚Р°С‚СЊ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РЅСѓР»РµРІС‹Рј (РЅР° РєРѕС‚РѕСЂС‹Р№ РїСЂРёС…РѕРґСЏС‚ РІСЃРµ СЃРёРіРЅР°Р»С‹) Рё aNumOfPoint РїСѓРЅРєС‚Р°РјРё.
@@ -215,31 +182,8 @@ private:
     */
     void countDistanceOfPoints(float aX1, float aY1, float aZ1, float aX2, float aY2, float aZ2, float &lDistance);
 
-
-
-
-//    /*!
-//        Р Р°СЃС‡РµС‚ РґРµРєР°СЂС‚РѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РґР»СЏ РІСЃРµС… РїСѓРЅРєС‚РѕРІ (СЃ СѓС‡РµС‚РѕРј РѕСЃРЅРѕРІРЅРѕРіРѕ РїСѓРЅРєС‚Р°)
-//        \param aCoordsOfPoint - РІРµРєС‚РѕСЂ РіРµРѕРіСЂР°С„РёС‡РµСЃРєРёС… РєРѕРѕСЂРґРёРЅР°С‚ (lat, lon) РІСЃРµС… РїСѓРЅРєС‚РѕРІ.
-//        \param aNumMainPoint - РЅРѕРјРµСЂ РѕСЃРЅРѕРІРЅРѕРіРѕ РїСЂРёРµРјРЅРѕРіРѕ РїСѓРЅРєС‚Р°.
-//        \param lDecartCoordsOfPoint - СЃСЃС‹Р»РєР° РЅР° РІРµРєС‚РѕСЂ РґРµРєР°СЂС‚РѕРІС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РІСЃРµС… РїСѓРЅРєС‚РѕРІ.
-//    */
-//    void countDecartCoord(QVector<QPointF> aCoordsOfPoint, unsigned int aNumMainPoint, QVector<QPointF> &lDecartCoordsOfPoint);
-
     //! Р Р°СЃС‡РµС‚ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ СЂРµС‚СЂР°РЅСЃР»СЏС†РёРё РЎРђР‘Р•Р РРћ - РРќР“РЈР  - РўРђР“Р›РђРќ - Р“РђР›
     double retransmissionSaberio();
-
-
-
-
-
-
-
-//    //! РџРѕСЂСЏРґРѕРє РѕР±СЂР°Р±РѕС‚РєРё РїСѓРЅРєС‚РѕРІ
-//    QVector<unsigned short> mOrderProcessing;
-
-//    //! Р”РµРєР°СЂС‚РѕРІС‹Р№ РєРѕРѕСЂРґРёРЅР°С‚С‹ РїСЂРёРµРјРЅС‹С… РїСѓРЅРєС‚РѕРІ (РёР·РјРµРЅСЏСЋС‚СЃСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РІС‹Р±РѕСЂР° РѕСЃРЅРѕРІРЅРѕРіРѕ РїСѓРЅРєС‚Р° mOrderProcessing)
-//    QVector<QPointF> mDecartCoords;
 
     //! РќРѕРјРµСЂ РѕСЃРЅРѕРІРЅРѕРіРѕ РїСѓРЅРєС‚Р°
     int mNumOfMainPoint;
@@ -247,10 +191,7 @@ private:
     //! Р”Р»СЏ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё СЃРёСЃС‚РµРјР°С‚РёС‡РµСЃРєРёС… РѕС€РёР±РѕРє Рё РёРЅРІРµСЂСЃРёРё Р·РЅР°РєР°
     ZCorrector* mCorrector;
 
-    //! Р”Р»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РєРѕРѕСЂРґРёРЅР°С‚
-    Solver* mSolver;
-
-    //! РљР»Р°СЃСЃ РґР»СЏ Р·Р°РїРёСЃРё Р»РѕРіРѕРІ
+	//! РљР»Р°СЃСЃ РґР»СЏ Р·Р°РїРёСЃРё Р»РѕРіРѕРІ
 //    ZLogger *mLogger;
     QString mCurrentLogName;
     
