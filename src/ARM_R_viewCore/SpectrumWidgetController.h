@@ -22,6 +22,8 @@
 
 #include "DBStation/DBStationController.h"
 
+#include "SignalDetectedDialog.h"
+
 #define TO_MHZ	1000000
 
 class SpectrumWidget;
@@ -67,6 +69,10 @@ private:
 
 	bool nextClearState;
 	SpectrumSelection tmpSelection;
+
+	bool m_spectrumShow;
+
+	double m_overthreshold;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -142,6 +148,9 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
+	void slotStopSpectrumShow();
+	void slotStartSpectrumShow();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H
