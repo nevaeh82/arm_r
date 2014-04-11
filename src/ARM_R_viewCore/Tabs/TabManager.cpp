@@ -132,7 +132,9 @@ void TabManager::setAtlantConfiguration(const AtlantConfiguration& atlantConfig)
 
 void TabManager::addStationTabs()
 {
-	m_rpcFlakonClient->start(m_rpcPort, QHostAddress(m_rpcHost));
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->start(m_rpcPort, QHostAddress(m_rpcHost));
+	}
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 	m_correlationControllers->init(m_stationsMap.count());
@@ -186,6 +188,14 @@ void TabManager::clearAllInformation()
 	m_currentTabWidget = NULL;
 	m_tabWidget->setEnabled(false);
 
+	QString tabName = tr("Common");
+	CommonSpectrumTabWidget* commonTabSpectrumWidget = dynamic_cast<CommonSpectrumTabWidget*>(m_tabWidgetsMap.take(tabName));
+	if (commonTabSpectrumWidget != NULL) {
+		commonTabSpectrumWidget->clearSpectrumWidgetsContainer();
+		delete commonTabSpectrumWidget;
+		commonTabSpectrumWidget = NULL;
+	}
+
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));
 		if (tabController != NULL){
@@ -196,6 +206,8 @@ void TabManager::clearAllInformation()
 			tabController = NULL;
 		}
 	}
+
+
 
 	for (qint32 index = 0; index < m_tabWidget->count(); ++index) {
 		QWidget* tabWidget = m_tabWidget->widget(index);
@@ -224,8 +236,6 @@ void TabManager::clearAllInformation()
 
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->stop();
-		delete m_rpcFlakonClient;
-		m_rpcFlakonClient = NULL;
 	}
 }
 
