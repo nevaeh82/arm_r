@@ -7,7 +7,7 @@
 #include "Interfaces/IDbManager.h"
 #include "ControlPanelWidget.h"
 #include "Interfaces/IControlPanelController.h"
-#include "Interfaces/IControlPanelListener.h".
+#include "Interfaces/IControlPanelListener.h"
 
 #include "DBStation/IDBStation.h"
 
