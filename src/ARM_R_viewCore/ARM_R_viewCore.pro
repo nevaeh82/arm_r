@@ -54,7 +54,8 @@ SOURCES += \
     Tabs/RPC/RpcConfigClient.cpp \
     ControlPanel/CheckBoxDelegate.cpp \
     ControlPanel/ListWhiteDialog.cpp \
-    ControlPanel/ListWhiteDialogController.cpp
+    ControlPanel/ListWhiteDialogController.cpp \
+    SignalDetectedDialog.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -121,7 +122,8 @@ HEADERS += \
     Interfaces/IRpcConfigClient.h \
     ControlPanel/CheckBoxDelegate.h \
     ControlPanel/ListWhiteDialog.h \
-    ControlPanel/ListWhiteDialogController.h
+    ControlPanel/ListWhiteDialogController.h \
+    SignalDetectedDialog.h
 
 FORMS += \
 	ControlPanel.ui \
@@ -135,7 +137,8 @@ FORMS += \
 	DBStation/AddStationDataDialog.ui \
 	DBStation/ListsDialog.ui \
 	Prm300ControlWidget.ui \
-    ControlPanel/ListWhiteDialog.ui
+    ControlPanel/ListWhiteDialog.ui \
+    SignalDetectedDialog.ui
 
 
 RESOURCES += \

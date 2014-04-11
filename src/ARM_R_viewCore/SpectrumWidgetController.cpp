@@ -27,6 +27,9 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_graphicsContextMenu = NULL;
 
 	nextClearState = false;
+
+	m_spectrumShow = true;
+	m_overthreshold = 0;
 }
 
 SpectrumWidgetController::~SpectrumWidgetController()
@@ -179,6 +182,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		{
 			if((spectrum[i] > m_threshold) && (m_rett != -99))
 			{
+				m_overthreshold = (m_current_frequency-10)*(m_bandwidth/m_pointCount)*i;
 				m_rett = 0;
 				break;
 			}
@@ -186,10 +190,24 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	}
 
 	//TODO: Write signals values over m_threshold. Task 6186
-	if(m_rett == 0)
+	if(m_overthreshold != 0)
 	{
+		SignalDetectedDialog dlg;
+		dlg.setFrequency(m_overthreshold);
+		int result = dlg.exec();
+		if(result == QDialog::Accepted)
+		{
+			setSpectrumShow(true);
+		}else
+		{
+			setSpectrumShow(false);
+		}
+		m_overthreshold = 0;
 		m_rett = -101;
 	}
+
+	if(!m_spectrumShow)
+		return;
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 
@@ -199,7 +217,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	//Control chart out of viewPort - update scale
 	if( *spectrum > startY || *spectrum < endY ) {
 		m_graphicsWidget->SetScaleY_1to1();
-}
+	}
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
@@ -246,6 +264,12 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 	for(it = vec.begin(); it != vec.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
+}
+
+void SpectrumWidgetController::setSpectrumShow(bool state)
+{
+	m_spectrumShow = state;
+	emit signalSpectrumEnable(state);
 }
 
 void SpectrumWidgetController::setZeroFrequency(double val)
@@ -322,6 +346,7 @@ void SpectrumWidgetController::init()
 	connect(m_view, SIGNAL(setAutoSearchSignal(bool)), this, SLOT(slotAutoSearch(bool)));
 	connect(m_view, SIGNAL(selectionTypeChangedSignal(bool)), this, SLOT(slotSelectiontypeChanged(bool)));
 	connect(m_view, SIGNAL(requestDataSignal(bool)), this, SLOT(slotRequestData(bool)));
+	connect(this, SIGNAL(signalSpectrumEnable(bool)), m_view, SLOT(slotEnableKM(bool)));
 
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
@@ -358,10 +383,16 @@ void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
 
 void SpectrumWidgetController::slotRequestData(bool state)
 {
-	int data[4] = {0, 1, 2, 3};
-	if(state){
-		emit signalRequestData(m_id, 0, &data[0], 4);
-	}
+	if(m_spectrumShow == state)
+		return;
+
+	setSpectrumShow(state);
+
+
+//	int data[4] = {0, 1, 2, 3};
+//	if(state){
+//		emit signalRequestData(m_id, 0, &data[0], 4);
+//	}
 }
 
 /// add selection to white list
