@@ -6,8 +6,6 @@ SignalDetectedDialog::SignalDetectedDialog(QWidget *parent) :
 	ui(new Ui::SignalDetectedDialog)
 {
 	ui->setupUi(this);
-	connect (ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SIGNAL(signalContinueSpectrum()));
-	connect (ui->buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SIGNAL(signalStopSpectrum()));
 }
 
 SignalDetectedDialog::~SignalDetectedDialog()

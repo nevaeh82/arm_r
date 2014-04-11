@@ -193,11 +193,15 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	if(m_overthreshold != 0)
 	{
 		SignalDetectedDialog dlg;
-		dlg.setModal(true);
-		dlg.show();
-		connect(&dlg, SIGNAL(signalContinueSpectrum()), this, SLOT(slotStartSpectrumShow()));
-		connect(&dlg, SIGNAL(signalStopSpectrum()), this, SLOT(slotStopSpectrumShow()));
 		dlg.setFrequency(m_overthreshold);
+		int result = dlg.exec();
+		if(result == QDialog::Accepted)
+		{
+			setSpectrumShow(true);
+		}else
+		{
+			setSpectrumShow(false);
+		}
 		m_overthreshold = 0;
 		m_rett = -101;
 	}
@@ -260,6 +264,12 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 	for(it = vec.begin(); it != vec.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
+}
+
+void SpectrumWidgetController::setSpectrumShow(bool state)
+{
+	m_spectrumShow = state;
+	emit signalSpectrumEnable(state);
 }
 
 void SpectrumWidgetController::setZeroFrequency(double val)
@@ -376,18 +386,8 @@ void SpectrumWidgetController::slotRequestData(bool state)
 	if(m_spectrumShow == state)
 		return;
 
-	switch(state)
-	{
-		case true:
-			slotStartSpectrumShow();
-			break;
-		case false:
-			slotStopSpectrumShow();
-			break;
-		default:
-			slotStartSpectrumShow();
-			break;
-	}
+	setSpectrumShow(state);
+
 
 //	int data[4] = {0, 1, 2, 3};
 //	if(state){
@@ -547,16 +547,4 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
-}
-
-void SpectrumWidgetController::slotStopSpectrumShow()
-{
-	m_spectrumShow = false;
-	emit signalSpectrumEnable(false);
-}
-
-void SpectrumWidgetController::slotStartSpectrumShow()
-{
-	m_spectrumShow = true;
-	emit signalSpectrumEnable(true);
 }

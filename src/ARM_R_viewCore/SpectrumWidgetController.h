@@ -117,6 +117,7 @@ private:
 	void setDefModulation(QString modulation);
 	void setLabelName(QString base, QString second);
 	void setDetectedAreasUpdate(const QByteArray& vec);
+	void setSpectrumShow(bool state);
 
 signals:
 	void doubleClickedSignal(int);
@@ -150,8 +151,6 @@ private slots:
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
 
-	void slotStopSpectrumShow();
-	void slotStartSpectrumShow();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

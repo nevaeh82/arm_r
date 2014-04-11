@@ -19,10 +19,6 @@ public:
 	void setFrequency(double freq);
 private:
 	Ui::SignalDetectedDialog *ui;
-
-signals:
-	void signalContinueSpectrum();
-	void signalStopSpectrum();
 };
 
 #endif // SIGNALDETECTEDDIALOG_H
