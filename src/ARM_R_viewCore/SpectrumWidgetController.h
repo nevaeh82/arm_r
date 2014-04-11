@@ -22,6 +22,8 @@
 
 #include "DBStation/DBStationController.h"
 
+#include "SignalDetectedDialog.h"
+
 #define TO_MHZ	1000000
 
 class SpectrumWidget;
@@ -68,6 +70,10 @@ private:
 	bool nextClearState;
 	SpectrumSelection tmpSelection;
 
+	bool m_spectrumShow;
+
+	double m_overthreshold;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -111,6 +117,7 @@ private:
 	void setDefModulation(QString modulation);
 	void setLabelName(QString base, QString second);
 	void setDetectedAreasUpdate(const QByteArray& vec);
+	void setSpectrumShow(bool state);
 
 signals:
 	void doubleClickedSignal(int);
@@ -118,6 +125,7 @@ signals:
 	void signalAddSelToLists(int id);
 	void signalCurSelChanged(int);
 	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
+	void signalSpectrumEnable(bool state);
 
 public slots:
 
@@ -142,6 +150,7 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

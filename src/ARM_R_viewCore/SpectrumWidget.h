@@ -41,6 +41,7 @@ public:
 
 
 public slots:
+	void slotSetEnableSpactrum(bool state);
 
 private slots:
 	void slotEnableKM(bool state);
