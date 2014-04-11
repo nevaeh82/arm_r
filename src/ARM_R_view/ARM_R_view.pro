@@ -6,6 +6,8 @@ TARGET   = ARM_R_view
 TEMPLATE = app
 ProjectDir=$$PWD
 
+LIBS+=user32.lib
+
 SOURCES = main.cpp
 
 include(../../specs/project.pri)

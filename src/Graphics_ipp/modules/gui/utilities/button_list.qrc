@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/button_list">
-        <file>Resources/coner.png</file>
-    </qresource>
-</RCC>
