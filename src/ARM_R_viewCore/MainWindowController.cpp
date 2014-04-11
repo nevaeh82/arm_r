@@ -29,7 +29,7 @@ MainWindowController::MainWindowController(QObject *parent)
 
 
 	m_rpcFlakonClient = new RpcFlakonClient(this);
-	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
+
 }
 
 MainWindowController::~MainWindowController()
@@ -47,7 +47,7 @@ void MainWindowController::appendView(MainWindow *view)
 
 void MainWindowController::startServer()
 {
-//	serverStartedSlot();
+	//serverStartedSlot();
 	start();
 }
 
@@ -87,9 +87,6 @@ void MainWindowController::init()
 
 	m_tabManager->setFlakonRpc(m_rpcFlakonClient, m_rpcHost, m_rpcPort);
 
-	//m_tabManager->createSubModules(tabsSettingsFile);
-
-
 	m_controlPanelController = new ControlPanelController(this);
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbStationController(m_dbStationController);
@@ -106,10 +103,7 @@ void MainWindowController::init()
 	/// Problem here:
 
 
-
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
-
-//	(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 }
 
 void MainWindowController::serverFailedToStartSlot()
@@ -137,6 +131,8 @@ void MainWindowController::serverStartedSlot()
 	m_tabManager->setRpcConfig(port, host);
 	m_rpcConfigClient->start(port, QHostAddress(host));
 	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
+
+	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
 }
 
 void MainWindowController::slotShowLists()
