@@ -336,6 +336,7 @@ void SpectrumWidgetController::init()
 	connect(m_view, SIGNAL(setAutoSearchSignal(bool)), this, SLOT(slotAutoSearch(bool)));
 	connect(m_view, SIGNAL(selectionTypeChangedSignal(bool)), this, SLOT(slotSelectiontypeChanged(bool)));
 	connect(m_view, SIGNAL(requestDataSignal(bool)), this, SLOT(slotRequestData(bool)));
+	connect(this, SIGNAL(signalSpectrumEnable(bool)), m_view, SLOT(slotEnableKM(bool)));
 
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
@@ -372,6 +373,9 @@ void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
 
 void SpectrumWidgetController::slotRequestData(bool state)
 {
+	if(m_spectrumShow == state)
+		return;
+
 	switch(state)
 	{
 		case true:
@@ -548,9 +552,11 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 void SpectrumWidgetController::slotStopSpectrumShow()
 {
 	m_spectrumShow = false;
+	emit signalSpectrumEnable(false);
 }
 
 void SpectrumWidgetController::slotStartSpectrumShow()
 {
 	m_spectrumShow = true;
+	emit signalSpectrumEnable(true);
 }

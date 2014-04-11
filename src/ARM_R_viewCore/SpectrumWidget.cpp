@@ -58,6 +58,11 @@ Prm300ControlWidget *SpectrumWidget::getPrm300Widget()
 	return ui->PrmControlWidget;
 }
 
+void SpectrumWidget::slotSetEnableSpactrum(bool state)
+{
+	ui->getSpectrumCB->setChecked(state);
+}
+
 void SpectrumWidget::slotEnableKM(bool state)
 {
 	/// not yet realazed signal

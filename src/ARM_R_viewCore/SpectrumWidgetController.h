@@ -124,6 +124,7 @@ signals:
 	void signalAddSelToLists(int id);
 	void signalCurSelChanged(int);
 	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
+	void signalSpectrumEnable(bool state);
 
 public slots:
 
