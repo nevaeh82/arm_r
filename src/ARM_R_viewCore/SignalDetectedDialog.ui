@@ -47,7 +47,7 @@
      <item>
       <widget class="QDoubleSpinBox" name="dspFreq">
        <property name="decimals">
-        <number>4</number>
+        <number>3</number>
        </property>
        <property name="maximum">
         <double>700000000.000000000000000</double>
