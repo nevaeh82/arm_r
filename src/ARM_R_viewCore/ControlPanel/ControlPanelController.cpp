@@ -163,6 +163,11 @@ void ControlPanelController::slotChangeFreq()
 void ControlPanelController::slotCheckModeSetFreq()
 {
 	m_mainStation = NULL;
+
+	if(m_listOfFreqs.size() == 0) {
+		return;
+	}
+
 	if(m_itCheckMode == m_listOfFreqs.end())
 	{
 		m_itCheckMode = m_listOfFreqs.begin();
