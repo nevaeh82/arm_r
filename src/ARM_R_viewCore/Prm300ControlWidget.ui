@@ -90,7 +90,7 @@
          <number>2</number>
         </property>
         <property name="intValue" stdset="0">
-         <number>-1</number>
+         <number>0</number>
         </property>
        </widget>
       </item>
@@ -177,7 +177,7 @@
          <number>2</number>
         </property>
         <property name="intValue" stdset="0">
-         <number>-1</number>
+         <number>0</number>
         </property>
        </widget>
       </item>
