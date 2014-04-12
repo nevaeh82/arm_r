@@ -11,6 +11,13 @@ SignalDetectedDialog::SignalDetectedDialog(QWidget *parent) :
 
 	QPushButton* btnCancel = ui->buttonBox->button(QDialogButtonBox::Cancel);
 	btnCancel->setText(tr("Cancel"));
+
+	Qt::WindowFlags flags=windowFlags();
+	Qt::WindowFlags helpFlag=Qt::WindowContextHelpButtonHint;
+	flags=flags&(~helpFlag);
+
+	setWindowFlags(flags);
+	setWindowIcon(QIcon(":images/icons/ListsDialog.png"));
 }
 
 SignalDetectedDialog::~SignalDetectedDialog()
