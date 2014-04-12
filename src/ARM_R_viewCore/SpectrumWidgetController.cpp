@@ -210,7 +210,8 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		if(result == QDialog::Accepted)
 		{
 			setSpectrumShow(true);
-		}else
+		}
+		else
 		{
 			setSpectrumShow(false);
 		}

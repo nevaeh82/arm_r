@@ -232,7 +232,7 @@
     <message>
         <location filename="ControlPanel/ListWhiteDialog.ui" line="47"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -576,7 +576,7 @@
     <message>
         <location filename="SignalDetectedDialog.ui" line="31"/>
         <source>Attention! Signal has been detected!</source>
-        <translation>Внимание! Сигнал был распознан!</translation>
+        <translation>Внимание! Сигнал распознан!</translation>
     </message>
     <message>
         <location filename="SignalDetectedDialog.ui" line="43"/>
@@ -586,12 +586,12 @@
     <message>
         <location filename="SignalDetectedDialog.cpp" line="10"/>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation>Продолжить</translation>
     </message>
     <message>
         <location filename="SignalDetectedDialog.cpp" line="13"/>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation>Остановить</translation>
     </message>
 </context>
 <context>
