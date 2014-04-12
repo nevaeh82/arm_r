@@ -30,6 +30,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	m_spectrumShow = true;
 	m_overthreshold = 0;
+
+	correlationFlag = false;
 }
 
 SpectrumWidgetController::~SpectrumWidgetController()
@@ -123,6 +125,16 @@ void SpectrumWidgetController::setRpcPrmClient(RpcPrmClient *rpcClient)
 	m_rpcClient = rpcClient;
 	m_prm300WidgetController->setRpcPrmClient(m_rpcClient);
 	m_rpcClient->registerReceiver(m_prm300WidgetController);
+}
+
+void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
+{
+	correlationFlag = isEnabled;
+
+	if(correlationFlag)
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+	else
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -436,13 +448,13 @@ void SpectrumWidgetController::recognizeSignal()
 void SpectrumWidgetController::toggleCorrelation()
 {
 	/// TODO: recheck new Message to memory leak
-	m_enableCorrelation = !m_enableCorrelation;
-	m_tab->enableCorrelation( m_enableCorrelation );
+//	m_enableCorrelation = !m_enableCorrelation;
+	m_tab->enableCorrelation( !correlationFlag );
 
-	if(m_enableCorrelation)
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-	else
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+//	if(m_enableCorrelation)
+//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+//	else
+//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 void SpectrumWidgetController::clearLabels()

@@ -67,6 +67,7 @@ void CorrelationWidgetController::onDataArrived(const QString &method, const QVa
 
 void CorrelationWidgetController::clear()
 {
+	m_graphicsWidget->Reset();
 }
 
 void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)

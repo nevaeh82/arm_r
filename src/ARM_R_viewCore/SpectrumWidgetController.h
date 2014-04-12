@@ -10,6 +10,7 @@
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
+#include "Interfaces/ICorrelationListener.h"
 #include "IGraphicWidget.h"
 #include "Tabs/ITabSpectrum.h"
 
@@ -29,6 +30,7 @@
 class SpectrumWidget;
 
 class SpectrumWidgetController : public QObject, public ISpectrumWidget, public IController<SpectrumWidget>
+		, public ICorrelationListener
 {
 	Q_OBJECT
 private:
@@ -74,6 +76,8 @@ private:
 
 	double m_overthreshold;
 
+	bool correlationFlag;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -108,6 +112,8 @@ public:
 	void onDataArrived(const QString& method, const QVariant& arg);
 
 	void setRpcPrmClient(RpcPrmClient* rpcClient);
+
+	void onCorrelationStateChanged(const bool isEnabled);
 
 private:
 	void init();
