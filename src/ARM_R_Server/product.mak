@@ -5,7 +5,7 @@ include ../../specs/qxt.mak
 include ../../specs/Solver.mak
 include ../../specs/protobuf.mak
 include ../../specs/get-runtime.mak
-
+include ../../specs/dbmysqlsources.mak
 prebuild::
 	$(cp) -ud *.log4qt $(DESTDIR)
 	$(cp) -ud qt.conf $(DESTDIR)
@@ -20,5 +20,5 @@ prebuild::
 	$(cp) -ud RDS/RDSpoints.ini $(DESTDIR)/RDS
 	$(mkdir) $(DESTDIR)/TCP
 	$(cp) -ud TCP/coders.ini $(DESTDIR)/TCP
-		
+              	
 	$(call begin-build, Prebuild OK )

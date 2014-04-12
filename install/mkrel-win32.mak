@@ -19,7 +19,7 @@ create-dirs:
 	$(mkdir) $(TmpRel)
 	$(mkdir) $(TmpRel)/bin
 	$(mkdir) $(TmpRel)/image
-	
+		
 copy-qt-msvc: get-msvc
 	$(cp) -u $(foreach name,$(Qt),$(SolutionDir)/build/qt-msvc/Qt$(name)4.dll) $(TmpRel)/bin
 	
@@ -33,8 +33,9 @@ copy-bin:
 	$(cp) -rudf $(BinDir)/Tabs $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/RDS $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/TCP $(TmpRel)/bin
-	$(echo) VERSION = $(if $(PRODUCT_VERSION_REL),$(PRODUCT_VERSION_REL),$(PRODUCT_VERSION).0) > $(TmpRel)/bin/version.ini
+	$(cp) -rudf $(BinDir)/DBMySqlSources $(TmpRel)/bin
 
+	$(echo) VERSION = $(if $(PRODUCT_VERSION_REL),$(PRODUCT_VERSION_REL),$(PRODUCT_VERSION).0) > $(TmpRel)/bin/version.ini
 
 move-components:
 
