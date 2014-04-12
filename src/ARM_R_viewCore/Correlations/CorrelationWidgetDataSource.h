@@ -31,7 +31,7 @@ private:
 	double	m_mapBandwidthCorelation;
 
 	QTimer*	correlationStateTimer;
-	QList<ICorrelationListener*> m_receiversListener;
+	QList<ICorrelationListener*> m_correlationListener;
 
 public:
 	explicit CorrelationWidgetDataSource(IGraphicWidget*, ITabManager *tabManager, int id, QObject *parent);

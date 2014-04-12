@@ -139,7 +139,7 @@ void CorrelationWidgetDataSource::sendCommand(int)
 
 void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
 {
-	foreach (ICorrelationListener* listner, m_receiversListener) {
+	foreach (ICorrelationListener* listner, m_correlationListener) {
 		listner->onCorrelationStateChanged(isEnabled);
 	}
 
@@ -148,17 +148,11 @@ void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
 
 void CorrelationWidgetDataSource::registerCorrelationReceiver(ICorrelationListener* obj)
 {
-	m_receiversListener.append(obj);
+	m_correlationListener.append(obj);
 }
 
 void CorrelationWidgetDataSource::deregisterCorrelationReceiver(ICorrelationListener* obj)
 {
-	int index = m_receiversListener.indexOf(obj);
-
-	if (index < 0){
-		return;
-	}
-
-	m_receiversListener.removeAt(index);
+	m_correlationListener.removeAll(obj);
 }
 
