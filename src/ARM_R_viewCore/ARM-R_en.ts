@@ -95,13 +95,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ControlPanelController</name>
+    <message>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="197"/>
+        <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -206,6 +214,42 @@
     </message>
 </context>
 <context>
+    <name>ListWhiteDialog</name>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="14"/>
+        <source>White List Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="40"/>
+        <source>Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="47"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListWhiteDialogController</name>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="23"/>
+        <source>Station Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="24"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="25"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ListsDialog</name>
     <message>
         <location filename="DBStation/ListsDialog.ui" line="14"/>
@@ -299,37 +343,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="75"/>
+        <location filename="MainWindow.ui" line="70"/>
         <source>Initialization...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="107"/>
+        <location filename="MainWindow.ui" line="102"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="114"/>
+        <location filename="MainWindow.ui" line="109"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="125"/>
+        <location filename="MainWindow.ui" line="123"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="130"/>
+        <location filename="MainWindow.ui" line="128"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="135"/>
+        <location filename="MainWindow.ui" line="133"/>
         <source>Atlant setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="140"/>
+        <location filename="MainWindow.ui" line="138"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -342,17 +386,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="92"/>
+        <location filename="MainWindowController.cpp" line="111"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="92"/>
+        <location filename="MainWindowController.cpp" line="111"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="117"/>
+        <location filename="MainWindowController.cpp" line="147"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -410,6 +454,34 @@
     </message>
 </context>
 <context>
+    <name>SignalDetectedDialog</name>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="31"/>
+        <source>Attention! Signal has been detected!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="43"/>
+        <source>Frequency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.cpp" line="10"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.cpp" line="13"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SpectrumWidget</name>
     <message>
         <location filename="SpectrumWidget.ui" line="14"/>
@@ -437,17 +509,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="94"/>
+        <location filename="SpectrumWidget.ui" line="97"/>
         <source> Maximums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="101"/>
+        <location filename="SpectrumWidget.ui" line="104"/>
         <source>PRM control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="110"/>
+        <location filename="SpectrumWidget.ui" line="113"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -455,63 +527,53 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="71"/>
+        <location filename="SpectrumWidgetController.cpp" line="73"/>
         <source>File error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="71"/>
+        <location filename="SpectrumWidgetController.cpp" line="73"/>
         <source>Very small file or file not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="161"/>
+        <location filename="SpectrumWidgetController.cpp" line="163"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="192"/>
-        <source>Attention!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SpectrumWidgetController.cpp" line="192"/>
-        <source>Signal was detected!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SpectrumWidgetController.cpp" line="294"/>
+        <location filename="SpectrumWidgetController.cpp" line="322"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="297"/>
+        <location filename="SpectrumWidgetController.cpp" line="325"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="298"/>
+        <location filename="SpectrumWidgetController.cpp" line="326"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="299"/>
+        <location filename="SpectrumWidgetController.cpp" line="327"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="300"/>
-        <location filename="SpectrumWidgetController.cpp" line="411"/>
+        <location filename="SpectrumWidgetController.cpp" line="328"/>
+        <location filename="SpectrumWidgetController.cpp" line="446"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="301"/>
+        <location filename="SpectrumWidgetController.cpp" line="329"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="409"/>
+        <location filename="SpectrumWidgetController.cpp" line="444"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -527,17 +589,18 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="44"/>
+        <location filename="Tabs/TabManager.cpp" line="48"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="158"/>
+        <location filename="Tabs/TabManager.cpp" line="178"/>
+        <location filename="Tabs/TabManager.cpp" line="191"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="112"/>
+        <location filename="Tabs/TabManager.cpp" line="130"/>
         <source>Atlant</source>
         <translation type="unfinished"></translation>
     </message>
@@ -553,12 +616,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="108"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="108"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>

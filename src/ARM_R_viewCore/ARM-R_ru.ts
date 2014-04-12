@@ -99,14 +99,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="27"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
         <source>Property</source>
         <translation>Значение</translation>
+    </message>
+</context>
+<context>
+    <name>ControlPanelController</name>
+    <message>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="197"/>
+        <source>Auto</source>
+        <translation>Авто</translation>
     </message>
 </context>
 <context>
@@ -207,6 +215,42 @@
         <location filename="DBStation/DBStationController.cpp" line="240"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ListWhiteDialog</name>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="14"/>
+        <source>White List Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="40"/>
+        <source>Accept</source>
+        <translation type="unfinished">Принять</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialog.ui" line="47"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ListWhiteDialogController</name>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="23"/>
+        <source>Station Name</source>
+        <translation type="unfinished">Пост</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="24"/>
+        <source>Frequency</source>
+        <translation type="unfinished">Частота</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ListWhiteDialogController.cpp" line="25"/>
+        <source>Bandwidth</source>
+        <translation type="unfinished">Полоса</translation>
     </message>
 </context>
 <context>
@@ -412,37 +456,37 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="75"/>
+        <location filename="MainWindow.ui" line="70"/>
         <source>Initialization...</source>
         <translation>Инициализация...</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="107"/>
+        <location filename="MainWindow.ui" line="102"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="114"/>
+        <location filename="MainWindow.ui" line="109"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="125"/>
+        <location filename="MainWindow.ui" line="123"/>
         <source>New</source>
         <translation>Новый пункт</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="130"/>
+        <location filename="MainWindow.ui" line="128"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="135"/>
+        <location filename="MainWindow.ui" line="133"/>
         <source>Atlant setup</source>
         <translation>Настройка Атланта</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="140"/>
+        <location filename="MainWindow.ui" line="138"/>
         <source>Lists</source>
         <translation>Списки</translation>
     </message>
@@ -455,17 +499,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="92"/>
+        <location filename="MainWindowController.cpp" line="111"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="92"/>
+        <location filename="MainWindowController.cpp" line="111"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="117"/>
+        <location filename="MainWindowController.cpp" line="147"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -475,7 +519,7 @@
     <message>
         <location filename="Prm300ControlWidget.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Списки</translation>
     </message>
     <message>
         <location filename="Prm300ControlWidget.ui" line="41"/>
@@ -523,6 +567,34 @@
     </message>
 </context>
 <context>
+    <name>SignalDetectedDialog</name>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Добавить запись</translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="31"/>
+        <source>Attention! Signal has been detected!</source>
+        <translation>Внимание! Сигнал был распознан!</translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="43"/>
+        <source>Frequency</source>
+        <translation>Частота</translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.cpp" line="10"/>
+        <source>Ok</source>
+        <translation>Ок</translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.cpp" line="13"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+</context>
+<context>
     <name>SpectrumWidget</name>
     <message>
         <location filename="SpectrumWidget.ui" line="14"/>
@@ -550,17 +622,17 @@
         <translation>Получить спектры</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="94"/>
+        <location filename="SpectrumWidget.ui" line="97"/>
         <source> Maximums</source>
         <translation>Максимумы</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="101"/>
+        <location filename="SpectrumWidget.ui" line="104"/>
         <source>PRM control</source>
         <translation>Управление ПРМ</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="110"/>
+        <location filename="SpectrumWidget.ui" line="113"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -568,63 +640,61 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="71"/>
+        <location filename="SpectrumWidgetController.cpp" line="73"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="71"/>
+        <location filename="SpectrumWidgetController.cpp" line="73"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="161"/>
+        <location filename="SpectrumWidgetController.cpp" line="163"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="192"/>
         <source>Attention!</source>
-        <translation>Внимание!</translation>
+        <translation type="obsolete">Внимание!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="192"/>
         <source>Signal was detected!</source>
-        <translation>Сигнал был распознан!</translation>
+        <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="294"/>
+        <location filename="SpectrumWidgetController.cpp" line="322"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="297"/>
+        <location filename="SpectrumWidgetController.cpp" line="325"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="298"/>
+        <location filename="SpectrumWidgetController.cpp" line="326"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="299"/>
+        <location filename="SpectrumWidgetController.cpp" line="327"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="300"/>
-        <location filename="SpectrumWidgetController.cpp" line="411"/>
+        <location filename="SpectrumWidgetController.cpp" line="328"/>
+        <location filename="SpectrumWidgetController.cpp" line="446"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="301"/>
+        <location filename="SpectrumWidgetController.cpp" line="329"/>
         <source>Cleanup text fields</source>
         <translation>Очистить текстовые данные</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="409"/>
+        <location filename="SpectrumWidgetController.cpp" line="444"/>
         <source>Disable correlation</source>
         <translation>Отключить корреляцию</translation>
     </message>
@@ -640,17 +710,18 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="44"/>
+        <location filename="Tabs/TabManager.cpp" line="48"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="158"/>
+        <location filename="Tabs/TabManager.cpp" line="178"/>
+        <location filename="Tabs/TabManager.cpp" line="191"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="112"/>
+        <location filename="Tabs/TabManager.cpp" line="130"/>
         <source>Atlant</source>
         <translation>Атлант</translation>
     </message>
@@ -666,12 +737,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="108"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="108"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>
