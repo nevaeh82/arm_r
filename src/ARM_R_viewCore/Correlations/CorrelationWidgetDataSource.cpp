@@ -48,7 +48,6 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 
 		setCorData( point1, point2, points, true );
 
-		correlationStateTimer->stop();
 		onCorrelationStateChanged(true);
 	}
 }
@@ -132,7 +131,6 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 void CorrelationWidgetDataSource::correlationTimerOff()
 {
 	onCorrelationStateChanged(false);
-	correlationStateTimer->stop();
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)
@@ -141,7 +139,7 @@ void CorrelationWidgetDataSource::sendCommand(int)
 
 void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
 {
-	foreach (ICorrelationListener* listner, m_receiversCorrelationFlag) {
+	foreach (ICorrelationListener* listner, m_receiversListener) {
 		listner->onCorrelationStateChanged(isEnabled);
 	}
 
@@ -150,17 +148,17 @@ void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
 
 void CorrelationWidgetDataSource::registerCorrelationReceiver(ICorrelationListener* obj)
 {
-	m_receiversCorrelationFlag.append(obj);
+	m_receiversListener.append(obj);
 }
 
 void CorrelationWidgetDataSource::deregisterCorrelationReceiver(ICorrelationListener* obj)
 {
-	int index = m_receiversCorrelationFlag.indexOf(obj);
+	int index = m_receiversListener.indexOf(obj);
 
 	if (index < 0){
 		return;
 	}
 
-	m_receiversCorrelationFlag.removeAt(index);
+	m_receiversListener.removeAt(index);
 }
 
