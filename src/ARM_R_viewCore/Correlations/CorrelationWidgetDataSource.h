@@ -12,8 +12,6 @@
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RpcPrmClient.h"
 
-#include "CorrelationListener.h"
-
 class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT
