@@ -25,6 +25,8 @@
 #include "SignalDetectedDialog.h"
 
 #define TO_MHZ	1000000
+#define TO_MHZ2	1000
+
 
 class SpectrumWidget;
 

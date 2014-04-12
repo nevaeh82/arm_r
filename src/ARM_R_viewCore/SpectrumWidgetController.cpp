@@ -148,6 +148,7 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
 {
+	m_rpcClient->requestFrequency();
 	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 
 	float maxv = 0.0;
@@ -259,10 +260,10 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 	stream >> vec;
 
-	m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas(0);
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
-		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
+		m_graphicsWidget->SetDetectedAreas(0, (*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
 }
 
@@ -274,9 +275,55 @@ void SpectrumWidgetController::setSpectrumShow(bool state)
 
 void SpectrumWidgetController::setZeroFrequency(double val)
 {
-	double cur_freq = m_tab->getCurrentFrequency();
-	m_current_frequency = cur_freq*TO_MHZ;
-	m_graphicsWidget->SetZeroFrequencyHz(val + m_current_frequency);
+	m_graphicsWidget->ClearAllDetectedAreas(0);
+	m_graphicsWidget->ClearAllDetectedAreas(1);
+	m_graphicsWidget->ClearAllDetectedAreas(2);
+
+//	double cur_freq = m_tab->getCurrentFrequency();
+	m_current_frequency = val*TO_MHZ;
+	double zeroFreq = m_current_frequency - m_bandwidth/2;
+	m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
+	QList<StationsFrequencyAndBandwith> listBlack;
+	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory(tr("Black"), listBlack );
+	QList<StationsFrequencyAndBandwith>::iterator it;
+	for(it = listBlack.begin(); it != listBlack.end(); ++it)
+	{
+		StationsFrequencyAndBandwith stFreq = *it;
+		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ2;
+		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ2;
+		if(endFreq < zeroFreq)
+			continue;
+		if(beginFreq > zeroFreq + m_bandwidth)
+			continue;
+
+		if(beginFreq < zeroFreq)
+			beginFreq = zeroFreq;
+		if(endFreq > zeroFreq + m_bandwidth)
+			endFreq = zeroFreq + m_bandwidth;
+
+		m_graphicsWidget->SetDetectedAreas(2, beginFreq, 0, endFreq, 0, false);
+	}
+
+
+	QList<StationsFrequencyAndBandwith> listWhite;
+	ret = m_dbStationController->getFrequencyAndBandwidthByCategory(tr("White"), listWhite );
+	for(it = listWhite.begin(); it != listWhite.end(); ++it)
+	{
+		StationsFrequencyAndBandwith stFreq = *it;
+		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ2;
+		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ2;
+		if(endFreq < zeroFreq)
+			continue;
+		if(beginFreq > zeroFreq + m_bandwidth)
+			continue;
+
+		if(beginFreq < zeroFreq)
+			beginFreq = zeroFreq;
+		if(endFreq > zeroFreq + m_bandwidth)
+			endFreq = zeroFreq + m_bandwidth;
+
+		m_graphicsWidget->SetDetectedAreas(1, beginFreq, 0, endFreq, 0, false);
+	}
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)
@@ -365,7 +412,7 @@ void SpectrumWidgetController::slotAutoSearch(bool state)
 	m_autoSearch = state;
 
 	if (!m_autoSearch) {
-		m_graphicsWidget->ClearAllDetectedAreas();
+		m_graphicsWidget->ClearAllDetectedAreas(0);
 	}
 }
 

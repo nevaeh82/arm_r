@@ -53,6 +53,8 @@ public:
 
 	bool start(quint16 port, QHostAddress ipAddress);
 
+	void requestFrequency();
+
 private:
 	void formCommand(IMessage *msg);
 	void recognize();
