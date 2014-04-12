@@ -41,6 +41,12 @@ bool RpcPrmClient::start(quint16 port, QHostAddress ipAddress)
 	return RpcClientBase::start(port, ipAddress);
 }
 
+void RpcPrmClient::requestFrequency()
+{
+	CommandMessage *msg = new CommandMessage(COMMAND_PRM_REQUEST_FREQ, QVariant());
+	setCommand(msg);
+}
+
 void RpcPrmClient::setCommand(IMessage *msg)
 {
 	emit signalSetCommand(msg);
@@ -123,8 +129,7 @@ void RpcPrmClient::requestStatus()
 void RpcPrmClient::slotRpcConnetion()
 {
 	registerRoute( m_station->getId() + 1 );
-	CommandMessage *msg = new CommandMessage(COMMAND_PRM_REQUEST_FREQ, QVariant());
-	setCommand(msg);
+	requestFrequency();
 }
 
 ///// slot if have some error while connetiting
