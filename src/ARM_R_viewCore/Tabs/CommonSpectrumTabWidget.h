@@ -11,11 +11,13 @@
 #include "SettingsTree/TreeModel.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
 
+#include "Rpc/RpcFlakonClient.h"
+
 namespace Ui {
 class CommonSpectrumTabWidget;
 }
 
-class CommonSpectrumTabWidget : public QWidget, public ITabWidget
+class CommonSpectrumTabWidget : public QWidget, public ITabWidget, public IRpcListener
 {
 	Q_OBJECT
 
@@ -30,6 +32,15 @@ private:
 	TreeWidgetDelegate* m_treeDelegate;
 
 	IDbManager* m_dbManager;
+
+	QPixmap* m_pmRoundRed;
+	QPixmap* m_pmRoundGreen;
+	QLabel* m_indicatorLabel;
+
+	/// connection status
+	QTimer	m_timerStatus;
+
+	RpcFlakonClient* m_rpcFlakonClient;
 	
 public:
 	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
@@ -55,12 +66,26 @@ public:
 
 	QLabel* getIndicator();
 
+	void setIndicatorState(int state);
+
+	virtual void onMethodCalled(const QString &method, const QVariant &argument);
+
 	virtual int createRPC();
 	virtual int closeRPC();
 	virtual int createView(QWidget *);
 	virtual int createTree();
 
+	void setFlakonRpcClient(RpcFlakonClient* rpcClient);
 
+private:
+	void setIndicator(int state);
+
+signals:
+	void setIndicatorStateSignal(int state);
+
+private slots:
+	void setIndicatorStateSlot(int state);
+	void slotCheckStatus();
 };
 
 #endif // COMMONSPECTRUMTABWIDGET_H

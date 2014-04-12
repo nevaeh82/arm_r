@@ -4,7 +4,7 @@
 
 RpcPrmClient::RpcPrmClient(IStation *prop, IDbManager *dbManager, IControlPRM*, QObject *parent)
 	: RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
-//	, m_controlPrm( controlPrm )
+	//	, m_controlPrm( controlPrm )
 	, m_station( prop )
 	, m_dbManager( dbManager )
 	, m_spectrum( new float[1] )
@@ -35,6 +35,7 @@ bool RpcPrmClient::start(quint16 port, QHostAddress ipAddress)
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(QByteArray)));
+
 
 	log_debug("Start RpcPrmClient");
 	return RpcClientBase::start(port, ipAddress);
@@ -117,6 +118,7 @@ void RpcPrmClient::requestStatus()
 	emit signalRequestStatus(m_station->getName());
 }
 
+
 /// slot when connection complete
 void RpcPrmClient::slotRpcConnetion()
 {
@@ -192,21 +194,13 @@ void RpcPrmClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_
 
 void RpcPrmClient::rpcSlotServerStatus(QByteArray message)
 {
-	RpcMessageStruct messageStruct;
-
-	QDataStream dataStream(&message, QIODevice::ReadOnly);
-	dataStream >> messageStruct.name;
-	dataStream >> messageStruct.data;
-
-	QDataStream dataStream1(&messageStruct.data, QIODevice::ReadOnly);
+	QDataStream dataStream1(&message, QIODevice::ReadOnly);
 	int state;
 	dataStream1 >> state;
 
-	log_debug(QString("NAMWS = %1 %2").arg(messageStruct.name).arg(m_station->getName()));
+	//log_debug(QString("NAMES = %1 %2").arg(messageStruct.name).arg(m_station->getName()));
 
-	if( messageStruct.name == m_station->getName() ) {
-		foreach( IRpcListener *listener, m_receiversList ) {
-			listener->onMethodCalled( RPC_PRM_STATE_CHANGED, QVariant(state) );
-		}
+	foreach( IRpcListener *listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_PRM_STATE_CHANGED, QVariant(state) );
 	}
 }

@@ -48,8 +48,9 @@
 
 /// connectiont status
 #define RPC_SLOT_SERVER_STATUS                      "rpc_slot_server_status"
-
+#define RPC_SLOT_FLAKON_STATUS						"rpc_slot_flakon_status"
 #define RPC_METHOD_REQUEST_STATUS                   "rpc_slot_request_status"
+#define RPC_METHOD_FLAKON_REQUEST_STATUS            "rpc_slot_flakon_request_status"
 
 /// to solver
 #define RPC_METHOD_SET_DATA_TO_SOLVER               "rpc_slot_set_data_to_solver"

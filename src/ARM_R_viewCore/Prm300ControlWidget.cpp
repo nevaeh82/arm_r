@@ -20,6 +20,8 @@ Prm300ControlWidget::~Prm300ControlWidget()
 
 void Prm300ControlWidget::setData(int freq, int filter, int att1, int att2)
 {
+	Q_UNUSED(freq);
+
 	switch(att1)
 	{
 		case 0:

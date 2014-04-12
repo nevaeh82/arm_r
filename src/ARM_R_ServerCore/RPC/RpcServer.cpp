@@ -31,6 +31,7 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_SET_CLEAR_TO_SOLVER, this, SLOT(setClearToSolver(quint64,QByteArray)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_REQUEST_STATUS, this, SLOT(requestStatus(quint64, QString)));
+	m_serverPeer->attachSlot(RPC_METHOD_FLAKON_REQUEST_STATUS, this, SLOT(requestFlakonStatus(quint64)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, this, SLOT(requestGetStationListSlot(quint64,QString)));
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, this, SLOT(requestGetAtlantConfigurationSlot(quint64,QString)));
@@ -240,3 +241,9 @@ void RpcServer::requestStatus(quint64 client, QString name)
 
 	dispatch( RPC_METHOD_REQUEST_STATUS, QVariant(byteArray), client );
 }
+
+void RpcServer::requestFlakonStatus(quint64 client)
+{
+	dispatch( RPC_METHOD_FLAKON_REQUEST_STATUS, QVariant(), client );
+}
+

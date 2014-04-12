@@ -59,6 +59,7 @@ private slots:
 	void setAtlantFrequency(quint64 clint, QByteArray data);
 
 	void requestStatus(quint64 client, QString name);
+	void requestFlakonStatus(quint64 client);
 	void sendResponseModulation(quint64 client, QString modulation);
 };
 

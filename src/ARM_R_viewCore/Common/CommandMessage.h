@@ -23,6 +23,7 @@
 #define COMMAND_ATLANT_SET_FREQ             401
 
 #define COMMAND_REQUEST_STATUS              500
+#define COMMAND_REQUEST_FLAKON_STATUS		501
 
 
 class CommandMessage : public IMessage
