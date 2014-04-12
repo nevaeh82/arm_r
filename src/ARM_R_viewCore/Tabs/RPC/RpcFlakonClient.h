@@ -18,6 +18,8 @@ public:
 	void sendCorrelation(IStation *station, const bool enable);
 	void sendAvarageSpectrum(IStation *station, const int avarage);
 
+	void requestFlakonStatus();
+
 	bool start(quint16 port, QHostAddress ipAddress);
 
 
@@ -26,6 +28,7 @@ protected slots:
 	void pointsReceived(QByteArray data);
 	void bandwidthReceived(QByteArray data);
 	void correlationReceived(QByteArray data);
+	void flakonStatusReceived(QByteArray data);
 
 signals:
 	void signalEnableCorrelation(int, bool);

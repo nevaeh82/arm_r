@@ -31,6 +31,8 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
+
+	m_timerStatus.start(2000);
 }
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
@@ -82,8 +84,6 @@ void TabSpectrumWidgetController::activate()
 	if(start || end) {
 		m_view->getSpectrumWidget()->setSelection(start, end);
 	}
-
-	m_timerStatus.start(2000);
 }
 
 void TabSpectrumWidgetController::deactivate()

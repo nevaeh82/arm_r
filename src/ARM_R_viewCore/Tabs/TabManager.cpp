@@ -145,7 +145,11 @@ void TabManager::addStationTabs()
 	commonTabSpectrumWidget->setDbManager(m_dbManager);
 	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
+	commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
 
+	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
+
+	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
@@ -164,7 +168,7 @@ void TabManager::addStationTabs()
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
-		QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
+		//QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 		if (tabBar != NULL) {
 			tabBar->setTabButton(index, QTabBar::LeftSide, tabSpectrumWidget->getIndicator());
@@ -176,6 +180,10 @@ void TabManager::addStationTabs()
 
 	commonTabSpectrumWidget->deactivate();
 	int index = m_tabWidget->addTab(commonTabSpectrumWidget, tr("Common"));
+
+	if (tabBar != NULL) {
+		tabBar->setTabButton(index, QTabBar::LeftSide, commonTabSpectrumWidget->getIndicator());
+	}
 
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);

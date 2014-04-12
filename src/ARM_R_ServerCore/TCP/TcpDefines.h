@@ -32,6 +32,7 @@
 #define TCP_PRM300_REQUEST_SET_FILTER			"tcpPRM300RequestSetFilter"
 
 /// Flakon device internal
+#define TCP_FLAKON_STATUS								"tcpFlakonStatus"
 #define TCP_FLAKON_ANSWER_FFT							"tcpFlakonAnswerFFT"
 #define TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH			"tcpFlakonAnswerDetectedBandwidth"
 #define TCP_FLAKON_ANSWER_CORRELATION					"tcpFlakonAnswerCorrelation"

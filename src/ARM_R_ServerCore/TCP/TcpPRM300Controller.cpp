@@ -24,8 +24,6 @@ TcpPRM300Controller::~TcpPRM300Controller()
 
 bool TcpPRM300Controller::init()
 {
-	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
-
 	QSettings settings("./TCP/coders.ini", QSettings::IniFormat, this);
 	QStringList childKeys = settings.childGroups();
 
@@ -66,6 +64,12 @@ void TcpPRM300Controller::createTcpDeviceCoder()
 
 	log_debug("Creating TcpPRM300Coder...");
 	m_tcpDeviceCoder = new TcpPRM300Coder(this);
+}
+
+void TcpPRM300Controller::createTcpClient()
+{
+	BaseTcpDeviceController::createTcpClient();
+	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
 }
 
 QObject* TcpPRM300Controller::asQObject()

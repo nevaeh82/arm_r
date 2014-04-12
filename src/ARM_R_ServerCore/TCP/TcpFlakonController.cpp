@@ -32,6 +32,12 @@ void TcpFlakonController::createTcpDeviceCoder()
 	m_tcpDeviceCoder = new TcpFlakonCoder(this);
 }
 
+void TcpFlakonController::createTcpClient()
+{
+	BaseTcpDeviceController::createTcpClient();
+	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
+}
+
 QObject* TcpFlakonController::asQObject()
 {
 	return this;
@@ -116,6 +122,23 @@ RpcRoutedServer::RouteId TcpFlakonController::getRouteId() const
 	return FLAKON_ROUTE_ID;
 }
 
+void TcpFlakonController::slotTcpConnectionStatus(int status)
+{
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << status;
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_STATUS, byteArray));
+
+	if (message == NULL) {
+		return;
+	}
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived((quint32) m_deviceType, m_tcpDeviceName, message);
+	}
+}
+
+
 void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& argument)
 {
 	QByteArray data = argument.toByteArray();
@@ -137,5 +160,10 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 	}
 	else if (method == RPC_METHOD_AVARAGE_SPECTRUM) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, data ) ) );
+	}
+	if (method == RPC_METHOD_FLAKON_REQUEST_STATUS) {
+		bool state = isConnected();
+
+		log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
 	}
 }

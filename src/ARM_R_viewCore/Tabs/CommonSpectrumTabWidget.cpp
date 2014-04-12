@@ -7,11 +7,25 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	m_rpcFlakonClient = NULL;
+
 	m_correlationControllers = NULL;
 	m_treeModel = NULL;
 	m_dbManager = NULL;
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
+
+	m_pmRoundRed = new QPixmap(":/images/signals/images/bullet_red.png");
+	m_pmRoundGreen = new QPixmap(":/images/signals/images/bullet_green.png");
+	m_indicatorLabel = new QLabel(this);
+	m_indicatorLabel->setFixedSize(16, 16);
+	m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+
+	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
+
+	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
+
+	m_timerStatus.start(2000);
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
@@ -104,7 +118,7 @@ ISpectrumWidget *CommonSpectrumTabWidget::getSpectrumWidget()
 
 QLabel *CommonSpectrumTabWidget::getIndicator()
 {
-	return NULL;
+	return m_indicatorLabel;
 }
 
 int CommonSpectrumTabWidget::createRPC()
@@ -125,6 +139,11 @@ int CommonSpectrumTabWidget::createView(QWidget*)
 int CommonSpectrumTabWidget::createTree()
 {
 	return 0;
+}
+
+void CommonSpectrumTabWidget::setFlakonRpcClient(RpcFlakonClient *rpcClient)
+{
+	m_rpcFlakonClient =rpcClient;
 }
 
 
@@ -157,4 +176,60 @@ TypeTabWidgetEnum CommonSpectrumTabWidget::getWidgetType() const
 void CommonSpectrumTabWidget::setStationNamesList(const QStringList &stationsList)
 {
 	m_treeDelegate->setStationNamesList(stationsList);
+}
+
+void CommonSpectrumTabWidget::setIndicatorState(int state)
+{
+	emit setIndicatorStateSignal(state);
+}
+
+void CommonSpectrumTabWidget::setIndicatorStateSlot(int state)
+{
+	switch(state)
+	{
+		case 1:
+			m_indicatorLabel->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
+			break;
+		case 0:
+			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+			break;
+		default:
+			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+			break;
+	}
+}
+
+
+void CommonSpectrumTabWidget::onMethodCalled(const QString &method, const QVariant &argument)
+{
+	if (RPC_SLOT_FLAKON_STATUS == method) {
+		setIndicator( argument.toInt() );
+		//setIndicatorState(argument.toInt());
+	}
+}
+
+void CommonSpectrumTabWidget::setIndicator(int state)
+{
+	setIndicatorState(state);
+	if(state < 1)
+	{
+		if(!m_timerStatus.isActive())
+		{
+			m_timerStatus.start(2000);
+		}
+	}
+	else
+	{
+		if(m_timerStatus.isActive())
+		{
+			m_timerStatus.stop();
+		}
+	}
+}
+
+void CommonSpectrumTabWidget::slotCheckStatus()
+{
+	if (NULL != m_rpcFlakonClient ) {
+		m_rpcFlakonClient->requestFlakonStatus();
+	}
 }

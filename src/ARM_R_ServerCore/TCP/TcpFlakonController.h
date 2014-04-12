@@ -27,6 +27,7 @@ public:
 
 	// ITcpDeviceController interface
 	virtual void createTcpDeviceCoder();
+	virtual void createTcpClient();
 	virtual QObject* asQObject();
 
 	virtual bool init();
@@ -41,6 +42,9 @@ private:
 	FlakonSettings m_flakonSettingStruct;
 
 	void requestStationCorellation(QString stationName);
+
+private slots:
+	void slotTcpConnectionStatus(int status);
 };
 
 #endif // TCPFLAKONCONTROLLER_H

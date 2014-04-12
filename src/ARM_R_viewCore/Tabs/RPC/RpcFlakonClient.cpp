@@ -8,14 +8,14 @@
 RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
 {
-//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
+	//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
 
-//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
-//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
-//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
+	//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
+	//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
+	//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
 
-//	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,bool)), RPC_METHOD_SS_CORRELATION);
-//	connect(this, SIGNAL(signalEnableCorrelation(int,bool)), this, SLOT(slotEnableCorrelation(int,bool)));
+	//	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,bool)), RPC_METHOD_SS_CORRELATION);
+	//	connect(this, SIGNAL(signalEnableCorrelation(int,bool)), this, SLOT(slotEnableCorrelation(int,bool)));
 }
 
 bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
@@ -25,6 +25,7 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_STATUS, this, SLOT(flakonStatusReceived(QByteArray)));
 
 	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,bool)), RPC_METHOD_SS_CORRELATION);
 
@@ -61,12 +62,17 @@ void RpcFlakonClient::recognize(IStation *station, const int type)
 void RpcFlakonClient::sendCorrelation(IStation *station, bool enable)
 {
 	emit signalEnableCorrelation(station->getId(), enable);
-//	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, station->getId(), enable );
+	//	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, station->getId(), enable );
 }
 
 void RpcFlakonClient::sendAvarageSpectrum(IStation* station, const int avarage)
 {
 	m_clientPeer->call( RPC_METHOD_AVARAGE_SPECTRUM, station->getId(), avarage );
+}
+
+void RpcFlakonClient::requestFlakonStatus()
+{
+	m_clientPeer->call( RPC_METHOD_FLAKON_REQUEST_STATUS);
 }
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
@@ -87,6 +93,17 @@ void RpcFlakonClient::correlationReceived(QByteArray data)
 {
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_CORRELATION, data );
+	}
+}
+
+void RpcFlakonClient::flakonStatusReceived(QByteArray data)
+{
+	QDataStream dataStream(&data, QIODevice::ReadOnly);
+	int state;
+	dataStream >> state;
+
+	foreach( IRpcListener *listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_FLAKON_STATUS, QVariant(state) );
 	}
 }
 
