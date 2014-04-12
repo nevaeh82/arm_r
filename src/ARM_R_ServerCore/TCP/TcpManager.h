@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include <QMap>
+#include <QTimer>
 
 #include <Interfaces/IRpcListener.h>
 #include <Interfaces/IRpcControllerBase.h>
@@ -31,6 +32,8 @@ private:
 
 	TcpFlakonController *m_flakonController;
 	QMap<QString, BaseTcpDeviceController*> m_flakonStations;
+	QTimer m_timer;
+
 	/**
 	 * key = deviceType
 	 * Define own deviceType in TcpDevicesDefines
@@ -67,6 +70,7 @@ signals:
 
 private slots:
 	void onMethodCalledInternalSlot(const QString &method, const QVariant &argument);
+	void emulateBplaPoint(IRpcListener* sender = NULL);
 
 };
 

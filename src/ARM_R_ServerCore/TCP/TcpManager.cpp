@@ -23,6 +23,9 @@ TcpManager::TcpManager(QObject* parent)
 	coordinateCounterThread->start();
 
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
+
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(emulateBplaPoint()));
+	m_timer.start(5);
 }
 
 TcpManager::~TcpManager()
@@ -186,7 +189,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	QVariant data = QVariant( argument->data() );
 
 	IRpcListener *sender = (IRpcListener*) m_controllersMap.value( deviceName, NULL );
-	if( sender == NULL ) {
+	if( sender == NULL && deviceType != ARMR_TCP_SERVER) {
 		return;
 	}
 
@@ -204,11 +207,16 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_CORRELATION, data, sender );
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {
+				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF, data, sender );
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO) {
+				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO, data, sender );
 			}
+
+			//emulateBplaPoint(sender);
+
 			break;
 		case ATLANT_TCP_DEVICE:
 			if (messageType == TCP_ATLANT_ANSWER_DIRECTION) {
@@ -247,6 +255,46 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 		default:
 			break;
 	}
+}
+
+void TcpManager::emulateBplaPoint(IRpcListener *sender)
+{
+	static double centerLat = 60 + (double)qrand() / RAND_MAX * 0.2;
+	static double centerLon = 30 + (double)qrand() / RAND_MAX;
+	static int alt = 1500 + qrand() % 1000;
+	static QVector<QPointF> path;
+
+	static int mode = 1;
+	static int bearing = 1;
+	static int angle = 0;
+
+
+	// calculate new position of BPLA
+	angle++;
+	double radius = 0.005 + (double)qrand() / RAND_MAX * 0.005;
+	double lon = cos((180 - angle) * M_PI / 180) * radius + centerLon;
+	double lat = sin((180 - angle) * M_PI / 180) * radius + centerLat;
+
+	path << QPointF( lat, lon );
+
+	// limit path points
+	if (path.size() > 50) {
+		path.remove( 0, path.size() - 50 );
+	}
+
+	// prepare data to send
+	QByteArray data;
+	QDataStream stream( &data, QIODevice::WriteOnly );
+
+	stream << QTime();
+	stream << mode;
+	stream << path.last();
+	stream << path;
+	stream << (double) (500 + qrand() % 1000);
+	stream << (double) alt;
+	stream << (double) bearing;
+
+	m_rpcServer->call(RPC_SLOT_SERVER_SEND_BPLA_DEF, QVariant(data), sender);
 }
 
 void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)

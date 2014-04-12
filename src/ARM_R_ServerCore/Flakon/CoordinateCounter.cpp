@@ -108,15 +108,21 @@ void CoordinateCounter::sendData(const MessageSP message)
 
 	if (messageType == TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER) {
 		QByteArray messageData = message->data();
+		/*TODO: REPLACE DATASTREAM WITH PROTOBUF WHEN TCPSERVER WILL BE TESTED*/
+		/*
 		Zaviruha::Packet packet;
 		if (!packet.ParseFromArray(messageData, messageData.size())){
 			return;
 		}
 
-		//QDataStream dataStream(&messageData, QIODevice::ReadOnly);
-		//dataStream >> id >> track_length >> alt;
+		double alt = packet.command().arguments().solverdata(0).altitude();*/
 
-		double alt = packet.command().arguments().solverdata(0).altitude();
+		int id;
+		int track_length;
+		double alt;
+
+		QDataStream dataStream(&messageData, QIODevice::ReadOnly);
+		dataStream >> id >> track_length >> alt;
 
 		m_solver->SetHeighApriori(alt);
 		m_alt = alt;
