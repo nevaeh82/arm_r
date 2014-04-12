@@ -24,9 +24,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="ControlPanelWidget" name="controlWidget" native="true">
-        <zorder>stackedWidget</zorder>
-       </widget>
+       <widget class="ControlPanelWidget" name="controlWidget" native="true"/>
       </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
@@ -55,9 +53,6 @@
            </widget>
           </item>
          </layout>
-         <zorder>worlTabsWidget</zorder>
-         <zorder>worlTabsWidget</zorder>
-         <zorder>verticalLayoutWidget</zorder>
         </widget>
         <widget class="QWidget" name="initializatioPage">
          <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -121,6 +116,9 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>New</string>
    </property>
