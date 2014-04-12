@@ -67,6 +67,8 @@ void SpectrumWidget::slotEnableKM(bool state)
 {
 	/// not yet realazed signal
 	emit signalEnableKM(state);
+
+	ui->thresholdCB->setChecked(state);
 }
 
 /// getting FFT

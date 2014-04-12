@@ -216,7 +216,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 			setSpectrumShow(false);
 		}
 		m_overthreshold = 0;
-		m_rett = -101;
+		m_rett = -100;
 	}
 
 	if(!m_spectrumShow)
