@@ -4,6 +4,8 @@
 
 #include "Interfaces/ICorrelationWidget.h"
 
+#define TIME_WAIT_CORRELATION 10000
+
 CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent)
 	: BaseDataSource(parent)
 	, m_needSetup(false)
@@ -16,6 +18,10 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correla
 	m_mapPeaksCorrelation = new float[1];
 	m_mapSpectrumCorelation = new float[1];
 	m_mapBandwidthCorelation = 0;
+
+	correlationStateTimer = new QTimer(this);
+	correlationStateTimer->setInterval(TIME_WAIT_CORRELATION);
+	connect(correlationStateTimer, SIGNAL(timeout()), this, SLOT(correlationTimerOff()));
 }
 
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
@@ -41,6 +47,8 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 		m_correlationWidget->setVisible(true);
 
 		setCorData( point1, point2, points, true );
+
+		onCorrelationStateChanged(true);
 	}
 }
 
@@ -120,6 +128,31 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	onDataReceived(RPC_SLOT_SERVER_SEND_CORRELATION, data);
 }
 
+void CorrelationWidgetDataSource::correlationTimerOff()
+{
+	onCorrelationStateChanged(false);
+}
+
 void CorrelationWidgetDataSource::sendCommand(int)
 {
 }
+
+void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
+{
+	foreach (ICorrelationListener* listner, m_correlationListener) {
+		listner->onCorrelationStateChanged(isEnabled);
+	}
+
+	correlationStateTimer->start();
+}
+
+void CorrelationWidgetDataSource::registerCorrelationReceiver(ICorrelationListener* obj)
+{
+	m_correlationListener.append(obj);
+}
+
+void CorrelationWidgetDataSource::deregisterCorrelationReceiver(ICorrelationListener* obj)
+{
+	m_correlationListener.removeAll(obj);
+}
+

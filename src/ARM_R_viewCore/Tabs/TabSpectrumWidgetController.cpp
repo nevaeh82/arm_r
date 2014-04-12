@@ -49,6 +49,10 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 		}
 	}
 
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		correlationWidgetDataSource->deregisterCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
+	}
+
 	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->deregisterReceiver( m_spectrumDataSource );
@@ -180,6 +184,10 @@ void TabSpectrumWidgetController::createView()
 
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
 	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
+
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		correlationWidgetDataSource->registerCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
+	}
 
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
@@ -422,7 +430,6 @@ void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClient* client)
 
 	foreach( CorrelationWidgetDataSource *ds, m_correlationDataSourcesList ) {
 		m_rpcFlakonClient->registerReceiver( ds );
-
 		if( old != NULL ) {
 			old->deregisterReceiver( ds );
 		}
