@@ -192,6 +192,10 @@ void TabSpectrumWidgetController::createView()
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
 	}
+	if(m_rpcPrmClient != NULL)
+	{
+		m_rpcPrmClient->registerReceiver( m_spectrumDataSource );
+	}
 }
 
 void TabSpectrumWidgetController::createTree()

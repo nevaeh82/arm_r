@@ -91,6 +91,16 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 		onDataReceived(method, data);
 		return;
 	}
+
+	if(RPC_SLOT_SERVER_PRM_STATUS == method)
+	{
+		QList<QVariant> list = data.toList();
+		quint32 freq = list.at(0).toUInt();
+		quint32 filter = list.at(1).toUInt();
+		quint32 att1 = list.at(2).toUInt();
+		quint32 att2 = list.at(3).toUInt();
+		m_spectrumWidget->setZeroFrequency(freq);
+	}
 }
 
 void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
@@ -107,11 +117,11 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 		setBandwidth(bandwidth);
 		m_bandwidthSingleSample = bandwidth;
 		m_needSetup = true;
-		if(m_spectrumWidget)
-		{
-			qDebug() << "ZERO FREQ = " << vecFFT_0.x();
-			m_spectrumWidget->setZeroFrequency((vecFFT_0.x())*TO_KHZ);
-		}
+//		if(m_spectrumWidget)
+//		{
+//			qDebug() << "ZERO FREQ = " << vecFFT_0.x();
+//			m_spectrumWidget->setZeroFrequency((vecFFT_0.x())*TO_KHZ);
+//		}
 	}
 
 	int index = findIndex(startx);
