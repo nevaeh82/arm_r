@@ -50,7 +50,7 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 	}
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
-		correlationWidgetDataSource->deregisterCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
+		correlationWidgetDataSource->deregisterCorrelationReceiver( (ICorrelationListener*) m_spectrumWidget );
 	}
 
 	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);

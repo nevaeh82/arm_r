@@ -480,7 +480,7 @@ void SpectrumWidgetController::addToBlackList()
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
 
-    m_dbStationController->addStationData(data);
+	m_dbStationController->addStationData(data);
 
 	emit signalAddSelToLists(2);
 }
