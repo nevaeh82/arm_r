@@ -19,7 +19,7 @@
 #include "Interfaces/ITabManager.h"
 #include "Interfaces/IControlPanelListener.h"
 
-#include "Rpc/RpcFlakonClient.h"
+#include "Rpc/RpcFlakonClientWrapper.h"
 
 #include "TabSpectrumWidgetController.h"
 #include "TabSpectrumWidget.h"
@@ -48,7 +48,7 @@ private:
 	QString m_rpcHost;
 	uint m_rpcPort;
 
-	RpcFlakonClient *m_rpcFlakonClient;
+	RpcFlakonClientWrapper *m_rpcFlakonClient;
 
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
@@ -63,7 +63,7 @@ public:
 	void start();
 	void setDbManager(IDbManager* dbManager);
 	void setDbStationController(DBStationController* controller);
-	void setFlakonRpc(RpcFlakonClient* rpcFlakonClient, QString rpcHost, uint rpcPort);
+	void setFlakonRpc(RpcFlakonClientWrapper *rpcFlakonClient, QString rpcHost, uint rpcPort);
 
 	virtual QString getStationName(const int id);
 	virtual void setActiveTab(const int id);

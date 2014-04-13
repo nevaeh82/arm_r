@@ -21,7 +21,7 @@
 #include "DBStation/DBStationController.h"
 
 #include "Rpc/RpcPrmClient.h"
-#include "Rpc/RpcFlakonClient.h"
+#include "Rpc/RpcFlakonClientWrapper.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>,
 		public ITabWidget, public ITabSpectrum, public IDbChangedListener, public IRpcListener
@@ -43,7 +43,7 @@ private:
 	TreeWidgetDelegate* m_treeDelegate;
 
 	RpcPrmClient*		m_rpcPrmClient;
-	RpcFlakonClient*	m_rpcFlakonClient;
+	RpcFlakonClientWrapper*	m_rpcFlakonClient;
 
 	QLabel*             m_indicatorLabel;
 
@@ -79,7 +79,7 @@ public:
 	virtual void setDbManager(IDbManager*);
 	virtual void setDbStationController(DBStationController* controller);
 	virtual void setStationNamesList(const QStringList &stationsList);
-	virtual void setRpcFlakonClient(RpcFlakonClient *client);
+	virtual void setRpcFlakonClient(RpcFlakonClientWrapper *client);
 
 	virtual void setIndicator(int state);
 

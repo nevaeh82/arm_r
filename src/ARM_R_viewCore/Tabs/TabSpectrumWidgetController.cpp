@@ -272,7 +272,7 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
 {
 	if (m_rpcFlakonClient == NULL) return;
 
-	m_rpcFlakonClient->sendCorrelation( m_station, enable );
+	m_rpcFlakonClient->sendCorrelation( m_station->getId(), enable );
 }
 
 ///getting points from rpc (flakon)
@@ -362,14 +362,14 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 
 		log_debug( QString("Property changed: ") + DB_LEADING_OP_PROPERTY );
 
-		m_rpcFlakonClient->sendMainStationCorrelation( m_station, property.value.toString() );
+		m_rpcFlakonClient->sendMainStationCorrelation( m_station->getId(), property.value.toString() );
 		return;
 	}
 
 	if( DB_AVERAGING_PROPERTY == property.name ) {
 		if (m_rpcFlakonClient == NULL) return;
 
-		m_rpcFlakonClient->sendAvarageSpectrum( m_station, property.value.toInt() );
+		m_rpcFlakonClient->sendAvarageSpectrum( m_station->getId(), property.value.toInt() );
 		return;
 	}
 
@@ -418,9 +418,9 @@ void TabSpectrumWidgetController::setStationNamesList(const QStringList &station
 	m_treeDelegate->setStationNamesList(stationsList);
 }
 
-void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClient* client)
+void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *client)
 {
-	RpcFlakonClient *old = m_rpcFlakonClient;
+	RpcFlakonClientWrapper *old = m_rpcFlakonClient;
 
 	m_rpcFlakonClient = client;
 

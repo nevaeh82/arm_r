@@ -11,7 +11,7 @@
 #include "SettingsTree/TreeModel.h"
 #include "SettingsTree/TreeWidgetDelegate.h"
 
-#include "Rpc/RpcFlakonClient.h"
+#include "Rpc/RpcFlakonClientWrapper.h"
 
 namespace Ui {
 class CommonSpectrumTabWidget;
@@ -40,7 +40,7 @@ private:
 	/// connection status
 	QTimer	m_timerStatus;
 
-	RpcFlakonClient* m_rpcFlakonClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 	
 public:
 	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
@@ -75,7 +75,7 @@ public:
 	virtual int createView(QWidget *);
 	virtual int createTree();
 
-	void setFlakonRpcClient(RpcFlakonClient* rpcClient);
+	void setFlakonRpcClient(RpcFlakonClientWrapper *rpcClient);
 
 private:
 	void setIndicator(int state);

@@ -28,14 +28,23 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
 
 
-	m_rpcFlakonClient = new RpcFlakonClient(this);
+	m_rpcFlakonClient = new RpcFlakonClientWrapper;
+	QThread* rpcClientThread = new QThread;
+	connect(m_rpcFlakonClient, SIGNAL(destroyed()), rpcClientThread, SLOT(terminate()));
+	//connect(this, SIGNAL(signalFinishRPC()), rpcClientThread, SLOT(quit()));
+	//connect(this, SIGNAL(signalFinishRPC()), m_rpcClient, SLOT(deleteLater()));
+	//connect(this, SIGNAL(signalFinishRPC()), rpcClientThread, SLOT(deleteLater()));
 
+	m_rpcFlakonClient->moveToThread(rpcClientThread);
+	rpcClientThread->start();
 }
 
 MainWindowController::~MainWindowController()
 {
 	stop();
 	m_tabManager->clearAllInformation();
+
+	delete m_rpcFlakonClient;
 }
 
 void MainWindowController::appendView(MainWindow *view)
@@ -131,8 +140,6 @@ void MainWindowController::serverStartedSlot()
 	m_tabManager->setRpcConfig(port, host);
 	m_rpcConfigClient->start(port, QHostAddress(host));
 	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
-
-	m_rpcFlakonClient->start( m_rpcPort, QHostAddress( m_rpcHost ) );
 }
 
 void MainWindowController::slotShowLists()

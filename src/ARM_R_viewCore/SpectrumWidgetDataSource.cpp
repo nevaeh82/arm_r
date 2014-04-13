@@ -20,6 +20,8 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 
 	m_spectrum = new float[1];
 	m_spectrumPeakHold = new float[1];
+
+	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
 }
 
 SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
@@ -31,76 +33,7 @@ SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
 Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum)
-			return;
-
-		bool isComplex = true;
-
-		QByteArray vecFFTBA = data.toByteArray();
-
-		QVector<QPointF> vecFFT;
-		QDataStream stream(vecFFTBA);
-
-		unsigned int id; // m_header.id;
-		stream >> id;
-		if (id != m_spectrumWidget->getId()) {
-			return;
-		}
-
-		stream >> vecFFT;
-		if (!vecFFT.size()) return;
-
-		dataProccess(vecFFT, isComplex);
-
-		QList<QVariant> list;
-
-//		QVariant headerId(id); // m_header.id;
-
-		QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
-		QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
-
-//		list.append(headerId); // m_header.id;
-
-		list.append(spectrumVariant);
-		list.append(peaksSpectrumVariant);
-
-		if(m_needSetupSpectrum)
-		{
-			QVariant pointsCountVariant(m_pointCountWhole);
-			QVariant bandwidthVariant(m_bandwidth);
-			QVariant isComplexVariant(isComplex);
-			list.append(pointsCountVariant);
-			list.append(bandwidthVariant);
-			list.append(isComplexVariant);
-
-			m_needSetupSpectrum = false;
-		}
-
-		QVariant data(list);
-		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
-		return;
-	}
-
-	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		onDataReceived(method, data);
-		return;
-	}
-
-	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
-		onDataReceived(method, data);
-		return;
-	}
-
-	if(RPC_SLOT_SERVER_PRM_STATUS == method)
-	{
-		QList<QVariant> list = data.toList();
-		quint32 freq = list.at(0).toUInt();
-		quint32 filter = list.at(1).toUInt();
-		quint32 att1 = list.at(2).toUInt();
-		quint32 att2 = list.at(3).toUInt();
-		m_spectrumWidget->setZeroFrequency(freq);
-	}
+	emit onMethodCalledSignal(method, data);
 }
 
 void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
@@ -228,6 +161,80 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 bool SpectrumWidgetDataSource::isPanoramaEnabled()
 {
 	return m_isPanoramaStart;
+}
+
+void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
+{
+	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
+		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum)
+			return;
+
+		bool isComplex = true;
+
+		QByteArray vecFFTBA = data.toByteArray();
+
+		QVector<QPointF> vecFFT;
+		QDataStream stream(vecFFTBA);
+
+		unsigned int id; // m_header.id;
+		stream >> id;
+		if (id != m_spectrumWidget->getId()) {
+			return;
+		}
+
+		stream >> vecFFT;
+		if (!vecFFT.size()) return;
+
+		dataProccess(vecFFT, isComplex);
+
+		QList<QVariant> list;
+
+//		QVariant headerId(id); // m_header.id;
+
+		QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
+		QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
+
+//		list.append(headerId); // m_header.id;
+
+		list.append(spectrumVariant);
+		list.append(peaksSpectrumVariant);
+
+		if(m_needSetupSpectrum)
+		{
+			QVariant pointsCountVariant(m_pointCountWhole);
+			QVariant bandwidthVariant(m_bandwidth);
+			QVariant isComplexVariant(isComplex);
+			list.append(pointsCountVariant);
+			list.append(bandwidthVariant);
+			list.append(isComplexVariant);
+
+			m_needSetupSpectrum = false;
+		}
+
+		QVariant data(list);
+		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
+		onDataReceived(method, data);
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
+		onDataReceived(method, data);
+		return;
+	}
+
+	if(RPC_SLOT_SERVER_PRM_STATUS == method)
+	{
+		QList<QVariant> list = data.toList();
+		quint32 freq = list.at(0).toUInt();
+//		quint32 filter = list.at(1).toUInt();
+//		quint32 att1 = list.at(2).toUInt();
+//		quint32 att2 = list.at(3).toUInt();
+		m_spectrumWidget->setZeroFrequency(freq);
+	}
 }
 
 void SpectrumWidgetDataSource::sendCommand(int)

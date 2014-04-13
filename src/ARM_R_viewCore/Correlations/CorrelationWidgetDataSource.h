@@ -46,8 +46,13 @@ public:
 private:
 	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool);
 
+signals:
+	void onMethodCalledSignal(QString, QVariant);
+
 private slots:
 	void correlationTimerOff();
+
+	void onMethodCalledSlot(QString, QVariant);
 };
 
 #endif // CORRELATIONWIDGETDATASOURCE_H
