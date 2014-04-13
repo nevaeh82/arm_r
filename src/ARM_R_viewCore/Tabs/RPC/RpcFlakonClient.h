@@ -11,12 +11,12 @@ class RpcFlakonClient : public RpcRoutedClient
 public:
 	explicit RpcFlakonClient(QObject *parent = 0);
 
-	void sendMainStationCorrelation(IStation *station, const QString& value);
-	void sendBandwidth(IStation *station, const float bandwidth);
-	void sendShift(IStation *station, const float shift);
-	void recognize(IStation *station, const int type);
-	void sendCorrelation(IStation *station, const bool enable);
-	void sendAvarageSpectrum(IStation *station, const int avarage);
+	void sendMainStationCorrelation(const int id, const QString& value);
+	void sendBandwidth(const int id, const float bandwidth);
+	void sendShift(const int id, const float shift);
+	void recognize(const int id, const int type);
+	void sendCorrelation(const int id, const bool enable);
+	void sendAvarageSpectrum(const int id, const int avarage);
 
 	void requestFlakonStatus();
 

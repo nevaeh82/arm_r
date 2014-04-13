@@ -11,7 +11,7 @@
 
 #include "DBStation/IDBStation.h"
 
-#include "Tabs/Rpc/RpcFlakonClient.h"
+#include "Tabs/Rpc/RpcFlakonClientWrapper.h"
 #include "Station.h"
 
 #include "ListWhiteDialog.h"
@@ -43,7 +43,7 @@ private:
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
 
-	RpcFlakonClient* m_rpcFlakonClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 	QMap<int, Station *> m_stationsMap;
 
 	Station* m_mainStation;
@@ -57,7 +57,7 @@ public:
 
 	void setDbManager(IDbManager* dbManager);
 	void setDbStationController(IDBStation* dbStationController);
-	void setRpcFlakonClient(RpcFlakonClient* rpcFlakonClient);
+	void setRpcFlakonClient(RpcFlakonClientWrapper* rpcFlakonClient);
 	void setMapStations(QMap<int, Station *> stationsMap);
 
 

@@ -55,7 +55,8 @@ SOURCES += \
     ControlPanel/CheckBoxDelegate.cpp \
     ControlPanel/ListWhiteDialog.cpp \
     ControlPanel/ListWhiteDialogController.cpp \
-    SignalDetectedDialog.cpp
+    SignalDetectedDialog.cpp \
+    Tabs/RPC/RpcFlakonClientWrapper.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -123,7 +124,8 @@ HEADERS += \
     ControlPanel/CheckBoxDelegate.h \
     ControlPanel/ListWhiteDialog.h \
     ControlPanel/ListWhiteDialogController.h \
-    SignalDetectedDialog.h
+    SignalDetectedDialog.h \
+    Tabs/RPC/RpcFlakonClientWrapper.h
 
 FORMS += \
 	ControlPanel.ui \

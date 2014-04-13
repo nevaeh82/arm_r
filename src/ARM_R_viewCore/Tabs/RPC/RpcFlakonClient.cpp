@@ -39,35 +39,35 @@ void RpcFlakonClient::registerRoute()
 	err = m_clientPeer->isClient();
 }
 
-void RpcFlakonClient::sendMainStationCorrelation(IStation *station, const QString& value)
+void RpcFlakonClient::sendMainStationCorrelation(const int id, const QString& value)
 {
-	m_clientPeer->call( RPC_METHOD_SET_MAIN_STATION_CORRELATION, station->getId(), value );
+	m_clientPeer->call( RPC_METHOD_SET_MAIN_STATION_CORRELATION, id, value );
 }
 
-void RpcFlakonClient::sendBandwidth(IStation *station, const float bandwidth)
+void RpcFlakonClient::sendBandwidth(const int id, const float bandwidth)
 {
-	m_clientPeer->call( RPC_METHOD_SET_BANDWIDTH, station->getId(), bandwidth );
+	m_clientPeer->call( RPC_METHOD_SET_BANDWIDTH, id, bandwidth );
 }
 
-void RpcFlakonClient::sendShift(IStation *station, const float shift)
+void RpcFlakonClient::sendShift(const int id, const float shift)
 {
-	m_clientPeer->call( RPC_METHOD_SET_SHIFT, station->getId(), shift );
+	m_clientPeer->call( RPC_METHOD_SET_SHIFT, id, shift );
 }
 
-void RpcFlakonClient::recognize(IStation *station, const int type)
+void RpcFlakonClient::recognize(const int id, const int type)
 {
-	m_clientPeer->call( RPC_METHOD_RECOGNIZE, station->getId(), type );
+	m_clientPeer->call( RPC_METHOD_RECOGNIZE, id, type );
 }
 
-void RpcFlakonClient::sendCorrelation(IStation *station, bool enable)
+void RpcFlakonClient::sendCorrelation(const int id, bool enable)
 {
-	emit signalEnableCorrelation(station->getId(), enable);
+	emit signalEnableCorrelation(id, enable);
 	//	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, station->getId(), enable );
 }
 
-void RpcFlakonClient::sendAvarageSpectrum(IStation* station, const int avarage)
+void RpcFlakonClient::sendAvarageSpectrum(const int id, const int avarage)
 {
-	m_clientPeer->call( RPC_METHOD_AVARAGE_SPECTRUM, station->getId(), avarage );
+	m_clientPeer->call( RPC_METHOD_AVARAGE_SPECTRUM, id, avarage );
 }
 
 void RpcFlakonClient::requestFlakonStatus()

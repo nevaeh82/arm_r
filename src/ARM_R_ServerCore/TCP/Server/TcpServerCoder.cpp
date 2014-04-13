@@ -110,6 +110,8 @@ MessageSP TcpServerCoder::fromProtoBuf(const QByteArray& data)
 
 QByteArray TcpServerCoder::toProtoBuf(const MessageSP& message)
 {
+	Q_UNUSED(message);
+
 	return QByteArray();
 }
 

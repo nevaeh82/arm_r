@@ -22,34 +22,14 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correla
 	correlationStateTimer = new QTimer(this);
 	correlationStateTimer->setInterval(TIME_WAIT_CORRELATION);
 	connect(correlationStateTimer, SIGNAL(timeout()), this, SLOT(correlationTimerOff()));
+
+	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
+
 }
 
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-	/// TODO this is hack for visible and unvisible widge. Need to refactor architechture
-	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
-		QDataStream stream( data.toByteArray() );
-
-		QVector<QPointF> points;
-		quint32 point1, point2;
-
-		stream >> point1 >> point2 >> points;
-
-		if( point1 == m_id ) {
-			m_correlationWidget->setVisible(false);
-			return;
-		}
-
-		if( point2 != m_id ){
-			return;
-		}
-
-		m_correlationWidget->setVisible(true);
-
-		setCorData( point1, point2, points, true );
-
-		onCorrelationStateChanged(true);
-	}
+	emit onMethodCalledSignal(method, data);
 }
 
 Q_DECLARE_METATYPE(float*)
@@ -131,6 +111,34 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 void CorrelationWidgetDataSource::correlationTimerOff()
 {
 	onCorrelationStateChanged(false);
+}
+
+void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
+{
+	/// TODO this is hack for visible and unvisible widget. Need to refactor architechture
+	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
+		QDataStream stream( data.toByteArray() );
+
+		QVector<QPointF> points;
+		quint32 point1, point2;
+
+		stream >> point1 >> point2 >> points;
+
+		if( point1 == m_id ) {
+			m_correlationWidget->setVisible(false);
+			return;
+		}
+
+		if( point2 != m_id ){
+			return;
+		}
+
+		m_correlationWidget->setVisible(true);
+
+		setCorData( point1, point2, points, true );
+
+		onCorrelationStateChanged(true);
+	}
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)

@@ -141,7 +141,7 @@ int CommonSpectrumTabWidget::createTree()
 	return 0;
 }
 
-void CommonSpectrumTabWidget::setFlakonRpcClient(RpcFlakonClient *rpcClient)
+void CommonSpectrumTabWidget::setFlakonRpcClient(RpcFlakonClientWrapper *rpcClient)
 {
 	m_rpcFlakonClient =rpcClient;
 }

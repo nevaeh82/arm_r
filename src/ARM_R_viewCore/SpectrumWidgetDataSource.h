@@ -45,6 +45,12 @@ public:
 	void setPanorama(bool enabled, double start = 0.0f, double end = 0.0f);
 	bool isPanoramaEnabled();
 
+signals:
+	void onMethodCalledSignal(QString, QVariant);
+
+private slots:
+	void onMethodCalledSlot(QString, QVariant);
+
 private:
 	void dataProccess(QVector<QPointF>& vecFFT, bool);
 	void setBandwidth(double bandwidth);
