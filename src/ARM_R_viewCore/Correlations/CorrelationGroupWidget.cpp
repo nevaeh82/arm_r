@@ -31,7 +31,7 @@ void CorrelationGroupWidget::clearWidgetContainer()
 {
 	foreach (ICorrelationWidget* widget , m_widgetList) {
 		ui->correlationWidgetsContainer->removeWidget(widget->getWidget());
-		widget->clear();
+		//widget->clear();
 	}
 
 	m_widgetList.clear();
