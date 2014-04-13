@@ -2,7 +2,7 @@
 
 #include "Station.h"
 
-Station::Station(IDbManager* dbManager, RpcFlakonClient* client, QObject *parent)
+Station::Station(IDbManager* dbManager, RpcFlakonClientWrapper *client, QObject *parent)
 	: QObject( parent )
 	, m_dbManager( dbManager )
 	, m_stationId( INVALID_STATION_ID )
@@ -75,9 +75,9 @@ void Station::recognize()
 	float bandwidth = getBandwidth();
 	float shift = getShift();
 
-	m_rpcFlakonClient->sendBandwidth( this, bandwidth );
-	m_rpcFlakonClient->sendShift( this, shift );
-	m_rpcFlakonClient->recognize( this, 104 );
+	m_rpcFlakonClient->sendBandwidth( m_stationId, bandwidth );
+	m_rpcFlakonClient->sendShift( m_stationId, shift );
+	m_rpcFlakonClient->recognize( m_stationId, 104 );
 }
 
 int Station::getId() const

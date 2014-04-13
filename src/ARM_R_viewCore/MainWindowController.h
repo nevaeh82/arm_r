@@ -16,7 +16,7 @@
 #include "Tabs/TabManager.h"
 #include "ControlPanel/ControlPanelController.h"
 
-#include "Tabs/Rpc/RpcFlakonClient.h"
+#include "Tabs/Rpc/RpcFlakonClientWrapper.h"
 
 #include "DBStation/DBStationController.h"
 #include "DBStation/ListsDialog.h"
@@ -44,7 +44,7 @@ private:
 	RpcConfigClient*		m_rpcConfigClient;
 	IRpcSettingsManager*	m_rpcSettingsManager;
 
-	RpcFlakonClient *m_rpcFlakonClient;
+	RpcFlakonClientWrapper *m_rpcFlakonClient;
 	QString m_rpcHost;
 	uint m_rpcPort;
 

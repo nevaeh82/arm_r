@@ -65,7 +65,7 @@ void TabManager::setDbStationController(DBStationController *controller)
 	m_dbStationController = controller;
 }
 
-void TabManager::setFlakonRpc(RpcFlakonClient *rpcFlakonClient, QString rpcHost, uint rpcPort)
+void TabManager::setFlakonRpc(RpcFlakonClientWrapper *rpcFlakonClient, QString rpcHost, uint rpcPort)
 {
 	m_rpcFlakonClient = rpcFlakonClient;
 	m_rpcHost = rpcHost;
@@ -106,8 +106,6 @@ void TabManager::changeTabSlot(int index)
 
 void TabManager::setStationsConfiguration(const QList<StationConfiguration>& stationList)
 {
-	m_rpcFlakonClient = new RpcFlakonClient(this);
-
 	foreach (StationConfiguration stationConf, stationList) {
 		Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
 
@@ -132,9 +130,9 @@ void TabManager::setAtlantConfiguration(const AtlantConfiguration& atlantConfig)
 
 void TabManager::addStationTabs()
 {
-	if (m_rpcFlakonClient != NULL) {
-		m_rpcFlakonClient->start(m_rpcPort, QHostAddress(m_rpcHost));
-	}
+//	if (m_rpcFlakonClient != NULL) {
+//		m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
+//	}
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 	m_correlationControllers->init(m_stationsMap.count());

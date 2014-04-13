@@ -50,7 +50,7 @@ void ControlPanelController::setDbStationController(IDBStation *dbStationControl
 	m_dbStation = dbStationController;
 }
 
-void ControlPanelController::setRpcFlakonClient(RpcFlakonClient *rpcFlakonClient)
+void ControlPanelController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcFlakonClient)
 {
 	m_rpcFlakonClient = rpcFlakonClient;
 }
@@ -173,7 +173,7 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 	foreach(Station* st, m_stationsMap)
 	{
-		m_rpcFlakonClient->sendBandwidth(st, (*m_itCheckMode).bandwidth);
+		m_rpcFlakonClient->sendBandwidth(st->getId(), (*m_itCheckMode).bandwidth);
 		if(st->getName() == (*m_itCheckMode).stationName)
 		{
 			m_mainStation = st;
@@ -192,11 +192,11 @@ void ControlPanelController::slotCheckModeSetFreq()
 		leadStation = tr("Auto");
 	}
 
-	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation, leadStation);
+	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
 
 	m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
 
-	m_rpcFlakonClient->sendCorrelation(m_mainStation, true);
+	m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), true);
 
 	m_itCheckMode++;
 }

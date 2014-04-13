@@ -7,7 +7,7 @@
 #include "Interfaces/IStation.h"
 #include "Interfaces/IDbManager.h"
 
-#include "Tabs/Rpc/RpcFlakonClient.h"
+#include "Tabs/Rpc/RpcFlakonClientWrapper.h"
 
 #define INVALID_STATION_ID -1
 
@@ -28,14 +28,14 @@ private:
 
 	IDbManager *m_dbManager;
 
-	RpcFlakonClient *m_rpcFlakonClient;
+	RpcFlakonClientWrapper *m_rpcFlakonClient;
 
 protected:
 	float getBandwidth() const;
 	float getShift() const;
 
 public:
-	Station(IDbManager *dbManager, RpcFlakonClient *client, QObject* parent = NULL);
+	Station(IDbManager *dbManager, RpcFlakonClientWrapper *client, QObject* parent = NULL);
 	virtual ~Station();
 
 	int getId() const;
