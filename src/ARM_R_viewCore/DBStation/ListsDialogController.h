@@ -10,6 +10,8 @@
 #include <QHeaderView>
 #include <QMessageBox>
 
+#include <QSqlRecord>
+
 #include "Interfaces/IController.h"
 
 #include "ListsDialog.h"
@@ -32,16 +34,19 @@ private:
 	QSqlDatabase				m_db;
 	QTableView*					m_view;
 	ListsProxyModel*			m_proxyModel;
+	int m_type;
 
 private:
 	QSqlQuery getAllStationsInfo();
 	QSqlQuery getStationsInfoByCategory(int type);
 	void adjustTableSize();
+	QSqlQuery deleteFromStationData(int id);
 
 private slots:
 	void m_slotChooseTypeList(int type);
 	void m_slotAdd();
 	void m_slotAddClose();
+	void m_slotDelete();
 };
 
 #endif // LISTSCONTROLLER_H

@@ -5,6 +5,7 @@
 ListsDialogController::ListsDialogController(const QSqlDatabase& db, QObject* parent):
 	QObject(parent)
 {
+	m_type = 0;
 	m_db = db;
 	m_model = new QSqlQueryModel(this);
 
@@ -39,6 +40,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	adjustTableSize();
 	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
 	connect(widget, SIGNAL(signalAddClicked()), this, SLOT(m_slotAdd()));
+	connect(widget, SIGNAL(signalDelete()), this, SLOT(m_slotDelete()));
 }
 
 QSqlQuery ListsDialogController::getAllStationsInfo()
@@ -66,6 +68,8 @@ QSqlQuery ListsDialogController::getAllStationsInfo()
 		return QSqlQuery();
 	}
 
+	m_type = 0;
+
 	return query;
 }
 
@@ -77,6 +81,28 @@ void ListsDialogController::adjustTableSize()
 	for(int column = 0; column < m_view->model()->columnCount(); column++)
 		width = width + m_view->columnWidth(column);
 	m_view->setMinimumWidth(width);
+}
+
+QSqlQuery ListsDialogController::deleteFromStationData(int id)
+{
+	QSqlQuery query(m_db);
+	bool succeeded = query.prepare("DELETE FROM StationData WHERE id=:objectID");
+
+	if (!succeeded) {
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		return QSqlQuery();
+	}
+
+	query.bindValue(":objectID", id);
+
+	succeeded = query.exec();
+
+	if (!succeeded) {
+		log_error(QString("SQL is wrong! Error = %1").arg(query.lastError().text()));
+		return QSqlQuery();
+	}
+
+	return query;
 }
 
 void ListsDialogController::m_slotChooseTypeList(int type)
@@ -120,6 +146,21 @@ void ListsDialogController::m_slotAddClose()
 	m_model->setQuery(m_model->query());
 }
 
+void ListsDialogController::m_slotDelete()
+{
+	QModelIndexList list = m_view->selectionModel()->selectedRows();
+	int row;
+	foreach(QModelIndex index, list)
+	{
+		row = index.row();
+		QSqlRecord rec = m_model->record(row);
+		int id = rec.value("id").toInt();
+		m_model->setQuery(deleteFromStationData(id));
+	}
+	m_slotChooseTypeList(m_type);
+
+}
+
 QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 {
 	QSqlQuery query(m_db);
@@ -140,11 +181,13 @@ QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 
 	switch(type)
 	{
-		case 1:
+		case 1:			
 			query.bindValue(":objectCategory", "White");
+			m_type = 1;
 			break;
 		case 2:
 			query.bindValue(":objectCategory", "Black");
+			m_type = 2;
 			break;
 		default:
 			break;
