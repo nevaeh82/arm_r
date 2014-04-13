@@ -95,12 +95,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="43"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="29"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="43"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>
@@ -190,12 +190,12 @@
 <context>
     <name>CorrelationWidgetController</name>
     <message>
-        <location filename="Correlations/CorrelationWidgetController.cpp" line="85"/>
+        <location filename="Correlations/CorrelationWidgetController.cpp" line="86"/>
         <source>m</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Correlations/CorrelationWidgetController.cpp" line="86"/>
+        <location filename="Correlations/CorrelationWidgetController.cpp" line="87"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
@@ -203,12 +203,46 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="206"/>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Frequency and bandwidth is exist!
+ %1
+ %2
+ %3
+ %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Station = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Frequency=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Bandwidth=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="166"/>
+        <source>Category=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/DBStationController.cpp" line="220"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="240"/>
+        <location filename="DBStation/DBStationController.cpp" line="254"/>
         <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -527,53 +561,63 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="73"/>
+        <location filename="SpectrumWidgetController.cpp" line="74"/>
         <source>File error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="73"/>
+        <location filename="SpectrumWidgetController.cpp" line="74"/>
         <source>Very small file or file not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="163"/>
+        <location filename="SpectrumWidgetController.cpp" line="175"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="SpectrumWidgetController.cpp" line="300"/>
+        <source>Black</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="SpectrumWidgetController.cpp" line="322"/>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SpectrumWidgetController.cpp" line="381"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="325"/>
+        <location filename="SpectrumWidgetController.cpp" line="384"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="326"/>
+        <location filename="SpectrumWidgetController.cpp" line="385"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="327"/>
+        <location filename="SpectrumWidgetController.cpp" line="386"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="328"/>
-        <location filename="SpectrumWidgetController.cpp" line="446"/>
+        <location filename="SpectrumWidgetController.cpp" line="137"/>
+        <location filename="SpectrumWidgetController.cpp" line="387"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="329"/>
+        <location filename="SpectrumWidgetController.cpp" line="388"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="444"/>
+        <location filename="SpectrumWidgetController.cpp" line="135"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -594,8 +638,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="178"/>
-        <location filename="Tabs/TabManager.cpp" line="191"/>
+        <location filename="Tabs/TabManager.cpp" line="182"/>
+        <location filename="Tabs/TabManager.cpp" line="199"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
@@ -616,12 +660,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="128"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="124"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="128"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>

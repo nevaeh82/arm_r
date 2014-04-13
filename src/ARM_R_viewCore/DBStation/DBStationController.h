@@ -11,9 +11,13 @@
 #include <QDateTime>
 #include <QList>
 
+#include <QIcon>
+
 #include "IDBStation.h"
 #include "Info/DBConnectionParameters.h"
 #include "DBFillTables.h"
+
+#include <QMessageBox>
 
 #define INVALID_INDEX 0
 
@@ -40,6 +44,9 @@ public:
 
 private:
 	QSqlDatabase m_db;
+
+private:
+	bool checkExist(double frequency, double bandwidth, StationData& data);
 
 signals:
 
