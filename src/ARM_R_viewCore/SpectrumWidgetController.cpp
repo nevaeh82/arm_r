@@ -211,12 +211,13 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		if(result == QDialog::Accepted)
 		{
 			setSpectrumShow(true);
-		}else
+		}
+		else
 		{
 			setSpectrumShow(false);
 		}
 		m_overthreshold = 0;
-		m_rett = -101;
+		m_rett = -100;
 	}
 
 	if(!m_spectrumShow)
