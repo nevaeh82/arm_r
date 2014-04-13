@@ -124,37 +124,37 @@ public:
 		delete stationController;
 	}
 
-	void testAddStationData()
-	{
-		DBStationController* stationController = new DBStationController(NULL);
-		DBConnectionStruct param;
-		param.dbName = "testStations";
-		param.host = "127.0.0.1";
-		param.login = "root";
-		param.port = 3306;
-		param.password = "qwerty12345";
-		bool isConnected = stationController->connectToDB(param);
-		TS_ASSERT_EQUALS(true, isConnected);
-		int lastID = stationController->getLastIndex("stationData");
+//	void testAddStationData()
+//	{
+//		DBStationController* stationController = new DBStationController(NULL);
+//		DBConnectionStruct param;
+//		param.dbName = "testStations";
+//		param.host = "127.0.0.1";
+//		param.login = "root";
+//		param.port = 3306;
+//		param.password = "qwerty12345";
+//		bool isConnected = stationController->connectToDB(param);
+//		TS_ASSERT_EQUALS(true, isConnected);
+//		int lastID = stationController->getLastIndex("stationData");
 
-		TS_ASSERT_DIFFERS(0, ++lastID);
-		StationData data;
-		data.stationName = "Station1";
-		data.port = 1024;
-		data.category = "White";
-		data.signalType = "Signal1";
-		data.frequency = 1456;
-		data.bandwidth= 1000;
+//		TS_ASSERT_DIFFERS(0, ++lastID);
+//		StationData data;
+//		data.stationName = "Station1";
+//		data.port = 1024;
+//		data.category = "White";
+//		data.signalType = "Signal1";
+//		data.frequency = 1456;
+//		data.bandwidth= 1000;
 
-		int index = stationController->addStationData(data);
+//		int index = stationController->addStationData(data);
 
-		qDebug() << index;
+//		qDebug() << index;
 
-		TS_ASSERT_DIFFERS(0, index);
+//		TS_ASSERT_DIFFERS(0, index);
 
 
-		delete stationController;
-	}
+//		delete stationController;
+//	}
 
 	void testGetStationInfo()
 	{

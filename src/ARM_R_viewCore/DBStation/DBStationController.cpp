@@ -159,6 +159,20 @@ int DBStationController::addCategory(const QString& name)
 
 int DBStationController::addStationData(const StationData& data)
 {
+	StationData dataExist;
+	bool exist = checkExist(data.frequency, data.bandwidth, dataExist);
+	if(exist)
+	{
+		QMessageBox msgBox(QMessageBox::Warning, tr("Error"), tr("Frequency and bandwidth is exist!\n %1\n %2\n %3\n %4").arg(tr("Station = %1").arg(dataExist.stationName)).arg(tr("Frequency=%1").arg(QString::number(dataExist.frequency/1000))).arg(tr("Bandwidth=%1").arg(QString::number(dataExist.bandwidth/1000))).arg(tr("Category=%1").arg(dataExist.category)));
+		msgBox.setWindowIcon(QIcon(":/images/icons/ExistInDB.png"));
+//		msgBox.setIcon(QMessageBox::Warning);
+//		msgBox.setWindowRole();
+//		msgBox.setWindowIconText(tr("Error!"));
+//		msgBox.setText(tr("Frequency and bandwidth is exist!"));
+		msgBox.exec();
+		return - 1;
+	}
+
 	if(!m_db.isOpen())
 	{
 		return INVALID_INDEX;
@@ -369,5 +383,53 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 	}
 
 	return true;
+}
+
+bool DBStationController::checkExist(double frequency, double bandwidth, StationData& data)
+{
+	if(!m_db.isOpen())
+	{
+		return false;
+	}
+
+	QSqlQuery query(m_db);
+	bool succeeded = query.prepare("SELECT st.name, sd.frequency, sd.bandwidth, cat.name " \
+					"FROM stationData AS sd " \
+					"INNER JOIN stationDevices as sdi on sd.deviceID=sdi.id " \
+					"INNER JOIN station as st on st.id=sdi.stationID " \
+					"INNER JOIN category AS cat on cat.id=sd.categoryID " \
+					"WHERE sd.frequency>:objectLowFreq and sd.frequency<:objectHighFreq");
+
+	if (!succeeded) {
+		qDebug() << "SQL is wrong!" <<  query.lastError();
+		return false;
+	}
+
+	query.bindValue(":objectLowFreq", frequency-bandwidth/2);
+	query.bindValue(":objectHighFreq", frequency+bandwidth/2);
+
+	succeeded = query.exec();
+	if (!succeeded)
+	{
+		qDebug() << "SQL is wrong!";
+		return false;
+	}
+
+
+	if(query.next())
+	{
+		qDebug() << 0 << query.value(0).toString();
+		qDebug() << 1 << query.value(1).toDouble();
+		qDebug() << 2 << query.value(2).toDouble();
+		qDebug() << 3 << query.value(3).toString();
+		data.stationName = query.value(0).toString();
+		data.frequency = query.value(1).toDouble();
+		data.bandwidth = query.value(2).toDouble();
+		data.category = query.value(3).toString();
+
+		return true;
+	}
+
+	return false;
 }
 
