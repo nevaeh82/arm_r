@@ -24,6 +24,7 @@ private:
 signals:
 	void signalTypeList(int);
 	void signalAddClicked();
+	void signalDelete();
 
 public slots:
 	void slotShow();

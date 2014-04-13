@@ -18,6 +18,7 @@ ListsDialog::ListsDialog(QWidget *parent) :
 	connect(ui->cbLists, SIGNAL(activated(int)), this, SIGNAL(signalTypeList(int)));
 	connect(ui->pbAdd, SIGNAL(clicked()), this, SIGNAL(signalAddClicked()));
 	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
+	connect(ui->pbDelete, SIGNAL(clicked()), this, SIGNAL(signalDelete()));
 }
 
 ListsDialog::~ListsDialog()

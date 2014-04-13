@@ -306,12 +306,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="61"/>
-        <source>Add</source>
+        <location filename="DBStation/ListsDialog.ui" line="48"/>
+        <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="75"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -319,52 +324,52 @@
 <context>
     <name>ListsDialogController</name>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>Station Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
         <source>Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
         <source>Bandwidth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
         <source>Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="24"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="108"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="134"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -377,37 +382,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="70"/>
+        <location filename="MainWindow.ui" line="109"/>
         <source>Initialization...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="102"/>
+        <location filename="MainWindow.ui" line="141"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="109"/>
+        <location filename="MainWindow.ui" line="148"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="123"/>
+        <location filename="MainWindow.ui" line="162"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="128"/>
+        <location filename="MainWindow.ui" line="167"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="133"/>
+        <location filename="MainWindow.ui" line="172"/>
         <source>Atlant setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="138"/>
+        <location filename="MainWindow.ui" line="177"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,17 +425,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="111"/>
+        <location filename="MainWindowController.cpp" line="120"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="111"/>
+        <location filename="MainWindowController.cpp" line="120"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="147"/>
+        <location filename="MainWindowController.cpp" line="154"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -638,13 +643,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="182"/>
-        <location filename="Tabs/TabManager.cpp" line="199"/>
+        <location filename="Tabs/TabManager.cpp" line="180"/>
+        <location filename="Tabs/TabManager.cpp" line="197"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="130"/>
+        <location filename="Tabs/TabManager.cpp" line="128"/>
         <source>Atlant</source>
         <translation type="unfinished"></translation>
     </message>
