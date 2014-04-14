@@ -46,6 +46,9 @@
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="dspFreq">
+       <property name="suffix">
+        <string>MHz</string>
+       </property>
        <property name="decimals">
         <number>3</number>
        </property>

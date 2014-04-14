@@ -43,7 +43,7 @@ public:
 public slots:
 	void slotSetEnableSpactrum(bool state);
 
-private slots:
+public slots:
 	void slotEnableKM(bool state);
 
 signals:

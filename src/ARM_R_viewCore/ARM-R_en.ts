@@ -510,6 +510,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="SignalDetectedDialog.ui" line="50"/>
+        <source>MHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="SignalDetectedDialog.cpp" line="10"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
@@ -581,43 +586,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="300"/>
+        <location filename="SpectrumWidgetController.cpp" line="299"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="322"/>
+        <location filename="SpectrumWidgetController.cpp" line="321"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="381"/>
+        <location filename="SpectrumWidgetController.cpp" line="380"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="384"/>
+        <location filename="SpectrumWidgetController.cpp" line="383"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="385"/>
+        <location filename="SpectrumWidgetController.cpp" line="384"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="386"/>
+        <location filename="SpectrumWidgetController.cpp" line="385"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="SpectrumWidgetController.cpp" line="137"/>
-        <location filename="SpectrumWidgetController.cpp" line="387"/>
+        <location filename="SpectrumWidgetController.cpp" line="386"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="388"/>
+        <location filename="SpectrumWidgetController.cpp" line="387"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
@@ -643,8 +648,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="180"/>
-        <location filename="Tabs/TabManager.cpp" line="197"/>
+        <location filename="Tabs/TabManager.cpp" line="184"/>
+        <location filename="Tabs/TabManager.cpp" line="201"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
@@ -665,12 +670,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="128"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="131"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="128"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="131"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>

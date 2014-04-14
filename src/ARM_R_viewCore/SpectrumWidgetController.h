@@ -25,7 +25,7 @@
 
 #include "SignalDetectedDialog.h"
 
-#define TO_MHZ	1000000
+#define TO_MHZ	1000000.0
 #define TO_MHZ2	1000
 
 
@@ -93,7 +93,7 @@ public:
 	void setFFTSetup(float* spectrum, float* spectrum_peak_hold);
 
 	QString getSpectrumName() const;
-	QWidget* getWidget() const;
+	QWidget *getWidget() const;
 
 	bool isGraphicVisible();
 	quint32 getId();
@@ -158,6 +158,8 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
+	void onSignalDetectedDialogFinishedSlot(int);
 
 };
 
