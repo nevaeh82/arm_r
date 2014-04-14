@@ -158,9 +158,6 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
-
-	void onSignalDetectedDialogFinishedSlot(int);
-
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H
