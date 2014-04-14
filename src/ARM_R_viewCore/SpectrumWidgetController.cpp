@@ -212,12 +212,9 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 		SignalDetectedDialog* dlg = new SignalDetectedDialog(m_view);
 		dlg->setFrequency(m_overthreshold);
-		dlg->setModal(true);
-		dlg->exec();
-
 		connect(dlg, SIGNAL(finished(int)), this, SLOT(onSignalDetectedDialogFinishedSlot(int)));
-
-		dlg->show();
+		connect(dlg, SIGNAL(finished(int)), dlg, SLOT(deleteLater()));
+		dlg->exec();
 	}
 
 
