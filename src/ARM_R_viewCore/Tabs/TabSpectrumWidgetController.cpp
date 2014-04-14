@@ -73,7 +73,10 @@ void TabSpectrumWidgetController::activate()
 	double start = 0;
 	double end = 0;
 
-	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_START_PROPERTY);
+	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_FREQUENCY_PROPERTY);
+	m_view->getSpectrumWidget()->setZeroFrequency(value.toDouble());
+
+	value = m_dbManager->getPropertyValue(m_station->getName(), DB_START_PROPERTY);
 
 	if (value.isValid()) {
 		start = value.toDouble();

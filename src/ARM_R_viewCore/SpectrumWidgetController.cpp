@@ -179,6 +179,9 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 }
 void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_hold)
 {
+	if(!m_spectrumShow)
+		return;
+
 	m_mux.lock();
 	float maxv = 0.0;
 	float minv = 0.0;
@@ -195,7 +198,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		{
 			if((spectrum[i] > m_threshold) && (m_rett != -99))
 			{
-				m_overthreshold = (m_current_frequency-10)*(m_bandwidth/m_pointCount)*i;
+				m_overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
 				m_rett = 0;
 				break;
 			}
@@ -203,25 +206,19 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	}
 
 	//TODO: Write signals values over m_threshold. Task 6186
-	if(m_overthreshold != 0)
-	{
-		SignalDetectedDialog dlg;
-		dlg.setFrequency(m_overthreshold);
-		int result = dlg.exec();
-		if(result == QDialog::Accepted)
-		{
-			setSpectrumShow(true);
-		}
-		else
-		{
-			setSpectrumShow(false);
-		}
-		m_overthreshold = 0;
-		m_rett = -100;
+	if(m_overthreshold != 0) {
+
+		setSpectrumShow(false);
+
+		SignalDetectedDialog* dlg = new SignalDetectedDialog(m_view);
+		dlg->setFrequency(m_overthreshold);
+		dlg->setModal(true);
+
+		connect(dlg, SIGNAL(finished(int)), this, SLOT(onSignalDetectedDialogFinishedSlot(int)));
+
+		dlg->show();
 	}
 
-	if(!m_spectrumShow)
-		return;
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 
@@ -283,7 +280,9 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 void SpectrumWidgetController::setSpectrumShow(bool state)
 {
 	m_spectrumShow = state;
-	emit signalSpectrumEnable(state);
+	//emit signalSpectrumEnable(state);
+
+	m_view->slotSetEnableSpactrum(state);
 }
 
 void SpectrumWidgetController::setZeroFrequency(double val)
@@ -292,7 +291,7 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_graphicsWidget->ClearAllDetectedAreas(1);
 	m_graphicsWidget->ClearAllDetectedAreas(2);
 
-//	double cur_freq = m_tab->getCurrentFrequency();
+	//	double cur_freq = m_tab->getCurrentFrequency();
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;
 	m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
@@ -449,10 +448,10 @@ void SpectrumWidgetController::slotRequestData(bool state)
 	setSpectrumShow(state);
 
 
-//	int data[4] = {0, 1, 2, 3};
-//	if(state){
-//		emit signalRequestData(m_id, 0, &data[0], 4);
-//	}
+	//	int data[4] = {0, 1, 2, 3};
+	//	if(state){
+	//		emit signalRequestData(m_id, 0, &data[0], 4);
+	//	}
 }
 
 /// add selection to white list
@@ -496,13 +495,13 @@ void SpectrumWidgetController::recognizeSignal()
 void SpectrumWidgetController::toggleCorrelation()
 {
 	/// TODO: recheck new Message to memory leak
-//	m_enableCorrelation = !m_enableCorrelation;
+	//	m_enableCorrelation = !m_enableCorrelation;
 	m_tab->enableCorrelation( !correlationFlag );
 
-//	if(m_enableCorrelation)
-//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-//	else
-//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	//	if(m_enableCorrelation)
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+	//	else
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 void SpectrumWidgetController::clearLabels()
@@ -607,4 +606,18 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
+}
+
+void SpectrumWidgetController::onSignalDetectedDialogFinishedSlot(int result)
+{
+	//int result = dlg.exec();
+	if(result == QDialog::Accepted){
+		setSpectrumShow(true);
+	}
+	else
+	{
+		setSpectrumShow(false);
+	}
+	m_overthreshold = 0;
+	m_rett = -100;
 }
