@@ -535,12 +535,15 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 {
 	///TODO: fix
 
-	/// To HZ
-	x1 /= 1000;
-	x2 /= 1000;
+	double x1count = x1 / TO_MHZ;
+	double x2count = x2 / TO_MHZ;
 
-	m_centerFreqSelTemp = (x1 + x2)/2;
-	m_bandwidhtTemp = qAbs(x2-x1);
+	/// To HZ
+	x1 /= TO_MHZ2;
+	x2 /= TO_MHZ2;
+
+	m_centerFreqSelTemp = (x1count + x2count)/2;
+	m_bandwidhtTemp = qAbs(x2count-x1count);
 
 	SpectrumSelection selection;
 	selection.start = QPointF(x1, y1);

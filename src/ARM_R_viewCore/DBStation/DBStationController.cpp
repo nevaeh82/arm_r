@@ -163,7 +163,7 @@ int DBStationController::addStationData(const StationData& data)
 	bool exist = checkExist(data.frequency, data.bandwidth, dataExist);
 	if(exist)
 	{
-		QMessageBox msgBox(QMessageBox::Warning, tr("Error"), tr("Frequency and bandwidth is exist!\n %1\n %2\n %3\n %4").arg(tr("Station = %1").arg(dataExist.stationName)).arg(tr("Frequency=%1").arg(QString::number(dataExist.frequency/1000))).arg(tr("Bandwidth=%1").arg(QString::number(dataExist.bandwidth/1000))).arg(tr("Category=%1").arg(dataExist.category)));
+		QMessageBox msgBox(QMessageBox::Warning, tr("Error"), tr("Frequency and bandwidth is exist!\n %1\n %2\n %3\n %4").arg(tr("Station = %1").arg(dataExist.stationName)).arg(tr("Frequency=%1").arg(QString::number(dataExist.frequency))).arg(tr("Bandwidth=%1").arg(QString::number(dataExist.bandwidth))).arg(tr("Category=%1").arg(dataExist.category)));
 		msgBox.setWindowIcon(QIcon(":/images/icons/ExistInDB.png"));
 //		msgBox.setIcon(QMessageBox::Warning);
 //		msgBox.setWindowRole();
