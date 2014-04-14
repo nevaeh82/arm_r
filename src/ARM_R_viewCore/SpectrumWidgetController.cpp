@@ -210,13 +210,20 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 		setSpectrumShow(false);
 
-		SignalDetectedDialog* dlg = new SignalDetectedDialog(m_view);
-		dlg->setFrequency(m_overthreshold);
-		dlg->setModal(true);
+		SignalDetectedDialog dlg(m_view);
+		dlg.setFrequency(m_overthreshold);
 
-		connect(dlg, SIGNAL(finished(int)), this, SLOT(onSignalDetectedDialogFinishedSlot(int)));
+		int result = dlg.exec();
 
-		dlg->show();
+		if(result == QDialog::Accepted){
+			setSpectrumShow(true);
+		}
+		else {
+			setSpectrumShow(false);
+		}
+
+		m_overthreshold = 0;
+		m_rett = -100;
 	}
 
 
@@ -606,18 +613,4 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
-}
-
-void SpectrumWidgetController::onSignalDetectedDialogFinishedSlot(int result)
-{
-	//int result = dlg.exec();
-	if(result == QDialog::Accepted){
-		setSpectrumShow(true);
-	}
-	else
-	{
-		setSpectrumShow(false);
-	}
-	m_overthreshold = 0;
-	m_rett = -100;
 }
