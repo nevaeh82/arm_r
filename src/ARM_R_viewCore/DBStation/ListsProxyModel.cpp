@@ -1,3 +1,6 @@
+#include <Logger.h>
+
+#include "StationHelper.h"
 #include "ListsProxyModel.h"
 
 ListsProxyModel::ListsProxyModel(QSqlQueryModel* model, QObject* parent) :
@@ -74,4 +77,13 @@ bool ListsProxyModel::hasAcceptedChildren(int source_row, const QModelIndex &sou
 	}
 
 	return false;
+}
+
+QVariant ListsProxyModel::data(const QModelIndex& index, int role) const
+{
+	if( index.column() == 4 && role == Qt::DisplayRole ) {
+		return StationHelper::translateCategory( m_model->data( index, role ).toString() );
+	}
+
+	return QSortFilterProxyModel::data( index, role );
 }

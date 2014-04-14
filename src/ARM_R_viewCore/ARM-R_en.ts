@@ -53,6 +53,22 @@
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="58"/>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="64"/>
+        <source>Insertion error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="58"/>
+        <source>Frequence format is wrong</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="64"/>
+        <source>Bandwidth format is wrong</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AtlantTabWidget</name>
@@ -203,47 +219,8 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Frequency and bandwidth is exist!
- %1
- %2
- %3
- %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Station = %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Frequency=%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Bandwidth=%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
-        <source>Category=%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="220"/>
+        <location filename="DBStation/DBStationController.cpp" line="261"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="254"/>
-        <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -306,17 +283,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="48"/>
+        <location filename="DBStation/ListsDialog.ui" line="61"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <location filename="DBStation/ListsDialog.ui" line="81"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="75"/>
+        <location filename="DBStation/ListsDialog.ui" line="88"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,52 +301,52 @@
 <context>
     <name>ListsDialogController</name>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>Station Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
         <source>Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
         <source>Bandwidth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="24"/>
         <source>Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="24"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="25"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="134"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="148"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -435,7 +412,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="154"/>
+        <location filename="MainWindowController.cpp" line="155"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -489,6 +466,76 @@
     <message>
         <location filename="Prm300ControlWidget.ui" line="231"/>
         <source>150/80 MHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="StationHelper.cpp" line="13"/>
+        <source>White list</source>
+        <oldsource>White</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="17"/>
+        <source>Black list</source>
+        <oldsource>Black</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="27"/>
+        <location filename="StationHelper.cpp" line="61"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="29"/>
+        <source>Frequency and bandwidth is exist!
+ %1
+ %2
+ %3
+ %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="30"/>
+        <source>Station = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="31"/>
+        <source>Frequency=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="32"/>
+        <source>Bandwidth=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="33"/>
+        <source>Category=%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="42"/>
+        <source>Invalid station name or port number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="46"/>
+        <source>Invalid category name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="50"/>
+        <source>Invalid signal type name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="StationHelper.cpp" line="54"/>
+        <source>An unexpected error occurred</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -571,63 +618,63 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="74"/>
+        <location filename="SpectrumWidgetController.cpp" line="76"/>
         <source>File error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="74"/>
+        <location filename="SpectrumWidgetController.cpp" line="76"/>
         <source>Very small file or file not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="175"/>
+        <location filename="SpectrumWidgetController.cpp" line="177"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="299"/>
+        <location filename="SpectrumWidgetController.cpp" line="308"/>
         <source>Black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="321"/>
+        <location filename="SpectrumWidgetController.cpp" line="330"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="380"/>
+        <location filename="SpectrumWidgetController.cpp" line="389"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="383"/>
+        <location filename="SpectrumWidgetController.cpp" line="392"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="384"/>
+        <location filename="SpectrumWidgetController.cpp" line="393"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="385"/>
+        <location filename="SpectrumWidgetController.cpp" line="394"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="137"/>
-        <location filename="SpectrumWidgetController.cpp" line="386"/>
+        <location filename="SpectrumWidgetController.cpp" line="139"/>
+        <location filename="SpectrumWidgetController.cpp" line="395"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="387"/>
+        <location filename="SpectrumWidgetController.cpp" line="396"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="135"/>
+        <location filename="SpectrumWidgetController.cpp" line="137"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>

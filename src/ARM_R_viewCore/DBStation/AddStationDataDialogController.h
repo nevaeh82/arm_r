@@ -10,27 +10,28 @@
 #include <QDateTime>
 
 #include "Interfaces/IController.h"
-
+#include "DBStation/DBStationController.h"
 #include "AddStationDataDialog.h"
 
 class AddStationDataDialogController: public QObject, public IController<AddStationDataDialog>
 {
 	Q_OBJECT
 public:
-	AddStationDataDialogController(const QSqlDatabase& db, QObject* parent = 0);
+	AddStationDataDialogController(DBStationController* stationDb, QObject* parent = 0);
 	virtual ~AddStationDataDialogController();
 
 	void appendView(AddStationDataDialog* widget);
 
 private:
+	DBStationController*		m_stationDb;
 	QSqlDatabase				m_db;
-	AddStationDataDialog*					m_view;
+	AddStationDataDialog*		m_view;
 
 private:
 	QStringList getNames(QString table);
 
 private slots:
-	void slotAccept(const QStringList& list);
+	void insert(const StationData& data);
 };
 
 #endif // ADDSTATIONDATADIALOGCONTROLLER_H

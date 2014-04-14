@@ -2,11 +2,12 @@
 
 #include "ListsDialogController.h"
 
-ListsDialogController::ListsDialogController(const QSqlDatabase& db, QObject* parent):
-	QObject(parent)
+ListsDialogController::ListsDialogController(DBStationController* stationDb, QObject* parent)
+	: QObject(parent)
+	, m_stationDb( stationDb )
 {
 	m_type = 0;
-	m_db = db;
+	m_db = m_stationDb->getDataBase();
 	m_model = new QSqlQueryModel(this);
 
 	m_proxyModel = new ListsProxyModel(m_model, this);
@@ -26,6 +27,7 @@ ListsDialogController::ListsDialogController(const QSqlDatabase& db, QObject* pa
 
 ListsDialogController::~ListsDialogController()
 {
+	m_stationDb->deregisterReceiver( this );
 }
 
 void ListsDialogController::appendView(ListsDialog *widget)
@@ -38,9 +40,21 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	adjustTableSize();
-	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(m_slotChooseTypeList(int)));
+
+	connect(widget, SIGNAL(signalTypeList(int)), this, SLOT(update(int)));
 	connect(widget, SIGNAL(signalAddClicked()), this, SLOT(m_slotAdd()));
 	connect(widget, SIGNAL(signalDelete()), this, SLOT(m_slotDelete()));
+	connect(widget, SIGNAL(finished(int)), this, SLOT(deleteLater()));
+}
+
+void ListsDialogController::onStationDataInserted(const StationData&)
+{
+	update();
+}
+
+void ListsDialogController::onStationDataUpdated(const StationData&)
+{
+	update();
 }
 
 QSqlQuery ListsDialogController::getAllStationsInfo()
@@ -105,38 +119,42 @@ QSqlQuery ListsDialogController::deleteFromStationData(int id)
 	return query;
 }
 
-void ListsDialogController::m_slotChooseTypeList(int type)
+void ListsDialogController::update(int type)
 {
-	if(type == 0)
-	{
+	if( type == -1 ) {
+		type = m_type;
+	}
+
+	if( type == 0 ) {
 		m_model->setQuery(getAllStationsInfo());
 		m_view->showColumn(4);
-	}
-	else
-	{
+	} else {
 		m_model->setQuery(getStationsInfoByCategory(type));
 		m_view->hideColumn(4);
 	}
 
 	adjustTableSize();
-
 	m_view->hideColumn(0);
 }
 
 void ListsDialogController::m_slotAdd()
 {
 	AddStationDataDialog* listAdd = new AddStationDataDialog(m_view);
-	AddStationDataDialogController* listAddController = new AddStationDataDialogController(m_db, this);
+	AddStationDataDialogController* listAddController = new AddStationDataDialogController(m_stationDb, this);
+
 	bool isOpen = m_db.isOpen();
-	if(!isOpen)
-	{
+	if(!isOpen) {
 		QMessageBox msgBox;
 		msgBox.setText(tr("DataBase is not opened!"));
 		msgBox.exec();
 		return;
 	}
+
 	listAddController->appendView(listAdd);
-	connect(listAdd, SIGNAL(signalUpdateList()), this, SLOT(m_slotAddClose()));
+
+	connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
+	connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
+
 	listAdd->show();
 }
 
@@ -149,16 +167,17 @@ void ListsDialogController::m_slotAddClose()
 void ListsDialogController::m_slotDelete()
 {
 	QModelIndexList list = m_view->selectionModel()->selectedRows();
-	int row;
-	foreach(QModelIndex index, list)
-	{
-		row = index.row();
+
+	foreach(QModelIndex index, list) {
+		int row = index.row();
 		QSqlRecord rec = m_model->record(row);
 		int id = rec.value("id").toInt();
-		m_model->setQuery(deleteFromStationData(id));
-	}
-	m_slotChooseTypeList(m_type);
+		log_debug( QString::number( id ) );
 
+		deleteFromStationData(id);
+	}
+
+	update();
 }
 
 QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
@@ -181,13 +200,13 @@ QSqlQuery ListsDialogController::getStationsInfoByCategory(int type)
 
 	switch(type)
 	{
-		case 1:			
+		case 1:
 			query.bindValue(":objectCategory", "White");
-			m_type = 1;
+			type = 1;
 			break;
 		case 2:
 			query.bindValue(":objectCategory", "Black");
-			m_type = 2;
+			type = 2;
 			break;
 		default:
 			break;

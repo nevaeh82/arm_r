@@ -13,7 +13,7 @@ typedef struct StationData
 	double frequency;
 	double bandwidth;
 	QString signalType;
-}StationData;
+} StationData;
 
 /// full log_info
 typedef struct StationDataFull

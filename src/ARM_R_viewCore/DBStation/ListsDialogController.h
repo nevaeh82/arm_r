@@ -12,26 +12,35 @@
 
 #include <QSqlRecord>
 
+#include "DBStation/DBStationController.h"
+
 #include "Interfaces/IController.h"
 
 #include "ListsDialog.h"
 #include "ListsProxyModel.h"
 
+#include "IDBStationListener.h"
+
 #include "AddStationDataDialog.h"
 #include "AddStationDataDialogController.h"
 
-class ListsDialogController: public QObject, public IController<ListsDialog>
+class ListsDialogController: public QObject, public IController<ListsDialog>, public IDBStationListener
 {
 	Q_OBJECT
 public:
-	ListsDialogController(const QSqlDatabase& db, QObject* parent = 0);
+	ListsDialogController(DBStationController* stationDb, QObject* parent = 0);
 	virtual ~ListsDialogController();
 
 	void appendView(ListsDialog* widget);
 
+	// intefrace IDBStationListener
+	virtual void onStationDataInserted(const StationData&);
+	virtual void onStationDataUpdated(const StationData&);
+
 private:
-	QSqlQueryModel*				m_model;
+	DBStationController*		m_stationDb;
 	QSqlDatabase				m_db;
+	QSqlQueryModel*				m_model;
 	QTableView*					m_view;
 	ListsProxyModel*			m_proxyModel;
 	int m_type;
@@ -43,7 +52,7 @@ private:
 	QSqlQuery deleteFromStationData(int id);
 
 private slots:
-	void m_slotChooseTypeList(int type);
+	void update(int type = -1);
 	void m_slotAdd();
 	void m_slotAddClose();
 	void m_slotDelete();

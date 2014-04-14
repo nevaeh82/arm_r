@@ -9,6 +9,8 @@
 #define DEFAULT_BANDWIDTH	0
 #define DEFAULT_PORT		1024
 
+#include "DBStation/DBFillTables.h";
+
 namespace Ui {
 class AddStationDataDialog;
 }
@@ -29,13 +31,11 @@ private:
 	Ui::AddStationDataDialog *ui;
 
 private slots:
-	void slotAccept();
-	void slotClear();
-	void slotClose();
+	virtual void accept();
+	void clear();
 
 signals:
-	void signalAccept(const QStringList& list);
-	void signalUpdateList();
+	void accepted(const StationData& data);
 
 };
 

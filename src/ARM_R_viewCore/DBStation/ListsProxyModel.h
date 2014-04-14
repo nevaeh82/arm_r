@@ -28,6 +28,7 @@ protected:
 
 	 bool hasAcceptedChildren(int source_row, const QModelIndex &source_parent) const;
 
+	 QVariant data(const QModelIndex &index, int role) const;
 };
 
 #endif // LISTSPROXYMODEL_H
