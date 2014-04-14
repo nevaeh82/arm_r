@@ -197,6 +197,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 		leadStation = tr("Auto");
 	}
 
+	if(m_mainStation == 0) {
+		return;
+	}
+
 	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
 
 	m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
