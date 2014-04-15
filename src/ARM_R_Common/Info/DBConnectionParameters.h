@@ -3,6 +3,8 @@
 
 #include <QtGlobal>
 
+#include <QDataStream>
+
 /// parameters for connect to mysql
 typedef struct DBConnectionStruct
 {

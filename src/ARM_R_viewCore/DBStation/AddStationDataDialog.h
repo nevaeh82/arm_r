@@ -9,7 +9,7 @@
 #define DEFAULT_BANDWIDTH	0
 #define DEFAULT_PORT		1024
 
-#include "DBStation/DBFillTables.h";
+#include "DBStation/DBFillTables.h"
 
 namespace Ui {
 class AddStationDataDialog;

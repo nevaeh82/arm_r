@@ -57,7 +57,8 @@ SOURCES += \
     ControlPanel/ListWhiteDialogController.cpp \
     SignalDetectedDialog.cpp \
     Tabs/RPC/RpcFlakonClientWrapper.cpp \
-    DBStation/StationHelper.cpp
+    DBStation/StationHelper.cpp \
+    DBStation/StationsDataTableModel.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -128,7 +129,8 @@ HEADERS += \
     SignalDetectedDialog.h \
     Tabs/RPC/RpcFlakonClientWrapper.h \
     DBStation/StationHelper.h \
-    DBStation/IDBStationListener.h
+    DBStation/IDBStationListener.h \
+    DBStation/StationsDataTableModel.h
 
 FORMS += \
 	ControlPanel.ui \

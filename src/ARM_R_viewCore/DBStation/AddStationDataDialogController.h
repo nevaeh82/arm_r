@@ -2,33 +2,24 @@
 #define ADDSTATIONDATADIALOGCONTROLLER_H
 
 #include <QObject>
-#include <QSqlRelationalTableModel>
-#include <QSqlQueryModel>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QDateTime>
 
 #include "Interfaces/IController.h"
-#include "DBStation/DBStationController.h"
-#include "AddStationDataDialog.h"
+
+#include "DBStation/IDBStation.h"
+#include "DBStation/AddStationDataDialog.h"
 
 class AddStationDataDialogController: public QObject, public IController<AddStationDataDialog>
 {
 	Q_OBJECT
 public:
-	AddStationDataDialogController(DBStationController* stationDb, QObject* parent = 0);
+	AddStationDataDialogController(IDBStation* stationDb, QObject* parent = 0);
 	virtual ~AddStationDataDialogController();
 
 	void appendView(AddStationDataDialog* widget);
 
 private:
-	DBStationController*		m_stationDb;
-	QSqlDatabase				m_db;
-	AddStationDataDialog*		m_view;
-
-private:
-	QStringList getNames(QString table);
+	IDBStation* m_stationDb;
+	AddStationDataDialog* m_view;
 
 private slots:
 	void insert(const StationData& data);

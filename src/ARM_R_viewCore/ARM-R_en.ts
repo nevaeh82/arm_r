@@ -219,7 +219,7 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="261"/>
+        <location filename="DBStation/DBStationController.cpp" line="282"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -301,53 +301,48 @@
 <context>
     <name>ListsDialogController</name>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="13"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="14"/>
         <source>Station Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
         <source>IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>Bandwidth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="24"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="25"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="148"/>
-        <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -472,25 +467,25 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="StationHelper.cpp" line="13"/>
+        <location filename="DBStation/StationHelper.cpp" line="13"/>
         <source>White list</source>
         <oldsource>White</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="17"/>
+        <location filename="DBStation/StationHelper.cpp" line="17"/>
         <source>Black list</source>
         <oldsource>Black</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="27"/>
-        <location filename="StationHelper.cpp" line="61"/>
+        <location filename="DBStation/StationHelper.cpp" line="27"/>
+        <location filename="DBStation/StationHelper.cpp" line="61"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="29"/>
+        <location filename="DBStation/StationHelper.cpp" line="29"/>
         <source>Frequency and bandwidth is exist!
  %1
  %2
@@ -499,42 +494,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="30"/>
+        <location filename="DBStation/StationHelper.cpp" line="30"/>
         <source>Station = %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="31"/>
-        <source>Frequency=%1</source>
+        <location filename="DBStation/StationHelper.cpp" line="31"/>
+        <source>Frequency = %1 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="32"/>
-        <source>Bandwidth=%1</source>
+        <location filename="DBStation/StationHelper.cpp" line="32"/>
+        <source>Bandwidth = %1 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="33"/>
-        <source>Category=%1</source>
+        <location filename="DBStation/StationHelper.cpp" line="33"/>
+        <source>Category = %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="42"/>
+        <location filename="DBStation/StationHelper.cpp" line="42"/>
         <source>Invalid station name or port number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="46"/>
+        <location filename="DBStation/StationHelper.cpp" line="46"/>
         <source>Invalid category name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="50"/>
+        <location filename="DBStation/StationHelper.cpp" line="50"/>
         <source>Invalid signal type name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="StationHelper.cpp" line="54"/>
+        <location filename="DBStation/StationHelper.cpp" line="54"/>
         <source>An unexpected error occurred</source>
         <translation type="unfinished"></translation>
     </message>
