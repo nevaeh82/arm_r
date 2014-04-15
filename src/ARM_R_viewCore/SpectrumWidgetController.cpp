@@ -292,6 +292,27 @@ void SpectrumWidgetController::setSpectrumShow(bool state)
 	m_view->slotSetEnableSpactrum(state);
 }
 
+void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list)
+{
+	double zeroFreq = m_current_frequency - m_bandwidth/2;
+
+	foreach (StationsFrequencyAndBandwith value, list) {
+		double beginFreq = (value.frequency - value.bandwidth/2)*TO_MHZ;
+		double endFreq = (value.frequency + value.bandwidth/2)*TO_MHZ;
+		if(endFreq < zeroFreq)
+			continue;
+		if(beginFreq > zeroFreq + m_bandwidth)
+			continue;
+
+		if(beginFreq < zeroFreq)
+			beginFreq = zeroFreq;
+		if(endFreq > zeroFreq + m_bandwidth)
+			endFreq = zeroFreq + m_bandwidth;
+
+		m_graphicsWidget->SetDetectedAreas(mode, beginFreq, 0, endFreq, 0, false);
+	}
+}
+
 void SpectrumWidgetController::setZeroFrequency(double val)
 {
 	m_graphicsWidget->ClearAllDetectedAreas(0);
@@ -302,14 +323,17 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;
 	m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
-	QList<StationsFrequencyAndBandwith> listBlack;
-	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory(tr("Black"), listBlack );
-	QList<StationsFrequencyAndBandwith>::iterator it;
+	QList<StationsFrequencyAndBandwith> list;
+	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
+
+	setDetectedAreas(2, list);
+
+	/*QList<StationsFrequencyAndBandwith>::iterator it;
 	for(it = listBlack.begin(); it != listBlack.end(); ++it)
 	{
 		StationsFrequencyAndBandwith stFreq = *it;
-		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ2;
-		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ2;
+		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ;
+		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ;
 		if(endFreq < zeroFreq)
 			continue;
 		if(beginFreq > zeroFreq + m_bandwidth)
@@ -320,29 +344,11 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 		if(endFreq > zeroFreq + m_bandwidth)
 			endFreq = zeroFreq + m_bandwidth;
 
-		m_graphicsWidget->SetDetectedAreas(2, beginFreq, 0, endFreq, 0, false);
-	}
+		m_graphicsWidget->SetDetectedAreas(2, beginFreq / TO_MHZ2, 0, endFreq, 0, false);
+	}*/
 
-
-	QList<StationsFrequencyAndBandwith> listWhite;
-	ret = m_dbStationController->getFrequencyAndBandwidthByCategory(tr("White"), listWhite );
-	for(it = listWhite.begin(); it != listWhite.end(); ++it)
-	{
-		StationsFrequencyAndBandwith stFreq = *it;
-		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ2;
-		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ2;
-		if(endFreq < zeroFreq)
-			continue;
-		if(beginFreq > zeroFreq + m_bandwidth)
-			continue;
-
-		if(beginFreq < zeroFreq)
-			beginFreq = zeroFreq;
-		if(endFreq > zeroFreq + m_bandwidth)
-			endFreq = zeroFreq + m_bandwidth;
-
-		m_graphicsWidget->SetDetectedAreas(1, beginFreq, 0, endFreq, 0, false);
-	}
+	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+	setDetectedAreas(1, list);
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)

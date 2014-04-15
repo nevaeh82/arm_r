@@ -26,7 +26,7 @@
 #include "SignalDetectedDialog.h"
 
 #define TO_MHZ	1000000.0
-#define TO_MHZ2	1000
+#define TO_MHZ2	1000.0
 
 
 class SpectrumWidget;
@@ -126,6 +126,9 @@ private:
 	void setLabelName(QString base, QString second);
 	void setDetectedAreasUpdate(const QByteArray& vec);
 	void setSpectrumShow(bool state);
+
+	void setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list);
+
 
 signals:
 	void doubleClickedSignal(int);
