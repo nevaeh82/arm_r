@@ -325,27 +325,7 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
-
 	setDetectedAreas(2, list);
-
-	/*QList<StationsFrequencyAndBandwith>::iterator it;
-	for(it = listBlack.begin(); it != listBlack.end(); ++it)
-	{
-		StationsFrequencyAndBandwith stFreq = *it;
-		double beginFreq = (stFreq.frequency - stFreq.bandwidth/2)*TO_MHZ;
-		double endFreq = (stFreq.frequency + stFreq.bandwidth/2)*TO_MHZ;
-		if(endFreq < zeroFreq)
-			continue;
-		if(beginFreq > zeroFreq + m_bandwidth)
-			continue;
-
-		if(beginFreq < zeroFreq)
-			beginFreq = zeroFreq;
-		if(endFreq > zeroFreq + m_bandwidth)
-			endFreq = zeroFreq + m_bandwidth;
-
-		m_graphicsWidget->SetDetectedAreas(2, beginFreq / TO_MHZ2, 0, endFreq, 0, false);
-	}*/
 
 	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
 	setDetectedAreas(1, list);
