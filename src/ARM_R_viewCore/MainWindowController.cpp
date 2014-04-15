@@ -5,7 +5,7 @@
 #define DEFAULT_RPC_PORT		24500
 
 
-MainWindowController::MainWindowController(QObject *parent) 
+MainWindowController::MainWindowController(QObject *parent)
 	: QObject(parent)
 	, m_serverHandler(0)
 	, m_dbManager(0)
@@ -144,17 +144,19 @@ void MainWindowController::serverStartedSlot()
 
 void MainWindowController::slotShowLists()
 {
-
 	ListsDialog* listForm = new ListsDialog(m_view);
-	ListsDialogController* listController = new ListsDialogController(m_dbStationController->getDataBase(), this);
+	ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
 	bool isOpen = m_dbStationController->getDataBase().isOpen();
-	if(!isOpen)
-	{
+
+	m_dbStationController->registerReceiver( listController );
+
+	if(!isOpen) {
 		QMessageBox msgBox;
 		msgBox.setText(tr("DataBase is not opened!"));
 		msgBox.exec();
 		return;
 	}
+
 	listController->appendView(listForm);
 	listForm->show();
 }

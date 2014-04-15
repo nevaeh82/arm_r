@@ -87,7 +87,7 @@ void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)
 	param.host		= dbConfig.value("DbStations_Config/host", "127.0.0.1").toString();
 	param.port		= dbConfig.value("DbStations_Config/port", "3306").toString().toUShort();
 	param.login		= dbConfig.value("DbStations_Config/login", "root").toString();
-	param.password	= dbConfig.value("DbStations_Config/password", "qwerty12345").toString();
+	param.password	= dbConfig.value("DbStations_Config/password", "").toString();
 	param.dbName	= dbConfig.value("DbStations_Config/dbName", "Stations").toString();
 
 	QByteArray dataToSend;

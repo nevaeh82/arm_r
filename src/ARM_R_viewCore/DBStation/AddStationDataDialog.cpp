@@ -1,3 +1,6 @@
+#include <QMessageBox>
+
+#include "StationHelper.h"
 #include "AddStationDataDialog.h"
 #include "ui_AddStationDataDialog.h"
 
@@ -17,9 +20,9 @@ AddStationDataDialog::AddStationDataDialog(QWidget *parent) :
 
 
 
-	connect(ui->pbAccept, SIGNAL(clicked()), this, SLOT(slotAccept()));
-	connect(ui->pbClear, SIGNAL(clicked()), this, SLOT(slotClear()));
-	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(slotClose()));
+	connect(ui->pbAccept, SIGNAL(clicked()), this, SLOT(accept()));
+	connect(ui->pbClear, SIGNAL(clicked()), this, SLOT(clear()));
+	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 AddStationDataDialog::~AddStationDataDialog()
@@ -34,7 +37,10 @@ void AddStationDataDialog::fillStation(const QStringList &list)
 
 void AddStationDataDialog::fillCategory(const QStringList &list)
 {
-	ui->cbCategory->addItems(list);
+	foreach( QString item, list ) {
+		QString value = StationHelper::translateCategory( item );
+		ui->cbCategory->addItem( value, item );
+	}
 }
 
 void AddStationDataDialog::fillSignalType(const QStringList &list)
@@ -42,21 +48,32 @@ void AddStationDataDialog::fillSignalType(const QStringList &list)
 	ui->cbSignalType->addItems(list);
 }
 
-void AddStationDataDialog::slotAccept()
+void AddStationDataDialog::accept()
 {
-	QStringList list;
-	list.append(ui->cbStation->currentText());
-	list.append(QString::number(ui->sbPort->value()));
-	list.append(ui->cbCategory->currentText());
-	list.append(ui->dsbFrequency->text());
-	list.append(ui->dsbBandwidth->text());
-	list.append(ui->cbSignalType->currentText());
-	emit signalAccept(list);
-	emit signalUpdateList();
+	StationData data;
+	bool doubleOK;
 
+	data.frequency = ui->dsbFrequency->text().toDouble( &doubleOK );
+	if( !doubleOK ) {
+		QMessageBox::critical( this, tr( "Insertion error" ), tr( "Frequence format is wrong" ) );
+		return;
+	}
+
+	data.bandwidth = ui->dsbBandwidth->text().toDouble( &doubleOK );
+	if( !doubleOK ) {
+		QMessageBox::critical( this, tr( "Insertion error" ), tr( "Bandwidth format is wrong" ) );
+		return;
+	}
+
+	data.stationName = ui->cbStation->currentText();
+	data.port = ui->sbPort->value();
+	data.category = ui->cbCategory->itemData( ui->cbCategory->currentIndex() ).toString();
+	data.signalType = ui->cbSignalType->currentText();
+
+	emit accepted( data );
 }
 
-void AddStationDataDialog::slotClear()
+void AddStationDataDialog::clear()
 {
 	ui->cbStation->setCurrentIndex(DEFAULT_INDEX);
 	ui->sbPort->setValue(DEFAULT_PORT);
@@ -65,10 +82,4 @@ void AddStationDataDialog::slotClear()
 	ui->dsbBandwidth->setValue(DEFAULT_BANDWIDTH);
 	ui->cbSignalType->setCurrentIndex(DEFAULT_INDEX);
 
-}
-
-void AddStationDataDialog::slotClose()
-{
-	this->close();
-	emit signalUpdateList();
 }

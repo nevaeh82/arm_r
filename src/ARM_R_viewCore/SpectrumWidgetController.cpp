@@ -3,6 +3,8 @@
 
 #include "Rpc/RpcDefines.h"
 
+#include "DBStation/StationHelper.h"
+
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
 	m_dbManager = NULL;
@@ -458,7 +460,21 @@ void SpectrumWidgetController::addToWhiteList()
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
 
-	m_dbStationController->addStationData(data);
+	StationData dataExist = m_dbStationController->
+			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );
+
+	if( !dataExist.stationName.isNull() ) {
+		StationHelper::showStationExistsWarning( dataExist, m_view );
+		return;
+	}
+
+	int result = m_dbStationController->addStationData(data);
+
+	if( result < 1 ) {
+		StationHelper::showStationWarning( result, m_view );
+		return;
+	}
+
 	emit signalAddSelToLists(1);
 }
 
@@ -473,7 +489,20 @@ void SpectrumWidgetController::addToBlackList()
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
 
-	m_dbStationController->addStationData(data);
+	StationData dataExist = m_dbStationController->
+			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );
+
+	if( !dataExist.stationName.isNull() ) {
+		StationHelper::showStationExistsWarning( dataExist, m_view );
+		return;
+	}
+
+	int result = m_dbStationController->addStationData(data);
+
+	if( result < 1 ) {
+		StationHelper::showStationWarning( result, m_view );
+		return;
+	}
 
 	emit signalAddSelToLists(2);
 }

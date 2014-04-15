@@ -2,51 +2,48 @@
 #define LISTSCONTROLLER_H
 
 #include <QObject>
-#include <QSqlRelationalTableModel>
-#include <QSqlQueryModel>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QHeaderView>
-#include <QMessageBox>
 
-#include <QSqlRecord>
-
+#include "DBStation/DBStationController.h"
 #include "Interfaces/IController.h"
 
 #include "ListsDialog.h"
 #include "ListsProxyModel.h"
+#include "StationsDataTableModel.h"
+
+#include "IDBStationListener.h"
 
 #include "AddStationDataDialog.h"
 #include "AddStationDataDialogController.h"
 
-class ListsDialogController: public QObject, public IController<ListsDialog>
+class ListsDialogController: public QObject, public IController<ListsDialog>, public IDBStationListener
 {
 	Q_OBJECT
+
 public:
-	ListsDialogController(const QSqlDatabase& db, QObject* parent = 0);
+	ListsDialogController(IDBStation* stationDb, QObject* parent = 0);
 	virtual ~ListsDialogController();
 
 	void appendView(ListsDialog* widget);
 
-private:
-	QSqlQueryModel*				m_model;
-	QSqlDatabase				m_db;
-	QTableView*					m_view;
-	ListsProxyModel*			m_proxyModel;
-	int m_type;
+	// intefrace IDBStationListener
+	virtual inline void onStationDataInserted(const StationData&) { update(); }
+	virtual inline void onStationDataUpdated(const StationData&) { update(); }
 
 private:
-	QSqlQuery getAllStationsInfo();
-	QSqlQuery getStationsInfoByCategory(int type);
+	IDBStation*					m_stationDb;
+	StationsDataTableModel*		m_model;
+	QTableView*					m_view;
+	QSortFilterProxyModel*		m_proxyModel;
+
+private:
 	void adjustTableSize();
-	QSqlQuery deleteFromStationData(int id);
 
 private slots:
-	void m_slotChooseTypeList(int type);
-	void m_slotAdd();
-	void m_slotAddClose();
-	void m_slotDelete();
+	void update();
+	void filter(int type);
+
+	void showAddDialog();
+	void deleteSelectedRecords();
 };
 
 #endif // LISTSCONTROLLER_H

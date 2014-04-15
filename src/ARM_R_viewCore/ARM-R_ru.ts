@@ -53,6 +53,22 @@
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="58"/>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="64"/>
+        <source>Insertion error</source>
+        <translation>Ошибка добавлени</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="58"/>
+        <source>Frequence format is wrong</source>
+        <translation>Неверный формат записи частоты</translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.cpp" line="64"/>
+        <source>Bandwidth format is wrong</source>
+        <translation>Неверный формат записи полосы</translation>
+    </message>
 </context>
 <context>
     <name>AtlantTabWidget</name>
@@ -207,47 +223,36 @@
 <context>
     <name>DBStationController</name>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Frequency and bandwidth is exist!
  %1
  %2
  %3
  %4</source>
-        <translation>Частота и полоса уже есть в БД!&lt;br /&gt; %1&lt;br /&gt; %2&lt;br /&gt; %3&lt;br /&gt; %4</translation>
+        <translation type="obsolete">Частота и полоса уже есть в БД!&lt;br /&gt; %1&lt;br /&gt; %2&lt;br /&gt; %3&lt;br /&gt; %4</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Station = %1</source>
-        <translation>Пункт = %1</translation>
+        <translation type="obsolete">Пункт = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Frequency=%1</source>
-        <translation>Частота = %1</translation>
+        <translation type="obsolete">Частота = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Bandwidth=%1</source>
-        <translation>Полоса = %1</translation>
+        <translation type="obsolete">Полоса = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="166"/>
         <source>Category=%1</source>
-        <translation>Категория = %1</translation>
+        <translation type="obsolete">Категория = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="220"/>
+        <location filename="DBStation/DBStationController.cpp" line="282"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="DBStation/DBStationController.cpp" line="254"/>
-        <source>SELECT %1 FROM station WHERE name=%1</source>
         <translation></translation>
     </message>
 </context>
@@ -392,17 +397,17 @@
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="48"/>
+        <location filename="DBStation/ListsDialog.ui" line="61"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <location filename="DBStation/ListsDialog.ui" line="81"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="75"/>
+        <location filename="DBStation/ListsDialog.ui" line="88"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -410,54 +415,53 @@
 <context>
     <name>ListsDialogController</name>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="13"/>
         <source>id</source>
         <translation>ИД</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="14"/>
         <source>Station Name</source>
         <translation>Пост</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
         <source>IP</source>
         <translation>IP адрес</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>Type</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="22"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>Bandwidth</source>
         <translation>Полоса</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="23"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Signal Type</source>
         <translation>Модуляция</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="24"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
         <source>Date</source>
         <translation>МДВ</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="134"/>
         <source>DataBase is not opened!</source>
-        <translation>Не удалось открыть базу данных!</translation>
+        <translation type="obsolete">Не удалось открыть базу данных!</translation>
     </message>
 </context>
 <context>
@@ -548,7 +552,7 @@
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="154"/>
+        <location filename="MainWindowController.cpp" line="155"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -603,6 +607,88 @@
         <location filename="Prm300ControlWidget.ui" line="231"/>
         <source>150/80 MHz</source>
         <translation>150/80 МГц</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="13"/>
+        <source>White list</source>
+        <oldsource>White</oldsource>
+        <translation>Белый список</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="17"/>
+        <source>Black list</source>
+        <oldsource>Black</oldsource>
+        <translation>Черный список</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="27"/>
+        <location filename="DBStation/StationHelper.cpp" line="61"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="29"/>
+        <source>Frequency and bandwidth is exist!
+ %1
+ %2
+ %3
+ %4</source>
+        <translation>Частота и полоса уже есть в БД!&lt;br /&gt; %1&lt;br /&gt; %2&lt;br /&gt; %3&lt;br /&gt; %4</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="30"/>
+        <source>Station = %1</source>
+        <translation>Пункт = %1</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="31"/>
+        <source>Frequency = %1 MHz</source>
+        <translation>Частота = %1 МГц</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="32"/>
+        <source>Bandwidth = %1 MHz</source>
+        <translation>Полоса = %1 МГц</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="33"/>
+        <source>Category = %1</source>
+        <translation>Категория = %1</translation>
+    </message>
+    <message>
+        <source>Frequency=%1</source>
+        <translation type="obsolete">Частота = %1</translation>
+    </message>
+    <message>
+        <source>Bandwidth=%1</source>
+        <translation type="obsolete">Полоса = %1</translation>
+    </message>
+    <message>
+        <source>Category=%1</source>
+        <translation type="obsolete">Категория = %1</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="42"/>
+        <source>Invalid station name or port number</source>
+        <translation>Неверно задано имя станции или имя порта</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="46"/>
+        <source>Invalid category name</source>
+        <translation>Неверно задано имя категории</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="50"/>
+        <source>Invalid signal type name</source>
+        <translation>Неверно задано имя типа сигнала</translation>
+    </message>
+    <message>
+        <location filename="DBStation/StationHelper.cpp" line="54"/>
+        <source>An unexpected error occurred</source>
+        <translation>Возникла непредвиденная ошибка</translation>
     </message>
 </context>
 <context>
@@ -684,17 +770,17 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="74"/>
+        <location filename="SpectrumWidgetController.cpp" line="76"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="74"/>
+        <location filename="SpectrumWidgetController.cpp" line="76"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="175"/>
+        <location filename="SpectrumWidgetController.cpp" line="177"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
@@ -707,48 +793,48 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="380"/>
+        <location filename="SpectrumWidgetController.cpp" line="389"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="383"/>
+        <location filename="SpectrumWidgetController.cpp" line="392"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="384"/>
+        <location filename="SpectrumWidgetController.cpp" line="393"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="385"/>
+        <location filename="SpectrumWidgetController.cpp" line="394"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="137"/>
-        <location filename="SpectrumWidgetController.cpp" line="386"/>
+        <location filename="SpectrumWidgetController.cpp" line="139"/>
+        <location filename="SpectrumWidgetController.cpp" line="395"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="299"/>
+        <location filename="SpectrumWidgetController.cpp" line="308"/>
         <source>Black</source>
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="321"/>
+        <location filename="SpectrumWidgetController.cpp" line="330"/>
         <source>White</source>
         <translation>Белый</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="387"/>
+        <location filename="SpectrumWidgetController.cpp" line="396"/>
         <source>Cleanup text fields</source>
         <translation>Очистить текстовые данные</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="135"/>
+        <location filename="SpectrumWidgetController.cpp" line="137"/>
         <source>Disable correlation</source>
         <translation>Отключить корреляцию</translation>
     </message>
