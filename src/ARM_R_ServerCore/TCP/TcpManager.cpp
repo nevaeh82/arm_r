@@ -24,8 +24,9 @@ TcpManager::TcpManager(QObject* parent)
 
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
 
-	connect(&m_timer, SIGNAL(timeout()), this, SLOT(emulateBplaPoint()));
-	m_timer.start(5);
+	//Uncomment this if you want simulate sending bpla points from R to OD through RPC
+	//connect(&m_timer, SIGNAL(timeout()), this, SLOT(emulateBplaPoint()));
+	//m_timer.start(5);
 }
 
 TcpManager::~TcpManager()
@@ -217,9 +218,6 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			else if (messageType == TCP_FLAKON_STATUS) {
 				m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
 			}
-
-			//emulateBplaPoint(sender);
-
 			break;
 		case ATLANT_TCP_DEVICE:
 			if (messageType == TCP_ATLANT_ANSWER_DIRECTION) {
