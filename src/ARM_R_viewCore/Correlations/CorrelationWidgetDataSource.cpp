@@ -4,7 +4,7 @@
 
 #include "Interfaces/ICorrelationWidget.h"
 
-#define TIME_WAIT_CORRELATION 10000
+#define TIME_WAIT_CORRELATION 2000
 
 CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent)
 	: BaseDataSource(parent)
