@@ -17,7 +17,7 @@ SignalDetectedDialog::SignalDetectedDialog(QWidget *parent) :
 	flags=flags&(~helpFlag);
 
 	setWindowFlags(flags);
-	setWindowIcon(QIcon(":images/icons/ListsDialog.png"));
+	setWindowIcon(QIcon(":/images/icons/ListsDialog.png"));
 }
 
 SignalDetectedDialog::~SignalDetectedDialog()

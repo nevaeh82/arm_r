@@ -139,6 +139,11 @@ QObject* CoordinateCounter::asQObject()
 
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
 {
+	if(aData.timeHMSMs.size()==0) {
+		return;
+	}
+
+
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
 	QByteArray dataToSend;
@@ -161,6 +166,10 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
 {
+	if(aData.timeHMSMs.size()==0) {
+		return;
+	}
+
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
 	QByteArray dataToSend;
@@ -224,7 +233,7 @@ void CoordinateCounter::setSolverDataSize(int aSize)
 void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 {
 	if ((aSize>10) && (aSize<200)) {
-//		m_solver->SetStateAnalizeCount(aSize);
+		//		m_solver->SetStateAnalizeCount(aSize);
 	}
 }
 
@@ -239,20 +248,22 @@ void CoordinateCounter::initSolver()
 	stationSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
 	QStringList childKeys = stationSettings.childGroups();
-	foreach( const QString &childKey, childKeys ) {
+
+	foreach(const QString& childKey, childKeys) {
 		stationSettings.beginGroup(childKey);
 
-		int type = stationSettings.value("type", 0).toInt();
-		if(type == 0)
+		int type=stationSettings.value("type",0).toInt();
+		if(type!=2)
 		{
+			stationSettings.endGroup();
 			continue;
 		}
 
-		double latitude = stationSettings.value("latitude", 0).toDouble();
-		double longitude = stationSettings.value("longitude", 0).toDouble();
-		int altitude = stationSettings.value("altitude", 0).toInt();
+		double latitude = stationSettings.value("latitude",0).toDouble();
+		double longitude = stationSettings.value("longitude",0).toDouble();
+		int altitude = stationSettings.value("altitude",0).toInt();
 
-		int id = m_solver->AddStation(latitude, longitude, altitude);
+		int id = m_solver->AddStation(latitude,longitude,altitude);
 		stationSettings.endGroup();
 	}
 

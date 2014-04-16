@@ -15,8 +15,8 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 
 	m_treeDelegate = new TreeWidgetDelegate(this);
 
-	m_pmRoundRed = new QPixmap(":/images/signals/images/bullet_red.png");
-	m_pmRoundGreen = new QPixmap(":/images/signals/images/bullet_green.png");
+	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
+	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
 	m_indicatorLabel = new QLabel(this);
 	m_indicatorLabel->setFixedSize(16, 16);
 	m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
