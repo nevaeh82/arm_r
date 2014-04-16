@@ -174,10 +174,6 @@ void TabManager::addStationTabs()
 
 		m_tabWidgetsMap.insert(station->getName(), tabController);
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
-
-		// init start freq
-		QVariant value = m_dbManager->getPropertyValue(station->getName(), DB_FREQUENCY_PROPERTY);
-		tabSpectrumWidget->getSpectrumWidget()->setZeroFrequency(value.toDouble());
 	}
 
 	commonTabSpectrumWidget->deactivate();

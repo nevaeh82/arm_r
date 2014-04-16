@@ -139,15 +139,16 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 	m_isPanoramaStart = enabled;
 
 	if (!m_isPanoramaStart){
-		qDebug() << "panorama stopped";
+		log_debug("panorama stopped");
 		setBandwidth(m_bandwidthSingleSample);
 		return;
 	}
 
-	qDebug() << "panorama started = " << start << end;
+	log_debug(QString("panorama started = %1 %2").arg(start).arg(end));
 
-	if (start > end)
+	if (start > end) {
 		return;
+	}
 
 	double bandwidth = end - start;
 	if(bandwidth < 20) {
@@ -166,8 +167,9 @@ bool SpectrumWidgetDataSource::isPanoramaEnabled()
 void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum)
+		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
 			return;
+		}
 
 		bool isComplex = true;
 
