@@ -35,7 +35,7 @@ public:
 
 	virtual bool deleteStationData(int id) = 0;
 
-	virtual StationData getStationData(const QString& stationName, int port, double frequency, double bandwidth) = 0;
+	virtual StationData getStationData(const QString& stationName, int port, double frequency, double bandwidth = 0) = 0;
 
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)	= 0;
 	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list) = 0;

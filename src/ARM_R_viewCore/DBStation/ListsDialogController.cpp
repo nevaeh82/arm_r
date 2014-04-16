@@ -94,7 +94,9 @@ void ListsDialogController::deleteSelectedRecords()
 {
 	QModelIndexList list = m_view->selectionModel()->selectedRows();
 
-	foreach(QModelIndex index, list) {
+	foreach( QModelIndex index, list ) {
+		index = m_proxyModel->mapToSource( index );
+
 		// get record id
 		int id = m_model->record( index.row() ).value( "id" ).toInt();
 

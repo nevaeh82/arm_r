@@ -20,6 +20,7 @@ DBStationController::DBStationController(QObject *parent) :
 	}
 	else {
 		m_db = QSqlDatabase::addDatabase( "QMYSQL", "DATACONNECTION" );
+		m_db.setConnectOptions( "MYSQL_OPT_RECONNECT=1" );
 	}
 }
 
@@ -68,7 +69,7 @@ int DBStationController::addStation(const QString& name, const QString& ip)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare("INSERT INTO station VALUES(NULL, :objectName, :objectIP);");
 
 	VALIDATE_QUERY( query );
@@ -88,7 +89,7 @@ int DBStationController::addStationDevice(const QString& name, const unsigned sh
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare("INSERT INTO stationDevices VALUES(0, :port, (SELECT id FROM station WHERE name=:station));");
 
 	VALIDATE_QUERY( query );
@@ -108,7 +109,7 @@ int DBStationController::addSignalType(const QString& name)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare("INSERT INTO signalType VALUES(NULL, :objectName);");
 
 	VALIDATE_QUERY( query );
@@ -128,7 +129,7 @@ int DBStationController::addCategory(const QString& name)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare("INSERT INTO category VALUES(NULL, :objectName);");
 
 	VALIDATE_QUERY( query );
@@ -199,9 +200,9 @@ int DBStationController::updateStationData(const StationData& data)
 	int signalTypeID = getSignalTypeID( data.signalType );
 	if( signalTypeID == INVALID_INDEX ) return ERROR_ADD_STATION_DATA_INVALID_SIGNAL_TYPE;
 
-	QSqlQuery query;
+	QSqlQuery query( m_db );
 	query.prepare( "UPDATE stationData " \
-				   "SET bandwidth = :bandwidth AND signalTypeID = :signalType AND datetime = :datetime" \
+				   "SET bandwidth = :bandwidth, signalTypeID = :signalType, datetime = :datetime " \
 				   "WHERE deviceID = :device AND categoryID = :category AND frequency = :frequency" );
 
 	VALIDATE_QUERY( query );
@@ -248,7 +249,7 @@ int DBStationController::getLastIndex(const QString& table)
 		return INVALID_INDEX;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare(tr("SELECT id FROM %1 ORDER BY id DESC LIMIT 1").arg(table));
 
 	VALIDATE_QUERY( query );
@@ -384,24 +385,40 @@ StationData DBStationController::getStationData(const QString& stationName, int 
 		return data;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 
-	query.prepare( "SELECT cat.name, st.name, sd.frequency, sd.bandwidth " \
-					"FROM stationData AS sd " \
-					"INNER JOIN stationDevices as sdi on sd.deviceID = sdi.id " \
-					"INNER JOIN station as st on st.id = sdi.stationID " \
-					"INNER JOIN category AS cat on cat.id = sd.categoryID " \
-					"INNER JOIN signalType AS stype on sd.signalTypeID = stype.id " \
-					"WHERE st.name = :station AND sdi.port = :port " \
-					"AND sd.frequency >= :lowFreq AND sd.frequency <= :highFreq" );
+	QString select = "SELECT cat.name, st.name, sd.frequency, sd.bandwidth " \
+			"FROM stationData AS sd " \
+			"INNER JOIN stationDevices as sdi on sd.deviceID = sdi.id " \
+			"INNER JOIN station as st on st.id = sdi.stationID " \
+			"INNER JOIN category AS cat on cat.id = sd.categoryID " \
+			"INNER JOIN signalType AS stype on sd.signalTypeID = stype.id " \
+			"WHERE st.name = :station AND sdi.port = :port";
+
+	// first try to get records with equals frequency
+	query.prepare( select + " AND sd.frequency = :frequency LIMIT 1" );
 
 	__VALIDATE_QUERY( query, data );
 
 	query.bindValue( ":station", stationName );
 	query.bindValue( ":port", port );
-	query.bindValue( ":lowFreq", frequency - bandwidth / 2 );
-	query.bindValue( ":highFreq", frequency + bandwidth / 2 );
+	query.bindValue( ":frequency", frequency );
 	query.exec();
+
+	__VALIDATE_QUERY( query, data );
+
+	// if there is no same records, try to get nearest
+	if( query.size() == 0 ) {
+		query.prepare( select + " AND sd.frequency > :lowFreq AND sd.frequency < :highFreq LIMIT 1" );
+
+		__VALIDATE_QUERY( query, data );
+
+		query.bindValue( ":station", stationName );
+		query.bindValue( ":port", port );
+		query.bindValue( ":lowFreq", frequency - bandwidth / 2 );
+		query.bindValue( ":highFreq", frequency + bandwidth / 2 );
+		query.exec();
+	}
 
 	__VALIDATE_QUERY( query, data );
 
@@ -423,7 +440,7 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 		return false;
 	}
 
-	QSqlQuery query(m_db);
+	QSqlQuery query( m_db );
 	query.prepare("SELECT sdi.id, st.name AS stationName, " \
 					"st.ip AS stationIP, sd.port, cat.name AS CategoryName, " \
 					"sdi.frequency, sdi.bandwidth, sigType.name AS signalType, " \
@@ -462,13 +479,13 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 		return false;
 	}
 
-	QSqlQuery query(m_db);
-	query.prepare("SELECT s.name, st.frequency, st.bandwidth " \
+	QSqlQuery query( m_db );
+	query.prepare( "SELECT s.name, st.frequency, st.bandwidth " \
 					"FROM stationData AS st " \
 					"INNER JOIN stationDevices as sdi on st.deviceID=sdi.id " \
 					"INNER JOIN station as s on s.id=sdi.stationID " \
 					"INNER JOIN category AS cat on st.categoryID=cat.id " \
-					"WHERE cat.name=:objectName");
+					"WHERE cat.name=:objectName" );
 
 	VALIDATE_QUERY( query );
 

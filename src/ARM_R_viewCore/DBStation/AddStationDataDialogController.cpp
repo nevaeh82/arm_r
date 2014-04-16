@@ -30,12 +30,12 @@ void AddStationDataDialogController::insert(const StationData& data)
 {
 	int result = 1;
 
-	// check if record with same frequency for same device is exists
+	// looking for segments that included into the new one
 	StationData dataExist = m_stationDb->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );
 
 	if( !dataExist.stationName.isNull() ) {
-		if( dataExist.bandwidth < data.bandwidth ) {
+		if( dataExist.frequency == data.frequency && dataExist.bandwidth < data.bandwidth ) {
 			// if it really exists and new bandwidth is bigger than current, update it
 			result = m_stationDb->updateStationData( data );
 		} else {
