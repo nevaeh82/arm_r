@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->setWindowTitle(tr("Zaviruha"));
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));
 
-
 	this->showMaximized();
 
 	init();

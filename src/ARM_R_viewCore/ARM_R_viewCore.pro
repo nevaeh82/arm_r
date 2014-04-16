@@ -149,8 +149,7 @@ FORMS += \
 
 
 RESOURCES += \
-	translations.qrc \
-    rc.qrc
+	translations.qrc
 
 TRANSLATIONS += ARM-R_en.ts\
 	ARM-R_ru.ts

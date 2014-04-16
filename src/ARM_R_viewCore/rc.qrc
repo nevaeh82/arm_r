@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>images/icons/ListsDialog.png</file>
+        <file>images/icons/ARM_R.png</file>
+        <file>images/icons/AddStationDataDialog.png</file>
+        <file>images/icons/ExistInDB.png</file>
+        <file>images/icons/ListWhiteDialog.png</file>
     </qresource>
 </RCC>
