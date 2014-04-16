@@ -21,9 +21,14 @@
 
 #define INVALID_INDEX 0
 
+class dbStationTest;
+
 class DBStationController : public QObject, public IDBStation
 {
 	Q_OBJECT
+
+	friend class dbStationTest;
+
 public:
 	explicit DBStationController(QObject *parent = 0);
 	virtual ~DBStationController();

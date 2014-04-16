@@ -89,12 +89,12 @@ int DBStationController::addStationDevice(const QString& name, const unsigned sh
 	}
 
 	QSqlQuery query(m_db);
-	query.prepare("INSERT INTO stationDevices VALUES(0, :objectPort, (SELECT id FROM station WHERE name=:objectStationName));");
+	query.prepare("INSERT INTO stationDevices VALUES(0, :port, (SELECT id FROM station WHERE name=:station));");
 
 	VALIDATE_QUERY( query );
 
-	query.bindValue(":objectPort", port);
-	query.bindValue(":objectStationName", name);
+	query.bindValue(":port", port);
+	query.bindValue(":station", name);
 	query.exec();
 
 	VALIDATE_QUERY( query );

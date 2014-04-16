@@ -12,8 +12,8 @@ ProjectDir=$$PWD
 INCLUDEPATH += ../../tools/cxxtest
 
 HEADERS += \
-	testDBStation.h \
-	testGraphicsData.h
+	DBStationControllerTest.h \
+    SpectrumWidgetDataSourceTest.h
 
 include(../../specs/project.pri)
 include(../../specs/tbb.pri)
@@ -23,9 +23,5 @@ include(../TestShared/mksuite.pri)
 include(../ARM_R_viewCore/reference.pri)
 
 applyReferences()
-
-SOURCES +=
-
-SOURCES +=
 
 SOURCES +=
