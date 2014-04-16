@@ -50,7 +50,8 @@ public:
 
 	virtual bool deleteStationData(int id);
 
-	virtual StationData getStationData(const QString& stationName, int port, double frequency, double bandwidth);
+	virtual StationData getStationData(const QString& stationName, int port, double frequency, double bandwidth = 0);
+
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
 	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list);
 
