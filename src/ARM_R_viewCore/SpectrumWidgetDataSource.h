@@ -14,7 +14,7 @@ class SpectrumWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT
 
-friend class DBStationControllerTest;
+friend class SpectrumWidgetDataSourceTest;
 
 private:
 	IGraphicWidget* m_spectrumWidget;
