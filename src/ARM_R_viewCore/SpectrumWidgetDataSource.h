@@ -10,6 +10,8 @@
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RpcPrmClient.h"
 
+class SpectrumWidgetDataSourceTest;
+
 class SpectrumWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT

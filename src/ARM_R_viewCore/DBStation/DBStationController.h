@@ -21,13 +21,13 @@
 
 #define INVALID_INDEX 0
 
-class dbStationTest;
+class DBStationControllerTest;
 
 class DBStationController : public QObject, public IDBStation
 {
 	Q_OBJECT
 
-	friend class dbStationTest;
+	friend class DBStationControllerTest;
 
 public:
 	explicit DBStationController(QObject *parent = 0);
