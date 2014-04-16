@@ -101,7 +101,14 @@ void TabManager::changeTabSlot(int index)
 		return;
 	}
 
-	m_currentTabWidget->activate();
+    m_currentTabWidget->activate();
+}
+
+void TabManager::slotUpdateDBStationsLists()
+{
+    foreach (ITabWidget* tabWidget, m_tabWidgetsMap) {
+        tabWidget->updateListsSelections();
+    }
 }
 
 void TabManager::setStationsConfiguration(const QList<StationConfiguration>& stationList)
@@ -171,6 +178,8 @@ void TabManager::addStationTabs()
 		if (tabBar != NULL) {
 			tabBar->setTabButton(index, QTabBar::LeftSide, tabSpectrumWidget->getIndicator());
 		}
+
+        connect(tabController, SIGNAL(signalUpdateDBStationsLists()), this, SLOT(slotUpdateDBStationsLists()));
 
 		m_tabWidgetsMap.insert(station->getName(), tabController);
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());

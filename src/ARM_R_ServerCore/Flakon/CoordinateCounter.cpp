@@ -255,7 +255,7 @@ void CoordinateCounter::initSolver()
 		int type=stationSettings.value("type",0).toInt();
 		if(type!=2)
 		{
-			stationSettings.endGroup();
+            stationSettings.endGroup();
 			continue;
 		}
 

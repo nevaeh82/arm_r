@@ -87,6 +87,7 @@ private:
 
 private slots:
 	void changeTabSlot(int index);
+    void slotUpdateDBStationsLists();
 
 signals:
 	void readyToStart();

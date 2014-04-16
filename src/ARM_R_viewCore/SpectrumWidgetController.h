@@ -117,6 +117,9 @@ public:
 
 	void onCorrelationStateChanged(const bool isEnabled);
 
+    void updateDBAreas();
+
+
 private:
 	void init();
 
@@ -161,6 +164,10 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
+
+
+
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

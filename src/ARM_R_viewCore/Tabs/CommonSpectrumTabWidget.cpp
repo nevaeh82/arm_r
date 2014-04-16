@@ -103,7 +103,12 @@ void CommonSpectrumTabWidget::deactivate()
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
 		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
-	}
+    }
+}
+
+void CommonSpectrumTabWidget::updateListsSelections()
+{
+
 }
 
 QWidget *CommonSpectrumTabWidget::getWidget()

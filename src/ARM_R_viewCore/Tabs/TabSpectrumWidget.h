@@ -54,6 +54,7 @@ public:
 
 	virtual void insertSpectrumWidget(ISpectrumWidget *spectrumWidget);
 	virtual void setIndicatorState(int state);
+    virtual void updateDBListsAreas();
 
 	QTreeView *getTreeView() const;
 	void insertCorrelationWidget(ICorrelationWidget *correlationWidget);

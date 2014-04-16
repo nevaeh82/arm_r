@@ -38,6 +38,8 @@ public:
 	virtual void setDbManager(IDbManager*) = 0;
     virtual void setDbStationController(DBStationController* controller) = 0;
 	virtual void setStationNamesList(const QStringList& stationsList) = 0;
+
+    virtual void updateListsSelections() = 0;
 };
 
 #endif // ISUBMODULE_H

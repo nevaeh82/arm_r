@@ -62,7 +62,7 @@ public:
 private:
 	QSqlDatabase m_db;
 
-protected:
+public:
 	QStringList getCatalog(const QString& name);
 
 	int getLastIndex(const QString& table);

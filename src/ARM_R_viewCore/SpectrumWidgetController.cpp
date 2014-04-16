@@ -136,7 +136,21 @@ void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
 	if(correlationFlag)
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	else
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+        m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+}
+
+void SpectrumWidgetController::updateDBAreas()
+{
+    m_graphicsWidget->ClearAllDetectedAreas(1);
+    m_graphicsWidget->ClearAllDetectedAreas(2);
+
+    QList<StationsFrequencyAndBandwith> list;
+    bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
+    setDetectedAreas(2, list);
+
+    ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+    setDetectedAreas(1, list);
+
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -476,6 +490,8 @@ void SpectrumWidgetController::addToWhiteList()
 	}
 
 	emit signalAddSelToLists(1);
+
+    m_tab->updateDbStationsLists();
 }
 
 /// add selection to black list
@@ -505,6 +521,8 @@ void SpectrumWidgetController::addToBlackList()
 	}
 
 	emit signalAddSelToLists(2);
+    m_tab->updateDbStationsLists();
+
 }
 
 /// signal for flakon to recognize signal

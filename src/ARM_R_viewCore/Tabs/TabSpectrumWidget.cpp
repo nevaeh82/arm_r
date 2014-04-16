@@ -87,7 +87,12 @@ void TabSpectrumWidget::insertSpectrumWidget(ISpectrumWidget *spectrumWidget)
 
 void TabSpectrumWidget::setIndicatorState(int state)
 {
-	emit setIndicatorStateSignal(state);
+    emit setIndicatorStateSignal(state);
+}
+
+void TabSpectrumWidget::updateDBListsAreas()
+{
+    m_spectrumWidgetController->updateDBAreas();
 }
 
 QTreeView *TabSpectrumWidget::getTreeView() const

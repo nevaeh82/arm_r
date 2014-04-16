@@ -407,6 +407,17 @@ void TabSpectrumWidgetController::onCleanSettings()
 {
 }
 
+void TabSpectrumWidgetController::updateDbStationsLists()
+{
+    emit signalUpdateDBStationsLists();
+    /// TODO
+}
+
+void TabSpectrumWidgetController::updateListsSelections()
+{
+    m_view->updateDBListsAreas();
+}
+
 void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QVariant& argument)
 {
 	if( method == RPC_PRM_STATE_CHANGED ) {

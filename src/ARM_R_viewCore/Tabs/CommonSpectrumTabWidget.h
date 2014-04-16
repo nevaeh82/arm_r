@@ -54,6 +54,8 @@ public:
 	virtual void activate();
 	virtual void deactivate();
 
+    virtual void updateListsSelections();
+
 	QWidget* getWidget();
 	ISpectrumWidget* getSpectrumWidget();
 

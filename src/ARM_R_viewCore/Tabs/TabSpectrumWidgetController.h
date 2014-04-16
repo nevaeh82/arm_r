@@ -103,6 +103,12 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
+    /// update white and black lists
+    virtual void updateDbStationsLists();
+
+    virtual void updateListsSelections();
+
+
 	// interface IRpcReceiver
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
@@ -119,6 +125,9 @@ signals:
 	void signalDoubleClicked(int id, double, double);
 
 	void signalPanoramaState(bool state);
+
+    void signalUpdateDBStationsLists();
+    void signalUpdateDBAreas();
 
 private slots:
 	void slotGetPointsFromRpc(QByteArray points);

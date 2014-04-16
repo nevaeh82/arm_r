@@ -20,9 +20,9 @@ public:
 		DBConnectionStruct param;
 		param.dbName = "testStations";
 		param.host = "127.0.0.1";
-		param.login = "uavtest";
+        param.login = "root";
 		param.port = 3306;
-		param.password = "uavtest";
+        param.password = "qwerty12345";
 
 		isConnected = stationController->connectToDB( param );
 

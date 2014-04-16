@@ -29,6 +29,8 @@ public:
 	virtual void recognize() = 0;
 
 	virtual double getCurrentFrequency() = 0;
+
+    virtual void updateDbStationsLists() = 0;
 };
 
 #endif // ITABSPECTRUM_H
