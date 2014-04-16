@@ -19,12 +19,12 @@ QString RpcSettingsManager::getRpcHost()
 {
 	QMutexLocker mutexLocker(&m_mutex);
 	QSettings settings(m_settingsFile, QSettings::IniFormat, this);
-	return settings.value("RPC_UI/IP", "127.0.0.1").toString();
+	return settings.value("RPC_UI/IP").toString();
 }
 
 QString RpcSettingsManager::getRpcPort()
 {
 	QMutexLocker mutexLocker(&m_mutex);
 	QSettings settings(m_settingsFile, QSettings::IniFormat, this);
-	return settings.value("RPC_UI/Port", "24500").toString();
+	return settings.value("RPC_UI/Port").toString();
 }

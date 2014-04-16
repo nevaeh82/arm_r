@@ -1,3 +1,7 @@
+#include <QFile>
+
+#include <Logger.h>
+
 #include "RpcConfigReader.h"
 
 RpcConfigReader::RpcConfigReader(QObject* parent) :
@@ -38,21 +42,22 @@ void RpcConfigReader::readStationListInternalSlot(const QString& fileName)
 	stationSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
 	QList<StationConfiguration> stationList;
-
 	QStringList childKeys = stationSettings.childGroups();
 
-	foreach (const QString &childKey, childKeys ) {
+	log_debug( "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+	log_debug( childKeys[0] );
 
+	foreach (const QString &childKey, childKeys ) {
 		StationConfiguration stationConfiguration;
 
 		stationSettings.beginGroup(childKey);
-		stationConfiguration.id				= stationSettings.value("Id", 0).toUInt();
-		stationConfiguration.name			= stationSettings.value("Name", "Unknown").toString();
-		stationConfiguration.latitude		= stationSettings.value("Latitude", 0.0).toDouble();
-		stationConfiguration.longitude		= stationSettings.value("Longitude", 0.0).toDouble();
-		stationConfiguration.hostPrm300		= stationSettings.value("IPprm300", "127.0.0.1").toString();
-		stationConfiguration.hostADC		= stationSettings.value("IPADC", "127.0.0.1").toString();
-		stationConfiguration.portADC		= stationSettings.value("portADC", 1030).toUInt();
+		stationConfiguration.id				= stationSettings.value("Id").toUInt();
+		stationConfiguration.name			= stationSettings.value("Name").toString();
+		stationConfiguration.latitude		= stationSettings.value("Latitude").toDouble();
+		stationConfiguration.longitude		= stationSettings.value("Longitude").toDouble();
+		stationConfiguration.hostPrm300		= stationSettings.value("IPprm300").toString();
+		stationConfiguration.hostADC		= stationSettings.value("IPADC").toString();
+		stationConfiguration.portADC		= stationSettings.value("portADC").toUInt();
 		stationSettings.endGroup();
 
 		stationList.append(stationConfiguration);
@@ -84,11 +89,11 @@ void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)
 {
 	DBConnectionStruct param;
 	QSettings dbConfig(filename, QSettings::IniFormat, this);
-	param.host		= dbConfig.value("DbStations_Config/host", "127.0.0.1").toString();
-	param.port		= dbConfig.value("DbStations_Config/port", "3306").toString().toUShort();
-	param.login		= dbConfig.value("DbStations_Config/login", "root").toString();
-	param.password	= dbConfig.value("DbStations_Config/password", "").toString();
-	param.dbName	= dbConfig.value("DbStations_Config/dbName", "Stations").toString();
+	param.host		= dbConfig.value("DbStations_Config/host").toString();
+	param.port		= dbConfig.value("DbStations_Config/port").toString().toUShort();
+	param.login		= dbConfig.value("DbStations_Config/login").toString();
+	param.password	= dbConfig.value("DbStations_Config/password").toString();
+	param.dbName	= dbConfig.value("DbStations_Config/dbName").toString();
 
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
