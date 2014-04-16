@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <imagedef>
-	<product name="Zaviruha" version="1.0.0.0" code="zaviruha"/>
+	<product name="Zaviruha R" version="1.0.0.0" code="zaviruha r"/>
 	<files path="build\tmprel\bin\*.*"/>
 	<link  name="$DESKTOP\Завируха-АРМ-Р" target="$INSTDIR\ARM_R_view.exe"/>
 	<imagefile path="build\tmprel\image\ARM_R_Setup.exe"/>
