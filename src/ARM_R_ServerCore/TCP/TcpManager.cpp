@@ -189,8 +189,16 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	QString messageType = argument->type();
 	QVariant data = QVariant( argument->data() );
 
-	IRpcListener *sender = (IRpcListener*) m_controllersMap.value( deviceName, NULL );
-	if( sender == NULL && deviceType != ARMR_TCP_SERVER) {
+	IRpcListener *sender = NULL;
+	if(deviceName == FLAKON_COORDINATE_COUNTER) {
+		/// HACK, fix it
+		sender =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
+	}
+	else {
+		sender = (IRpcListener*)m_controllersMap.value(deviceName,NULL);
+	}
+
+	if(sender == NULL && deviceType != ARMR_TCP_SERVER){
 		return;
 	}
 
