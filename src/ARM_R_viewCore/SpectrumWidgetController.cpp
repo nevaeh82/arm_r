@@ -133,23 +133,25 @@ void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
 {
 	correlationFlag = isEnabled;
 
-	if(correlationFlag)
+	if(correlationFlag) {
 		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-	else
-        m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	}
+	else {
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	}
 }
 
 void SpectrumWidgetController::updateDBAreas()
 {
-    m_graphicsWidget->ClearAllDetectedAreas(1);
-    m_graphicsWidget->ClearAllDetectedAreas(2);
+	m_graphicsWidget->ClearAllDetectedAreas(1);
+	m_graphicsWidget->ClearAllDetectedAreas(2);
 
-    QList<StationsFrequencyAndBandwith> list;
-    bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
-    setDetectedAreas(2, list);
+	QList<StationsFrequencyAndBandwith> list;
+	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
+	setDetectedAreas(2, list);
 
-    ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
-    setDetectedAreas(1, list);
+	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+	setDetectedAreas(1, list);
 
 }
 

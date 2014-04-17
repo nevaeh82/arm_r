@@ -117,7 +117,7 @@ public:
 
 	void onCorrelationStateChanged(const bool isEnabled);
 
-    void updateDBAreas();
+	void updateDBAreas();
 
 
 private:
