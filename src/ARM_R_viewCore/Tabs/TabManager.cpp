@@ -149,11 +149,12 @@ void TabManager::addStationTabs()
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
 	commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
 
-	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
-
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
 	}
+
+	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
+
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 	foreach (Station* station, m_stationsMap) {
