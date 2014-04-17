@@ -137,9 +137,6 @@ void TabManager::setAtlantConfiguration(const AtlantConfiguration& atlantConfig)
 
 void TabManager::addStationTabs()
 {
-	if (m_rpcFlakonClient != NULL) {
-		m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
-	}
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 	m_correlationControllers->init(m_stationsMap.count());
@@ -154,6 +151,9 @@ void TabManager::addStationTabs()
 
 	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
 
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
+	}
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 	foreach (Station* station, m_stationsMap) {
