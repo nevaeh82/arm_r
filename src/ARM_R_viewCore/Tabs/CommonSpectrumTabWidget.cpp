@@ -46,7 +46,7 @@ void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
 	ui->settingsTreeView->setItemDelegate(m_treeDelegate);
 
 	m_dbManager->registerReceiver(m_treeModel);
-    connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
 }
 
 void CommonSpectrumTabWidget::setDbStationController(DBStationController *)
@@ -92,6 +92,8 @@ void CommonSpectrumTabWidget::activate()
 	}
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
+		QVariant value = m_dbManager->getPropertyValue(widget->getSpectrumName(), DB_FREQUENCY_PROPERTY);
+		widget->setZeroFrequency(value.toDouble());
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
 	}
 }
@@ -103,7 +105,7 @@ void CommonSpectrumTabWidget::deactivate()
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
 		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
-    }
+	}
 }
 
 void CommonSpectrumTabWidget::updateListsSelections()
