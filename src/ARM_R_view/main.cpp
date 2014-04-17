@@ -25,6 +25,11 @@ int main(int argc, char *argv[])
 	translator.load(":/ARM-R_ru.qm");
 	a.installTranslator(&translator);
 
+	QTranslator translatorIPP;
+	bool b;
+	b = translatorIPP.load(":/GraphicsIpp/GraphicsIpp_ru.qm");
+	a.installTranslator(&translatorIPP);
+
 	MainWindow view;
 
 	MainWindowController controller;
