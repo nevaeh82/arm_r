@@ -45,6 +45,12 @@ private:
 
 	QString m_likeADeviceName;
 
+	struct PositionLocal{
+		double lat;
+		double lon;
+		int alt;
+	};
+
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);
 	virtual ~CoordinateCounter();

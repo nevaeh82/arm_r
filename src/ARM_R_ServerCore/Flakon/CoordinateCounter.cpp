@@ -149,8 +149,10 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
 
+	int state = 1;
+
 	dataStream << aData.timeHMSMs.at(aLastItem);
-	dataStream << 1;								/*aData.StateMassive_.at(aLastItem)*/
+	dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
 	dataStream << aData.latLonStdDev.at(aLastItem);
 	dataStream << aData.coordLatLon;
 	dataStream << aData.airspeed.at(aLastItem);
@@ -175,8 +177,10 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
 
+	int state = 1;
+
 	dataStream << aData.timeHMSMs.at(aLastItem);
-	dataStream << 1;									/*aData.StateMassive_.at(aLastItem)*/
+	dataStream << state;									/*aData.StateMassive_.at(aLastItem)*/
 	dataStream << aData.latLonStdDev.at(aLastItem);
 	dataStream << aData.coordLatLon;
 	dataStream << aData.airspeed.at(aLastItem);
@@ -195,15 +199,20 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 	QByteArray ba;
 	QDataStream ds(&ba, QIODevice::ReadWrite);
 
-	QVector<QPointF> vec;
+	double alt = 100;
+	double speed = 0;
+	double course = 0;
+	int state = 1;
+
+	QVector<QPointF>vec;
 	vec.append(aData_1.coordLatLon);
-	ds << aData_1.timeHMSMs;
-	ds << 1/*aData.StateMassive_.at(aLastItem)*/;
-	ds << aData_1.latLonStdDev;
-	ds << vec;
-	ds << 0;
-	ds << 100;
-	ds << 1;
+	ds<<aData_1.timeHMSMs;
+	ds<<state/*aData.StateMassive_.at(aLastItem)*/;
+	ds<<aData_1.latLonStdDev;
+	ds<<vec;
+	ds<<speed;
+	ds<<alt;
+	ds<<course;
 
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
 
@@ -249,23 +258,45 @@ void CoordinateCounter::initSolver()
 
 	QStringList childKeys = stationSettings.childGroups();
 
+	QMap<int, PositionLocal> settings;
+
 	foreach(const QString& childKey, childKeys) {
 		stationSettings.beginGroup(childKey);
 
 		int type=stationSettings.value("type",0).toInt();
 		if(type!=2)
 		{
-            stationSettings.endGroup();
+			stationSettings.endGroup();
 			continue;
 		}
 
-		double latitude = stationSettings.value("latitude",0).toDouble();
-		double longitude = stationSettings.value("longitude",0).toDouble();
-		int altitude = stationSettings.value("altitude",0).toInt();
+		PositionLocal coordData;
 
-		int id = m_solver->AddStation(latitude,longitude,altitude);
+		//double latitude = stationSettings.value("latitude",0).toDouble();
+		//double longitude = stationSettings.value("longitude",0).toDouble();
+		//int altitude = stationSettings.value("altitude",0).toInt();
+
+		coordData.lat = stationSettings.value("latitude",0).toDouble();
+		coordData.lon = stationSettings.value("longitude",0).toDouble();
+		coordData.alt = stationSettings.value("altitude",0).toInt();
+
+		int id = stationSettings.value("id",0).toInt();
+
+		settings.insert(id, coordData);
+
+		//int id2 = m_solver->AddStation(latitude,longitude,altitude);
 		stationSettings.endGroup();
 	}
+
+	foreach (int id, settings.keys()) {
+
+		double latitude = settings.value(id).lat;
+		double longitude = settings.value(id).lon;
+		int altitude = settings.value(id).alt;
+
+		m_solver->AddStation(latitude,longitude,altitude);
+	}
+
 
 	m_solver->AddSolverType(ONE_DATA);
 	m_solver->AddSolverType(HYPERBOLES);
