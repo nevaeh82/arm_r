@@ -540,6 +540,7 @@ void SpectrumWidgetController::toggleCorrelation()
 	//	m_enableCorrelation = !m_enableCorrelation;
 	m_tab->enableCorrelation( !correlationFlag );
 
+
 	//	if(m_enableCorrelation)
 	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	//	else

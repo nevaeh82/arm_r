@@ -153,12 +153,12 @@ void RpcFlakonClientWrapper::sendMainStationCorrelation(const int id, const QStr
 
 void RpcFlakonClientWrapper::sendBandwidth(const int id, const float bandwidth)
 {
-	emit sendBandwidthSignal(id, bandwidth);
+    emit sendBandwidthSignal(id, bandwidth);
 }
 
 void RpcFlakonClientWrapper::sendShift(const int id, const float shift)
 {
-	emit sendShiftSignal(id, shift);
+    emit sendShiftSignal(id, shift);
 }
 
 void RpcFlakonClientWrapper::recognize(const int id, const int type)

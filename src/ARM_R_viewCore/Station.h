@@ -30,9 +30,10 @@ private:
 
 	RpcFlakonClientWrapper *m_rpcFlakonClient;
 
-protected:
+public:
 	float getBandwidth() const;
 	float getShift() const;
+    float getCenterSelection() const;
 
 public:
 	Station(IDbManager *dbManager, RpcFlakonClientWrapper *client, QObject* parent = NULL);

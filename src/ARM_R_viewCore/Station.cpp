@@ -122,21 +122,36 @@ float Station::getBandwidth() const
 	// try to get correct value from DB
 	QVariant value = m_dbManager->getPropertyValue( getName(), DB_SELECTED_PROPERTY );
 	if( value.canConvert( QVariant::Double ) ) {
-		bandwidth = value.toFloat();
+        bandwidth = value.toFloat();
 	}
 
-	return bandwidth;
+    bandwidth *= 1000;
+
+    return bandwidth;
 }
 
 float Station::getShift() const
 {
 	float shift = 0;
 
+    float frequency = 0;
+
+    float center = 0;
+
 	// try to get correct value from DB
+    QVariant freq = m_dbManager->getPropertyValue( getName(), DB_FREQUENCY_PROPERTY );
+    if( freq.canConvert( QVariant::Double ) ) {
+        frequency = freq.toFloat();
+    }
+
 	QVariant value = m_dbManager->getPropertyValue( getName(), DB_CENTER_PROPERTY );
 	if( value.canConvert( QVariant::Double ) ) {
-		shift = value.toFloat();
+        center = value.toFloat();
 	}
 
-	return shift;
+    shift = center-frequency;
+
+    shift *= 1000;
+
+    return shift;
 }
