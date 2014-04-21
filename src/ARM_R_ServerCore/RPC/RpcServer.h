@@ -40,6 +40,7 @@ private slots:
 	void setMainStationCorrelation(quint64 client, int id, QString station);
 	void setBandwidth(quint64 client, int id, float bandwidth);
 	void setShift(quint64 client, int id, float shift);
+	void setCenter(quint64 client, int id, float center);
 	void recognize(quint64 client, int id, int);
 	void ssCorrelation(quint64 client, int id, bool enable);
 	void setAvarageSpectrum(quint64 client, int id, int avarage);

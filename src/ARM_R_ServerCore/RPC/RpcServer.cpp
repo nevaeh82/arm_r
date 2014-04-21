@@ -16,6 +16,7 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_SET_MAIN_STATION_CORRELATION, this, SLOT(setMainStationCorrelation(quint64,int,QString)));
 	m_serverPeer->attachSlot(RPC_METHOD_SET_BANDWIDTH, this, SLOT(setBandwidth(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_METHOD_SET_SHIFT, this, SLOT(setShift(quint64, int, float)));
+	m_serverPeer->attachSlot(RPC_METHOD_SET_CENTER, this, SLOT(setCenter(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_METHOD_RECOGNIZE, this, SLOT(recognize(quint64, int, int)));
 	m_serverPeer->attachSlot(RPC_METHOD_SS_CORRELATION, this, SLOT(ssCorrelation(quint64,int,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_AVARAGE_SPECTRUM, this, SLOT(setAvarageSpectrum(quint64,int,int)));
@@ -119,6 +120,13 @@ void RpcServer::setShift(quint64 client, int id, float shift)
 	dataStream << shift;
 
 	dispatch( RPC_METHOD_SET_SHIFT, QVariant(byteArray), client );
+}
+
+void RpcServer::setCenter(quint64 client, int id, float center)
+{
+	Q_UNUSED( id );
+
+	dispatch( RPC_METHOD_SET_CENTER, QVariant(center), client );
 }
 
 void RpcServer::recognize(quint64 client, int id, int)

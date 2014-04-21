@@ -37,6 +37,7 @@ private:
 	int m_main_point;
 	double m_corr_threshold;
 	int m_prevStation;
+	double m_centerFrequency;
 
 	ISolver* m_solver;
 
@@ -79,6 +80,7 @@ signals:
 public:
 	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
+	virtual void setCenterFrequency(const double &frequency);
 
 private:
 	/// Solver dll
@@ -94,10 +96,11 @@ private slots:
 	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
 	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void slotErrorOccured(const ErrorType& error_type, const QString& str);
-
+	void slotSetCenterFrequency(const double& frequency);
 
 signals:
 	void signalFinished();
+	void signalSetCenterFrequency(const double& frequency);
 };
 
 #endif // COORDINATECOUNTER_H

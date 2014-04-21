@@ -14,6 +14,7 @@ public:
 	void sendMainStationCorrelation(const int id, const QString& value);
 	void sendBandwidth(const int id, const float bandwidth);
 	void sendShift(const int id, const float shift);
+	void sendCenter(const int id, const float center);
 	void recognize(const int id, const int type);
 	void sendCorrelation(const int id, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);

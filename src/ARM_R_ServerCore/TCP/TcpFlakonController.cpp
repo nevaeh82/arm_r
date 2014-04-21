@@ -9,6 +9,8 @@ TcpFlakonController::TcpFlakonController(QObject* parent) :
 {
 	m_tcpDeviceName = FLAKON_TCP_DEVICE;
 	log_debug(QString("Created %1").arg(m_tcpDeviceName));
+
+	m_coordinateCounter = 0;
 }
 
 TcpFlakonController::TcpFlakonController(const QString& tcpDeviceName, QObject* parent) :
@@ -24,6 +26,11 @@ TcpFlakonController::~TcpFlakonController()
 QMap<QString, BaseTcpDeviceController*>& TcpFlakonController::stations()
 {
 	return m_stations;
+}
+
+void TcpFlakonController::setCoordinateCounter(CoordinateCounter* obj)
+{
+	m_coordinateCounter = obj;
 }
 
 void TcpFlakonController::createTcpDeviceCoder()
@@ -151,6 +158,14 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 	}
 	else if (method == RPC_METHOD_SET_SHIFT) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_SHIFT, data ) ) );
+	}
+	else if (method == RPC_METHOD_SET_CENTER) {
+		//signal to save value
+		bool *result;
+		const double frequency = argument.toDouble(result);
+		if(*result) {
+			m_coordinateCounter->setCenterFrequency(frequency);
+		}
 	}
 	else if (method == RPC_METHOD_RECOGNIZE) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_RECOGNIZE, data ) ) );
