@@ -9,6 +9,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	m_corr_threshold = 3;
 	m_prevStation = 0;
+	m_centerFrequency = -1;
 
 	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
 	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
@@ -19,6 +20,8 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	m_likeADeviceName = deviceName;
 	log_debug(QString("Created %1").arg(m_likeADeviceName));
+
+	connect(this, SIGNAL(signalSetCenterFrequency(double)), this, SLOT(setCenterFrequency(double)));
 }
 
 CoordinateCounter::~CoordinateCounter()
@@ -137,12 +140,16 @@ QObject* CoordinateCounter::asQObject()
 	return this;
 }
 
+void CoordinateCounter::sendSetCenterFrequency(const double& frequency)
+{
+	emit signalSetCenterFrequency(frequency);
+}
+
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
 {
 	if(aData.timeHMSMs.size()==0) {
 		return;
 	}
-
 
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
@@ -158,6 +165,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	dataStream << aData.airspeed.at(aLastItem);
 	dataStream << aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
+	dataStream << m_centerFrequency;
 
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
@@ -186,6 +194,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 	dataStream << aData.airspeed.at(aLastItem);
 	dataStream << m_alt;									//aData.heigh.at(aLastItem);
 	dataStream << aData.relativeBearing.at(aLastItem);
+	dataStream << m_centerFrequency;
 
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
@@ -206,13 +215,14 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 
 	QVector<QPointF>vec;
 	vec.append(aData_1.coordLatLon);
-	ds<<aData_1.timeHMSMs;
-	ds<<state/*aData.StateMassive_.at(aLastItem)*/;
-	ds<<aData_1.latLonStdDev;
-	ds<<vec;
-	ds<<speed;
-	ds<<alt;
-	ds<<course;
+	ds << aData_1.timeHMSMs;
+	ds << state/*aData.StateMassive_.at(aLastItem)*/;
+	ds << aData_1.latLonStdDev;
+	ds << vec;
+	ds << speed;
+	ds << alt;
+	ds << course;
+	ds << m_centerFrequency;
 
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
 
@@ -311,4 +321,9 @@ void CoordinateCounter::initSolver()
 	connect(this, SIGNAL(signalGetOneDataFromRadioLocation(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)));
 	connect(this, SIGNAL(signalError(ErrorType,QString)), this, SLOT(slotErrorOccured(ErrorType,QString)));
 
+}
+
+void CoordinateCounter::setCenterFrequency(const double& frequency)
+{
+	m_centerFrequency = frequency;
 }

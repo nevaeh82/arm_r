@@ -275,8 +275,9 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
 {
 	if (m_rpcFlakonClient == NULL) return;
 
-    m_rpcFlakonClient->sendBandwidth(m_station->getId(), m_station->getBandwidth());
-    m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
+	m_rpcFlakonClient->sendBandwidth(m_station->getId(), m_station->getBandwidth());
+	m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
+	m_rpcFlakonClient->sendCenter(m_station->getId(), m_station->getCenter());
 
 	m_rpcFlakonClient->sendCorrelation( m_station->getId(), enable );
 }

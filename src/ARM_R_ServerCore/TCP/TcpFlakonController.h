@@ -8,6 +8,8 @@
 #include <TcpDevicesDefines.h>
 #include <Info/FlakonSettings.h>
 
+#include "Flakon/CoordinateCounter.h"
+
 #include "TCP/TcpDeviceController.h"
 #include "TCP/TcpFlakonCoder.h"
 
@@ -24,6 +26,7 @@ public:
 	virtual ~TcpFlakonController();
 
 	QMap<QString, BaseTcpDeviceController*>& stations();
+	void addCoordinateCounter(CoordinateCounter* obj);
 
 	// ITcpDeviceController interface
 	virtual void createTcpDeviceCoder();
@@ -40,6 +43,7 @@ public:
 
 private:
 	FlakonSettings m_flakonSettingStruct;
+	CoordinateCounter* m_coordinateCounter;
 
 	void requestStationCorellation(QString stationName);
 

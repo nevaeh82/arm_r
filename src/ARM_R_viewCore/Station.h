@@ -33,7 +33,8 @@ private:
 public:
 	float getBandwidth() const;
 	float getShift() const;
-    float getCenterSelection() const;
+	float getCenter() const;
+	float getCenterSelection() const;
 
 public:
 	Station(IDbManager *dbManager, RpcFlakonClientWrapper *client, QObject* parent = NULL);

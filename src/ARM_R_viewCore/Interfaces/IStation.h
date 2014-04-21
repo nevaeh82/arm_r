@@ -23,8 +23,9 @@ public:
 	virtual QString getAdcIp() const = 0;
 	virtual quint16 getAdcPort() const = 0;
 
-    virtual float getBandwidth() const = 0;
-    virtual float getShift() const = 0;
+	virtual float getBandwidth() const = 0;
+	virtual float getShift() const = 0;
+	virtual float getCenter() const = 0;
 
 
 	virtual void setSelectedArea(const SpectrumSelection& selection) = 0;

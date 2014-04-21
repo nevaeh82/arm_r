@@ -60,6 +60,9 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 			m_flakonController = (TcpFlakonController*) controller;
 
+			// add coordinateCounter object to Flacon controller
+			m_flakonController->addCoordinateCounter(m_coordinatesCounter);
+
 			// add all added before station devices to Flakon controller
 			foreach( QString name, m_flakonStations.keys() ) {
 				m_flakonController->stations().insert( name, m_flakonStations.value(name) );

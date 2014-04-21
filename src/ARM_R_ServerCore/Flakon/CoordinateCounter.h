@@ -37,6 +37,7 @@ private:
 	int m_main_point;
 	double m_corr_threshold;
 	int m_prevStation;
+	double m_centerFrequency;
 
 	ISolver* m_solver;
 
@@ -79,6 +80,7 @@ signals:
 public:
 	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
+	virtual void sendSetCenterFrequency(const double &frequency);
 
 private:
 	/// Solver dll
@@ -87,6 +89,7 @@ private:
 
 public slots:
 	void initSolver();
+	void setCenterFrequency(const double& frequency);
 
 private slots:
 	void slotCatchDataFromRadioLocationAuto(const SolveResult& result, const DataFromRadioLocation& aData);
@@ -98,6 +101,7 @@ private slots:
 
 signals:
 	void signalFinished();
+	void signalSetCenterFrequency(const double& frequency);
 };
 
 #endif // COORDINATECOUNTER_H

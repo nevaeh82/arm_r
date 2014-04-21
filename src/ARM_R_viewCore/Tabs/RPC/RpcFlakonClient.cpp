@@ -54,6 +54,11 @@ void RpcFlakonClient::sendShift(const int id, const float shift)
 	m_clientPeer->call( RPC_METHOD_SET_SHIFT, id, shift );
 }
 
+void RpcFlakonClient::sendCenter(const int id, const float center)
+{
+	m_clientPeer->call( RPC_METHOD_SET_CENTER, id, center );
+}
+
 void RpcFlakonClient::recognize(const int id, const int type)
 {
 	m_clientPeer->call( RPC_METHOD_RECOGNIZE, id, type );
