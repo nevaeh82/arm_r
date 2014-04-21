@@ -3,6 +3,7 @@
 #include <QSize>
 
 #include <TreeModel\TreeItem.h>
+#include "UiDefines.h"
 
 TreeModel::TreeModel(IDbManager *dbManager, const QStringList &headers, QObject *parent)
 	: TreeModelBase(headers, parent)
@@ -104,6 +105,14 @@ QString TreeModel::getTranslateItemNameFromReal(const QString& itemName) const
 
 bool TreeModel::updateModelData(TreeItem *item)
 {
+	if (item->data().name == DB_LEADING_OP_PROPERTY){
+		return m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, item->data().value);
+	}
+
+	if (item->data().name == DB_AVERAGING_PROPERTY){
+		return m_dbManager->updatePropertyForAllObjects(DB_AVERAGING_PROPERTY, item->data().value);
+	}
+
 	return m_dbManager->updateProperty(Property(item->data()));
 }
 

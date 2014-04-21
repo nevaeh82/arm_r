@@ -56,6 +56,7 @@ signals:
 
 private slots:
 	void commitSBEditorSlot();
+	void onCurrentIndexChanged(int);
 
 };
 

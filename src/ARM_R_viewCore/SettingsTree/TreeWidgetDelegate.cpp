@@ -71,6 +71,9 @@ void TreeWidgetDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 			QString text = index.model()->data(index, Qt::EditRole).toString();
 			int value = cbEditor->findText(text);
 			cbEditor->setCurrentIndex(value);
+
+			connect(cbEditor, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
+
 			break;
 		}
 		case DefaultMode:
@@ -187,4 +190,11 @@ void TreeWidgetDelegate::commitSBEditorSlot()
 {
 	QSpinBox* editor = qobject_cast<QSpinBox *>(sender());
 	emit commitData(editor);
+	emit closeEditor(editor);
+}
+
+void TreeWidgetDelegate::onCurrentIndexChanged(int) {
+	QComboBox * editor = static_cast<QComboBox *>(sender());
+	emit commitData(editor);
+	emit closeEditor(editor);
 }
