@@ -28,7 +28,7 @@ QMap<QString, BaseTcpDeviceController*>& TcpFlakonController::stations()
 	return m_stations;
 }
 
-void TcpFlakonController::addCoordinateCounter(CoordinateCounter* obj)
+void TcpFlakonController::setCoordinateCounter(CoordinateCounter* obj)
 {
 	m_coordinateCounter = obj;
 }
@@ -164,7 +164,7 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 		bool *result;
 		const double frequency = argument.toDouble(result);
 		if(*result) {
-			m_coordinateCounter->sendSetCenterFrequency(frequency);
+			m_coordinateCounter->setCenterFrequency(frequency);
 		}
 	}
 	else if (method == RPC_METHOD_RECOGNIZE) {

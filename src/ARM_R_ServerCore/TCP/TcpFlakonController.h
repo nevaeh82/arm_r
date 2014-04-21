@@ -26,7 +26,7 @@ public:
 	virtual ~TcpFlakonController();
 
 	QMap<QString, BaseTcpDeviceController*>& stations();
-	void addCoordinateCounter(CoordinateCounter* obj);
+	void setCoordinateCounter(CoordinateCounter* obj);
 
 	// ITcpDeviceController interface
 	virtual void createTcpDeviceCoder();

@@ -80,7 +80,7 @@ signals:
 public:
 	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
-	virtual void sendSetCenterFrequency(const double &frequency);
+	virtual void setCenterFrequency(const double &frequency);
 
 private:
 	/// Solver dll
@@ -89,7 +89,6 @@ private:
 
 public slots:
 	void initSolver();
-	void setCenterFrequency(const double& frequency);
 
 private slots:
 	void slotCatchDataFromRadioLocationAuto(const SolveResult& result, const DataFromRadioLocation& aData);
@@ -97,7 +96,7 @@ private slots:
 	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
 	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void slotErrorOccured(const ErrorType& error_type, const QString& str);
-
+	void slotSetCenterFrequency(const double& frequency);
 
 signals:
 	void signalFinished();

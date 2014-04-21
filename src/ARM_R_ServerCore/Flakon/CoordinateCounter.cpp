@@ -21,7 +21,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	m_likeADeviceName = deviceName;
 	log_debug(QString("Created %1").arg(m_likeADeviceName));
 
-	connect(this, SIGNAL(signalSetCenterFrequency(double)), this, SLOT(setCenterFrequency(double)));
+	connect(this, SIGNAL(signalSetCenterFrequency(double)), this, SLOT(slotSetCenterFrequency(double)));
 }
 
 CoordinateCounter::~CoordinateCounter()
@@ -140,7 +140,7 @@ QObject* CoordinateCounter::asQObject()
 	return this;
 }
 
-void CoordinateCounter::sendSetCenterFrequency(const double& frequency)
+void CoordinateCounter::setCenterFrequency(const double& frequency)
 {
 	emit signalSetCenterFrequency(frequency);
 }
@@ -323,7 +323,7 @@ void CoordinateCounter::initSolver()
 
 }
 
-void CoordinateCounter::setCenterFrequency(const double& frequency)
+void CoordinateCounter::slotSetCenterFrequency(const double& frequency)
 {
 	m_centerFrequency = frequency;
 }
