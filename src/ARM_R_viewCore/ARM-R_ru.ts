@@ -251,7 +251,7 @@
         <translation type="obsolete">Категория = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="282"/>
+        <location filename="DBStation/DBStationController.cpp" line="253"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation></translation>
     </message>
@@ -402,12 +402,17 @@
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="81"/>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <source>Report</source>
+        <translation>Отчет</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="88"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="88"/>
+        <location filename="DBStation/ListsDialog.ui" line="95"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -415,47 +420,47 @@
 <context>
     <name>ListsDialogController</name>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="13"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="12"/>
         <source>id</source>
         <translation>ИД</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="14"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="13"/>
         <source>Station Name</source>
         <translation>Пост</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="14"/>
         <source>IP</source>
         <translation>IP адрес</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="15"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="16"/>
         <source>Type</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="17"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="18"/>
         <source>Bandwidth</source>
         <translation>Полоса</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="19"/>
         <source>Signal Type</source>
         <translation>Модуляция</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="21"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="20"/>
         <source>Date</source>
         <translation>МДВ</translation>
     </message>
@@ -780,7 +785,7 @@
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="177"/>
+        <location filename="SpectrumWidgetController.cpp" line="193"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
@@ -793,43 +798,41 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="389"/>
+        <location filename="SpectrumWidgetController.cpp" line="391"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="392"/>
+        <location filename="SpectrumWidgetController.cpp" line="394"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="393"/>
+        <location filename="SpectrumWidgetController.cpp" line="395"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="394"/>
+        <location filename="SpectrumWidgetController.cpp" line="396"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="139"/>
-        <location filename="SpectrumWidgetController.cpp" line="395"/>
+        <location filename="SpectrumWidgetController.cpp" line="140"/>
+        <location filename="SpectrumWidgetController.cpp" line="397"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="308"/>
         <source>Black</source>
-        <translation>Черный</translation>
+        <translation type="obsolete">Черный</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="330"/>
         <source>White</source>
-        <translation>Белый</translation>
+        <translation type="obsolete">Белый</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="396"/>
+        <location filename="SpectrumWidgetController.cpp" line="398"/>
         <source>Cleanup text fields</source>
         <translation>Очистить текстовые данные</translation>
     </message>
@@ -855,13 +858,13 @@
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="184"/>
-        <location filename="Tabs/TabManager.cpp" line="201"/>
+        <location filename="Tabs/TabManager.cpp" line="190"/>
+        <location filename="Tabs/TabManager.cpp" line="207"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="128"/>
+        <location filename="Tabs/TabManager.cpp" line="135"/>
         <source>Atlant</source>
         <translation>Атлант</translation>
     </message>
@@ -890,47 +893,47 @@
 <context>
     <name>TreeModel</name>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="83"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="84"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="85"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="86"/>
         <source>Selected</source>
         <translation>Выделено</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="87"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="88"/>
         <source>Center</source>
         <translation>Центр</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="89"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="90"/>
         <source>Start</source>
         <translation>Начало</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="91"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="92"/>
         <source>Stop</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="93"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="94"/>
         <source>Averaging</source>
         <translation>Усреднение</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="95"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="96"/>
         <source>Leading OP</source>
         <translation>Ведуший ОП</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="97"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="98"/>
         <source>Panorama start</source>
         <translation>Панорама начало</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeModel.cpp" line="99"/>
+        <location filename="SettingsTree/TreeModel.cpp" line="100"/>
         <source>Panorama end</source>
         <translation>Панорама конец</translation>
     </message>
@@ -966,20 +969,20 @@
         <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="150"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="169"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="153"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="172"/>
         <source>Frequency</source>
         <translation>Частота</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="151"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="170"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="154"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="173"/>
         <source>Averaging</source>
         <translation>Усреднение</translation>
     </message>
     <message>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="152"/>
-        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="171"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="155"/>
+        <location filename="SettingsTree/TreeWidgetDelegate.cpp" line="174"/>
         <source>Leading OP</source>
         <translation>Ведуший ОП</translation>
     </message>

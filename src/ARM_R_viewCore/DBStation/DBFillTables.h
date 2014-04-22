@@ -32,4 +32,12 @@ typedef struct StationsFrequencyAndBandwith
 	double bandwidth;
 }StationsFrequencyAndBandwith;
 
+///info for report
+typedef struct AllStationsReport
+{
+    StationsFrequencyAndBandwith sfab;
+    QString category;
+    QDateTime date;
+}AllStationsReport;
+
 #endif // DBFILLTABLES_H

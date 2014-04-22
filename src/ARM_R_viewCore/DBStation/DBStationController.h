@@ -55,6 +55,7 @@ public:
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords);
 	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list);
 
+    virtual bool getReportCategory(const QString& category, QList<AllStationsReport>& listReport);
 	virtual inline QStringList getStationsCatalog() { return getCatalog( "station" ); }
 	virtual inline QStringList getCategoriesCatalog() { return getCatalog( "category" ); }
 	virtual inline QStringList getSignalTypesCatalog() { return getCatalog( "signalType" ); }

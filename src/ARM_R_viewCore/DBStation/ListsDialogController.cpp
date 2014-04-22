@@ -42,6 +42,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	connect(widget, SIGNAL(signalAddClicked()), this, SLOT(showAddDialog()));
 	connect(widget, SIGNAL(signalDelete()), this, SLOT(deleteSelectedRecords()));
 	connect(widget, SIGNAL(finished(int)), this, SLOT(deleteLater()));
+    connect(widget, SIGNAL(signalReport(int)), this, SLOT(slotReport(int)));
 }
 
 void ListsDialogController::adjustTableSize()
@@ -103,5 +104,119 @@ void ListsDialogController::deleteSelectedRecords()
 		m_stationDb->deleteStationData( id );
 	}
 
-	update();
+    update();
+}
+
+void ListsDialogController::slotReport(int type)
+{
+    QString category = "";
+    switch(type)
+    {
+    case 0:
+        category = "";
+        break;
+    case 1:
+        category = "White";
+        break;
+    case 2:
+        category = "Black";
+        break;
+    default:
+        break;
+    }
+
+    QList<AllStationsReport> list;
+    bool res = m_stationDb->getReportCategory(category, list);
+
+    QAxObject* WordApplication=new QAxObject("Word.Application"); // Создаю интерфейс к MSWord
+    QAxObject* WordDocuments = WordApplication->querySubObject( "Documents()" ); // Получаю интерфейсы к его подобъекту "коллекция открытых документов":
+    QAxObject* NewDocument = WordDocuments->querySubObject( "Add()" ); // Создаю новый документ
+    WordApplication->setProperty("Visible", true); // Делаем Word видимым
+
+    QAxObject* ActiveDocument = WordApplication->querySubObject("ActiveDocument()");
+    QAxObject* Range = ActiveDocument->querySubObject("Range()");
+
+    QAxObject *selection = WordApplication->querySubObject("Selection()");
+    selection->dynamicCall("TypeParagraph()");
+
+    selection->dynamicCall("TypeText(const QString&)","ОТЧЕТ\n");
+    selection->dynamicCall("TypeText(const QString&)",QDateTime::currentDateTime().toString("dd-MM-yyyy hh:mm:ss"));
+    selection->dynamicCall("TypeParagraph()");
+    QAxObject *range = selection->querySubObject("Range()");
+    QAxObject *tables = NewDocument->querySubObject("Tables()");
+    QAxObject *table = tables->querySubObject("Add(Range,NumRows,NumColumns)",range->asVariant(),list.count() + 1,6);
+
+
+
+    QAxObject* cell = table->querySubObject("Cell(Row, Column)" , 1,1);
+    QAxObject* CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "№");
+
+    cell = table->querySubObject("Cell(Row, Column)" , 1,2);
+    CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "Время");
+
+    cell = table->querySubObject("Cell(Row, Column)" , 1,3);
+    CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "Пост");
+
+    cell = table->querySubObject("Cell(Row, Column)" , 1,4);
+    CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "Частота");
+
+    cell = table->querySubObject("Cell(Row, Column)" , 1,5);
+    CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "Полоса");
+
+    cell = table->querySubObject("Cell(Row, Column)" , 1,6);
+    CellRange = cell->querySubObject("Range()");
+    CellRange->dynamicCall("InsertAfter(Text)", "Категория");
+
+    int j = 1;
+    for(int i = 0; i < list.count(); ++i)
+    {
+        j += 1;
+        cell = table->querySubObject("Cell(Row, Column)" , j,1);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", QString::number(i));
+
+        cell = table->querySubObject("Cell(Row, Column)" , j,2);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", list.at(i).date.toString("dd-MM-yyyy hh:mm:ss"));
+
+        cell = table->querySubObject("Cell(Row, Column)" , j,3);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", list.at(i).sfab.stationName);
+
+        cell = table->querySubObject("Cell(Row, Column)" , j,4);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", QString::number(list.at(i).sfab.frequency));
+
+        cell = table->querySubObject("Cell(Row, Column)" , j,5);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", QString::number(list.at(i).sfab.bandwidth));
+
+        cell = table->querySubObject("Cell(Row, Column)" , j,6);
+        CellRange = cell->querySubObject("Range()");
+        CellRange->dynamicCall("InsertAfter(Text)", list.at(i).category);
+
+    }
+
+    // освобождение памяти
+
+    delete CellRange;
+
+    delete cell;
+
+
+    delete range;
+    delete table;
+    delete tables;
+
+    delete selection;
+    delete Range;
+    delete ActiveDocument;
+    delete NewDocument;
+    delete WordDocuments;
+    delete WordApplication;
 }

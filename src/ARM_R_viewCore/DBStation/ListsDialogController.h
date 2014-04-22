@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+#include <ActiveQt/qaxobject.h>
+#include <ActiveQt/qaxbase.h>
+
+
 #include "DBStation/DBStationController.h"
 #include "Interfaces/IController.h"
 
@@ -44,6 +48,7 @@ private slots:
 
 	void showAddDialog();
 	void deleteSelectedRecords();
+    void slotReport(int type);
 };
 
 #endif // LISTSCONTROLLER_H

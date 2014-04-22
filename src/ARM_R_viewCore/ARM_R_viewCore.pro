@@ -4,6 +4,7 @@ TARGET   = ARM_R_viewCore
 TEMPLATE = lib
 ProjectDir=$$PWD
 CONFIG += staticlib
+CONFIG += qaxcontainer
 
 include(../../specs/project.pri)
 include(../../specs/tbb.pri)
@@ -154,6 +155,7 @@ RESOURCES += \
 TRANSLATIONS += ARM-R_en.ts\
 	ARM-R_ru.ts
 
+LIBS += -lqaxcontainer
 #LIBS += -luser32
 
 DEFINES += UNICODE

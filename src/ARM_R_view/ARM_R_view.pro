@@ -6,7 +6,10 @@ TARGET   = ARM_R_view
 TEMPLATE = app
 ProjectDir=$$PWD
 
+CONFIG += qaxcontainer
+
 LIBS+=user32.lib
+LIBS += -lqaxcontainer
 
 SOURCES = main.cpp
 

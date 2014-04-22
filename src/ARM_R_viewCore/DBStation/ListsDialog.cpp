@@ -19,6 +19,7 @@ ListsDialog::ListsDialog(QWidget *parent) :
 	connect(ui->pbAdd, SIGNAL(clicked()), this, SIGNAL(signalAddClicked()));
 	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
 	connect(ui->pbDelete, SIGNAL(clicked()), this, SIGNAL(signalDelete()));
+    connect(ui->pbReport, SIGNAL(clicked()), this, SLOT(slotReportType()));
 }
 
 ListsDialog::~ListsDialog()
@@ -33,5 +34,10 @@ QTableView *ListsDialog::getTableView()
 
 void ListsDialog::slotShow()
 {
-	this->show();
+    this->show();
+}
+
+void ListsDialog::slotReportType()
+{
+    emit signalReport(ui->cbLists->currentIndex());
 }
