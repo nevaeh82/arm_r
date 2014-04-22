@@ -10,6 +10,8 @@
 #include <QTime>
 #include <QMetaType>
 
+#include <QFile>
+
 #include "Interfaces/ICoordinateCounter.h"
 #include "../TCP/Interfaces/ITcpListener.h"
 #include "BaseSubject.h"
@@ -51,6 +53,11 @@ private:
 		double lon;
 		int alt;
 	};
+
+    QFile* fi;
+    QFile* fi1;
+    QFile* fi2;
+    QFile* fi3;
 
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);

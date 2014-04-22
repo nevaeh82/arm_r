@@ -5,6 +5,28 @@
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent)
 {
+
+    fi = new QFile("logDistances.log");
+    if(!fi->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        log_debug("error");
+    }
+    fi1 = new QFile("logTrajMan.log");
+    if(!fi1->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        log_debug("error");
+    }
+    fi2 = new QFile("logTrajAuto.log");
+    if(!fi2->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        log_debug("error");
+    }
+    fi3 = new QFile("logTrajOne.log");
+    if(!fi3->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        log_debug("error");
+    }
+
 	m_solver = NULL;
 
 	m_corr_threshold = 3;
@@ -29,6 +51,10 @@ CoordinateCounter::~CoordinateCounter()
 	if(m_solver != NULL)
 		delete m_solver;
 	emit signalFinished();
+    fi->close();
+    fi1->close();
+    fi2->close();
+    fi3->close();
 }
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
@@ -73,6 +99,13 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
 
 			m_solver->GetData(m_aData);
+
+            QString dataToFile = QTime::currentTime().toString() + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
+
+            QTextStream outstream(fi);
+            outstream << dataToFile;
+//            fi->write(dataToFile.toAscii());
+            fi->flush();
 		}
 	}
 
@@ -172,6 +205,13 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
+
+    QString dataToFile = aData.timeHMSMs.at(aLastItem).toString() + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
+
+    QTextStream outstream(fi2);
+    outstream << dataToFile;
+//            fi->write(dataToFile.toAscii());
+    fi2->flush();
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -201,6 +241,13 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
+
+    QString dataToFile = aData.timeHMSMs.at(aLastItem).toString() + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
+
+    QTextStream outstream(fi1);
+    outstream << dataToFile;
+//            fi->write(dataToFile.toAscii());
+    fi1->flush();
 }
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
@@ -224,11 +271,18 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 	ds << course;
 	ds << m_centerFrequency;
 
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
+//	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
 
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
-	}
+//	foreach (ITcpListener* receiver, m_receiversList) {
+//		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+//	}
+
+    QString dataToFile = aData_1.timeHMSMs.toString() + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
+
+    QTextStream outstream(fi3);
+    outstream << dataToFile;
+//            fi->write(dataToFile.toAscii());
+    fi3->flush();
 }
 
 void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
