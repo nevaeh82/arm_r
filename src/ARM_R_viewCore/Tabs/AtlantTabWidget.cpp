@@ -11,6 +11,7 @@ AtlantTabWidget::AtlantTabWidget(QWidget* parent) :
 
 	connect(ui->sendPB, SIGNAL(clicked()), this, SLOT(_slot_send()));
 	connect(this, SIGNAL(signalAddLog(QString)), ui->logsTE, SLOT(append(QString)));
+    connect(ui->pbOpenRDP, SIGNAL(clicked()), this, SLOT(slotOpenRDP()));
 
 	m_rpcClient = new RpcAtlantClient( m_id, this, this );
 }
@@ -80,6 +81,22 @@ void AtlantTabWidget::_slot_send()
 	rpc_send_atlant_data ba1(*ba);
 
 	CommandMessage* msg = new CommandMessage(COMMAND_ATLANT_SET_FREQ, QVariant::fromValue(ba1));
-	m_rpcClient->set_command(msg);
+    m_rpcClient->set_command(msg);
+}
+
+void AtlantTabWidget::slotOpenRDP()
+{
+    int ret = openRDP();
+    log_debug(QString("Open RDP for CellNet = %1").arg(QString::number(ret)));
+}
+
+int AtlantTabWidget::openRDP()
+{
+    QProcess process;
+//    process.setReadChannelMode(ForwardedChannels);
+    process.start("mstsc RDP/cell.net.RDP");
+    if (!process.waitForFinished(-1))
+        return -2;
+    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 

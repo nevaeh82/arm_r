@@ -20,5 +20,7 @@ prebuild::
 	$(cp) -ud RDS/RDSpoints.ini $(DESTDIR)/RDS
 	$(mkdir) $(DESTDIR)/TCP
 	$(cp) -ud TCP/coders.ini $(DESTDIR)/TCP
+	$(mkdir) $(DESTDIR)/RDP
+	$(cp) -ud RDP/cell.net.rdp $(DESTDIR)/RDP
               	
 	$(call begin-build, Prebuild OK )

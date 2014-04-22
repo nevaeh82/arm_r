@@ -99,6 +99,11 @@
     </message>
     <message>
         <location filename="AtlantTabWidget.ui" line="76"/>
+        <source>OpenRDP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="AtlantTabWidget.ui" line="83"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>

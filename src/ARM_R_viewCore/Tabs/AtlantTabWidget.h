@@ -16,6 +16,8 @@
 
 #include <QHostAddress>
 
+#include <QProcess>
+
 #include "Station.h"
 #include "RPC/RpcAtlantClient.h"
 
@@ -47,9 +49,13 @@ public:
 
 private slots:
 	void _slot_send();
+    void slotOpenRDP();
 
 signals:
 	void signalAddLog(QString str);
+
+private:
+    int openRDP();
 };
 
 #endif // ATLANTTABWIDGET

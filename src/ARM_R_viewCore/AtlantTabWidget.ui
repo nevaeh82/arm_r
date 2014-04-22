@@ -71,6 +71,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="pbOpenRDP">
+       <property name="text">
+        <string>OpenRDP</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="sendPB">
        <property name="text">
         <string>Send</string>
