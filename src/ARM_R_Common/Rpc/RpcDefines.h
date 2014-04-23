@@ -32,6 +32,7 @@
 #define RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH		"rpc_slot_server_send_detected_bandwidth"
 #define RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION    "rpc_slot_server_send_response_modulation"
 #define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
+#define RPC_SLOT_SERVER_SEND_BPLA_RESULT			"rpc_slot_server_send_solver_result"
 
 ///PRM to RPC client
 #define RPC_SLOT_SERVER_PRM_STATUS                   "rpc_slot_server_prm_status"

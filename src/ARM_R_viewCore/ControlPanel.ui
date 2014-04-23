@@ -87,7 +87,7 @@
       </size>
      </property>
      <property name="minimum">
-      <number>300</number>
+      <number>20</number>
      </property>
      <property name="maximum">
       <number>7000</number>
@@ -113,7 +113,7 @@
       </size>
      </property>
      <property name="minimum">
-      <number>300</number>
+      <number>20</number>
      </property>
      <property name="maximum">
       <number>7000</number>
@@ -186,6 +186,51 @@
     </spacer>
    </item>
    <item>
+    <widget class="QPushButton" name="pbDown100MHz">
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbDown10MHz">
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbDown1MHz">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QSpinBox" name="commonFreqSB">
      <property name="minimumSize">
       <size>
@@ -194,13 +239,52 @@
       </size>
      </property>
      <property name="minimum">
-      <number>300</number>
+      <number>20</number>
      </property>
      <property name="maximum">
       <number>7000</number>
      </property>
      <property name="value">
-      <number>1830</number>
+      <number>20</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbUp1MHz">
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbUp10MHz">
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbUp100MHz">
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;&gt;&gt;</string>
      </property>
     </widget>
    </item>

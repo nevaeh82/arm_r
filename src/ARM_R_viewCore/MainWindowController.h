@@ -27,6 +27,8 @@
 
 #include <Sleeper.h>
 
+#include "Tabs/SolverResultWidgetController.h"
+
 class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
 	Q_OBJECT
@@ -48,6 +50,8 @@ private:
 	QString m_rpcHost;
 	uint m_rpcPort;
 
+	SolverResultWidgetController* m_solverWidgetController;
+
 public:
 	explicit MainWindowController(QObject *parent = 0);
 	virtual ~MainWindowController();
@@ -62,6 +66,7 @@ private slots:
 	void serverFailedToStartSlot();
 	void serverStartedSlot();
 	void slotShowLists();
+	void slotShowSolverLog();
 
 	void rpcConnectionEstablished();
 	void startTabManger();

@@ -39,10 +39,21 @@ signals:
     void signalCheckMode();
     void signalViewMode();
 
+	void signalDown1Mhz();
+	void signalDown10Mhz();
+	void signalDown100Mhz();
+	void signalUp1Mhz();
+	void signalUp10Mhz();
+	void signalUp100Mhz();
+
+
 private slots:
 	void onSetCommonFrequencySlot();
 	void onSetBandWidthSlot();
     void slotChangeMode(int index);
+
+public slots:
+	void slotChangeCommonFreq(int value);
 
 
 };

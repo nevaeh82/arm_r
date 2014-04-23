@@ -100,7 +100,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 			m_solver->GetData(m_aData);
 
-            QString dataToFile = QTime::currentTime().toString() + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
+			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
             QTextStream outstream(fi);
             outstream << dataToFile;
@@ -206,7 +206,22 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 
-    QString dataToFile = aData.timeHMSMs.at(aLastItem).toString() + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
+	QByteArray dataResult;
+	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
+
+	int sourceType = 0;
+	QString resultString = getSolverResultToString(result);
+
+	dataResultStream << sourceType;
+	dataResultStream << resultString;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
+
+	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
     QTextStream outstream(fi2);
     outstream << dataToFile;
@@ -242,7 +257,23 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 	}
 
-    QString dataToFile = aData.timeHMSMs.at(aLastItem).toString() + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
+	QByteArray dataResult;
+	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
+
+	int sourceType = 1;
+
+	QString resultString = getSolverResultToString(result);
+
+	dataResultStream << sourceType;
+	dataResultStream << resultString;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
+
+	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
     QTextStream outstream(fi1);
     outstream << dataToFile;
@@ -277,7 +308,24 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 //		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 //	}
 
-    QString dataToFile = aData_1.timeHMSMs.toString() + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
+	QByteArray dataResult;
+	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
+
+	int sourceType = 2;
+
+	QString resultString = getSolverResultToString(result);
+
+	dataResultStream << sourceType;
+	dataResultStream << resultString;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
+
+
+	QString dataToFile = aData_1.timeHMSMs.toString("hh:mm:ss:zzz") + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
 
     QTextStream outstream(fi3);
     outstream << dataToFile;
@@ -308,6 +356,48 @@ void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 	if ((aSize>10) && (aSize<200)) {
 		//		m_solver->SetStateAnalizeCount(aSize);
 	}
+}
+
+QString CoordinateCounter::getSolverResultToString(const SolveResult &result)
+{
+	QString resultString;
+	switch(result)
+	{
+		case SOLVED:
+			resultString = tr("Successed slove");
+			break;
+		case ERROR_OCCURED:
+			resultString = tr("Some errors during slove");
+			break;
+		case NOT_ENOUGH_DATA:
+			resultString = tr("Not enough data for slove");
+			break;
+		case THERE_IS_NO_SOLUTION:
+			resultString = tr("There is no solution");
+			break;
+		case CANT_DETERMINE_REAL_TRAJECTORY:
+			resultString = tr("No solve cause 2 trajectory");
+			break;
+		case TOO_FEW_RANGES:
+			resultString = tr("Not enough distances for slove");
+			break;
+		case TOO_LOW_SOLUTION_ACCURACY:
+			resultString = tr("There is not enough accuracy slove");
+			break;
+		case TOO_LOW_DATA_ACCURACY:
+			resultString = tr("There is not enough input accuracy for slove");
+			break;
+		case COORDS_DOES_NOT_HIT_IN_AREA:
+			resultString = tr("Solves data is out of range of resposible zone");
+			break;
+		case COORDS_DOES_NOT_HIT_IN_STROB:
+			resultString = tr("Coords is out of catching strobe");
+			break;
+		default:
+			break;
+	}
+	return resultString;
+
 }
 
 void CoordinateCounter::initSolver()

@@ -107,7 +107,7 @@ void RpcAtlantClient::rpcSlotServerAtlantDirection(QByteArray data)
 	ds >> msg.level;
 	ds >> msg.quality;
 	ds >> msg.motionType;
-	ds >> msg.motionConfidence;
+	ds >> msg.motionConfidence;    
 
 	m_parentTab->setLog(data);
 }

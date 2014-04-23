@@ -379,23 +379,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="162"/>
+        <location filename="MainWindow.ui" line="163"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="167"/>
+        <location filename="MainWindow.ui" line="168"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="172"/>
+        <location filename="MainWindow.ui" line="173"/>
         <source>Atlant setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="177"/>
+        <location filename="MainWindow.ui" line="178"/>
         <source>Lists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="183"/>
+        <source>SolverLogs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -407,17 +412,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="120"/>
+        <location filename="MainWindowController.cpp" line="129"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="120"/>
+        <location filename="MainWindowController.cpp" line="129"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="155"/>
+        <location filename="MainWindowController.cpp" line="164"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -574,6 +579,34 @@
     <message>
         <location filename="SignalDetectedDialog.cpp" line="13"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SolverResultWidget</name>
+    <message>
+        <location filename="Tabs/SolverResultWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
+        <source>Solver log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="36"/>
+        <source>AUTO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="39"/>
+        <source>MANUAL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="42"/>
+        <source>ALONE</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

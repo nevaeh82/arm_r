@@ -18,6 +18,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_controlPanelController = NULL;
 	m_rpcConfigClient = NULL;
 	m_rpcSettingsManager = NULL;
+	m_solverWidgetController = NULL;
 
 	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
 	rpcSettingsFile.append("./Tabs/RPC.ini");
@@ -113,6 +114,14 @@ void MainWindowController::init()
 
 
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
+
+
+	///
+	SolverResultWidget* solverWidget = new SolverResultWidget();
+	m_solverWidgetController = new SolverResultWidgetController(this);
+	m_solverWidgetController->appendView(solverWidget);
+	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
 }
 
 void MainWindowController::serverFailedToStartSlot()
@@ -159,6 +168,11 @@ void MainWindowController::slotShowLists()
 
 	listController->appendView(listForm);
 	listForm->show();
+}
+
+void MainWindowController::slotShowSolverLog()
+{
+	m_solverWidgetController->slotShowWidget();
 }
 
 void MainWindowController::rpcConnectionEstablished()

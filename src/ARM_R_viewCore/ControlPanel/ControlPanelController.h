@@ -22,6 +22,8 @@
 #include <QTimer>
 
 #define INTERVAL 20
+#define MINIMUM_FREQ 20
+#define MAXIMUM_FREQ 7000
 
 class ControlPanelController : public QObject, public IControlPanelController
 {
@@ -62,6 +64,7 @@ public:
 
 
 signals:
+	void signalSetComonFreq(int value);
 
 public slots:
 
@@ -79,6 +82,15 @@ private slots:
 
     void slotChangeFreq();
 	void slotCheckModeSetFreq();
+
+	void slotDown1MHz();
+	void slotDown10MHz();
+	void slotDown100MHz();
+	void slotUp1MHz();
+	void slotUp10MHz();
+	void slotUp100MHz();
+
+
 
 };
 

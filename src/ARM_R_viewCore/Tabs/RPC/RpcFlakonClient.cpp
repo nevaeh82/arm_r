@@ -27,6 +27,8 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_STATUS, this, SLOT(flakonStatusReceived(QByteArray)));
 
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT, this, SLOT(sloverResultReceived(QByteArray)));
+
 	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,bool)), RPC_METHOD_SS_CORRELATION);
 
 	log_debug("Start RpcPrmClient");
@@ -109,6 +111,13 @@ void RpcFlakonClient::flakonStatusReceived(QByteArray data)
 
 	foreach( IRpcListener *listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_FLAKON_STATUS, QVariant(state) );
+	}
+}
+
+void RpcFlakonClient::sloverResultReceived(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_BPLA_RESULT, data );
 	}
 }
 

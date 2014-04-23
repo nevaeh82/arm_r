@@ -31,6 +31,8 @@ protected slots:
 	void correlationReceived(QByteArray data);
 	void flakonStatusReceived(QByteArray data);
 
+	void sloverResultReceived(QByteArray data);
+
 signals:
 	void signalEnableCorrelation(int, bool);
 

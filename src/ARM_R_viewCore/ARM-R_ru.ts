@@ -524,24 +524,29 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="162"/>
+        <location filename="MainWindow.ui" line="163"/>
         <source>New</source>
         <translation>Новый пункт</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="167"/>
+        <location filename="MainWindow.ui" line="168"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="172"/>
+        <location filename="MainWindow.ui" line="173"/>
         <source>Atlant setup</source>
         <translation>Настройка Атланта</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="177"/>
+        <location filename="MainWindow.ui" line="178"/>
         <source>Lists</source>
         <translation>Списки</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="183"/>
+        <source>SolverLogs</source>
+        <translation>Лог решателя</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="14"/>
@@ -552,17 +557,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="120"/>
+        <location filename="MainWindowController.cpp" line="129"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="120"/>
+        <location filename="MainWindowController.cpp" line="129"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="155"/>
+        <location filename="MainWindowController.cpp" line="164"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -732,6 +737,34 @@
         <location filename="SignalDetectedDialog.cpp" line="13"/>
         <source>Cancel</source>
         <translation>Остановить</translation>
+    </message>
+</context>
+<context>
+    <name>SolverResultWidget</name>
+    <message>
+        <location filename="Tabs/SolverResultWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished">Списки</translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
+        <source>Solver log</source>
+        <translation>Лог решателя</translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="36"/>
+        <source>AUTO</source>
+        <translation>Авто</translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="39"/>
+        <source>MANUAL</source>
+        <translation>Ручное</translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidget.cpp" line="42"/>
+        <source>ALONE</source>
+        <translation>Один отсчет</translation>
     </message>
 </context>
 <context>

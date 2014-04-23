@@ -93,6 +93,7 @@ private:
 	/// Solver dll
 	void setSolverDataSize(int aSize);
 	void setSolverAnalyzeSize(int aSize);
+	QString getSolverResultToString(const SolveResult& result);
 
 public slots:
 	void initSolver();

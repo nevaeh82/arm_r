@@ -31,6 +31,7 @@ private:
 
 signals:
 	void signalShowLists();
+	void signalShowSolverLog();
 
 };
 

@@ -38,6 +38,15 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	connect(&m_timerCheck, SIGNAL(timeout()), this, SLOT(slotCheckModeSetFreq()));
 
+	connect(m_view, SIGNAL(signalDown1Mhz()), this, SLOT(slotDown1MHz()));
+	connect(m_view, SIGNAL(signalDown10Mhz()), this, SLOT(slotDown10MHz()));
+	connect(m_view, SIGNAL(signalDown100Mhz()), this, SLOT(slotDown100MHz()));
+	connect(m_view, SIGNAL(signalUp1Mhz()), this, SLOT(slotUp1MHz()));
+	connect(m_view, SIGNAL(signalUp10Mhz()), this, SLOT(slotUp10MHz()));
+	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
+
+	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
+
 }
 
 void ControlPanelController::setDbManager(IDbManager *dbManager)
@@ -81,7 +90,9 @@ void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 		return;
 	}
 
-	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, value);
+	m_currentFreq = value;
+
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 }
 
 void ControlPanelController::onBandWidthChangedSlot(int start, int end)
@@ -208,4 +219,94 @@ void ControlPanelController::slotCheckModeSetFreq()
 	m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), true);
 
 	m_itCheckMode++;
+}
+
+void ControlPanelController::slotDown1MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq > MINIMUM_FREQ)
+	{
+		m_currentFreq = m_currentFreq - 1;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::slotDown10MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq > MINIMUM_FREQ + 10)
+	{
+		m_currentFreq = m_currentFreq - 10;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::slotDown100MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq > MINIMUM_FREQ + 100)
+	{
+		m_currentFreq = m_currentFreq - 100;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::slotUp1MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq < MAXIMUM_FREQ)
+	{
+		m_currentFreq = m_currentFreq + 1;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::slotUp10MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq < MAXIMUM_FREQ + 10)
+	{
+		m_currentFreq = m_currentFreq + 10;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::slotUp100MHz()
+{
+	if (NULL == m_dbManager) {
+		return;
+	}
+
+	if(m_currentFreq < MAXIMUM_FREQ + 100)
+	{
+		m_currentFreq = m_currentFreq + 100;
+	}
+	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+	emit signalSetComonFreq(m_currentFreq);
 }

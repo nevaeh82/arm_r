@@ -59,7 +59,9 @@ SOURCES += \
     SignalDetectedDialog.cpp \
     Tabs/RPC/RpcFlakonClientWrapper.cpp \
     DBStation/StationHelper.cpp \
-    DBStation/StationsDataTableModel.cpp
+    DBStation/StationsDataTableModel.cpp \
+    Tabs/SolverResultWidget.cpp \
+    Tabs/SolverResultWidgetController.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -131,7 +133,9 @@ HEADERS += \
     Tabs/RPC/RpcFlakonClientWrapper.h \
     DBStation/StationHelper.h \
     DBStation/IDBStationListener.h \
-    DBStation/StationsDataTableModel.h
+    DBStation/StationsDataTableModel.h \
+    Tabs/SolverResultWidget.h \
+    Tabs/SolverResultWidgetController.h
 
 FORMS += \
 	ControlPanel.ui \
@@ -146,7 +150,8 @@ FORMS += \
 	DBStation/ListsDialog.ui \
 	Prm300ControlWidget.ui \
     ControlPanel/ListWhiteDialog.ui \
-    SignalDetectedDialog.ui
+    SignalDetectedDialog.ui \
+    Tabs/SolverResultWidget.ui
 
 
 RESOURCES += \

@@ -72,7 +72,11 @@ void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
     {
         convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(i), lDataOfPoints.aHeight.at(i), aTempX, aTempY, aTempZ);
         countDistanceOfPoints(aX, aY, aZ, aTempX, aTempY, aTempZ, aTempDistance);
-        aTempDistance=aTempDistance+aWire.at(i);
+		if (i==5)
+		{
+			aTempDistance=retransmissionSaberio();
+		}
+		aTempDistance=aTempDistance+aWire.at(i);
         lDataOfPoints.aDistance.replace(i, -aTempDistance);
     }
 }

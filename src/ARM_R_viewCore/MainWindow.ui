@@ -149,6 +149,7 @@
     </property>
     <addaction name="actionAtlantSetup"/>
     <addaction name="actionLists"/>
+    <addaction name="actionSolverLogs"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
@@ -175,6 +176,11 @@
   <action name="actionLists">
    <property name="text">
     <string>Lists</string>
+   </property>
+  </action>
+  <action name="actionSolverLogs">
+   <property name="text">
+    <string>SolverLogs</string>
    </property>
   </action>
  </widget>

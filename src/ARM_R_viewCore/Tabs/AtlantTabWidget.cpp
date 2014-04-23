@@ -25,36 +25,52 @@ void AtlantTabWidget::setLog(QByteArray data)
 	QDataStream ds(&data, QIODevice::ReadWrite);
 	int source_id;
 	int request_id;
+    quint64 dateTime;
+    QString post;
+    double postLatitude;     //GPS Geo Coords
+    double postLongitude;    //GPS Geo Coords
+    double postHeight;       //meters
+
 	double freq;
 	double width;
 	double direction;
 	double angle;
 	double level;
 	double quality;
+    int motionType;
+    double motionConfidence;
+
 	ds >> source_id;
 	ds >> request_id;
+    ds >> dateTime;
+    ds >> post;
+    ds >> postLatitude;
+    ds >> postLongitude;
+    ds >> postHeight;
 	ds >> freq;
 	ds >> width;
 	ds >> direction;
 	ds >> angle;
 	ds >> level;
 	ds >> quality;
+    ds >> motionType;
+    ds >> motionConfidence;
 
 	QString str;
 	str = QString::number(source_id);
-	str.append(" ");
+    str.append("   ");
 	str.append(QString::number(request_id));
-	str.append(" ");
-	str.append(QString::number(freq));
-	str.append(" ");
-	str.append(QString::number(width));
-	str.append(" ");
+    str.append("   ");
+    str.append(QString::number(freq/1000000));
+    str.append("   ");
+    str.append(QString::number(width/1000000));
+    str.append("   ");
 	str.append(QString::number(direction));
-	str.append(" ");
+    str.append("   ");
 	str.append(QString::number(angle));
-	str.append(" ");
+    str.append("   ");
 	str.append(QString::number(level));
-	str.append(" ");
+    str.append("   ");
 	str.append(QString::number(quality));
 	emit signalAddLog(str);
 
