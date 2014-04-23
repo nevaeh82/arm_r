@@ -20,7 +20,7 @@ private:
 	Ui::SolverResultWidget *ui;
 
 public:
-	void appendSolverResult(QByteArray& data);
+	void appendSolverResult(const QString& log);
 };
 
 #endif // SOLVERRESULTWIDGET_H

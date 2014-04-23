@@ -129,7 +129,7 @@
 <context>
     <name>ControlPanelController</name>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="197"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="208"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,7 +182,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="ControlPanel.ui" line="197"/>
+        <source>&lt;&lt;&lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="ControlPanel.ui" line="210"/>
+        <source>&lt;&lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="229"/>
+        <source>&lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="261"/>
+        <source>&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="274"/>
+        <source>&gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="287"/>
+        <source>&gt;&gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="294"/>
         <source>Set common frequency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -594,19 +624,72 @@
         <source>Solver log</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>SolverResultWidgetController</name>
     <message>
-        <location filename="Tabs/SolverResultWidget.cpp" line="36"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="55"/>
         <source>AUTO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidget.cpp" line="39"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="58"/>
         <source>MANUAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidget.cpp" line="42"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="61"/>
         <source>ALONE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="87"/>
+        <source>Successed solved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="90"/>
+        <source>Some errors during solve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="93"/>
+        <source>Not enough data for solve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="96"/>
+        <source>There is no solution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="99"/>
+        <source>No solve cause 2 trajectory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="102"/>
+        <source>Not enough distances for solve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="105"/>
+        <source>There is not enough accuracy for solve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="108"/>
+        <source>There is not enough input accuracy for solve</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="111"/>
+        <source>Solves data is out of range of resposible zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="114"/>
+        <source>Coords is out of catching strobe</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

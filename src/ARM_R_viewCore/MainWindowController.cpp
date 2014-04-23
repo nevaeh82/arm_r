@@ -120,7 +120,7 @@ void MainWindowController::init()
 	SolverResultWidget* solverWidget = new SolverResultWidget();
 	m_solverWidgetController = new SolverResultWidgetController(this);
 	m_solverWidgetController->appendView(solverWidget);
-	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
 }
 
@@ -184,6 +184,9 @@ void MainWindowController::rpcConnectionEstablished()
 
 void MainWindowController::startTabManger()
 {
+	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
+	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+
 	m_view->getStackedWidget()->setCurrentIndex(0);
 	m_tabManager->start();
 }
