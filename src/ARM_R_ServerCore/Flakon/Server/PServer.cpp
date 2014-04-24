@@ -72,9 +72,28 @@ int PServer::get_type()
     return _type;
 }
 
-void PServer::send_data(QSharedPointer<IMessageOld> msg_ptr)
+//void PServer::send_data(QSharedPointer<IMessageOld> msg_ptr)
+//{
+//	emit signalGetData(msg_ptr);
+//}
+
+void PServer::onMessageReceived(const quint32 type, const QString &deviceType, const MessageSP argument)
 {
-    emit signalGetData(msg_ptr);
+	QString messageType = argument->type();
+	QVariant data = QVariant( argument->data() );
+
+	switch(type) {
+		case FLAKON_TCP_DEVICE:
+			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO)
+			{
+				QByteArray dataSolver = data.toByteArray();
+				_slotGetData(dataSolver);
+			}
+			break;
+		default:
+			break;
+	}
+
 }
 
 void PServer::slotNewSocket()
@@ -113,13 +132,13 @@ void PServer::slotReadClient()
 {
 }
 
-void PServer::_slotGetData(rpc_flakon_msg msg_ptr)
+void PServer::_slotGetData(QByteArray& data)
 {
-    int type1 = 1;
-    int id = 0;
-    IMessageOld *f = (msg_ptr.data());
-    QByteArray* dd = f->get(id, type1);
-    QDataStream ds(*dd);
+//    int type1 = 1;
+//    int id = 0;
+//    IMessageOld *f = (msg_ptr.data());
+//    QByteArray* dd = f->get(id, type1);
+	QDataStream ds(data);
 
     QTime tt;
     ds >> tt;

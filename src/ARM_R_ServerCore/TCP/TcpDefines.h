@@ -49,6 +49,7 @@
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER			"tcpFlakonCoordinatesCounterRequestSetSolver"
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR		"tcpFlakonCoordinatesCounterRequestSetSolverClear"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT				"tcpFlakonCoordinatesCounterAnswerBPLAResult"
+
 /// Atlant device external
 #define Atlant_Direction_MsgA	"DIRECTION_ANSWER_MESSAGE"
 #define Atlant_Position_MsgA	"POSITION_ANSWER_MESSAGE"

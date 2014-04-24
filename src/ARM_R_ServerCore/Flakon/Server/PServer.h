@@ -23,19 +23,23 @@
 
 #include <stdlib.h>
 
-#include "../../Common/IClient.h"
+#include <TcpDevicesDefines.h>
+
+#include "Interfaces/Tcp/ITcpListener.h"
 
 #include "../../Atlant/EMS/StormEmsClient.h"
 
-#include "../../TCP/ParserAtlant.h"
+#include "TCP/TcpDefines.h"
+
+//#include "../../TCP/ParserAtlant.h"
 
 /*!
     Класс для отправки текста и QVector<QPointF> TCP.
 */
 
-typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
+//typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
 
-class PServer : public QObject, public IClient
+class PServer : public QObject,  public ITcpListener
 {
     Q_OBJECT
 public:
@@ -46,10 +50,13 @@ public:
     virtual int get_id();
     virtual void set_type(int type);
     virtual int get_type();
-    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
+//    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
+
+	virtual void onMessageReceived(const quint32 type, const QString& deviceType, const MessageSP argument);
+
 
 signals:
-    void signalGetData(rpc_flakon_msg nsg);
+//    void signalGetData(rpc_flakon_msg nsg);
 
     void finished();
     
@@ -63,7 +70,7 @@ private slots:
 
     void slotReadClient();
 
-    void _slotGetData(rpc_flakon_msg msg_ptr);
+	void _slotGetData(QByteArray& data);
 
 private:
     QTcpServer *tcpServer;

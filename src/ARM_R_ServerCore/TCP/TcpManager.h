@@ -20,6 +20,8 @@
 
 #include "Flakon/CoordinateCounter.h"
 
+#include "Flakon/Server/PServer.h"
+
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
 {
@@ -41,6 +43,7 @@ private:
 	 **/
 
 	CoordinateCounter* m_coordinatesCounter;
+	PServer*		   m_pServer;
 
 public:
 	explicit TcpManager(QObject* parent = NULL);

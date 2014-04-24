@@ -22,6 +22,21 @@ TcpManager::TcpManager(QObject* parent)
 	m_coordinatesCounter->moveToThread(coordinateCounterThread);
 	coordinateCounterThread->start();
 
+
+	m_pServer = new PServer(10240, this);
+	m_coordinatesCounter->registerReceiver(m_pServer);
+
+	QThread* pServerThread = new QThread;
+	connect(pServerThread, SIGNAL(started()), m_pServer, SLOT(startServer()));
+	connect(m_pServer, SIGNAL(signalFinished()), pServerThread, SLOT(quit()));
+	connect(this, SIGNAL(threadTerminateSignal()), pServerThread, SLOT(quit()));
+	connect(this, SIGNAL(threadTerminateSignal()), m_pServer, SLOT(deleteLater()));
+	connect(pServerThread, SIGNAL(finished()), pServerThread, SLOT(deleteLater()));
+	m_pServer->moveToThread(pServerThread);
+	pServerThread->start();
+
+
+
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
 
 	//Uncomment this if you want simulate sending bpla points from R to OD through RPC

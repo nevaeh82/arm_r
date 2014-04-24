@@ -36,6 +36,7 @@ SOURCES += \
 	Flakon/CoordinateCounter.cpp \
 	RPC/RpcConfigReader.cpp \
 	RPC/RpcServer.cpp \
+    Flakon/Server/PServer.cpp
 
 HEADERS += \
 	ARM_R_Srv.h \
@@ -72,3 +73,4 @@ HEADERS += \
 	RPC/RpcConfigReader.h \
 	RPC/RpcServer.h \
 	RPC/Interfaces/IRpcConfigReader.h \
+    Flakon/Server/PServer.h
