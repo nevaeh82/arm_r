@@ -12,7 +12,13 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
 
 	m_rpcServer = new RpcServer;
-	m_rpcServer->start(24500, QHostAddress("127.0.0.1"));
+
+	IRpcSettingsManager* rpcSettingsManager = RpcSettingsManager::instance();
+	rpcSettingsManager->setIniFile("./Rpc/RpcServer.ini");
+
+	QString host = rpcSettingsManager->getRpcHost();
+	quint16 port = rpcSettingsManager->getRpcPort().toUShort();
+	m_rpcServer->start(port, QHostAddress(host));
 
 	m_tcpServer = new TcpServerController(this);
 	m_tcpServer->createTcpServer();

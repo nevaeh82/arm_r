@@ -10,11 +10,11 @@
 
 #include <Interfaces/IRpcListener.h>
 #include <Interfaces/IRpcControllerBase.h>
+#include <SettingsManager/RpcSettingsManager.h>
 
 #include "Info/StationConfiguration.h"
 #include "Info/AtlantConfiguraton.h"
 #include "Info/DBConnectionParameters.h"
-#include "Rpc/RpcSettingsManager.h"
 #include "Rpc/RpcDefines.h"
 
 #include "Interfaces/IRpcConfigReader.h"

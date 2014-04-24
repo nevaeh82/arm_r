@@ -22,5 +22,7 @@ prebuild::
 	$(cp) -ud TCP/coders.ini $(DESTDIR)/TCP
 	$(mkdir) $(DESTDIR)/RDP
 	$(cp) -ud RDP/cell.net.rdp $(DESTDIR)/RDP
+	$(mkdir) $(DESTDIR)/Rpc
+	$(cp) -ud Rpc/*.ini $(DESTDIR)/Rpc
               	
 	$(call begin-build, Prebuild OK )

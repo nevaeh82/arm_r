@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QThread>
 
+#include <SettingsManager/RpcSettingsManager.h>
+
 #include "RPC/RPCServer.h"
 #include "TCP/TcpManager.h"
 #include "TCP/TcpSettingsManager.h"

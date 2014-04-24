@@ -6,6 +6,7 @@
 #include <QEventLoop>
 #include <QTimer>
 
+#include <SettingsManager/RpcSettingsManager.h>
 
 
 #include "Interfaces/IController.h"
@@ -23,7 +24,6 @@
 #include "DBStation/ListsDialogController.h"
 
 #include "Tabs/RPC/RpcConfigClient.h"
-#include "Rpc/RpcSettingsManager.h"
 
 #include <Sleeper.h>
 
