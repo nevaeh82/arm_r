@@ -178,7 +178,7 @@ void ListsDialogController::slotReport(int type)
         j += 1;
         cell = table->querySubObject("Cell(Row, Column)" , j,1);
         CellRange = cell->querySubObject("Range()");
-        CellRange->dynamicCall("InsertAfter(Text)", QString::number(i));
+		CellRange->dynamicCall("InsertAfter(Text)", QString::number(i + 1));
 
         cell = table->querySubObject("Cell(Row, Column)" , j,2);
         CellRange = cell->querySubObject("Range()");
