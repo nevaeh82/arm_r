@@ -620,6 +620,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="Tabs/SolverResultWidget.ui" line="23"/>
+        <source>Autoscroll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
         <source>Solver log</source>
         <translation type="unfinished"></translation>

@@ -14,8 +14,18 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QTextEdit" name="teLogResults"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="checkBoxAutoScroll">
+     <property name="text">
+      <string>Autoscroll</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QByteArray>
+#include <QScrollBar>
 
 namespace Ui {
 class SolverResultWidget;
