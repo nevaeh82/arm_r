@@ -25,7 +25,7 @@ MessageSP TcpPRM300Coder::encode(const QByteArray& data)
 	QDataStream inputDataSream(&inputData, QIODevice::ReadOnly);
 	inputDataSream.setVersion(QDataStream::Qt_4_7);
 	quint8 aFirstByte, aLastByte, aCrc;
-	quint8 aSizeAll;
+	quint8 aSizeAll = data.size();
 
 	if (!m_needBytes) {
 		bool found = findPreamble();

@@ -64,7 +64,7 @@ void SolverResultWidgetController::addResultToLog(const QByteArray& inData)
 			break;
 	}
 
-	QString log = source + "   " + getSolverResultToString(result) + "\n";
+	QString log = source + " - " + getSolverResultToString(result);
 
 	m_view->appendSolverResult(log);
 
