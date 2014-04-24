@@ -777,6 +777,11 @@
         <translation>Списки</translation>
     </message>
     <message>
+        <location filename="Tabs/SolverResultWidget.ui" line="23"/>
+        <source>Autoscroll</source>
+        <translation>Автопрокрутка</translation>
+    </message>
+    <message>
         <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
         <source>Solver log</source>
         <translation>Лог решателя</translation>

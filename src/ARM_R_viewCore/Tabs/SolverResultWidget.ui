@@ -20,7 +20,10 @@
    <item row="0" column="0">
     <widget class="QCheckBox" name="checkBoxAutoScroll">
      <property name="text">
-      <string>Автопрокрутка</string>
+      <string>Autoscroll</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
