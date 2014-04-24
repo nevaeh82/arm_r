@@ -210,10 +210,9 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
 	int sourceType = 0;
-	QString resultString = getSolverResultToString(result);
 
 	dataResultStream << sourceType;
-	dataResultStream << resultString;
+	dataResultStream << (int)result;;
 
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
 
@@ -262,10 +261,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	int sourceType = 1;
 
-	QString resultString = getSolverResultToString(result);
-
 	dataResultStream << sourceType;
-	dataResultStream << resultString;
+	dataResultStream << (int)result;
 
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
 
@@ -313,10 +310,8 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 
 	int sourceType = 2;
 
-	//QString resultString = getSolverResultToString(result);
 
 	dataResultStream << sourceType;
-	//dataResultStream << resultString;
 	dataResultStream << (int)result;
 
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
@@ -359,47 +354,6 @@ void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 	}
 }
 
-QString CoordinateCounter::getSolverResultToString(const SolveResult &result)
-{
-	QString resultString;
-	switch(result)
-	{
-		case SOLVED:
-			resultString = tr("Successed solved");
-			break;
-		case ERROR_OCCURED:
-			resultString = tr("Some errors during solve");
-			break;
-		case NOT_ENOUGH_DATA:
-			resultString = tr("Not enough data for solve");
-			break;
-		case THERE_IS_NO_SOLUTION:
-			resultString = tr("There is no solution");
-			break;
-		case CANT_DETERMINE_REAL_TRAJECTORY:
-			resultString = tr("No solve cause 2 trajectory");
-			break;
-		case TOO_FEW_RANGES:
-			resultString = tr("Not enough distances for solve");
-			break;
-		case TOO_LOW_SOLUTION_ACCURACY:
-			resultString = tr("There is not enough accuracy for solve");
-			break;
-		case TOO_LOW_DATA_ACCURACY:
-			resultString = tr("There is not enough input accuracy for solve");
-			break;
-		case COORDS_DOES_NOT_HIT_IN_AREA:
-			resultString = tr("Solves data is out of range of resposible zone");
-			break;
-		case COORDS_DOES_NOT_HIT_IN_STROB:
-			resultString = tr("Coords is out of catching strobe");
-			break;
-		default:
-			break;
-	}
-	return resultString;
-
-}
 
 void CoordinateCounter::initSolver()
 {

@@ -63,12 +63,8 @@ public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);
 	virtual ~CoordinateCounter();
 
-	// ITcpListener interface
-public:
 	virtual void onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument);
 
-	/// ISolverListener
-public:
 	void onSendDataFromRadioLocation(const SolveResult& result, const DataFromRadioLocation& allData);
 	void onSendDataFromRadioLocationManualHeigh(const SolveResult& result, const DataFromRadioLocation& allData);
 	void onSendOneDataFromRadioLocation(const SolveResult& result, const OneDataFromRadioLocation& oneData_1, const OneDataFromRadioLocation& oneData_2);
@@ -93,7 +89,6 @@ private:
 	/// Solver dll
 	void setSolverDataSize(int aSize);
 	void setSolverAnalyzeSize(int aSize);
-	QString getSolverResultToString(const SolveResult& result);
 
 public slots:
 	void initSolver();
