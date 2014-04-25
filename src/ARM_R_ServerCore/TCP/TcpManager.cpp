@@ -23,7 +23,7 @@ TcpManager::TcpManager(QObject* parent)
 	coordinateCounterThread->start();
 
 
-	m_pServer = new PServer(10240, this);
+	m_pServer = new PServer(10240);
 	m_coordinatesCounter->registerReceiver(m_pServer);
 
 	QThread* pServerThread = new QThread;

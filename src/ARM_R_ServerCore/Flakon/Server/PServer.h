@@ -44,7 +44,7 @@ class PServer : public QObject,  public ITcpListener
     Q_OBJECT
 public:
     PServer(int nPort, QObject* parent = 0);
-    ~PServer();
+	virtual ~PServer();
 
     virtual void set_id(int id);
     virtual int get_id();
