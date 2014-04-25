@@ -1,3 +1,4 @@
+#include "ISolver.h"
 #include "SolverResultWidgetController.h"
 
 SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
@@ -51,14 +52,17 @@ void SolverResultWidgetController::addResultToLog(const QByteArray& inData)
 
 	switch(sourceType)
 	{
-		case 0:
+		case AUTO_HEIGH:
 			source = tr("AUTO");
 			break;
-		case 1:
+		case MANUAL_HEIGH:
 			source = tr("MANUAL");
 			break;
-		case 2:
+		case ONE_DATA:
 			source = tr("ALONE");
+			break;
+		case HYPERBOLES:
+			source = tr("HYPERBOLES");
 			break;
 		default:
 			break;
