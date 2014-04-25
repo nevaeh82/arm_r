@@ -2,6 +2,7 @@
 #define SOLVERRESULTWIDGET_H
 
 #include <QWidget>
+#include <QDialog>
 #include <QByteArray>
 #include <QScrollBar>
 
@@ -9,7 +10,7 @@ namespace Ui {
 class SolverResultWidget;
 }
 
-class SolverResultWidget : public QWidget
+class SolverResultWidget : public QDialog
 {
 	Q_OBJECT
 

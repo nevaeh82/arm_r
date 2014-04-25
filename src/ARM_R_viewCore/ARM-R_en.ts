@@ -385,6 +385,18 @@
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="63"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="64"/>
+        <source>Ms.Office package is not installed</source>
+        <oldsource>Could not attatch to Ms.Word object.
+ Ms.Office package is not installed</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -620,7 +632,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidget.ui" line="23"/>
+        <location filename="Tabs/SolverResultWidget.ui" line="27"/>
         <source>Autoscroll</source>
         <translation type="unfinished"></translation>
     </message>

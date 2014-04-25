@@ -2,7 +2,7 @@
 #include "ui_SolverResultWidget.h"
 
 SolverResultWidget::SolverResultWidget(QWidget *parent) :
-	QWidget(parent),
+	QDialog(parent),
 	ui(new Ui::SolverResultWidget)
 {
 	ui->setupUi(this);
