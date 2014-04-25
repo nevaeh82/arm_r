@@ -54,10 +54,10 @@ private:
 		int alt;
 	};
 
-    QFile* fi;
-    QFile* fi1;
-    QFile* fi2;
-    QFile* fi3;
+	QFile* fi;
+	QFile* fi1;
+	QFile* fi2;
+	QFile* fi3;
 
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);

@@ -802,67 +802,72 @@
 <context>
     <name>SolverResultWidgetController</name>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="55"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="56"/>
         <source>AUTO</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="58"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="59"/>
         <source>MANUAL</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="61"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="62"/>
         <source>ALONE</source>
         <translation>Один отсчет</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="87"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="65"/>
+        <source>HYPERBOLES</source>
+        <translation>Гиперболы</translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="91"/>
         <source>Successed solved</source>
         <translation>Найдено решение</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="90"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="94"/>
         <source>Some errors during solve</source>
         <translation>В ходе решения возникли ошибки</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="93"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="97"/>
         <source>Not enough data for solve</source>
         <translation>Недостаточно данных для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="96"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="100"/>
         <source>There is no solution</source>
         <translation>Решение не найдено</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="99"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="103"/>
         <source>No solve cause 2 trajectory</source>
         <translation>Решение не найдено из-за наличия 2 траекторий</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="102"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="106"/>
         <source>Not enough distances for solve</source>
         <translation>Недостаточные дистанции для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="105"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="109"/>
         <source>There is not enough accuracy for solve</source>
         <translation>Недостаточная точность для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="108"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="112"/>
         <source>There is not enough input accuracy for solve</source>
         <translation>Низкая точность получаемого решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="111"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="115"/>
         <source>Solves data is out of range of resposible zone</source>
         <translation>Расчинтанные данные не попадают в зону ответственности</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="114"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="118"/>
         <source>Coords is out of catching strobe</source>
         <translation>Расчитанные координаты не попадают в строб захвата</translation>
     </message>

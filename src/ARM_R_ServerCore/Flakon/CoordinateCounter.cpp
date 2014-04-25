@@ -6,26 +6,26 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	QObject(parent)
 {
 
-    fi = new QFile("logDistances.log");
-    if(!fi->open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        log_debug("error");
-    }
-    fi1 = new QFile("logTrajMan.log");
-    if(!fi1->open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        log_debug("error");
-    }
-    fi2 = new QFile("logTrajAuto.log");
-    if(!fi2->open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        log_debug("error");
-    }
-    fi3 = new QFile("logTrajOne.log");
-    if(!fi3->open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        log_debug("error");
-    }
+	fi = new QFile("logDistances.log");
+	if(!fi->open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		log_debug("error");
+	}
+	fi1 = new QFile("logTrajMan.log");
+	if(!fi1->open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		log_debug("error");
+	}
+	fi2 = new QFile("logTrajAuto.log");
+	if(!fi2->open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		log_debug("error");
+	}
+	fi3 = new QFile("logTrajOne.log");
+	if(!fi3->open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		log_debug("error");
+	}
 
 	m_solver = NULL;
 
@@ -51,14 +51,16 @@ CoordinateCounter::~CoordinateCounter()
 	if(m_solver != NULL)
 		delete m_solver;
 	emit signalFinished();
-    fi->close();
-    fi1->close();
-    fi2->close();
-    fi3->close();
+	fi->close();
+	fi1->close();
+	fi2->close();
+	fi3->close();
 }
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
 {
+	Q_UNUSED( device );
+
 	if (deviceType != FLAKON_TCP_DEVICE) {
 		return;
 	}
@@ -102,10 +104,10 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
-            QTextStream outstream(fi);
-            outstream << dataToFile;
+			QTextStream outstream(fi);
+			outstream << dataToFile;
 //            fi->write(dataToFile.toAscii());
-            fi->flush();
+			fi->flush();
 		}
 	}
 
@@ -180,36 +182,38 @@ void CoordinateCounter::setCenterFrequency(const double& frequency)
 
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
 {
-	if(aData.timeHMSMs.size()==0) {
+	if( aData.timeHMSMs.size() == 0 ) {
 		return;
 	}
 
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
-	QByteArray dataToSend;
-	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+	if( result == SOLVED ) {
+		QByteArray dataToSend;
+		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
 
-	int state = 1;
+		int state = 1;
 
-	dataStream << aData.timeHMSMs.at(aLastItem);
-	dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
-	dataStream << aData.latLonStdDev.at(aLastItem);
-	dataStream << aData.coordLatLon;
-	dataStream << aData.airspeed.at(aLastItem);
-	dataStream << aData.heigh.at(aLastItem);
-	dataStream << aData.relativeBearing.at(aLastItem);
-	dataStream << m_centerFrequency;
+		dataStream << aData.timeHMSMs.at(aLastItem);
+		dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
+		dataStream << aData.latLonStdDev.at(aLastItem);
+		dataStream << aData.coordLatLon;
+		dataStream << aData.airspeed.at(aLastItem);
+		dataStream << aData.heigh.at(aLastItem);
+		dataStream << aData.relativeBearing.at(aLastItem);
+		dataStream << m_centerFrequency;
 
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
+		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		}
 	}
 
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = 0;
+	int sourceType = AUTO_HEIGH;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;;
@@ -222,10 +226,10 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-    QTextStream outstream(fi2);
-    outstream << dataToFile;
+	QTextStream outstream(fi2);
+	outstream << dataToFile;
 //            fi->write(dataToFile.toAscii());
-    fi2->flush();
+	fi2->flush();
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -236,30 +240,32 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
-	QByteArray dataToSend;
-	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+	if( result == SOLVED ) {
+		QByteArray dataToSend;
+		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
 
-	int state = 1;
+		int state = 1;
 
-	dataStream << aData.timeHMSMs.at(aLastItem);
-	dataStream << state;									/*aData.StateMassive_.at(aLastItem)*/
-	dataStream << aData.latLonStdDev.at(aLastItem);
-	dataStream << aData.coordLatLon;
-	dataStream << aData.airspeed.at(aLastItem);
-	dataStream << m_alt;									//aData.heigh.at(aLastItem);
-	dataStream << aData.relativeBearing.at(aLastItem);
-	dataStream << m_centerFrequency;
+		dataStream << aData.timeHMSMs.at(aLastItem);
+		dataStream << state;									/*aData.StateMassive_.at(aLastItem)*/
+		dataStream << aData.latLonStdDev.at(aLastItem);
+		dataStream << aData.coordLatLon;
+		dataStream << aData.airspeed.at(aLastItem);
+		dataStream << m_alt;									//aData.heigh.at(aLastItem);
+		dataStream << aData.relativeBearing.at(aLastItem);
+		dataStream << m_centerFrequency;
 
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
+		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		}
 	}
 
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = 1;
+	int sourceType = MANUAL_HEIGH;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;
@@ -272,44 +278,45 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-    QTextStream outstream(fi1);
-    outstream << dataToFile;
+	QTextStream outstream(fi1);
+	outstream << dataToFile;
 //            fi->write(dataToFile.toAscii());
-    fi1->flush();
+	fi1->flush();
 }
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
 {
-	QByteArray ba;
-	QDataStream ds(&ba, QIODevice::ReadWrite);
+	if( result == SOLVED ) {
+		QByteArray ba;
+		QDataStream ds(&ba, QIODevice::ReadWrite);
 
-	double alt = 100;
-	double speed = 0;
-	double course = 0;
-	int state = 1;
+		double alt = 100;
+		double speed = 0;
+		double course = 0;
+		int state = 1;
 
-	QVector<QPointF>vec;
-	vec.append(aData_1.coordLatLon);
-	ds << aData_1.timeHMSMs;
-	ds << state/*aData.StateMassive_.at(aLastItem)*/;
-	ds << aData_1.latLonStdDev;
-	ds << vec;
-	ds << speed;
-	ds << alt;
-	ds << course;
-	ds << m_centerFrequency;
+		QVector<QPointF>vec;
+		vec.append(aData_1.coordLatLon);
+		ds << aData_1.timeHMSMs;
+		ds << state/*aData.StateMassive_.at(aLastItem)*/;
+		ds << aData_1.latLonStdDev;
+		ds << vec;
+		ds << speed;
+		ds << alt;
+		ds << course;
+		ds << m_centerFrequency;
 
-//	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
+	//	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
 
-//	foreach (ITcpListener* receiver, m_receiversList) {
-//		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
-//	}
+	//	foreach (ITcpListener* receiver, m_receiversList) {
+	//		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+	//	}
+	}
 
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = 2;
-
+	int sourceType = ONE_DATA;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;
@@ -323,37 +330,50 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 
 	QString dataToFile = aData_1.timeHMSMs.toString("hh:mm:ss:zzz") + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
 
-    QTextStream outstream(fi3);
-    outstream << dataToFile;
+	QTextStream outstream(fi3);
+	outstream << dataToFile;
 //            fi->write(dataToFile.toAscii());
-    fi3->flush();
+	fi3->flush();
 }
 
 void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
 {
-	Q_UNUSED(result) //? Dont need?
+	if( result == SOLVED ) {
+		QByteArray dataToSend;
+		QVector<QPointF> tmpHyperb;
 
-	QByteArray dataToSend;
-	QVector<QPointF> tmpHyperb;
+		foreach (tmpHyperb, hyperb.hyperboles_list) {
+			QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+			dataStream << tmpHyperb;
+			dataStream << (double)m_centerFrequency;
 
-	foreach (tmpHyperb, hyperb.hyperboles_list) {
-		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-		dataStream << tmpHyperb;
-		dataStream << (double)m_centerFrequency;
+			MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA, dataToSend));
+			foreach (ITcpListener* receiver, m_receiversList) {
+				receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+			}
 
-		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA, dataToSend));
-		foreach (ITcpListener* receiver, m_receiversList) {
-			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+			dataToSend.clear();
 		}
-
-		dataToSend.clear();
 	}
 
-	log_debug("Hyperboles");
+	QByteArray dataResult;
+	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
+
+	int sourceType = HYPERBOLES;
+
+	dataResultStream << sourceType;
+	dataResultStream << (int)result;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
 }
 
 void CoordinateCounter::slotErrorOccured(const ErrorType &error_type, const QString &str)
 {
+	Q_UNUSED( str );
 	log_debug(QString("ERROR = ").arg(error_type));
 }
 
