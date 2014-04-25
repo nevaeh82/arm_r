@@ -500,6 +500,18 @@
         <translation>МДВ</translation>
     </message>
     <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="63"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialogController.cpp" line="64"/>
+        <source>Ms.Office package is not installed</source>
+        <oldsource>Could not attatch to Ms.Word object.
+ Ms.Office package is not installed</oldsource>
+        <translation>Не установлен пакет Microsoft Word</translation>
+    </message>
+    <message>
         <source>DataBase is not opened!</source>
         <translation type="obsolete">Не удалось открыть базу данных!</translation>
     </message>
@@ -777,7 +789,7 @@
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidget.ui" line="23"/>
+        <location filename="Tabs/SolverResultWidget.ui" line="27"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>

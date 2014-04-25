@@ -117,7 +117,7 @@ void MainWindowController::init()
 
 
 	///
-	SolverResultWidget* solverWidget = new SolverResultWidget();
+	SolverResultWidget* solverWidget = new SolverResultWidget(m_view);
 	m_solverWidgetController = new SolverResultWidgetController(this);
 	m_solverWidgetController->appendView(solverWidget);
 
