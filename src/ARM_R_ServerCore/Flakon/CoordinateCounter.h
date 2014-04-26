@@ -9,7 +9,7 @@
 #include <QPointF>
 #include <QTime>
 #include <QMetaType>
-
+#include <QThread>
 #include <QFile>
 
 #include "Interfaces/ICoordinateCounter.h"

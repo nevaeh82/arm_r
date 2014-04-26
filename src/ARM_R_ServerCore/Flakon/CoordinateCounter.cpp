@@ -373,8 +373,10 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 
 void CoordinateCounter::slotErrorOccured(const ErrorType &error_type, const QString &str)
 {
+	log_debug(QString("ERROR = %1").arg(error_type));
+
 	Q_UNUSED( str );
-	log_debug(QString("ERROR = ").arg(error_type));
+	log_debug(QString("ERROR = %1").arg(error_type));
 }
 
 

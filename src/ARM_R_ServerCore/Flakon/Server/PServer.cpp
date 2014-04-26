@@ -1,5 +1,7 @@
 #include "PServer.h"
 
+#include <Logger.h>
+
 PServer::PServer(int nPort, QObject* parent) 
 	: QObject(parent)
 	, tcpServer(0)
@@ -86,6 +88,8 @@ void PServer::onMessageReceived(const quint32 type, const QString &deviceType, c
 		case FLAKON_TCP_DEVICE:
 			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO)
 			{
+//				log_info(QString("This thread = 0x%1").arg( (int)QThread::currentThread(), 16 ));
+
 				QByteArray dataSolver = data.toByteArray();
 				_slotGetData(dataSolver);
 			}

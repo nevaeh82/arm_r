@@ -171,7 +171,7 @@ MessageSP TcpFlakonCoder::messageFromPreparedData()
 			break;
 		case FlakonExternal::TypeStringAnswer:
 			stream >> stringFromServer;
-			log_info(QString("Flakon: %1").arg(stringFromServer));
+//			log_info(QString("Flakon: %1").arg(stringFromServer));
 			break;
 		case FlakonExternal::TypeCorrelationReceivedAnswer:
 			stream >> id1;
