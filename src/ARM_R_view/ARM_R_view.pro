@@ -25,7 +25,8 @@ DEFINES += _UNICODE
 applyReferences()
 
 win32{
-    HEADERS = version.h
-    RC_FILE = details_res.rc
+	HEADERS = version.h
+	RC_FILE = details_res.rc
+	LIBS += -lpsapi
 }
 
