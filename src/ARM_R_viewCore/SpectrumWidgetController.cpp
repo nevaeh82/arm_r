@@ -366,7 +366,11 @@ void SpectrumWidgetController::setPanorama(bool enabled)
 
 void SpectrumWidgetController::setSelection(double start, double end)
 {
-	m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+	double start_x, start_y, end_x, end_y;
+	m_graphicsWidget->GetCurrentViewport(start_x, start_y, end_x, end_y);
+	if( (start*TO_MHZ > start_x) && (end*TO_MHZ < end_x) ) {
+		m_graphicsWidget->SetSelection(start*TO_MHZ, 0, end*TO_MHZ, 0);
+	}
 }
 
 void SpectrumWidgetController::setDbManager(IDbManager *dbManager)

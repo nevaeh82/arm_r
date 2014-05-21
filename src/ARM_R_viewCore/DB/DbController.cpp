@@ -4,6 +4,9 @@
 
 #include <QtSql>
 
+#define PROPERTY_RANGE_MIN 0
+#define PROPERTY_RANGE_MAX 7020
+
 DbController::DbController(const QString& dbFile, QObject *parent) :
 	QObject(parent)
 {
@@ -220,7 +223,14 @@ bool DbController::setPropertyEditable(const uint propId, const bool isEditable)
 
 bool DbController::setPropertyValue(const uint propId, const QVariant propValue)
 {
-	return setPropertyParam(propId, "VALUE", propValue);
+	bool result;
+	double value = propValue.toDouble(&result);
+	if( result && ( PROPERTY_RANGE_MIN <= value ) && ( PROPERTY_RANGE_MAX >= value ) ) {
+		return setPropertyParam(propId, "VALUE", propValue);
+	}
+
+	//If property value if wrong
+	return false;
 }
 
 bool DbController::createConnection(const QString& dbFile)
