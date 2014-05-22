@@ -192,6 +192,10 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	m_isComplex = false;
 	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
+
+	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
+	setZeroFrequency(value.toDouble());
+
 	m_mux.unlock();
 
 }
@@ -337,10 +341,14 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	m_graphicsWidget->ClearAllDetectedAreas(1);
 	m_graphicsWidget->ClearAllDetectedAreas(2);
 
-	//	double cur_freq = m_tab->getCurrentFrequency();
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;
-	m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
+
+	//If not activated spectrum - laggy counting of zero frequency ???
+	if(m_graphicsWidget->isActivated()) {
+		m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
+	}
+
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
 	setDetectedAreas(2, list);
