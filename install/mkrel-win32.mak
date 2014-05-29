@@ -2,7 +2,7 @@ include makeimage-win32-common.mak
 
 .NOTPARALLEL:
 
-DEPLOY = *.exe *.dll *.conf *.ini
+DEPLOY = *.exe *.dll *.conf *.ini *.bat
 
 TmpRel = $(SolutionDir)/build/tmprel
 BinDir = $(SolutionDir)/build/bin/msvc
@@ -36,6 +36,7 @@ copy-bin:
 	$(cp) -rudf $(BinDir)/DBMySqlSources $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/RDP $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/Rpc $(TmpRel)/bin
+	$(cp) -rudf $(BinDir)/icons $(TmpRel)/bin
 
 
 	$(echo) VERSION = $(if $(PRODUCT_VERSION_REL),$(PRODUCT_VERSION_REL),$(PRODUCT_VERSION).0) > $(TmpRel)/bin/version.ini

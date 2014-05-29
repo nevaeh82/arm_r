@@ -7,7 +7,6 @@
 
 MainWindowController::MainWindowController(QObject *parent)
 	: QObject(parent)
-	, m_serverHandler(0)
 	, m_dbManager(0)
 	, m_dbStationController(0)
 	, m_rpcPort(24500)
@@ -42,7 +41,6 @@ MainWindowController::MainWindowController(QObject *parent)
 
 MainWindowController::~MainWindowController()
 {
-	stop();
 	m_tabManager->clearAllInformation();
 
 	delete m_rpcFlakonClient;
@@ -53,33 +51,6 @@ void MainWindowController::appendView(MainWindow *view)
 	m_view = view;
 
 	init();
-}
-
-void MainWindowController::startServer()
-{
-//    serverStartedSlot();
-    start();
-}
-
-void MainWindowController::start()
-{
-	QString serverName = "./" + QString(SERVER_NAME);
-
-#ifdef QT_DEBUG
-	serverName += "d";
-#endif
-
-	m_serverHandler = new Pw::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
-	connect(m_serverHandler, SIGNAL(processStartedSignal()), this, SLOT(serverStartedSlot()));
-	connect(m_serverHandler, SIGNAL(processStartFailedSignal()), this, SLOT(serverFailedToStartSlot()));
-
-	m_serverHandler->start();
-}
-
-void MainWindowController::stop()
-{
-	//m_serverHandler->terminate();
-	m_serverHandler->kill();
 }
 
 void MainWindowController::init()
@@ -122,6 +93,8 @@ void MainWindowController::init()
 	m_solverWidgetController->appendView(solverWidget);
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
+
+	serverStartedSlot();
 }
 
 void MainWindowController::serverFailedToStartSlot()

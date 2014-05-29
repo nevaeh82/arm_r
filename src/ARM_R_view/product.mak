@@ -11,9 +11,10 @@ prebuild::
 	-$(cp) -ud qt.conf $(DESTDIR)
 	-$(cp) -ud ../../version.ini $(DESTDIR)
 	$(call begin-build, Prebuild OK )
-	
+
 postbuild::
 	-$(mkdir) $(SolutionDir)/build/bin/$(MAKE_PLATFORM)/DB
 	-$(cp) -ud *.sqlite $(DESTDIR)/DB
-	
-	
+	$(cp) -ud *.bat $(DESTDIR)
+	$(mkdir) $(SolutionDir)/build/bin/$(MAKE_PLATFORM)/icons
+	$(cp) -ud images/shortcut.ico $(DESTDIR)/icons

@@ -37,7 +37,5 @@ int main(int argc, char *argv[])
 
 	view.show();
 
-	controller.startServer();
-
 	return a.exec();
 }

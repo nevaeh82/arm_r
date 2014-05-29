@@ -5,7 +5,7 @@
 #include "ARM_R_Application.h"
 
 ARM_R_Application::ARM_R_Application(int& argc, char** argv) :
-	QCoreApplication(argc, argv)
+	QtSingleCoreApplication(argc, argv)
 {
 }
 

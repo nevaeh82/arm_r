@@ -24,5 +24,7 @@ prebuild::
 	$(cp) -ud RDP/cell.net.rdp $(DESTDIR)/RDP
 	$(mkdir) $(DESTDIR)/Rpc
 	$(cp) -ud Rpc/*.ini $(DESTDIR)/Rpc
-              	
 	$(call begin-build, Prebuild OK )
+
+postbuild::
+	$(cp) -ud *.bat $(DESTDIR)

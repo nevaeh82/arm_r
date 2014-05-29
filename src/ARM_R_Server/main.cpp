@@ -12,6 +12,9 @@ int main(int argc, char *argv[])
 	Logger().setupLogger("logs/ARM_R_server.log");
 
 	ARM_R_Application a(argc, argv);
+	if( a.isRunning() ) {
+		return 0;
+	}
 
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));

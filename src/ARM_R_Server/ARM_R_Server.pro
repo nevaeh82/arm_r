@@ -13,5 +13,6 @@ SOURCES = main.cpp
 
 include(../../specs/project.pri)
 include(../ARM_R_ServerCore/reference.pri)
+include(../../specs/qtsingleapplication.pri)
 
 applyReferences()

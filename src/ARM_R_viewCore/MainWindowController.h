@@ -36,8 +36,6 @@ class MainWindowController : public QObject, public IController<MainWindow>, pub
 private:
 	MainWindow* m_view;
 
-	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;
-
 	TabManager*				m_tabManager;
 	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
@@ -58,8 +56,6 @@ public:
 
 	void appendView(MainWindow *view);
 
-	void startServer();
-
 signals:
 
 private slots:
@@ -72,9 +68,6 @@ private slots:
 	void startTabManger();
 
 private:
-
-	void start();
-	void stop();
 
 	void init();
 

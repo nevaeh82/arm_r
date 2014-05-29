@@ -3,6 +3,9 @@
 	<product name="Zaviruha R" version="__VERSION__" code="ARM_R"/>
 	<files path="build\tmprel\bin\*.*"/>
 	<link  name="$DESKTOP\ARM-OD-__VERSION__" target="$INSTDIR\ARM_R_view.exe"/>
+	<link  name="$DESKTOP\Сервер-ARM-R" target="$INSTDIR\Server.bat" icon="$INSTDIR\icons\shortcut.ico"/>
+	<link  name="$DESKTOP\Приложение-ARM-R" target="$INSTDIR\View.bat" icon="$INSTDIR\icons\shortcut.ico"/>
+	<link  name="$DESKTOP\Платформа-ARM-R" target="$INSTDIR\Platform.bat" icon="$INSTDIR\icons\shortcut.ico"/>
 	<imagefile path="build\tmprel\image\ARM_R_Setup-__VERSION__.exe"/>
 	<installdir path="c:\Zaviruha\ARM-R-__VERSION__\"/>
 </imagedef>
