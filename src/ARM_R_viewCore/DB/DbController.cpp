@@ -225,7 +225,9 @@ bool DbController::setPropertyValue(const uint propId, const QVariant propValue)
 {
 	bool result;
 	double value = propValue.toDouble(&result);
-	if( result && ( PROPERTY_RANGE_MIN <= value ) && ( PROPERTY_RANGE_MAX >= value ) ) {
+
+	if( (result && ( PROPERTY_RANGE_MIN <= value ) && ( PROPERTY_RANGE_MAX >= value ))
+			|| propValue.type() == QVariant::String ) {
 		return setPropertyParam(propId, "VALUE", propValue);
 	}
 
