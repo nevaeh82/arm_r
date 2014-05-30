@@ -24,16 +24,7 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -57,16 +48,7 @@
         </property>
         <widget class="QWidget" name="tabPage">
          <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -83,16 +65,7 @@
         </widget>
         <widget class="QWidget" name="initializatioPage">
          <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -151,8 +124,15 @@
     <addaction name="actionLists"/>
     <addaction name="actionSolverLogs"/>
    </widget>
+   <widget class="QMenu" name="menuServer">
+    <property name="title">
+     <string>Server</string>
+    </property>
+    <addaction name="actionRestartServer"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
+   <addaction name="menuServer"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
@@ -181,6 +161,11 @@
   <action name="actionSolverLogs">
    <property name="text">
     <string>SolverLogs</string>
+   </property>
+  </action>
+  <action name="actionRestartServer">
+   <property name="text">
+    <string>Restart Server</string>
    </property>
   </action>
  </widget>

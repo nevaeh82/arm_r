@@ -46,6 +46,6 @@ void MainWindow::init()
 
 	connect(ui->actionLists, SIGNAL(triggered()), this, SIGNAL(signalShowLists()));
 	connect(ui->actionSolverLogs, SIGNAL(triggered()), this, SIGNAL(signalShowSolverLog()));
-	//connect(ui->actionAtlantSetup, SIGNAL(triggered()), _diag_txt, SLOT(slotShow()));
 
+	connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
 }

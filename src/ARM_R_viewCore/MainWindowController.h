@@ -36,6 +36,7 @@ class MainWindowController : public QObject, public IController<MainWindow>, pub
 private:
 	MainWindow* m_view;
 
+	Pw::Common::ServiceControl::ServiceHandler* m_serverHandler;
 	TabManager*				m_tabManager;
 	IDbManager*				m_dbManager;
 	ControlPanelController* m_controlPanelController;
@@ -66,6 +67,7 @@ private slots:
 
 	void rpcConnectionEstablished();
 	void startTabManger();
+	void resetServer();
 
 private:
 

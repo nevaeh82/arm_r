@@ -551,44 +551,54 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="109"/>
+        <location filename="MainWindow.ui" line="82"/>
         <source>Initialization...</source>
         <translation>Инициализация...</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="141"/>
+        <location filename="MainWindow.ui" line="114"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="148"/>
+        <location filename="MainWindow.ui" line="121"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="163"/>
+        <location filename="MainWindow.ui" line="129"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="143"/>
         <source>New</source>
         <translation>Новый пункт</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="168"/>
+        <location filename="MainWindow.ui" line="148"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="173"/>
+        <location filename="MainWindow.ui" line="153"/>
         <source>Atlant setup</source>
         <translation>Настройка Атланта</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="178"/>
+        <location filename="MainWindow.ui" line="158"/>
         <source>Lists</source>
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="183"/>
+        <location filename="MainWindow.ui" line="163"/>
         <source>SolverLogs</source>
         <translation>Лог решателя</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="168"/>
+        <source>Restart Server</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="14"/>
@@ -599,17 +609,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="129"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="129"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="164"/>
+        <location filename="MainWindowController.cpp" line="143"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -953,28 +963,28 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="391"/>
+        <location filename="SpectrumWidgetController.cpp" line="394"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="394"/>
+        <location filename="SpectrumWidgetController.cpp" line="397"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="395"/>
+        <location filename="SpectrumWidgetController.cpp" line="398"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="396"/>
+        <location filename="SpectrumWidgetController.cpp" line="399"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
         <location filename="SpectrumWidgetController.cpp" line="140"/>
-        <location filename="SpectrumWidgetController.cpp" line="397"/>
+        <location filename="SpectrumWidgetController.cpp" line="400"/>
         <source>Enable correlation</source>
         <translation>Включить корреляцию</translation>
     </message>
@@ -987,7 +997,7 @@
         <translation type="obsolete">Белый</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="398"/>
+        <location filename="SpectrumWidgetController.cpp" line="401"/>
         <source>Cleanup text fields</source>
         <translation>Очистить текстовые данные</translation>
     </message>

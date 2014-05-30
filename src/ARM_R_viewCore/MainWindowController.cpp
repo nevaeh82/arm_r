@@ -11,6 +11,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	, m_dbStationController(0)
 	, m_rpcPort(24500)
 	, m_rpcHost("127.0.0.1")
+	, m_serverHandler(0)
 {
 	m_view = NULL;
 	m_tabManager = NULL;
@@ -27,6 +28,11 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_rpcHost = rpcSettings.value("RPC_UI/IP", "192.168.0.1").toString();
 	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
 
+	QString serverName = "./" + QString(SERVER_NAME);
+	#ifdef QT_DEBUG
+		serverName += "d";
+	#endif
+	m_serverHandler = new Pw::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
 
 	m_rpcFlakonClient = new RpcFlakonClientWrapper;
 	QThread* rpcClientThread = new QThread;
@@ -83,16 +89,16 @@ void MainWindowController::init()
 
 	/// Problem here:
 
-
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 
-
 	///
+
 	SolverResultWidget* solverWidget = new SolverResultWidget(m_view);
 	m_solverWidgetController = new SolverResultWidgetController(this);
 	m_solverWidgetController->appendView(solverWidget);
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
+	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
 
 	serverStartedSlot();
 }
@@ -162,6 +168,17 @@ void MainWindowController::startTabManger()
 
 	m_view->getStackedWidget()->setCurrentIndex(0);
 	m_tabManager->start();
+}
+
+void MainWindowController::resetServer()
+{
+	QStringList serverPIDList;
+	bool searchResult;
+	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
+
+	if( searchResult ) {
+		m_serverHandler->killProcessExist( serverPIDList );
+	}
 }
 
 void MainWindowController::onMethodCalled(const QString& method, const QVariant& argument)

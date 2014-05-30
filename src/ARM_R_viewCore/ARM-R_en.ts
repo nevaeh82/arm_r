@@ -406,43 +406,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="109"/>
+        <location filename="MainWindow.ui" line="82"/>
         <source>Initialization...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="141"/>
+        <location filename="MainWindow.ui" line="114"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="148"/>
+        <location filename="MainWindow.ui" line="121"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="163"/>
+        <location filename="MainWindow.ui" line="129"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="143"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="168"/>
+        <location filename="MainWindow.ui" line="148"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="173"/>
+        <location filename="MainWindow.ui" line="153"/>
         <source>Atlant setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="178"/>
+        <location filename="MainWindow.ui" line="158"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="183"/>
+        <location filename="MainWindow.ui" line="163"/>
         <source>SolverLogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="168"/>
+        <source>Restart Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -454,17 +464,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="129"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="129"/>
+        <location filename="MainWindowController.cpp" line="108"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="164"/>
+        <location filename="MainWindowController.cpp" line="143"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -776,33 +786,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="391"/>
+        <location filename="SpectrumWidgetController.cpp" line="394"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="394"/>
+        <location filename="SpectrumWidgetController.cpp" line="397"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="395"/>
+        <location filename="SpectrumWidgetController.cpp" line="398"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="396"/>
+        <location filename="SpectrumWidgetController.cpp" line="399"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="SpectrumWidgetController.cpp" line="140"/>
-        <location filename="SpectrumWidgetController.cpp" line="397"/>
+        <location filename="SpectrumWidgetController.cpp" line="400"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="398"/>
+        <location filename="SpectrumWidgetController.cpp" line="401"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
