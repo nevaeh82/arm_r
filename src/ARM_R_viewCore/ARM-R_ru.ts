@@ -568,7 +568,7 @@
     <message>
         <location filename="MainWindow.ui" line="129"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="143"/>
@@ -598,7 +598,7 @@
     <message>
         <location filename="MainWindow.ui" line="168"/>
         <source>Restart Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапуск сервера</translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="14"/>
