@@ -146,77 +146,84 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="103"/>
+        <location filename="ControlPanel.ui" line="93"/>
+        <location filename="ControlPanel.ui" line="125"/>
+        <location filename="ControlPanel.ui" line="257"/>
+        <source> MHz</source>
+        <translation> МГц</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="109"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="129"/>
+        <location filename="ControlPanel.ui" line="144"/>
         <source>Set panorama</source>
         <translation>Установить панораму</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="138"/>
+        <location filename="ControlPanel.ui" line="153"/>
         <source>Autosearch</source>
         <translation>Автопоиск</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="145"/>
+        <location filename="ControlPanel.ui" line="160"/>
         <source>Panorama</source>
         <translation>Панорама</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="155"/>
+        <location filename="ControlPanel.ui" line="170"/>
         <source>Manual</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="160"/>
+        <location filename="ControlPanel.ui" line="175"/>
         <source>Scanning</source>
         <translation>Сканирование</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="165"/>
+        <location filename="ControlPanel.ui" line="180"/>
         <source>Checking</source>
         <translation>Проверка</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="170"/>
+        <location filename="ControlPanel.ui" line="185"/>
         <source>Escorting</source>
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="197"/>
+        <location filename="ControlPanel.ui" line="212"/>
         <source>&lt;&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="210"/>
+        <location filename="ControlPanel.ui" line="225"/>
         <source>&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="229"/>
+        <location filename="ControlPanel.ui" line="244"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="261"/>
+        <location filename="ControlPanel.ui" line="279"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="274"/>
+        <location filename="ControlPanel.ui" line="292"/>
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="287"/>
+        <location filename="ControlPanel.ui" line="305"/>
         <source>&gt;&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="294"/>
+        <location filename="ControlPanel.ui" line="312"/>
         <source>Set common frequency</source>
         <translation>Установить общую частоту</translation>
     </message>
@@ -593,7 +600,7 @@
     <message>
         <location filename="MainWindow.ui" line="163"/>
         <source>SolverLogs</source>
-        <translation>Лог решателя</translation>
+        <translation>История расчетов</translation>
     </message>
     <message>
         <location filename="MainWindow.ui" line="168"/>
@@ -603,7 +610,7 @@
     <message>
         <location filename="MainWindow.cpp" line="14"/>
         <source>Zaviruha</source>
-        <translation>Завируха</translation>
+        <translation>Завируха АРМ-Р</translation>
     </message>
 </context>
 <context>
@@ -806,7 +813,7 @@
     <message>
         <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
         <source>Solver log</source>
-        <translation>Лог решателя</translation>
+        <translation>История расчетов</translation>
     </message>
     <message>
         <source>AUTO</source>

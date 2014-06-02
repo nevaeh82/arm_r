@@ -86,6 +86,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="suffix">
+      <string> MHz</string>
+     </property>
      <property name="minimum">
       <number>20</number>
      </property>
@@ -111,6 +117,15 @@
        <width>70</width>
        <height>0</height>
       </size>
+     </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="suffix">
+      <string> MHz</string>
+     </property>
+     <property name="prefix">
+      <string/>
      </property>
      <property name="minimum">
       <number>20</number>
@@ -237,6 +252,9 @@
        <width>70</width>
        <height>0</height>
       </size>
+     </property>
+     <property name="suffix">
+      <string> MHz</string>
      </property>
      <property name="minimum">
       <number>20</number>
