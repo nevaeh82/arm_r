@@ -27,6 +27,11 @@ void SolverResultWidgetController::onMethodCalled(const QString &method, const Q
 	emit onMethodCalledSignal(method, argument);
 }
 
+SolverResultWidget*SolverResultWidgetController::getView()
+{
+	return m_view;
+}
+
 void SolverResultWidgetController::slotShowWidget()
 {
 	if(m_view != NULL)

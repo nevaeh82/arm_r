@@ -47,8 +47,13 @@ MainWindowController::MainWindowController(QObject *parent)
 
 MainWindowController::~MainWindowController()
 {
-	m_tabManager->clearAllInformation();
+	SolverResultWidget* resultWidget = m_solverWidgetController->getView();
+	if( resultWidget ) {
+		resultWidget->close();
+		delete resultWidget;
+	}
 
+	m_tabManager->clearAllInformation();
 	delete m_rpcFlakonClient;
 }
 

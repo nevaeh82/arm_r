@@ -27,6 +27,7 @@ private:
 public:
 	void appendView(SolverResultWidget* view);
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+	SolverResultWidget* getView();
 
 public slots:
 	void slotShowWidget();
