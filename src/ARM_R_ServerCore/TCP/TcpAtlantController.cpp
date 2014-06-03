@@ -47,6 +47,7 @@ bool TcpAtlantController::init()
 			m_atlantSettingStruct.port = settings.value("Port", 2323).toInt();
 //			m_atlantSettingStruct.type = settings.value("type", -1).toInt();
 			m_atlantSettingStruct.name = settings.value("name", "").toString();
+			m_atlantSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
 
 			m_host = m_atlantSettingStruct.host;
 			m_port = m_atlantSettingStruct.port;

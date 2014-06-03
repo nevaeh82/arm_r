@@ -42,6 +42,7 @@ bool TcpPRM300Controller::init()
 			m_prmSettings.altitude = settings.value("altitude", 0).toInt();
 			m_prmSettings.trace = settings.value("trace", "0").toString();
 			m_prmSettings.wire_length = settings.value("wire_length", 0).toInt();
+			m_prmSettings.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
 
 			m_host = m_prmSettings.host;
 			m_port = m_prmSettings.port;
@@ -69,6 +70,7 @@ void TcpPRM300Controller::createTcpDeviceCoder()
 void TcpPRM300Controller::createTcpClient()
 {
 	BaseTcpDeviceController::createTcpClient();
+	m_tcpClient->setReconnectInterval(m_prmSettings.reconnectInterval);
 	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
 }
 

@@ -42,6 +42,7 @@ void TcpFlakonController::createTcpDeviceCoder()
 void TcpFlakonController::createTcpClient()
 {
 	BaseTcpDeviceController::createTcpClient();
+	m_tcpClient->setReconnectInterval(m_flakonSettingStruct.reconnectInterval);
 	connect(m_tcpClient, SIGNAL(signalConnectedToHost(int)), this, SLOT(slotTcpConnectionStatus(int)));
 }
 
@@ -66,6 +67,7 @@ bool TcpFlakonController::init()
 			m_flakonSettingStruct.port = settings.value("Port", 2323).toInt();
 //			m_flakonSettingStruct.type = settings.value("type", -1).toInt();
 			m_flakonSettingStruct.name = settings.value("name", "").toString();
+			m_flakonSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
 
 			m_host = m_flakonSettingStruct.host;
 			m_port = m_flakonSettingStruct.port;
