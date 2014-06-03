@@ -4,8 +4,8 @@
 
 #include <Logger.h>
 
-ControlPanelController::ControlPanelController(QObject *parent) :
-	QObject(parent)
+ControlPanelController::ControlPanelController(QObject *parent)
+	: QObject(parent)
 {
 	m_view = NULL;
 	m_dbManager = NULL;
@@ -46,6 +46,8 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
 
 	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
+	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
+	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
 
 }
 
@@ -67,6 +69,16 @@ void ControlPanelController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcFlako
 void ControlPanelController::setMapStations(QMap<int, Station *> stationsMap)
 {
 	m_stationsMap = stationsMap;
+}
+
+void ControlPanelController::onCorrelationStateChanged(const bool isEnabled)
+{
+		emit setCorrelationStatusActive(isEnabled);
+}
+
+void ControlPanelController::setCorrelationFrequencyValue(double value)
+{
+	emit setCorrelationStatus(" " + QString::number(value) + QString(" MHz"));
 }
 
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
@@ -309,4 +321,14 @@ void ControlPanelController::slotUp100MHz()
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 
 	emit signalSetComonFreq(m_currentFreq);
+}
+
+void ControlPanelController::changeCorrelationStatus(QString correlationStatus)
+{
+	m_view->changeCorrelationStatus(correlationStatus);
+}
+
+void ControlPanelController::changeCorrelationStatusActive(bool isActive)
+{
+	m_view->changeCorrelationStatusActive(isActive);
 }

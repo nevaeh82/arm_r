@@ -53,6 +53,7 @@ private:
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
 	DBStationController* m_dbStationController;
+	ICorrelationListener* m_controlPanelController;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
@@ -80,6 +81,8 @@ public:
 
 	void addStationTabs();
 	void clearAllInformation();
+
+	void setControlPanelController(ICorrelationListener* controller);
 
 private:
 	int readStationSettings(const QString &settingsFile);

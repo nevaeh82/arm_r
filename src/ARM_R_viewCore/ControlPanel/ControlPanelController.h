@@ -25,7 +25,9 @@
 #define MINIMUM_FREQ 20
 #define MAXIMUM_FREQ 7000
 
-class ControlPanelController : public QObject, public IControlPanelController
+#include "Interfaces/ICorrelationListener.h"
+
+class ControlPanelController : public QObject, public IControlPanelController, public ICorrelationListener
 {
 	Q_OBJECT
 
@@ -62,9 +64,15 @@ public:
 	void setRpcFlakonClient(RpcFlakonClientWrapper* rpcFlakonClient);
 	void setMapStations(QMap<int, Station *> stationsMap);
 
+	//From correlation Listener
+	void onCorrelationStateChanged(const bool isEnabled);
+
+	void setCorrelationFrequencyValue(double value);
 
 signals:
 	void signalSetComonFreq(int value);
+	void setCorrelationStatus(QString correlationStatus);
+	void setCorrelationStatusActive(bool isActive);
 
 public slots:
 
@@ -90,7 +98,8 @@ private slots:
 	void slotUp10MHz();
 	void slotUp100MHz();
 
-
+	void changeCorrelationStatus(QString correlationStatus);
+	void changeCorrelationStatusActive(bool isActive);
 
 };
 

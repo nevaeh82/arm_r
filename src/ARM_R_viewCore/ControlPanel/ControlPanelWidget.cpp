@@ -19,6 +19,11 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
 
+	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
+	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
+
+	ui->correlationStatusLabelActive->setFixedSize(16, 16);
+	ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -55,6 +60,21 @@ void ControlPanelWidget::slotChangeMode(int index)
         break;
     }
 
+}
+
+void ControlPanelWidget::changeCorrelationStatus(QString correlationValue)
+{
+	ui->correlationStatusLabelValue->setText(correlationValue);
+}
+
+void ControlPanelWidget::changeCorrelationStatusActive(bool isActive)
+{
+	if(isActive) {
+		ui->correlationStatusLabelActive->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
+	}
+	else {
+		ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+	}
 }
 
 void ControlPanelWidget::slotChangeCommonFreq(int value)

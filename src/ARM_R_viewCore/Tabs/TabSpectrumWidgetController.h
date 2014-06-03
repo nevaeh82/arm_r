@@ -23,6 +23,8 @@
 #include "Rpc/RpcPrmClient.h"
 #include "Rpc/RpcFlakonClientWrapper.h"
 
+#include "ControlPanel/ControlPanelController.h"
+
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>,
 		public ITabWidget, public ITabSpectrum, public IDbChangedListener, public IRpcListener
 {
@@ -48,6 +50,7 @@ private:
 	QLabel*             m_indicatorLabel;
 
 	double              m_threshold;
+	double              m_currentCorrelation;
 
 	QString m_rpcHost;
 	quint16 m_rpcPort;
@@ -56,6 +59,7 @@ private:
 	QTimer	m_timerStatus;
 
 	DBStationController* m_dbStationController;
+	ICorrelationListener* m_controlPanelController;
 
 public:
 	explicit TabSpectrumWidgetController(
@@ -111,6 +115,9 @@ public:
 
 	// interface IRpcReceiver
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+	//Set control Panel controller pointer
+	void setControlPanelController(ICorrelationListener* controller);
 
 private:
 	void init();

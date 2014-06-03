@@ -23,9 +23,15 @@ class ControlPanelWidget : public QWidget
 private:
 	Ui::ControlPanelWidget*     ui;
 
+	QPixmap* m_pmRoundRed;
+	QPixmap* m_pmRoundGreen;
+
 public:
 	ControlPanelWidget(QWidget* parent = NULL);
 	~ControlPanelWidget();
+
+	void changeCorrelationStatus(QString correlationValue);
+	void changeCorrelationStatusActive(bool isActive);
 
 signals:
 	void commonFreqChangedSignal(int value);
@@ -50,7 +56,7 @@ signals:
 private slots:
 	void onSetCommonFrequencySlot();
 	void onSetBandWidthSlot();
-    void slotChangeMode(int index);
+	void slotChangeMode(int index);
 
 public slots:
 	void slotChangeCommonFreq(int value);

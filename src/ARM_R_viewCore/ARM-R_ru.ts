@@ -133,7 +133,7 @@
 <context>
     <name>ControlPanelController</name>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="208"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="220"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
@@ -148,7 +148,7 @@
     <message>
         <location filename="ControlPanel.ui" line="93"/>
         <location filename="ControlPanel.ui" line="125"/>
-        <location filename="ControlPanel.ui" line="257"/>
+        <location filename="ControlPanel.ui" line="291"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
@@ -193,37 +193,47 @@
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="212"/>
+        <location filename="ControlPanel.ui" line="206"/>
+        <source>Correlation on frequency </source>
+        <translation>Корреляция на частоте</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="213"/>
+        <source>---</source>
+        <translation>---</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="246"/>
         <source>&lt;&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="225"/>
+        <location filename="ControlPanel.ui" line="259"/>
         <source>&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="244"/>
+        <location filename="ControlPanel.ui" line="278"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="279"/>
+        <location filename="ControlPanel.ui" line="313"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="292"/>
+        <location filename="ControlPanel.ui" line="326"/>
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="305"/>
+        <location filename="ControlPanel.ui" line="339"/>
         <source>&gt;&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="312"/>
+        <location filename="ControlPanel.ui" line="346"/>
         <source>Set common frequency</source>
         <translation>Установить общую частоту</translation>
     </message>
@@ -616,17 +626,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="108"/>
+        <location filename="MainWindowController.cpp" line="115"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="108"/>
+        <location filename="MainWindowController.cpp" line="115"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="143"/>
+        <location filename="MainWindowController.cpp" line="150"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -831,72 +841,72 @@
 <context>
     <name>SolverResultWidgetController</name>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="56"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="61"/>
         <source>AUTO</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="59"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="64"/>
         <source>MANUAL</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="62"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="67"/>
         <source>ALONE</source>
         <translation>Один отсчет</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="65"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="70"/>
         <source>HYPERBOLES</source>
         <translation>Гиперболы</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="91"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="96"/>
         <source>Successed solved</source>
         <translation>Найдено решение</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="94"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="99"/>
         <source>Some errors during solve</source>
         <translation>В ходе решения возникли ошибки</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="97"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="102"/>
         <source>Not enough data for solve</source>
         <translation>Недостаточно данных для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="100"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="105"/>
         <source>There is no solution</source>
         <translation>Решение не найдено</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="103"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="108"/>
         <source>No solve cause 2 trajectory</source>
         <translation>Решение не найдено из-за наличия 2 траекторий</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="106"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="111"/>
         <source>Not enough distances for solve</source>
         <translation>Недостаточные дистанции для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="109"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="114"/>
         <source>There is not enough accuracy for solve</source>
         <translation>Недостаточная точность для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="112"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="117"/>
         <source>There is not enough input accuracy for solve</source>
         <translation>Низкая точность получаемого решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="115"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="120"/>
         <source>Solves data is out of range of resposible zone</source>
         <translation>Расчинтанные данные не попадают в зону ответственности</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="118"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="123"/>
         <source>Coords is out of catching strobe</source>
         <translation>Расчитанные координаты не попадают в строб захвата</translation>
     </message>
@@ -1025,18 +1035,18 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="48"/>
+        <location filename="Tabs/TabManager.cpp" line="49"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="190"/>
-        <location filename="Tabs/TabManager.cpp" line="207"/>
+        <location filename="Tabs/TabManager.cpp" line="192"/>
+        <location filename="Tabs/TabManager.cpp" line="209"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="135"/>
+        <location filename="Tabs/TabManager.cpp" line="136"/>
         <source>Atlant</source>
         <translation>Атлант</translation>
     </message>
@@ -1052,12 +1062,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="131"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="133"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="131"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="133"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>

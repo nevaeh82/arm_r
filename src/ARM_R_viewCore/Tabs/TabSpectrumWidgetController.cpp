@@ -27,6 +27,8 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	, m_rpcHost( rpcHost )
 	, m_rpcPort( rpcPort )
 	, m_rpcFlakonClient( NULL )
+	, m_controlPanelController( NULL )
+	, m_currentCorrelation( 0 )
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
@@ -280,6 +282,9 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
 	m_rpcFlakonClient->sendCenter(m_station->getId(), m_station->getCenter());
 
 	m_rpcFlakonClient->sendCorrelation( m_station->getId(), enable );
+
+	m_currentCorrelation = m_station->getCenter();
+	dynamic_cast<ControlPanelController*>(m_controlPanelController)->setCorrelationFrequencyValue(m_currentCorrelation);
 }
 
 ///getting points from rpc (flakon)
@@ -427,6 +432,15 @@ void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QV
 	if( method == RPC_PRM_STATE_CHANGED ) {
 		setIndicator( argument.toInt() );
 		return;
+	}
+}
+
+void TabSpectrumWidgetController::setControlPanelController(ICorrelationListener* controller)
+{
+	m_controlPanelController = controller;
+
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		correlationWidgetDataSource->registerCorrelationReceiver(m_controlPanelController);
 	}
 }
 

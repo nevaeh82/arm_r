@@ -85,6 +85,7 @@ void MainWindowController::init()
 	m_controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
 	m_controlPanelController->setMapStations(m_tabManager->getStations());
 	m_controlPanelController->registerReceiver(m_tabManager);
+	m_tabManager->setControlPanelController((ICorrelationListener* )m_controlPanelController);
 
 	m_dbManager = new DbManager(this);
 	m_tabManager->setDbManager(m_dbManager);

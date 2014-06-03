@@ -16,6 +16,7 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_dbStationController( NULL )
 	, m_rpcHost( "127.0.0.1" )
 	, m_rpcPort( 24500 )
+	, m_controlPanelController( NULL )
 {
 	m_rpcFlakonClient = NULL;
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
@@ -169,6 +170,7 @@ void TabManager::addStationTabs()
 		tabController->setStationNamesList(stationNamesList);
 		tabController->setRpcFlakonClient(m_rpcFlakonClient);
 		tabController->appendView(tabSpectrumWidget);
+		tabController->setControlPanelController(m_controlPanelController);
 
 		m_dbManager->registerReceiver(tabController);
 
@@ -253,6 +255,11 @@ void TabManager::clearAllInformation()
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->stop();
 	}
+}
+
+void TabManager::setControlPanelController(ICorrelationListener* controller)
+{
+	m_controlPanelController = controller;
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
