@@ -4,22 +4,46 @@
 
 #include <Logger.h>
 
+#define TIMER_INTERVAL 5000
+#define TIMERCHECK_INTERVAL 60000
+#define TIMERINTERVAL_KEY "ControlPanel"
+
 ControlPanelController::ControlPanelController(QObject *parent)
 	: QObject(parent)
 {
 	m_view = NULL;
 	m_dbManager = NULL;
-    m_currentFreq = 0;
-    m_startFreq = 0;
-    m_finishFreq = 0;	
+	m_currentFreq = 0;
+	m_startFreq = 0;
+	m_finishFreq = 0;
 	m_dbStation = NULL;
 	m_rpcFlakonClient = NULL;
 	m_mainStation = NULL;
+
+	init();
 }
 
 ControlPanelController::~ControlPanelController()
 {
 
+}
+
+void ControlPanelController::init()
+{
+	QSettings timerSettings("./ARM_R.ini", QSettings::IniFormat, this);
+	timerSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+
+	QStringList childKeys = timerSettings.childGroups();
+
+	foreach (QString key, childKeys) {
+		if(key == TIMERINTERVAL_KEY) {
+			timerSettings.beginGroup(childKeys.first());
+			m_timerInterval = timerSettings.value("timerCheck", TIMER_INTERVAL).toInt();
+			m_timerCheckInterval = timerSettings.value("timerCheckInterval", TIMERCHECK_INTERVAL).toInt();
+			timerSettings.endGroup();
+			break;
+		}
+	}
 }
 
 void ControlPanelController::appendView(ControlPanelWidget *view)
@@ -30,12 +54,12 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(panoramaCheckedSignal(bool)), this, SLOT(onPanoramaStateChangedSlot(bool)));
 	connect(m_view, SIGNAL(commonFreqChangedSignal(int)), this, SLOT(onCommonFrequencyChangedSlot(int)));
 	connect(m_view, SIGNAL(bandwidthChangedSignal(int,int)), this, SLOT(onBandWidthChangedSlot(int,int)));
-    connect(m_view, SIGNAL(signalManualMode()), this, SLOT(slotManualMode()));
-    connect(m_view, SIGNAL(signalScanMode(int,int)), this, SLOT(slotScanMode(int,int)));
-    connect(m_view, SIGNAL(signalCheckMode()), this, SLOT(slotCheckMode()));
-    connect(m_view, SIGNAL(signalViewMode()), this, SLOT(slotViewMode()));
+	connect(m_view, SIGNAL(signalManualMode()), this, SLOT(slotManualMode()));
+	connect(m_view, SIGNAL(signalScanMode(int,int)), this, SLOT(slotScanMode(int,int)));
+	connect(m_view, SIGNAL(signalCheckMode()), this, SLOT(slotCheckMode()));
+	connect(m_view, SIGNAL(signalViewMode()), this, SLOT(slotViewMode()));
 
-    connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	connect(&m_timerCheck, SIGNAL(timeout()), this, SLOT(slotCheckModeSetFreq()));
 
 	connect(m_view, SIGNAL(signalDown1Mhz()), this, SLOT(slotDown1MHz()));
@@ -126,10 +150,10 @@ void ControlPanelController::slotScanMode(int start, int finish)
 	if(m_timerCheck.isActive())
 		m_timerCheck.stop();
 
-    m_startFreq = start;
-    m_currentFreq = start;
-    m_finishFreq = finish;
-    m_timer.start(5000);
+	m_startFreq = start;
+	m_currentFreq = start;
+	m_finishFreq = finish;
+	m_timer.start(m_timerInterval);
 }
 
 void ControlPanelController::slotCheckMode()
@@ -141,7 +165,7 @@ void ControlPanelController::slotCheckMode()
 	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
 	m_itCheckMode = m_listOfFreqs.begin();
 	slotCheckModeSetFreq();
-	m_timerCheck.start(60000);
+	m_timerCheck.start(m_timerCheckInterval);
 }
 
 void ControlPanelController::slotViewMode()
@@ -155,7 +179,7 @@ void ControlPanelController::slotViewMode()
 	log_debug(QString("data for leading = %1").arg(m_listOfFreqs.count()));
 	m_itCheckMode = m_listOfFreqs.begin();
 	slotCheckModeSetFreq();
-	m_timerCheck.start(60000);
+	m_timerCheck.start(m_timerCheckInterval);
 
 	/// TODo in next release
 //	ListWhiteDialog* listView = new ListWhiteDialog(m_view);

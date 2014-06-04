@@ -2,6 +2,10 @@
 #define CONTROLPANELCONTROLLER_H
 
 #include <QObject>
+#include <QSettings>
+#include <QTextCodec>
+#include <QMessageBox>
+#include <QTimer>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/IDbManager.h"
@@ -17,9 +21,6 @@
 #include "ListWhiteDialog.h"
 #include "ListWhiteDialogController.h"
 
-#include <QMessageBox>
-
-#include <QTimer>
 
 #define INTERVAL 20
 #define MINIMUM_FREQ 20
@@ -37,12 +38,15 @@ private:
 	IDbManager* m_dbManager;
 	IDBStation* m_dbStation;
 
-    QTimer m_timer;
+	QTimer m_timer;
 	QTimer m_timerCheck;
 
-    int m_startFreq;
-    int m_finishFreq;
-    int m_currentFreq;
+	int m_startFreq;
+	int m_finishFreq;
+	int m_currentFreq;
+
+	int m_timerInterval;
+	int m_timerCheckInterval;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
@@ -52,6 +56,7 @@ private:
 
 	Station* m_mainStation;
 
+	void init();
 
 public:
 	explicit ControlPanelController(QObject *parent = 0);
@@ -83,12 +88,12 @@ private slots:
 	void onCommonFrequencyChangedSlot(int value);
 	void onBandWidthChangedSlot(int start, int end);
 
-    void slotManualMode();
-    void slotScanMode(int start, int finish);
-    void slotCheckMode();
-    void slotViewMode();
+	void slotManualMode();
+	void slotScanMode(int start, int finish);
+	void slotCheckMode();
+	void slotViewMode();
 
-    void slotChangeFreq();
+	void slotChangeFreq();
 	void slotCheckModeSetFreq();
 
 	void slotDown1MHz();

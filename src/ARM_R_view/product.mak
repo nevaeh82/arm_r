@@ -18,3 +18,4 @@ postbuild::
 	$(cp) -ud *.bat $(DESTDIR)
 	$(mkdir) $(SolutionDir)/build/bin/$(MAKE_PLATFORM)/icons
 	$(cp) -ud images/shortcut.ico $(DESTDIR)/icons
+	$(cp) -ud ARM_R.ini $(DESTDIR)
