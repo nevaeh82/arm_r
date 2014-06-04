@@ -19,7 +19,7 @@ include( ../../specs/CISCommonLib.pri )
 INCLUDEPATH += $$PWD
 
 SOURCES += \
-        CRCs.cpp \
+		CRCs.cpp
 
 HEADERS += \
 	Interfaces/IRpcControllerBase.h \
@@ -35,4 +35,4 @@ HEADERS += \
 	Rpc/RpcMessageStruct.h \
     Info/StationConfiguration.h \
     Info/AtlantConfiguraton.h \
-    Info/DBConnectionParameters.h
+	Info/DBConnectionParameters.h

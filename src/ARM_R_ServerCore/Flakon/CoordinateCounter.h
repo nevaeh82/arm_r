@@ -11,6 +11,9 @@
 #include <QMetaType>
 #include <QThread>
 #include <QFile>
+#include <QDir>
+
+#include <logManager/LogManager.h>
 
 #include "Interfaces/ICoordinateCounter.h"
 #include "../TCP/Interfaces/ITcpListener.h"
@@ -54,10 +57,10 @@ private:
 		int alt;
 	};
 
-	QFile* fi;
-	QFile* fi1;
-	QFile* fi2;
-	QFile* fi3;
+	LogManager* m_logManager;
+	LogManager* m_logManager1;
+	LogManager* m_logManager2;
+	LogManager* m_logManager3;
 
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);

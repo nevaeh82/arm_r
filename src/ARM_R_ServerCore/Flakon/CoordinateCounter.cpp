@@ -5,25 +5,26 @@
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent)
 {
+	QDir dir;
+	dir.mkdir("./logs/SpecialLogs");
 
-	fi = new QFile("logDistances.log");
-	if(!fi->open(QIODevice::WriteOnly | QIODevice::Text))
-	{
+	m_logManager = new LogManager("./logs/SpecialLogs/logDistances.log");
+	if(!m_logManager->isFileOpened()) {
 		log_debug("error");
 	}
-	fi1 = new QFile("logTrajMan.log");
-	if(!fi1->open(QIODevice::WriteOnly | QIODevice::Text))
-	{
+
+	m_logManager1 = new LogManager("./logs/SpecialLogs/logTrajMan.log");
+	if(!m_logManager1->isFileOpened()) {
 		log_debug("error");
 	}
-	fi2 = new QFile("logTrajAuto.log");
-	if(!fi2->open(QIODevice::WriteOnly | QIODevice::Text))
-	{
+
+	m_logManager2 = new LogManager("./logs/SpecialLogs/logTrajAuto.log");
+	if(!m_logManager2->isFileOpened()) {
 		log_debug("error");
 	}
-	fi3 = new QFile("logTrajOne.log");
-	if(!fi3->open(QIODevice::WriteOnly | QIODevice::Text))
-	{
+
+	m_logManager3 = new LogManager("./logs/SpecialLogs/logTrajOne.log");
+	if(!m_logManager3->isFileOpened()) {
 		log_debug("error");
 	}
 
@@ -51,10 +52,10 @@ CoordinateCounter::~CoordinateCounter()
 	if(m_solver != NULL)
 		delete m_solver;
 	emit signalFinished();
-	fi->close();
-	fi1->close();
-	fi2->close();
-	fi3->close();
+	delete m_logManager;
+	delete m_logManager1;
+	delete m_logManager2;
+	delete m_logManager3;
 }
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
@@ -104,10 +105,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
-			QTextStream outstream(fi);
-			outstream << dataToFile;
-//            fi->write(dataToFile.toAscii());
-			fi->flush();
+			m_logManager->writeToFile(dataToFile);
 		}
 	}
 
@@ -226,10 +224,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-	QTextStream outstream(fi2);
-	outstream << dataToFile;
-//            fi->write(dataToFile.toAscii());
-	fi2->flush();
+	m_logManager2->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -278,10 +273,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-	QTextStream outstream(fi1);
-	outstream << dataToFile;
-//            fi->write(dataToFile.toAscii());
-	fi1->flush();
+	m_logManager1->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
@@ -330,10 +322,7 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 
 	QString dataToFile = aData_1.timeHMSMs.toString("hh:mm:ss:zzz") + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
 
-	QTextStream outstream(fi3);
-	outstream << dataToFile;
-//            fi->write(dataToFile.toAscii());
-	fi3->flush();
+	m_logManager3->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
