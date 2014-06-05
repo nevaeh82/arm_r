@@ -46,7 +46,6 @@ public:
 	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
 	~CommonSpectrumTabWidget();
 
-	//void insertSpectrumWidget(GraphicWidget* widget);
 	void clearSpectrumWidgetsContainer();
 
 	void setCorrelationComponent(ICorrelationControllersContainer* correlationControllers);

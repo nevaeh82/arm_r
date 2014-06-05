@@ -25,7 +25,6 @@ ControlPanelController::ControlPanelController(QObject *parent)
 
 ControlPanelController::~ControlPanelController()
 {
-
 }
 
 void ControlPanelController::init()
@@ -105,13 +104,16 @@ void ControlPanelController::setCorrelationFrequencyValue(double value)
 	emit setCorrelationStatus(" " + QString::number(value) + QString(" MHz"));
 }
 
+void ControlPanelController::setResponseFreq(quint32 freq)
+{
+	m_view->slotChangeCommonFreq(freq);
+}
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
 {
 	foreach (IControlPanelListener* receiver, m_receiversList) {
 		receiver->onGlobalPanoramaEnabled(isEnabled);
 	}
 }
-
 
 void ControlPanelController::onAutoSearchStateChangedSlot(bool isEnabled)
 {
@@ -181,6 +183,12 @@ void ControlPanelController::slotViewMode()
 	slotCheckModeSetFreq();
 	m_timerCheck.start(m_timerCheckInterval);
 
+    QString ControlPanelSettingsPath = QCoreApplication::applicationDirPath();
+    ControlPanelSettingsPath.append("./Scan/CheckTimer.ini");
+    QSettings ControlPanelSettings( ControlPanelSettingsPath, QSettings::IniFormat );
+
+    int interval = ControlPanelSettings.value("timer", 10000).toInt();
+    m_timerCheck.start(interval);
 	/// TODo in next release
 //	ListWhiteDialog* listView = new ListWhiteDialog(m_view);
 //	ListWhiteDialogController* listController = new ListWhiteDialogController(m_dbStation->getDataBase(), this);

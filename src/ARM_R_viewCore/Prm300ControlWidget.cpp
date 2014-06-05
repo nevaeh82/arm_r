@@ -18,7 +18,7 @@ Prm300ControlWidget::~Prm300ControlWidget()
 	delete ui;
 }
 
-void Prm300ControlWidget::setData(int freq, int filter, int att1, int att2)
+void Prm300ControlWidget::setData(quint16 freq, quint8 filter, quint8 att1, quint8 att2)
 {
 	Q_UNUSED(freq);
 

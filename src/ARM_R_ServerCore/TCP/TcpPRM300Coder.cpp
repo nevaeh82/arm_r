@@ -58,6 +58,7 @@ MessageSP TcpPRM300Coder::encode(const QByteArray& data)
 	if (m_aPacketType == (quint8)PRM300External::TypeFrequencyChangedAnswer /*2*/) {
 		quint16 aFlag;
 		inputDataSream >> aFlag;
+        message = prmFrequencyChanged(aFlag);
 	}
 
 	if (m_aPacketType == (quint8)PRM300External::TypeAttenuerOneChangedAnswer /*3*/) {
@@ -240,6 +241,15 @@ MessageSP TcpPRM300Coder::sendPRMStatus(int status)
 	return MessageSP(new Message<QByteArray>(TCP_PRM300_STATUS, byteArray));
 }
 
+MessageSP TcpPRM300Coder::prmFrequencyChanged(unsigned short aFreq)
+{
+    QByteArray byteArray;
+    QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+    dataStream << aFreq;
+
+    return MessageSP(new Message<QByteArray>(TCP_PRM300_FREQUENCY_CHANGED, byteArray));
+}
+
 QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)
 {
 	/// WTF?! Magic again
@@ -288,7 +298,7 @@ QByteArray TcpPRM300Coder::prmSetFrequency(unsigned short aFreq)
 		streamWrite << aCrc;
 	}
 
-	return ba;
+    return ba;
 }
 
 bool TcpPRM300Coder::specialSymb(quint8 &aByteA, quint8 &aByteB)

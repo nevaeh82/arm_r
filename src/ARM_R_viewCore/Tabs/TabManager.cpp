@@ -17,6 +17,7 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_rpcHost( "127.0.0.1" )
 	, m_rpcPort( 24500 )
 	, m_controlPanelController( NULL )
+	, m_panelController(NULL)
 {
 	m_rpcFlakonClient = NULL;
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
@@ -260,6 +261,21 @@ void TabManager::clearAllInformation()
 void TabManager::setControlPanelController(ICorrelationListener* controller)
 {
 	m_controlPanelController = controller;
+}
+
+void TabManager::setControlPanelController(ControlPanelController *controller)
+{
+	m_panelController = controller;
+}
+
+void TabManager::setResponseCommonFreq(quint32 freq)
+{
+	if(m_panelController == NULL)
+	{
+		return;
+	}
+
+	m_panelController->setResponseFreq(freq);
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)

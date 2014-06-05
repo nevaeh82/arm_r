@@ -17,16 +17,16 @@ void Prm300ControlWidgetController::onMethodCalled(const QString &method, const 
 {
 	if(method == RPC_SLOT_SERVER_PRM_STATUS)
 	{
-		QList<QVariant> list = argument.toList();
-		quint32 freq = list.at(0).toUInt();
-		quint32 filter = list.at(1).toUInt();
-		quint32 att1 = list.at(2).toUInt();
-		quint32 att2 = list.at(3).toUInt();
-		if(m_view)
-		{
-			m_view->setData(freq, filter, att1, att2);
-		}
-		m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
+        QList<QVariant> list = argument.toList();
+        quint16 freq = list.at(0).toUInt();
+        quint8 filter = list.at(1).toUInt();
+        quint8 att1 = list.at(2).toUInt();
+        quint8 att2 = list.at(3).toUInt();
+        if(m_view)
+        {
+            m_view->setData(freq, filter, att1, att2);
+        }
+        m_dbManager->updatePropertyValue(m_stationName, DB_FREQUENCY_PROPERTY, freq);
 	}
 }
 

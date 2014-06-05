@@ -36,6 +36,7 @@ private:
 
 	QPixmap* m_pmRoundRed;
 	QPixmap* m_pmRoundGreen;
+    QPixmap* m_pmRoundYellow;
 	QLabel* m_indicatorLabel;
 
 	RpcPrmClient*	m_rpcPrmClient;

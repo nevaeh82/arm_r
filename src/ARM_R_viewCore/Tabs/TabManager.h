@@ -31,6 +31,8 @@
 #include "Info/StationConfiguration.h"
 #include "Info/AtlantConfiguraton.h"
 
+#include "../ControlPanel/ControlPanelController.h"
+
 class TabManager: public QObject, public ITabManager, public IControlPanelListener
 {
 	Q_OBJECT
@@ -54,6 +56,7 @@ private:
 
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
+	ControlPanelController*	m_panelController;
 
 public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
@@ -83,8 +86,9 @@ public:
 	void clearAllInformation();
 
 	void setControlPanelController(ICorrelationListener* controller);
+	void setControlPanelController(ControlPanelController *controller);
 
-private:
+	void setResponseCommonFreq(quint32 freq);private:
 	int readStationSettings(const QString &settingsFile);
 	void readRpcSettings();	
 

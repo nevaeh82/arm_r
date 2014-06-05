@@ -266,7 +266,10 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->call( RPC_SLOT_SERVER_PRM_STATUS, data, sender );
 			}else if(messageType == TCP_PRM300_STATUS) {
 				m_rpcServer->call( RPC_SLOT_SERVER_STATUS, data, sender );
-			}
+            }else if(messageType == TCP_PRM300_FREQUENCY_CHANGED)
+            {
+                m_rpcServer->call( RPC_SLOT_PRM300_FREQUENCY_CHANGED, data, sender );
+            }
 			break;
 		case ARMR_TCP_SERVER:
 			if (messageType == TCP_ARMR_SEND_SOLVER_DATA) {

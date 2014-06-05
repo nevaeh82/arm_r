@@ -15,7 +15,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	, m_treeModel( NULL )
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
-//	, m_controlPRM( NULL )
 	, m_indicatorLabel( NULL )
 	, m_spectrumDataSource( NULL )
 	, m_spectrumWidget( NULL )
@@ -29,6 +28,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	, m_rpcFlakonClient( NULL )
 	, m_controlPanelController( NULL )
 	, m_currentCorrelation( 0 )
+	, m_isPanoramaEnabled(false)
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
@@ -159,6 +159,8 @@ void TabSpectrumWidgetController::createRPC()
 	}
 
 	m_view->setRpcPrmClient(m_rpcPrmClient);
+
+//	m_spectrumDataSource->setPrmRpcClient(m_rpcPrmClient);
 }
 
 void TabSpectrumWidgetController::createView()
@@ -188,7 +190,11 @@ void TabSpectrumWidgetController::createView()
 	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
 	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
+    m_spectrumDataSource->setDBManager(m_dbManager);
+    m_spectrumDataSource->setName(m_station->getName());
 	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
+
+    m_spectrumDataSource->setTabManager(m_tabManager);
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
 		correlationWidgetDataSource->registerCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
@@ -215,6 +221,8 @@ void TabSpectrumWidgetController::createTree()
 
 void TabSpectrumWidgetController::setIndicator(int state)
 {
+    /// 2 - change frequency
+    /// 3 - changed frequency
 	m_view->setIndicatorState(state);
 	if(state < 1)
 	{
@@ -225,11 +233,15 @@ void TabSpectrumWidgetController::setIndicator(int state)
 	}
 	else
 	{
+        if(state < 2)
+        {
 		if(m_timerStatus.isActive())
 		{
 			m_timerStatus.stop();
 		}
 	}
+
+}
 }
 
 double TabSpectrumWidgetController::getCurrentFrequency()
@@ -339,7 +351,7 @@ void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 
 void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 {
-	qDebug() << "slot Panorama = " << isEnabled;
+    m_isPanoramaEnabled = isEnabled;
 
 	double panoramaStartValue = 300;
 	double panoramaEndValue = 300;
@@ -390,7 +402,9 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
-		m_spectrumWidget->setZeroFrequency(property.value.toDouble());
+        m_view->setIndicatorState(2);
+        if(!m_isPanoramaEnabled)
+            m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
 		commandCode = COMMAND_PRM_SET_FREQ;
 		commandType = TypeGraphicCommand;
 	}
@@ -433,6 +447,10 @@ void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QV
 		setIndicator( argument.toInt() );
 		return;
 	}
+    if( method == RPC_PRM_FREQUENCY_CHANGED) {
+        setIndicator( argument.toInt() );
+        return;
+}
 }
 
 void TabSpectrumWidgetController::setControlPanelController(ICorrelationListener* controller)

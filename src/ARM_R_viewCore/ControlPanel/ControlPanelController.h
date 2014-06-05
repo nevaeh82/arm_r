@@ -22,6 +22,9 @@
 #include "ListWhiteDialogController.h"
 
 
+#include <QSettings>
+#include <QCoreApplication>
+
 #define INTERVAL 20
 #define MINIMUM_FREQ 20
 #define MAXIMUM_FREQ 7000
@@ -68,6 +71,7 @@ public:
 	void setDbStationController(IDBStation* dbStationController);
 	void setRpcFlakonClient(RpcFlakonClientWrapper* rpcFlakonClient);
 	void setMapStations(QMap<int, Station *> stationsMap);
+	void setResponseFreq(quint32 freq);
 
 	//From correlation Listener
 	void onCorrelationStateChanged(const bool isEnabled);

@@ -90,6 +90,7 @@ void MainWindowController::init()
 	m_dbManager = new DbManager(this);
 	m_tabManager->setDbManager(m_dbManager);
 	m_controlPanelController->setDbManager(m_dbManager);
+	m_tabManager->setControlPanelController(m_controlPanelController);
 
 	m_view->getStackedWidget()->setCurrentIndex(1);
 

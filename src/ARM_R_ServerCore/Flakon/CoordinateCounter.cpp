@@ -193,7 +193,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		int state = 1;
 
 		dataStream << aData.timeHMSMs.at(aLastItem);
-		dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
+        dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
 		dataStream << aData.latLonStdDev.at(aLastItem);
 		dataStream << aData.coordLatLon;
 		dataStream << aData.airspeed.at(aLastItem);

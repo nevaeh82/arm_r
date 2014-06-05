@@ -71,6 +71,22 @@ public:
 		grData->dataProccess(vecFFT1, isComplex);
 
 
+		QList<QVariant> list;
+
+		int freq = 20000;
+		int filter = 0;
+		int att1 = 0;
+		int att2 = 0;
+		list.append(QVariant(freq));
+		list.append(QVariant(filter));
+		list.append(QVariant(att1));
+		list.append(QVariant(att2));
+
+		QVariant data(list);
+
+
+		grData->onMethodCalled(RPC_SLOT_SERVER_PRM_STATUS, data);
+
 		QVector<QPointF> vecFFT2;
 		for(int i = 21; i < 41; i++)
 		{

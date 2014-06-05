@@ -149,7 +149,7 @@ Object DbManager::createStation(const QString &stationName)
 	Property prop;
 	prop.pid = obj.id;
 	prop.name = DB_FREQUENCY_PROPERTY;
-	prop.value = "1830";
+	prop.value = "0";
 	prop.state = 0;
 	prop.isEditable = true;
 

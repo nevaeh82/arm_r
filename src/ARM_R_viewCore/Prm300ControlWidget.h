@@ -18,7 +18,7 @@ public:
 	explicit Prm300ControlWidget(QWidget *parent = 0);
 	~Prm300ControlWidget();
 
-	void setData(int freq, int filter, int att1, int att2);
+    void setData(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
 
 private:
 	Ui::Prm300ControlWidget *ui;

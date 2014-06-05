@@ -37,6 +37,7 @@
 
 ///PRM to RPC client
 #define RPC_SLOT_SERVER_PRM_STATUS                   "rpc_slot_server_prm_status"
+#define RPC_PRM_FREQUENCY_CHANGED                    "rpc_prm_frequency_changed"
 
 ///ATLANT
 #define RPC_SLOT_SERVER_ATLANT_DIRECTION            "rpc_slot_server_atlant_direction"
@@ -54,6 +55,7 @@
 #define RPC_SLOT_FLAKON_STATUS						"rpc_slot_flakon_status"
 #define RPC_METHOD_REQUEST_STATUS                   "rpc_slot_request_status"
 #define RPC_METHOD_FLAKON_REQUEST_STATUS            "rpc_slot_flakon_request_status"
+#define RPC_SLOT_PRM300_FREQUENCY_CHANGED           "rpc_slot_prm300_frequency_changed"
 
 /// to solver
 #define RPC_METHOD_SET_DATA_TO_SOLVER               "rpc_slot_set_data_to_solver"

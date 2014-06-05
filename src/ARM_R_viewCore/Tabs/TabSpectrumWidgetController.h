@@ -60,6 +60,7 @@ private:
 
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
+	bool m_isPanoramaEnabled;
 
 public:
 	explicit TabSpectrumWidgetController(

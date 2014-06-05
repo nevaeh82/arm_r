@@ -20,6 +20,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
 	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
+    m_pmRoundYellow = new QPixmap(":/images/bullet_yellow.png");
+
 	m_indicatorLabel = new QLabel(this);
 	m_indicatorLabel->setFixedSize(16, 16);
 	m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
@@ -127,11 +129,17 @@ void TabSpectrumWidget::setIndicatorStateSlot(int state)
 	switch(state)
 	{
 		case 1:
-			m_indicatorLabel->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
+            m_indicatorLabel->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
 			break;
 		case 0:
 			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
+        case 2:
+            m_indicatorLabel->setPixmap(m_pmRoundYellow->scaled(16,16,Qt::KeepAspectRatio));
+            break;
+        case 3:
+            m_indicatorLabel->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
+            break;
 		default:
 			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;

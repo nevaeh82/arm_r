@@ -4,7 +4,6 @@
 
 RpcPrmClient::RpcPrmClient(IStation *prop, IDbManager *dbManager, IControlPRM*, QObject *parent)
 	: RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
-	//	, m_controlPrm( controlPrm )
 	, m_station( prop )
 	, m_dbManager( dbManager )
 	, m_spectrum( new float[1] )
@@ -33,8 +32,9 @@ bool RpcPrmClient::start(quint16 port, QHostAddress ipAddress)
 	///server
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, this, SLOT(rpcSlotGettingModulation(QString)));
 
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(int, int, int, int)));
+    m_clientPeer->attachSlot(RPC_SLOT_SERVER_PRM_STATUS, this, SLOT(rpcSlotServerPrmStatus(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_STATUS, this, SLOT(rpcSlotServerStatus(QByteArray)));
+    m_clientPeer->attachSlot(RPC_SLOT_PRM300_FREQUENCY_CHANGED, this, SLOT(rpcSlotPRM300FrequencyChanged(QByteArray)));
 
 
 	log_debug("Start RpcPrmClient");
@@ -70,6 +70,7 @@ void RpcPrmClient::formCommand(IMessage *msg)
 			break;
 		case COMMAND_PRM_SET_FREQ:
 			prmSetFreq(data.toUInt());
+            //prmRequestFreq();
 			break;
 		case COMMAND_PRM_REQUEST_FREQ:
 			prmRequestFreq();
@@ -162,8 +163,21 @@ void RpcPrmClient::rpcSlotGettingModulation(QString modulation)
 	//m_grData->set_def_modulation(modulation);
 }
 
-void RpcPrmClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2)
+void RpcPrmClient::rpcSlotServerPrmStatus(QByteArray message)
 {
+
+    QDataStream dataStream(&message, QIODevice::ReadOnly);
+    quint16 prm_freq;
+    quint8 prm_filter;
+    quint8 prm_att1;
+    quint8 prm_att2;
+
+    dataStream >> prm_freq;
+    dataStream >> prm_filter;
+    dataStream >> prm_att1;
+    dataStream >> prm_att2;
+
+
 
 	log_info(QString("PRM Status = %1 %1 %3 %4").arg(prm_freq).arg(prm_filter).arg(prm_att1).arg(prm_att2));
 	QList<QVariant> list;
@@ -175,11 +189,9 @@ void RpcPrmClient::rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_
 
 	QVariant data(list);
 
-	foreach (IRpcListener* listener, m_receiversList) {
-		listener->onMethodCalled(RPC_SLOT_SERVER_PRM_STATUS, data);
-	}
-
-	//	m_parentTab->setIndicator(true);
+    foreach (IRpcListener* listener, m_receiversList) {
+        listener->onMethodCalled(RPC_SLOT_SERVER_PRM_STATUS, data);
+    }
 
 	///TODO: update
 
@@ -207,5 +219,20 @@ void RpcPrmClient::rpcSlotServerStatus(QByteArray message)
 
 	foreach( IRpcListener *listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_PRM_STATE_CHANGED, QVariant(state) );
-	}
+    }
+}
+
+void RpcPrmClient::rpcSlotPRM300FrequencyChanged(QByteArray message)
+{
+    QDataStream dataStream(&message, QIODevice::ReadOnly);
+    unsigned short state;
+    dataStream >> state;
+
+    /// todo, now changed values to correct
+    ///
+    state = 3;
+
+    foreach( IRpcListener *listener, m_receiversList ) {
+        listener->onMethodCalled( RPC_PRM_FREQUENCY_CHANGED, QVariant(state) );
+    }
 }

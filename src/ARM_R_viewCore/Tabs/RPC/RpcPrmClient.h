@@ -94,8 +94,10 @@ signals:
 public slots:
 	///rpc_server
 	void rpcSlotGettingModulation(QString modulation);
-	void rpcSlotServerPrmStatus(int prm_freq, int prm_filter, int prm_att1, int prm_att2);
+    void rpcSlotServerPrmStatus(QByteArray);
 	void rpcSlotServerStatus(QByteArray message);
+    void rpcSlotPRM300FrequencyChanged(QByteArray message);
+
 
 private slots:
 	void slotRpcConnetion();
