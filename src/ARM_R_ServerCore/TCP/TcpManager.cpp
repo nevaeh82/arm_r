@@ -283,6 +283,10 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO, data);
 			}
+			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_SINGLE, data);
+			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT) {
 				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_RESULT, data);
@@ -310,10 +314,10 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->call( RPC_SLOT_SERVER_PRM_STATUS, data, sender );
 			}else if(messageType == TCP_PRM300_STATUS) {
 				m_rpcServer->call( RPC_SLOT_SERVER_STATUS, data, sender );
-            }else if(messageType == TCP_PRM300_FREQUENCY_CHANGED)
-            {
-                m_rpcServer->call( RPC_SLOT_PRM300_FREQUENCY_CHANGED, data, sender );
-            }
+			}else if(messageType == TCP_PRM300_FREQUENCY_CHANGED)
+			{
+				m_rpcServer->call( RPC_SLOT_PRM300_FREQUENCY_CHANGED, data, sender );
+			}
 			break;
 		case ARMR_TCP_SERVER:
 			if (messageType == TCP_ARMR_SEND_SOLVER_DATA) {

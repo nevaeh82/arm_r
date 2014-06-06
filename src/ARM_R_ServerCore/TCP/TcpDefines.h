@@ -50,6 +50,7 @@
 /// Flakon Coordinates Counter
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA					"tcpFlakonCoordinatesCounterAnswerBPLA"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO				"tcpFlakonCoordinatesCounterAnswerBPLAAuto"
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE			"tcpFlakonCoordinatesCounterAnswerBPLASingle"
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER			"tcpFlakonCoordinatesCounterRequestSetSolver"
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR		"tcpFlakonCoordinatesCounterRequestSetSolverClear"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT				"tcpFlakonCoordinatesCounterAnswerBPLAResult"

@@ -49,6 +49,7 @@
 /// BPLA
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF               "rpc_slot_server_send_bpla_def"
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO          "rpc_slot_server_send_bpla_def_auto"
+#define RPC_SLOT_SERVER_SEND_BPLA_DEF_SINGLE        "rpc_slot_server_send_bpla_def_single"
 
 /// connectiont status
 #define RPC_SLOT_SERVER_STATUS                      "rpc_slot_server_status"

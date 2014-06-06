@@ -184,6 +184,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		return;
 	}
 
+	int sourceType = AUTO_HEIGH;
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
 	if( result == SOLVED ) {
@@ -193,13 +194,14 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		int state = 1;
 
 		dataStream << aData.timeHMSMs.at(aLastItem);
-        dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
+		dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
 		dataStream << aData.latLonStdDev.at(aLastItem);
 		dataStream << aData.coordLatLon;
 		dataStream << aData.airspeed.at(aLastItem);
 		dataStream << aData.heigh.at(aLastItem);
 		dataStream << aData.relativeBearing.at(aLastItem);
 		dataStream << m_centerFrequency;
+		dataStream << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
@@ -211,7 +213,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = AUTO_HEIGH;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;;
@@ -229,6 +230,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
 {
+	int sourceType = MANUAL_HEIGH;
+
 	if(aData.timeHMSMs.size()==0) {
 		return;
 	}
@@ -249,6 +252,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 		dataStream << m_alt;									//aData.heigh.at(aLastItem);
 		dataStream << aData.relativeBearing.at(aLastItem);
 		dataStream << m_centerFrequency;
+		dataStream << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
@@ -260,7 +264,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = MANUAL_HEIGH;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;
@@ -278,6 +281,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
 {
+	int sourceType = ONE_DATA;
+
 	if( result == SOLVED ) {
 		QByteArray ba;
 		QDataStream ds(&ba, QIODevice::ReadWrite);
@@ -297,18 +302,18 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 		ds << alt;
 		ds << course;
 		ds << m_centerFrequency;
+		ds << (int) sourceType;
 
-	//	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, ba));
+		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE, ba));
 
-	//	foreach (ITcpListener* receiver, m_receiversList) {
-	//		receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
-	//	}
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		}
 	}
 
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
-	int sourceType = ONE_DATA;
 
 	dataResultStream << sourceType;
 	dataResultStream << (int)result;
