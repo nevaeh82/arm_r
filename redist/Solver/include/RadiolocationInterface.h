@@ -84,13 +84,13 @@ enum ErrorType { SETUP_ERROR, INPUT_DATA_ERROR, INTERNAL_ERROR };
 
 /**
  * @enum SolveResult
- * Результат расчета 
- * @param SOLVED - данные благополучно обработаны 
+ * Результат расчета
+ * @param SOLVED - данные благополучно обработаны
  * @param ERROR_OCCURED - в ходе вычислений появились ошибки
  * @param NOT_ENOUGH_DATA - в солвер добавлено недостаточно данных для анализа их точности
  * @param THERE_IS_NO_SOLUTION - решения не существует
  * @param CANT_DETERMINE_REAL_TRAJECTORY - солвер не может определить реальную траекторию из двух возможных
- * @param TOO_FEW_RANGES - слишком мало корректных разностей расстояний для расчета 
+ * @param TOO_FEW_RANGES - слишком мало корректных разностей расстояний для расчета
  * @param TOO_LOW_SOLUTION_ACCURACY - слишком низкая точность получаемого решения
  * @param TOO_LOW_DATA_ACCURACY - слишком низкая точность входных данных
  * @param COORDS_DOES_NOT_HIT_IN_AREA - рассчитанные координаты не попадают в зону ответственности

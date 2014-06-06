@@ -62,7 +62,6 @@ public:
 
 private:
 	QSqlDatabase m_db;
-
 protected:
 	QStringList getCatalog(const QString& name);
 
@@ -71,6 +70,8 @@ protected:
 	int getDeviceID(const QString& stationName, int port);
 	int getCategoryID(const QString& name);
 	int getSignalTypeID(const QString& name);
+
+
 
 signals:
 

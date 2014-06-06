@@ -18,7 +18,7 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_SET_SHIFT, this, SLOT(setShift(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_METHOD_SET_CENTER, this, SLOT(setCenter(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_METHOD_RECOGNIZE, this, SLOT(recognize(quint64, int, int)));
-	m_serverPeer->attachSlot(RPC_METHOD_SS_CORRELATION, this, SLOT(ssCorrelation(quint64,int,bool)));
+	m_serverPeer->attachSlot(RPC_METHOD_SS_CORRELATION, this, SLOT(ssCorrelation(quint64,int,float,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_AVARAGE_SPECTRUM, this, SLOT(setAvarageSpectrum(quint64,int,int)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FREQUENCY, this, SLOT(setPrmFrequency(quint64, QString, short)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_REQUEST_FREQUENCY, this, SLOT(requestPrmFrequency(quint64,QString)));
@@ -140,12 +140,13 @@ void RpcServer::recognize(quint64 client, int id, int)
 	dispatch( RPC_METHOD_RECOGNIZE, QVariant(byteArray), client );
 }
 
-void RpcServer::ssCorrelation(quint64 client, int id, bool enable)
+void RpcServer::ssCorrelation(quint64 client, int id, float frequency, bool enable)
 {
 	Q_UNUSED( id );
 
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << frequency;
 	dataStream << enable;
 
 	dispatch( RPC_METHOD_SS_CORRELATION, QVariant(byteArray), client );

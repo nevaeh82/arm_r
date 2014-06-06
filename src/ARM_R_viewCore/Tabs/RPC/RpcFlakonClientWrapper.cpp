@@ -15,7 +15,7 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendShiftSignal(int, float)), this, SLOT(sendShiftSlot(int, float)));
 	connect(this, SIGNAL(sendCenterSignal(int,float)), this, SLOT(sendCenterSlot(int,float)));
 	connect(this, SIGNAL(recognizeSignal(int, int)), this, SLOT(recognizeSlot(int, int)));
-	connect(this, SIGNAL(sendCorrelationSignal(int, bool)), this, SLOT(sendCorrelationSlot(int, bool)));
+	connect(this, SIGNAL(sendCorrelationSignal(int, float, bool)), this, SLOT(sendCorrelationSlot(int, float, bool)));
 	connect(this, SIGNAL(sendAvarageSpectrumSignal(int, int)), this, SLOT(sendAvarageSpectrumSlot(int, int)));
 	connect(this, SIGNAL(requestFlakonStatusSignal()), this, SLOT(requestFlakonStatusSlot()));
 }
@@ -128,13 +128,13 @@ void RpcFlakonClientWrapper::recognizeSlot(int id, int type)
 	m_rpcClient->recognize(id, type);
 }
 
-void RpcFlakonClientWrapper::sendCorrelationSlot(int id, bool enable)
+void RpcFlakonClientWrapper::sendCorrelationSlot(int id, float frequency, bool enable)
 {
 	if(NULL == m_rpcClient) {
 		return;
 	}
 
-	m_rpcClient->sendCorrelation(id, enable);
+	m_rpcClient->sendCorrelation(id, frequency, enable);
 }
 
 void RpcFlakonClientWrapper::sendAvarageSpectrumSlot(int id, int avarage)
@@ -181,9 +181,9 @@ void RpcFlakonClientWrapper::recognize(const int id, const int type)
 	emit recognizeSignal(id, type);
 }
 
-void RpcFlakonClientWrapper::sendCorrelation(const int id, const bool enable)
+void RpcFlakonClientWrapper::sendCorrelation(const int id, const float frequency, const bool enable)
 {
-	emit sendCorrelationSignal(id, enable);
+	emit sendCorrelationSignal(id, frequency, enable);
 }
 
 void RpcFlakonClientWrapper::sendAvarageSpectrum(const int id, const int avarage)

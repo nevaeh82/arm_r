@@ -42,7 +42,7 @@ private slots:
 	void setShift(quint64 client, int id, float shift);
 	void setCenter(quint64 client, int id, float center);
 	void recognize(quint64 client, int id, int);
-	void ssCorrelation(quint64 client, int id, bool enable);
+	void ssCorrelation(quint64 client, int id, float frequency, bool enable);
 	void setAvarageSpectrum(quint64 client, int id, int avarage);
 
 	///prm300 from rpc client

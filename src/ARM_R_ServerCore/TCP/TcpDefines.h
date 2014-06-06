@@ -44,6 +44,9 @@
 #define TCP_FLAKON_REQUEST_RECOGNIZE					"tcpFlakonRequestRecognize"
 #define TCP_FLAKON_REQUEST_SS_CORRELATION				"tcpFlakonRequestSSCorrelation"
 
+/// RPC CORRELATION COMMAND
+#define RPC_CORRELATION_CONTROL							"rpcCorrelationControl"
+
 /// Flakon Coordinates Counter
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA					"tcpFlakonCoordinatesCounterAnswerBPLA"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO				"tcpFlakonCoordinatesCounterAnswerBPLAAuto"

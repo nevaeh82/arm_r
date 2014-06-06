@@ -27,7 +27,7 @@ public:
 	void sendShift(const int id, const float shift);
 	void sendCenter(const int id, const float center);
 	void recognize(const int id, const int type);
-	void sendCorrelation(const int id, const bool enable);
+	void sendCorrelation(const int id, const float frequency, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);
 
 	void requestFlakonStatus();
@@ -41,7 +41,7 @@ signals:
 	void sendShiftSignal(int id, float shift);
 	void sendCenterSignal(int id, float shift);
 	void recognizeSignal(int id, int type);
-	void sendCorrelationSignal(int id, bool enable);
+	void sendCorrelationSignal(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSignal(int id, int avarage);
 
 	void requestFlakonStatusSignal();
@@ -57,7 +57,7 @@ private slots:
 	void sendShiftSlot(int id, float shift);
 	void sendCenterSlot(int id, float center);
 	void recognizeSlot(int id, int type);
-	void sendCorrelationSlot(int id, bool enable);
+	void sendCorrelationSlot(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSlot(int id, int avarage);
 
 	void requestFlakonStatusSlot();

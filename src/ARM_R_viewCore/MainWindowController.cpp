@@ -83,7 +83,6 @@ void MainWindowController::init()
 	m_controlPanelController->appendView(m_view->getControlPanelWidget());
 	m_controlPanelController->setDbStationController(m_dbStationController);
 	m_controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
-	m_controlPanelController->setMapStations(m_tabManager->getStations());
 	m_controlPanelController->registerReceiver(m_tabManager);
 	m_tabManager->setControlPanelController((ICorrelationListener* )m_controlPanelController);
 
@@ -200,6 +199,7 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 		m_tabManager->clearAllInformation();
 		m_tabManager->setStationsConfiguration(stationList);
 		m_tabManager->addStationTabs();
+		m_controlPanelController->setMapStations(m_tabManager->getStations());
 
 	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
 

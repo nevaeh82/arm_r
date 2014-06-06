@@ -108,11 +108,11 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 	stream << header.headerCRC;
 
 	if (message->type() == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
-		int poin;
-		inputDataStream >> poin;
+		int point;
+		inputDataStream >> point;
 		QString s(inputData);
-		log_debug(QString("poin %1 %2").arg(QString::number(poin)).arg(s));
-		stream << poin;
+		log_debug(QString("poin %1 %2").arg(QString::number(point)).arg(s));
+		stream << point;
 	}
 	else if (message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM) {
 		int average;
@@ -120,7 +120,15 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 		log_debug(QString("average %1").arg(QString::number(average)));
 		stream << average;
 	}
-	else {
+	else if (message->type() == TCP_FLAKON_REQUEST_SS_CORRELATION) {
+		float frequency;
+		bool enable;
+		inputDataStream >> frequency;
+		inputDataStream >> enable;
+		log_debug(QString("frequency %1 %2").arg(QString::number(frequency)).arg(QString::number(enable)));
+		stream << enable;
+	}
+	else{
 		// For what??
 		dataToSend.append(inputData);
 	}

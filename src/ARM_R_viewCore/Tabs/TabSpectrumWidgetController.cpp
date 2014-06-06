@@ -293,7 +293,7 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
 	m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
 	m_rpcFlakonClient->sendCenter(m_station->getId(), m_station->getCenter());
 
-	m_rpcFlakonClient->sendCorrelation( m_station->getId(), enable );
+	m_rpcFlakonClient->sendCorrelation( m_station->getId(), m_station->getCenter(), enable );
 
 	m_currentCorrelation = m_station->getCenter();
 	dynamic_cast<ControlPanelController*>(m_controlPanelController)->setCorrelationFrequencyValue(m_currentCorrelation);

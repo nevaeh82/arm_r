@@ -278,20 +278,18 @@ int DBStationController::getStationID(const QString& name)
 	}
 
 	QSqlQuery query( m_db );
-	query.prepare( "SELECT id FROM station WHERE name = :name" );
+	bool err = query.prepare( "SELECT id FROM station WHERE name=:name" );
 
 	VALIDATE_QUERY( query );
 
 	query.bindValue( "name", name );
-	query.exec();
+	err = query.exec();
 
 	VALIDATE_QUERY( query );
 
 	if( query.next() ) {
 		return query.record().value(0).toUInt();
 	}
-
-
 	return INVALID_INDEX;
 }
 

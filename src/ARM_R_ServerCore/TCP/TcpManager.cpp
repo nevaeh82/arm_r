@@ -47,6 +47,8 @@ TcpManager::TcpManager(QObject* parent)
 TcpManager::~TcpManager()
 {
 	emit threadTerminateSignal();
+	emit threadTerminateSignalForMapSolver();
+	m_mapCoordinateCounter.clear();
 }
 
 void TcpManager::addStationToFlakon(QString name, BaseTcpDeviceController* controller)
@@ -56,6 +58,46 @@ void TcpManager::addStationToFlakon(QString name, BaseTcpDeviceController* contr
 	} else {
 		m_flakonStations.insert(name, controller);
 	}
+}
+
+void TcpManager::addSolver(QByteArray data)
+{
+	QDataStream ds(&data, QIODevice::ReadOnly);
+	float frequency;
+	bool isEnabled;
+	ds >> frequency;
+	ds >> isEnabled;
+
+	if(isEnabled == false)
+	{
+		emit threadTerminateSignalForMapSolver();
+		m_mapCoordinateCounter.clear();
+		return;
+	}
+
+	if(!m_mapCoordinateCounter.contains(frequency))
+	{
+		CoordinateCounter* coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
+		coordinatesCounter->registerReceiver(this);
+
+		QThread* coordinateCounterThread = new QThread;
+		connect(coordinateCounterThread, SIGNAL(started()), coordinatesCounter, SLOT(initSolver()));
+		connect(coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignalForMapSolver()), coordinateCounterThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignalForMapSolver()), coordinatesCounter, SLOT(deleteLater()));
+		connect(coordinateCounterThread, SIGNAL(finished()), coordinateCounterThread, SLOT(deleteLater()));
+		coordinatesCounter->moveToThread(coordinateCounterThread);
+		coordinateCounterThread->start();
+
+		coordinatesCounter->registerReceiver(m_pServer);
+
+		m_mapCoordinateCounter.insert(frequency, coordinatesCounter);
+	}
+
+	m_flakonController->setCoordinateCounter(m_mapCoordinateCounter.value(frequency));
+
+
+
 }
 
 void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
@@ -251,6 +293,8 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			}
 			else if (messageType == TCP_FLAKON_STATUS) {
 				m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
+			} else if(messageType == RPC_CORRELATION_CONTROL) {
+				addSolver(data.toByteArray());
 			}
 			break;
 		case ATLANT_TCP_DEVICE:
@@ -273,18 +317,38 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			break;
 		case ARMR_TCP_SERVER:
 			if (messageType == TCP_ARMR_SEND_SOLVER_DATA) {
-				if (m_coordinatesCounter == NULL) {
+				CoordinateCounter* currentCoordinateCounter;
+				if(m_mapCoordinateCounter.contains(m_currentFrequencyCorrelation))
+				{
+					currentCoordinateCounter = m_mapCoordinateCounter.value(m_currentFrequencyCorrelation);
+				}
+				else
+				{
+					currentCoordinateCounter = m_coordinatesCounter;
+				}
+				if(currentCoordinateCounter == NULL)
+				{
 					return;
 				}
-				m_coordinatesCounter->sendData(
+				currentCoordinateCounter->sendData(
 							MessageSP(new Message<QByteArray>(
 										  TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER,
 										  argument->data())));
 			} else if (messageType == TCP_ARMR_SEND_SOLVER_CLEAR) {
-				if (m_coordinatesCounter == NULL) {
+				CoordinateCounter* currentCoordinateCounter;
+				if(m_mapCoordinateCounter.contains(m_currentFrequencyCorrelation))
+				{
+					currentCoordinateCounter = m_mapCoordinateCounter.value(m_currentFrequencyCorrelation);
+				}
+				else
+				{
+					currentCoordinateCounter = m_coordinatesCounter;
+				}
+				if(currentCoordinateCounter == NULL)
+				{
 					return;
 				}
-				m_coordinatesCounter->sendData(
+				currentCoordinateCounter->sendData(
 							MessageSP(new Message<QByteArray>(
 										  TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR,
 										  argument->data())));
@@ -342,6 +406,11 @@ void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)
 {
+	if(method == RPC_METHOD_SS_CORRELATION)
+	{
+		addSolver(argument.toByteArray());
+		/// TODO Create solver om frequency
+	}
 	/// todo: this methods doesn't called from any RPC clients, move to TcpDeviceControoler child
 	if (false) {}
 	else if (method == RPC_METHOD_SET_DATA_TO_SOLVER) {

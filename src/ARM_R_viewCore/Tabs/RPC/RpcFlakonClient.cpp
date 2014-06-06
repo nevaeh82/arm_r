@@ -29,7 +29,7 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT, this, SLOT(sloverResultReceived(QByteArray)));
 
-	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,bool)), RPC_METHOD_SS_CORRELATION);
+	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,float,bool)), RPC_METHOD_SS_CORRELATION);
 
 	log_debug("Start RpcPrmClient");
 	return RpcClientBase::start(port, ipAddress);
@@ -66,9 +66,9 @@ void RpcFlakonClient::recognize(const int id, const int type)
 	m_clientPeer->call( RPC_METHOD_RECOGNIZE, id, type );
 }
 
-void RpcFlakonClient::sendCorrelation(const int id, bool enable)
+void RpcFlakonClient::sendCorrelation(const int id, const float frequency, bool enable)
 {
-	emit signalEnableCorrelation(id, enable);
+	emit signalEnableCorrelation(id, frequency, enable);
 	//	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, station->getId(), enable );
 }
 
@@ -121,8 +121,8 @@ void RpcFlakonClient::sloverResultReceived(QByteArray data)
 	}
 }
 
-void RpcFlakonClient::slotEnableCorrelation(int id, bool state)
+void RpcFlakonClient::slotEnableCorrelation(int id, float frequency, bool state)
 {
-	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, id, state );
+	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, id, frequency,state );
 }
 

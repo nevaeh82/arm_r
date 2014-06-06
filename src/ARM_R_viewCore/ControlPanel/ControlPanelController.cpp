@@ -260,7 +260,7 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 	m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
 
-	m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), true);
+	m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
 
 	m_itCheckMode++;
 }

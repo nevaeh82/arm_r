@@ -159,7 +159,6 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );
 	}
 	else if (method == RPC_METHOD_SET_SHIFT) {
-		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_SHIFT, data ) ) );
 	}
 	else if (method == RPC_METHOD_SET_CENTER) {
 		//signal to save value
@@ -174,6 +173,15 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 	}
 	else if (method == RPC_METHOD_SS_CORRELATION) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, data ) ) );
+
+		MessageSP message(new Message<QByteArray>(RPC_CORRELATION_CONTROL, data));
+		if (message == NULL) {
+			return;
+		}
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived((quint32) m_deviceType, m_tcpDeviceName, message);
+		}
+
 	}
 	else if (method == RPC_METHOD_AVARAGE_SPECTRUM) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, data ) ) );

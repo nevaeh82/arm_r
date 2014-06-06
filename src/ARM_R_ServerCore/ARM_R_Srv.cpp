@@ -34,6 +34,8 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	tcpManagerThread->start();
 
 	m_rpcServer->registerReceiver(m_tcpManager, 701);
+//	m_rpcServer->registerReceiver(m_tcpManager, 201);
+
 	m_tcpServer->registerReceiver(m_tcpManager);
 
 	m_tcpManager->setRpcServer(m_rpcServer);

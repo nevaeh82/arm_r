@@ -16,7 +16,7 @@ public:
 	void sendShift(const int id, const float shift);
 	void sendCenter(const int id, const float center);
 	void recognize(const int id, const int type);
-	void sendCorrelation(const int id, const bool enable);
+	void sendCorrelation(const int id, const float frequency, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);
 
 	void requestFlakonStatus();
@@ -34,10 +34,10 @@ protected slots:
 	void sloverResultReceived(QByteArray data);
 
 signals:
-	void signalEnableCorrelation(int, bool);
+	void signalEnableCorrelation(int, float, bool);
 
 private slots:
-	void slotEnableCorrelation(int, bool);
+	void slotEnableCorrelation(int, float, bool);
 };
 
 #endif // RPCFLAKONCLIENT_H

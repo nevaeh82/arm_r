@@ -45,6 +45,10 @@ private:
 	CoordinateCounter* m_coordinatesCounter;
 	PServer*		   m_pServer;
 
+	QMap<float, CoordinateCounter* > m_mapCoordinateCounter;
+
+	float m_currentFrequencyCorrelation;
+
 public:
 	explicit TcpManager(QObject* parent = NULL);
 	virtual ~TcpManager();
@@ -66,9 +70,12 @@ public:
 
 private:
 	void addStationToFlakon(QString name, BaseTcpDeviceController* controller);
+	void addSolver(QByteArray data);
 
 signals:
 	void threadTerminateSignal();
+	void threadTerminateSignalForMapSolver();
+
 	void onMethodCalledInternalSignal(const QString& method, const QVariant& argument);
 
 private slots:
