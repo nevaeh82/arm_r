@@ -295,6 +295,12 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_HYPERBOLA, data);
 			}
+			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_QUALITY_STATUS) {
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_QUALITY_STATUS, data, sender );
+			}
+			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ERRORS) {
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, data, sender );
+			}
 			else if (messageType == TCP_FLAKON_STATUS) {
 				m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
 			} else if(messageType == RPC_CORRELATION_CONTROL) {

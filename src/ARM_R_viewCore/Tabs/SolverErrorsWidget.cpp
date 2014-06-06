@@ -1,9 +1,11 @@
-#include "SolverResultWidget.h"
-#include "ui_SolverResultWidget.h"
+#include "SolverErrorsWidget.h"
+#include "ui_SolverErrorsWidget.h"
 
-SolverResultWidget::SolverResultWidget(QWidget *parent) :
+#include <QScrollBar>
+
+SolverErrorsWidget::SolverErrorsWidget(QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::SolverResultWidget)
+	ui(new Ui::SolverErrorsWidget)
 {
 	ui->setupUi(this);
 
@@ -14,20 +16,18 @@ SolverResultWidget::SolverResultWidget(QWidget *parent) :
 
 	setWindowFlags(flags);
 
-	this->setWindowTitle(tr("Solver log"));
+	this->setWindowTitle(tr("Solver errors"));
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));
-
-	this->hide();
 }
 
-SolverResultWidget::~SolverResultWidget()
+SolverErrorsWidget::~SolverErrorsWidget()
 {
 	delete ui;
 }
 
-void SolverResultWidget::appendSolverResult(const QString &log)
+void SolverErrorsWidget::appendSolverError(const QString &error)
 {
-	ui->teLogResults->append(log);
+	ui->teLogResults->append(error);
 
 	QScrollBar *tempScrollBar = ui->teLogResults->verticalScrollBar();
 	if(ui->checkBoxAutoScroll->isChecked()) {

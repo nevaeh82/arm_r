@@ -24,6 +24,9 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 
 	ui->correlationStatusLabelActive->setFixedSize(16, 16);
 	ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+
+	ui->solverQualityLB->setFixedSize(16, 16);
+	ui->solverQualityLB->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -67,10 +70,22 @@ void ControlPanelWidget::changeCorrelationStatus(QString correlationValue)
 	ui->correlationStatusLabelValue->setText(correlationValue);
 }
 
-void ControlPanelWidget::changeCorrelationStatusActive(bool isActive)
+void ControlPanelWidget::changeCorrelationStatusActive(const bool isActive)
 {
 	if(isActive) {
 		ui->correlationStatusLabelActive->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
+	}
+	else {
+		ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
+	}
+}
+
+
+
+void ControlPanelWidget::changeQualityStatus(const int status)
+{
+	if(1 == status) {
+		ui->solverQualityLB->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
 	}
 	else {
 		ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));

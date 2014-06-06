@@ -55,6 +55,8 @@
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR		"tcpFlakonCoordinatesCounterRequestSetSolverClear"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT				"tcpFlakonCoordinatesCounterAnswerBPLAResult"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA				"tcpFlakonCoordinatesCounterAnswerHyperbola"
+#define TCP_FLAKON_COORDINATES_COUNTER_QUALITY_STATUS				"tcpFlakonCoordinatesCounterQualityStatus"
+#define TCP_FLAKON_COORDINATES_COUNTER_ERRORS						"tcpFlakonCoordinatesCounterErrors"
 
 /// Atlant device external
 #define Atlant_Direction_MsgA	"DIRECTION_ANSWER_MESSAGE"

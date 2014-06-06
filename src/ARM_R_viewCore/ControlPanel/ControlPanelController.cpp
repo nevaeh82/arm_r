@@ -4,6 +4,8 @@
 
 #include <Logger.h>
 
+#include "Rpc/RpcDefines.h"
+
 #define TIMER_INTERVAL 5000
 #define TIMERCHECK_INTERVAL 60000
 #define TIMERINTERVAL_KEY "ControlPanel"
@@ -87,6 +89,7 @@ void ControlPanelController::setDbStationController(IDBStation *dbStationControl
 void ControlPanelController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcFlakonClient)
 {
 	m_rpcFlakonClient = rpcFlakonClient;
+	m_rpcFlakonClient->registerReceiver(this);
 }
 
 void ControlPanelController::setMapStations(QMap<int, Station *> stationsMap)
@@ -363,4 +366,16 @@ void ControlPanelController::changeCorrelationStatus(QString correlationStatus)
 void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 {
 	m_view->changeCorrelationStatusActive(isActive);
+}
+
+void ControlPanelController::onMethodCalled(const QString &method, const QVariant &argument)
+{
+	if (method == RPC_SLOT_SERVER_SEND_QUALITY_STATUS) {
+		int status;
+		QDataStream stream(argument.toByteArray());
+
+		stream >> status;
+
+		m_view->changeQualityStatus(status);
+	}
 }

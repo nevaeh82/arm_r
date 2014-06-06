@@ -28,8 +28,11 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_STATUS, this, SLOT(flakonStatusReceived(QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT, this, SLOT(sloverResultReceived(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_QUALITY_STATUS, this, SLOT(solverQualityStatusReceived(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, this, SLOT(solverErrorsReceived(QByteArray)));
 
 	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,float,bool)), RPC_METHOD_SS_CORRELATION);
+
 
 	log_debug("Start RpcPrmClient");
 	return RpcClientBase::start(port, ipAddress);
@@ -118,6 +121,20 @@ void RpcFlakonClient::sloverResultReceived(QByteArray data)
 {
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_BPLA_RESULT, data );
+	}
+}
+
+void RpcFlakonClient::solverQualityStatusReceived(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_QUALITY_STATUS, data );
+	}
+}
+
+void RpcFlakonClient::solverErrorsReceived(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, data );
 	}
 }
 

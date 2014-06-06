@@ -24,7 +24,16 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -48,7 +57,16 @@
         </property>
         <widget class="QWidget" name="tabPage">
          <layout class="QVBoxLayout" name="verticalLayout_5">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -65,7 +83,16 @@
         </widget>
         <widget class="QWidget" name="initializatioPage">
          <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -123,6 +150,7 @@
     <addaction name="actionAtlantSetup"/>
     <addaction name="actionLists"/>
     <addaction name="actionSolverLogs"/>
+    <addaction name="actionSolverErrors"/>
    </widget>
    <widget class="QMenu" name="menuServer">
     <property name="title">
@@ -166,6 +194,11 @@
   <action name="actionRestartServer">
    <property name="text">
     <string>Restart Server</string>
+   </property>
+  </action>
+  <action name="actionSolverErrors">
+   <property name="text">
+    <string>SolverErrors</string>
    </property>
   </action>
  </widget>

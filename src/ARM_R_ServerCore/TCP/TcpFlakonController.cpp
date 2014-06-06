@@ -162,9 +162,10 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 	}
 	else if (method == RPC_METHOD_SET_CENTER) {
 		//signal to save value
-		bool *result;
-		const double frequency = argument.toDouble(result);
-		if(*result) {
+		///WTF?? OMG.... FACEPALM.TIFF
+		bool result = false;
+		const double frequency = argument.toDouble(&result);
+		if(result) {
 			m_coordinateCounter->setCenterFrequency(frequency);
 		}
 	}

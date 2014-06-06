@@ -38,6 +38,9 @@ signals:
 
 private slots:
 	void slotEnableCorrelation(int, float, bool);
+	void solverQualityStatusReceived(QByteArray data);
+	void solverErrorsReceived(QByteArray data);
+
 };
 
 #endif // RPCFLAKONCLIENT_H

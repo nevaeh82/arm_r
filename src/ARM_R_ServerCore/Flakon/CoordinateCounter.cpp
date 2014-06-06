@@ -2,6 +2,8 @@
 
 #include "CoordinateCounter.h"
 
+#define GOOD_LIMIT 0.7
+
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent)
 {
@@ -135,7 +137,7 @@ void CoordinateCounter::onSendHyperbolesFromRadioLocation(const SolveResult &res
 
 void CoordinateCounter::onErrorOccured(const ErrorType &error_type, const QString &str)
 {
-	emit signalError(error_type, str);
+	emit signalError((int)error_type, str);
 }
 
 void CoordinateCounter::sendData(const MessageSP message)
@@ -208,6 +210,24 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		foreach (ITcpListener* receiver, m_receiversList) {
 			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 		}
+
+		//Send status to ARM-R UI
+
+		QByteArray statusBA;
+		QDataStream dataStreamStatus(&statusBA, QIODevice::WriteOnly);
+
+		int status = 0;
+		if (aData.qualityMassive_.count(GOOD)/GOOD_LIMIT >= aData.qualityMassive_.size()) {
+			status = 1;
+		}
+		dataStreamStatus << status;
+
+		MessageSP messageStatus(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_QUALITY_STATUS, statusBA));
+
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageStatus);
+		}
+
 	}
 
 	QByteArray dataResult;
@@ -222,6 +242,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
 	}
+
+
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
@@ -258,6 +280,23 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 		foreach (ITcpListener* receiver, m_receiversList) {
 			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		}
+
+		//Send status to ARM-R UI
+
+		QByteArray statusBA;
+		QDataStream dataStreamStatus(&statusBA, QIODevice::WriteOnly);
+
+		int status = 0;
+		if (aData.qualityMassive_.count(GOOD)/GOOD_LIMIT >= aData.qualityMassive_.size()) {
+			status = 1;
+		}
+		dataStreamStatus << status;
+
+		MessageSP messageStatus(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_QUALITY_STATUS, statusBA));
+
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageStatus);
 		}
 	}
 
@@ -309,6 +348,7 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 		foreach (ITcpListener* receiver, m_receiversList) {
 			receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 		}
+
 	}
 
 	QByteArray dataResult;
@@ -365,12 +405,19 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 	}
 }
 
-void CoordinateCounter::slotErrorOccured(const ErrorType &error_type, const QString &str)
+void CoordinateCounter::slotErrorOccured(int error_type, QString str)
 {
 	log_debug(QString("ERROR = %1").arg(error_type));
 
-	Q_UNUSED( str );
-	log_debug(QString("ERROR = %1").arg(error_type));
+	QByteArray strBA;
+	QDataStream dataStream(&strBA, QIODevice::WriteOnly);
+	dataStream << str;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ERRORS, strBA));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
 }
 
 
@@ -452,7 +499,7 @@ void CoordinateCounter::initSolver()
 	connect(this, SIGNAL(signalGetDataFromRadioLocationManualHeight(SolveResult,DataFromRadioLocation)), this, SLOT(slotCatchDataFromRadioLocationManual(SolveResult,DataFromRadioLocation)));
 	connect(this, SIGNAL(signalGetHyperbolesDataFromRadioLocation(SolveResult,HyperbolesFromRadioLocation)), this, SLOT(slotCatchDataHyperbolesFromRadioLocation(SolveResult,HyperbolesFromRadioLocation)));
 	connect(this, SIGNAL(signalGetOneDataFromRadioLocation(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)));
-	connect(this, SIGNAL(signalError(ErrorType,QString)), this, SLOT(slotErrorOccured(ErrorType,QString)));
+	connect(this, SIGNAL(signalError(int ,QString)), this, SLOT(slotErrorOccured(int ,QString)));
 
 }
 

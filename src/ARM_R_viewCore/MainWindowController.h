@@ -28,6 +28,7 @@
 #include <Sleeper.h>
 
 #include "Tabs/SolverResultWidgetController.h"
+#include "Tabs/SolverErrorsWidgetController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
@@ -50,6 +51,7 @@ private:
 	uint m_rpcPort;
 
 	SolverResultWidgetController* m_solverWidgetController;
+	SolverErrorsWidgetController* m_solverErrorsWidgetController;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -69,6 +71,7 @@ private slots:
 	void startTabManger();
 	void resetServer();
 
+	void slotShowSolverErrors();
 private:
 
 	void init();

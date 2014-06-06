@@ -19,6 +19,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_rpcConfigClient = NULL;
 	m_rpcSettingsManager = NULL;
 	m_solverWidgetController = NULL;
+	m_solverErrorsWidgetController = NULL;
 
 	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
 	rpcSettingsFile.append("./Tabs/RPC.ini");
@@ -51,6 +52,12 @@ MainWindowController::~MainWindowController()
 	if( resultWidget ) {
 		resultWidget->close();
 		delete resultWidget;
+	}
+
+	SolverErrorsWidget* errorsWidget = m_solverErrorsWidgetController->getView();
+	if( errorsWidget ) {
+		errorsWidget->close();
+		delete errorsWidget;
 	}
 
 	m_tabManager->clearAllInformation();
@@ -103,7 +110,13 @@ void MainWindowController::init()
 	m_solverWidgetController = new SolverResultWidgetController(this);
 	m_solverWidgetController->appendView(solverWidget);
 
+	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
+	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
+	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
+
+
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
+	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
 
 	serverStartedSlot();
@@ -160,6 +173,11 @@ void MainWindowController::slotShowSolverLog()
 	m_solverWidgetController->slotShowWidget();
 }
 
+void MainWindowController::slotShowSolverErrors()
+{
+	m_solverErrorsWidgetController->slotShowWidget();
+}
+
 void MainWindowController::rpcConnectionEstablished()
 {
 	m_rpcConfigClient->requestGetDbConfiguration("./Tabs/Db.ini");
@@ -171,6 +189,9 @@ void MainWindowController::startTabManger()
 {
 	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
 	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+
+	m_rpcFlakonClient->deregisterReceiver(m_solverErrorsWidgetController);
+	m_rpcFlakonClient->registerReceiver(m_solverErrorsWidgetController);
 
 	m_view->getStackedWidget()->setCurrentIndex(0);
 	m_tabManager->start();

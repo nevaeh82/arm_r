@@ -116,12 +116,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="43"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="44"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="43"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="44"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>
@@ -129,7 +129,7 @@
 <context>
     <name>ControlPanelController</name>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="220"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="255"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -144,7 +144,7 @@
     <message>
         <location filename="ControlPanel.ui" line="93"/>
         <location filename="ControlPanel.ui" line="125"/>
-        <location filename="ControlPanel.ui" line="291"/>
+        <location filename="ControlPanel.ui" line="309"/>
         <source> MHz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,47 +189,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="206"/>
+        <location filename="ControlPanel.ui" line="222"/>
         <source>Correlation on frequency </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="213"/>
+        <location filename="ControlPanel.ui" line="215"/>
         <source>---</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="246"/>
+        <location filename="ControlPanel.ui" line="229"/>
+        <source>Solver quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="264"/>
         <source>&lt;&lt;&lt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="259"/>
+        <location filename="ControlPanel.ui" line="277"/>
         <source>&lt;&lt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="278"/>
+        <location filename="ControlPanel.ui" line="296"/>
         <source>&lt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="313"/>
+        <location filename="ControlPanel.ui" line="331"/>
         <source>&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="326"/>
+        <location filename="ControlPanel.ui" line="344"/>
         <source>&gt;&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="339"/>
+        <location filename="ControlPanel.ui" line="357"/>
         <source>&gt;&gt;&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="346"/>
+        <location filename="ControlPanel.ui" line="364"/>
         <source>Set common frequency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -423,53 +428,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="82"/>
+        <location filename="MainWindow.ui" line="109"/>
         <source>Initialization...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="114"/>
+        <location filename="MainWindow.ui" line="141"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="121"/>
+        <location filename="MainWindow.ui" line="148"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="129"/>
+        <location filename="MainWindow.ui" line="157"/>
         <source>Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="143"/>
+        <location filename="MainWindow.ui" line="171"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="148"/>
+        <location filename="MainWindow.ui" line="176"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="153"/>
+        <location filename="MainWindow.ui" line="181"/>
         <source>Atlant setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="158"/>
+        <location filename="MainWindow.ui" line="186"/>
         <source>Lists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="163"/>
+        <location filename="MainWindow.ui" line="191"/>
         <source>SolverLogs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="168"/>
+        <location filename="MainWindow.ui" line="196"/>
         <source>Restart Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="201"/>
+        <source>SolverErrors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -481,17 +491,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="115"/>
+        <location filename="MainWindowController.cpp" line="128"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="115"/>
+        <location filename="MainWindowController.cpp" line="128"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="150"/>
+        <location filename="MainWindowController.cpp" line="163"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -648,6 +658,24 @@
     <message>
         <location filename="SignalDetectedDialog.cpp" line="13"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SolverErrorsWidget</name>
+    <message>
+        <location filename="Tabs/SolverErrorsWidget.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverErrorsWidget.ui" line="20"/>
+        <source>Autoscroll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Tabs/SolverErrorsWidget.cpp" line="12"/>
+        <source>Solver errors</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -850,18 +878,18 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="49"/>
+        <location filename="Tabs/TabManager.cpp" line="50"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="192"/>
-        <location filename="Tabs/TabManager.cpp" line="209"/>
+        <location filename="Tabs/TabManager.cpp" line="193"/>
+        <location filename="Tabs/TabManager.cpp" line="210"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="136"/>
+        <location filename="Tabs/TabManager.cpp" line="137"/>
         <source>Atlant</source>
         <translation type="unfinished"></translation>
     </message>

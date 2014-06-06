@@ -78,17 +78,17 @@ void RpcServer::logClientDisconected(quint64 client)
 	Q_UNUSED( client );
 }
 
-void RpcServer::requestGetStationListSlot(quint64 client, QString configFilename)
+void RpcServer::requestGetStationListSlot(quint64, QString configFilename)
 {
 	dispatch( RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, QVariant(configFilename) );
 }
 
-void RpcServer::requestGetAtlantConfigurationSlot(quint64 client, QString configFilename)
+void RpcServer::requestGetAtlantConfigurationSlot(quint64, QString configFilename)
 {
 	dispatch( RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, QVariant(configFilename) );
 }
 
-void RpcServer::requestGetDbConfigurationSlot(quint64 client, QString configFilename)
+void RpcServer::requestGetDbConfigurationSlot(quint64, QString configFilename)
 {
 	dispatch( RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, QVariant(configFilename) );
 }

@@ -79,7 +79,7 @@ signals:
 	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
 	void signalGetOneDataFromRadioLocation(const SolveResult&, const OneDataFromRadioLocation&, const OneDataFromRadioLocation&);
 	void signalGetHyperbolesDataFromRadioLocation(const SolveResult&, const HyperbolesFromRadioLocation&);
-	void signalError(const ErrorType&, const QString&);
+	void signalError(int, QString);
 
 
 	// ICoordinateCounter interface
@@ -101,7 +101,7 @@ private slots:
 	void slotCatchDataFromRadioLocationManual(const SolveResult& result, const DataFromRadioLocation& aData);
 	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
 	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
-	void slotErrorOccured(const ErrorType& error_type, const QString& str);
+	void slotErrorOccured(int error_type, QString str);
 	void slotSetCenterFrequency(const double& frequency);
 
 signals:

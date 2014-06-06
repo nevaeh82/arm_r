@@ -34,6 +34,8 @@
 #define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
 #define RPC_SLOT_SERVER_SEND_BPLA_RESULT			"rpc_slot_server_send_solver_result"
 #define RPC_SLOT_SERVER_SEND_HYPERBOLA				"rpc_slot_server_send_hyperbola"
+#define RPC_SLOT_SERVER_SEND_QUALITY_STATUS			"rpc_slot_server_send_quality_status"
+#define RPC_SLOT_SERVER_SEND_SOLVER_ERRORS			"rpc_slot_server_send_solver_errors"
 
 ///PRM to RPC client
 #define RPC_SLOT_SERVER_PRM_STATUS                   "rpc_slot_server_prm_status"

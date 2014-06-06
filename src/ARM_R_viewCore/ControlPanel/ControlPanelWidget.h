@@ -31,8 +31,9 @@ public:
 	~ControlPanelWidget();
 
 	void changeCorrelationStatus(QString correlationValue);
-	void changeCorrelationStatusActive(bool isActive);
+	void changeCorrelationStatusActive(const bool isActive);
 
+	void changeQualityStatus(const int status);
 signals:
 	void commonFreqChangedSignal(int value);
 	void bandwidthChangedSignal(int start, int end);

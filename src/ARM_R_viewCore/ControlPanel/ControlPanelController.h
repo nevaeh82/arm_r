@@ -31,7 +31,7 @@
 
 #include "Interfaces/ICorrelationListener.h"
 
-class ControlPanelController : public QObject, public IControlPanelController, public ICorrelationListener
+class ControlPanelController : public QObject, public IControlPanelController, public ICorrelationListener, public IRpcListener
 {
 	Q_OBJECT
 
@@ -78,6 +78,8 @@ public:
 
 	void setCorrelationFrequencyValue(double value);
 
+	virtual void onMethodCalled(const QString &method, const QVariant &argument);
+
 signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);
@@ -109,6 +111,8 @@ private slots:
 
 	void changeCorrelationStatus(QString correlationStatus);
 	void changeCorrelationStatusActive(bool isActive);
+
+
 
 };
 

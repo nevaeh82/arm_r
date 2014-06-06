@@ -62,7 +62,9 @@ SOURCES += \
     DBStation/StationHelper.cpp \
     DBStation/StationsDataTableModel.cpp \
     Tabs/SolverResultWidget.cpp \
-    Tabs/SolverResultWidgetController.cpp
+    Tabs/SolverResultWidgetController.cpp \
+    Tabs/SolverErrorsWidget.cpp \
+    Tabs/SolverErrorsWidgetController.cpp
 
 HEADERS += \
 	stdafx.h \
@@ -136,7 +138,9 @@ HEADERS += \
     DBStation/IDBStationListener.h \
     DBStation/StationsDataTableModel.h \
     Tabs/SolverResultWidget.h \
-    Tabs/SolverResultWidgetController.h
+    Tabs/SolverResultWidgetController.h \
+    Tabs/SolverErrorsWidget.h \
+    Tabs/SolverErrorsWidgetController.h
 
 FORMS += \
 	ControlPanel.ui \
@@ -152,7 +156,8 @@ FORMS += \
 	Prm300ControlWidget.ui \
     ControlPanel/ListWhiteDialog.ui \
     SignalDetectedDialog.ui \
-    Tabs/SolverResultWidget.ui
+    Tabs/SolverResultWidget.ui \
+    Tabs/SolverErrorsWidget.ui
 
 
 RESOURCES += \
