@@ -32,6 +32,48 @@
 
 #include "Protobuf/ARMR_OD/ZVPacket.pb.h"
 
+// Copy/paste from ARM OD UavDefines.h
+typedef struct UAVPositionDataEnemy
+{
+	UAVPositionDataEnemy()
+	{
+		altitude	= 0.0;
+		altitudeStdDev = 0.0;
+		speed		= 0.0;
+		course		= 0.0;
+		state		= 0;
+		frequency	= -1;
+		time		= QTime::currentTime();
+		latLonStdDev	= QPointF(0.0, 0.0);
+		sourceType  = 0;
+	}
+
+	UAVPositionDataEnemy(const UAVPositionDataEnemy& object)
+	{
+		altitude	= object.altitude;
+		altitudeStdDev = object.altitudeStdDev;
+		speed		= object.speed;
+		course		= object.course;
+		state		= object.state;
+		frequency	= object.frequency;
+		time		= object.time;
+		latLonStdDev	= object.latLonStdDev;
+		latLon		= object.latLon;
+		sourceType  = object.sourceType;
+	}
+
+	double		altitude;
+	double		altitudeStdDev;
+	double		speed;
+	double		course;
+	int			state;
+	double		frequency;
+	QTime		time;
+	QPointF		latLonStdDev;
+	QPointF		latLon;
+	uint		sourceType;
+
+} UAVPositionDataEnemy;
 
 class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter, public ISolverListener
 {
@@ -93,6 +135,9 @@ private:
 	void setSolverDataSize(int aSize);
 	void setSolverAnalyzeSize(int aSize);
 
+	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
+	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
+
 public slots:
 	void initSolver();
 
@@ -109,4 +154,11 @@ signals:
 	void signalSetCenterFrequency(const double& frequency);
 };
 
+inline QDataStream& operator<<(QDataStream& out, const UAVPositionDataEnemy& object)
+{
+	return out << object.altitude << object.altitudeStdDev << object.speed
+			   << object.course << object.state << object.frequency
+			   << object.time << object.latLonStdDev
+			   << object.latLon;
+}
 #endif // COORDINATECOUNTER_H

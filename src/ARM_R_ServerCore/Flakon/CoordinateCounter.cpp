@@ -191,21 +191,12 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 	if( result == SOLVED ) {
 		QByteArray dataToSend;
-		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+		QDataStream ds(&dataToSend, QIODevice::WriteOnly);
 
-		int state = 1;
-
-		dataStream << aData.timeHMSMs.at(aLastItem);
-		dataStream << state;								/*aData.StateMassive_.at(aLastItem)*/
-		dataStream << aData.latLonStdDev.at(aLastItem);
-		dataStream << aData.coordLatLon;
-		dataStream << aData.airspeed.at(aLastItem);
-		dataStream << aData.heigh.at(aLastItem);
-		dataStream << aData.relativeBearing.at(aLastItem);
-		dataStream << m_centerFrequency;
+		ds << encodeSolverData(aData);
 
 		/// @deprecated Now source type determinates by TCP/RPC message type
-		dataStream << sourceType;
+		ds << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
 
@@ -229,7 +220,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		foreach (ITcpListener* receiver, m_receiversList) {
 			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageStatus);
 		}
-
 	}
 
 	QByteArray dataResult;
@@ -244,8 +234,6 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
 	}
-
-
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
@@ -264,21 +252,12 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	if( result == SOLVED ) {
 		QByteArray dataToSend;
-		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+		QDataStream ds(&dataToSend, QIODevice::WriteOnly);
 
-		int state = 1;
-
-		dataStream << aData.timeHMSMs.at(aLastItem);
-		dataStream << state;									/*aData.StateMassive_.at(aLastItem)*/
-		dataStream << aData.latLonStdDev.at(aLastItem);
-		dataStream << aData.coordLatLon;
-		dataStream << aData.airspeed.at(aLastItem);
-		dataStream << m_alt;									//aData.heigh.at(aLastItem);
-		dataStream << aData.relativeBearing.at(aLastItem);
-		dataStream << m_centerFrequency;
+		ds << encodeSolverData(aData, true);
 
 		/// @deprecated Now source type determinates by TCP/RPC message type
-		dataStream << sourceType;
+		ds << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
 
@@ -330,32 +309,11 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 		QByteArray ba;
 		QDataStream ds(&ba, QIODevice::ReadWrite);
 
-		double alt = 100;
-		double speed = 0;
-		double course = 0;
-		int state = 1;
+		QList<UAVPositionDataEnemy> list;
+		list << encodeSolverData(aData_1);
+		list << encodeSolverData(aData_2);
 
-		QVector<QPointF>vec;
-		vec.append(aData_1.coordLatLon);
-		ds << aData_1.timeHMSMs;
-		ds << state/*aData.StateMassive_.at(aLastItem)*/;
-		ds << aData_1.latLonStdDev;
-		ds << vec;
-		ds << speed;
-		ds << alt;
-		ds << course;
-		ds << m_centerFrequency;
-
-		vec.clear();
-		vec.append(aData_2.coordLatLon);
-		ds << aData_2.timeHMSMs;
-		ds << state/*aData.StateMassive_.at(aLastItem)*/;
-		ds << aData_2.latLonStdDev;
-		ds << vec;
-		ds << speed;
-		ds << alt;
-		ds << course;
-		ds << m_centerFrequency;
+		ds << list;
 
 		/// @deprecated Now source type determinates by TCP/RPC message type
 		ds << (int) sourceType;
@@ -450,7 +408,6 @@ void CoordinateCounter::setSolverAnalyzeSize(int aSize)
 	}
 }
 
-
 void CoordinateCounter::initSolver()
 {
 	//Solver
@@ -521,4 +478,61 @@ void CoordinateCounter::initSolver()
 void CoordinateCounter::slotSetCenterFrequency(const double& frequency)
 {
 	m_centerFrequency = frequency;
+}
+
+QList<UAVPositionDataEnemy> CoordinateCounter::encodeSolverData(
+		const DataFromRadioLocation& data, bool useCommonAlt)
+{
+	// get the shortest length of vectors
+	// to prevent app crash fault of erroneous data content
+	int len = data.timeHMSMs.size();
+	len = qMin( len, data.airspeed.size() );
+	len = qMin( len, data.airSpeedStdDev.size() );
+	len = qMin( len, data.coordLatLon.size() );
+	len = qMin( len, data.heigh.size() );
+	len = qMin( len, data.heighStdDev.size() );
+	len = qMin( len, data.latLonStdDev.size() );
+	len = qMin( len, data.relativeBearing.size() );
+	len = qMin( len, data.StateMassive_.size() );
+
+	QList<UAVPositionDataEnemy> list;
+
+	for ( int i=0; i < len; i++ ) {
+		UAVPositionDataEnemy uav;
+
+		uav.altitude = useCommonAlt ? m_alt : data.heigh[i];
+		uav.altitudeStdDev = data.heighStdDev[i];
+		uav.speed = data.airspeed[i];
+		uav.course = data.relativeBearing[i];
+		uav.state = 1; // data.StateMassive_[i]
+		uav.frequency = m_centerFrequency;
+		uav.time = data.timeHMSMs[i];
+		uav.latLonStdDev = data.latLonStdDev[i];
+		uav.latLon = data.coordLatLon[i];
+
+		list << uav;
+	}
+
+	return list;
+}
+
+UAVPositionDataEnemy CoordinateCounter::encodeSolverData(const OneDataFromRadioLocation& data)
+{
+	UAVPositionDataEnemy uav;
+
+	double alt = 100;
+	double speed = 0;
+	double course = 0;
+
+	uav.altitude = alt;
+	uav.altitudeStdDev = data.heighStdDev;
+	uav.speed = speed;
+	uav.course = course;
+	uav.state = 1;
+	uav.frequency = m_centerFrequency;
+	uav.time = data.timeHMSMs;
+	uav.latLonStdDev = data.latLonStdDev;
+	uav.latLon = data.coordLatLon;
+
+	return uav;
 }
