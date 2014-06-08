@@ -37,6 +37,8 @@ copy-bin:
 	$(cp) -rudf $(BinDir)/RDP $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/Rpc $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/icons $(TmpRel)/bin
+	$(cp) -rudf $(BinDir)/audio $(TmpRel)/bin
+	$(cp) -rudf $(BinDir)/phonon-backend $(TmpRel)/bin
 
 
 	$(echo) VERSION = $(if $(PRODUCT_VERSION_REL),$(PRODUCT_VERSION_REL),$(PRODUCT_VERSION).0) > $(TmpRel)/bin/version.ini

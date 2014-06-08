@@ -28,12 +28,16 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
 
+	m_controlPanelController = NULL;
 	nextClearState = false;
 
 	m_spectrumShow = true;
-	m_overthreshold = 0;
-
 	correlationFlag = false;
+
+	m_controlPanelMode = -1;
+	m_stopFlag = true;
+
+	m_sigDialog = NULL;
 }
 
 SpectrumWidgetController::~SpectrumWidgetController()
@@ -43,6 +47,10 @@ SpectrumWidgetController::~SpectrumWidgetController()
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
 {
 	m_view = view;
+	m_sigDialog = new SignalDetectedDialog(m_view);
+
+	//m_sigDialog->hide();
+
 
 	init();
 }
@@ -59,6 +67,7 @@ void SpectrumWidgetController::setId(const int id)
 
 void SpectrumWidgetController::setSpectrumName(const QString &name)
 {
+	m_name = name;
 	m_view->setSpectrumName(name);
 }
 
@@ -167,6 +176,11 @@ QWidget *SpectrumWidgetController::getWidget() const
 
 void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
 {
+	if(m_stopFlag == false)
+	{
+		return;
+	}
+
 	m_mux.lock();
 	m_bandwidth = bandwidth;
 	m_pointCount = PointCount;
@@ -178,6 +192,11 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
 {
+	if(m_stopFlag == false)
+	{
+		return;
+	}
+
 	m_rpcClient->requestFrequency();
 	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 
@@ -214,38 +233,66 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	m_mux.unlock();
 
+	if(m_controlPanelMode == 3)
+	{
+		m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+		return;
+	}
+
+
 	if((m_threshold != -1000) && (m_rett == -100))
 	{
+		QList<StationsFrequencyAndBandwith> list;
+
+		if(m_controlPanelMode == 2)
+		{
+			bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+		}
+
 		for(int i = 0; i < m_pointCount; i++)
 		{
+			double overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
+
 			if((spectrum[i] > m_threshold) && (m_rett != -99))
 			{
-				m_overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
+				if(m_controlPanelMode == 2)
+				{
+					foreach (StationsFrequencyAndBandwith st, list) {
+						if((overthreshold > (st.frequency - st.bandwidth/2)) && (overthreshold < (st.frequency + st.bandwidth/2))){
+							m_overthreshold.append(overthreshold);
+						}
+					}
+				}else {
+					m_overthreshold.append(overthreshold);
+				}
 				m_rett = 0;
-				break;
 			}
 		}
 	}
 
 	//TODO: Write signals values over m_threshold. Task 6186
-	if(m_overthreshold != 0) {
+	if(!m_overthreshold.isEmpty()) {
 
 		setSpectrumShow(false);
+		m_stopFlag = false;
 
-		SignalDetectedDialog dlg(m_view);
-		dlg.setFrequency(m_overthreshold);
+		m_sigDialog->setFrequency(m_name, m_overthreshold);
 
-		int result = dlg.exec();
+		int result = m_sigDialog->exec();
+
+		m_overthreshold.clear();
+		m_rett = -100;
 
 		if(result == QDialog::Accepted){
 			setSpectrumShow(true);
+			m_stopFlag = true;
+
 		}
 		else {
 			setSpectrumShow(false);
+			m_stopFlag = false;
+			return;
 		}
-
-		m_overthreshold = 0;
-		m_rett = -100;
 	}
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
@@ -303,6 +350,7 @@ void SpectrumWidgetController::setSpectrumShow(bool state)
 	//emit signalSpectrumEnable(state);
 
 	m_view->slotSetEnableSpactrum(state);
+	m_stopFlag = state;
 }
 
 void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list)
@@ -328,6 +376,10 @@ void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFr
 
 void SpectrumWidgetController::setZeroFrequency(double val)
 {
+	if(m_stopFlag == false)
+	{
+		return;
+	}
 	m_graphicsWidget->ClearAllDetectedAreas(0);
 	m_graphicsWidget->ClearAllDetectedAreas(1);
 	m_graphicsWidget->ClearAllDetectedAreas(2);
@@ -381,6 +433,12 @@ void SpectrumWidgetController::setDbManager(IDbManager *dbManager)
 void SpectrumWidgetController::setDbStationController(DBStationController *controller)
 {
 	m_dbStationController = controller;
+}
+
+void SpectrumWidgetController::setControlPanelController(ControlPanelController *controller)
+{
+	m_controlPanelController = controller;
+	connect(m_controlPanelController, SIGNAL(signalSetMode(int)), this, SLOT(slotControlPanelMode(int)));
 }
 
 void SpectrumWidgetController::init()
@@ -655,4 +713,9 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		default:
 			break;
 	}
+}
+
+void SpectrumWidgetController::slotControlPanelMode(int mode)
+{
+	m_controlPanelMode = mode;
 }

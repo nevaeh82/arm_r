@@ -2,6 +2,8 @@
 
 #include "TcpFlakonCoder.h"
 
+#include <QDebug>
+
 TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
 	BaseTcpDeviceCoder(parent)
 {
@@ -121,11 +123,8 @@ QByteArray TcpFlakonCoder::decode(const MessageSP message)
 		stream << average;
 	}
 	else if (message->type() == TCP_FLAKON_REQUEST_SS_CORRELATION) {
-		float frequency;
 		bool enable;
-		inputDataStream >> frequency;
 		inputDataStream >> enable;
-		log_debug(QString("frequency %1 %2").arg(QString::number(frequency)).arg(QString::number(enable)));
 		stream << enable;
 	}
 	else{

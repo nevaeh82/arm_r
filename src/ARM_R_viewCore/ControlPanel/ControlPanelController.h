@@ -50,6 +50,7 @@ private:
 
 	int m_timerInterval;
 	int m_timerCheckInterval;
+	int m_mode;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
@@ -84,6 +85,7 @@ signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);
 	void setCorrelationStatusActive(bool isActive);
+	void signalSetMode(int mode);
 
 public slots:
 
@@ -111,6 +113,8 @@ private slots:
 
 	void changeCorrelationStatus(QString correlationStatus);
 	void changeCorrelationStatusActive(bool isActive);
+
+	void slotSetMode(int mode);
 
 
 

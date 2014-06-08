@@ -172,6 +172,7 @@ void TabManager::addStationTabs()
 		tabController->setRpcFlakonClient(m_rpcFlakonClient);
 		tabController->appendView(tabSpectrumWidget);
 		tabController->setControlPanelController(m_controlPanelController);
+		tabController->setControlPanelControllerTrue(m_panelController);
 
 		m_dbManager->registerReceiver(tabController);
 

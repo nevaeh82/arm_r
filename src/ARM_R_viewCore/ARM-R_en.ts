@@ -9,47 +9,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="24"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="89"/>
         <source>Station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="34"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="62"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="51"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="79"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="61"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="96"/>
         <source>Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="81"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="106"/>
         <source>Bandwidth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="95"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="133"/>
         <source>Signal Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="122"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="143"/>
+        <source>Memo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="DBStation/AddStationDataDialog.ui" line="37"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="129"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="44"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="DBStation/AddStationDataDialog.ui" line="136"/>
+        <location filename="DBStation/AddStationDataDialog.ui" line="51"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -129,7 +134,7 @@
 <context>
     <name>ControlPanelController</name>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="255"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="259"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -491,17 +496,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="128"/>
+        <location filename="MainWindowController.cpp" line="127"/>
         <source>Unable to connect to server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="128"/>
+        <location filename="MainWindowController.cpp" line="127"/>
         <source>Please try to restart application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="163"/>
+        <location filename="MainWindowController.cpp" line="162"/>
         <source>DataBase is not opened!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -636,18 +641,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SignalDetectedDialog.ui" line="31"/>
+        <location filename="SignalDetectedDialog.ui" line="22"/>
+        <source>Overthreshols on follow Frequencies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SignalDetectedDialog.ui" line="42"/>
         <source>Attention! Signal has been detected!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SignalDetectedDialog.ui" line="43"/>
-        <source>Frequency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SignalDetectedDialog.ui" line="50"/>
-        <source>MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -674,7 +674,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/SolverErrorsWidget.cpp" line="12"/>
+        <location filename="Tabs/SolverErrorsWidget.cpp" line="19"/>
         <source>Solver errors</source>
         <translation type="unfinished"></translation>
     </message>
@@ -692,7 +692,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidget.cpp" line="10"/>
+        <location filename="Tabs/SolverResultWidget.cpp" line="17"/>
         <source>Solver log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -816,53 +816,53 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="76"/>
+        <location filename="SpectrumWidgetController.cpp" line="78"/>
         <source>File error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="76"/>
+        <location filename="SpectrumWidgetController.cpp" line="78"/>
         <source>Very small file or file not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="193"/>
+        <location filename="SpectrumWidgetController.cpp" line="205"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="394"/>
+        <location filename="SpectrumWidgetController.cpp" line="446"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="397"/>
+        <location filename="SpectrumWidgetController.cpp" line="449"/>
         <source>Add to white list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="398"/>
+        <location filename="SpectrumWidgetController.cpp" line="450"/>
         <source>Add to black list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="399"/>
+        <location filename="SpectrumWidgetController.cpp" line="451"/>
         <source>Determine signal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="140"/>
-        <location filename="SpectrumWidgetController.cpp" line="400"/>
+        <location filename="SpectrumWidgetController.cpp" line="142"/>
+        <location filename="SpectrumWidgetController.cpp" line="452"/>
         <source>Enable correlation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="401"/>
+        <location filename="SpectrumWidgetController.cpp" line="453"/>
         <source>Cleanup text fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="137"/>
+        <location filename="SpectrumWidgetController.cpp" line="139"/>
         <source>Disable correlation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -883,8 +883,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="193"/>
-        <location filename="Tabs/TabManager.cpp" line="210"/>
+        <location filename="Tabs/TabManager.cpp" line="194"/>
+        <location filename="Tabs/TabManager.cpp" line="211"/>
         <source>Common</source>
         <translation type="unfinished"></translation>
     </message>
@@ -905,12 +905,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="133"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="134"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="133"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="134"/>
         <source>Property</source>
         <translation type="unfinished"></translation>
     </message>

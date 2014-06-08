@@ -60,6 +60,7 @@ private:
 
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
+	ControlPanelController* m_controlPanelControllerTrue;
 	bool m_isPanoramaEnabled;
 
 public:
@@ -119,6 +120,7 @@ public:
 
 	//Set control Panel controller pointer
 	void setControlPanelController(ICorrelationListener* controller);
+	void setControlPanelControllerTrue(ControlPanelController* controller);
 
 private:
 	void init();

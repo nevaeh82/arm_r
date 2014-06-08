@@ -12,6 +12,7 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->commonFrequencyPB, SIGNAL(clicked()), this, SLOT(onSetCommonFrequencySlot()));
 	connect(ui->panoramaPB, SIGNAL(clicked()), this, SLOT(onSetBandWidthSlot()));
     connect(ui->cbMode, SIGNAL(activated(int)), this, SLOT(slotChangeMode(int)));
+	connect(ui->cbMode, SIGNAL(activated(int)), this, SIGNAL(signalSetMode(int)));
 	connect(ui->pbDown1MHz, SIGNAL(clicked()), this, SIGNAL(signalDown1Mhz()));
 	connect(ui->pbDown10MHz, SIGNAL(clicked()), this, SIGNAL(signalDown10Mhz()));
 	connect(ui->pbDown100MHz, SIGNAL(clicked()), this, SIGNAL(signalDown100Mhz()));

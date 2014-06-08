@@ -1,4 +1,4 @@
-QT += core sql network
+QT += core sql network phonon
 
 TARGET   = ARM_R_viewCore
 TEMPLATE = lib

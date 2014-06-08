@@ -1,4 +1,4 @@
-QT += core gui network sql
+QT += core gui network sql phonon
 CONFIG   += gui
 #CONFIG   += console
 

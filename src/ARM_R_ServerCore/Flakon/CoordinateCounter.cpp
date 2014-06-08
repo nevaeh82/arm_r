@@ -374,20 +374,18 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 {
 	if( result == SOLVED ) {
 		QByteArray dataToSend;
-		QVector<QPointF> tmpHyperb;
 
-		foreach (tmpHyperb, hyperb.hyperboles_list) {
-			QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-			dataStream << tmpHyperb;
-			dataStream << (double)m_centerFrequency;
+		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+		dataStream << m_centerFrequency;
+		dataStream << hyperb.timeHMSMs;
+		dataStream << hyperb.hyperboles_list;
 
-			MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA, dataToSend));
-			foreach (ITcpListener* receiver, m_receiversList) {
-				receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
-			}
-
-			dataToSend.clear();
+		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA, dataToSend));
+		foreach (ITcpListener* receiver, m_receiversList) {
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 		}
+
+		dataToSend.clear();
 	}
 
 	QByteArray dataResult;

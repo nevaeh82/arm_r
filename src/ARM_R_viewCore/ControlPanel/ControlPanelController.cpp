@@ -21,6 +21,7 @@ ControlPanelController::ControlPanelController(QObject *parent)
 	m_dbStation = NULL;
 	m_rpcFlakonClient = NULL;
 	m_mainStation = NULL;
+	m_mode = 0;
 
 	init();
 }
@@ -74,6 +75,7 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
 	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
 
+	connect(m_view, SIGNAL(signalSetMode(int)), this, SLOT(slotSetMode(int)));
 }
 
 void ControlPanelController::setDbManager(IDbManager *dbManager)
@@ -231,6 +233,8 @@ void ControlPanelController::slotCheckModeSetFreq()
 		m_itCheckMode = m_listOfFreqs.begin();
 	}
 
+	double freq = (*m_itCheckMode).frequency;
+	double band = (*m_itCheckMode).bandwidth;
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, (*m_itCheckMode).frequency);
 	m_dbManager->updatePropertyForAllObjects(DB_SELECTED_PROPERTY, (*m_itCheckMode).bandwidth);
 
@@ -259,11 +263,14 @@ void ControlPanelController::slotCheckModeSetFreq()
 		return;
 	}
 
-	m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
+	if(m_mode == 3)
+	{
+		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
 
-	m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
+		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
 
-	m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
+		m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
+	}
 
 	m_itCheckMode++;
 }
@@ -366,6 +373,12 @@ void ControlPanelController::changeCorrelationStatus(QString correlationStatus)
 void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 {
 	m_view->changeCorrelationStatusActive(isActive);
+}
+
+void ControlPanelController::slotSetMode(int mode)
+{
+	m_mode = mode;
+	emit signalSetMode(mode);
 }
 
 void ControlPanelController::onMethodCalled(const QString &method, const QVariant &argument)

@@ -24,6 +24,11 @@ prebuild::
 	$(cp) -ud RDP/cell.net.rdp $(DESTDIR)/RDP
 	$(mkdir) $(DESTDIR)/Rpc
 	$(cp) -ud Rpc/*.ini $(DESTDIR)/Rpc
+	$(mkdir) $(DESTDIR)/audio
+	$(cp) -ud audio/*.mp3 $(DESTDIR)/audio
+	$(cp) -ud phonon/*.* $(DESTDIR)
+
+
 	$(call begin-build, Prebuild OK )
 
 postbuild::

@@ -7,6 +7,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QFile>
+#include <QList>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
@@ -24,6 +25,8 @@
 #include "DBStation/DBStationController.h"
 
 #include "SignalDetectedDialog.h"
+
+#include "ControlPanel/ControlPanelController.h"
 
 #define TO_MHZ	1000000.0
 #define TO_MHZ2	1000.0
@@ -70,15 +73,22 @@ private:
 
 	IDbManager* m_dbManager;
 	DBStationController* m_dbStationController;
+	ControlPanelController* m_controlPanelController;
 
 	bool nextClearState;
 	SpectrumSelection tmpSelection;
 
 	bool m_spectrumShow;
 
-	double m_overthreshold;
+	QList<double> m_overthreshold;
 
 	bool correlationFlag;
+
+	int m_controlPanelMode;
+	bool m_stopFlag;
+
+	SignalDetectedDialog* m_sigDialog;
+	QString m_name;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -107,6 +117,7 @@ public:
 
 	virtual void setDbManager(IDbManager* dbManager);
 	virtual void setDbStationController(DBStationController* controller);
+	virtual void setControlPanelController(ControlPanelController* controller);
 
 	void setup();
 	void setControlPrmState(bool state);
@@ -118,6 +129,8 @@ public:
 	void onCorrelationStateChanged(const bool isEnabled);
 
 	void updateDBAreas();
+
+
 
 
 private:
@@ -164,6 +177,8 @@ private slots:
 
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
+
+	void slotControlPanelMode(int mode);
 
 
 

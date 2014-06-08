@@ -159,6 +159,7 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );
 	}
 	else if (method == RPC_METHOD_SET_SHIFT) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_SHIFT, data ) ) );
 	}
 	else if (method == RPC_METHOD_SET_CENTER) {
 		//signal to save value
@@ -173,7 +174,18 @@ void TcpFlakonController::onMethodCalled(const QString& method, const QVariant& 
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_RECOGNIZE, data ) ) );
 	}
 	else if (method == RPC_METHOD_SS_CORRELATION) {
-		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, data ) ) );
+		QDataStream inputDataStream(&data, QIODevice::ReadOnly);
+
+		QByteArray mess;
+		QDataStream ds(&mess, QIODevice::WriteOnly);
+
+		float frequency;
+		bool enable;
+		inputDataStream >> frequency;
+		inputDataStream >> enable;
+		ds << enable;
+		log_debug(QString("frequency %1 %2").arg(QString::number(frequency)).arg(QString::number(enable)));
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, mess ) ) );
 
 		MessageSP message(new Message<QByteArray>(RPC_CORRELATION_CONTROL, data));
 		if (message == NULL) {

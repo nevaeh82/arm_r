@@ -3,6 +3,12 @@
 
 #include <QDialog>
 #include <QPushButton>
+#include <QList>
+#include <phonon/audiooutput.h>
+#include <phonon/seekslider.h>
+#include <phonon/mediaobject.h>
+#include <phonon/volumeslider.h>
+#include <phonon/backendcapabilities.h>
 
 namespace Ui {
 class SignalDetectedDialog;
@@ -16,9 +22,14 @@ public:
 	explicit SignalDetectedDialog(QWidget *parent = 0);
 	~SignalDetectedDialog();
 
-	void setFrequency(double freq);
+	void setFrequency(QString name, QList<double> freqs);
 private:
 	Ui::SignalDetectedDialog *ui;
+
+private:
+	Phonon::MediaObject *mediaObject;
+	Phonon::MediaObject *metaInformationResolver;
+	Phonon::AudioOutput *audioOutput;
 };
 
 #endif // SIGNALDETECTEDDIALOG_H

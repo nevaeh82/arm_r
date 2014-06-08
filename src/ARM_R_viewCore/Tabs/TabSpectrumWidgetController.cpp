@@ -29,6 +29,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	, m_controlPanelController( NULL )
 	, m_currentCorrelation( 0 )
 	, m_isPanoramaEnabled(false)
+	, m_controlPanelControllerTrue( NULL)
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
@@ -460,6 +461,12 @@ void TabSpectrumWidgetController::setControlPanelController(ICorrelationListener
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
 		correlationWidgetDataSource->registerCorrelationReceiver(m_controlPanelController);
 	}
+}
+
+void TabSpectrumWidgetController::setControlPanelControllerTrue(ControlPanelController *controller)
+{
+	m_controlPanelControllerTrue = controller;
+	m_spectrumWidget->setControlPanelController(m_controlPanelControllerTrue);
 }
 
 

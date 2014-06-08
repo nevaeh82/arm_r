@@ -7,6 +7,7 @@ class QWidget;
 
 #include "IGraphicWidget.h"
 #include "Interfaces/IDataSourceListener.h"
+#include "ControlPanel/ControlPanelController.h"
 #include "IDbManager.h"
 #include "DBStation/DBStationController.h"
 
@@ -31,6 +32,7 @@ public:
 	virtual QWidget* getWidget() const = 0;
 	virtual void setDbManager(IDbManager* dbManager) = 0;
 	virtual void setDbStationController(DBStationController* controller) = 0;
+	virtual void setControlPanelController(ControlPanelController* controller) = 0;
 
 };
 

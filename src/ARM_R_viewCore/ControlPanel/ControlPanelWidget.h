@@ -52,6 +52,7 @@ signals:
 	void signalUp1Mhz();
 	void signalUp10Mhz();
 	void signalUp100Mhz();
+	void signalSetMode(int);
 
 
 private slots:
