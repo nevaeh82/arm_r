@@ -203,6 +203,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 		dataStream << aData.heigh.at(aLastItem);
 		dataStream << aData.relativeBearing.at(aLastItem);
 		dataStream << m_centerFrequency;
+
+		/// @deprecated Now source type determinates by TCP/RPC message type
 		dataStream << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO, dataToSend));
@@ -274,6 +276,8 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 		dataStream << m_alt;									//aData.heigh.at(aLastItem);
 		dataStream << aData.relativeBearing.at(aLastItem);
 		dataStream << m_centerFrequency;
+
+		/// @deprecated Now source type determinates by TCP/RPC message type
 		dataStream << sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA, dataToSend));
@@ -341,6 +345,19 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 		ds << alt;
 		ds << course;
 		ds << m_centerFrequency;
+
+		vec.clear();
+		vec.append(aData_2.coordLatLon);
+		ds << aData_2.timeHMSMs;
+		ds << state/*aData.StateMassive_.at(aLastItem)*/;
+		ds << aData_2.latLonStdDev;
+		ds << vec;
+		ds << speed;
+		ds << alt;
+		ds << course;
+		ds << m_centerFrequency;
+
+		/// @deprecated Now source type determinates by TCP/RPC message type
 		ds << (int) sourceType;
 
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE, ba));
