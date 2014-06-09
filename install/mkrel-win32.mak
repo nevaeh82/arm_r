@@ -3,6 +3,7 @@ include makeimage-win32-common.mak
 .NOTPARALLEL:
 
 DEPLOY = *.exe *.dll *.conf *.ini *.bat
+DEPLOY_EXCLUDE = *Test.exe *debug.dll
 
 TmpRel = $(SolutionDir)/build/tmprel
 BinDir = $(SolutionDir)/build/bin/msvc
@@ -25,8 +26,7 @@ copy-qt-msvc: get-msvc
 	
 copy-bin:
 	$(cp) -rudf $(foreach name,$(DEPLOY), $(BinDir)/$(name)) $(TmpRel)/bin
-	$(rm) $(TmpRel)/bin/*d.*
-	$(rm) $(TmpRel)/bin/*debug.dll
+	$(rm) $(foreach name,$(DEPLOY_EXCLUDE), $(TmpRel)/bin/$(name))
 	$(cp) -rudf $(BinDir)/libiomp5md.dll $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/plugins $(TmpRel)/bin
 	$(cp) -rudf $(BinDir)/DB $(TmpRel)/bin
