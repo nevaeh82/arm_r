@@ -48,7 +48,6 @@ bool TcpPRM300Controller::init()
 			m_port = m_prmSettings.port;
 			m_deviceType = TypePRM300;
 			m_routeId = m_prmSettings.id;
-			m_tcpClient->setReconnectInterval(m_prmSettings.reconnectInterval);
 
 			settings.endGroup();
 

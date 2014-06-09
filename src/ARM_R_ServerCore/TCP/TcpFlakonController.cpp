@@ -72,7 +72,6 @@ bool TcpFlakonController::init()
 			m_host = m_flakonSettingStruct.host;
 			m_port = m_flakonSettingStruct.port;
 			m_deviceType = TypeFlakon;//m_flakonSettingStruct.type;
-			m_tcpClient->setReconnectInterval(m_flakonSettingStruct.reconnectInterval);
 
 			QByteArray baseInfo;
 			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);

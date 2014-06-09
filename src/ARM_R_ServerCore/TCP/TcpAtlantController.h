@@ -32,6 +32,8 @@ public:
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
+	void createTcpClient();
+
 private:
 	AtlantSettings m_atlantSettingStruct;
 };

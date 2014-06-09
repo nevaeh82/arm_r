@@ -52,7 +52,6 @@ bool TcpAtlantController::init()
 			m_host = m_atlantSettingStruct.host;
 			m_port = m_atlantSettingStruct.port;
 			m_deviceType = TypeAtlant;//m_atlantSettingStruct.type;
-			m_tcpClient->setReconnectInterval(m_atlantSettingStruct.reconnectInterval);
 
 			settings.endGroup();
 			return true;
@@ -83,4 +82,10 @@ void TcpAtlantController::onMethodCalled(const QString& method, const QVariant& 
 	if (method == RPC_METHOD_SET_ATLANT_FREQUENCY) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_ATLANT_REQUEST_SET_FREQUENCY, data ) ) );
 	}
+}
+
+void TcpAtlantController::createTcpClient()
+{
+	BaseTcpDeviceController::createTcpClient();
+	m_tcpClient->setReconnectInterval(m_atlantSettingStruct.reconnectInterval);
 }
