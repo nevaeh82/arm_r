@@ -31,13 +31,18 @@
 
 #include "TCP/TcpDefines.h"
 
+#include "Structs.h"
 //#include "../../TCP/ParserAtlant.h"
+#include "ISolver.h"
+
 
 /*!
     Класс для отправки текста и QVector<QPointF> TCP.
 */
 
 //typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
+
+
 
 class PServer : public QObject,  public ITcpListener
 {
@@ -83,5 +88,13 @@ private:
     int _id;
     int _type;
 };
+
+inline QDataStream& operator>>(QDataStream& out, UAVPositionDataEnemy& object)
+{
+	return out >> object.altitude >> object.altitudeStdDev >> object.speed
+			   >> object.course >> object.state >> object.frequency
+			   >> object.time >> object.latLonStdDev
+			   >> object.latLon;
+}
 
 #endif // PSERVER_H

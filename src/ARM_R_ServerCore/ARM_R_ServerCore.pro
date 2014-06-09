@@ -74,4 +74,5 @@ HEADERS += \
 	RPC/RpcConfigReader.h \
 	RPC/RpcServer.h \
 	RPC/Interfaces/IRpcConfigReader.h \
-    Flakon/Server/PServer.h
+    Flakon/Server/PServer.h \
+    Flakon/Server/Structs.h

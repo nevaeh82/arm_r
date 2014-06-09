@@ -240,7 +240,7 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 	foreach(Station* st, m_stationsMap)
 	{
-		m_rpcFlakonClient->sendBandwidth(st->getId(), (*m_itCheckMode).bandwidth);
+		m_rpcFlakonClient->sendBandwidth(st->getId(), (*m_itCheckMode).bandwidth*1000);
 		if(st->getName() == (*m_itCheckMode).stationName)
 		{
 			m_mainStation = st;

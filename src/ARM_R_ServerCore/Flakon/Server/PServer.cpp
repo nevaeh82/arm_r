@@ -138,28 +138,27 @@ void PServer::slotReadClient()
 
 void PServer::_slotGetData(QByteArray& data)
 {
-//    int type1 = 1;
-//    int id = 0;
-//    IMessageOld *f = (msg_ptr.data());
-//    QByteArray* dd = f->get(id, type1);
+	QList<UAVPositionDataEnemy> list;
+	int sourceType = -1;
+
+
 	QDataStream ds(data);
+	ds >> list;
+	ds >> sourceType;
 
-    QTime tt;
-    ds >> tt;
-    int state;
-    ds >> state;
-    QPointF std_p;
-    ds >> std_p;
-    QVector<QPointF> coordLatLon;
-    ds >> coordLatLon;
-    double speed;
-    ds >> speed;
-    double alt;
-    ds >> alt;
-    double course;
-    ds >> course;
+	if(list.isEmpty())
+	{
+		return;
+	}
 
-    double sko1 = qSqrt(std_p.x()*std_p.x() + std_p.y()*std_p.y());
+	UAVPositionDataEnemy uav = list.at(list.size() - 1);
+
+	if(uav.latLon.isNull())
+	{
+		return;
+	}
+
+	double sko1 = qSqrt(uav.latLonStdDev.x()*uav.latLonStdDev.x() + uav.latLonStdDev.y()*uav.latLonStdDev.y());
 
     EMS::EagleMessage e_msg;
     QString type = "POSITION_ANSWER_MESSAGE";
@@ -176,39 +175,28 @@ void PServer::_slotGetData(QByteArray& data)
     d_msg.set_requestid(50);
     d_msg.set_sourceid(50);
     d_msg.set_datetime(0);
-    d_msg.set_longitude(coordLatLon.at(coordLatLon.size() - 1).y());
-    d_msg.set_latitude(coordLatLon.at(coordLatLon.size() - 1).x());
-    d_msg.set_quality(sko1);
+	d_msg.set_longitude(uav.latLon.y());
+	d_msg.set_latitude(uav.latLon.x());
+	d_msg.set_quality(sko1);
 
-//    char* d1 = new char(d_msg.ByteSize());
-
-//    qDebug() << d_msg.SerializeToArray(d1 , d_msg.ByteSize());
     std::string inner = d_msg.SerializeAsString();
 
     e_msg.set_innermessage(inner);
 
-//    char* d2 = new char(e_msg.ByteSize());
     std::string message = e_msg.SerializeAsString();
 
     QByteArray ret;
 
-//    qDebug() << message.size();
-
-//    //QByteArray bg = QByteArray::number(message.size());
     unsigned int size = message.size();
     ret.append(reinterpret_cast<char *>(&size), sizeof(size));
     ret.append(message.c_str(), message.size());
 
-
     if (!SClients.isEmpty())
     {
-        //QMap<int,QTcpSocket *>::const_iterator i = SClients.constBegin();
         QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
         while (i != SClients.constEnd())
         {
             QTcpSocket* clientSocket = i.value();
-//            QDataStream streamWrite(clientSocket);
-//            streamWrite << ret;
             clientSocket->write(ret);
 
             if ((clientSocket->bytesToWrite())>(100*1024*1024))
