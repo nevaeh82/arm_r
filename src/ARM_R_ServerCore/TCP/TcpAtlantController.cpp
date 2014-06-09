@@ -52,6 +52,7 @@ bool TcpAtlantController::init()
 			m_host = m_atlantSettingStruct.host;
 			m_port = m_atlantSettingStruct.port;
 			m_deviceType = TypeAtlant;//m_atlantSettingStruct.type;
+			m_tcpClient->setReconnectInterval(m_atlantSettingStruct.reconnectInterval);
 
 			settings.endGroup();
 			return true;
