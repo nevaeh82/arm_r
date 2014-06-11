@@ -106,6 +106,13 @@ void RpcFlakonClient::correlationReceived(QByteArray data)
 	}
 }
 
+void RpcFlakonClient::clearReceiversList()
+{
+	foreach( IRpcListener *listener, m_receiversList ) {
+		deregisterReceiver(listener);
+	}
+}
+
 void RpcFlakonClient::flakonStatusReceived(QByteArray data)
 {
 	QDataStream dataStream(&data, QIODevice::ReadOnly);

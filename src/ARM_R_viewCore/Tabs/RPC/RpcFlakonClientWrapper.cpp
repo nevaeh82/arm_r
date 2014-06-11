@@ -195,3 +195,10 @@ void RpcFlakonClientWrapper::requestFlakonStatus()
 {
 	emit requestFlakonStatusSignal();
 }
+
+void RpcFlakonClientWrapper::clearAllReceiversList()
+{
+	if(m_rpcClient) {
+		m_rpcClient->clearReceiversList();
+	}
+}

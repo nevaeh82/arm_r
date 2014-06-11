@@ -32,6 +32,8 @@ public:
 
 	void requestFlakonStatus();
 
+	void clearAllReceiversList();
+
 signals:
 	void initSignal();
 	void stopSignal();

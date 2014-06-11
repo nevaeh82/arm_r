@@ -23,7 +23,8 @@ public:
 
 	bool start(quint16 port, QHostAddress ipAddress);
 
-
+	void clearReceiversList();
+	QByteArray testData;
 protected slots:
 	void registerRoute();
 	void pointsReceived(QByteArray data);

@@ -205,6 +205,8 @@ void TabManager::addStationTabs()
 
 void TabManager::clearAllInformation()
 {
+	m_rpcFlakonClient->clearAllReceiversList();
+
 	m_currentTabWidget = NULL;
 	m_tabWidget->setEnabled(false);
 
