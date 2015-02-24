@@ -6,7 +6,6 @@
 #include <QxtRPCPeer>
 #include <QHostAddress>
 
-#include <PwLogger/PwLogger.h>
 #include "Interfaces/IRpcControllerBase.h"
 
 class RpcClientBase: public QObject, public IRpcControllerBase
@@ -19,11 +18,10 @@ private:
 	QTimer* reconnectTimer;
 
 protected:
-	Pw::Logger::ILogger* m_logger;
 	QxtRPCPeer* m_clientPeer;
 
 public:
-	explicit RpcClientBase(Pw::Logger::ILogger* logger, QObject* parent = NULL);
+	explicit RpcClientBase(QObject* parent = NULL);
 	virtual ~RpcClientBase(){}
 
 	virtual bool start(quint16 port, QHostAddress address);
