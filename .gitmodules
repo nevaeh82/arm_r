@@ -10,3 +10,6 @@
 [submodule "redist/GraphicsIpp"]
 	path = redist/GraphicsIpp
 	url = git@192.168.137.67:externals/graphics_ipp.git
+[submodule "redist/ipp"]
+	path = redist/ipp
+	url = git@192.168.137.67:externals/ipp.git
