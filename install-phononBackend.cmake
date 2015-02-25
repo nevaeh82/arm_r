@@ -1,0 +1,5 @@
+if( NOT QT_PHONON_DS9_PLUGIN_RELEASE )
+	status( WARNING "Qt plugin Phonon DS9 (release version) not found!" )
+else()
+	install( FILES ${QT_PHONON_DS9_PLUGIN_RELEASE} DESTINATION ${BINDIR}/plugins/phonon_backend COMPONENT runtime )
+endif()
