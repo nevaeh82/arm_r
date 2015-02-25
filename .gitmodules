@@ -4,3 +4,6 @@
 [submodule "redist\\tbb"]
 	path = redist\\tbb
 	url = git@192.168.137.67:externals/tbb.git
+[submodule "redist/plugins"]
+	path = redist/plugins
+	url = git@192.168.137.67:externals/qt_plugins_bin.git
