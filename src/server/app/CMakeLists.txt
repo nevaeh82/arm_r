@@ -12,7 +12,7 @@ add_service(${PROJECT_NAME} ${deps})
 
 # add installation for app runtime data files
 set(runtime_data_dirs audio DB RDP RDS Rpc Tabs TCP)
-install(DIRECTORY runtime_data_dirs DESTINATION ${BINDIR})
+install(DIRECTORY ${runtime_data_dirs} DESTINATION ${BINDIR})
 install(FILES qt.conf DESTINATION ${BINDIR})
 
 # copy runtime data to shared output dir
@@ -31,30 +31,36 @@ if(USE_SHARED_OUTPUT)
 endif()
 
 if(WIN32)
+	# configure windows app version info
 	configure_file(
 		"${PROJECT_SOURCE_DIR}/version.h.in"
 		"${PROJECT_BINARY_DIR}/version.h")
 
+	# get path to plugins directory
 	if(MSVC)
 		set(plugins_spec "-${SPEC}")
 	endif()
 	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${FULL_QT_VERSION}${plugins_spec})
-	message( ${qt_plugins_dir} )
 
+	# install batch for run server
 	install(FILES ${PROJECT_SOURCE_DIR}/Server.bat DESTINATION ${BINDIR})
-	install(DIRECTORY ${qt_plugins_dir} DESTINATION ${BINDIR})
 
-	set(NSIS_EXE_FOR_LINKS ${NSIS_EXE_FOR_LINKS} "${PROJECT_NAME}" CACHE STRING "" FORCE)
+	if(INSTALL_RUNTIME_LIBS)
+		# install Qt plugins
+		install(DIRECTORY ${qt_plugins_dir}/ DESTINATION ${BINDIR}/plugins)
 
-	if(INSTALL_RUNTIME_LIBS AND CREATE_BUNDLE)
-		if(SPEC STREQUAL "mingw")
-			set(gp_tool "objdump")
+		# install Qt libs
+		if(CREATE_BUNDLE)
+			if(SPEC STREQUAL "mingw")
+				set(gp_tool "objdump")
+			endif()
+
+			include(DeployQt4)
+			install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
 		endif()
-
-		include(DeployQt4)
-		install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
 	endif()
 
+	# copy Qt plugins to runtime dir
 	if(USE_SHARED_OUTPUT)
 		add_custom_command(
 			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD

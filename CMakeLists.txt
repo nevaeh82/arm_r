@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.6.3)
 
 set(PROJECT_NAME_GLOBAL ${PROJECT_NAME})
 
-set(PROJECT_NAME "Zaviruha")
 set(PROJECT_NAME_LOW "zaviruha")
 
 # todo: rename SKYVERSION to smthng correct
@@ -27,11 +26,11 @@ include(UsefulMacros)
 
 option(MAKE_TESTS "Include tests in solution" ON)
 option(INSTALL_RUNTIME_PATH "Install rpath" OFF)
-option(INSTALL_RUNTIME_LIBS "Install runtime libs" OFF)
+option(INSTALL_RUNTIME_LIBS "Install runtime libs" ON)
 option(USE_SYSLOG "Use syslog instead qxtlogger" OFF)
 option(USE_COVERAGE "Run coverage for statistics" OFF)
 option(CREATE_TR "Dynamical create qrc with qm files" ON)
-option(CREATE_BUNDLE "Create bundle on install" OFF)
+option(CREATE_BUNDLE "Create bundle on install" ON)
 option(USE_SHARED_OUTPUT "Place all build binaries on one common direcotory bin" ON)
 option(NO_BACKTRACE "Build without backtrace" OFF)
 
@@ -149,13 +148,13 @@ if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 
 	# install runtime libs
 	if(INSTALL_RUNTIME_LIBS)
-		install(FILES ${runtime_libs} DESTINATION ${LIBDIR} COMPONENT runtime)
+		install(FILES ${runtime_libs} DESTINATION ${LIBDIR})
 
 		if(WIN32)
 			if(NOT QT_PHONON_DS9_PLUGIN_RELEASE)
 				status(WARNING "Qt plugin Phonon DS9 (release version) not found!")
 			else()
-				install(FILES ${QT_PHONON_DS9_PLUGIN_RELEASE} DESTINATION ${BINDIR}/plugins/phonon_backend COMPONENT runtime)
+				install(FILES ${QT_PHONON_DS9_PLUGIN_RELEASE} DESTINATION ${BINDIR}/plugins/phonon_backend)
 			endif()
 		endif()
 	endif()
@@ -177,26 +176,32 @@ add_subdirectory(src)
 
 # settings for package target
 if(WIN32)
+	include(nsisParams.cmake)
+
 	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/win32/)
 	set(CPACK_GENERATOR NSIS)
 	set(CPACK_PACKAGE_VENDOR "STC")
 	set(CPACK_PACKAGE_VERSION ${SKYVERSION})
 	set(CPACK_NSIS_INSTALL_ROOT "C:")
 
-	set(CPACK_PACKAGE_NAME "Zaviruha")
+	set(CPACK_PACKAGE_NAME "ZaviruhaR")
 	set(CPACK_NSIS_INSTALLED_ICON_NAME "ZaviruhaClient.exe")
 	list(APPEND CPACK_NSIS_CREATE_ICONS_EXTRA "
-	CreateShortCut '$DESKTOP\\\\Zaviruha-${SKYVERSION}.lnk' '$INSTDIR\\\\ZaviruhaClient.exe'
+	CreateShortCut '$DESKTOP\\\\${PACKAGE_NAME_RUS} ${SKYVERSION}.lnk' '$INSTDIR\\\\ZaviruhaClient.exe'
 	")
 	list(APPEND CPACK_NSIS_DELETE_ICONS_EXTRA "
-	Delete '$DESKTOP\\\\Zaviruha-${SKYVERSION}.lnk'
+	Delete '$DESKTOP\\\\${PACKAGE_NAME_RUS} ${SKYVERSION}.lnk'
 	")
 
-	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${SKYVERSION}")
+	set( CPACK_NSIS_PACKAGE_NAME "${PACKAGE_NAME_RUS} ${SKYVERSION}" )
+	set( CPACK_NSIS_DISPLAY_NAME "${CPACK_NSIS_PACKAGE_NAME}" )
 	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${CPACK_PACKAGE_NAME})
-	set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}\\\\${CPACK_PACKAGE_NAME} ${SKYVERSION}")
-	set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}Setup_${SKYVERSION}")
+	set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_VENDOR}\\\\${CPACK_PACKAGE_NAME}-${SKYVERSION}")
+	set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${SKYVERSION}_Setup")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY ${CPACK_NSIS_DISPLAY_NAME})
+
+	# enable uninstalling at first
+	set( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON" )
 
 	unset(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS)
 	unset(NSIS_MENU_LINKS)

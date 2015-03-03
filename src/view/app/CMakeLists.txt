@@ -10,34 +10,9 @@ endif()
 
 add_service(${PROJECT_NAME} ${deps})
 
-if(WIN32)
-	configure_file(
-		"${PROJECT_SOURCE_DIR}/version.h.in"
-		"${PROJECT_BINARY_DIR}/version.h")
-
-	if(MSVC)
-		set(plugins_spec ${spec})
-	endif()
-
-	install(FILES ${PROJECT_SOURCE_DIR}/View.bat DESTINATION ${BINDIR})
-	install(FILES ${PROJECT_SOURCE_DIR}/Platform.bat DESTINATION ${BINDIR})
-	install(DIRECTORY ${PROJECT_BASE_DIR}/redist/plugins/${FULL_QT_VERSION}/${plugins_spec}/sqldrivers DESTINATION ${BINDIR}/plugins)
-
-	set(NSIS_EXE_FOR_LINKS ${NSIS_EXE_FOR_LINKS} "${PROJECT_NAME}" CACHE STRING "" FORCE)
-
-	if(INSTALL_RUNTIME_LIBS AND CREATE_BUNDLE)
-		if(SPEC STREQUAL "mingw")
-			set(gp_tool "objdump")
-		endif()
-
-		include(DeployQt4)
-		install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
-	endif()
-endif()
-
 # add installation for app runtime data files
 set(runtime_data_files ARM_R.ini Zaviruha.sqlite)
-install(FILES runtime_data_files DESTINATION ${BINDIR})
+install(FILES ${runtime_data_files} DESTINATION ${BINDIR})
 install(FILES qt.conf DESTINATION ${BINDIR})
 
 # copy runtime data to shared output dir
@@ -53,4 +28,36 @@ if(USE_SHARED_OUTPUT)
 			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name})
 	endforeach()
+endif()
+
+if(WIN32)
+	# configure windows app version info
+	configure_file(
+		"${PROJECT_SOURCE_DIR}/version.h.in"
+		"${PROJECT_BINARY_DIR}/version.h")
+
+	# get path to plugins directory
+	if(MSVC)
+		set(plugins_spec "-${SPEC}")
+	endif()
+	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${FULL_QT_VERSION}${plugins_spec})
+
+	# install batch for run client and both
+	install(FILES ${PROJECT_SOURCE_DIR}/View.bat DESTINATION ${BINDIR})
+	install(FILES ${PROJECT_SOURCE_DIR}/Platform.bat DESTINATION ${BINDIR})
+
+	if(INSTALL_RUNTIME_LIBS)
+		# install Qt plugins
+		install(DIRECTORY ${qt_plugins_dir}/sqldrivers DESTINATION ${BINDIR}/plugins)
+
+		# install Qt libs
+		if(CREATE_BUNDLE)
+			if(SPEC STREQUAL "mingw")
+				set(gp_tool "objdump")
+			endif()
+
+			include(DeployQt4)
+			install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
+		endif()
+	endif()
 endif()
