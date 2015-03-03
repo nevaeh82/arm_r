@@ -1,3 +1,3 @@
 :start
-ARM_R_Server.exe
+ZaviruhaServer.exe
 goto start

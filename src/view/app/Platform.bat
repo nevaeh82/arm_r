@@ -1,2 +1,2 @@
-start ARM_R_view.exe
+start ZaviruhaView.exe
 Server.bat

@@ -321,7 +321,7 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 		MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE, ba));
 
 		foreach (ITcpListener* receiver, m_receiversList) {
-			receiver->onMessageReceived(DeviceTypesEnum::FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+			receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
 		}
 
 	}

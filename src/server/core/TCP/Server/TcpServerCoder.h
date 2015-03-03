@@ -10,7 +10,7 @@
 #include "Tcp/BaseTcpDeviceCoder.h"
 #include "TCP/TcpDefines.h"
 
-#include "Protobuf/ARMR_OD/ZVPacket.pb.h"
+#include "ZVPacket.pb.h"
 
 class TcpServerCoder : public BaseTcpDeviceCoder
 {
@@ -26,7 +26,7 @@ public:
 	virtual MessageSP encode(const QByteArray& data);
 	virtual QByteArray decode(const MessageSP message);
 	virtual QObject* asQObject();
-	
+
 private:
 	MessageSP fromProtoBuf(const QByteArray& data);
 	QByteArray toProtoBuf(const MessageSP& message);

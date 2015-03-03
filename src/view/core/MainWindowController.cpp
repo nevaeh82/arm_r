@@ -33,7 +33,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	#ifdef QT_DEBUG
 		serverName += "d";
 	#endif
-	m_serverHandler = new Pw::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
+	m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
 
 	m_rpcFlakonClient = new RpcFlakonClientWrapper;
 	QThread* rpcClientThread = new QThread;
@@ -50,12 +50,14 @@ MainWindowController::~MainWindowController()
 {
 	SolverResultWidget* resultWidget = m_solverWidgetController->getView();
 	if( resultWidget ) {
+		m_solverWidgetController->appendView(NULL);
 		resultWidget->close();
 		delete resultWidget;
 	}
 
 	SolverErrorsWidget* errorsWidget = m_solverErrorsWidgetController->getView();
 	if( errorsWidget ) {
+		m_solverErrorsWidgetController->appendView(NULL);
 		errorsWidget->close();
 		delete errorsWidget;
 	}
@@ -113,7 +115,6 @@ void MainWindowController::init()
 	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
 	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
-
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
 	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
@@ -199,13 +200,14 @@ void MainWindowController::startTabManger()
 
 void MainWindowController::resetServer()
 {
-	QStringList serverPIDList;
-	bool searchResult;
-	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
+	/// todo: Is that logic need in future?
+//	QStringList serverPIDList;
+//	bool searchResult;
+//	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
 
-	if( searchResult ) {
-		m_serverHandler->killProcessExist( serverPIDList );
-	}
+//	if( searchResult ) {
+//		m_serverHandler->killProcessExist( serverPIDList );
+//	}
 }
 
 void MainWindowController::onMethodCalled(const QString& method, const QVariant& argument)

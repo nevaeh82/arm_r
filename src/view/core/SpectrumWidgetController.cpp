@@ -554,7 +554,7 @@ void SpectrumWidgetController::addToWhiteList()
 
 	emit signalAddSelToLists(1);
 
-    m_tab->updateDbStationsLists();
+	m_tab->updateDbStationsLists();
 }
 
 /// add selection to black list
@@ -584,7 +584,7 @@ void SpectrumWidgetController::addToBlackList()
 	}
 
 	emit signalAddSelToLists(2);
-    m_tab->updateDbStationsLists();
+	m_tab->updateDbStationsLists();
 
 }
 
@@ -704,13 +704,12 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 	m_tab->setShowControlPrm(state);
 	switch(state)
 	{
-		case false:
-			m_view->getPrm300Widget()->hide();
-			break;
 		case true:
 			m_view->getPrm300Widget()->show();
 			break;
+
 		default:
+			m_view->getPrm300Widget()->hide();
 			break;
 	}
 }

@@ -1,12 +1,12 @@
 #ifndef PSERVER_H
 #define PSERVER_H
 
+#include <stdlib.h>
+
 #include <QObject>
 #include <QAbstractSocket>
 #include <QMap>
 #include <QDebug>
-
-#include <QtNetwork>
 //#include <QMessageBox>
 #include <QTcpSocket>
 #include <QTextCodec>
@@ -17,27 +17,20 @@
 #include <QtGlobal>
 #include <QString>
 #include <QTime>
-#include <QtNetwork>
 #include <QHostAddress>
 #include <QCoreApplication>
-
-#include <stdlib.h>
+#include <QtNetwork>
 
 #include <TcpDevicesDefines.h>
+#include <ISolver.h>
 
+#include "Atlant/EMS/proto/EagleMessageProto.pb.h"
+#include "Flakon/Server/Structs.h"
 #include "Interfaces/Tcp/ITcpListener.h"
-
-#include "../../Atlant/EMS/StormEmsClient.h"
-
 #include "TCP/TcpDefines.h"
 
-#include "Structs.h"
-//#include "../../TCP/ParserAtlant.h"
-#include "ISolver.h"
-
-
 /*!
-    Класс для отправки текста и QVector<QPointF> TCP.
+	Класс для отправки текста и QVector<QPointF> TCP.
 */
 
 //typedef QSharedPointer<IMessageOld> rpc_flakon_msg;
@@ -46,15 +39,15 @@
 
 class PServer : public QObject,  public ITcpListener
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    PServer(int nPort, QObject* parent = 0);
+	PServer(int nPort, QObject* parent = 0);
 	virtual ~PServer();
 
-    virtual void set_id(int id);
-    virtual int get_id();
-    virtual void set_type(int type);
-    virtual int get_type();
+	virtual void set_id(int id);
+	virtual int get_id();
+	virtual void set_type(int type);
+	virtual int get_type();
 //    virtual void send_data(QSharedPointer<IMessageOld> msg_ptr);
 
 	virtual void onMessageReceived(const quint32 type, const QString& deviceType, const MessageSP argument);
@@ -63,30 +56,30 @@ public:
 signals:
 //    void signalGetData(rpc_flakon_msg nsg);
 
-    void finished();
-    
+	void finished();
+
 public slots:
-    void startServer(void);
+	void startServer(void);
 
 private slots:
-    void slotNewSocket();
+	void slotNewSocket();
 
-    void slotSocketDisconnected();
+	void slotSocketDisconnected();
 
-    void slotReadClient();
+	void slotReadClient();
 
 	void _slotGetData(QByteArray& data);
 
 private:
-    QTcpServer *tcpServer;
-    int server_status;
-    QMap<int,QTcpSocket *> SClients;
+	QTcpServer *tcpServer;
+	int server_status;
+	QMap<int,QTcpSocket *> SClients;
 
-    unsigned int blockSize;
-    bool newData;
+	unsigned int blockSize;
+	bool newData;
 
-    int _id;
-    int _type;
+	int _id;
+	int _type;
 };
 
 inline QDataStream& operator>>(QDataStream& out, UAVPositionDataEnemy& object)

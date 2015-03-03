@@ -22,15 +22,15 @@
 #include "../TCP/TcpDefines.h"
 #include "Message.h"
 
-#include "RadiolocationInterface.h"
-#include "Solver.h"
-#include "Solver_global.h"
-#include "ISolver.h"
-#include "ISolverListener.h"
+#include <RadiolocationInterface.h>
+#include <Solver.h>
+#include <Solver_global.h>
+#include <ISolver.h>
+#include <ISolverListener.h>
 
 #include "Correction/ZDR.h"
 
-#include "Protobuf/ARMR_OD/ZVPacket.pb.h"
+#include "ZVPacket.pb.h"
 #include "Server/Structs.h"
 
 // Copy/paste from ARM OD UavDefines.h

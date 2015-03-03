@@ -93,3 +93,8 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- CREATE USER FOR A "testStations" DATABASE
+-- -----------------------------------------------------
+GRANT ALL ON `stations`.* TO 'uav'@'localhost' IDENTIFIED BY 'qwerty12345';

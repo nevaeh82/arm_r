@@ -7,7 +7,7 @@
 #include <QDateTime>
 
 #include "../Atlant/EMS/proto/EagleMessageProto.pb.h"
-#include "../Atlant/EMS/storm.pb.h"
+#include "storm.pb.h"
 
 #include "TcpDevicesDefines.h"
 #include "TcpDefines.h"
