@@ -34,3 +34,6 @@
 [submodule "src/server/core/protobuf"]
 	path = src/server/core/protobuf
 	url = git@192.168.137.67:zaviruha/protobuf.git
+[submodule "redist/libmysql"]
+	path = redist/libmysql
+	url = git@192.168.137.67:externals/libmysql.git
