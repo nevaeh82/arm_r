@@ -72,22 +72,4 @@ if(WIN32)
 			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${libmysql_dll} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmysql.dll)
 	endif()
-
-	# settings for cpack
-	include(nsis.cmake)
-
-	# add link to ZaviruhaView in Windows menu
-	set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
-		"$INSTDIR\\\\${PROJECT_NAME}.exe" "${PROJECT_NAME_RUS} ${VERSION}")
-
-	# set uninstall icon path
-	set(CPACK_NSIS_INSTALLED_ICON_NAME "${PROJECT_NAME}.exe")
-
-	# add create icon to ZaviruhaView in Windows Desktop
-	set(CPACK_NSIS_CREATE_ICONS_EXTRA ${CPACK_NSIS_CREATE_ICONS_EXTRA}
-		"\nCreateShortCut '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk' '$INSTDIR\\\\${PROJECT_NAME}.exe'\n")
-
-	# add delete icon to ZaviruhaView in Windows Desktop
-	set(CPACK_NSIS_DELETE_ICONS_EXTRA ${CPACK_NSIS_CREATE_ICONS_EXTRA}
-		"\nDelete '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk'\n")
 endif()

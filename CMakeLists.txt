@@ -144,6 +144,9 @@ if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 	endif()
 endif()
 
+add_subdirectory(src)
+add_subdirectory(docs)
+
 # init settings for cpack BEFORE include subprojects
 if(WIN32)
 	include(nsis.cmake)
@@ -167,13 +170,26 @@ if(WIN32)
 	set(CPACK_NSIS_INSTALL_ROOT "C:")
 	set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_VENDOR}\\\\${CPACK_PACKAGE_NAME}-${VERSION}")
 	set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${VERSION}_Setup")
-	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION}")
+	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CPACK_PACKAGE_NAME} ${VERSION_MAJOR}.${VERSION_MINOR}")
 
 	# enable uninstalling at first
 	set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON")
-endif()
 
-add_subdirectory(src)
-add_subdirectory(docs)
+	# add link to ZaviruhaView in Windows menu
+	set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
+		"ZaviruhaView.exe" "${PROJECT_NAME_RUS} ${VERSION}"
+		"Zaviruha_instruction.docx" "${DOCUMENTATION_NAME_RUS}")
+
+	# set uninstall icon path
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "ZaviruhaView.exe")
+
+	# add create icon to ZaviruhaView in Windows Desktop
+	set(CPACK_NSIS_CREATE_ICONS_EXTRA ${CPACK_NSIS_CREATE_ICONS_EXTRA}
+		"\nCreateShortCut '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk' '$INSTDIR\\\\ZaviruhaView.exe'\n")
+
+	# add delete icon to ZaviruhaView in Windows Desktop
+	set(CPACK_NSIS_DELETE_ICONS_EXTRA ${CPACK_NSIS_DELETE_ICONS_EXTRA}
+		"\nDelete '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk'\n")
+endif()
 
 include(CPack)
