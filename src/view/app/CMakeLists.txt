@@ -40,12 +40,13 @@ if(WIN32)
 	if(MSVC)
 		set(plugins_spec "-${SPEC}")
 	endif()
-	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${FULL_QT_VERSION}${plugins_spec})
+	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${QT_VERSION_API}${plugins_spec})
 
 	# install batch for run client and both
 	install(FILES ${PROJECT_SOURCE_DIR}/View.bat DESTINATION ${BINDIR})
 	install(FILES ${PROJECT_SOURCE_DIR}/Platform.bat DESTINATION ${BINDIR})
 
+	# if we should install runtime libs
 	if(INSTALL_RUNTIME_LIBS)
 		# install Qt plugins
 		install(DIRECTORY ${qt_plugins_dir}/sqldrivers DESTINATION ${BINDIR}/plugins)
@@ -60,4 +61,22 @@ if(WIN32)
 			install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
 		endif()
 	endif()
+
+	# settings for cpack
+	include(nsis.cmake)
+
+	# add link to ZaviruhaView in Windows menu
+	set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
+		"$INSTDIR\\\\${PROJECT_NAME}.exe" "${PROJECT_NAME_RUS} ${VERSION}")
+
+	# set uninstall icon path
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "${PROJECT_NAME}.exe")
+
+	# add create icon to ZaviruhaView in Windows Desktop
+	set(CPACK_NSIS_CREATE_ICONS_EXTRA ${CPACK_NSIS_CREATE_ICONS_EXTRA}
+		"\nCreateShortCut '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk' '$INSTDIR\\\\${PROJECT_NAME}.exe'\n")
+
+	# add delete icon to ZaviruhaView in Windows Desktop
+	set(CPACK_NSIS_DELETE_ICONS_EXTRA ${CPACK_NSIS_CREATE_ICONS_EXTRA}
+		"\nDelete '$DESKTOP\\\\${PROJECT_NAME_RUS} ${VERSION}.lnk'\n")
 endif()

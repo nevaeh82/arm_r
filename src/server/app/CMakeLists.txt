@@ -40,7 +40,7 @@ if(WIN32)
 	if(MSVC)
 		set(plugins_spec "-${SPEC}")
 	endif()
-	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${FULL_QT_VERSION}${plugins_spec})
+	set(qt_plugins_dir ${PROJECT_BASE_DIR}/redist/plugins/${QT_VERSION_API}${plugins_spec})
 
 	# install batch for run server
 	install(FILES ${PROJECT_SOURCE_DIR}/Server.bat DESTINATION ${BINDIR})
