@@ -49,5 +49,5 @@ set errorlevel=%last_error%
 exit /B %errorlevel%
 
 :no_error
-cd ..mkrel
+cd ..
 exit /B 0
