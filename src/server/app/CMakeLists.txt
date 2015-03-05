@@ -51,10 +51,6 @@ if(WIN32)
 
 		# install Qt libs
 		if(CREATE_BUNDLE)
-			if(SPEC STREQUAL "mingw")
-				set(gp_tool "objdump")
-			endif()
-
 			include(DeployQt4)
 			install_qt4_executable(${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX})
 		endif()
