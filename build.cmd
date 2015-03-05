@@ -14,7 +14,7 @@ rem clean build folder
 cmake -E remove_directory build
 if not errorlevel 0 goto error
 
-cmake -E make_directory  build
+cmake -E make_directory build
 if not errorlevel 0 goto error
 
 cd build
