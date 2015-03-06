@@ -153,6 +153,7 @@ if(WIN32)
 
 	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/win32/)
 	set(CPACK_GENERATOR NSIS)
+
 	set(CPACK_PACKAGE_NAME "ZaviruhaR")
 	set(CPACK_PACKAGE_VENDOR "STC")
 	set(CPACK_PACKAGE_VERSION ${VERSION})
@@ -174,6 +175,9 @@ if(WIN32)
 
 	# enable uninstalling at first
 	set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON")
+
+	# enable full delete of installation directory
+	set(CPACK_NSIS_ENABLE_REMOVE_INSTDIR_RECURSIVE "ON")
 
 	# add link to ZaviruhaView in Windows menu
 	set(CPACK_NSIS_MENU_LINKS ${CPACK_NSIS_MENU_LINKS}
