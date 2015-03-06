@@ -3,7 +3,7 @@
 
 #include <QSharedPointer>
 
-#include "Message.h"
+#include <Templates/Message.h>
 
 typedef QSharedPointer<IMessage<QByteArray>> MessageSP;
 

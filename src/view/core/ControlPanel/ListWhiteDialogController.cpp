@@ -1,5 +1,5 @@
 #include "ListWhiteDialogController.h"
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 ListWhiteDialogController::ListWhiteDialogController(const QSqlDatabase& db, QObject* parent):
 	QObject(parent)

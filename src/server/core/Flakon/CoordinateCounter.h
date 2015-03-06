@@ -14,13 +14,13 @@
 #include <QDir>
 
 #include <logManager/LogManager.h>
+#include <Templates/BaseSubject.h>
+#include <Templates/Message.h>
 
 #include "Interfaces/ICoordinateCounter.h"
 #include "../TCP/Interfaces/ITcpListener.h"
-#include "BaseSubject.h"
 #include "TcpDevicesDefines.h"
 #include "../TCP/TcpDefines.h"
-#include "Message.h"
 
 #include <RadiolocationInterface.h>
 #include <Solver.h>

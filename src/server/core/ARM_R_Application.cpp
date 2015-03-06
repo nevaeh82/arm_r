@@ -1,6 +1,6 @@
 #include <QDebug>
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "ARM_R_Application.h"
 

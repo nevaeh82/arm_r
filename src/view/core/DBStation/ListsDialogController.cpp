@@ -1,6 +1,6 @@
 #include <QHeaderView>
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "ListsDialogController.h"
 

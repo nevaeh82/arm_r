@@ -6,7 +6,7 @@
 
 #include "Info/DBConnectionParameters.h"
 
-#include <BaseSubject.h>
+#include <Templates/BaseSubject.h>
 
 #include "DBStation/IDBStationListener.h"
 #include "DBStation/StationsDataTableModel.h"
@@ -39,7 +39,7 @@ public:
 
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)	= 0;
 	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list) = 0;
-    virtual bool getReportCategory(const QString& category, QList<AllStationsReport>& listReport) = 0;
+	virtual bool getReportCategory(const QString& category, QList<AllStationsReport>& listReport) = 0;
 
 	/// Returns station names (stations catalog)
 	virtual QStringList getStationsCatalog() = 0;

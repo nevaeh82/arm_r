@@ -1,6 +1,6 @@
 #include <QFile>
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "RpcConfigReader.h"
 

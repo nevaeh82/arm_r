@@ -2,7 +2,7 @@
 #define IRPCCONTROLLERBASE_H
 
 #include <Interfaces/IRpcListener.h>
-#include "BaseSubject.h"
+#include <Templates/BaseSubject.h>
 
 class QHostAddress;
 

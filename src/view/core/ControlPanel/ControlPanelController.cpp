@@ -2,7 +2,7 @@
 
 #include "UiDefines.h"
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "Rpc/RpcDefines.h"
 

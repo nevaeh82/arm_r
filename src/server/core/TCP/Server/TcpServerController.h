@@ -7,7 +7,7 @@
 
 #include "TcpDevicesDefines.h"
 
-#include "Logger.h"
+#include <Logger/Logger.h>
 
 #include "Info/BaseSettings.h"
 

@@ -7,7 +7,7 @@
 
 #include "Settings/SettingsNode.h"
 #include "Interfaces/IDbChangedListener.h"
-#include "BaseSubject.h"
+#include <Templates/BaseSubject.h>
 
 class IDbManager: public BaseSubject<IDbChangedListener>
 {

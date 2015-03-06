@@ -1,8 +1,6 @@
 project(${PROJECT_NAME_GLOBAL}View)
 
-list(APPEND deps
-	${PROJECT_NAME}Core
-)
+list(APPEND deps ${PROJECT_NAME}Core)
 
 if(NOT NO_BACKTRACE)
 	list(APPEND deps WIN32_BT)
@@ -23,10 +21,11 @@ if(USE_SHARED_OUTPUT)
 		TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/qt.conf ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qt.conf)
 
-	foreach(dir ${runtime_data_dirs})
+	foreach(file ${runtime_data_files})
+		get_filename_component(file_name ${file} NAME)
 		add_custom_command(
 			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name})
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name})
 	endforeach()
 endif()
 

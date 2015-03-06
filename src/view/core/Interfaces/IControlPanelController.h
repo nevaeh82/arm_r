@@ -4,7 +4,7 @@
 class IControlPanelListener;
 class ControlPanelWidget;
 
-#include "BaseSubject.h"
+#include <Templates/BaseSubject.h>
 #include "Interfaces/IController.h"
 
 class IControlPanelController : public BaseSubject<IControlPanelListener>, public IController<ControlPanelWidget>

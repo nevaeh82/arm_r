@@ -7,8 +7,9 @@
 #include <QSettings>
 #include <QStringList>
 
+#include <Templates/SingletonTemplate.h>
+
 #include "Interfaces/ITcpSettingsManager.h"
-#include "SingletonTemplate.h"
 
 class TcpSettingsManager : public QObject, public ITcpSettingsManager, public SingletonTemplate<TcpSettingsManager, ITcpSettingsManager>
 {

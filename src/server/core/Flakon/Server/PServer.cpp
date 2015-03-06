@@ -1,7 +1,7 @@
 #include "PServer.h"
 #include "storm.pb.h"
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 PServer::PServer(int nPort, QObject* parent)
 	: QObject(parent)

@@ -1,5 +1,5 @@
 #include <QDebug>
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "DBStationController.h"
 

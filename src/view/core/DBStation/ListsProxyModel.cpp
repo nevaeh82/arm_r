@@ -1,4 +1,4 @@
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "StationHelper.h"
 #include "ListsProxyModel.h"

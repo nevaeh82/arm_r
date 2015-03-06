@@ -3,7 +3,7 @@
 
 class IDataSourceListener;
 
-#include "BaseSubject.h"
+#include <Templates/BaseSubject.h>
 
 class IDataSource: public BaseSubject<IDataSourceListener>
 {

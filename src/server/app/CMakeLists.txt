@@ -1,8 +1,6 @@
 project(${PROJECT_NAME_GLOBAL}Server)
 
-list(APPEND deps
-	${PROJECT_NAME}Core
-)
+list(APPEND deps ${PROJECT_NAME}Core)
 
 if(NOT NO_BACKTRACE)
 	list(APPEND deps WIN32_BT)

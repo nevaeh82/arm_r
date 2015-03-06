@@ -1,7 +1,7 @@
 #include <QtGui/QApplication>
 #include <QTranslator>
 
-#include <Logger.h>
+#include <Logger/Logger.h>
 
 #include "MainWindow.h"
 #include "MainWindowController.h"
