@@ -9,8 +9,6 @@ endif()
 add_service(${PROJECT_NAME} ${deps})
 
 # add installation for app runtime data files
-set(runtime_data_files ARM_R.ini Zaviruha.sqlite)
-install(FILES ${runtime_data_files} DESTINATION ${BINDIR})
 install(FILES qt.conf DESTINATION ${BINDIR})
 
 # copy runtime data to shared output dir
@@ -20,13 +18,6 @@ if(USE_SHARED_OUTPUT)
 	add_custom_command(
 		TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/qt.conf ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qt.conf)
-
-	foreach(file ${runtime_data_files})
-		get_filename_component(file_name ${file} NAME)
-		add_custom_command(
-			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name})
-	endforeach()
 endif()
 
 if(WIN32)

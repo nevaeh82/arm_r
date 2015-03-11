@@ -9,8 +9,6 @@ endif()
 add_service(${PROJECT_NAME} ${deps})
 
 # add installation for app runtime data files
-set(runtime_data_dirs audio DB RDP RDS Rpc Tabs TCP)
-install(DIRECTORY ${runtime_data_dirs} DESTINATION ${BINDIR})
 install(FILES qt.conf DESTINATION ${BINDIR})
 
 # copy runtime data to shared output dir
@@ -20,12 +18,6 @@ if(USE_SHARED_OUTPUT)
 	add_custom_command(
 		TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/qt.conf ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qt.conf)
-
-	foreach(dir ${runtime_data_dirs})
-		add_custom_command(
-			TARGET ${PROJECT_NAME}_copy_runtime POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/${dir} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${dir})
-	endforeach()
 endif()
 
 if(WIN32)

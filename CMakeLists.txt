@@ -56,6 +56,9 @@ find_package(Protobuf REQUIRED)
 find_package(QtSingleApplication REQUIRED)
 find_package(Solver REQUIRED)
 
+# add settings to installation
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/settings/ DESTINATION ${BINDIR})
+
 # scripts for runtime libs installation and copying
 if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 	set(runtime_libs)
@@ -141,6 +144,11 @@ if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 				TARGET copy_runtime POST_BUILD
 				COMMAND ${CMAKE_COMMAND} -E copy_if_different ${lib} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${lib_name})
 		endforeach()
+
+		# copy settings to shared output directory
+		add_custom_command(
+			TARGET copy_runtime POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/settings/ ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 	endif()
 endif()
 
