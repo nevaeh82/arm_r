@@ -1,6 +1,10 @@
 project(Zaviruha)
 cmake_minimum_required(VERSION 2.6.3)
 
+if(WIN32)
+	cmake_minimum_required(VERSION 3.0)
+endif()
+
 if(NOT VERSION)
 	set(VERSION "3.0.0")
 endif()
