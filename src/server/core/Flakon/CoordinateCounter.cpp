@@ -32,6 +32,8 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	m_solver = NULL;
 
+	m_clientTcpServer = NULL;
+
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 	m_centerFrequency = -1;
@@ -105,6 +107,10 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 			m_solver->GetData(m_aData);
 
+			if(m_clientTcpServer) {
+				m_clientTcpServer->sendClientSolverData(m_aData);
+			}
+
 			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
 			m_logManager->writeToFile(dataToFile);
@@ -138,6 +144,11 @@ void CoordinateCounter::onSendHyperbolesFromRadioLocation(const SolveResult &res
 void CoordinateCounter::onErrorOccured(const ErrorType &error_type, const QString &str)
 {
 	emit signalError((int)error_type, str);
+}
+
+void CoordinateCounter::insertClientTcpServer(ClientTcpServer* server)
+{
+	m_clientTcpServer = server;
 }
 
 void CoordinateCounter::sendData(const MessageSP message)

@@ -10,6 +10,7 @@
 #include <Interfaces/IRpcControllerBase.h>
 #include <TcpDevicesDefines.h>
 #include <Rpc/RpcDefines.h>
+#include <Tcp/BaseTcpServer.h>
 
 #include "Tcp/TcpDeviceController.h"
 #include "Tcp/TcpFlakonController.h"
@@ -21,6 +22,7 @@
 #include "Flakon/CoordinateCounter.h"
 
 #include "Flakon/Server/PServer.h"
+#include "Flakon/Server/ClientServer.h"
 
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
@@ -44,6 +46,7 @@ private:
 
 	CoordinateCounter* m_coordinatesCounter;
 	PServer*		   m_pServer;
+	ClientTcpServer* m_clientTcpServer;
 
 	QMap<float, CoordinateCounter* > m_mapCoordinateCounter;
 

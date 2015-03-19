@@ -35,7 +35,17 @@ TcpManager::TcpManager(QObject* parent)
 	m_pServer->moveToThread(pServerThread);
 	pServerThread->start();
 
+	QThread* clientServerThread = new QThread(this);
+	m_clientTcpServer = new ClientTcpServer(clientServerThread);
+	m_coordinatesCounter->insertClientTcpServer(m_clientTcpServer);
 
+	connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
+	connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
+	connect(this, SIGNAL(threadTerminateSignal()), clientServerThread, SLOT(quit()));
+	connect(this, SIGNAL(threadTerminateSignal()), m_clientTcpServer, SLOT(deleteLater()));
+	connect(clientServerThread, SIGNAL(finished()), clientServerThread, SLOT(deleteLater()));
+	m_clientTcpServer->moveToThread(clientServerThread);
+	clientServerThread->start();
 
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
 

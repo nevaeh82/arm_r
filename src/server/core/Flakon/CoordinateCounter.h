@@ -33,6 +33,8 @@
 #include "ZVPacket.pb.h"
 #include "Server/Structs.h"
 
+#include "Server/ClientServer.h"
+
 // Copy/paste from ARM OD UavDefines.h
 //typedef struct UAVPositionDataEnemy
 //{
@@ -89,6 +91,8 @@ private:
 
 	ISolver* m_solver;
 
+	ClientTcpServer* m_clientTcpServer;
+
 	double m_alt;
 	DataFromFlacon m_aData;
 
@@ -116,6 +120,8 @@ public:
 	void onSendOneDataFromRadioLocation(const SolveResult& result, const OneDataFromRadioLocation& oneData_1, const OneDataFromRadioLocation& oneData_2);
 	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void onErrorOccured(const ErrorType& error_type, const QString& str);
+
+	void insertClientTcpServer(ClientTcpServer* server);
 
 signals:
 	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
