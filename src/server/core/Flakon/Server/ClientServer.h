@@ -8,8 +8,12 @@
 #include <QTextCodec>
 
 #include <Tcp/BaseTcpServer.h>
+#include <Interfaces/Tcp/ITcpListener.h>
 
 #include <RadiolocationInterface.h>
+
+#include "TCP/TcpDefines.h"
+#include "TcpDevicesDefines.h"
 
 #define TCP_SERVER_NAME "CLIENT_TCPSERVER"
 #define TCP_SERVER_PORT 2021
@@ -17,7 +21,7 @@
 #define CLIENT_SOLVER_DATA "SOLVER_DATA"
 #define CLIENT_BLA_DATA "BLA_DATA"
 
-class ClientTcpServer : public BaseTcpServer
+class ClientTcpServer : public BaseTcpServer, public ITcpListener
 {
 	Q_OBJECT
 
@@ -25,13 +29,19 @@ public:
 	ClientTcpServer(QObject* parent = 0);
 	~ClientTcpServer();
 
-	bool sendClientSolverData( DataFromFlacon clientData );
+	void onMessageReceived(const quint32 deviceType,
+								   const QString& device,
+								   const MessageSP argument);
 
 public slots:
 	void startServer();
+	void stopServer();
 
 private:
 	int getClientTcpPortValue();
+
+signals:
+	void onDataSended(bool res);
 };
 
 inline QDataStream& operator<<(QDataStream& out, const DataFromFlacon& object)

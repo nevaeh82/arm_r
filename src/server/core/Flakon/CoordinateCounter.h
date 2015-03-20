@@ -91,8 +91,6 @@ private:
 
 	ISolver* m_solver;
 
-	ClientTcpServer* m_clientTcpServer;
-
 	double m_alt;
 	DataFromFlacon m_aData;
 
@@ -121,8 +119,6 @@ public:
 	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void onErrorOccured(const ErrorType& error_type, const QString& str);
 
-	void insertClientTcpServer(ClientTcpServer* server);
-
 signals:
 	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
 	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
@@ -144,6 +140,7 @@ private:
 
 	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
 	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
+	void sendDataToClientTcpServer();
 
 public slots:
 	void initSolver();
@@ -168,4 +165,9 @@ inline QDataStream& operator<<(QDataStream& out, const UAVPositionDataEnemy& obj
 			   << object.time << object.latLonStdDev
 			   << object.latLon;
 }
+
+//inline QDataStream& operator<<(QDataStream& out, const DataFromFlacon& object)
+//{
+//	return out << object.numOfReferenceDetector_ << object.time_ << object.ranges_;
+//}
 #endif // COORDINATECOUNTER_H

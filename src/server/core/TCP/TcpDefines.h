@@ -63,6 +63,10 @@
 #define Atlant_Position_MsgA	"POSITION_ANSWER_MESSAGE"
 #define Atlant_Direction_Finding_Request	"DIRECTION_FINDING_REQUEST"
 
+/// CLIENT_TCP_SERVER commands
+#define CLIENT_TCP_SERVER_SOLVER_DATA	"tcpClientSolverData"
+#define CLIENT_TCP_SERVER_BPLA_DATA		"tcpClientBPLAData"
+
 /// PRM300 device external
 namespace PRM300External {
 typedef enum TypePRM300ExternalEnum {

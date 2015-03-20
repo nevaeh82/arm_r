@@ -37,12 +37,13 @@ TcpManager::TcpManager(QObject* parent)
 
 	QThread* clientServerThread = new QThread(this);
 	m_clientTcpServer = new ClientTcpServer(clientServerThread);
-	m_coordinatesCounter->insertClientTcpServer(m_clientTcpServer);
+	m_coordinatesCounter->registerReceiver(m_clientTcpServer);
 
 	connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
 	connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), clientServerThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), m_clientTcpServer, SLOT(deleteLater()));
+	connect(clientServerThread, SIGNAL(finished()), m_clientTcpServer, SLOT(stopServer()));
 	connect(clientServerThread, SIGNAL(finished()), clientServerThread, SLOT(deleteLater()));
 	m_clientTcpServer->moveToThread(clientServerThread);
 	clientServerThread->start();
@@ -56,6 +57,8 @@ TcpManager::TcpManager(QObject* parent)
 
 TcpManager::~TcpManager()
 {
+	m_coordinatesCounter->deregisterReceiver(m_clientTcpServer);
+
 	emit threadTerminateSignal();
 	emit threadTerminateSignalForMapSolver();
 	m_mapCoordinateCounter.clear();

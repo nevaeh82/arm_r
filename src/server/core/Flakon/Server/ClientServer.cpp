@@ -15,15 +15,30 @@ void ClientTcpServer::startServer()
 	start( QHostAddress::Any, getClientTcpPortValue() );
 }
 
-bool ClientTcpServer::sendClientSolverData(DataFromFlacon clientData)
+void ClientTcpServer::stopServer()
 {
-	QByteArray dataToSend;
+	stop();
+}
 
-	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-	dataStream << QString(CLIENT_SOLVER_DATA);
-	dataStream << clientData;
+void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
+{
+	Q_UNUSED(device);
 
-	return sendData(dataToSend);
+	QString messageType = argument->type();
+	QVariant data = QVariant( argument->data() );
+
+	switch (deviceType) {
+	case CLIENT_TCP_SERVER:
+	{
+		if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA) {
+			bool res = sendData(data.toByteArray());
+			emit onDataSended(res);
+		}
+	}
+	break;
+	default:
+	break;
+	}
 }
 
 int ClientTcpServer::getClientTcpPortValue() {

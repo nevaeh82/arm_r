@@ -32,8 +32,6 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	m_solver = NULL;
 
-	m_clientTcpServer = NULL;
-
 	m_corr_threshold = 3;
 	m_prevStation = 0;
 	m_centerFrequency = -1;
@@ -107,9 +105,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 			m_solver->GetData(m_aData);
 
-			if(m_clientTcpServer) {
-				m_clientTcpServer->sendClientSolverData(m_aData);
-			}
+			sendDataToClientTcpServer();
 
 			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
@@ -144,11 +140,6 @@ void CoordinateCounter::onSendHyperbolesFromRadioLocation(const SolveResult &res
 void CoordinateCounter::onErrorOccured(const ErrorType &error_type, const QString &str)
 {
 	emit signalError((int)error_type, str);
-}
-
-void CoordinateCounter::insertClientTcpServer(ClientTcpServer* server)
-{
-	m_clientTcpServer = server;
 }
 
 void CoordinateCounter::sendData(const MessageSP message)
@@ -546,4 +537,16 @@ UAVPositionDataEnemy CoordinateCounter::encodeSolverData(const OneDataFromRadioL
 	uav.latLon = data.coordLatLon;
 
 	return uav;
+}
+
+void CoordinateCounter::sendDataToClientTcpServer() {
+	QByteArray dataToSend;
+	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+	dataStream << QString( CLIENT_TCP_SERVER_SOLVER_DATA );
+	dataStream << m_aData;
+
+	MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, dataToSend));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, message);
+	}
 }
