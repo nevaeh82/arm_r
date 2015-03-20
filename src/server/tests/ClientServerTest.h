@@ -5,6 +5,7 @@
 #include <QtGlobal>
 #include <QTcpSocket>
 #include <QThread>
+#include <QSettings>
 
 #include <QxtSignalWaiter>
 
@@ -19,6 +20,7 @@ public:
 	QTcpSocket* clientSocket;
 
 	QThread* clientServerThread;
+	int m_serverPort;
 
 	void setUp()
 	{
@@ -26,6 +28,10 @@ public:
 
 		clientServerThread = new QThread();
 		server = new ClientTcpServer(0);
+
+		QSettings param("./ARM_R.ini", QSettings::IniFormat, 0);
+		param.setIniCodec(QTextCodec::codecForName("UTF-8"));
+		m_serverPort = param.value("ClientTCPServer/Port", TCP_SERVER_PORT).toInt();
 
 		QObject::connect(clientServerThread, SIGNAL(started()), server, SLOT(startServer()));
 		QObject::connect(server, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
@@ -66,7 +72,7 @@ public:
 	void testConnectToClientServerAndSendAnyData()
 	{
 		TS_ASSERT_EQUALS(clientServerThread->isRunning(), true);
-		clientSocket->connectToHost("127.0.0.1", 2020, QIODevice::ReadOnly);
+		clientSocket->connectToHost("127.0.0.1", m_serverPort, QIODevice::ReadOnly);
 
 		bool res = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
 		TS_ASSERT_EQUALS(true, res);
@@ -81,7 +87,7 @@ public:
 
 	void testClientServerOnMessageReceive()
 	{
-		clientSocket->connectToHost("127.0.0.1", 2020, QIODevice::ReadOnly);
+		clientSocket->connectToHost("127.0.0.1", m_serverPort, QIODevice::ReadOnly);
 		bool res = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
 		TS_ASSERT_EQUALS(true, res);
 
