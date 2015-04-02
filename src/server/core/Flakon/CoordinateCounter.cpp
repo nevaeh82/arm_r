@@ -273,7 +273,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 		QDataStream dataStreamStatus(&statusBA, QIODevice::WriteOnly);
 
 		int status = 0;
-		if (aData.qualityMassive_.count(GOOD)/GOOD_LIMIT >= aData.qualityMassive_.size()) {
+		if (aData.qualityMassive_.count( GOOD )/GOOD_LIMIT >= aData.qualityMassive_.size()) {
 			status = 1;
 		}
 		dataStreamStatus << status;
@@ -542,8 +542,8 @@ UAVPositionDataEnemy CoordinateCounter::encodeSolverData(const OneDataFromRadioL
 void CoordinateCounter::sendDataToClientTcpServer() {
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-	dataStream << QString( CLIENT_TCP_SERVER_SOLVER_DATA );
 	dataStream << m_aData;
+	dataStream << m_centerFrequency;
 
 	MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, dataToSend));
 	foreach (ITcpListener* receiver, m_receiversList) {

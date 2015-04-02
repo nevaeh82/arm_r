@@ -15,6 +15,10 @@
 #include "TCP/TcpDefines.h"
 #include "TcpDevicesDefines.h"
 
+#include "SolverEncoder.h"
+
+#include "SolverPacket.pb.h"
+
 #define TCP_SERVER_NAME "CLIENT_TCPSERVER"
 #define TCP_SERVER_PORT 2021
 
@@ -33,12 +37,20 @@ public:
 								   const QString& device,
 								   const MessageSP argument);
 
+	SolverEncoder* getSolverEncoder();
+
 public slots:
 	void startServer();
 	void stopServer();
 
 private:
 	int getClientTcpPortValue();
+
+	QByteArray decode(const MessageSP message);
+	void toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray& data);
+	void addPreambula(QByteArray& data);
+
+	SolverEncoder* m_encoder;
 
 signals:
 	void onDataSended(bool res);
