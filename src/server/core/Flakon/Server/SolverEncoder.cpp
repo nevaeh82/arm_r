@@ -90,6 +90,7 @@ QByteArray SolverEncoder::encode(const QByteArray &data)
 	}
 
 	int preambulaIndex = m_dataFromTcpSocket.indexOf(TCP_ZAVIRUHA_PREAMBULA);
+	m_dataFromTcpSocket = m_dataFromTcpSocket.right( m_dataFromTcpSocket.length() - preambulaIndex );
 	if (preambulaIndex < 0) {
 		return QByteArray();
 	}

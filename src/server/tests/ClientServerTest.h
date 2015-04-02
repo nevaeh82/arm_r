@@ -143,50 +143,31 @@ public:
 		TS_ASSERT_EQUALS(arg.centerfrequency(), 1355.55);
 	}
 
-	void testClientServerManyClients()
-	{
-		QTcpSocket* socket1 = new QTcpSocket(0);
-		QTcpSocket* socket2 = new QTcpSocket(0);
-		QTcpSocket* socket3 = new QTcpSocket(0);
-
-		TS_ASSERT_EQUALS(clientServerThread->isRunning(), true);
-		socket1->connectToHost("127.0.0.1", m_serverPort, QIODevice::ReadOnly);
-		socket2->connectToHost("127.0.0.1", m_serverPort, QIODevice::ReadOnly);
-		socket3->connectToHost("127.0.0.1", m_serverPort, QIODevice::ReadOnly);
-		bool res1 = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
-		TS_ASSERT_EQUALS(true, res1);
-
-		bool res2 = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
-		TS_ASSERT_EQUALS(true, res2);
-
-		bool res3 = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
-		TS_ASSERT_EQUALS(true, res3);
-
-		bool testResult;
-		testResult = server->sendData( QByteArray("Hello!") );
-		TS_ASSERT_EQUALS( testResult, true );
-
-		QxtSignalWaiter::wait(socket3, SIGNAL(readyRead()), 5000);
-		TS_ASSERT_EQUALS( socket1->bytesAvailable(), 6 );
-		TS_ASSERT_EQUALS( socket2->bytesAvailable(), 6 );
-		TS_ASSERT_EQUALS( socket3->bytesAvailable(), 6 );
-
-		socket1->disconnectFromHost();
-		socket2->disconnectFromHost();
-		socket3->disconnectFromHost();
-
-		delete socket1;
-		delete socket2;
-		delete socket3;
-	}
-
 	void testSolverEncoder()
 	{
 		SolverEncoder encoder;
 		TS_ASSERT_DIFFERS( 0, rawTestProtobuf.length() );
 
-		QByteArray encodedData = encoder.encode( rawTestProtobuf );
-		TS_ASSERT_DIFFERS( 0, encodedData.length() );
+		rawTestProtobuf.prepend("TESTdataNoValidMessageOlolo");
+		rawTestProtobuf.append("EndOfMessageInvalidData");
+
+		QByteArray part1 = rawTestProtobuf.mid(0, 30);
+		QByteArray part2 = rawTestProtobuf.mid(30, 10);
+		QByteArray part3 = rawTestProtobuf.mid(40, 10);
+		QByteArray part4 = rawTestProtobuf.right(rawTestProtobuf.length() - 50);
+
+		TS_ASSERT_EQUALS(rawTestProtobuf.length(), part1.length() + part2.length() + part3.length() + part4.length() );
+
+		for(int i = 0; i < 3; i++) {
+			QByteArray encodedData = encoder.encode( part1 );
+			TS_ASSERT_EQUALS( 0, encodedData.length() );
+			encodedData = encoder.encode( part2 );
+			TS_ASSERT_EQUALS( 0, encodedData.length() );
+			encodedData = encoder.encode( part3 );
+			TS_ASSERT_EQUALS( 0, encodedData.length() );
+			encodedData = encoder.encode( part4 );
+			TS_ASSERT_DIFFERS( 0, encodedData.length() );
+		}
 	}
 };
 
