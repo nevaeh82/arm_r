@@ -141,6 +141,7 @@ private:
 	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
 	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
 	void sendDataToClientTcpServer();
+	bool getIsSolverServer();
 
 public slots:
 	void initSolver();

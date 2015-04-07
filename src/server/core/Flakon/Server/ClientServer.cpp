@@ -96,18 +96,15 @@ void ClientTcpServer::toProtobufSolverData(SolverClient::Packet::ArgumentVariant
 	stream >> receiveData.ranges_;
 	stream >> centerFrequency;
 
-	int indexRange = 0;
 	foreach (double range, receiveData.ranges_) {
-		arg->add_ranges(range);
-		indexRange++;
+		arg->add_delays(range);
 	}
 
 	QDateTime dateTime = QDateTime::currentDateTime();
 	//Fill time form solver
 	//TODO new solver has QDateTime
 	dateTime.setTime(receiveData.time_);
-	arg->set_datetime(dateTime.toTime_t());
-	arg->set_numofreferencedetector(receiveData.numOfReferenceDetector_);
+	arg->set_datetime(dateTime.toMSecsSinceEpoch());
 	arg->set_centerfrequency(centerFrequency);
 }
 

@@ -133,12 +133,11 @@ public:
 		TS_ASSERT_EQUALS( packet.command().action(), SolverClient::sendSolverClientData );
 		SolverClient::Packet::ArgumentVariant::SolverInput arg = packet.command().arguments().solverinput();
 
-		TS_ASSERT_EQUALS(arg.ranges_size(), 3);
-		TS_ASSERT_EQUALS(arg.ranges(0), 1.1);
-		TS_ASSERT_EQUALS(arg.ranges(1), 2.2);
-		TS_ASSERT_EQUALS(arg.ranges(2), 3.3);
+		TS_ASSERT_EQUALS(arg.delays_size(), 3);
+		TS_ASSERT_EQUALS(arg.delays(0), 1.1);
+		TS_ASSERT_EQUALS(arg.delays(1), 2.2);
+		TS_ASSERT_EQUALS(arg.delays(2), 3.3);
 
-		TS_ASSERT_EQUALS(arg.numofreferencedetector(), 123);
 		//TS_ASSERT_EQUALS(arg.datetime(), m_aData.time_.toTime_t());
 		TS_ASSERT_EQUALS(arg.centerfrequency(), 1355.55);
 	}

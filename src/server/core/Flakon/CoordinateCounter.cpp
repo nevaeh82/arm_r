@@ -51,8 +51,9 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 CoordinateCounter::~CoordinateCounter()
 {
-	if(m_solver != NULL)
+	if(m_solver != NULL) {
 		delete m_solver;
+	}
 	emit signalFinished();
 	delete m_logManager;
 	delete m_logManager1;
@@ -93,6 +94,8 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 		QVector<double> aDR;
 		aDR.clear();
+		bool isSolverServer = getIsSolverServer();
+
 		ZDR mZDR;
 		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
 		m_map_vec_corr.clear();
@@ -103,9 +106,12 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 			m_aData.time_ = QTime::currentTime();	//Time
 			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
 
-			m_solver->GetData(m_aData);
-
-			sendDataToClientTcpServer();
+			if( !isSolverServer ) {
+				m_solver->GetData(m_aData);
+			} else {
+				m_aData.ranges_.insert(m_main_point, 0);
+				sendDataToClientTcpServer();
+			}
 
 			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
 
@@ -549,4 +555,11 @@ void CoordinateCounter::sendDataToClientTcpServer() {
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, message);
 	}
+}
+
+bool CoordinateCounter::getIsSolverServer()
+{
+	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
+	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+	return settings.value("ClientTCPServer/isSolverServer", false).toBool();
 }

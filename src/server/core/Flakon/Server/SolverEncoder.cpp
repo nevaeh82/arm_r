@@ -34,49 +34,125 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 			//qDebug() << "Bad Message";
 		} else {
 			int targetID = packet.command().arguments().solveranswer().targetid();
-			//qDebug() << QString("TargetID = %1").arg(targetID);
+			Q_UNUSED(targetID); // For future using
 
-			//Parse Trajectory Message
-			SolverClient::Packet::ArgumentVariant::SolverAnswer::Trajectory traj = packet.command().arguments().solveranswer().trajectory();
-			//qDebug() << QString("Trajectory Type = %1").arg( QString(traj.type().data()) );
-			//Unpack MotionEstimate list in trajectory
-			for(int i = 0; i < traj.motionestimate_size(); i++) {
-//				qDebug() << QString("> MotionINDEX = %1").arg(i);
+///   Auto Trajectory   ///
+			if( packet.command().arguments().solveranswer().has_auto_trajectory() ) {
+				SolverClient::Packet::ArgumentVariant::SolverAnswer::Trajectory traj =
+						packet.command().arguments().solveranswer().auto_trajectory();
 
-//				qDebug() << QString("	CoordEstDate = %1").arg( QDateTime::fromTime_t(traj.motionestimate(i).datetime()).toString() );
-//				qDebug() << QString("	Coordinates lat = %1 lon = %2")
-//							.arg(traj.motionestimate(i).coordinates().lat())
-//							.arg(traj.motionestimate(i).coordinates().lon());
+				SolveResult res = (SolveResult)traj.result_of_calculation();
+				DataFromRadioLocation data;
 
-//				qDebug() << QString("	Coordinates_acc lat = %1 lon = %2 alt = %3")
-//							.arg(traj.motionestimate(i).coordinates_acc().lat_acc())
-//							.arg(traj.motionestimate(i).coordinates_acc().lon_acc())
-//							.arg(traj.motionestimate(i).coordinates_acc().alt_acc());
+				for( int i = 0; i < traj.motionestimate_size(); i++ ) {
+					SolverClient::Packet::ArgumentVariant::SolverAnswer::MotionEstimate motionEst = traj.motionestimate(i);
+					data.coordLatLon.append( QPointF(motionEst.coordinates().lon(), motionEst.coordinates().lat()) );
+					data.heigh.append( motionEst.coordinates().alt() );
+					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lon_acc(), motionEst.coordinates_acc().lat_acc()) );
+					data.heighStdDev.append( motionEst.coordinates_acc().alt_acc() );
+					data.timeHMSMs.append( QTime::currentTime() );
+					data.airspeed.append( motionEst.targetspeed() );
+					data.airSpeedStdDev.append( motionEst.targetspeed_acc() );
+					data.relativeBearing.append( motionEst.relativebearing() );
+					data.StateMassive_.append( (State)motionEst.state() );
+					data.qualityMassive_.append( (Quality)motionEst.quality() );
+				}
 
-//				qDebug() << QString("	target speed = %1").arg(traj.motionestimate(i).targetspeed());
-//				qDebug() << QString("	target speed acc = %1").arg(traj.motionestimate(i).targetspeed_acc());
-//				qDebug() << QString("	bearing = %1").arg(traj.motionestimate(i).relativebearing());
+				foreach (ISolverListener* listener, m_receiversList) {
+					listener->onSendDataFromRadioLocation(res, data);
+				}
 			}
 
-			//Parse SingleMarks Message
-			SolverClient::Packet::ArgumentVariant::SolverAnswer::SingleMarks singleMarks = packet.command().arguments().solveranswer().singlemarks();
-			//Unpack MotionEstimate list in trajectory
-			for(int i = 0; i < singleMarks.coordsestimate_size(); i++) {
-				//qDebug() << QString("> CoordINDEX = %1").arg(i);
+///   Manual Trajectory   ///
+			if( packet.command().arguments().solveranswer().has_manual_trajectory() ) {
+				SolverClient::Packet::ArgumentVariant::SolverAnswer::Trajectory traj =
+						packet.command().arguments().solveranswer().manual_trajectory();
 
-				//qDebug() << QString("	CoordEstDate = %1").arg( QDateTime::fromTime_t(singleMarks.coordsestimate(i).datetime()).toString() );
-/*				qDebug() << QString("	Coordinates lat = %1 lon = %2")
-							.arg(singleMarks.coordsestimate(i).coordinates().lat())
-							.arg(singleMarks.coordsestimate(i).coordinates().lon());
+				SolveResult res = (SolveResult)traj.result_of_calculation();
+				DataFromRadioLocation data;
 
-				qDebug() << QString("	Coordinates_acc lat = %1 lon = %2 alt = %3")
-							.arg(singleMarks.coordsestimate(i).coordinates_acc().lat_acc())
-							.arg(singleMarks.coordsestimate(i).coordinates_acc().lon_acc())
-							.arg(singleMarks.coordsestimate(i).coordinates_acc().alt_acc())*/;
+				for( int i = 0; i < traj.motionestimate_size(); i++ ) {
+					SolverClient::Packet::ArgumentVariant::SolverAnswer::MotionEstimate motionEst = traj.motionestimate(i);
+					data.coordLatLon.append( QPointF(motionEst.coordinates().lon(), motionEst.coordinates().lat()) );
+					data.heigh.append( motionEst.coordinates().alt() );
+					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lon_acc(), motionEst.coordinates_acc().lat_acc()) );
+					data.heighStdDev.append( motionEst.coordinates_acc().alt_acc() );
+					data.timeHMSMs.append( QTime::currentTime() );
+					data.airspeed.append( motionEst.targetspeed() );
+					data.airSpeedStdDev.append( motionEst.targetspeed_acc() );
+					data.relativeBearing.append( motionEst.relativebearing() );
+					data.StateMassive_.append( (State)motionEst.state() );
+					data.qualityMassive_.append( (Quality)motionEst.quality() );
+				}
+
+				foreach (ISolverListener* listener, m_receiversList) {
+					listener->onSendDataFromRadioLocationManualHeigh(res, data);
+				}
 			}
 
+///   Single Marks   ///
+			if( packet.command().arguments().solveranswer().has_singlemarks() ) {
+				SolverClient::Packet::ArgumentVariant::SolverAnswer::SingleMarks singleMarks = packet.command().arguments().solveranswer().singlemarks();
 
-			//qDebug() << " >>>>>>>>>>> \r\n\r\n";
+				SolveResult res = (SolveResult)singleMarks.result_of_calculation();
+				QList<OneDataFromRadioLocation> oneDataList;
+				int coordsEstimateCount = singleMarks.coordsestimate_size();
+
+				for(int i = 0; i < coordsEstimateCount; i++) {
+					OneDataFromRadioLocation oneData;
+					SolverClient::Packet::ArgumentVariant::SolverAnswer::CoordsEstimate coordsEstimate = singleMarks.coordsestimate(i);
+					oneData.coordLatLon = QPointF( coordsEstimate.coordinates().lon(), coordsEstimate.coordinates().lat() );
+					oneData.heigh = coordsEstimate.coordinates().alt();
+					oneData.latLonStdDev = QPointF( coordsEstimate.coordinates_acc().lon_acc(), coordsEstimate.coordinates_acc().lat_acc() );
+					oneData.heighStdDev = coordsEstimate.coordinates_acc().alt_acc();
+					oneData.timeHMSMs = QTime::currentTime();
+					oneDataList.append(oneData);
+				}
+
+				if( oneDataList.length() < 2 ) {
+					oneDataList.append(oneDataList.at(0));
+				}
+
+				foreach (ISolverListener* listener, m_receiversList) {
+					listener->onSendOneDataFromRadioLocation( res, oneDataList.at(0), oneDataList.at(1) );
+				}
+			}
+
+///   State Lines   ///
+			if( packet.command().arguments().solveranswer().has_statelines() ) {
+				SolverClient::Packet::ArgumentVariant::SolverAnswer::StateLines stateLines = packet.command().arguments().solveranswer().statelines();
+				SolveResult res = (SolveResult)stateLines.result_of_calculation();
+				HyperbolesFromRadioLocation hyperb;
+				hyperb.timeHMSMs = QDateTime::fromMSecsSinceEpoch( stateLines.datetime() ).time();
+
+				for(int i = 0; i < stateLines.stateline_size(); i++) {
+					QVector<QPointF> pointsVector;
+					SolverClient::Packet::ArgumentVariant::SolverAnswer::StateLines::StateLine stateLine =
+							packet.command().arguments().solveranswer().statelines().stateline(i);
+
+					for(int j = 0; j < stateLine.point_size(); j++) {
+						pointsVector.append(QPointF( stateLine.point(j).lon(), stateLine.point(j).lat() ));
+					}
+
+					hyperb.hyperboles_list.append(pointsVector);
+				}
+
+				foreach (ISolverListener* listener, m_receiversList) {
+					listener->onSendHyperbolesFromRadioLocation( res, hyperb );
+				}
+			}
+
+///   Error Message   ///
+			if( packet.command().arguments().solveranswer().has_errormessage() ) {
+				SolverClient::Packet::ArgumentVariant::SolverAnswer::ErrorMessage error = packet.command().arguments().solveranswer().errormessage();
+				ErrorType errType = (ErrorType)error.errortype();
+				QString errString = QString::fromStdString( error.message() );
+
+				foreach (ISolverListener* listener, m_receiversList) {
+					listener->onErrorOccured(errType, errString);
+				}
+			}
+
 		}
 	}
 }
