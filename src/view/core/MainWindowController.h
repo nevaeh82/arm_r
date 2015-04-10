@@ -51,6 +51,8 @@ private:
 	SolverResultWidgetController* m_solverWidgetController;
 	SolverErrorsWidgetController* m_solverErrorsWidgetController;
 
+    QThread *m_rpcClientThread;
+
 public:
 	explicit MainWindowController(QObject *parent = 0);
 	virtual ~MainWindowController();

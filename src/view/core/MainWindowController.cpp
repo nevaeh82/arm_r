@@ -36,14 +36,16 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
 
 	m_rpcFlakonClient = new RpcFlakonClientWrapper;
-	QThread* rpcClientThread = new QThread;
-	connect(m_rpcFlakonClient, SIGNAL(destroyed()), rpcClientThread, SLOT(terminate()));
-	//connect(this, SIGNAL(signalFinishRPC()), rpcClientThread, SLOT(quit()));
+    m_rpcClientThread = new QThread;
+    connect(m_rpcFlakonClient, SIGNAL(destroyed()), m_rpcClientThread, SLOT(terminate()));
+    connect(m_rpcClientThread, SIGNAL(finished()), m_rpcFlakonClient, SLOT(deleteLater()), Qt::DirectConnection);
+    connect(m_rpcClientThread, SIGNAL(destroyed()), m_rpcFlakonClient, SLOT(deleteLater()));
+    //connect(this, SIGNAL(signalFinishRPC()), m_rpcClientThread, SLOT(quit()));
 	//connect(this, SIGNAL(signalFinishRPC()), m_rpcClient, SLOT(deleteLater()));
 	//connect(this, SIGNAL(signalFinishRPC()), rpcClientThread, SLOT(deleteLater()));
 
-	m_rpcFlakonClient->moveToThread(rpcClientThread);
-	rpcClientThread->start();
+    m_rpcFlakonClient->moveToThread(m_rpcClientThread);
+    m_rpcClientThread->start();
 }
 
 MainWindowController::~MainWindowController()
@@ -63,7 +65,8 @@ MainWindowController::~MainWindowController()
 	}
 
 	m_tabManager->clearAllInformation();
-	delete m_rpcFlakonClient;
+    m_rpcClientThread->exit();
+    m_rpcClientThread->deleteLater();
 }
 
 void MainWindowController::appendView(MainWindow *view)
