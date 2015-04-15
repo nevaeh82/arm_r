@@ -24,7 +24,7 @@
 #include <TcpDevicesDefines.h>
 #include <ISolver.h>
 
-#include "Atlant/EMS/proto/EagleMessageProto.pb.h"
+#include "EagleMessageProto.pb.h"
 #include "Flakon/Server/Structs.h"
 #include "Interfaces/Tcp/ITcpListener.h"
 #include "TCP/TcpDefines.h"

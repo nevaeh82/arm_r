@@ -114,5 +114,5 @@ void ClientTcpServer::addPreambula(QByteArray& data)
 {
 	uint size = data.size();
 	data.prepend((char*)&size, sizeof(unsigned int));
-	data.prepend(TCP_ZAVIRUHA_PREAMBULA);
+	data.prepend(TCP_ZAVIRUHA_PREAMBULA_SOLVER);
 }

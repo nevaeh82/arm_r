@@ -110,6 +110,12 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 				m_solver->GetData(m_aData);
 			} else {
 				m_aData.ranges_.insert(m_main_point, 0);
+
+				for( int i = 0; i < m_aData.ranges_.size(); i++ ) {
+					m_aData.ranges_[i] = m_aData.ranges_[i] / (3 * pow(10.0, 8));
+					log_debug(QString("Range: %1 - %2").arg(i).arg(m_aData.ranges_[i]));
+				}
+
 				sendDataToClientTcpServer();
 			}
 

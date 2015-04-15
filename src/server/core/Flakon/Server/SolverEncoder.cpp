@@ -16,11 +16,6 @@ void SolverEncoder::onDataReceived(const QVariant& argument)
 	} else {
 		readProtobuf( inData );
 	}
-
-//	foreach (ISolverListener* receiver, m_receiversList) {
-//		DataFromRadioLocation data;
-//		receiver->onSendDataFromRadioLocation(SOLVED, data);
-//	}
 }
 
 void SolverEncoder::readProtobuf(const QByteArray& inputData)
@@ -165,7 +160,7 @@ QByteArray SolverEncoder::encode(const QByteArray &data)
 		return QByteArray();
 	}
 
-	int preambulaIndex = m_dataFromTcpSocket.indexOf(TCP_ZAVIRUHA_PREAMBULA);
+	int preambulaIndex = m_dataFromTcpSocket.indexOf(TCP_ZAVIRUHA_PREAMBULA_SOLVER);
 	m_dataFromTcpSocket = m_dataFromTcpSocket.right( m_dataFromTcpSocket.length() - preambulaIndex );
 	if (preambulaIndex < 0) {
 		return QByteArray();

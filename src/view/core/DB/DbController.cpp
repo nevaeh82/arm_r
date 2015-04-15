@@ -148,6 +148,7 @@ uint DbController::addObject(const Object &object)
 {
 	QSqlQuery query(m_sdb);
 	bool succeeded = query.prepare("INSERT INTO Objects VALUES (NULL, :objectName, :pid, :state, :editable);");
+	QSqlError err = query.lastError();
 
 	if (!succeeded) {
 		qDebug() << "SQL is wrong!";
@@ -239,22 +240,30 @@ bool DbController::createConnection(const QString& dbFile)
 {
 	bool isOpened = false;
 
+	QStringList cNames = QSqlDatabase::connectionNames();
+
 	if(QSqlDatabase::contains("SETTINGSCONNECTION"))
 	{
 		m_sdb =  QSqlDatabase::database("SETTINGSCONNECTION");
+		qDebug(">>>> It Has SETTINGSCONNECTION");
 	}
 	else
 	{
 		m_sdb = QSqlDatabase::addDatabase("QSQLITE", "SETTINGSCONNECTION");
+		qDebug(">>>> It Has NOT SETTINGSCONNECTION");
 	}
-	
-	m_sdb.setDatabaseName(dbFile);
 
+	cNames = QSqlDatabase::connectionNames();
+
+	m_sdb.setDatabaseName( dbFile );
 	isOpened = m_sdb.open();
 
 	if (!isOpened) {
 		qDebug() << m_sdb.lastError().text();
+		qDebug(">>>> It Has ERROR OPEN SQLITE");
 	}
+
+	cNames = QSqlDatabase::connectionNames();
 
 	return isOpened;
 }
@@ -368,6 +377,10 @@ Object DbController::getObjectByParam(const QString &paramName, const QVariant v
 	QString sql = QString("SELECT * FROM Objects WHERE %1 = :value;").arg(paramName);
 	bool succeeded = query.prepare(sql);
 
+	qDebug( ">>>> Getting object by param : %1" );
+	qDebug( paramName.toLocal8Bit().data() );
+	qDebug( value.toString().toAscii().data() );
+
 	if (!succeeded) {
 		qDebug() << "SQL is wrong!";
 		return obj;
@@ -378,10 +391,12 @@ Object DbController::getObjectByParam(const QString &paramName, const QVariant v
 	succeeded = query.exec();
 
 	if (!succeeded) {
+		qDebug( ">>>> No succseed" );
 		return obj;
 	}
 
 	if(!query.next()) {
+		qDebug( ">>>> No next" );
 		return obj;
 	}
 

@@ -45,7 +45,7 @@ if(USE_SHARED_OUTPUT)
 endif()
 
 # include qt package
-find_package(Qt4 4.7 EXACT COMPONENTS QtCore QtNetwork QtSql QtGui QAxContainer REQUIRED)
+find_package(Qt4 4.8 EXACT COMPONENTS QtCore QtNetwork QtSql QtGui QAxContainer REQUIRED)
 set(QT_USE_PHONON TRUE)
 
 include(CommonInit)

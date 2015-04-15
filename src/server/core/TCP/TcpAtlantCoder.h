@@ -6,7 +6,7 @@
 #include <QDataStream>
 #include <QDateTime>
 
-#include "../Atlant/EMS/proto/EagleMessageProto.pb.h"
+#include "EagleMessageProto.pb.h"
 #include "storm.pb.h"
 
 #include "TcpDevicesDefines.h"

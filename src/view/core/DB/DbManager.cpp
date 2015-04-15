@@ -11,7 +11,7 @@
 DbManager::DbManager(QObject *parent) :
 	QObject(parent)
 {
-	QString dbPath = QString(DB_PATH) + QDir::separator() + QString(DB_NAME);
+	QString dbPath = /*QString(DB_PATH) + QDir::separator() + */QString(DB_NAME);
 	m_dbController = new DbController(dbPath, this);
 }
 
@@ -22,6 +22,8 @@ DbManager::~DbManager()
 SettingsNode DbManager::getSettingsNode(const QString &objectName)
 {
 	SettingsNode settingsNode;
+
+	log_debug(QString(">>> Getting Settings node %1").arg(objectName));
 
 	Object obj = m_dbController->getObject(objectName);
 

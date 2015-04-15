@@ -152,8 +152,8 @@ void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
 
 void SpectrumWidgetController::updateDBAreas()
 {
-	m_graphicsWidget->ClearAllDetectedAreas(1);
-	m_graphicsWidget->ClearAllDetectedAreas(2);
+	m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas();
 
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
@@ -337,10 +337,10 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 	stream >> vec;
 
-	m_graphicsWidget->ClearAllDetectedAreas(0);
+	m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
-		m_graphicsWidget->SetDetectedAreas(0, (*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
+		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0.0, (*it).y()*TO_MHZ + m_current_frequency, 0.0, false);
 	}
 }
 
@@ -370,7 +370,7 @@ void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFr
 		if(endFreq > zeroFreq + m_bandwidth)
 			endFreq = zeroFreq + m_bandwidth;
 
-		m_graphicsWidget->SetDetectedAreas(mode, beginFreq, 0, endFreq, 0, false);
+		m_graphicsWidget->SetDetectedAreas(beginFreq, 0.0, endFreq, 0.0, false);
 	}
 }
 
@@ -380,9 +380,9 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	{
 		return;
 	}
-	m_graphicsWidget->ClearAllDetectedAreas(0);
-	m_graphicsWidget->ClearAllDetectedAreas(1);
-	m_graphicsWidget->ClearAllDetectedAreas(2);
+	m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas();
 
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;
@@ -496,7 +496,7 @@ void SpectrumWidgetController::slotAutoSearch(bool state)
 	m_autoSearch = state;
 
 	if (!m_autoSearch) {
-		m_graphicsWidget->ClearAllDetectedAreas(0);
+		m_graphicsWidget->ClearAllDetectedAreas();
 	}
 }
 
