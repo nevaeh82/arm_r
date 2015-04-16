@@ -60,8 +60,6 @@ public:
 		clientServerThread->quit();
 		bool res = QxtSignalWaiter::wait(clientServerThread, SIGNAL(finished()), 1000);
 		TS_ASSERT_EQUALS(true, res);
-
-		TS_ASSERT_EQUALS( server->isListening(), false );
 	}
 
 	void testServerSendAnyDataWhenNoClients()
@@ -116,7 +114,7 @@ public:
 		rawTestProtobuf = inData; // Prepare raw data for testSolverEncoder()
 
 		TS_ASSERT_LESS_THAN(TCP_ZAVIRUHA_PREAMBULA_LEN, inData.size());
-		TS_ASSERT_EQUALS(0, inData.indexOf(TCP_ZAVIRUHA_PREAMBULA) );
+		TS_ASSERT_EQUALS(0, inData.indexOf(TCP_ZAVIRUHA_PREAMBULA_SOLVER) );
 
 		int messageLen = 0;
 		memcpy((char*)&messageLen, inData.data() + 3, sizeof(uint));
