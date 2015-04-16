@@ -1,3 +1,4 @@
+#include "Logger/Logger.h"
 #include "SolverEncoder.h"
 
 SolverEncoder::SolverEncoder(QObject* parent)
@@ -31,26 +32,28 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 			int targetID = packet.command().arguments().solveranswer().targetid();
 			Q_UNUSED(targetID); // For future using
 
+			SolveResult res = SOLVED;
+
 ///   Auto Trajectory   ///
 			if( packet.command().arguments().solveranswer().has_auto_trajectory() ) {
 				SolverClient::Packet::ArgumentVariant::SolverAnswer::Trajectory traj =
 						packet.command().arguments().solveranswer().auto_trajectory();
 
-				SolveResult res = (SolveResult)traj.result_of_calculation();
+				res = (SolveResult)(traj.result_of_calculation() - 1);
 				DataFromRadioLocation data;
 
 				for( int i = 0; i < traj.motionestimate_size(); i++ ) {
 					SolverClient::Packet::ArgumentVariant::SolverAnswer::MotionEstimate motionEst = traj.motionestimate(i);
-					data.coordLatLon.append( QPointF(motionEst.coordinates().lon(), motionEst.coordinates().lat()) );
+					data.coordLatLon.append( QPointF(motionEst.coordinates().lat(), motionEst.coordinates().lon()) );
 					data.heigh.append( motionEst.coordinates().alt() );
-					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lon_acc(), motionEst.coordinates_acc().lat_acc()) );
+					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lat_acc(), motionEst.coordinates_acc().lon_acc()) );
 					data.heighStdDev.append( motionEst.coordinates_acc().alt_acc() );
 					data.timeHMSMs.append( QTime::currentTime() );
 					data.airspeed.append( motionEst.targetspeed() );
 					data.airSpeedStdDev.append( motionEst.targetspeed_acc() );
 					data.relativeBearing.append( motionEst.relativebearing() );
-					data.StateMassive_.append( (State)motionEst.state() );
-					data.qualityMassive_.append( (Quality)motionEst.quality() );
+					data.StateMassive_.append( (State)(motionEst.state() - 1) );
+					data.qualityMassive_.append( (Quality)(motionEst.quality() - 1) );
 				}
 
 				foreach (ISolverListener* listener, m_receiversList) {
@@ -63,21 +66,22 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 				SolverClient::Packet::ArgumentVariant::SolverAnswer::Trajectory traj =
 						packet.command().arguments().solveranswer().manual_trajectory();
 
-				SolveResult res = (SolveResult)traj.result_of_calculation();
+				res = (SolveResult)(traj.result_of_calculation() - 1);
+
 				DataFromRadioLocation data;
 
 				for( int i = 0; i < traj.motionestimate_size(); i++ ) {
 					SolverClient::Packet::ArgumentVariant::SolverAnswer::MotionEstimate motionEst = traj.motionestimate(i);
-					data.coordLatLon.append( QPointF(motionEst.coordinates().lon(), motionEst.coordinates().lat()) );
+					data.coordLatLon.append( QPointF(motionEst.coordinates().lat(), motionEst.coordinates().lon()) );
 					data.heigh.append( motionEst.coordinates().alt() );
-					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lon_acc(), motionEst.coordinates_acc().lat_acc()) );
+					data.latLonStdDev.append( QPointF(motionEst.coordinates_acc().lat_acc(), motionEst.coordinates_acc().lon_acc()) );
 					data.heighStdDev.append( motionEst.coordinates_acc().alt_acc() );
 					data.timeHMSMs.append( QTime::currentTime() );
 					data.airspeed.append( motionEst.targetspeed() );
 					data.airSpeedStdDev.append( motionEst.targetspeed_acc() );
 					data.relativeBearing.append( motionEst.relativebearing() );
-					data.StateMassive_.append( (State)motionEst.state() );
-					data.qualityMassive_.append( (Quality)motionEst.quality() );
+					data.StateMassive_.append( (State)(motionEst.state() - 1) );
+					data.qualityMassive_.append( (Quality)(motionEst.quality() - 1) );
 				}
 
 				foreach (ISolverListener* listener, m_receiversList) {
@@ -89,16 +93,17 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 			if( packet.command().arguments().solveranswer().has_singlemarks() ) {
 				SolverClient::Packet::ArgumentVariant::SolverAnswer::SingleMarks singleMarks = packet.command().arguments().solveranswer().singlemarks();
 
-				SolveResult res = (SolveResult)singleMarks.result_of_calculation();
+				res = (SolveResult)(singleMarks.result_of_calculation() - 1);
+
 				QList<OneDataFromRadioLocation> oneDataList;
 				int coordsEstimateCount = singleMarks.coordsestimate_size();
 
 				for(int i = 0; i < coordsEstimateCount; i++) {
 					OneDataFromRadioLocation oneData;
 					SolverClient::Packet::ArgumentVariant::SolverAnswer::CoordsEstimate coordsEstimate = singleMarks.coordsestimate(i);
-					oneData.coordLatLon = QPointF( coordsEstimate.coordinates().lon(), coordsEstimate.coordinates().lat() );
+					oneData.coordLatLon = QPointF( coordsEstimate.coordinates().lat(), coordsEstimate.coordinates().lon() );
 					oneData.heigh = coordsEstimate.coordinates().alt();
-					oneData.latLonStdDev = QPointF( coordsEstimate.coordinates_acc().lon_acc(), coordsEstimate.coordinates_acc().lat_acc() );
+					oneData.latLonStdDev = QPointF( coordsEstimate.coordinates_acc().lat_acc(), coordsEstimate.coordinates_acc().lon_acc() );
 					oneData.heighStdDev = coordsEstimate.coordinates_acc().alt_acc();
 					oneData.timeHMSMs = QTime::currentTime();
 					oneDataList.append(oneData);
@@ -116,7 +121,8 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 ///   State Lines   ///
 			if( packet.command().arguments().solveranswer().has_statelines() ) {
 				SolverClient::Packet::ArgumentVariant::SolverAnswer::StateLines stateLines = packet.command().arguments().solveranswer().statelines();
-				SolveResult res = (SolveResult)stateLines.result_of_calculation();
+				res = (SolveResult)(stateLines.result_of_calculation() - 1);
+
 				HyperbolesFromRadioLocation hyperb;
 				hyperb.timeHMSMs = QDateTime::fromMSecsSinceEpoch( stateLines.datetime() ).time();
 
@@ -126,7 +132,7 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 							packet.command().arguments().solveranswer().statelines().stateline(i);
 
 					for(int j = 0; j < stateLine.point_size(); j++) {
-						pointsVector.append(QPointF( stateLine.point(j).lon(), stateLine.point(j).lat() ));
+						pointsVector.append(QPointF( stateLine.point(j).lat(), stateLine.point(j).lon() ));
 					}
 
 					hyperb.hyperboles_list.append(pointsVector);
@@ -140,7 +146,7 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 ///   Error Message   ///
 			if( packet.command().arguments().solveranswer().has_errormessage() ) {
 				SolverClient::Packet::ArgumentVariant::SolverAnswer::ErrorMessage error = packet.command().arguments().solveranswer().errormessage();
-				ErrorType errType = (ErrorType)error.errortype();
+				ErrorType errType = (ErrorType)(error.errortype() - 1);
 				QString errString = QString::fromStdString( error.message() );
 
 				foreach (ISolverListener* listener, m_receiversList) {
