@@ -35,8 +35,8 @@ TcpManager::TcpManager(QObject* parent)
 	m_pServer->moveToThread(pServerThread);
 	pServerThread->start();
 
-	QThread* clientServerThread = new QThread(this);
-	m_clientTcpServer = new ClientTcpServer(clientServerThread);
+	QThread* clientServerThread = new QThread;
+	m_clientTcpServer = new ClientTcpServer;
 	m_coordinatesCounter->registerReceiver(m_clientTcpServer);
 	m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
 
@@ -155,7 +155,6 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 			addStationToFlakon(deviceName, controller);
 			break;
 		default:
-			return;
 			break;
 	}
 
@@ -169,13 +168,18 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	controller->createTcpClient();
 	controller->createTcpDeviceCoder();
 
-	QThread* controllerThread = new QThread;
+	QThread* controllerThread = new QThread();
 	connect(controller->asQObject(), SIGNAL(destroyed()), controllerThread, SLOT(terminate()));
 	connect(this, SIGNAL(threadTerminateSignal()), controllerThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), controller->asQObject(), SLOT(deleteLater()));
 	connect(this, SIGNAL(threadTerminateSignal()), controllerThread, SLOT(deleteLater()));
-	controller->asQObject()->moveToThread(controllerThread);
+
+	controller->moveToThread(controllerThread);
 	controllerThread->start();
+
+
+
+	log_debug(deviceName + QString("Status %1").arg(controllerThread->isRunning()));
 
 	m_controllersMap.insert(deviceName, controller);
 

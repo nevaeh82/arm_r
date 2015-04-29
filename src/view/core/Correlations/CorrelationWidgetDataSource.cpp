@@ -35,7 +35,7 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 Q_DECLARE_METATYPE(float*)
 void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool /*isComplex*/)
 {
-	log_debug( QString("Points size: %1").arg(points.size() ) );
+	//log_debug( QString("Points size: %1").arg(points.size() ) );
 
 	QString base = m_tabManager->getStationName(point1);//m_id);
 	QString second = m_tabManager->getStationName(point2);

@@ -1,3 +1,3 @@
 :start
-ZaviruhaServer.exe
+ZaviruhaRServer.exe
 goto start

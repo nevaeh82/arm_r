@@ -1,2 +1,2 @@
-start ZaviruhaView.exe
+start ZaviruhaRView.exe
 Server.bat

@@ -126,6 +126,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			bool isComplex = list.at(4).toBool();
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
+		m_graphicsWidget->ZoomOutFull();
 
 		return;
 	}
@@ -211,6 +212,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	m_isComplex = false;
 	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
+	m_graphicsWidget->ZoomOutFull();
 
 	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
 	setZeroFrequency(value.toDouble());
@@ -340,7 +342,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 	m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
-		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0.0, (*it).y()*TO_MHZ + m_current_frequency, 0.0, false);
+		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
 	}
 }
 
@@ -370,7 +372,7 @@ void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFr
 		if(endFreq > zeroFreq + m_bandwidth)
 			endFreq = zeroFreq + m_bandwidth;
 
-		m_graphicsWidget->SetDetectedAreas(beginFreq, 0.0, endFreq, 0.0, false);
+		m_graphicsWidget->SetDetectedAreas(beginFreq, 0, endFreq, 0, false);
 	}
 }
 
