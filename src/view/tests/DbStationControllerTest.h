@@ -3,6 +3,7 @@
 
 #include <cxxtest/TestSuite.h>
 #include <QtGlobal>
+#include <QtSql/QSqlDriver>
 
 #include "DBStation/DBStationController.h"
 
@@ -27,11 +28,14 @@ public:
 		isConnected = stationController->connectToDB( param );
 
 		stationController->m_db.transaction();
+
+		//Just this worked. Transaction form DB returns false! Dont know why!
+		bool be = stationController->m_db.driver()->beginTransaction();
 	}
 
 	void tearDown()
 	{
-		stationController->m_db.rollback();
+		stationController->m_db.driver()->rollbackTransaction();
 		delete stationController;
 	}
 
