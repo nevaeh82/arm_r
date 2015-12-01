@@ -40,10 +40,18 @@ public:
 	QWidget* getWidget() const;
 	void setVisible(const bool isVisible);
 
+private slots:
+	void onDataArrivedLS(const QString method, const QVariant arg);
+	void onVisible(const bool b);
+
 private:
 	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
 	void setData(float *spectrum, float *spectrum_peak_hold);
 	void setLabelName(QString base, QString second);
+
+signals:
+	void signalonDataArrivedLS(const QString& method, const QVariant& arg);
+	void signalOnVisible(const bool);
 
 };
 

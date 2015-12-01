@@ -38,6 +38,10 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_stopFlag = true;
 
 	m_sigDialog = NULL;
+
+	connect(this, SIGNAL(signalVisible(bool)), this, SLOT(onVisible(bool)));
+
+	connect(this, SIGNAL(onCorrelationStateChangedSignal(bool)), this, SLOT(onCorrelationStateChangedSlot(bool)));
 }
 
 SpectrumWidgetController::~SpectrumWidgetController()
@@ -124,7 +128,9 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			int pointCount = list.at(2).toInt();
 			double bandwidth = list.at(3).toDouble();
 			bool isComplex = list.at(4).toBool();
+			qDebug( QString(":::%1 On setup Spectrum %2").arg(QTime::currentTime().toString("mm-ss-zzz")).arg(pointCount).toAscii() );
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+			qDebug( QString(":::%1 On setupped Spectrum!").arg(QTime::currentTime().toString("mm-ss-zzz")).toAscii() );
 		}
 		m_graphicsWidget->ZoomOutFull();
 
@@ -140,6 +146,11 @@ void SpectrumWidgetController::setRpcPrmClient(RpcPrmClient *rpcClient)
 }
 
 void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
+{
+	emit onCorrelationStateChangedSignal(isEnabled);
+}
+
+void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnabled)
 {
 	correlationFlag = isEnabled;
 
@@ -372,7 +383,7 @@ void SpectrumWidgetController::setDetectedAreas(int mode, const QList<StationsFr
 		if(endFreq > zeroFreq + m_bandwidth)
 			endFreq = zeroFreq + m_bandwidth;
 
-		m_graphicsWidget->SetDetectedAreas(beginFreq, 0, endFreq, 0, false);
+		m_graphicsWidget->SetDetectedAreas(mode, beginFreq, 0, endFreq, 0, false);
 	}
 }
 
@@ -404,7 +415,11 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 
 void SpectrumWidgetController::setVisible(const bool isVisible)
 {
-	m_view->setVisible(isVisible);
+	emit signalVisible(isVisible);
+}
+
+void SpectrumWidgetController::onVisible(const bool b) {
+	m_view->setVisible(b);
 }
 
 void SpectrumWidgetController::setAutoSearch(bool enabled)

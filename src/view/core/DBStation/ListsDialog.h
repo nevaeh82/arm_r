@@ -26,6 +26,7 @@ signals:
 	void signalAddClicked();
 	void signalDelete();
     void signalReport(int);
+	void onClosing();
 
 public slots:
 	void slotShow();

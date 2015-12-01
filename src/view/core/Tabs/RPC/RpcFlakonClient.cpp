@@ -87,6 +87,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
+	//log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}
@@ -94,6 +95,7 @@ void RpcFlakonClient::pointsReceived(QByteArray data)
 
 void RpcFlakonClient::bandwidthReceived(QByteArray data)
 {
+	//log_debug("Receive Bandwidth >>>>>");
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data );
 	}
@@ -101,6 +103,7 @@ void RpcFlakonClient::bandwidthReceived(QByteArray data)
 
 void RpcFlakonClient::correlationReceived(QByteArray data)
 {
+	//log_debug(QString("Receive Correlations >>>>>  %1").arg(data.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_CORRELATION, data );
 	}

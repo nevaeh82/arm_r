@@ -9,6 +9,8 @@ TcpManager::TcpManager(QObject* parent)
 	: QObject(parent)
 	, m_rpcServer( NULL )
 	, m_flakonController( NULL )
+	, m_timePoints(QTime::currentTime())
+	, m_isCorrelAfterPoints(false)
 {
 	m_coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
 	m_coordinatesCounter->registerReceiver(this);
@@ -110,9 +112,6 @@ void TcpManager::addSolver(QByteArray data)
 	}
 
 	m_flakonController->setCoordinateCounter(m_mapCoordinateCounter.value(frequency));
-
-
-
 }
 
 void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
@@ -284,7 +283,10 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	switch(deviceType) {
 		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
+
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_POINTS, data, sender );
+
+				log_debug("to RPC RPC_SLOT_SERVER_SEND_POINTS   >>>  %1");
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data, sender );
@@ -293,6 +295,8 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				/// send data to FlakonCoordinatesCounter
 				m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender );
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_CORRELATION, data, sender );
+
+				log_debug("to RPC FLAKON_COORDINATE_COUNTER and RPC_SLOT_SERVER_SEND_CORRELATION");
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {
 				//FROM COORDINATES COUNTER

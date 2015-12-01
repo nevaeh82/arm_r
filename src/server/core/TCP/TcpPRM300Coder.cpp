@@ -13,6 +13,7 @@ TcpPRM300Coder::~TcpPRM300Coder()
 
 MessageSP TcpPRM300Coder::encode(const QByteArray& data)
 {
+
 	/// What does the fucking magic happen here?!
 
 	/// TODO: recheck

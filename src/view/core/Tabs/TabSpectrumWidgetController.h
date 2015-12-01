@@ -63,6 +63,8 @@ private:
 	ControlPanelController* m_controlPanelControllerTrue;
 	bool m_isPanoramaEnabled;
 
+	QList<QThread*> m_threadSrcList;
+
 public:
 	explicit TabSpectrumWidgetController(
 			IStation*, ICorrelationControllersContainer*, ITabManager*, TabSpectrumWidget*,

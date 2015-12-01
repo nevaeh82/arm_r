@@ -40,6 +40,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
+	log_debug("~() <<<<<<<<<<<");
 	m_dbManager->deregisterReceiver(m_treeModel);
 
 	m_rpcPrmClient->deregisterReceiver( m_spectrumDataSource );
@@ -54,12 +55,21 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 
 	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
 		correlationWidgetDataSource->deregisterCorrelationReceiver( (ICorrelationListener*) m_spectrumWidget );
+
+		correlationWidgetDataSource->deleteLater();
 	}
 
 	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->deregisterReceiver( m_spectrumDataSource );
 	}
+
+	foreach (QThread* thread, m_threadSrcList) {
+		thread->exit();
+		//thread->deleteLater();
+	}
+
+	log_debug("~() >>>>>>>>>>>>");
 }
 
 void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
@@ -170,8 +180,22 @@ void TabSpectrumWidgetController::createView()
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 
-		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, this);
+		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, 0);
 		correlationDataSource->registerReceiver(correlationWidget);
+
+
+		//Maybe it will better perfomance
+		QThread* thread = new QThread;
+		connect(correlationDataSource, SIGNAL(destroyed()), thread, SLOT(terminate()));
+		connect(thread, SIGNAL(finished()), correlationDataSource, SLOT(deleteLater()), Qt::DirectConnection);
+		connect(thread, SIGNAL(destroyed()), correlationDataSource, SLOT(deleteLater()));
+
+		correlationDataSource->moveToThread(thread);
+		thread->start();
+
+		m_threadSrcList.append(thread);
+
+		//---------------------------------------
 
 		if( m_rpcFlakonClient != NULL ) {
 			m_rpcFlakonClient->registerReceiver( correlationDataSource );

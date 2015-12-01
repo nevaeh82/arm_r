@@ -8,6 +8,8 @@ BaseDataSource::BaseDataSource(QObject *parent) :
 void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)
 {
 	foreach(IDataSourceListener* receiver, m_receiversList){
-		receiver->onDataArrived(method, arg);
+		if(receiver) {
+			receiver->onDataArrived(method, arg);
+		}
 	}
 }

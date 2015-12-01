@@ -8,6 +8,7 @@ TcpFlakonCoder::TcpFlakonCoder(QObject* parent) :
 	BaseTcpDeviceCoder(parent)
 {
 	m_residueLength = 0;
+	cnt = 0;
 }
 
 TcpFlakonCoder::~TcpFlakonCoder()
@@ -17,9 +18,13 @@ TcpFlakonCoder::~TcpFlakonCoder()
 MessageSP TcpFlakonCoder::encode(const QByteArray& data)
 {
 	MessageSP message;
-
 	m_dataFromTcpSocket.append(data);
 	if (m_residueLength == 0) {
+
+		if(m_dataFromTcpSocket.length() < PAYLOAD_HEADER_LENGTH) {
+			return message;
+		}
+
 		QDataStream stream(m_dataFromTcpSocket);
 		stream.setVersion(QDataStream::Qt_4_7);
 
@@ -35,15 +40,82 @@ MessageSP TcpFlakonCoder::encode(const QByteArray& data)
 		stream >> m_header.headerCRC;
 
 		m_residueLength = m_header.length;
+
+		if(m_header.magic != 0xFFEECCFF) {
+
+//			for(int i = 0; i<m_dataFromTcpSocket.length(); i++) {
+//				if( m_dataFromTcpSocket.at(i) == 0xFF &&  m_dataFromTcpSocket.at(i))
+//			}
+
+			QByteArray tst;
+			tst.append(0xFF);
+			tst.append(0xEE);
+			tst.append(0xCC);
+			tst.append(0xFF);
+
+			bool res = false;
+			uint ind = 0;
+			for(int i = 0; i<m_dataFromTcpSocket.length() - 3; i++) {
+				uchar a1 = m_dataFromTcpSocket.at(i);
+				uchar a2 = m_dataFromTcpSocket.at(i+1);
+				uchar a3 = m_dataFromTcpSocket.at(i+2);
+				uchar a4 = m_dataFromTcpSocket.at(i+3);
+
+				if( m_dataFromTcpSocket.at(i) == tst.at(0) &&
+					m_dataFromTcpSocket.at(i+1) == tst.at(1) &&
+					m_dataFromTcpSocket.at(i+2) == tst.at(2) &&
+					m_dataFromTcpSocket.at(i+3) == tst.at(3)) {
+					ind = i;
+					res = true;
+				}
+			}
+
+			if( !res ) {
+				m_dataFromTcpSocket = m_dataFromTcpSocket.right( 10 );
+				m_residueLength = 0;
+				//log_debug("err_no");
+				return message;
+			} else {
+				m_dataFromTcpSocket = m_dataFromTcpSocket.right( m_dataFromTcpSocket.length() - ind );
+				m_residueLength = 0;
+				log_debug("err_Ok");
+				return message;
+			}
+		} else {
+			bool b;
+			b = true;
+		}
+
 		m_dataFromTcpSocket.remove(0, PAYLOAD_HEADER_LENGTH);
 	}
 
+	//m_dataFromTcpSocket.append( QByteArray(m_residueLength, 'a') );
+
+	float t1 = m_residueLength;
+	float t2 = m_dataFromTcpSocket.length();
+
+	float res = (t2 / t1) * 100;
+
+//	log_debug(QString("Socket size:   %1").arg(m_dataFromTcpSocket.length()));
+//	log_debug(QString("All size:   %1").arg(m_residueLength));
+
+	cnt++;
+
+	if(cnt > 100) {
+		log_debug(QString("Receiving data   %1%").arg(res));
+		cnt = 0;
+	}
+
 	if(m_dataFromTcpSocket.length() >= m_residueLength) {
+		//log_debug(QString("Receiving data   %1% !!!!! all").arg(res));
 		QByteArray rest_msg = m_dataFromTcpSocket.right(m_dataFromTcpSocket.size() - m_residueLength);
 		m_dataFromTcpSocket.truncate(m_residueLength);
+
+
 		message = messageFromPreparedData();
 		m_dataFromTcpSocket.clear();
 		m_dataFromTcpSocket = rest_msg;
+
 		m_residueLength = 0;
 	}
 

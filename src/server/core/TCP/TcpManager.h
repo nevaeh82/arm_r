@@ -38,6 +38,10 @@ private:
 	QMap<QString, BaseTcpDeviceController*> m_flakonStations;
 	QTimer m_timer;
 
+	QTime m_timePoints;
+	bool m_isCorrelAfterPoints;
+
+
 	/**
 	 * key = deviceType
 	 * Define own deviceType in TcpDevicesDefines

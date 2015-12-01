@@ -20,6 +20,7 @@ ListsDialog::ListsDialog(QWidget *parent) :
 	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
 	connect(ui->pbDelete, SIGNAL(clicked()), this, SIGNAL(signalDelete()));
     connect(ui->pbReport, SIGNAL(clicked()), this, SLOT(slotReportType()));
+	connect(ui->pbClose, SIGNAL(clicked(bool)), this, SIGNAL(onClosing()));
 }
 
 ListsDialog::~ListsDialog()

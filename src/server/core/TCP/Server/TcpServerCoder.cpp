@@ -11,6 +11,7 @@ TcpServerCoder::~TcpServerCoder()
 
 MessageSP TcpServerCoder::encode(const QByteArray &data)
 {
+	log_debug(" tcpServer encode ");
 	m_dataFromTcpSocket.append(data);
 
 	if (m_dataFromTcpSocket.size() < TCP_ZAVIRUHA_PREAMBULA_LEN){

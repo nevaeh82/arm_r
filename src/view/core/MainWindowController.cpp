@@ -159,6 +159,8 @@ void MainWindowController::slotShowLists()
 	ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
 	bool isOpen = m_dbStationController->getDataBase().isOpen();
 
+	connect(listForm, SIGNAL(onClosing()), m_tabManager, SLOT(slotUpdateDBStationsLists()));
+
 	m_dbStationController->registerReceiver( listController );
 
 	if(!isOpen) {

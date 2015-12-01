@@ -101,7 +101,7 @@ void ControlPanelController::setMapStations(QMap<int, Station *> stationsMap)
 
 void ControlPanelController::onCorrelationStateChanged(const bool isEnabled)
 {
-		emit setCorrelationStatusActive(isEnabled);
+	emit setCorrelationStatusActive(isEnabled);
 }
 
 void ControlPanelController::setCorrelationFrequencyValue(double value)

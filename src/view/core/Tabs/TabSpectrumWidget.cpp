@@ -33,6 +33,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 TabSpectrumWidget::~TabSpectrumWidget()
 {
+	log_debug("~() <<<<<<<<<<<");
+	log_debug("~() >>>>>>>>>>>");
 }
 
 void TabSpectrumWidget::activate()

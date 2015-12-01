@@ -9,6 +9,8 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent)
 	, m_isComplex(0)
 	, m_graphicsWidget(0)
 {
+	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
+	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
 }
 
 QWidget *CorrelationWidgetController::getWidget() const
@@ -18,7 +20,12 @@ QWidget *CorrelationWidgetController::getWidget() const
 
 void CorrelationWidgetController::setVisible(const bool isVisible)
 {
-	m_view->setVisible(isVisible);
+	emit signalOnVisible(isVisible);
+}
+
+void CorrelationWidgetController::onVisible(const bool b)
+{
+	m_view->setVisible(b);
 }
 
 bool CorrelationWidgetController::isGraphicVisible()
@@ -44,6 +51,11 @@ void CorrelationWidgetController::appendView(CorrelationWidget *view)
 Q_DECLARE_METATYPE(float*)
 void CorrelationWidgetController::onDataArrived(const QString &method, const QVariant &arg)
 {
+	emit signalonDataArrivedLS(method, arg);
+}
+
+void CorrelationWidgetController::onDataArrivedLS(const QString method, const QVariant arg)
+{
 	Q_UNUSED(method);
 
 	QList<QVariant> list = arg.toList();
@@ -65,6 +77,7 @@ void CorrelationWidgetController::onDataArrived(const QString &method, const QVa
 	setLabelName(base, second);
 	m_graphicsWidget->ZoomOutFull();
 }
+
 
 void CorrelationWidgetController::clear()
 {

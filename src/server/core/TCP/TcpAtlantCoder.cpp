@@ -14,6 +14,8 @@ TcpAtlantCoder::~TcpAtlantCoder()
 
 MessageSP TcpAtlantCoder::encode(const QByteArray& data)
 {
+	log_debug("Atlant encode");
+
 	m_dataFromTcpSocket.append(data);
 
 	/// TODO: recheck

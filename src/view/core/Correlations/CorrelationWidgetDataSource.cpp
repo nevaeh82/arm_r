@@ -116,13 +116,14 @@ void CorrelationWidgetDataSource::correlationTimerOff()
 void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
 	/// TODO this is hack for visible and unvisible widget. Need to refactor architechture
-	if (RPC_SLOT_SERVER_SEND_CORRELATION == method){
+	if (RPC_SLOT_SERVER_SEND_CORRELATION == method) {
+
 		QDataStream stream( data.toByteArray() );
 
 		QVector<QPointF> points;
 		quint32 point1, point2;
 
-		stream >> point1 >> point2 >> points;
+		stream >> point1 >> point2;
 
 		if( point1 == m_id ) {
 			m_correlationWidget->setVisible(false);
@@ -132,6 +133,8 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 		if( point2 != m_id ){
 			return;
 		}
+
+		stream >> points;
 
 		m_correlationWidget->setVisible(true);
 

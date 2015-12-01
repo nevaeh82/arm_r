@@ -19,6 +19,7 @@ private:
 	ZaviruhaPayloadPacketHeader m_header;
 	int m_residueLength;
 	QByteArray m_dataFromTcpSocket;
+	int cnt;
 
 public:
 	explicit TcpFlakonCoder(QObject* parent = NULL);

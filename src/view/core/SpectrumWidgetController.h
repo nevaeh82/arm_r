@@ -153,6 +153,9 @@ signals:
 	void signalCurSelChanged(int);
 	void signalRequestData(unsigned int id, unsigned int type, int *data, unsigned int length);
 	void signalSpectrumEnable(bool state);
+	void signalVisible(const bool);
+
+	void onCorrelationStateChangedSignal(const bool isEnabled);
 
 public slots:
 
@@ -180,9 +183,9 @@ private slots:
 
 	void slotControlPanelMode(int mode);
 
+	void onVisible(const bool b);
 
-
-
+	void onCorrelationStateChangedSlot(const bool isEnabled);
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H
