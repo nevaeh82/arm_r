@@ -26,6 +26,14 @@ public:
 
 		isConnected = stationController->connectToDB( param );
 
+		QSqlQuery query( stationController->m_db );
+		query.exec("DELETE FROM stationdata;");
+		query.exec("DELETE FROM stationdevices;");
+		query.exec("DELETE FROM station;");
+		query.exec("DELETE FROM category;");
+		query.exec("DELETE FROM signaltype;");
+
+		QString rr = query.lastError().text();
 		stationController->m_db.transaction();
 	}
 
