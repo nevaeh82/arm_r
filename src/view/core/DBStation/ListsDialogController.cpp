@@ -3,6 +3,7 @@
 #include <Logger/Logger.h>
 
 #include "ListsDialogController.h"
+#include "StationHelper.h"
 
 ListsDialogController::ListsDialogController(IDBStation* stationDb, QObject* parent)
 	: QObject(parent)
@@ -53,6 +54,17 @@ void ListsDialogController::adjustTableSize()
 
 	for( int column = 0; column < m_view->model()->columnCount(); column++ ) {
 		width = width + m_view->columnWidth( column );
+	}
+
+	for( int row = 0; row < m_view->model()->rowCount(); row++ ) {
+		if( m_view->model()->itemData( m_view->model()->index(row, 4) ).value(0) ==
+				StationHelper::translateCategory( "Black" ) ) {
+
+//			m_view->setItemDelegateForRow(row, );
+			for( int column = 0; column < m_view->model()->columnCount(); column++ ) {
+				m_view->model()->setData( m_view->model()->index(row, column), QColor(0, 0, 255), Qt::BackgroundColorRole);
+			}
+		}
 	}
 
 	m_view->setMinimumWidth(width);

@@ -14,5 +14,14 @@ QVariant ListsProxyModel::data(const QModelIndex& index, int role) const
 		return StationHelper::translateCategory( sourceModel()->data( index, role ).toString() );
 	}
 
+	if( sourceModel() && role == Qt::BackgroundColorRole ) {
+
+		QString target = sourceModel()->data( sourceModel()->index(index.row(), 4), Qt::DisplayRole ).toString();
+		if( target == QString("Black") ||
+			target == StationHelper::translateCategory("Black") ) {
+			return QColor(255, 0, 0, 80);
+		}
+	}
+
 	return QSortFilterProxyModel::data( index, role );
 }
