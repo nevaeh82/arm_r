@@ -128,9 +128,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			int pointCount = list.at(2).toInt();
 			double bandwidth = list.at(3).toDouble();
 			bool isComplex = list.at(4).toBool();
-			//qDebug( QString(":::%1 On setup Spectrum %2").arg(QTime::currentTime().toString("mm-ss-zzz")).arg(pointCount).toAscii() );
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-			//qDebug( QString(":::%1 On setupped Spectrum!").arg(QTime::currentTime().toString("mm-ss-zzz")).toAscii() );
 		}
 		//m_graphicsWidget->ZoomOutFull();
 
@@ -223,7 +221,6 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	m_isComplex = false;
 	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
-	m_graphicsWidget->ZoomOutFull();
 
 	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
 	setZeroFrequency(value.toDouble());
@@ -242,13 +239,12 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	m_graphicsWidget->SetAutoscaleY(false);
 	m_graphicsWidget->SetAlign(0);
-	//m_graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
-
 	m_mux.unlock();
 
 	if(m_controlPanelMode == 3)
 	{
 		m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+		m_graphicsWidget->ZoomOutFull();
 		return;
 	}
 
@@ -309,6 +305,8 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	}
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+
+	m_graphicsWidget->ZoomOutFull();
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
