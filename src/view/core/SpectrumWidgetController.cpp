@@ -128,11 +128,11 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			int pointCount = list.at(2).toInt();
 			double bandwidth = list.at(3).toDouble();
 			bool isComplex = list.at(4).toBool();
-			qDebug( QString(":::%1 On setup Spectrum %2").arg(QTime::currentTime().toString("mm-ss-zzz")).arg(pointCount).toAscii() );
+			//qDebug( QString(":::%1 On setup Spectrum %2").arg(QTime::currentTime().toString("mm-ss-zzz")).arg(pointCount).toAscii() );
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-			qDebug( QString(":::%1 On setupped Spectrum!").arg(QTime::currentTime().toString("mm-ss-zzz")).toAscii() );
+			//qDebug( QString(":::%1 On setupped Spectrum!").arg(QTime::currentTime().toString("mm-ss-zzz")).toAscii() );
 		}
-		m_graphicsWidget->ZoomOutFull();
+		//m_graphicsWidget->ZoomOutFull();
 
 		return;
 	}
