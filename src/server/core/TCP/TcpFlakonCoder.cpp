@@ -99,12 +99,12 @@ MessageSP TcpFlakonCoder::encode(const QByteArray& data)
 //	log_debug(QString("Socket size:   %1").arg(m_dataFromTcpSocket.length()));
 //	log_debug(QString("All size:   %1").arg(m_residueLength));
 
-	cnt++;
+//	cnt++;
 
-	if(cnt > 100) {
-		log_debug(QString("Receiving data   %1%").arg(res));
-		cnt = 0;
-	}
+//	if(cnt > 100) {
+//		log_debug(QString("Receiving data   %1%").arg(res));
+//		cnt = 0;
+//	}
 
 	if(m_dataFromTcpSocket.length() >= m_residueLength) {
 		//log_debug(QString("Receiving data   %1% !!!!! all").arg(res));

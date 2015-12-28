@@ -145,7 +145,9 @@ void TcpPRM300Controller::onMethodCalled(const QString& method, const QVariant& 
 
 	if (method == RPC_METHOD_REQUEST_STATUS) {
 		bool state = isConnected();
+        slotTcpConnectionStatus(state);
 
-		log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
+        log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
+        return;
 	}
 }

@@ -27,7 +27,7 @@ void Server::onSend()
 	{
 		//txt = f.readLine();
 
-		txt = f.read(1000000);
+        txt = f.read(100000);
 //		pos += 1000000;
 //		txt = f.readAll();
 
