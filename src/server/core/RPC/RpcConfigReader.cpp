@@ -38,36 +38,40 @@ void RpcConfigReader::onMethodCalled(const QString& method, const QVariant& argu
 
 void RpcConfigReader::readStationListInternalSlot(const QString& fileName)
 {
-	QSettings stationSettings(fileName, QSettings::IniFormat, this);
-	stationSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+	if( 0 ) {
+		QSettings stationSettings(fileName, QSettings::IniFormat, this);
+		stationSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
-	QList<StationConfiguration> stationList;
-	QStringList childKeys = stationSettings.childGroups();
+		QList<StationConfiguration> stationList;
+		QStringList childKeys = stationSettings.childGroups();
 
-	log_debug( "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
-	log_debug( childKeys[0] );
+		log_debug( "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" );
+		log_debug( childKeys[0] );
 
-	foreach (const QString &childKey, childKeys ) {
-		StationConfiguration stationConfiguration;
+		foreach (const QString &childKey, childKeys ) {
+			StationConfiguration stationConfiguration;
 
-		stationSettings.beginGroup(childKey);
-		stationConfiguration.id				= stationSettings.value("Id").toUInt();
-		stationConfiguration.name			= stationSettings.value("Name").toString();
-		stationConfiguration.latitude		= stationSettings.value("Latitude").toDouble();
-		stationConfiguration.longitude		= stationSettings.value("Longitude").toDouble();
-		stationConfiguration.hostPrm300		= stationSettings.value("IPprm300").toString();
-		stationConfiguration.hostADC		= stationSettings.value("IPADC").toString();
-		stationConfiguration.portADC		= stationSettings.value("portADC").toUInt();
-		stationSettings.endGroup();
+			stationSettings.beginGroup(childKey);
+			stationConfiguration.id				= stationSettings.value("Id").toUInt();
+			stationConfiguration.name			= stationSettings.value("Name").toString();
+			stationConfiguration.latitude		= stationSettings.value("Latitude").toDouble();
+			stationConfiguration.longitude		= stationSettings.value("Longitude").toDouble();
+			stationConfiguration.hostPrm300		= stationSettings.value("IPprm300").toString();
+			stationConfiguration.hostADC		= stationSettings.value("IPADC").toString();
+			stationConfiguration.portADC		= stationSettings.value("portADC").toUInt();
+			stationSettings.endGroup();
 
-		stationList.append(stationConfiguration);
+			stationList.append(stationConfiguration);
+		}
+
+		QByteArray dataToSend;
+		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
+		dataStream << stationList;
+
+		m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, QVariant(dataToSend));
+	} else {
+		emit getStationList();
 	}
-
-	QByteArray dataToSend;
-	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-	dataStream << stationList;
-
-	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, QVariant(dataToSend));
 }
 
 void RpcConfigReader::readAtlantConfigurationInternalSlot(const QString& filename)
@@ -100,4 +104,9 @@ void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)
 	dataStream << param;
 
 	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, QVariant(dataToSend));
+}
+
+void RpcConfigReader::inStationsList(const QVariant& dataToSend)
+{
+	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, dataToSend);
 }

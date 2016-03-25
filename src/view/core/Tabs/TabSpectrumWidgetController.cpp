@@ -427,9 +427,9 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
-        m_view->setIndicatorState(2);
-        if(!m_isPanoramaEnabled)
-            m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
+		m_view->setIndicatorState(2);
+		if(!m_isPanoramaEnabled)
+			m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
 		commandCode = COMMAND_PRM_SET_FREQ;
 		commandType = TypeGraphicCommand;
 	}

@@ -12,6 +12,8 @@
 #include "TCP/TcpDeviceController.h"
 #include "TCP/TcpRdsCoder.h"
 
+#include "Info/StationConfiguration.h"
+
 class TcpRDSController : public TcpDeviceController
 {
 	Q_OBJECT
@@ -50,4 +52,8 @@ private:
 
 private slots:
 	void slotTcpConnectionStatus(int status);
+	void onGetStations();
+
+signals:
+	void outStationsList(QList<StationConfiguration> list);
 };

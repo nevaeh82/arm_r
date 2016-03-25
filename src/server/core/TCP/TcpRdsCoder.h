@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tcp/BaseTcpDeviceCoder.h"
+#include "Info/StationConfiguration.h"
 
 #include <QDataStream>
 #include <QPointF>
@@ -33,6 +34,7 @@ public:
 private:
 	MessageSP messageFromPreparedData(const QByteArray& data);
 	MessageSP pointers(int index, QVector<QPointF> vec);
+	MessageSP configure(const QList<StationConfiguration>& lst);
 	MessageSP correlation(quint32 point1, quint32 point2, QVector<QPointF> points);
 	MessageSP detectedBandwidth(QVector<QPointF> vec);
 

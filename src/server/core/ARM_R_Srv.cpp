@@ -53,6 +53,8 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 
 	RpcConfigReader* rpcConfigReader = new RpcConfigReader(this);
 	rpcConfigReader->setRpcServer(m_rpcServer);
+
+	m_tcpManager->setConfigReader(rpcConfigReader);
 }
 
 ARM_R_Srv::~ARM_R_Srv()

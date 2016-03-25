@@ -43,10 +43,15 @@ signals:
 	void readAtlantConfigurationInternalSignal(const QString& filename);
 	void readDbConfigurationInternalSignal(const QString& filename);
 
+	void getStationList();
+
 private slots:
 	void readStationListInternalSlot(const QString& fileName);
 	void readAtlantConfigurationInternalSlot(const QString& filename);
 	void readDbConfigurationInternalSlot(const QString& filename);
+
+public slots:
+	void inStationsList(const QVariant& dataToSend);
 };
 
 #endif // RPCCONFIGREADER_H

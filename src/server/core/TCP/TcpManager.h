@@ -19,6 +19,7 @@
 #include "Tcp/TcpRDSController.h"
 #include "Tcp/Interfaces/ITcpManager.h"
 #include "Tcp/Interfaces/ITcpListener.h"
+#include "Rpc/RpcConfigReader.h"
 
 #include "Flakon/CoordinateCounter.h"
 
@@ -37,6 +38,8 @@ private:
 
 	TcpFlakonController *m_flakonController;
 	TcpRDSController *m_rdsController;
+
+	RpcConfigReader* m_rpcConfigReader;
 
 	QMap<QString, BaseTcpDeviceController*> m_flakonStations;
 	QTimer m_timer;
@@ -77,6 +80,8 @@ public:
 
 	// IRpcListener interface
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+	void setConfigReader(RpcConfigReader* reader);
 
 private:
 	void addStationToFlakon(QString name, BaseTcpDeviceController* controller);

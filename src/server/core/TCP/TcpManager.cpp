@@ -12,6 +12,7 @@ TcpManager::TcpManager(QObject* parent)
 	, m_rdsController( NULL )
 	, m_timePoints(QTime::currentTime())
 	, m_isCorrelAfterPoints(false)
+	, m_rpcConfigReader(NULL)
 {
 	m_coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
 	m_coordinatesCounter->registerReceiver(this);
@@ -291,6 +292,12 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 
 				log_debug("SEND RDS POINTS!");
 			}
+			else if(messageType == TCP_RDS_ANSWER_SYSTEM) {
+				if(m_rpcConfigReader) {
+					m_rpcConfigReader->inStationsList(data);
+					log_debug("SEND RDS CONFIGURATION!");
+				}
+			}
 			break;
 		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
@@ -446,6 +453,17 @@ void TcpManager::emulateBplaPoint(IRpcListener *sender)
 void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)
 {
 	emit onMethodCalledInternalSignal(method, argument);
+}
+
+void TcpManager::setConfigReader(RpcConfigReader* reader)
+{
+	m_rpcConfigReader = reader;
+
+	if(m_rdsController) {
+		connect(m_rpcConfigReader, SIGNAL(getStationList()), m_rdsController, SLOT(onGetStations()));
+		connect(m_rdsController, SIGNAL(outStationsList(QList<StationConfiguration>)),
+				m_rpcConfigReader, SLOT(inStationsList(QList<StationConfiguration>)));
+	}
 }
 
 void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVariant& argument)

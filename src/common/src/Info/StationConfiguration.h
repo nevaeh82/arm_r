@@ -14,6 +14,13 @@ struct StationConfiguration
 		hostPrm300	= "127.0.0.1";
 		hostADC		= "127.0.0.1";
 		portADC		= 0;
+		namePrm = "";
+		nameChannel = "";
+		portPrm = 0;
+		typePrm = 0;
+		statusPrm = "";
+		inversionPrm = "";
+		statusAdc = "";
 	}
 
 	StationConfiguration(const StationConfiguration& object)
@@ -25,13 +32,29 @@ struct StationConfiguration
 		hostPrm300	= object.hostPrm300;
 		hostADC		= object.hostADC;
 		portADC		= object.portADC;
+		namePrm		= object.namePrm;
+		nameChannel	= object.nameChannel;
+		portPrm		= object.portPrm;
+		typePrm		= object.typePrm;
+		statusPrm	= object.statusPrm;
+		inversionPrm= object.inversionPrm;
+		statusAdc	= object.statusAdc;
 	}
 
 	quint32		id;
 	QString		name;
+	QString		namePrm;
+	QString		nameChannel;
 	double		latitude;
 	double		longitude;
 	QString		hostPrm300;
+	quint32		portPrm;
+	quint32		typePrm;
+	bool		statusPrm;
+	bool		inversionPrm;
+
+	bool		statusAdc;
+
 	QString		hostADC;
 	quint32		portADC;
 };
@@ -44,7 +67,14 @@ inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& obj
 			   << object.longitude
 			   << object.hostPrm300
 			   << object.hostADC
-			   << object.portADC;
+			   << object.portADC
+			   << object.namePrm
+			   << object.nameChannel
+			   << object.portPrm
+			   << object.typePrm
+			   << object.statusPrm
+			   << object.inversionPrm
+			   << object.statusAdc;
 }
 
 inline QDataStream& operator>>(QDataStream& in, StationConfiguration& object)
@@ -55,7 +85,14 @@ inline QDataStream& operator>>(QDataStream& in, StationConfiguration& object)
 	   >> object.longitude
 	   >> object.hostPrm300
 	   >> object.hostADC
-	   >> object.portADC;
+	   >> object.portADC
+	   >> object.namePrm
+	   >> object.nameChannel
+	   >> object.portPrm
+	   >> object.typePrm
+	   >> object.statusPrm
+	   >> object.inversionPrm
+	   >> object.statusAdc;
 
 	return in;
 }

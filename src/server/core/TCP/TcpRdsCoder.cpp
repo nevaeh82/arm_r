@@ -3,6 +3,7 @@
 #include "TcpRdsCoder.h"
 
 #include "RdsPacket.pb.h"
+#include "Info/StationConfiguration.h"
 
 #include <QDebug>
 
@@ -72,12 +73,18 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 {
 	QString messageType = message->type();
 	QByteArray dataToSend;
+
+	QByteArray msgData = message->data();
+	QDataStream stream(&msgData, QIODevice::ReadOnly);
+
 	RdsProtobuf::Packet msg;
 
 	if (messageType == TCP_RDS_SET_STATUS) {
 		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_TURN_STATUS) {
-		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(true);
+		bool b;
+		stream >> b;
+		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(b);
 	} else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_GET_SYSTEM) {
@@ -95,8 +102,6 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		devMsg->set_channelsnum(0);
 		devMsg->set_sync(0);
 		devMsg->set_board(0);
-
-//		sMsg->mutable_devices(0)->is
 
 		RdsProtobuf::ReceiverOptions* recMsg = sMsg->add_separate_receivers();
 		recMsg->set_title("111");
@@ -185,20 +190,24 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			i = i+1;
 		} else if( sMsg.current().has_system() ) {
 			if( sMsg.current().system().has_options() ) {
+				QList<StationConfiguration> resultList;
+
 				RdsProtobuf::System_SystemOptions sysMsg = sMsg.current().system().options();
 				QString str = QString::fromStdString(sysMsg.title());
 				int devNums = sysMsg.devices_num();
 				int sDevNums = sysMsg.separate_receivers_num();
 
-
 				for(int d = 0; d < sysMsg.devices().size(); d++) {
 					RdsProtobuf::DeviceOptions optMsg = sysMsg.devices(d);
 					QString optStr = QString::fromStdString(optMsg.title());
-					bool stat = optMsg.status();
-					QString ipStr = QString::fromStdString(optMsg.ip());
+					bool statDev = optMsg.status();
+					QString ipDev = QString::fromStdString(optMsg.ip());
+					quint32 PortDev = optMsg.porthttp();
+
 					for(int i = 0; i < optMsg.channels().size(); i++) {
+						StationConfiguration configVal;
 						RdsProtobuf::ChannelOptions chMsg = optMsg.channels(i);
-						QString str = QString::fromStdString(chMsg.title());
+						QString chStr = QString::fromStdString(chMsg.title());
 						bool inv = chMsg.inversion();
 						RdsProtobuf::ReceiverOptions recMsg = chMsg.receiver();
 						QString recStr = QString::fromStdString(recMsg.title());
@@ -213,8 +222,29 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 						int att2 = prmMsg.attenuator2();
 						int chNum = prmMsg.channum();
 						int gen = prmMsg.generator();
+
+						//configVal.id			= chNum;
+						configVal.id			= i;
+						configVal.name			= str;
+						configVal.nameChannel	= chStr;
+						configVal.namePrm		= chStr; //recStr;
+
+						configVal.latitude		= 0; //to be done in proto
+						configVal.longitude		= 0;
+						configVal.hostPrm300	= ip;
+						configVal.portPrm		= port;
+						configVal.typePrm		= type;
+						configVal.inversionPrm	= inv;
+						configVal.statusPrm		= stat;
+						configVal.statusAdc		= statDev;
+						configVal.hostADC		= ipDev;
+						configVal.portADC		= PortDev;
+
+						resultList.append(configVal);
 					}
 				}
+				message = configure(resultList);
+
 			}
 		}
 	}
@@ -232,6 +262,19 @@ MessageSP TcpRdsCoder::pointers(int index, QVector<QPointF> vec)
 	dataStream << index << vec;
 
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
+}
+
+MessageSP TcpRdsCoder::configure(const QList<StationConfiguration>& lst)
+{
+	if(lst.isEmpty()) {
+		return MessageSP();
+	}
+
+	QByteArray ba;
+	QDataStream dataStream(&ba, QIODevice::WriteOnly);
+	dataStream << lst;
+
+	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, ba));
 }
 
 MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, QVector<QPointF> points)
