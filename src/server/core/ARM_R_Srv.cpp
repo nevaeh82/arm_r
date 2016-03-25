@@ -42,7 +42,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	m_tcpManager->setTcpServer(m_tcpServer);
 
 	ITcpSettingsManager* settingsManager = TcpSettingsManager::instance();
-	settingsManager->setIniFile("./TCP/coders.ini");
+	settingsManager->setIniFile("C:/projects/Zav-R-git/zaviruha_r-build/bin/TCP/coders.ini");
 	QMap<QString, int> mapInfo = settingsManager->getAllInfo();
 
 	foreach(QString key, mapInfo.keys())

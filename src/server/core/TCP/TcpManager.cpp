@@ -9,6 +9,7 @@ TcpManager::TcpManager(QObject* parent)
 	: QObject(parent)
 	, m_rpcServer( NULL )
 	, m_flakonController( NULL )
+	, m_rdsController( NULL )
 	, m_timePoints(QTime::currentTime())
 	, m_isCorrelAfterPoints(false)
 {
@@ -144,14 +145,19 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 		case ATLANT_TCP_DEVICE:
 			controller = new TcpAtlantController(deviceName);
 			log_debug(QString("Created TcpAtlantController"));
-
-
 			break;
 		case PRM300_TCP_DEVICE:
 			controller = new TcpPRM300Controller(deviceName);
 			log_debug(QString("Created TcpPRM300Controller"));
 
 			addStationToFlakon(deviceName, controller);
+			break;
+		case RDS_TCP_DEVICE:
+			controller = new TcpRDSController(deviceName);
+
+			log_debug(QString("Created TcpRdsController"));
+			m_rdsController = (TcpRDSController*) controller;
+
 			break;
 		default:
 			break;
@@ -175,8 +181,6 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 	controller->moveToThread(controllerThread);
 	controllerThread->start();
-
-
 
 	log_debug(deviceName + QString("Status %1").arg(controllerThread->isRunning()));
 
@@ -281,12 +285,19 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	}
 
 	switch(deviceType) {
+		case RDS_TCP_DEVICE:
+			if (messageType == TCP_FLAKON_ANSWER_FFT) {
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_POINTS, data, sender );
+
+				log_debug("SEND RDS POINTS!");
+			}
+			break;
 		case FLAKON_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
 
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_POINTS, data, sender );
 
-                //log_debug("to RPC RPC_SLOT_SERVER_SEND_POINTS   >>>  %1");
+				log_debug("to RPC RPC_SLOT_SERVER_SEND_POINTS   >>>  %1");
 			}
 			else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data, sender );

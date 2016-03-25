@@ -16,6 +16,7 @@
 #include "Tcp/TcpFlakonController.h"
 #include "Tcp/TcpAtlantController.h"
 #include "Tcp/TcpPRM300Controller.h"
+#include "Tcp/TcpRDSController.h"
 #include "Tcp/Interfaces/ITcpManager.h"
 #include "Tcp/Interfaces/ITcpListener.h"
 
@@ -35,6 +36,8 @@ private:
 	QMap< QString, TcpDeviceController* > m_controllersMap;
 
 	TcpFlakonController *m_flakonController;
+	TcpRDSController *m_rdsController;
+
 	QMap<QString, BaseTcpDeviceController*> m_flakonStations;
 	QTimer m_timer;
 

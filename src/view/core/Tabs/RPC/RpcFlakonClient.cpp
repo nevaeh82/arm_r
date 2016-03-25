@@ -22,7 +22,7 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 {
 	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
 
-	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
+	bool n = m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_STATUS, this, SLOT(flakonStatusReceived(QByteArray)));
@@ -40,7 +40,8 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 
 void RpcFlakonClient::registerRoute()
 {
-	bool err = RpcRoutedClient::registerRoute( FLAKON_ROUTE_ID );
+	//bool err = RpcRoutedClient::registerRoute( FLAKON_ROUTE_ID );
+	bool err = RpcRoutedClient::registerRoute( RDS_ROUTE_ID );
 	err = m_clientPeer->isClient();
 }
 
@@ -87,7 +88,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
-	//log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
+	log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}

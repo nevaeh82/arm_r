@@ -5,6 +5,8 @@
 #define TCP_ZAVIRUHA_PREAMBULA_SOLVER "Zav"
 #define TCP_ZAVIRUHA_PREAMBULA_LEN 7
 
+#define TCP_RDS_PREAMBULA "RdsPacket"
+
 #define TCP_EMPTY_MESSAGE	"tcpEmptyMessage"
 
 #define TCP_ARMR_SEND_SOLVER_DATA		"tcpArmrSendSolverData"
@@ -44,6 +46,13 @@
 #define TCP_FLAKON_REQUEST_SET_SHIFT					"tcpFlakonRequestSetShift"
 #define TCP_FLAKON_REQUEST_RECOGNIZE					"tcpFlakonRequestRecognize"
 #define TCP_FLAKON_REQUEST_SS_CORRELATION				"tcpFlakonRequestSSCorrelation"
+
+/// RDS custom msgs
+#define TCP_RDS_GET_STATUS								"tcpRDSGetStatus"
+#define TCP_RDS_GET_SYSTEM								"tcpRDSGetSystem"
+
+#define TCP_RDS_SET_STATUS								"tcpRDSSetStatus"
+#define TCP_RDS_TURN_STATUS								"tcpRDSTurnStatus"
 
 /// RPC CORRELATION COMMAND
 #define RPC_CORRELATION_CONTROL							"rpcCorrelationControl"

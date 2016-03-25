@@ -62,7 +62,8 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 
 	if(m_bandwidthSingleSample != bandwidth && m_isPanoramaStart == false)
 	{
-		setBandwidth(bandwidth);
+		setBandwidth(bandwidth); // Old Flakon
+		//setBandwidth1(vecFFT.size()); //new Protobuf
 		m_bandwidthSingleSample = bandwidth;
 		m_needSetup = true;
 //		if(m_spectrumWidget)
@@ -155,6 +156,9 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 	{
 		m_bandwidth = bandwidth;
 		int div = m_bandwidth / BANDWIDTH_SINGLE;
+		if( !div ) {
+			div += 1;
+		}
 		m_pointCountWhole = m_pointCount*div;
 
 		delete[] m_spectrum;
@@ -164,6 +168,16 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 		m_spectrumPeakHold = new float[m_pointCountWhole] ();
 		m_needSetupSpectrum = true;
 	}
+}
+
+void SpectrumWidgetDataSource::setBandwidth1(int size)
+{
+	delete[] m_spectrum;
+	m_spectrum = new float[size] ();
+
+	delete[] m_spectrumPeakHold;
+	m_spectrumPeakHold = new float[size] ();
+	m_needSetupSpectrum = true;
 }
 
 void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double end)

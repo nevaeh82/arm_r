@@ -9,6 +9,7 @@ enum BaseSettingsType
 	TypeFlakon = 1,
 	TypePRM300 = 2,
 	TypeAtlant = 3,
+	TypeRDS = 6,
 	typeUnknown = 0
 };
 

@@ -84,7 +84,10 @@ private slots:
 
 private:
 	void dataProccess(QVector<QPointF>& vecFFT, bool);
+
 	void setBandwidth(double bandwidth);
+	void setBandwidth1(int size);
+
 	int findIndex(qreal startx);
 
 	bool startPanorama(bool start);

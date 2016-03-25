@@ -72,7 +72,7 @@ void Server::onPause()
 	QTime current = QTime::currentTime();
 	current.start();
 
-	while (current.elapsed() < 10) {
+	while (current.elapsed() < 100) {
 		qApp->processEvents();
 	}
 }
