@@ -19,6 +19,7 @@ struct StationConfiguration
 		portPrm = 0;
 		typePrm = 0;
 		statusPrm = "";
+		freqPrm = 0;
 		inversionPrm = "";
 		statusAdc = "";
 	}
@@ -37,6 +38,7 @@ struct StationConfiguration
 		portPrm		= object.portPrm;
 		typePrm		= object.typePrm;
 		statusPrm	= object.statusPrm;
+		freqPrm = object.freqPrm;
 		inversionPrm= object.inversionPrm;
 		statusAdc	= object.statusAdc;
 	}
@@ -52,6 +54,7 @@ struct StationConfiguration
 	quint32		typePrm;
 	bool		statusPrm;
 	bool		inversionPrm;
+	int freqPrm;
 
 	bool		statusAdc;
 
@@ -73,6 +76,7 @@ inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& obj
 			   << object.portPrm
 			   << object.typePrm
 			   << object.statusPrm
+			   << object.freqPrm
 			   << object.inversionPrm
 			   << object.statusAdc;
 }
@@ -91,6 +95,7 @@ inline QDataStream& operator>>(QDataStream& in, StationConfiguration& object)
 	   >> object.portPrm
 	   >> object.typePrm
 	   >> object.statusPrm
+	   >> object.freqPrm
 	   >> object.inversionPrm
 	   >> object.statusAdc;
 

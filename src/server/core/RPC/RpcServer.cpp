@@ -171,7 +171,7 @@ void RpcServer::setPrmFrequency(quint64 client, QString name, short freq)
 	dataStream << name;
 	dataStream << freq;
 
-	dispatch( RPC_METHOD_PRM_SET_FREQUENCY, QVariant(byteArray), client );
+	dispatch( RPC_METHOD_PRM_SET_FREQUENCY, QVariant(byteArray)/*, client*/ );
 }
 
 void RpcServer::requestPrmFrequency(quint64 client, QString name)

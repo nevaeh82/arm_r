@@ -27,7 +27,7 @@ MessageSP TcpRdsCoder::encode(const QByteArray& data)
 	QByteArray inData = getMessage(data);
 
 	if(inData.isEmpty()) {
-		return message;
+		return MessageSP(new Message<QByteArray>(TCP_EMPTY_MESSAGE, inData));
 	}
 
 	if(m_dataFromTcpSocket.length() >= m_residueLength) {
@@ -59,7 +59,7 @@ QByteArray TcpRdsCoder::getMessage(const QByteArray& input)
 	int packetLen = m_residueLength + 13;
 
 	if (m_dataFromTcpSocket.length() >= packetLen) {
-		QByteArray data = m_dataFromTcpSocket.right( m_residueLength );
+		QByteArray data = m_dataFromTcpSocket.mid(13, m_residueLength );
 		dataToSend = data;
 
 		m_dataFromTcpSocket = m_dataFromTcpSocket.right(m_dataFromTcpSocket.length() - packetLen);
@@ -84,7 +84,7 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	} else if(messageType == TCP_RDS_TURN_STATUS) {
 		bool b;
 		stream >> b;
-		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(b);
+		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(false);
 	} else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_GET_SYSTEM) {
@@ -116,6 +116,24 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		recMsg->mutable_settingsprm300()->set_attenuator2(0);
 		recMsg->mutable_settingsprm300()->set_channum(0);
 		recMsg->mutable_settingsprm300()->set_generator(0);
+	} else if (message->type() == TCP_PRM300_REQUEST_SET_FREQUENCY) {
+		QString name;
+		unsigned short avalue;
+		stream >> name;
+		stream >> avalue;
+
+		RdsProtobuf::System_Receiver* rMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver();
+
+		rMsg->set_device_index(1);
+		rMsg->set_channel_index(name.toInt());
+
+		RdsProtobuf::Prm300 pMsg = RdsProtobuf::Prm300();
+		rMsg->mutable_settingsprm300()->set_freq(avalue);
+		rMsg->mutable_settingsprm300()->set_attenuator1(0);
+		rMsg->mutable_settingsprm300()->set_attenuator2(0);
+		rMsg->mutable_settingsprm300()->set_channum(0);
+		rMsg->mutable_settingsprm300()->set_generator(0);
+		rMsg->mutable_settingsprm300()->set_filter(0);
 	} else {
 		return QByteArray();
 	}
@@ -225,7 +243,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 						//configVal.id			= chNum;
 						configVal.id			= i;
-						configVal.name			= str;
+						configVal.name			= chStr;
 						configVal.nameChannel	= chStr;
 						configVal.namePrm		= chStr; //recStr;
 
@@ -236,6 +254,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 						configVal.typePrm		= type;
 						configVal.inversionPrm	= inv;
 						configVal.statusPrm		= stat;
+						configVal.freqPrm = freq;
 						configVal.statusAdc		= statDev;
 						configVal.hostADC		= ipDev;
 						configVal.portADC		= PortDev;

@@ -130,11 +130,11 @@ void TcpRDSController::requestTest()
 	QByteArray data;
 
 	//sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
 
-	QDataStream st(&data, QIODevice::ReadWrite);
-	st << false;
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+//	QDataStream st(&data, QIODevice::ReadWrite);
+//	st << true;
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 }
 
 RpcRoutedServer::RouteId TcpRDSController::getRouteId() const
@@ -164,9 +164,11 @@ void TcpRDSController::onGetStations()
 {
 	QByteArray data;
 
-//	QDataStream st(&data, QIODevice::ReadWrite);
-//	st << false;
-//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+
+	QDataStream st(&data, QIODevice::ReadWrite);
+	st << true;
+	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 
 	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
 }
@@ -180,6 +182,10 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 	}
 	else if (method == RPC_METHOD_SET_BANDWIDTH) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );
+	} else if(method == RPC_METHOD_PRM_SET_FREQUENCY) {
+		int k = 0;
+		k = k+1;
+		sendData( MessageSP( new Message<QByteArray>( TCP_PRM300_REQUEST_SET_FREQUENCY, data ) ) );
 	}
 	else if (method == RPC_METHOD_SET_SHIFT) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_SHIFT, data ) ) );

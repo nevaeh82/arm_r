@@ -17,6 +17,9 @@ class Station: public QObject, public IStation
 
 private:
 	int m_stationId;
+
+	int m_center;
+
 	QString m_stationName;
 
 	double m_stationLatitude;
@@ -55,6 +58,9 @@ public:
 	void setPrm300Ip(const QString& ip);
 	void setAdcIp(const QString& ip);
 	void setAdcPort(const quint16 port);
+
+	void setCenter(const int val);
+	int getCenterVal() const;
 
 	void setSelectedArea(const SpectrumSelection& selection);
 

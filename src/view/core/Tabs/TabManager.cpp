@@ -125,6 +125,7 @@ void TabManager::setStationsConfiguration(const QList<StationConfiguration>& sta
 		station->setPrm300Ip(stationConf.hostPrm300);
 		station->setAdcIp(stationConf.hostADC);
 		station->setAdcPort(stationConf.portADC);
+		station->setCenter( stationConf.freqPrm );
 
 		m_stationsMap.insert(station->getId(), station);
 	}
@@ -173,6 +174,8 @@ void TabManager::addStationTabs()
 		tabController->appendView(tabSpectrumWidget);
 		tabController->setControlPanelController(m_controlPanelController);
 		tabController->setControlPanelControllerTrue(m_panelController);
+
+		tabController->getSpectrumWidget()->setZeroFrequency(station->getCenterVal());
 
 		m_dbManager->registerReceiver(tabController);
 

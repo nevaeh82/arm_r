@@ -96,7 +96,7 @@ void RpcPrmClient::formCommand(IMessage *msg)
 
 void RpcPrmClient::prmSetFreq(short freq)
 {
-	emit signalPRMSetFreq(m_station->getName(), freq);
+	emit signalPRMSetFreq(QString::number(m_station->getId()), freq);
 }
 
 void RpcPrmClient::prmRequestFreq()

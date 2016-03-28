@@ -50,6 +50,12 @@ void Station::setAdcIp(const QString& ip)
 	m_adcIp = ip;
 }
 
+void Station::setCenter(const int val)
+{
+	m_center = val;
+	m_dbManager->updatePropertyValue( getName(), DB_FREQUENCY_PROPERTY, val );
+}
+
 void Station::setAdcPort(const quint16 port)
 {
 	m_adcPort = port;
@@ -166,4 +172,9 @@ float Station::getCenter() const
 	}
 
 	return center;
+}
+
+int Station::getCenterVal() const
+{
+	return m_center;
 }

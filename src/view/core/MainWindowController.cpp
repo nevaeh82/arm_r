@@ -245,7 +245,7 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 	} else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
 
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		DBConnectionStruct dbConfig;;
+		DBConnectionStruct dbConfig;
 		dataStream >> dbConfig;
 
 		m_dbStationController->connectToDB(dbConfig);
