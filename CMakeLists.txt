@@ -45,8 +45,21 @@ if(USE_SHARED_OUTPUT)
 endif()
 
 # include qt package
-find_package(Qt5 5.6.0 EXACT COMPONENTS Core Network Sql Gui AxContainer REQUIRED)
-set(QT_USE_PHONON TRUE)
+#find_package(Qt5 5.6.0 EXACT COMPONENTS Core Network Sql Gui AxContainer REQUIRED)
+#set(QT_USE_PHONON TRUE)
+
+list(APPEND qt_libs QtCore QtSql QtNetwork QtGui QtAxContainer)
+
+foreach(qt_lib ${qt_libs})
+	if (NOT USE_QT5)
+		find_package(Qt4 4.7.0 COMPONENTS ${qt_lib} REQUIRED)
+	else()
+		string(REPLACE "Qt" "Qt5" qt_lib ${qt_lib})
+		find_package(${qt_lib} 5.0.0 REQUIRED)
+	endif()
+endforeach()
+
+add_definitions(-DQXT_STATIC -DBUILD_QXT) # FOR QXT
 
 include(CommonInit)
 include(CodeCoverage)
