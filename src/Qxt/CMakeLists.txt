@@ -1,0 +1,6 @@
+project(${PROJECT_NAME_GLOBAL}Qxt)
+
+add_definitions(-DQT_NO_OPENSSL)
+
+#ADD_LIBRARY(${PROJECT_NAME} STATIC IMPORTED)
+add_lib_static(${PROJECT_NAME})

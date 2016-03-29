@@ -3,7 +3,6 @@ project(${PROJECT_NAME_GLOBAL}ServerCore)
 list(APPEND deps
 	${PROJECT_NAME_GLOBAL}CISCommonLib
 	${PROJECT_NAME_GLOBAL}Common
-	QXT
 	PROTOBUF
 	QtSingleApplication
 	Solver
