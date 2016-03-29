@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ARM-R_en.qm</file>
+        <file>ARM-R_ru.qm</file>
+    </qresource>
+</RCC>

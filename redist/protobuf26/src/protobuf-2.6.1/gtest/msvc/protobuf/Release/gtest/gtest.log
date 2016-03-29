@@ -1,0 +1,13 @@
+﻿Build started 29.03.2016 2:52:31.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\gtest.vcxproj" on node 2 (Build target(s)).
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.. /I..\include /Zi /nologo /W3 /WX- /O2 /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D NDEBUG /D _LIB /D _MBCS /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"protobuf/Release\gtest\\" /Fd"protobuf/Release\gtest\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\src\gtest-all.cc"
+  gtest-all.cc
+Lib:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"protobuf/Release\gtest.lib" /NOLOGO "protobuf/Release\gtest\gtest-all.obj"
+  gtest.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf/Release\gtest.lib
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\gtest.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.60

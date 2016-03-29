@@ -1,0 +1,29 @@
+﻿Build started 29.03.2016 2:48:34.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\lite-test.vcxproj" on node 2 (Build target(s)).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (libprotobuf-lite.vcxproj, libprotobuf.vcxproj, libprotoc.vcxproj, protoc.vcxproj, tests.vcxproj, test_plugin.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+CustomBuild:
+  Generating unittest_import_lite.pb.{h,cc}...
+  Generating unittest_import_public_lite.pb.{h,cc}...
+  Generating unittest_lite.pb.{h,cc}...
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../src /I. /I../gtest/include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VARIADIC_MAX=10 /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4244 /wd4267 /wd4018 /wd4355 /wd4800 /wd4251 /wd4996 /wd4146 /wd4305 ..\src\google\protobuf\lite_unittest.cc ..\src\google\protobuf\test_util_lite.cc google\protobuf\unittest_import_lite.pb.cc google\protobuf\unittest_import_public_lite.pb.cc google\protobuf\unittest_lite.pb.cc
+  unittest_lite.pb.cc
+  unittest_import_public_lite.pb.cc
+  unittest_import_lite.pb.cc
+  test_util_lite.cc
+  lite_unittest.cc
+  Generating Code...
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug\lite-test.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Debug\lite-test.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Debug\lite-test.lib" /MACHINE:X86 /SAFESEH Debug\lite_unittest.obj
+  Debug\test_util_lite.obj
+  Debug\unittest_import_lite.pb.obj
+  Debug\unittest_import_public_lite.pb.obj
+  Debug\unittest_lite.pb.obj
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Debug\libprotobuf-lite.lib"
+lite_unittest.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  lite-test.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Debug\lite-test.exe
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\lite-test.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:05.97

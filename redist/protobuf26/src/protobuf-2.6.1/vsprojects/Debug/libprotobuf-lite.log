@@ -1,0 +1,37 @@
+﻿Build started 29.03.2016 2:47:17.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\libprotobuf-lite.vcxproj" on node 2 (Build target(s)).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (libprotobuf.vcxproj, libprotoc.vcxproj, protoc.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../src /I. /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D LIBPROTOBUF_EXPORTS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4244 /wd4267 /wd4018 /wd4355 /wd4800 /wd4251 /wd4996 /wd4146 /wd4305 ..\src\google\protobuf\extension_set.cc ..\src\google\protobuf\generated_message_util.cc ..\src\google\protobuf\io\coded_stream.cc ..\src\google\protobuf\io\zero_copy_stream.cc ..\src\google\protobuf\io\zero_copy_stream_impl_lite.cc ..\src\google\protobuf\message_lite.cc ..\src\google\protobuf\repeated_field.cc ..\src\google\protobuf\stubs\atomicops_internals_x86_msvc.cc ..\src\google\protobuf\stubs\common.cc ..\src\google\protobuf\stubs\once.cc ..\src\google\protobuf\stubs\stringprintf.cc ..\src\google\protobuf\wire_format_lite.cc
+  Skipping... (no relevant changes detected)
+  wire_format_lite.cc
+  stringprintf.cc
+  once.cc
+  common.cc
+  atomicops_internals_x86_msvc.cc
+  repeated_field.cc
+  message_lite.cc
+  zero_copy_stream_impl_lite.cc
+  zero_copy_stream.cc
+  coded_stream.cc
+  generated_message_util.cc
+  extension_set.cc
+Lib:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"Debug\libprotobuf-lite.lib" /NOLOGO Debug\extension_set.obj
+  Debug\generated_message_util.obj
+  Debug\coded_stream.obj
+  Debug\zero_copy_stream.obj
+  Debug\zero_copy_stream_impl_lite.obj
+  Debug\message_lite.obj
+  Debug\repeated_field.obj
+  Debug\atomicops_internals_x86_msvc.obj
+  Debug\common.obj
+  Debug\once.obj
+  Debug\stringprintf.obj
+  Debug\wire_format_lite.obj
+  libprotobuf-lite.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Debug\libprotobuf-lite.lib
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\libprotobuf-lite.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.40

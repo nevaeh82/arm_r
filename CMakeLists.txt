@@ -7,7 +7,7 @@ else()
 endif()
 
 if(NOT VERSION)
-	set(VERSION "4.0.0")
+	set(VERSION "5.0.0")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -45,7 +45,7 @@ if(USE_SHARED_OUTPUT)
 endif()
 
 # include qt package
-find_package(Qt4 4.8 EXACT COMPONENTS QtCore QtNetwork QtSql QtGui QAxContainer REQUIRED)
+find_package(Qt5 5.6.0 EXACT COMPONENTS Core Network Sql Gui AxContainer REQUIRED)
 set(QT_USE_PHONON TRUE)
 
 include(CommonInit)
@@ -53,7 +53,7 @@ include(CodeCoverage)
 
 # include thrid party packages
 find_package(Threads REQUIRED)
-find_package(Qxt REQUIRED)
+#find_package(Qxt REQUIRED)
 find_package(Ipp REQUIRED)
 find_package(Tbb REQUIRED)
 find_package(GraphicsIpp REQUIRED)
@@ -132,7 +132,7 @@ if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 
 		if(WIN32)
 			if(NOT QT_PHONON_DS9_PLUGIN_RELEASE)
-				status(WARNING "Qt plugin Phonon DS9 (release version) not found!")
+				#status(WARNING "Qt plugin Phonon DS9 (release version) not found!")
 			else()
 				install(FILES ${QT_PHONON_DS9_PLUGIN_RELEASE} DESTINATION ${BINDIR}/plugins/phonon_backend)
 			endif()

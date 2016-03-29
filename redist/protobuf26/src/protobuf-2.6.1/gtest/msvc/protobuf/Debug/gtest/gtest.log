@@ -1,0 +1,15 @@
+﻿Build started 29.03.2016 2:47:10.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\gtest.vcxproj" on node 2 (Build target(s)).
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.. /I..\include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"protobuf/Debug\gtest\\" /Fd"protobuf/Debug\gtest\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\src\gtest-all.cc"
+  gtest-all.cc
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1361,5): warning MSB8012: TargetPath(C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf/Debug\gtest.lib) does not match the Library's OutputFile property value (C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf\Debug\gtestd.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1363,5): warning MSB8012: TargetName(gtest) does not match the Library's OutputFile property value (gtestd). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+Lib:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"protobuf/Debug\gtestd.lib" /NOLOGO "protobuf/Debug\gtest\gtest-all.obj"
+  gtest.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf/Debug\gtest.lib
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\gtest.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.67

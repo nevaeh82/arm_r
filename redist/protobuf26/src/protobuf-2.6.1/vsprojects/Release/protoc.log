@@ -1,0 +1,17 @@
+﻿Build started 29.03.2016 2:52:36.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\protoc.vcxproj" on node 2 (Build target(s)).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (libprotobuf.vcxproj, libprotoc.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../src /I. /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4244 /wd4267 /wd4018 /wd4355 /wd4800 /wd4251 /wd4996 /wd4146 /wd4305 ..\src\google\protobuf\compiler\main.cc
+  main.cc
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release\protoc.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Release\protoc.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Release\protoc.lib" /MACHINE:X86 /SAFESEH Release\main.obj
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\libprotobuf.lib"
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\libprotoc.lib"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
+  protoc.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\protoc.exe
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\protoc.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.33

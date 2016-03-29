@@ -1,0 +1,83 @@
+﻿Build started 29.03.2016 2:49:24.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\libprotobuf.vcxproj" on node 2 (Build target(s)).
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../src /I. /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D LIBPROTOBUF_EXPORTS /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4244 /wd4267 /wd4018 /wd4355 /wd4800 /wd4251 /wd4996 /wd4146 /wd4305 ..\src\google\protobuf\compiler\importer.cc ..\src\google\protobuf\compiler\parser.cc ..\src\google\protobuf\descriptor.cc ..\src\google\protobuf\descriptor.pb.cc ..\src\google\protobuf\descriptor_database.cc ..\src\google\protobuf\dynamic_message.cc ..\src\google\protobuf\extension_set.cc ..\src\google\protobuf\extension_set_heavy.cc ..\src\google\protobuf\generated_message_reflection.cc ..\src\google\protobuf\generated_message_util.cc ..\src\google\protobuf\io\coded_stream.cc ..\src\google\protobuf\io\gzip_stream.cc ..\src\google\protobuf\io\printer.cc ..\src\google\protobuf\io\strtod.cc ..\src\google\protobuf\io\tokenizer.cc ..\src\google\protobuf\io\zero_copy_stream.cc ..\src\google\protobuf\io\zero_copy_stream_impl.cc ..\src\google\protobuf\io\zero_copy_stream_impl_lite.cc ..\src\google\protobuf\message.cc ..\src\google\protobuf\message_lite.cc ..\src\google\protobuf\reflection_ops.cc ..\src\google\protobuf\repeated_field.cc ..\src\google\protobuf\service.cc ..\src\google\protobuf\stubs\atomicops_internals_x86_msvc.cc ..\src\google\protobuf\stubs\common.cc ..\src\google\protobuf\stubs\once.cc ..\src\google\protobuf\stubs\stringprintf.cc ..\src\google\protobuf\stubs\structurally_valid.cc ..\src\google\protobuf\stubs\strutil.cc ..\src\google\protobuf\stubs\substitute.cc ..\src\google\protobuf\text_format.cc ..\src\google\protobuf\unknown_field_set.cc ..\src\google\protobuf\wire_format.cc ..\src\google\protobuf\wire_format_lite.cc
+  importer.cc
+  parser.cc
+  descriptor.cc
+  descriptor.pb.cc
+  descriptor_database.cc
+  dynamic_message.cc
+  extension_set.cc
+  extension_set_heavy.cc
+  generated_message_reflection.cc
+  generated_message_util.cc
+  coded_stream.cc
+  gzip_stream.cc
+  printer.cc
+  strtod.cc
+  tokenizer.cc
+  zero_copy_stream.cc
+  zero_copy_stream_impl.cc
+  zero_copy_stream_impl_lite.cc
+  message.cc
+  message_lite.cc
+  Generating Code...
+c:\project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\src\google\protobuf\extension_set.cc(74): warning C4715: 'google::protobuf::internal::`anonymous namespace'::is_packable' : not all control paths return a value
+  Compiling...
+  reflection_ops.cc
+  repeated_field.cc
+  service.cc
+  atomicops_internals_x86_msvc.cc
+  common.cc
+  once.cc
+  stringprintf.cc
+  structurally_valid.cc
+  strutil.cc
+  substitute.cc
+  text_format.cc
+  unknown_field_set.cc
+  wire_format.cc
+  wire_format_lite.cc
+  Generating Code...
+Lib:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"Release\libprotobuf.lib" /NOLOGO Release\importer.obj
+  Release\parser.obj
+  Release\descriptor.obj
+  Release\descriptor.pb.obj
+  Release\descriptor_database.obj
+  Release\dynamic_message.obj
+  Release\extension_set.obj
+  Release\extension_set_heavy.obj
+  Release\generated_message_reflection.obj
+  Release\generated_message_util.obj
+  Release\coded_stream.obj
+  Release\gzip_stream.obj
+  Release\printer.obj
+  Release\strtod.obj
+  Release\tokenizer.obj
+  Release\zero_copy_stream.obj
+  Release\zero_copy_stream_impl.obj
+  Release\zero_copy_stream_impl_lite.obj
+  Release\message.obj
+  Release\message_lite.obj
+  Release\reflection_ops.obj
+  Release\repeated_field.obj
+  Release\service.obj
+  Release\atomicops_internals_x86_msvc.obj
+  Release\common.obj
+  Release\once.obj
+  Release\stringprintf.obj
+  Release\structurally_valid.obj
+  Release\strutil.obj
+  Release\substitute.obj
+  Release\text_format.obj
+  Release\unknown_field_set.obj
+  Release\wire_format.obj
+  Release\wire_format_lite.obj
+  libprotobuf.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\libprotobuf.lib
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\libprotobuf.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:01:54.28

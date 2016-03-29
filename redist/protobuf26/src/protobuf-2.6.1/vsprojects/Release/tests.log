@@ -1,0 +1,129 @@
+﻿Build started 29.03.2016 2:52:54.
+Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\tests.vcxproj" on node 2 (Build target(s)).
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (libprotobuf-lite.vcxproj, libprotobuf.vcxproj, libprotoc.vcxproj, protoc.vcxproj, test_plugin.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+CustomBuild:
+  Generating cpp_test_bad_identifiers.pb.{h,cc}...
+  Generating unittest.pb.{h,cc}...
+  Generating unittest_custom_options.pb.{h,cc}...
+  Generating unittest_embed_optimize_for.pb.{h,cc}...
+  Generating unittest_import.pb.{h,cc}...
+  Generating unittest_import_public.pb.{h,cc}...
+  Generating unittest_lite_imports_nonlite.pb.{h,cc}...
+  Generating unittest_mset.pb.{h,cc}...
+  Generating unittest_no_generic_services.pb.{h,cc}...
+  Generating unittest_optimize_for.pb.{h,cc}...
+ClCompile:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I../src /I. /I../gtest/include /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D _VARIADIC_MAX=10 /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4244 /wd4267 /wd4018 /wd4355 /wd4800 /wd4251 /wd4996 /wd4146 /wd4305 ..\src\google\protobuf\compiler\command_line_interface_unittest.cc ..\src\google\protobuf\compiler\cpp\cpp_bootstrap_unittest.cc ..\src\google\protobuf\compiler\cpp\cpp_plugin_unittest.cc ..\src\google\protobuf\compiler\cpp\cpp_unittest.cc ..\src\google\protobuf\compiler\importer_unittest.cc ..\src\google\protobuf\compiler\java\java_doc_comment_unittest.cc ..\src\google\protobuf\compiler\java\java_plugin_unittest.cc ..\src\google\protobuf\compiler\mock_code_generator.cc ..\src\google\protobuf\compiler\parser_unittest.cc ..\src\google\protobuf\compiler\python\python_plugin_unittest.cc ..\src\google\protobuf\descriptor_database_unittest.cc ..\src\google\protobuf\descriptor_unittest.cc ..\src\google\protobuf\dynamic_message_unittest.cc ..\src\google\protobuf\extension_set_unittest.cc ..\src\google\protobuf\generated_message_reflection_unittest.cc ..\src\google\protobuf\io\coded_stream_unittest.cc ..\src\google\protobuf\io\printer_unittest.cc ..\src\google\protobuf\io\tokenizer_unittest.cc ..\src\google\protobuf\io\zero_copy_stream_unittest.cc ..\src\google\protobuf\message_unittest.cc ..\src\google\protobuf\reflection_ops_unittest.cc ..\src\google\protobuf\repeated_field_reflection_unittest.cc ..\src\google\protobuf\repeated_field_unittest.cc ..\src\google\protobuf\stubs\common_unittest.cc ..\src\google\protobuf\stubs\once_unittest.cc ..\src\google\protobuf\stubs\stringprintf_unittest.cc ..\src\google\protobuf\stubs\structurally_valid_unittest.cc ..\src\google\protobuf\stubs\strutil_unittest.cc ..\src\google\protobuf\stubs\template_util_unittest.cc ..\src\google\protobuf\stubs\type_traits_unittest.cc ..\src\google\protobuf\testing\file.cc ..\src\google\protobuf\testing\googletest.cc ..\src\google\protobuf\test_util.cc ..\src\google\protobuf\text_format_unittest.cc ..\src\google\protobuf\unknown_field_set_unittest.cc ..\src\google\protobuf\wire_format_unittest.cc google\protobuf\compiler\cpp\cpp_test_bad_identifiers.pb.cc google\protobuf\unittest.pb.cc google\protobuf\unittest_custom_options.pb.cc google\protobuf\unittest_embed_optimize_for.pb.cc google\protobuf\unittest_import.pb.cc google\protobuf\unittest_import_public.pb.cc google\protobuf\unittest_lite_imports_nonlite.pb.cc google\protobuf\unittest_mset.pb.cc google\protobuf\unittest_no_generic_services.pb.cc google\protobuf\unittest_optimize_for.pb.cc
+  command_line_interface_unittest.cc
+  cpp_bootstrap_unittest.cc
+  cpp_plugin_unittest.cc
+  cpp_unittest.cc
+  importer_unittest.cc
+  java_doc_comment_unittest.cc
+  java_plugin_unittest.cc
+  mock_code_generator.cc
+  parser_unittest.cc
+  python_plugin_unittest.cc
+  descriptor_database_unittest.cc
+  descriptor_unittest.cc
+  dynamic_message_unittest.cc
+  extension_set_unittest.cc
+  generated_message_reflection_unittest.cc
+  coded_stream_unittest.cc
+  printer_unittest.cc
+  tokenizer_unittest.cc
+  zero_copy_stream_unittest.cc
+  message_unittest.cc
+  Generating Code...
+  Compiling...
+  reflection_ops_unittest.cc
+  repeated_field_reflection_unittest.cc
+  repeated_field_unittest.cc
+  common_unittest.cc
+..\src\google\protobuf\stubs\common_unittest.cc(75): warning C4307: '+' : integral constant overflow
+..\src\google\protobuf\stubs\common_unittest.cc(76): warning C4307: '+' : integral constant overflow
+  once_unittest.cc
+  stringprintf_unittest.cc
+  structurally_valid_unittest.cc
+  strutil_unittest.cc
+  template_util_unittest.cc
+  type_traits_unittest.cc
+  file.cc
+  googletest.cc
+  test_util.cc
+  text_format_unittest.cc
+  unknown_field_set_unittest.cc
+  wire_format_unittest.cc
+..\src\google\protobuf\wire_format_unittest.cc(789): warning C4309: 'static_cast' : truncation of constant value
+..\src\google\protobuf\wire_format_unittest.cc(794): warning C4309: 'static_cast' : truncation of constant value
+  cpp_test_bad_identifiers.pb.cc
+  unittest.pb.cc
+  unittest_custom_options.pb.cc
+  unittest_embed_optimize_for.pb.cc
+  Generating Code...
+  Compiling...
+  unittest_import.pb.cc
+  unittest_import_public.pb.cc
+  unittest_lite_imports_nonlite.pb.cc
+  unittest_mset.pb.cc
+  unittest_no_generic_services.pb.cc
+  unittest_optimize_for.pb.cc
+  Generating Code...
+Link:
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release\tests.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Release\tests.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Release\tests.lib" /MACHINE:X86 /SAFESEH Release\command_line_interface_unittest.obj
+  Release\cpp_bootstrap_unittest.obj
+  Release\cpp_plugin_unittest.obj
+  Release\cpp_unittest.obj
+  Release\importer_unittest.obj
+  Release\java_doc_comment_unittest.obj
+  Release\java_plugin_unittest.obj
+  Release\mock_code_generator.obj
+  Release\parser_unittest.obj
+  Release\python_plugin_unittest.obj
+  Release\descriptor_database_unittest.obj
+  Release\descriptor_unittest.obj
+  Release\dynamic_message_unittest.obj
+  Release\extension_set_unittest.obj
+  Release\generated_message_reflection_unittest.obj
+  Release\coded_stream_unittest.obj
+  Release\printer_unittest.obj
+  Release\tokenizer_unittest.obj
+  Release\zero_copy_stream_unittest.obj
+  Release\message_unittest.obj
+  Release\reflection_ops_unittest.obj
+  Release\repeated_field_reflection_unittest.obj
+  Release\repeated_field_unittest.obj
+  Release\common_unittest.obj
+  Release\once_unittest.obj
+  Release\stringprintf_unittest.obj
+  Release\structurally_valid_unittest.obj
+  Release\strutil_unittest.obj
+  Release\template_util_unittest.obj
+  Release\type_traits_unittest.obj
+  Release\file.obj
+  Release\googletest.obj
+  Release\test_util.obj
+  Release\text_format_unittest.obj
+  Release\unknown_field_set_unittest.obj
+  Release\wire_format_unittest.obj
+  Release\cpp_test_bad_identifiers.pb.obj
+  Release\unittest.pb.obj
+  Release\unittest_custom_options.pb.obj
+  Release\unittest_embed_optimize_for.pb.obj
+  Release\unittest_import.pb.obj
+  Release\unittest_import_public.pb.obj
+  Release\unittest_lite_imports_nonlite.pb.obj
+  Release\unittest_mset.pb.obj
+  Release\unittest_no_generic_services.pb.obj
+  Release\unittest_optimize_for.pb.obj
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf\Release\gtest.lib"
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\gtest\msvc\protobuf\Release\gtest_main.lib"
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\libprotobuf.lib"
+  "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\libprotoc.lib"
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification
+  tests.vcxproj -> C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\Release\tests.exe
+Done Building Project "C:\Project\zaviruha_r\redist\protobuf26\src\protobuf-2.6.1\vsprojects\tests.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:02:41.47
