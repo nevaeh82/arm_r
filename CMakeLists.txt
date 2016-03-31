@@ -48,7 +48,13 @@ endif()
 #find_package(Qt5 5.6.0 EXACT COMPONENTS Core Network Sql Gui AxContainer REQUIRED)
 #set(QT_USE_PHONON TRUE)
 
-list(APPEND qt_libs QtCore QtSql QtNetwork QtGui QtAxContainer)
+add_definitions(-DTBB_USE_CAPTURED_EXCEPTION=1)
+
+list(APPEND qt_libs QtCore QtSql QtNetwork QtGui QtAxContainer QtMultimedia)
+
+if (USE_QT5)
+    list(APPEND qt_libs QtLinguistTools)
+endif()
 
 foreach(qt_lib ${qt_libs})
 	if (NOT USE_QT5)
@@ -67,12 +73,12 @@ include(CodeCoverage)
 # include thrid party packages
 find_package(Threads REQUIRED)
 #find_package(Qxt REQUIRED)
-find_package(Ipp REQUIRED)
-find_package(Tbb REQUIRED)
-find_package(GraphicsIpp REQUIRED)
+#find_package(Ipp REQUIRED)
+#find_package(Tbb REQUIRED)
+#find_package(GraphicsIpp REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(QtSingleApplication REQUIRED)
-find_package(Solver REQUIRED)
+#find_package(Solver REQUIRED)
 
 # add settings to installation
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/settings/ DESTINATION ${BINDIR})
@@ -94,49 +100,49 @@ if(INSTALL_RUNTIME_LIBS OR USE_SHARED_OUTPUT)
 			endforeach()
 		endif()
 
-		if(GRAPHICSIPP_LIBRARIES)
-			foreach(lib ${GRAPHICSIPP_LIBRARIES})
-				get_filename_component(lib_dir ${lib} PATH)
-				get_filename_component(lib_name ${lib} NAME_WE)
-				string(REPLACE lib "" lib_name ${lib_name})
-				file(GLOB libs ${lib_dir}/${lib_name}.dll)
-				list(APPEND runtime_libs ${libs})
-			endforeach()
-		endif()
+#		if(GRAPHICSIPP_LIBRARIES)
+#			foreach(lib ${GRAPHICSIPP_LIBRARIES})
+#				get_filename_component(lib_dir ${lib} PATH)
+#				get_filename_component(lib_name ${lib} NAME_WE)
+#				string(REPLACE lib "" lib_name ${lib_name})
+#				file(GLOB libs ${lib_dir}/${lib_name}.dll)
+#				list(APPEND runtime_libs ${libs})
+#			endforeach()
+#		endif()
 
-		if(IPP_LIBRARIES)
-			list(GET IPP_LIBRARIES 0 lib)
-			get_filename_component(lib_dir ${lib} PATH)
-			list(APPEND runtime_libs
-				${lib_dir}/libiomp5md.dll
-				${lib_dir}/ippcore-7.0.dll
-				${lib_dir}/ipps-7.0.dll
-				${lib_dir}/ippsp8-7.0.dll)
-		endif()
+#		if(IPP_LIBRARIES)
+#			list(GET IPP_LIBRARIES 0 lib)
+#			get_filename_component(lib_dir ${lib} PATH)
+#			list(APPEND runtime_libs
+#				${lib_dir}/libiomp5md.dll
+#				${lib_dir}/ippcore-7.0.dll
+#				${lib_dir}/ipps-7.0.dll
+#				${lib_dir}/ippsp8-7.0.dll)
+#		endif()
 
-		if(TBB_LIBRARIES)
-			foreach(lib ${TBB_LIBRARIES})
-				get_filename_component(lib_dir ${lib} PATH)
-				get_filename_component(lib_name ${lib} NAME_WE)
-				string(REPLACE lib "" lib_name ${lib_name})
-				file(GLOB libs ${lib_dir}/${lib_name}.dll)
-				list(APPEND runtime_libs ${libs})
-			endforeach()
-		endif()
+#		if(TBB_LIBRARIES)
+#			foreach(lib ${TBB_LIBRARIES})
+#				get_filename_component(lib_dir ${lib} PATH)
+#				get_filename_component(lib_name ${lib} NAME_WE)
+#				string(REPLACE lib "" lib_name ${lib_name})
+#				file(GLOB libs ${lib_dir}/${lib_name}.dll)
+#				list(APPEND runtime_libs ${libs})
+#			endforeach()
+#		endif()
 
-		if(SOLVER_LIBRARY)
-			foreach(lib ${SOLVER_LIBRARY})
-				get_filename_component(lib_dir ${lib} PATH)
-				get_filename_component(lib_name ${lib} NAME_WE)
-				string(REPLACE lib "" lib_name ${lib_name})
-				file(GLOB libs ${lib_dir}/${lib_name}.dll)
-				list(APPEND runtime_libs ${libs})
-			endforeach()
+                #if(SOLVER_LIBRARY)
+                #	foreach(lib ${SOLVER_LIBRARY})
+                #		get_filename_component(lib_dir ${lib} PATH)
+                #		get_filename_component(lib_name ${lib} NAME_WE)
+                #		string(REPLACE lib "" lib_name ${lib_name})
+                #		file(GLOB libs ${lib_dir}/${lib_name}.dll)
+                #		list(APPEND runtime_libs ${libs})
+                #	endforeach()
 
-			list(APPEND runtime_libs
-				${lib_dir}/blas_win32_MT.dll
-				${lib_dir}/lapack_win32_MT.dll)
-		endif()
+                #	list(APPEND runtime_libs
+                #		${lib_dir}/blas_win32_MT.dll
+                #		${lib_dir}/lapack_win32_MT.dll)
+                #endif()
 	endif()
 
 	# install runtime libs

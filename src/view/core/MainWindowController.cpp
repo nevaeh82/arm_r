@@ -18,8 +18,8 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_controlPanelController = NULL;
 	m_rpcConfigClient = NULL;
 	m_rpcSettingsManager = NULL;
-	m_solverWidgetController = NULL;
-	m_solverErrorsWidgetController = NULL;
+//	m_solverWidgetController = NULL;
+//	m_solverErrorsWidgetController = NULL;
 
 	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
 	rpcSettingsFile.append("./Tabs/RPC.ini");
@@ -50,19 +50,19 @@ MainWindowController::MainWindowController(QObject *parent)
 
 MainWindowController::~MainWindowController()
 {
-	SolverResultWidget* resultWidget = m_solverWidgetController->getView();
-	if( resultWidget ) {
-		m_solverWidgetController->appendView(NULL);
-		resultWidget->close();
-		delete resultWidget;
-	}
+//	SolverResultWidget* resultWidget = m_solverWidgetController->getView();
+//	if( resultWidget ) {
+//		m_solverWidgetController->appendView(NULL);
+//		resultWidget->close();
+//		delete resultWidget;
+//	}
 
-	SolverErrorsWidget* errorsWidget = m_solverErrorsWidgetController->getView();
-	if( errorsWidget ) {
-		m_solverErrorsWidgetController->appendView(NULL);
-		errorsWidget->close();
-		delete errorsWidget;
-	}
+//	SolverErrorsWidget* errorsWidget = m_solverErrorsWidgetController->getView();
+//	if( errorsWidget ) {
+//		m_solverErrorsWidgetController->appendView(NULL);
+//		errorsWidget->close();
+//		delete errorsWidget;
+//	}
 
 	m_tabManager->clearAllInformation();
     m_rpcClientThread->exit();
@@ -111,16 +111,16 @@ void MainWindowController::init()
 
 	///
 
-	SolverResultWidget* solverWidget = new SolverResultWidget(m_view);
-	m_solverWidgetController = new SolverResultWidgetController(this);
-	m_solverWidgetController->appendView(solverWidget);
+//	SolverResultWidget* solverWidget = new SolverResultWidget(m_view);
+//	m_solverWidgetController = new SolverResultWidgetController(this);
+//	m_solverWidgetController->appendView(solverWidget);
 
-	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
+/*	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
-	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
+	m_solverErrorsWidgetController->appendView(solverErrorsWidget)*/;
 
-	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
-	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
+//	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
+//	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
 
 	serverStartedSlot();
@@ -174,15 +174,15 @@ void MainWindowController::slotShowLists()
 	listForm->show();
 }
 
-void MainWindowController::slotShowSolverLog()
-{
-	m_solverWidgetController->slotShowWidget();
-}
+//void MainWindowController::slotShowSolverLog()
+//{
+//	m_solverWidgetController->slotShowWidget();
+//}
 
-void MainWindowController::slotShowSolverErrors()
-{
-	m_solverErrorsWidgetController->slotShowWidget();
-}
+//void MainWindowController::slotShowSolverErrors()
+//{
+//	m_solverErrorsWidgetController->slotShowWidget();
+//}
 
 void MainWindowController::rpcConnectionEstablished()
 {
@@ -193,11 +193,11 @@ void MainWindowController::rpcConnectionEstablished()
 
 void MainWindowController::startTabManger()
 {
-	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
-	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+//	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
+//	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
 
-	m_rpcFlakonClient->deregisterReceiver(m_solverErrorsWidgetController);
-	m_rpcFlakonClient->registerReceiver(m_solverErrorsWidgetController);
+//	m_rpcFlakonClient->deregisterReceiver(m_solverErrorsWidgetController);
+//	m_rpcFlakonClient->registerReceiver(m_solverErrorsWidgetController);
 
 	m_view->getStackedWidget()->setCurrentIndex(0);
 	m_tabManager->start();

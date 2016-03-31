@@ -379,7 +379,7 @@ Object DbController::getObjectByParam(const QString &paramName, const QVariant v
 
 	qDebug( ">>>> Getting object by param : %1" );
 	qDebug( paramName.toLocal8Bit().data() );
-	qDebug( value.toString().toAscii().data() );
+	qDebug( value.toString().toLatin1().data() );
 
 	if (!succeeded) {
 		qDebug() << "SQL is wrong!";

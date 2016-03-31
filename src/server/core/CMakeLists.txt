@@ -5,7 +5,7 @@ list(APPEND deps
 	${PROJECT_NAME_GLOBAL}Common
 	PROTOBUF
 	QtSingleApplication
-	Solver
+        #Solver
 )
 
 string(REPLACE Core "" PROJECT_NAME_COV ${PROJECT_NAME})

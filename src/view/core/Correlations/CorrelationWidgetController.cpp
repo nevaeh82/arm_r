@@ -7,7 +7,7 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent)
 	, m_bandwidth(0)
 	, m_pointCount(0)
 	, m_isComplex(0)
-	, m_graphicsWidget(0)
+//	, m_graphicsWidget(0)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
@@ -45,7 +45,7 @@ void CorrelationWidgetController::setZeroFrequency(double)
 void CorrelationWidgetController::appendView(CorrelationWidget *view)
 {
 	m_view = view;
-	m_graphicsWidget = m_view->getGraphicsWidget();
+//	m_graphicsWidget = m_view->getGraphicsWidget();
 }
 
 Q_DECLARE_METATYPE(float*)
@@ -75,13 +75,13 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
 	QString second = list.at(list.size() - 1).toString();
 
 	setLabelName(base, second);
-	m_graphicsWidget->ZoomOutFull();
+//	m_graphicsWidget->ZoomOutFull();
 }
 
 
 void CorrelationWidgetController::clear()
 {
-	m_graphicsWidget->Reset();
+//	m_graphicsWidget->Reset();
 }
 
 void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
@@ -94,18 +94,18 @@ void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_
 	float maxv = 1.0;
 	float minv = 0.0;
 
-	m_graphicsWidget->SetAutoscaleY(false);
+//	m_graphicsWidget->SetAutoscaleY(false);
 	//  spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
-	m_graphicsWidget->SetAlign(3);
-	m_graphicsWidget->SetHorizontalLabel(tr("m"));
-	m_graphicsWidget->Setup(true,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
-	m_graphicsWidget->SetSpectrumVisible(1, true);
+//	m_graphicsWidget->SetAlign(3);
+//	m_graphicsWidget->SetHorizontalLabel(tr("m"));
+//	m_graphicsWidget->Setup(true,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
+//	m_graphicsWidget->SetSpectrumVisible(1, true);
 	//_mux.unlock();
 }
 
 void CorrelationWidgetController::setData(float *spectrum, float *spectrum_peak_hold)
 {
-	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, 0.0, 1.0);
+//	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, 0.0, 1.0);
 }
 
 void CorrelationWidgetController::setLabelName(QString base, QString second)
@@ -114,7 +114,7 @@ void CorrelationWidgetController::setLabelName(QString base, QString second)
 	if(m_labelName != name)
 	{
 		m_labelName = name;
-		m_graphicsWidget->ClearAllLabels();
-		m_graphicsWidget->SetLabel(0, m_labelName);
+//		m_graphicsWidget->ClearAllLabels();
+//		m_graphicsWidget->SetLabel(0, m_labelName);
 	}
 }

@@ -3,7 +3,7 @@
 
 #include "ui_SpectrumWidget.h"
 
-SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
+SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WindowFlags flags):
 	QWidget(parent, flags), ui(new Ui::SpectrumWidget)
 {
 	ui->setupUi(this);
@@ -43,10 +43,10 @@ QString SpectrumWidget::getSpectrumName() const
 	return ui->spectrumNameLB->text();
 }
 
-Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
-{
-	return ui->graphicsWidget;
-}
+//Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
+//{
+//	return ui->graphicsWidget;
+//}
 
 void SpectrumWidget::setControlPrmState(bool state)
 {

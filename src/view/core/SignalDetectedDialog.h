@@ -4,11 +4,11 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QList>
-#include <phonon/audiooutput.h>
-#include <phonon/seekslider.h>
-#include <phonon/mediaobject.h>
-#include <phonon/volumeslider.h>
-#include <phonon/backendcapabilities.h>
+//#include <phonon/audiooutput.h>
+//#include <phonon/seekslider.h>
+//#include <phonon/mediaobject.h>
+//#include <phonon/volumeslider.h>
+//#include <phonon/backendcapabilities.h>
 
 namespace Ui {
 class SignalDetectedDialog;
@@ -26,10 +26,10 @@ public:
 private:
 	Ui::SignalDetectedDialog *ui;
 
-private:
-	Phonon::MediaObject *mediaObject;
-	Phonon::MediaObject *metaInformationResolver;
-	Phonon::AudioOutput *audioOutput;
+//private:
+//	Phonon::MediaObject *mediaObject;
+//	Phonon::MediaObject *metaInformationResolver;
+//	Phonon::AudioOutput *audioOutput;
 };
 
 #endif // SIGNALDETECTEDDIALOG_H

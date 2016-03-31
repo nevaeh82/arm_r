@@ -25,8 +25,8 @@
 
 #include <Sleeper.h>
 
-#include "Tabs/SolverResultWidgetController.h"
-#include "Tabs/SolverErrorsWidgetController.h"
+//#include "Tabs/SolverResultWidgetController.h"
+//#include "Tabs/SolverErrorsWidgetController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
@@ -48,8 +48,8 @@ private:
 	QString m_rpcHost;
 	uint m_rpcPort;
 
-	SolverResultWidgetController* m_solverWidgetController;
-	SolverErrorsWidgetController* m_solverErrorsWidgetController;
+//	SolverResultWidgetController* m_solverWidgetController;
+//	SolverErrorsWidgetController* m_solverErrorsWidgetController;
 
     QThread *m_rpcClientThread;
 
@@ -65,13 +65,13 @@ private slots:
 	void serverFailedToStartSlot();
 	void serverStartedSlot();
 	void slotShowLists();
-	void slotShowSolverLog();
+//	void slotShowSolverLog();
 
 	void rpcConnectionEstablished();
 	void startTabManger();
 	void resetServer();
 
-	void slotShowSolverErrors();
+//	void slotShowSolverErrors();
 private:
 
 	void init();

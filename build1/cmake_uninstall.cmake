@@ -1,8 +1,8 @@
-IF(NOT EXISTS "C:/Project/zaviruha_r/build1/install_manifest.txt")
-  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"C:/Project/zaviruha_r/build1/install_manifest.txt\"")
-ENDIF(NOT EXISTS "C:/Project/zaviruha_r/build1/install_manifest.txt")
+IF(NOT EXISTS "F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/install_manifest.txt")
+  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/install_manifest.txt\"")
+ENDIF(NOT EXISTS "F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/install_manifest.txt")
 
-FILE(READ "C:/Project/zaviruha_r/build1/install_manifest.txt" files)
+FILE(READ "F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/install_manifest.txt" files)
 STRING(REGEX REPLACE "\n" ";" files "${files}")
 FOREACH(file ${files})
   MESSAGE(STATUS "Uninstalling \"$ENV{DESTDIR}${file}\"")

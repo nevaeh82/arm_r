@@ -1,5 +1,5 @@
 #include "TreeWidgetDelegate.h"
-#include <QtGui/QApplication>
+#include <QApplication>
 
 #include <QSpinBox>
 #include <QDoubleSpinBox>

@@ -7,6 +7,7 @@
 
 #include <QIODevice>
 #include <QDebug>
+#include <QDataStream>
 
 class TcpPRM300Coder : public BaseTcpDeviceCoder
 {

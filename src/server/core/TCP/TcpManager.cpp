@@ -18,7 +18,7 @@ TcpManager::TcpManager(QObject* parent)
 	m_coordinatesCounter->registerReceiver(this);
 
 	QThread* coordinateCounterThread = new QThread;
-	connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
+//	connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
 	connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
@@ -42,7 +42,7 @@ TcpManager::TcpManager(QObject* parent)
 	QThread* clientServerThread = new QThread;
 	m_clientTcpServer = new ClientTcpServer;
 	m_coordinatesCounter->registerReceiver(m_clientTcpServer);
-	m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
+//	m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
 
 	connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
 	connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
@@ -63,7 +63,7 @@ TcpManager::TcpManager(QObject* parent)
 TcpManager::~TcpManager()
 {
 	m_coordinatesCounter->deregisterReceiver(m_clientTcpServer);
-	m_clientTcpServer->getSolverEncoder()->deregisterReceiver(m_coordinatesCounter);
+//	m_clientTcpServer->getSolverEncoder()->deregisterReceiver(m_coordinatesCounter);
 
 	emit threadTerminateSignal();
 	emit threadTerminateSignalForMapSolver();
@@ -100,7 +100,7 @@ void TcpManager::addSolver(QByteArray data)
 		coordinatesCounter->registerReceiver(this);
 
 		QThread* coordinateCounterThread = new QThread;
-		connect(coordinateCounterThread, SIGNAL(started()), coordinatesCounter, SLOT(initSolver()));
+//		connect(coordinateCounterThread, SIGNAL(started()), coordinatesCounter, SLOT(initSolver()));
 		connect(coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
 		connect(this, SIGNAL(threadTerminateSignalForMapSolver()), coordinateCounterThread, SLOT(quit()));
 		connect(this, SIGNAL(threadTerminateSignalForMapSolver()), coordinatesCounter, SLOT(deleteLater()));

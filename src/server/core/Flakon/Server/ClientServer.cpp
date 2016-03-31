@@ -3,8 +3,7 @@
 ClientTcpServer::ClientTcpServer(QObject* parent) :
 	BaseTcpServer(parent)
 {
-	m_encoder = new SolverEncoder(this);
-	this->registerReceiver(m_encoder);
+//	this->registerReceiver(m_encoder);
 }
 
 ClientTcpServer::~ClientTcpServer()
@@ -44,11 +43,6 @@ void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString&
 	}
 }
 
-SolverEncoder*ClientTcpServer::getSolverEncoder()
-{
-	return m_encoder;
-}
-
 int ClientTcpServer::getClientTcpPortValue() {
 	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
@@ -59,54 +53,54 @@ QByteArray ClientTcpServer::decode(const MessageSP message) {
 	QByteArray dataToSend;
 
 	//Zaviruha::Packet packet;
-	SolverClient::Packet packet;
+//	SolverClient::Packet packet;
 
-	SolverClient::Packet::Command* packetCommand = new SolverClient::Packet::Command();
-	packet.set_allocated_command(packetCommand);
+//	SolverClient::Packet::Command* packetCommand = new SolverClient::Packet::Command();
+//	packet.set_allocated_command(packetCommand);
 
-	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
-		packetCommand->set_action(SolverClient::sendSolverClientData);
+//	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
+//		packetCommand->set_action(SolverClient::sendSolverClientData);
 
-		SolverClient::Packet::ArgumentVariant* packetArgs = new SolverClient::Packet::ArgumentVariant();
-		SolverClient::Packet::ArgumentVariant::SolverInput* arg = new SolverClient::Packet::ArgumentVariant::SolverInput();
-		packetArgs->set_allocated_solverinput(arg);
-		packetCommand->set_allocated_arguments(packetArgs);
-		toProtobufSolverData( arg, message->data() );
-	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
-		packetCommand->set_action(SolverClient::sendSolverClientBla);
-	} else {
-		return QByteArray();
-	}
+//		SolverClient::Packet::ArgumentVariant* packetArgs = new SolverClient::Packet::ArgumentVariant();
+//		SolverClient::Packet::ArgumentVariant::SolverInput* arg = new SolverClient::Packet::ArgumentVariant::SolverInput();
+//		packetArgs->set_allocated_solverinput(arg);
+//		packetCommand->set_allocated_arguments(packetArgs);
+//		toProtobufSolverData( arg, message->data() );
+//	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
+//		packetCommand->set_action(SolverClient::sendSolverClientBla);
+//	} else {
+//		return QByteArray();
+//	}
 
-	unsigned int size = packet.ByteSize();
-	dataToSend.resize(size);
-	packet.SerializeToArray(dataToSend.data(), size);
+//	unsigned int size = packet.ByteSize();
+//	dataToSend.resize(size);
+//	packet.SerializeToArray(dataToSend.data(), size);
 
-	addPreambula(dataToSend);
+//	addPreambula(dataToSend);
 	return dataToSend;
 }
 
-void ClientTcpServer::toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray &data) {
-	QDataStream stream(&data, QIODevice::ReadOnly);
+//void ClientTcpServer::toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray &data) {
+//	QDataStream stream(&data, QIODevice::ReadOnly);
 
-	DataFromFlacon receiveData;
-	double centerFrequency;
-	stream >> receiveData.numOfReferenceDetector_;
-	stream >> receiveData.time_;
-	stream >> receiveData.ranges_;
-	stream >> centerFrequency;
+//	DataFromFlacon receiveData;
+//	double centerFrequency;
+//	stream >> receiveData.numOfReferenceDetector_;
+//	stream >> receiveData.time_;
+//	stream >> receiveData.ranges_;
+//	stream >> centerFrequency;
 
-	foreach (double range, receiveData.ranges_) {
-		arg->add_delays(range);
-	}
+//	foreach (double range, receiveData.ranges_) {
+//		arg->add_delays(range);
+//	}
 
-	QDateTime dateTime = QDateTime::currentDateTime();
-	//Fill time form solver
-	//TODO new solver has QDateTime
-	dateTime.setTime(receiveData.time_);
-	arg->set_datetime(dateTime.toMSecsSinceEpoch());
-	arg->set_centerfrequency(centerFrequency);
-}
+//	QDateTime dateTime = QDateTime::currentDateTime();
+//	//Fill time form solver
+//	//TODO new solver has QDateTime
+//	dateTime.setTime(receiveData.time_);
+//	arg->set_datetime(dateTime.toMSecsSinceEpoch());
+//	arg->set_centerfrequency(centerFrequency);
+//}
 
 
 

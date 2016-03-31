@@ -120,8 +120,8 @@ void PServer::slotSocketDisconnected()
 	if(server_status==1)
 	{
 		QTcpSocket* clientSocket = (QTcpSocket*)sender();
-		QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
-		while (i != SClients.constEnd())
+		QMap<int,QTcpSocket *>::iterator i = SClients.begin();
+		while (i != SClients.end())
 		{
 			if (clientSocket==i.value())
 			{
@@ -194,8 +194,8 @@ void PServer::_slotGetData(QByteArray& data)
 
 	if (!SClients.isEmpty())
 	{
-		QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
-		while (i != SClients.constEnd())
+		QMap<int,QTcpSocket *>::iterator i = SClients.begin();
+		while (i != SClients.end())
 		{
 			QTcpSocket* clientSocket = i.value();
 			clientSocket->write(ret);

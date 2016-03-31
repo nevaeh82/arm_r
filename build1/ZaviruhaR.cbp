@@ -1,0 +1,2368 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="ZaviruhaR" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="msvc8" />
+      <Option virtualFolders="CMake Files\;CMake Files\cmake\;CMake Files\Qt\;CMake Files\Qt\5.6mcvs2013\;CMake Files\Qt\5.6mcvs2013\5.6\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Network\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxContainer\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxBase\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Widgets\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\;CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5LinguistTools\;CMake Files\src\;CMake Files\src\Qxt\;CMake Files\src\CISCommonLib\;CMake Files\src\CISCommonLib\src\;CMake Files\src\CISCommonLib\tests\;CMake Files\src\common\;CMake Files\src\common\src\;CMake Files\src\common\tests\;CMake Files\src\server\;CMake Files\src\server\core\;CMake Files\src\server\app\;CMake Files\src\server\tests\;CMake Files\src\view\;CMake Files\src\view\core\;CMake Files\src\view\app\;CMake Files\src\view\tests\;CMake Files\build1\;CMake Files\build1\src\;CMake Files\build1\src\view\;CMake Files\build1\src\view\core\;CMake Files\docs\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 all" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="copy_runtime">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 copy_runtime" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 edit_cache" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 install" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install/local">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 install/local" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="list_install_components">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 list_install_components" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="package">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 package" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="package_source">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 package_source" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 rebuild_cache" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="test">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 test" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="uninstall">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 uninstall" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRQxt">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRQxt.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_NO_OPENSSL" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 ZaviruhaRQxt" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRQxt/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRQxt.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_NO_OPENSSL" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 ZaviruhaRQxt/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRQxt_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 ZaviruhaRQxt_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\Qxt\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLib">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCISCommonLib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 ZaviruhaRCISCommonLib" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLib/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCISCommonLib.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 ZaviruhaRCISCommonLib/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLib_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 ZaviruhaRCISCommonLib_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLibTest">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCISCommonLibTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 ZaviruhaRCISCommonLibTest" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLibTest/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCISCommonLibTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 ZaviruhaRCISCommonLibTest/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCISCommonLibTest_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/tests" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 ZaviruhaRCISCommonLibTest_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\CISCommonLib\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCommon">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCommon.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 ZaviruhaRCommon" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCommon/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRCommon.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 ZaviruhaRCommon/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRCommon_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 ZaviruhaRCommon_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\common\src\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerCore">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServerCore.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 ZaviruhaRServerCore" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerCore/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServerCore.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 ZaviruhaRServerCore/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerCore_protobuf_autogen">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 ZaviruhaRServerCore_protobuf_autogen" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerCore_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 ZaviruhaRServerCore_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServer">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServer.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 ZaviruhaRServer" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServer/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServer.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 ZaviruhaRServer/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServer_copy_runtime">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/app" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 ZaviruhaRServer_copy_runtime" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServer_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/app" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 ZaviruhaRServer_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerTest">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServerTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 ZaviruhaRServerTest" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerTest/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRServerTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 ZaviruhaRServerTest/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRServerTest_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/server/tests" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 ZaviruhaRServerTest_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\server\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewCore">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRViewCore.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 ZaviruhaRViewCore" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewCore/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRViewCore.lib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 ZaviruhaRViewCore/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewCore_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 ZaviruhaRViewCore_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\core\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRView">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRView.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 ZaviruhaRView" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRView/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRView.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 ZaviruhaRView/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRView_copy_runtime">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/app" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 ZaviruhaRView_copy_runtime" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRView_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/app" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 ZaviruhaRView_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\app\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewTest">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRViewTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 ZaviruhaRViewTest" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewTest/fast">
+         <Option output="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin/ZaviruhaRViewTest.exe" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/bin" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="msvc8" />
+         <Compiler>
+            <Add option="-DUNICODE" />
+            <Add option="-D_UNICODE" />
+            <Add option="-DTBB_USE_CAPTURED_EXCEPTION=1" />
+            <Add option="-DQXT_STATIC" />
+            <Add option="-DBUILD_QXT" />
+            <Add option="-D_LARGEFILE_SOURCE" />
+            <Add option="-D_FILE_OFFSET_BITS=64" />
+            <Add option="-D_DATADIR=&quot;share/&quot;" />
+            <Add option="-DQT_CORE_LIB" />
+            <Add option="-DQT_NO_DEBUG" />
+            <Add option="-DQT_SQL_LIB" />
+            <Add option="-DQT_NETWORK_LIB" />
+            <Add option="-DQT_GUI_LIB" />
+            <Add option="-DQT_AXCONTAINER_LIB" />
+            <Add option="-DQT_AXBASE_LIB" />
+            <Add option="-DQT_WIDGETS_LIB" />
+            <Add option="-DQT_MULTIMEDIA_LIB" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/./mkspecs/win32-msvc2013" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/ActiveQt" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtCore" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtGui" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtMultimedia" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtNetwork" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtSql" />
+            <Add directory="C:/Qt/5.6mcvs2013/5.6/msvc2013_64/include/QtWidgets" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/GraphicsIpp/include/modules" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/ipp/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/protobuf26/5.6/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/qtsingleapplication/bin/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/redist/tbb/include" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/TestShared" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxmock" />
+            <Add directory="F:/Projects/Qt/Zaviruha2/zaviruha_r/tools/cxxtest" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 ZaviruhaRViewTest/fast" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ZaviruhaRViewTest_tr">
+         <Option working_dir="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/tests" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 ZaviruhaRViewTest_tr" />
+            <CompileFile command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+            <DistClean command="nmake /NOLOGO /f F:\Projects\Qt\Zaviruha2\zaviruha_r\build1\src\view\tests\Makefile VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Db/DbControllerBase.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Logger/Logger.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Network/ReplyTimeout.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/QxtRpcPeerWrapper.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcClientBase.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcRoutedClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcRoutedServer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcServerBase.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/CommonCodes.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ServiceHandler.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/SettingsManager/RpcSettingsManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpDeviceCoder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpDeviceController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServerClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServerController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ThreadTimer/ThreadSafeTimer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/TreeModel/TreeItem.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/TreeModel/TreeModelBase.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/logManager/LogManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/qt-json/json.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractconnectionmanager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractfileloggerengine.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractiologgerengine.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtbasicfileloggerengine.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtbasicstdloggerengine.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtdatastreamsignalserializer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtglobal.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogger.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtloggerengine.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogstream.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtmetaobject.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtmultisignalwaiter.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtnull.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtrpcpeer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtrpcservice.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtsignalgroup.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtsignalwaiter.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxttcpconnectionmanager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/CRCs.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/main.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/ARM_R_Application.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/ARM_R_Srv.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/CoordinateCounter.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZCoord.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZCorrector.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZDR.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Server/ClientServer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Server/PServer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RpcConfigReader.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RpcServer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Server/TcpServerCoder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Server/TcpServerController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpAtlantCoder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpAtlantController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpFlakonCoder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpFlakonController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpPRM300Coder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpPRM300Controller.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpRDSController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpRdsCoder.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpSettingsManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/main.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Common/BaseDataSource.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Common/CommandMessage.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/CheckBoxDelegate.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ControlPanelController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ControlPanelWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ListWhiteDialog.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ListWhiteDialogController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationControllersContainer.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationGroupWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidgetController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidgetDataSource.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DB/DbController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DB/DbManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/AddStationDataDialog.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/AddStationDataDialogController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/DBStationController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsDialog.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsDialogController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsProxyModel.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/StationHelper.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/StationsDataTableModel.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/MainWindow.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/MainWindowController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Prm300ControlWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Prm300ControlWidgetController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SettingsTree/TreeModel.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SettingsTree/TreeWidgetDelegate.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SignalDetectedDialog.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidgetController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidgetDataSource.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Station.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/AtlantTabWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/CommonSpectrumTabWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/Controls/ControlPRM.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcAtlantClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcConfigClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcFlakonClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcFlakonClientWrapper.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcPrmClient.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabManager.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabSpectrumWidget.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabSpectrumWidgetController.cpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core/ZaviruhaRViewCore_ts.qrc">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Db/DbControllerBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Db/Defines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Gui/ViewController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/IController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/IDbControllerBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/IMessage.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/IRpcControllerBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/IRpcListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/ITerminateRpcController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/SettingsManager/IRpcSettingsManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpDeviceCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpDeviceController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpReceiver.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpServerClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Interfaces/Tcp/ITcpServerController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Logger/DebugUtils.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Logger/Logger.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Macroses/SettingsMacroses.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Network/ReplyTimeout.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/QxtRpcPeerWrapper.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcClientBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcPeerAbstract.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcRoutedClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcRoutedServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Rpc/RpcServerBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/CommonCodes.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/CommonCodesEnumsToString.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/IServiceHandler.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ProcessState.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ProcessStateEnumsToString.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ServiceHandler.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ServiceTerminateCause.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ServiceHandler/ServiceTerminateCauseEnumsToString.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Settings/BaseItem.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Settings/Object.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Settings/Property.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Settings/SettingsNode.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/SettingsManager/RpcSettingsManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Sleeper.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpDeviceCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpDeviceController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServerClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Tcp/BaseTcpServerController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/BaseSubject.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/BaseSubjectEx.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/BiMap.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/EasySingletonTemplate.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/EasySingletonTemplate.hpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/Message.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/MessageSP.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/SingletonTemplate.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/Templates/SingletonTemplate.hpp">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/ThreadTimer/ThreadSafeTimer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/TreeModel/TreeItem.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/TreeModel/TreeModelBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/json/json-forwards.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/json/json.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/logManager/LogManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/qt-json/json.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/TestBiMap.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/TestRpcRoutedClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/TestRpcRoutedServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/TestStreaming.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/TestTcp.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractconnectionmanager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractfileloggerengine.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractiologgerengine.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtabstractsignalserializer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtbasicfileloggerengine.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtbasicstdloggerengine.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtboundcfunction.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtboundfunction.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtboundfunctionbase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtdatastreamsignalserializer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtglobal.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogger.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogger_p.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtloggerengine.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogstream.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtlogstream_p.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtmetaobject.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtmetatype.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtmultisignalwaiter.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtnamespace.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtnull.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtnullable.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtrpcpeer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtrpcservice.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtrpcservice_p.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtsignalgroup.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxtsignalwaiter.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxttcpconnectionmanager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/qxttcpconnectionmanager_p.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/CRCs.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/CommonDefines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/AtlantConfiguraton.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/AtlantSettings.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/BaseSettings.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/DBConnectionParameters.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/FlakonSettings.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/Prm300Settings.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Info/StationConfiguration.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Interfaces/IExchangeMainTreeItem.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Interfaces/IQueue.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Interfaces/IRouter.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Interfaces/IRpcControllerBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Interfaces/ITCPController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Rpc/RpcClientBase.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Rpc/RpcDefines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/Rpc/RpcMessageStruct.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/TcpDevicesDefines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/details_res.rc">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/ARM_R_Application.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/ARM_R_Srv.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/CoordinateCounter.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZCoord.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZCorrector.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Correction/ZDR.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Interfaces/ICoordinateCounter.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Server/ClientServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Server/PServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/Flakon/Server/Structs.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/MessageSP.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/Interfaces/IRpcConfigReader.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RPCBaseItem.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RPCStructs.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RpcConfigReader.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/RPC/RpcServer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpDeviceCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpDeviceController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpReceiver.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Interfaces/ITcpSettingsManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Server/TcpServerCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/Server/TcpServerController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpAtlantCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpAtlantController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpDefines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpDeviceController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpFlakonCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpFlakonController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpPRM300Coder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpPRM300Controller.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpRDSController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpRdsCoder.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/TCP/TcpSettingsManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/tests/ClientServerTest.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/details_res.rc">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/Punkts/stac.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/Tabs/map.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/Tabs/spectra.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/Tabs/spectrum.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/Tabs/tabs_manager.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/UAV/BLA.jpg">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/UAV/BPLA.jpg">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/bullet_green.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/bullet_red.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/bullet_yellow.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/icons/ARM_R.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/icons/AddStationDataDialog.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/icons/ExistInDB.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/icons/ListWhiteDialog.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/images/icons/ListsDialog.png">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/rc.qrc">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ARM-R_en.ts">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ARM-R_ru.ts">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/AtlantTabWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Common/BaseDataSource.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Common/CommandMessage.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Common/IMessage.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/CheckBoxDelegate.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ControlPanelController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ControlPanelWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ListWhiteDialog.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ListWhiteDialog.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ControlPanel/ListWhiteDialogController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationControllersContainer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationGroupWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationGroupWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidgetController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Correlations/CorrelationWidgetDataSource.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DB/DbController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DB/DbManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/AddStationDataDialog.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/AddStationDataDialog.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/AddStationDataDialogController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/DBFillTables.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/DBStationController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/IDBStation.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/IDBStationListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsDialog.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsDialog.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsDialogController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/ListsProxyModel.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/StationHelper.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/DBStation/StationsDataTableModel.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Defines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/ICorrelationWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/IGraphicWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IControlPanelController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IControlPanelListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ICorrelationControllersContainer.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ICorrelationListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ICorrelationWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDataSource.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDataSourceListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDbCache.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDbChangedListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDbController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IDbManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IExchangeMainTreeItem.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IRpcConfigClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ISettingsChangedListener.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ISpectrumWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/IStation.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ITCPClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ITCPParser.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ITabManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Interfaces/ITabWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/MainWindow.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/MainWindow.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/MainWindowController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Prm300ControlWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Prm300ControlWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Prm300ControlWidgetController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SettingsTree/TreeModel.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SettingsTree/TreeWidgetDelegate.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SignalDetectedDialog.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SignalDetectedDialog.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidgetController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/SpectrumWidgetDataSource.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Station.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/TabSpectrumWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/AtlantTabWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/CommonSpectrumTabWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/CommonSpectrumTabWidget.ui">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/Controls/ControlPRM.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/Controls/IControlPRM.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/ITabAtlant.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/ITabSpectrum.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcAtlantClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcConfigClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcFlakonClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcFlakonClientWrapper.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/RPC/RpcPrmClient.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabManager.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabSpectrumWidget.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/Tabs/TabSpectrumWidgetController.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/UiDefines.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/core.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/sample_types.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/stdafx.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests/DbStationControllerTest.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests/SpectrumWidgetDataSourceTest.h">
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/nsis.cmake">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/UsefulMacros.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/CommonInit.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/cmake_uninstall.cmake.in">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/CodeCoverage.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/FindIpp.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/FindTbb.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/FindGraphicsIpp.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/FindProtobuf.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/FindQtSingleApplication.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/DeployQt4.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/BundleUtilities.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/GetPrerequisites.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/DeployQt4.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/BundleUtilities.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/GetPrerequisites.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/DeployQt4.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/BundleUtilities.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/GetPrerequisites.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/DeployQt4.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/BundleUtilities.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/cmake/GetPrerequisites.cmake">
+          <Option virtualFolder="CMake Files\cmake\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Core/Qt5CoreConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Core/Qt5CoreConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Core/Qt5CoreConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Core/Qt5CoreMacros.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Sql/Qt5SqlConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Sql/Qt5SqlConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Sql/Qt5Sql_QMYSQLDriverPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Sql/Qt5Sql_QPSQLDriverPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Sql/Qt5Sql_QSQLiteDriverPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Sql\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Network/Qt5NetworkConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Network\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Network/Qt5NetworkConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Network\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Network/Qt5Network_QGenericEnginePlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Network\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Network/Qt5Network_QNativeWifiEnginePlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Network\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5GuiConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QDDSPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QGifPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QICNSPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QICOPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QJpegPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QMinimalIntegrationPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QOffscreenIntegrationPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QTgaPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QTiffPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QTuioTouchPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QWbmpPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QWebpPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5Gui_QWindowsIntegrationPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Gui\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5AxContainer/Qt5AxContainerConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxContainer\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5AxContainer/Qt5AxContainerConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxContainer\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5AxBase/Qt5AxBaseConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxBase\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5AxBase/Qt5AxBaseConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5AxBase\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Widgets\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5MultimediaConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5MultimediaConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5Multimedia_AudioCaptureServicePlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5Multimedia_DSServicePlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5Multimedia_QM3uPlaylistPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5Multimedia/Qt5Multimedia_QWindowsAudioPlugin.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5Multimedia\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsConfigVersion.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5LinguistTools\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsConfig.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5LinguistTools\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/Qt/5.6mcvs2013/5.6/msvc2013_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake">
+          <Option virtualFolder="CMake Files\Qt\5.6mcvs2013\5.6\msvc2013_64\lib\cmake\Qt5LinguistTools\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\Qxt\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/Qxt/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\Qxt\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\CISCommonLib\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\CISCommonLib\src\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\CISCommonLib\src\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\CISCommonLib\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/CISCommonLib/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\CISCommonLib\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\common\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\common\src\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\common\src\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/common/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\common\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/core/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/version.h.in">
+          <Option virtualFolder="CMake Files\src\server\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/app/version.h.in">
+          <Option virtualFolder="CMake Files\src\server\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/server/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\server\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/core/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/rc.qrc">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/version.h.in">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/rc.qrc">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/app/version.h.in">
+          <Option virtualFolder="CMake Files\src\view\app\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/src/view/tests/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\view\tests\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core/ZaviruhaRViewCore_ts.qrc">
+          <Option virtualFolder="CMake Files\build1\src\view\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/build1/src/view/core/ZaviruhaRViewCore_ts.qrc">
+          <Option virtualFolder="CMake Files\build1\src\view\core\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/docs/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\docs\" />
+      </Unit>
+      <Unit filename="F:/Projects/Qt/Zaviruha2/zaviruha_r/docs/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\docs\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

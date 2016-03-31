@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QStringList>
 #include <QHostAddress>
+#include <qdatastream.h>
 
 #include <Rpc/RpcDefines.h>
 #include <Rpc/RpcRoutedClient.h>

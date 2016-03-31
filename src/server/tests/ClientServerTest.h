@@ -93,15 +93,15 @@ public:
 		bool res = QxtSignalWaiter::wait(server, SIGNAL(newClientSignal(uint,ITcpServerClient*)), 5000);
 		TS_ASSERT_EQUALS(true, res);
 
-		DataFromFlacon m_aData;
-		m_aData.numOfReferenceDetector_ = 123;
-		m_aData.time_ = QTime::currentTime();
-		QVector<double> vector;
-		m_aData.ranges_ = ( vector  << 1.1 << 2.2 << 3.3 );
+//		DataFromFlacon m_aData;
+//		m_aData.numOfReferenceDetector_ = 123;
+//		m_aData.time_ = QTime::currentTime();
+//		QVector<double> vector;
+//		m_aData.ranges_ = ( vector  << 1.1 << 2.2 << 3.3 );
 
 		QByteArray dataToSend;
 		QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-		dataStream << m_aData;
+//		dataStream << m_aData;
 		dataStream << 1355.55; // Setting some of central frequency
 		MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, dataToSend));
 
@@ -124,47 +124,20 @@ public:
 		TS_ASSERT_EQUALS(packetLen, inData.size());
 
 // ========================================================================================
-		QByteArray protoData = inData.mid(TCP_ZAVIRUHA_PREAMBULA_LEN, messageLen);
-		SolverClient::Packet packet;
-		packet.ParseFromArray(protoData.constData(), protoData.size());
+//		QByteArray protoData = inData.mid(TCP_ZAVIRUHA_PREAMBULA_LEN, messageLen);
+//		SolverClient::Packet packet;
+//		packet.ParseFromArray(protoData.constData(), protoData.size());
 
-		TS_ASSERT_EQUALS( packet.command().action(), SolverClient::sendSolverClientData );
-		SolverClient::Packet::ArgumentVariant::SolverInput arg = packet.command().arguments().solverinput();
+//		TS_ASSERT_EQUALS( packet.command().action(), SolverClient::sendSolverClientData );
+//		SolverClient::Packet::ArgumentVariant::SolverInput arg = packet.command().arguments().solverinput();
 
-		TS_ASSERT_EQUALS(arg.delays_size(), 3);
-		TS_ASSERT_EQUALS(arg.delays(0), 1.1);
-		TS_ASSERT_EQUALS(arg.delays(1), 2.2);
-		TS_ASSERT_EQUALS(arg.delays(2), 3.3);
+//		TS_ASSERT_EQUALS(arg.delays_size(), 3);
+//		TS_ASSERT_EQUALS(arg.delays(0), 1.1);
+//		TS_ASSERT_EQUALS(arg.delays(1), 2.2);
+//		TS_ASSERT_EQUALS(arg.delays(2), 3.3);
 
-		//TS_ASSERT_EQUALS(arg.datetime(), m_aData.time_.toTime_t());
-		TS_ASSERT_EQUALS(arg.centerfrequency(), 1355.55);
-	}
-
-	void testSolverEncoder()
-	{
-		SolverEncoder encoder;
-		TS_ASSERT_DIFFERS( 0, rawTestProtobuf.length() );
-
-		rawTestProtobuf.prepend("TESTdataNoValidMessageOlolo");
-		rawTestProtobuf.append("EndOfMessageInvalidData");
-
-		QByteArray part1 = rawTestProtobuf.mid(0, 30);
-		QByteArray part2 = rawTestProtobuf.mid(30, 10);
-		QByteArray part3 = rawTestProtobuf.mid(40, 10);
-		QByteArray part4 = rawTestProtobuf.right(rawTestProtobuf.length() - 50);
-
-		TS_ASSERT_EQUALS(rawTestProtobuf.length(), part1.length() + part2.length() + part3.length() + part4.length() );
-
-		for(int i = 0; i < 3; i++) {
-			QByteArray encodedData = encoder.encode( part1 );
-			TS_ASSERT_EQUALS( 0, encodedData.length() );
-			encodedData = encoder.encode( part2 );
-			TS_ASSERT_EQUALS( 0, encodedData.length() );
-			encodedData = encoder.encode( part3 );
-			TS_ASSERT_EQUALS( 0, encodedData.length() );
-			encodedData = encoder.encode( part4 );
-			TS_ASSERT_DIFFERS( 0, encodedData.length() );
-		}
+//		//TS_ASSERT_EQUALS(arg.datetime(), m_aData.time_.toTime_t());
+//		TS_ASSERT_EQUALS(arg.centerfrequency(), 1355.55);
 	}
 };
 

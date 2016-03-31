@@ -6,6 +6,7 @@
 #include <QTime>
 #include <QDateTime>
 #include <QVector>
+#include <QDataStream>
 
 #include "Tcp/BaseTcpDeviceCoder.h"
 #include "TCP/TcpDefines.h"

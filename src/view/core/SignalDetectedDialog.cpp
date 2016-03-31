@@ -19,11 +19,11 @@ SignalDetectedDialog::SignalDetectedDialog(QWidget *parent) :
 	setWindowFlags(flags);
 	setWindowIcon(QIcon(":/images/icons/ListsDialog.png"));
 
-	audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-	mediaObject = new Phonon::MediaObject(this);
-	metaInformationResolver = new Phonon::MediaObject(this);
+//	audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+//	mediaObject = new Phonon::MediaObject(this);
+//	metaInformationResolver = new Phonon::MediaObject(this);
 
-	Phonon::createPath(mediaObject, audioOutput);
+//	Phonon::createPath(mediaObject, audioOutput);
 }
 
 SignalDetectedDialog::~SignalDetectedDialog()
@@ -35,11 +35,11 @@ void SignalDetectedDialog::setFrequency(QString name, QList<double> freqs)
 {
 	ui->teDetected->clear();
 
-	Phonon::MediaSource source("./audio/alarm.mp3");
+//	Phonon::MediaSource source("./audio/alarm.mp3");
 
-	mediaObject->setCurrentSource(source);
+//	mediaObject->setCurrentSource(source);
 
-	mediaObject->play();
+//	mediaObject->play();
 
 
 

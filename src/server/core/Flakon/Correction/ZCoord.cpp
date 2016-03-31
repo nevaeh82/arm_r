@@ -4,7 +4,7 @@ ZCoord::ZCoord(QObject *parent) :
     QObject(parent)
 {
     QTextCodec *pCodec = QTextCodec::codecForName("UTF-8");
-    QTextCodec::setCodecForCStrings(pCodec);
+	QTextCodec::setCodecForLocale(pCodec);
 
     unsigned short aTempNumPoints;
     QVector<QString> aTitleOfPoint;

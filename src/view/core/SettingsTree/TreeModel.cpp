@@ -67,7 +67,9 @@ void TreeModel::onCleanSettings()
 		delete m_rootItem;
 
 	m_rootItem = new TreeItem(NULL);
-	reset();
+	beginResetModel();
+	endResetModel();
+//	reset();
 }
 
 void TreeModel::setStationsList(const QStringList &stationsList)

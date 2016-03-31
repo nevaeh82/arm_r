@@ -15,8 +15,8 @@
 #include "IGraphicWidget.h"
 #include "Tabs/ITabSpectrum.h"
 
-#include "modules/gui/multi_graphics/components_relation.h"
-#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
+//#include "modules/gui/multi_graphics/components_relation.h"
+//#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
 #include "Prm300ControlWidgetController.h"
 
@@ -54,7 +54,7 @@ private:
 
 	QMutex	m_mux;
 	bool	m_enableCorrelation;
-	QMenu*	m_graphicsContextMenu;
+//	QMenu*	m_graphicsContextMenu;
 
 	double	m_centerFreqSelTemp;
 	double  m_bandwidhtTemp;
@@ -65,7 +65,7 @@ private:
 	double	m_threshold;
 	int		m_rett;
 
-	Q_MG_SpectrumInterface* m_graphicsWidget;
+//	Q_MG_SpectrumInterface* m_graphicsWidget;
 
 	Prm300ControlWidgetController* m_prm300WidgetController;
 

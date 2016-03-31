@@ -20,9 +20,9 @@
 #include <QHostAddress>
 #include <QCoreApplication>
 #include <QtNetwork>
+#include <QTcpSocket>
 
 #include <TcpDevicesDefines.h>
-#include <ISolver.h>
 
 #include "EagleMessageProto.pb.h"
 #include "Flakon/Server/Structs.h"

@@ -6,8 +6,8 @@
 #include "Interfaces/IController.h"
 #include "Interfaces/ICorrelationWidget.h"
 
-#include "modules/gui/multi_graphics/components_relation.h"
-#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
+//#include "modules/gui/multi_graphics/components_relation.h"
+//#include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
 class CorrelationWidget;
 
@@ -21,7 +21,7 @@ private:
 	int	m_pointCount;
 	bool	m_isComplex;
 
-	Q_MG_SpectrumInterface* m_graphicsWidget;
+//	Q_MG_SpectrumInterface* m_graphicsWidget;
 
 	QString	m_labelName;
 

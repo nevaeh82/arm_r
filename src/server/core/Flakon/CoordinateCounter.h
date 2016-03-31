@@ -22,12 +22,6 @@
 #include "TcpDevicesDefines.h"
 #include "../TCP/TcpDefines.h"
 
-#include <RadiolocationInterface.h>
-#include <Solver.h>
-#include <Solver_global.h>
-#include <ISolver.h>
-#include <ISolverListener.h>
-
 #include "Correction/ZDR.h"
 
 #include "ZVPacket.pb.h"
@@ -78,7 +72,7 @@
 
 //} UAVPositionDataEnemy;
 
-class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter, public ISolverListener
+class CoordinateCounter : public QObject, public ITcpListener, public BaseSubject<ITcpListener>, public ICoordinateCounter
 {
 	Q_OBJECT
 
@@ -89,10 +83,10 @@ private:
 	int m_prevStation;
 	double m_centerFrequency;
 
-	ISolver* m_solver;
+//	ISolver* m_solver;
 
 	double m_alt;
-	DataFromFlacon m_aData;
+//	DataFromFlacon m_aData;
 
 	QString m_likeADeviceName;
 
@@ -113,18 +107,18 @@ public:
 
 	virtual void onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument);
 
-	void onSendDataFromRadioLocation(const SolveResult& result, const DataFromRadioLocation& allData);
-	void onSendDataFromRadioLocationManualHeigh(const SolveResult& result, const DataFromRadioLocation& allData);
-	void onSendOneDataFromRadioLocation(const SolveResult& result, const OneDataFromRadioLocation& oneData_1, const OneDataFromRadioLocation& oneData_2);
-	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
-	void onErrorOccured(const ErrorType& error_type, const QString& str);
+//	void onSendDataFromRadioLocation(const SolveResult& result, const DataFromRadioLocation& allData);
+//	void onSendDataFromRadioLocationManualHeigh(const SolveResult& result, const DataFromRadioLocation& allData);
+//	void onSendOneDataFromRadioLocation(const SolveResult& result, const OneDataFromRadioLocation& oneData_1, const OneDataFromRadioLocation& oneData_2);
+//	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
+//	void onErrorOccured(const ErrorType& error_type, const QString& str);
 
 signals:
-	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
-	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
-	void signalGetOneDataFromRadioLocation(const SolveResult&, const OneDataFromRadioLocation&, const OneDataFromRadioLocation&);
-	void signalGetHyperbolesDataFromRadioLocation(const SolveResult&, const HyperbolesFromRadioLocation&);
-	void signalError(int, QString);
+//	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
+//	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
+//	void signalGetOneDataFromRadioLocation(const SolveResult&, const OneDataFromRadioLocation&, const OneDataFromRadioLocation&);
+//	void signalGetHyperbolesDataFromRadioLocation(const SolveResult&, const HyperbolesFromRadioLocation&);
+//	void signalError(int, QString);
 
 
 	// ICoordinateCounter interface
@@ -135,23 +129,23 @@ public:
 
 private:
 	/// Solver dll
-	void setSolverDataSize(int aSize);
-	void setSolverAnalyzeSize(int aSize);
+//	void setSolverDataSize(int aSize);
+//	void setSolverAnalyzeSize(int aSize);
 
-	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
-	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
+//	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
+//	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
 	void sendDataToClientTcpServer();
 	bool getIsSolverServer();
 
 public slots:
-	void initSolver();
+//	void initSolver();
 
 private slots:
-	void slotCatchDataFromRadioLocationAuto(const SolveResult& result, const DataFromRadioLocation& aData);
-	void slotCatchDataFromRadioLocationManual(const SolveResult& result, const DataFromRadioLocation& aData);
-	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
-	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
-	void slotErrorOccured(int error_type, QString str);
+//	void slotCatchDataFromRadioLocationAuto(const SolveResult& result, const DataFromRadioLocation& aData);
+//	void slotCatchDataFromRadioLocationManual(const SolveResult& result, const DataFromRadioLocation& aData);
+//	void slotOneCatchDataFromRadioLocationManual(const SolveResult& result, const OneDataFromRadioLocation& aData_1, const OneDataFromRadioLocation& aData_2);
+//	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
+//	void slotErrorOccured(int error_type, QString str);
 	void slotSetCenterFrequency(const double& frequency);
 
 signals:

@@ -7,9 +7,9 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	QObject(parent)
 {
 	qRegisterMetaType<MessageSP>("MessageSP");
-	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
-	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
-	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
+//	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
+//	qRegisterMetaType<DataFromRadioLocation> ("DataFromRadioLocation");
+//	qRegisterMetaType<OneDataFromRadioLocation> ("OneDataFromRadioLocation");
 
 	m_rpcServer = new RpcServer;
 

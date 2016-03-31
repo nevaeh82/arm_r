@@ -23,7 +23,7 @@ private:
 	SpectrumWidgetController* m_controller;
 
 public:
-	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
+	SpectrumWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0);
 	~SpectrumWidget();
 
 	void setAutoSearch(bool);
@@ -32,7 +32,7 @@ public:
 	void setSpectrumName(const QString& name);
 	QString getSpectrumName() const;
 
-	Q_MG_SpectrumInterface* getGraphicsWidget();
+//	Q_MG_SpectrumInterface* getGraphicsWidget();
 
 	void setControlPrmState(bool state);
 

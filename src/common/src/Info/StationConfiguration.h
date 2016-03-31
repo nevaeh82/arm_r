@@ -2,6 +2,8 @@
 #define STATIONCONFIGURATION_H
 
 #include <QtGlobal>
+#include <QDataStream>
+#include <QString>
 
 struct StationConfiguration
 {
