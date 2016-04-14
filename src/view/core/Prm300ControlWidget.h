@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include "Common/CommandMessage.h"
+#include "Info/StationConfiguration.h"
 
 
 namespace Ui {
@@ -18,10 +19,14 @@ public:
 	explicit Prm300ControlWidget(QWidget *parent = 0);
 	~Prm300ControlWidget();
 
-    void setData(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
+	void setData(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
+
+	Prm getPrmParams();
 
 private:
 	Ui::Prm300ControlWidget *ui;
+
+	Prm m_params;
 
 private slots:
 	void slotAtt1Up();
@@ -29,11 +34,10 @@ private slots:
 	void slotAtt2Up();
 	void slotAtt2Down();
 
-signals:
-	void signalSetAtt1Value(int value);
-	void signalSetAtt2Value(int value);
-	void signalSetFilter(int index);
+	void setPrmParams();
 
+signals:
+	void signalOnSetParams();
 };
 
 #endif // PRM300CONTROLWIDGET_H

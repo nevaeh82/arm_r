@@ -62,7 +62,7 @@ private:
 
 	void prmSetFreq(short freq);
 	void prmRequestFreq();
-	void prmSetAtt1(int att1);
+	void prmSetAtt1(QVariant att1);
 	void prmSetAtt2(int att2);
 	void prmSetFilter(int index);
 
@@ -82,7 +82,7 @@ signals:
 	///RPC signals
 	void signalPRMSetFreq(QString name, short freq);
 	void signalPRMRequestFreq(QString name);
-	void signalPRMSetAtt1(QString name, int att1);
+	void signalPRMSetAtt1(QString name, QVariant att1);
 	void signalPRMSetAtt2(QString name, int att2);
 	void signalPRMSetFilter(QString name, int index);
 

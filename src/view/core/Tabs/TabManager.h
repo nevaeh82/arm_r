@@ -83,7 +83,9 @@ public:
 	QMap<int, Station *>& getStations();
 
 	void addStationTabs();
+
 	void clearAllInformation();
+	void onClose();
 
 	void setControlPanelController(ICorrelationListener* controller);
 	void setControlPanelController(ControlPanelController *controller);

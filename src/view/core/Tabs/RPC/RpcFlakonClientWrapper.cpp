@@ -18,6 +18,8 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendCorrelationSignal(int, float, bool)), this, SLOT(sendCorrelationSlot(int, float, bool)));
 	connect(this, SIGNAL(sendAvarageSpectrumSignal(int, int)), this, SLOT(sendAvarageSpectrumSlot(int, int)));
 	connect(this, SIGNAL(requestFlakonStatusSignal()), this, SLOT(requestFlakonStatusSlot()));
+
+	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
 }
 
 RpcFlakonClientWrapper::~RpcFlakonClientWrapper()
@@ -146,6 +148,15 @@ void RpcFlakonClientWrapper::sendAvarageSpectrumSlot(int id, int avarage)
 	m_rpcClient->sendAvarageSpectrum(id, avarage);
 }
 
+void RpcFlakonClientWrapper::sendWorkModeSlot(int mode, bool isOn)
+{
+	if(NULL == m_rpcClient) {
+		return;
+	}
+
+	m_rpcClient->sendWorkMode(mode, isOn);
+}
+
 void RpcFlakonClientWrapper::requestFlakonStatusSlot()
 {
 	if(NULL == m_rpcClient) {
@@ -189,6 +200,11 @@ void RpcFlakonClientWrapper::sendCorrelation(const int id, const float frequency
 void RpcFlakonClientWrapper::sendAvarageSpectrum(const int id, const int avarage)
 {
 	emit sendAvarageSpectrumSignal(id, avarage);
+}
+
+void RpcFlakonClientWrapper::sendWorkMode(const int mode, const bool isOn)
+{
+	emit sendWorkModeSignal(mode, isOn);
 }
 
 void RpcFlakonClientWrapper::requestFlakonStatus()

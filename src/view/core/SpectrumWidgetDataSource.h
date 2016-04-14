@@ -43,6 +43,8 @@ private:
 
 	QList<qreal>	m_listStartx;
 
+	float m_workFreq;
+
 	double m_currentFreq;
 	double m_startFreq;
 	double m_endFreq;

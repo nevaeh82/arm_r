@@ -64,6 +64,7 @@ MainWindowController::~MainWindowController()
 		delete errorsWidget;
 	}
 
+	m_tabManager->onClose();
 	m_tabManager->clearAllInformation();
     m_rpcClientThread->exit();
     m_rpcClientThread->deleteLater();
@@ -235,7 +236,11 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 		m_tabManager->addStationTabs();
 		m_controlPanelController->setMapStations(m_tabManager->getStations());
 
-	} else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
+	} else if(method == RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM) {
+		QDataStream dataStream(&data, QIODevice::ReadOnly);
+		LocSystemConfiguration config;
+	}
+	else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
 
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
 		AtlantConfiguration atlantConfiguration;

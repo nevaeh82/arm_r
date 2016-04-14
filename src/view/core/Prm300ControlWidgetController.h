@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QDataStream>
 
 #include "Prm300ControlWidget.h"
 #include "Interfaces/IController.h"
@@ -35,13 +36,15 @@ public:
 
 	virtual void setDbManager(IDbManager*);
 
+	void setName(const QString& name);
+
 private:
 	void init();
 
 signals:
 
 private slots:
-	void slotSetAtt1(int value);
+	void slotSetAtt1();
 	void slotSetAtt2(int value);
 	void slotSetFilter(int index);
 };

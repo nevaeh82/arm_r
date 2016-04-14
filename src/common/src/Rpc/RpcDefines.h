@@ -12,6 +12,10 @@
 
 #define RPC_METHOD_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
 
+#define RPC_METHOD_WORK_MODE       "rpc_slot_work_mode"
+#define RPC_METHOD_WORK_MODE_M       "rpc_slot_work_mode_m"
+#define RPC_METHOD_WORK_MODE_ON       "rpc_slot_work_mode_on"
+
 ///PRM300 from rpc client
 #define RPC_METHOD_PRM_SET_FREQUENCY       "rpc_slot_prm_set_freq"
 #define RPC_METHOD_PRM_REQUEST_FREQUENCY   "rpc_slot_prm_request_freq"
@@ -22,6 +26,7 @@
 /// rpc config client
 #define RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST				"rpcMethodConfigRequestGetStationList"
 #define RPC_METHOD_CONFIG_ANSWER_STATION_LIST					"rpcMethodConfigAnswerStationList"
+#define RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM					"rpcMethodConfigAnswerLocSystem"
 #define RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION		"rpcMethodConfigRequsetGetAtlantConfiguration"
 #define RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION			"rpcMethodConfigAnswerAtlantConfiguration"
 #define RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION			"rpcMethodConfigRequsetGetDBConfiguration"
@@ -56,6 +61,7 @@
 /// connectiont status
 #define RPC_SLOT_SERVER_STATUS                      "rpc_slot_server_status"
 #define RPC_SLOT_FLAKON_STATUS						"rpc_slot_flakon_status"
+#define RPC_SLOT_FLAKON_DEV_STATE						"rpc_slot_flakon_dev_state"
 #define RPC_METHOD_REQUEST_STATUS                   "rpc_slot_request_status"
 #define RPC_METHOD_FLAKON_REQUEST_STATUS            "rpc_slot_flakon_request_status"
 #define RPC_SLOT_PRM300_FREQUENCY_CHANGED           "rpc_slot_prm300_frequency_changed"

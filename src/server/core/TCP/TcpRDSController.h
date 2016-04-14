@@ -51,7 +51,9 @@ private:
 	void requestTest();
 
 private slots:
-	void slotTcpConnectionStatus(int status);
+	void slotTcpConnectionStatus(QMap<int, bool>);
+	void slotDetectSignal(int index, QVector<QPointF> vec);
+
 	void onGetStations();
 
 signals:

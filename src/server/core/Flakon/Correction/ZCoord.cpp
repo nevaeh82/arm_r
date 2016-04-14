@@ -1,4 +1,4 @@
-#include "ZCoord.h"
+﻿#include "ZCoord.h"
 
 ZCoord::ZCoord(QObject *parent) :
     QObject(parent)
@@ -54,20 +54,20 @@ void ZCoord::setDataPoint(unsigned short aNumPoints, QVector<QString> aTitleOfPo
 
 void ZCoord::countDistanceOfPoints(DataOfPoints &lDataOfPoints)
 {
-    float aX, aY, aZ; //РћСЃРЅРѕРІРЅРѕР№ РїСѓРЅРєС‚
+    float aX, aY, aZ; //Р С›РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„– Р С—РЎС“Р Р…Р С”РЎвЂљ
     float aTempX, aTempY, aTempZ;
     float aTempDistance;
 
-    QVector<float> aWire;//РџРѕРїСЂР°РІРєРё РЅР° РґР»РёРЅС‹ РїСЂРѕРІРѕРґРѕРІ
+    QVector<float> aWire;//Р СџР С•Р С—РЎР‚Р В°Р Р†Р С”Р С‘ Р Р…Р В° Р Т‘Р В»Р С‘Р Р…РЎвЂ№ Р С—РЎР‚Р С•Р Р†Р С•Р Т‘Р С•Р Р†
 
-    aWire.append(70);//Р“Р°Р»
-    aWire.append(140);//РџРёС‡РѕСЂРё
-    aWire.append(140);//РќР°Р±Р°РєРµРІРё
-    aWire.append(140);//РўР°РіР»Р°РЅ
-    aWire.append(140);//РћС‡Р°РјС‡РёСЂР°
-    aWire.append(420);//РЎР°Р±РµСЂРёРѕ
+    aWire.append(70);//Р вЂњР В°Р В»
+    aWire.append(140);//Р СџР С‘РЎвЂЎР С•РЎР‚Р С‘
+    aWire.append(140);//Р СњР В°Р В±Р В°Р С”Р ВµР Р†Р С‘
+    aWire.append(140);//Р СћР В°Р С–Р В»Р В°Р Р…
+    aWire.append(140);//Р С›РЎвЂЎР В°Р СРЎвЂЎР С‘РЎР‚Р В°
+    aWire.append(420);//Р РЋР В°Р В±Р ВµРЎР‚Р С‘Р С•
 
-    convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(0), lDataOfPoints.aHeight.at(0), aX, aY, aZ);//РћСЃРЅРѕРІРЅРѕР№ РїСѓРЅРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ РїСЂРёС…РѕРґСЏС‚ РІСЃРµ СЃРёРіРЅР°Р»С‹
+    convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(0), lDataOfPoints.aHeight.at(0), aX, aY, aZ);//Р С›РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„– Р С—РЎС“Р Р…Р С”РЎвЂљ, Р Р…Р В° Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р в„– Р С—РЎР‚Р С‘РЎвЂ¦Р С•Р Т‘РЎРЏРЎвЂљ Р Р†РЎРѓР Вµ РЎРѓР С‘Р С–Р Р…Р В°Р В»РЎвЂ№
     for (int i=0; i<lDataOfPoints.aNumPoints; i++)
     {
         convertGeogrToGeocentric(lDataOfPoints.aCoordsOfPoint.at(i), lDataOfPoints.aHeight.at(i), aTempX, aTempY, aTempZ);
@@ -142,11 +142,11 @@ void ZCoord::checkData(int aNumMain, QVector<double> &lDR, QVector<float> aBench
     float aDistance;
 
 
-	for (int i = 0; i < mDataOfPoints.aHeight.size(); i++) //РќРѕРјРµСЂ РїСѓРЅРєС‚Р°, СЃ РєРѕС‚РѕСЂС‹Рј СЃРІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ РѕСЃРЅРѕРІРЅРѕР№
+	for (int i = 0; i < 2; i++) //Р СњР С•Р СР ВµРЎР‚ Р С—РЎС“Р Р…Р С”РЎвЂљР В°, РЎРѓ Р С”Р С•РЎвЂљР С•РЎР‚РЎвЂ№Р С РЎРѓР Р†Р С•РЎР‚Р В°РЎвЂЎР С‘Р Р†Р В°Р ВµРЎвЂљРЎРѓРЎРЏ Р С•РЎРѓР Р…Р С•Р Р†Р Р…Р С•Р в„–
     {
 		if (i != aNumMain)
         {
-            int aTemp; //РќРѕРјРµСЂ СЂР°Р·РЅРѕСЃС‚Рё
+            int aTemp; //Р СњР С•Р СР ВµРЎР‚ РЎР‚Р В°Р В·Р Р…Р С•РЎРѓРЎвЂљР С‘
 			if (i < aNumMain) {
 				aTemp = i;
 			} else {
@@ -173,29 +173,29 @@ double ZCoord::retransmissionSaberio()
     float aTempX, aTempY, aTempZ, aX, aY, aZ, aTempDistance;
     double aSumDist=0;
 
-    //РЎРђР‘Р•Р РРћ - РРќР“РЈР 
+    //Р РЋР С’Р вЂР вЂўР  Р ВР С› - Р ВР СњР вЂњР Р€Р  
     convertGeogrToGeocentric(mDataOfPoints.aCoordsOfPoint.at(5), mDataOfPoints.aHeight.at(5), aTempX, aTempY, aTempZ);
     convertGeogrToGeocentric(igurCoord, ingurHgt, aX, aY, aZ);
 
     countDistanceOfPoints(aTempX, aTempY, aTempZ, aX, aY, aZ, aTempDistance);
     aSumDist=aSumDist+aTempDistance;
-//    qDebug()<<" РЎРђР‘Р•Р РРћ - РРќР“РЈР  "<<aTempDistance;
+//    qDebug()<<" Р РЋР С’Р вЂР вЂўР  Р ВР С› - Р ВР СњР вЂњР Р€Р   "<<aTempDistance;
 
-    //РРќР“РЈР  - РўРђР“Р›РђРќ
+    //Р ВР СњР вЂњР Р€Р   - Р СћР С’Р вЂњР вЂєР С’Р Сњ
     convertGeogrToGeocentric(igurCoord, ingurHgt, aTempX, aTempY, aTempZ);
     convertGeogrToGeocentric(mDataOfPoints.aCoordsOfPoint.at(3), mDataOfPoints.aHeight.at(3), aX, aY, aZ);
 
     countDistanceOfPoints(aTempX, aTempY, aTempZ, aX, aY, aZ, aTempDistance);
     aSumDist=aSumDist+aTempDistance;
-//    qDebug()<<" РРќР“РЈР  - РўРђР“Р›РђРќ "<<aTempDistance;
+//    qDebug()<<" Р ВР СњР вЂњР Р€Р   - Р СћР С’Р вЂњР вЂєР С’Р Сњ "<<aTempDistance;
 
-    //РўРђР“Р›РђРќ - Р“РђР›
+    //Р СћР С’Р вЂњР вЂєР С’Р Сњ - Р вЂњР С’Р вЂє
     convertGeogrToGeocentric(mDataOfPoints.aCoordsOfPoint.at(3), mDataOfPoints.aHeight.at(3), aTempX, aTempY, aTempZ);
     convertGeogrToGeocentric(mDataOfPoints.aCoordsOfPoint.at(0), mDataOfPoints.aHeight.at(0), aX, aY, aZ);
 
     countDistanceOfPoints(aTempX, aTempY, aTempZ, aX, aY, aZ, aTempDistance);
     aSumDist=aSumDist+aTempDistance;
-//    qDebug()<<" РўРђР“Р›РђРќ - Р“РђР› "<<aTempDistance;
+//    qDebug()<<" Р СћР С’Р вЂњР вЂєР С’Р Сњ - Р вЂњР С’Р вЂє "<<aTempDistance;
 
     return aSumDist;
 }

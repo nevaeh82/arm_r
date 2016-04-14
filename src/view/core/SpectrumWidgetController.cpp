@@ -9,6 +9,9 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 {
 	m_dbManager = NULL;
 	m_rpcClient = NULL;
+
+	m_prm300WidgetController = NULL;
+
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
@@ -73,6 +76,10 @@ void SpectrumWidgetController::setSpectrumName(const QString &name)
 {
 	m_name = name;
 	m_view->setSpectrumName(name);
+
+	if(m_prm300WidgetController) {
+		m_prm300WidgetController->setName(m_name);
+	}
 }
 
 void SpectrumWidgetController::setup()
@@ -153,16 +160,15 @@ void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnable
 	correlationFlag = isEnabled;
 
 	if(correlationFlag) {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Correlation"));
 	}
 	else {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Correlation"));
 	}
 }
 
 void SpectrumWidgetController::updateDBAreas()
 {
-	m_graphicsWidget->ClearAllDetectedAreas();
 	m_graphicsWidget->ClearAllDetectedAreas();
 
 	QList<StationsFrequencyAndBandwith> list;
@@ -351,7 +357,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 	m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
-		m_graphicsWidget->SetDetectedAreas((*it).x()*TO_MHZ + m_current_frequency, 0, (*it).y()*TO_MHZ + m_current_frequency, 0, false);
+		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ /*+ m_current_frequency*/, 0, (*it).y()*TO_MHZ /*+ m_current_frequency*/, 0, false);
 	}
 }
 
@@ -392,8 +398,11 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 		return;
 	}
 	m_graphicsWidget->ClearAllDetectedAreas();
-	m_graphicsWidget->ClearAllDetectedAreas();
-	m_graphicsWidget->ClearAllDetectedAreas();
+	updateDBAreas();
+
+	if(m_current_frequency == val*TO_MHZ) {
+		return;
+	}
 
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;
@@ -454,6 +463,8 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 {
 	m_controlPanelController = controller;
 	connect(m_controlPanelController, SIGNAL(signalSetMode(int)), this, SLOT(slotControlPanelMode(int)));
+
+	connect(m_controlPanelController, SIGNAL(onSignalWorkMode(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
 }
 
 void SpectrumWidgetController::init()

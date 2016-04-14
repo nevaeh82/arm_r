@@ -36,7 +36,12 @@ void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 void TcpRDSController::createTcpDeviceCoder()
 {
 	log_debug("Creating TcpFlakonCoder...");
-	m_tcpDeviceCoder = new TcpRdsCoder(this);
+	TcpRdsCoder* coder = new TcpRdsCoder(this);
+	m_tcpDeviceCoder = coder;
+
+
+	connect(coder, SIGNAL(onChangeDevState(QMap<int, bool>)), this, SLOT(slotTcpConnectionStatus(QMap<int, bool>)) );
+	connect(coder, SIGNAL(onDetectSignal(int, QVector<QPointF>)), this, SLOT(slotDetectSignal(int,QVector<QPointF>)) );
 }
 
 void TcpRDSController::createTcpClient()
@@ -131,10 +136,11 @@ void TcpRDSController::requestTest()
 
 	//sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
 //	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
-
 //	QDataStream st(&data, QIODevice::ReadWrite);
 //	st << true;
 //	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+
+
 }
 
 RpcRoutedServer::RouteId TcpRDSController::getRouteId() const
@@ -142,35 +148,64 @@ RpcRoutedServer::RouteId TcpRDSController::getRouteId() const
 	return RDS_ROUTE_ID;
 }
 
-void TcpRDSController::slotTcpConnectionStatus(int status)
+void TcpRDSController::slotTcpConnectionStatus(QMap<int, bool> map)
 {
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
-	dataStream << status;
+
+	QList<DevState> stateList;
+	foreach (int key, map.keys()) {
+		DevState state;
+		state.id = key;
+		state.state = map.value(key);
+		stateList.append(state);
+
+		if(!state.state) {
+			QByteArray data;
+			QDataStream stream(&data, QIODevice::ReadWrite);
+
+			stream << state.id;
+
+			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
+		}
+
+	}
+	dataStream << stateList;
+
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_STATUS, byteArray));
 
-	if (message == NULL) {
-		return;
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
 	}
+}
+
+void TcpRDSController::slotDetectSignal(int index, QVector<QPointF> vec)
+{
+	// We should send m_header.id to rpcclient
+	QByteArray ba;
+	QDataStream dataStream(&ba, QIODevice::WriteOnly);
+	dataStream << index << vec;
+
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived((quint32) m_deviceType, m_tcpDeviceName, message);
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
 	}
-
-	requestTest();
 }
 
 void TcpRDSController::onGetStations()
 {
 	QByteArray data;
 
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
 
-	QDataStream st(&data, QIODevice::ReadWrite);
-	st << true;
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+//	QDataStream st(&data, QIODevice::ReadWrite);
+//	st << true;
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 
 	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
+
+	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 }
 
 void TcpRDSController::onMethodCalled(const QString& method, const QVariant& argument)
@@ -178,7 +213,8 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 	QByteArray data = argument.toByteArray();
 
 	if (method == RPC_METHOD_SET_MAIN_STATION_CORRELATION) {
-		requestStationCorellation(argument.toString());
+		//requestStationCorellation(argument.toString());
+		sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION, data)));
 	}
 	else if (method == RPC_METHOD_SET_BANDWIDTH) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SET_BANDWIDTH, data ) ) );
@@ -198,39 +234,42 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 		if(result) {
 			m_coordinateCounter->setCenterFrequency(frequency);
 		}
+
+		//m_coordinateCounter->setCenterFrequency(frequency);
 	}
 	else if (method == RPC_METHOD_RECOGNIZE) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_RECOGNIZE, data ) ) );
 	}
 	else if (method == RPC_METHOD_SS_CORRELATION) {
-		QDataStream inputDataStream(&data, QIODevice::ReadOnly);
-
-		QByteArray mess;
-		QDataStream ds(&mess, QIODevice::WriteOnly);
-
-		float frequency;
-		bool enable;
-		inputDataStream >> frequency;
-		inputDataStream >> enable;
-		ds << enable;
-		log_debug(QString("frequency %1 %2").arg(QString::number(frequency)).arg(QString::number(enable)));
-		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, mess ) ) );
-
-		MessageSP message(new Message<QByteArray>(RPC_CORRELATION_CONTROL, data));
-		if (message == NULL) {
-			return;
-		}
-		foreach (ITcpListener* receiver, m_receiversList) {
-			receiver->onMessageReceived((quint32) m_deviceType, m_tcpDeviceName, message);
-		}
-
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_SS_CORRELATION, data ) ) );
 	}
 	else if (method == RPC_METHOD_AVARAGE_SPECTRUM) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, data ) ) );
 	}
-	if (method == RPC_METHOD_FLAKON_REQUEST_STATUS) {
-		bool state = isConnected();
-		requestTest();
-		log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
+	else if(method == RPC_METHOD_WORK_MODE_M) {
+		sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+	}
+	else if(method == RPC_METHOD_WORK_MODE_ON) {
+		sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+	}
+
+	else if (method == RPC_METHOD_PRM_SET_ATT1) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_PRM300_REQUEST_SET_ATTENUER_ONE, data ) ) );
+		return;
+	}
+	else if (method == RPC_METHOD_PRM_SET_ATT2) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_PRM300_REQUEST_SET_ATTENUER_TWO, data ) ) );
+		return;
+	}
+	else if (method == RPC_METHOD_PRM_SET_FILTER) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_PRM300_REQUEST_SET_FILTER, data ) ) );
+		return;
+	}
+	else if (method == RPC_METHOD_FLAKON_REQUEST_STATUS) {
+//		bool state = isConnected();
+//		requestTest();
+		//		log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
+//		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
+		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_PRM_STATUS, data ) ) );
 	}
 }

@@ -3,6 +3,106 @@
 
 #include <QtGlobal>
 
+struct Prm
+{
+	int att1;
+	int att2;
+	int filter;
+
+	Prm()
+	{
+		att1 = 0; // invalid id
+		att2 = 0;
+		filter = 0;
+	}
+};
+
+inline QDataStream& operator<<(QDataStream& out, const Prm& object)
+{
+	return out << object.att1
+			   << object.att2
+			   << object.filter;
+}
+
+inline QDataStream& operator>>(QDataStream& out, Prm& object)
+{
+	return out >> object.att1
+			   >> object.att2
+			   >> object.filter;
+}
+
+struct DevState
+{
+	int id;
+	bool state;
+
+	DevState()
+	{
+		id = -2; // invalid id
+		state = false;
+	}
+};
+
+inline QDataStream& operator<<(QDataStream& out, const DevState& object)
+{
+	return out << object.id
+			   << object.state;
+}
+
+inline QDataStream& operator>>(QDataStream& out, DevState& object)
+{
+	return out >> object.id
+			   >> object.state;
+}
+
+struct LocSystemConfiguration
+{
+	int chanNum;
+	int mode;
+	int baseIndex;
+	bool convolution;
+	int spectrumMean;
+	int tuningMode;
+	int duration;
+	int centralFreq;
+
+	LocSystemConfiguration()
+	{
+		chanNum = 0;
+		mode = 0;
+		baseIndex = 0;
+		convolution = false;
+		spectrumMean = 0;
+		tuningMode = 0;
+		duration = 0;
+		centralFreq = 0;
+	}
+};
+
+inline QDataStream& operator<<(QDataStream& out, const LocSystemConfiguration& object)
+{
+	return out << object.chanNum
+			   << object.mode
+			   << object.baseIndex
+			   << object.convolution
+			   << object.spectrumMean
+			   << object.tuningMode
+			   << object.duration
+			   << object.centralFreq;
+}
+
+inline QDataStream& operator>>(QDataStream& in, LocSystemConfiguration& object)
+{
+	return in  >> object.chanNum
+			   >> object.mode
+			   >> object.baseIndex
+			   >> object.convolution
+			   >> object.spectrumMean
+			   >> object.tuningMode
+			   >> object.duration
+			   >> object.centralFreq;
+}
+
 struct StationConfiguration
 {
 	StationConfiguration()
@@ -55,6 +155,8 @@ struct StationConfiguration
 	bool		statusPrm;
 	bool		inversionPrm;
 	int freqPrm;
+
+
 
 	bool		statusAdc;
 

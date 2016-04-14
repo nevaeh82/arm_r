@@ -24,7 +24,7 @@ bool RpcPrmClient::start(quint16 port, QHostAddress ipAddress)
 
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFreq(QString, short)), RPC_METHOD_PRM_SET_FREQUENCY);
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMRequestFreq(QString)), RPC_METHOD_PRM_REQUEST_FREQUENCY);
-	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(QString, int)), RPC_METHOD_PRM_SET_ATT1);
+	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt1(QString, QVariant)), RPC_METHOD_PRM_SET_ATT1);
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetAtt2(QString, int)), RPC_METHOD_PRM_SET_ATT2);
 	m_clientPeer->attachSignal(this, SIGNAL(signalPRMSetFilter(QString,int)), RPC_METHOD_PRM_SET_FILTER);
 	m_clientPeer->attachSignal(this, SIGNAL(signalRequestStatus(QString)), RPC_METHOD_REQUEST_STATUS);
@@ -76,7 +76,7 @@ void RpcPrmClient::formCommand(IMessage *msg)
 			prmRequestFreq();
 			break;
 		case COMMAND_PRM_SET_ATT1:
-			prmSetAtt1(data.toInt());
+			prmSetAtt1(data);
 			break;
 		case COMMAND_PRM_SET_ATT2:
 			prmSetAtt2(data.toInt());
@@ -105,7 +105,7 @@ void RpcPrmClient::prmRequestFreq()
 	emit signalPRMRequestFreq(m_station->getName());
 }
 
-void RpcPrmClient::prmSetAtt1(int att1)
+void RpcPrmClient::prmSetAtt1(QVariant att1)
 {
 	emit signalPRMSetAtt1(m_station->getName(), att1);
 }

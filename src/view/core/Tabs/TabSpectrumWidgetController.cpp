@@ -1,6 +1,8 @@
 #include "TabSpectrumWidgetController.h"
 #include "UiDefines.h"
 
+#include "Info/StationConfiguration.h"
+
 TabSpectrumWidgetController::TabSpectrumWidgetController(
 		IStation* station,
 		ICorrelationControllersContainer* correlationControllers,
@@ -77,6 +79,8 @@ void TabSpectrumWidgetController::appendView(TabSpectrumWidget *view)
 	m_view = view;
 
 	init();
+
+	connect(m_view, SIGNAL(onSetWorkMode(int,bool)), this, SLOT(slotOnSetWorkMode(int,bool)));
 }
 
 void TabSpectrumWidgetController::activate()
@@ -394,6 +398,11 @@ void TabSpectrumWidgetController::slotCheckStatus()
 	checkStatus();
 }
 
+void TabSpectrumWidgetController::slotOnSetWorkMode(int, bool)
+{
+
+}
+
 void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode& property)
 {
 }
@@ -427,7 +436,7 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
-		m_view->setIndicatorState(2);
+		//m_view->setIndicatorState(2);
 		if(!m_isPanoramaEnabled)
 			m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
 		commandCode = COMMAND_PRM_SET_FREQ;
@@ -468,14 +477,34 @@ void TabSpectrumWidgetController::updateListsSelections()
 
 void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QVariant& argument)
 {
-	if( method == RPC_PRM_STATE_CHANGED ) {
-		setIndicator( argument.toInt() );
-		return;
+//	if( method == RPC_PRM_STATE_CHANGED ) {
+//		setIndicator( argument.toInt() );
+//		return;
+//	}
+//    if( method == RPC_PRM_FREQUENCY_CHANGED) {
+//        setIndicator( argument.toInt() );
+//        return;
+//	}
+
+	if (RPC_SLOT_FLAKON_STATUS == method) {
+
+		QByteArray inData = argument.toByteArray();
+		QDataStream dataStream(&inData, QIODevice::ReadOnly);
+		QList<DevState> stateList;
+		dataStream >> stateList;
+
+		int id = m_station->getId();
+
+		foreach (DevState state, stateList) {
+			if(state.id == id) {
+					setIndicator(state.state);
+				//setIndicatorState(state.state);
+			}
+		}
+
+		//setIndicator( argument.toInt() );
+		//setIndicatorState(argument.toInt());
 	}
-    if( method == RPC_PRM_FREQUENCY_CHANGED) {
-        setIndicator( argument.toInt() );
-        return;
-}
 }
 
 void TabSpectrumWidgetController::setControlPanelController(ICorrelationListener* controller)

@@ -30,6 +30,8 @@ public:
 	void sendCorrelation(const int id, const float frequency, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);
 
+	void sendWorkMode(const int mode, const bool isOn);
+
 	void requestFlakonStatus();
 
 	void clearAllReceiversList();
@@ -46,6 +48,8 @@ signals:
 	void sendCorrelationSignal(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSignal(int id, int avarage);
 
+	void sendWorkModeSignal(int mode, bool isOn);
+
 	void requestFlakonStatusSignal();
 
 	void initFinishedSignal();
@@ -61,6 +65,8 @@ private slots:
 	void recognizeSlot(int id, int type);
 	void sendCorrelationSlot(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSlot(int id, int avarage);
+
+	void sendWorkModeSlot(int mode, bool isOn);
 
 	void requestFlakonStatusSlot();
 	

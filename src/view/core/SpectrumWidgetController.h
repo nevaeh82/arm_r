@@ -157,6 +157,8 @@ signals:
 
 	void onCorrelationStateChangedSignal(const bool isEnabled);
 
+	void onSignalSetWorkMode(int, bool);
+
 public slots:
 
 private slots:

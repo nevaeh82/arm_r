@@ -46,21 +46,32 @@ void Prm300ControlWidgetController::setDbManager(IDbManager *dbManager)
 	m_dbManager = dbManager;
 }
 
+void Prm300ControlWidgetController::setName(const QString &name)
+{
+	m_stationName = name;
+}
+
 void Prm300ControlWidgetController::init()
 {
 	//connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
-	connect(m_view, SIGNAL(signalSetAtt1Value(int)), this, SLOT(slotSetAtt1(int)));
-	connect(m_view, SIGNAL(signalSetAtt2Value(int)), this, SLOT(slotSetAtt2(int)));
-	connect(m_view, SIGNAL(signalSetFilter(int)), this, SLOT(slotSetFilter(int)));
+//	connect(m_view, SIGNAL(signalSetAtt1Value(int)), this, SLOT(slotSetAtt1(int)));
+//	connect(m_view, SIGNAL(signalSetAtt2Value(int)), this, SLOT(slotSetAtt2(int)));
+//	connect(m_view, SIGNAL(signalSetFilter(int)), this, SLOT(slotSetFilter(int)));
+	connect(m_view, SIGNAL(signalOnSetParams()), this, SLOT(slotSetAtt1()));
 	m_view->hide();
 }
 
-void Prm300ControlWidgetController::slotSetAtt1(int value)
+void Prm300ControlWidgetController::slotSetAtt1()
 {
 	if(!m_rpcPrmClient)
 		return;
 
-	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT1, QVariant::fromValue(value));
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::ReadWrite);
+	stream << m_stationName
+		   << m_view->getPrmParams();
+
+	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT1, QVariant::fromValue(data));
 	m_rpcPrmClient->setCommand(msg);
 }
 

@@ -20,6 +20,9 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
 
+	connect(ui->workMode, SIGNAL(valueChanged(int)), this, SLOT(slotOnWorkMode()));
+	connect(ui->workModeOn, SIGNAL(clicked(bool)), this, SLOT(slotOnWorkMode()));
+
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
 	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
 
@@ -64,6 +67,11 @@ void ControlPanelWidget::slotChangeMode(int index)
         break;
     }
 
+}
+
+void ControlPanelWidget::slotOnWorkMode()
+{
+	emit signalWorkMode(ui->workMode->value(), ui->workModeOn->isChecked());
 }
 
 void ControlPanelWidget::changeCorrelationStatus(QString correlationValue)

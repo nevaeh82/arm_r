@@ -5,6 +5,7 @@ RpcConfigClient::RpcConfigClient(QObject* parent) :
 {
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
+	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM, this, SLOT(receivedLocSystem(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION, this, SLOT(receivedAtlantConfigSlot(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
 }
@@ -17,6 +18,13 @@ void RpcConfigClient::receivedStationListSlot(QByteArray data)
 {
 	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
+	}
+}
+
+void RpcConfigClient::receivedLocSystem(QByteArray data)
+{
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM, data);
 	}
 }
 

@@ -134,6 +134,12 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 			return;
 		}
 
+		float trds;
+		float veracity;
+
+		stream >> trds;
+		stream >> veracity;
+
 		stream >> points;
 
 		m_correlationWidget->setVisible(true);

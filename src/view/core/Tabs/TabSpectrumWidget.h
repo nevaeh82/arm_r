@@ -67,6 +67,8 @@ signals:
 	void setIndicatorStateSignal(int state);
 	void spectrumDoubleClickedSignal(int);
 
+	void onSetWorkMode(int,bool);
+
 private slots:
 	void setIndicatorStateSlot(int state);
 

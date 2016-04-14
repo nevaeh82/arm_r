@@ -16,19 +16,19 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
 
     QVector<double> aDR;
 
-	if (aCorrel.size() < 5) {
-		isCount=false;
-	}
-	if (aNumMain < 0 || aNumMain > 5) {
-		isCount=false;
-	}
-	if (aThreshold < 0 || aThreshold > 10000) {
-		aThreshold=0;
-	}
+//	if (aCorrel.size() < 2) {
+//		isCount=false;
+//	}
+//	if (aNumMain < 0 || aNumMain > 5) {
+//		isCount=false;
+//	}
+//	if (aThreshold < 0 || aThreshold > 10000) {
+//		aThreshold=0;
+//	}
 
     if (isCount)
     {
-		for (int i = 0; i < (mCoord2->mDataOfPoints.aHeight.size()-1); i++)
+		for (int i = 0; i < 2; i++)
         {
 			QVector<QPointF> aLine = aCorrel.at(i);
             float aTempForMax=-9999;
@@ -43,16 +43,16 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
 			} else {
 				aNumB = i + 1;
 			}
-			for (int p = 0; p < 30000; p++)
-            {
-                aLine.replace(p, QPointF(aLine.at(p).x()-(mCoord2->getPointsDistance(aNumB)-mCoord2->getPointsDistance(aNumA)),aLine.at(p).y()));
+			for (int p = 0; p < 20000; p++)
+			{
+				aLine.replace(p, QPointF(aLine.at(p).x()-(mCoord2->getPointsDistance(aNumB)-mCoord2->getPointsDistance(aNumA)),aLine.at(p).y()));
 				if (aTempForMax<aLine.at(p).y()) {
-                    aTempForMax=aLine.at(p).y();
-                    aCurrentDr=aLine.at(p).x();
-                }
-                aSum=aSum+aLine.at(p).y();
-            }
-            aMean=aSum/30000;
+					aTempForMax=aLine.at(p).y();
+					aCurrentDr=aLine.at(p).x();
+				}
+				aSum=aSum+aLine.at(p).y();
+			}
+			aMean=aSum/20000;
 
 			if (aTempForMax < 0.03) {
 				aTempBenchmark=((aTempForMax-aMean)/(aMean*10));
@@ -65,7 +65,7 @@ void ZDR::getDataFromFlackon(int aNumMain, QVector<QVector<QPointF> > aCorrel, f
             aBenchmark.append(aTempBenchmark);
             aDR.append(aCurrentDr);
         }
-		if (aDR.size() == 5)
+		if (aDR.size() == 2)
 		{
 			mCoord2->checkData(aNumMain, aDR, aBenchmark, aThreshold);
 			mCorrector2->correctDr(aNumMain, aDR);

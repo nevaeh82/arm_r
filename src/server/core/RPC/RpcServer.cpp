@@ -20,9 +20,10 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_RECOGNIZE, this, SLOT(recognize(quint64, int, int)));
 	m_serverPeer->attachSlot(RPC_METHOD_SS_CORRELATION, this, SLOT(ssCorrelation(quint64,int,float,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_AVARAGE_SPECTRUM, this, SLOT(setAvarageSpectrum(quint64,int,int)));
+	m_serverPeer->attachSlot(RPC_METHOD_WORK_MODE, this, SLOT(setWorkMode(quint64,int,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FREQUENCY, this, SLOT(setPrmFrequency(quint64, QString, short)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_REQUEST_FREQUENCY, this, SLOT(requestPrmFrequency(quint64,QString)));
-	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_ATT1, this, SLOT(setPrmAtt1(quint64, QString, int)));
+	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_ATT1, this, SLOT(setPrmAtt1(quint64, QString, QVariant)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_ATT2, this, SLOT(setPrmAtt2(quint64, QString, int)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FILTER, this, SLOT(setPrmFilter(quint64, QString, int)));
 
@@ -97,7 +98,10 @@ void RpcServer::setMainStationCorrelation(quint64 client, int id, QString statio
 {
 	Q_UNUSED( id );
 
-	dispatch( RPC_METHOD_SET_MAIN_STATION_CORRELATION, station, client );
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << station;
+	dispatch( RPC_METHOD_SET_MAIN_STATION_CORRELATION, byteArray, client );
 }
 
 void RpcServer::setBandwidth(quint64 client, int id, float bandwidth)
@@ -142,10 +146,10 @@ void RpcServer::recognize(quint64 client, int id, int)
 
 void RpcServer::ssCorrelation(quint64 client, int id, float frequency, bool enable)
 {
-	Q_UNUSED( id );
 
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << id;
 	dataStream << frequency;
 	dataStream << enable;
 
@@ -162,6 +166,22 @@ void RpcServer::setAvarageSpectrum(quint64 client, int id, int avarage)
 
 	dispatch( RPC_METHOD_AVARAGE_SPECTRUM, QVariant(byteArray), client );
 }
+
+void RpcServer::setWorkMode(quint64 client, int mode, bool isOn)
+{
+	QByteArray byteArrayMod;
+	QByteArray byteArrayOn;
+
+	QDataStream dataStreamMod(&byteArrayMod, QIODevice::WriteOnly);
+	dataStreamMod << mode;
+
+	QDataStream dataStreamOn(&byteArrayOn, QIODevice::WriteOnly);
+	dataStreamOn << isOn;
+
+	dispatch( RPC_METHOD_WORK_MODE_M, QVariant(byteArrayMod), client );
+	dispatch( RPC_METHOD_WORK_MODE_ON, QVariant(byteArrayOn), client );
+}
+
 
 /// send command to prm300 for set central freq
 void RpcServer::setPrmFrequency(quint64 client, QString name, short freq)
@@ -183,14 +203,14 @@ void RpcServer::requestPrmFrequency(quint64 client, QString name)
 	dispatch( RPC_METHOD_PRM_REQUEST_FREQUENCY, QVariant(byteArray), client );
 }
 
-void RpcServer::setPrmAtt1(quint64 client, QString name, int value)
+void RpcServer::setPrmAtt1(quint64 client, QString name, QVariant value)
 {
 	QByteArray byteArray;
 	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
 	dataStream << name;
 	dataStream << value;
 
-	dispatch( RPC_METHOD_PRM_SET_ATT1, QVariant(byteArray), client );
+	dispatch( RPC_METHOD_PRM_SET_ATT1, value/*, client*/ );
 }
 
 void RpcServer::setPrmAtt2(quint64 client, QString name, int value)
@@ -200,7 +220,7 @@ void RpcServer::setPrmAtt2(quint64 client, QString name, int value)
 	dataStream << name;
 	dataStream << value;
 
-	dispatch( RPC_METHOD_PRM_SET_ATT2, QVariant(byteArray), client );
+	dispatch( RPC_METHOD_PRM_SET_ATT2, QVariant(byteArray)/*, client*/ );
 }
 
 void RpcServer::setPrmFilter(quint64 client, QString name, int index)
@@ -210,7 +230,7 @@ void RpcServer::setPrmFilter(quint64 client, QString name, int index)
 	dataStream << name;
 	dataStream << index;
 
-	dispatch( RPC_METHOD_PRM_SET_FILTER, QVariant(byteArray), client );
+	dispatch( RPC_METHOD_PRM_SET_FILTER, QVariant(byteArray)/*, client*/ );
 }
 
 void RpcServer::setDataToSolver(quint64 client, QByteArray data)

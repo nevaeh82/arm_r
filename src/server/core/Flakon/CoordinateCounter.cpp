@@ -2,10 +2,15 @@
 
 #include "CoordinateCounter.h"
 
+#include "Info/StationConfiguration.h"
+
 #define GOOD_LIMIT 0.7
+#define VERACITY 1
 
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
-	QObject(parent)
+	QObject(parent),
+	isInit(false),
+	m_main_point(0)
 {
 	QDir dir;
 	dir.mkdir("./logs/SpecialLogs");
@@ -65,11 +70,34 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 {
 	Q_UNUSED( device );
 
-	if (deviceType != FLAKON_TCP_DEVICE) {
+	if (deviceType != FLAKON_TCP_DEVICE && deviceType != RDS_TCP_DEVICE) {
 		return;
 	}
 
-	if (argument->type() != TCP_FLAKON_ANSWER_CORRELATION) {
+	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
+
+		LocSystemConfiguration conf;
+		QByteArray inData;
+		inData = argument->data();
+		QDataStream stream(&inData, QIODevice::ReadWrite);
+		stream >> conf;
+
+		countChanNum = conf.chanNum;
+		m_centerFrequency = conf.centralFreq;
+
+		if(m_main_point != conf.baseIndex || !isInit) {
+			m_aData.ranges_.clear();
+			m_rangesMap.clear();
+		}
+
+		m_main_point = conf.baseIndex;
+
+		isInit = true;
+
+		return;
+	}
+
+	if (argument->type() != TCP_FLAKON_ANSWER_CORRELATION || !isInit) {
 		return;
 	}
 
@@ -78,52 +106,80 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 	QVector<QPointF> points;
 	int point1, point2;
+	float timeDiff, veracity;
 
-	inputDataStream >> point1 >> point2 >> points;
+	inputDataStream >> point1 >> point2 >> timeDiff >> veracity >> points;
+	//std::numeric_limits<double>::quiet_NaN()
 
-	m_main_point = point1;
-	m_map_vec_corr.insert(point2, points);
+	m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
+	m_aData.time_ = QTime::currentTime();	//Time
 
-	if((m_prevStation > point2) && (m_map_vec_corr.count() > 4)) {
-		QVector< QVector<QPointF> > vec_p;
-		QMap<int, QVector<QPointF> >::iterator it;
-
-		for(it = m_map_vec_corr.begin(); it != m_map_vec_corr.end(); ++it) {
-			vec_p.append(it.value());
-		}
-
-		QVector<double> aDR;
-		aDR.clear();
-		bool isSolverServer = getIsSolverServer();
-
-		ZDR mZDR;
-		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
-		m_map_vec_corr.clear();
-
-		if (aDR.size() == 5) {
-			// form data and calculate coordinates
-			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
-			m_aData.time_ = QTime::currentTime();	//Time
-			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
-
-			if( !isSolverServer ) {
-				m_solver->GetData(m_aData);
-			} else {
-				m_aData.ranges_.insert(m_main_point, 0);
-
-				for( int i = 0; i < m_aData.ranges_.size(); i++ ) {
-					m_aData.ranges_[i] = m_aData.ranges_[i] / (3 * pow(10.0, 8));
-					log_debug(QString("Range: %1 - %2").arg(i).arg(m_aData.ranges_[i]));
-				}
-
-				sendDataToClientTcpServer();
-			}
-
-			QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
-
-			m_logManager->writeToFile(dataToFile);
-		}
+	if(veracity > VERACITY) {
+		m_rangesMap.insert(point2, timeDiff);
+	} else {
+		//m_rangesMap.insert(point2, std::numeric_limits<double>::quiet_NaN());
+		m_rangesMap.insert(point2, timeDiff);
 	}
+	m_rangesMap.insert(m_main_point, 0);
+
+	if(!countChanNum) {
+		return;
+	}
+
+	//m_map_vec_corr.insert(point2, points);
+	if( m_rangesMap.size() >= countChanNum ) {
+		foreach (int key, m_rangesMap.keys()) {
+			m_aData.ranges_.insert(key, m_rangesMap.value(key));
+		}
+
+		sendDataToClientTcpServer();
+		m_aData.ranges_.clear();
+		m_rangesMap.clear();
+	}
+
+
+
+
+//	if((m_prevStation > point2) /*&& (m_map_vec_corr.count() > 4)*/) {
+//		QVector< QVector<QPointF> > vec_p;
+//		QMap<int, QVector<QPointF> >::iterator it;
+
+//		for(it = m_map_vec_corr.begin(); it != m_map_vec_corr.end(); ++it) {
+//			vec_p.append(it.value());
+//		}
+
+//		QVector<double> aDR;
+//		aDR.clear();
+//		bool isSolverServer = getIsSolverServer();
+
+//		ZDR mZDR;
+//		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
+//		m_map_vec_corr.clear();
+
+//		if (aDR.size() == 2) {
+//			// form data and calculate coordinates
+//			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
+//			m_aData.time_ = QTime::currentTime();	//Time
+//			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
+
+//			if( !isSolverServer ) {
+//				m_solver->GetData(m_aData);
+//			} else {
+//				m_aData.ranges_.insert(m_main_point, 0);
+
+//				for( int i = 0; i < m_aData.ranges_.size(); i++ ) {
+//					m_aData.ranges_[i] = m_aData.ranges_[i] / (3 * pow(10.0, 8));
+//					log_debug(QString("Range: %1 - %2").arg(i).arg(m_aData.ranges_[i]));
+//				}
+
+//				sendDataToClientTcpServer();
+//			}
+
+//			//QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
+
+//			//m_logManager->writeToFile(dataToFile);
+//		}
+//	}
 
 	m_prevStation = point2;
 }

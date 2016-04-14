@@ -150,6 +150,8 @@ private slots:
 
 	void slotCheckStatus();
 
+	void slotOnSetWorkMode(int,bool);
+
 };
 
 #endif // TABSPECTRUMWIDGETCONTROLLER_H

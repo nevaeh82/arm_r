@@ -25,6 +25,7 @@ public:
 
 	void clearReceiversList();
 	QByteArray testData;
+	void sendWorkMode(const int mode, const bool isOn);
 protected slots:
 	void registerRoute();
 	void pointsReceived(QByteArray data);

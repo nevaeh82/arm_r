@@ -29,6 +29,7 @@ private slots:
 	void receivedStationListSlot(QByteArray data);
 	void receivedAtlantConfigSlot(QByteArray data);
 	void receivedDbConfigurationSlot(QByteArray data);
+	void receivedLocSystem(QByteArray data);
 };
 
 #endif // RPCCONFIGCLIENT_H

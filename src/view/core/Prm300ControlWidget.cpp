@@ -10,7 +10,7 @@ Prm300ControlWidget::Prm300ControlWidget(QWidget *parent) :
 	connect(ui->pbAtt1Down, SIGNAL(clicked()), this, SLOT(slotAtt1Down()));
 	connect(ui->pbAtt2Up, SIGNAL(clicked()), this, SLOT(slotAtt2Up()));
 	connect(ui->pbAtt2Down, SIGNAL(clicked()), this, SLOT(slotAtt2Down()));
-	connect(ui->cbFilter, SIGNAL(activated(int)), this, SIGNAL(signalSetFilter(int)));
+	connect(ui->cbFilter, SIGNAL(activated(int)), this, SLOT(setPrmParams()));
 }
 
 Prm300ControlWidget::~Prm300ControlWidget()
@@ -38,6 +38,29 @@ void Prm300ControlWidget::setData(quint16 freq, quint8 filter, quint8 att1, quin
 	ui->lcdAtt1->display(att1);
 	ui->lcdAtt2->display(att2);
 	ui->cbFilter->setCurrentIndex(filter);
+
+	m_params.att1 = att1;
+	m_params.att2 = att2;
+	m_params.filter = filter;
+}
+
+Prm Prm300ControlWidget::getPrmParams()
+{
+	return m_params;
+}
+
+void Prm300ControlWidget::setPrmParams()
+{
+	if(ui->lcdAtt1->value()) {
+		m_params.att1 = 1;
+	} else {
+		m_params.att1 = 0;
+	}
+
+	m_params.att2 = ui->lcdAtt2->value();
+	m_params.filter = ui->cbFilter->currentIndex();
+
+	emit signalOnSetParams();
 }
 
 void Prm300ControlWidget::slotAtt1Up()
@@ -49,7 +72,8 @@ void Prm300ControlWidget::slotAtt1Up()
 	int value = 10;
 	int aval = 1;
 	ui->lcdAtt1->display(value);
-	emit signalSetAtt1Value(aval);
+	setPrmParams();
+	//emit signalSetAtt1Value(aval);
 }
 
 void Prm300ControlWidget::slotAtt1Down()
@@ -60,7 +84,8 @@ void Prm300ControlWidget::slotAtt1Down()
 	}
 	int value = 0;
 	ui->lcdAtt1->display(value);
-	emit signalSetAtt1Value(value);
+	setPrmParams();
+	//emit signalSetAtt1Value(value);
 }
 
 void Prm300ControlWidget::slotAtt2Up()
@@ -72,7 +97,9 @@ void Prm300ControlWidget::slotAtt2Up()
 	int value = ui->lcdAtt2->value();
 	value++;
 	ui->lcdAtt2->display(value);
-	emit signalSetAtt2Value(value);
+
+	setPrmParams();
+	//emit signalSetAtt2Value(value);
 }
 
 void Prm300ControlWidget::slotAtt2Down()
@@ -84,5 +111,7 @@ void Prm300ControlWidget::slotAtt2Down()
 	int value = ui->lcdAtt2->value();
 	value--;
 	ui->lcdAtt2->display(value);
-	emit signalSetAtt2Value(value);
+
+	setPrmParams();
+	//emit signalSetAtt2Value(value);
 }

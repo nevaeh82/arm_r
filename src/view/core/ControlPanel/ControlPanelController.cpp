@@ -71,6 +71,9 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalUp10Mhz()), this, SLOT(slotUp10MHz()));
 	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
 
+	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SIGNAL(onSignalWorkMode(int,bool)));
+	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
+
 	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
 	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
@@ -379,6 +382,11 @@ void ControlPanelController::slotSetMode(int mode)
 {
 	m_mode = mode;
 	emit signalSetMode(mode);
+}
+
+void ControlPanelController::onSlotWorkMode(int mode, bool isOn)
+{
+	m_rpcFlakonClient->sendWorkMode(mode, isOn);
 }
 
 void ControlPanelController::onMethodCalled(const QString &method, const QVariant &argument)

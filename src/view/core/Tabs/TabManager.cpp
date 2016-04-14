@@ -77,6 +77,9 @@ void TabManager::setFlakonRpc(RpcFlakonClientWrapper *rpcFlakonClient, QString r
 QString TabManager::getStationName(const int id)
 {
 	Station *t = m_stationsMap.value(id);
+	if(!t) {
+		return "";
+	}
 	return t->getName();
 }
 
@@ -178,6 +181,7 @@ void TabManager::addStationTabs()
 		tabController->getSpectrumWidget()->setZeroFrequency(station->getCenterVal());
 
 		m_dbManager->registerReceiver(tabController);
+		m_rpcFlakonClient->registerReceiver(tabController);
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
@@ -262,6 +266,11 @@ void TabManager::clearAllInformation()
 	if (m_rpcFlakonClient != NULL) {
 		m_rpcFlakonClient->stop();
 	}
+}
+
+void TabManager::onClose()
+{
+	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 void TabManager::setControlPanelController(ICorrelationListener* controller)

@@ -16,7 +16,8 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 	, m_startx(0)
 	, m_tabManager(NULL)
     , m_spectrumCounter(0)
-    , m_dbmanager(NULL)
+	, m_dbmanager(NULL)
+	,m_workFreq(0)
 {
 	m_spectrumWidget = spectrumWidget;
 
@@ -259,10 +260,16 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 		QDataStream stream(vecFFTBA);
 
 		unsigned int id; // m_header.id;
+
+		float cf;
+
 		stream >> id;
 		if (id != m_spectrumWidget->getId()) {
 			return;
 		}
+
+		stream >> cf;
+		m_spectrumWidget->setZeroFrequency(cf);
 
 		stream >> vecFFT;
 		if (!vecFFT.size()) return;
@@ -291,6 +298,18 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 
 		QVariant data(list);
 		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
+
+
+		if(m_workFreq != cf) {
+			m_responseFreq = m_currentFreq;
+			if(m_isPanoramaStart)
+			{
+				m_spectrumCounter++;
+				m_timerRepeatSetFreq.stop();
+			}
+		}
+		m_workFreq = cf;
+
 
         if(m_isPanoramaStart)
         {

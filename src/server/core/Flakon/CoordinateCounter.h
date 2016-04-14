@@ -87,12 +87,18 @@ private:
 	int m_main_point;
 	double m_corr_threshold;
 	int m_prevStation;
-	double m_centerFrequency;
+
+	bool isInit;
+	QMap<int, double> m_rangesMap;
+
 
 	ISolver* m_solver;
 
 	double m_alt;
 	DataFromFlacon m_aData;
+
+	int countChanNum;
+	double m_centerFrequency;
 
 	QString m_likeADeviceName;
 

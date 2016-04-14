@@ -1,6 +1,8 @@
 #include "CommonSpectrumTabWidget.h"
 #include "ui_CommonSpectrumTabWidget.h"
 
+#include "Info/StationConfiguration.h"
+
 CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::CommonSpectrumTabWidget)
@@ -211,7 +213,20 @@ void CommonSpectrumTabWidget::setIndicatorStateSlot(int state)
 void CommonSpectrumTabWidget::onMethodCalled(const QString &method, const QVariant &argument)
 {
 	if (RPC_SLOT_FLAKON_STATUS == method) {
-		setIndicator( argument.toInt() );
+
+		QByteArray inData = argument.toByteArray();
+		QDataStream dataStream(&inData, QIODevice::ReadOnly);
+		QList<DevState> stateList;
+		dataStream >> stateList;
+
+		foreach (DevState state, stateList) {
+			if(state.id == -1) {
+				setIndicator(1);
+				setIndicatorState(state.state);
+			}
+		}
+
+		//setIndicator( argument.toInt() );
 		//setIndicatorState(argument.toInt());
 	}
 }

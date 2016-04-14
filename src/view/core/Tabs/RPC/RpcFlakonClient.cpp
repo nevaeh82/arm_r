@@ -4,6 +4,7 @@
 #include <Rpc/RpcMessageStruct.h>
 
 #include "Tabs/RPC/RpcFlakonClient.h"
+#include "Info/StationConfiguration.h"
 
 RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
@@ -26,6 +27,7 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, this, SLOT(bandwidthReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_CORRELATION, this, SLOT(correlationReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_STATUS, this, SLOT(flakonStatusReceived(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_DEV_STATE, this, SLOT(flakonStatusReceived(QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT, this, SLOT(sloverResultReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_QUALITY_STATUS, this, SLOT(solverQualityStatusReceived(QByteArray)));
@@ -81,6 +83,11 @@ void RpcFlakonClient::sendAvarageSpectrum(const int id, const int avarage)
 	m_clientPeer->call( RPC_METHOD_AVARAGE_SPECTRUM, id, avarage );
 }
 
+void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
+{
+	m_clientPeer->call( RPC_METHOD_WORK_MODE, mode, isOn );
+}
+
 void RpcFlakonClient::requestFlakonStatus()
 {
 	m_clientPeer->call( RPC_METHOD_FLAKON_REQUEST_STATUS);
@@ -119,12 +126,14 @@ void RpcFlakonClient::clearReceiversList()
 
 void RpcFlakonClient::flakonStatusReceived(QByteArray data)
 {
-	QDataStream dataStream(&data, QIODevice::ReadOnly);
-	int state;
-	dataStream >> state;
+//	QDataStream dataStream(&data, QIODevice::ReadOnly);
+
+//	QList<DevState> stateList;
+
+//	dataStream >> stateList;
 
 	foreach( IRpcListener *listener, m_receiversList ) {
-		listener->onMethodCalled( RPC_SLOT_FLAKON_STATUS, QVariant(state) );
+		listener->onMethodCalled( RPC_SLOT_FLAKON_STATUS, QVariant(data) );
 	}
 }
 

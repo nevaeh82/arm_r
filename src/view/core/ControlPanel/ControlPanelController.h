@@ -87,6 +87,8 @@ signals:
 	void setCorrelationStatusActive(bool isActive);
 	void signalSetMode(int mode);
 
+	void onSignalWorkMode(int, bool);
+
 public slots:
 
 private slots:
@@ -115,6 +117,8 @@ private slots:
 	void changeCorrelationStatusActive(bool isActive);
 
 	void slotSetMode(int mode);
+
+	void onSlotWorkMode(int mode, bool isOn);
 
 
 

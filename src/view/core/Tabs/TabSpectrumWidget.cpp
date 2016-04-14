@@ -16,6 +16,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	m_spectrumWidgetController = new SpectrumWidgetController(m_spectrumWidget);
 	m_spectrumWidgetController->appendView(m_spectrumWidget);
 
+	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SIGNAL(onSetWorkMode(int,bool)));
+
 	insertSpectrumWidget(m_spectrumWidgetController);
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");

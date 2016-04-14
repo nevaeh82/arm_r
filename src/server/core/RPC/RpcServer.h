@@ -48,7 +48,7 @@ private slots:
 	///prm300 from rpc client
 	void setPrmFrequency(quint64 client, QString name, short freq);
 	void requestPrmFrequency(quint64 client, QString name);
-	void setPrmAtt1(quint64 client, QString name, int value);
+	void setPrmAtt1(quint64 client, QString name, QVariant value);
 	void setPrmAtt2(quint64 client, QString name, int value);
 	void setPrmFilter(quint64 client, QString name, int index);
 
@@ -62,6 +62,7 @@ private slots:
 	void requestStatus(quint64 client, QString name);
 	void requestFlakonStatus(quint64 client);
 	void sendResponseModulation(quint64 client, QString modulation);
+	void setWorkMode(quint64 client, int mode, bool isOn);
 };
 
 

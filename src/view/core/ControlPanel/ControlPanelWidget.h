@@ -54,11 +54,13 @@ signals:
 	void signalUp100Mhz();
 	void signalSetMode(int);
 
+	void signalWorkMode(int, bool);
 
 private slots:
 	void onSetCommonFrequencySlot();
 	void onSetBandWidthSlot();
 	void slotChangeMode(int index);
+	void slotOnWorkMode();
 
 public slots:
 	void slotChangeCommonFreq(int value);
