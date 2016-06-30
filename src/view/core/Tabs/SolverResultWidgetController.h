@@ -12,6 +12,8 @@
 #include "Interfaces/IRpcListener.h"
 #include "RadiolocationInterface.h"
 
+#include "SolverPacket1.pb.h"
+
 class SolverResultWidgetController : public QObject, public IController<SolverResultWidget>,
 									 public IRpcListener
 {
@@ -42,6 +44,7 @@ private slots:
 private:
 	QString getSolverResultToString(const SolveResult &result);
 	void addResultToLog(const QByteArray &data);
+	void addResultToLog1(const QByteArray &data);
 
 };
 

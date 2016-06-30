@@ -16,10 +16,15 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendCenterSignal(int,float)), this, SLOT(sendCenterSlot(int,float)));
 	connect(this, SIGNAL(recognizeSignal(int, int)), this, SLOT(recognizeSlot(int, int)));
 	connect(this, SIGNAL(sendCorrelationSignal(int, float, bool)), this, SLOT(sendCorrelationSlot(int, float, bool)));
+
 	connect(this, SIGNAL(sendAvarageSpectrumSignal(int, int)), this, SLOT(sendAvarageSpectrumSlot(int, int)));
+	connect(this, SIGNAL(sendEnableReceiverSignal(int,bool)), this, SLOT(sendEnableReceiverSlot(int, bool)));
+
 	connect(this, SIGNAL(requestFlakonStatusSignal()), this, SLOT(requestFlakonStatusSlot()));
 
 	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
+
+	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
 }
 
 RpcFlakonClientWrapper::~RpcFlakonClientWrapper()
@@ -148,6 +153,24 @@ void RpcFlakonClientWrapper::sendAvarageSpectrumSlot(int id, int avarage)
 	m_rpcClient->sendAvarageSpectrum(id, avarage);
 }
 
+void RpcFlakonClientWrapper::sendEnableReceiverSlot(int id, bool val)
+{
+	if(NULL == m_rpcClient) {
+		return;
+	}
+
+	m_rpcClient->sendEnableReceiver(id, val);
+}
+
+void RpcFlakonClientWrapper::sendSolverSetupSettingsSlot(QByteArray data)
+{
+	if(NULL == m_rpcClient) {
+		return;
+	}
+
+	m_rpcClient->sendSolverSettings( data );
+}
+
 void RpcFlakonClientWrapper::sendWorkModeSlot(int mode, bool isOn)
 {
 	if(NULL == m_rpcClient) {
@@ -202,9 +225,19 @@ void RpcFlakonClientWrapper::sendAvarageSpectrum(const int id, const int avarage
 	emit sendAvarageSpectrumSignal(id, avarage);
 }
 
+void RpcFlakonClientWrapper::sendEnableReceiver(const int id, const bool val)
+{
+	emit sendEnableReceiverSignal(id, val);
+}
+
 void RpcFlakonClientWrapper::sendWorkMode(const int mode, const bool isOn)
 {
 	emit sendWorkModeSignal(mode, isOn);
+}
+
+void RpcFlakonClientWrapper::sendSolverSetupSettings(const QByteArray &data)
+{
+	emit sendSolverSetupSettingsSignal( data );
 }
 
 void RpcFlakonClientWrapper::requestFlakonStatus()

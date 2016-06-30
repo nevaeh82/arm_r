@@ -10,6 +10,7 @@ enum BaseSettingsType
 	TypePRM300 = 2,
 	TypeAtlant = 3,
 	TypeRDS = 6,
+	TypeSolverClient = 7,
 	typeUnknown = 0
 };
 

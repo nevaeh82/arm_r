@@ -65,42 +65,62 @@ struct LocSystemConfiguration
 	int tuningMode;
 	int duration;
 	int centralFreq;
+	bool doppler;
+	int freqBand;
+
+	//Filter for correl
+	int range;
+	int shift;
 
 	LocSystemConfiguration()
 	{
+		duration = 10;
 		chanNum = 0;
 		mode = 0;
 		baseIndex = 0;
 		convolution = false;
 		spectrumMean = 0;
-		tuningMode = 0;
-		duration = 0;
+		tuningMode = 2;
 		centralFreq = 0;
+		doppler = false;
+		freqBand = 1;
+
+		//Filter for correl
+		range = 0;
+		shift = 0;
 	}
 };
 
 inline QDataStream& operator<<(QDataStream& out, const LocSystemConfiguration& object)
 {
-	return out << object.chanNum
-			   << object.mode
-			   << object.baseIndex
-			   << object.convolution
-			   << object.spectrumMean
-			   << object.tuningMode
-			   << object.duration
-			   << object.centralFreq;
+	return out	<< object.duration
+				<< object.chanNum
+				<< object.mode
+				<< object.baseIndex
+				<< object.convolution
+				<< object.spectrumMean
+				<< object.tuningMode
+				<< object.centralFreq
+				<< object.doppler
+				<< object.freqBand
+				<< object.range
+				<< object.shift;
 }
 
 inline QDataStream& operator>>(QDataStream& in, LocSystemConfiguration& object)
 {
-	return in  >> object.chanNum
-			   >> object.mode
-			   >> object.baseIndex
-			   >> object.convolution
-			   >> object.spectrumMean
-			   >> object.tuningMode
-			   >> object.duration
-			   >> object.centralFreq;
+	return in	>> object.duration
+				>> object.chanNum
+				>> object.mode
+				>> object.baseIndex
+				>> object.convolution
+				>> object.spectrumMean
+				>> object.tuningMode
+				>> object.centralFreq
+				>> object.doppler
+				>> object.freqBand
+				>> object.range
+				>> object.shift;
 }
 
 struct StationConfiguration
@@ -111,16 +131,13 @@ struct StationConfiguration
 		name		= "Unknown";
 		latitude	= 0.0;
 		longitude	= 0.0;
+		altitude	= 0.0;
 		hostPrm300	= "127.0.0.1";
 		hostADC		= "127.0.0.1";
-		portADC		= 0;
 		namePrm = "";
 		nameChannel = "";
-		portPrm = 0;
-		typePrm = 0;
 		statusPrm = "";
 		freqPrm = 0;
-		inversionPrm = "";
 		statusAdc = "";
 	}
 
@@ -132,14 +149,10 @@ struct StationConfiguration
 		longitude	= object.longitude;
 		hostPrm300	= object.hostPrm300;
 		hostADC		= object.hostADC;
-		portADC		= object.portADC;
 		namePrm		= object.namePrm;
 		nameChannel	= object.nameChannel;
-		portPrm		= object.portPrm;
-		typePrm		= object.typePrm;
 		statusPrm	= object.statusPrm;
-		freqPrm = object.freqPrm;
-		inversionPrm= object.inversionPrm;
+		freqPrm		= object.freqPrm;
 		statusAdc	= object.statusAdc;
 	}
 
@@ -149,19 +162,13 @@ struct StationConfiguration
 	QString		nameChannel;
 	double		latitude;
 	double		longitude;
+	double		altitude;
 	QString		hostPrm300;
-	quint32		portPrm;
-	quint32		typePrm;
 	bool		statusPrm;
-	bool		inversionPrm;
-	int freqPrm;
-
-
+	int			freqPrm;
 
 	bool		statusAdc;
-
 	QString		hostADC;
-	quint32		portADC;
 };
 
 inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& object)
@@ -170,16 +177,13 @@ inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& obj
 			   << object.name
 			   << object.latitude
 			   << object.longitude
+			   << object.altitude
 			   << object.hostPrm300
 			   << object.hostADC
-			   << object.portADC
 			   << object.namePrm
 			   << object.nameChannel
-			   << object.portPrm
-			   << object.typePrm
 			   << object.statusPrm
 			   << object.freqPrm
-			   << object.inversionPrm
 			   << object.statusAdc;
 }
 
@@ -189,16 +193,13 @@ inline QDataStream& operator>>(QDataStream& in, StationConfiguration& object)
 	   >> object.name
 	   >> object.latitude
 	   >> object.longitude
+	   >> object.altitude
 	   >> object.hostPrm300
 	   >> object.hostADC
-	   >> object.portADC
 	   >> object.namePrm
 	   >> object.nameChannel
-	   >> object.portPrm
-	   >> object.typePrm
 	   >> object.statusPrm
 	   >> object.freqPrm
-	   >> object.inversionPrm
 	   >> object.statusAdc;
 
 	return in;

@@ -35,7 +35,7 @@ void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 
 void TcpRDSController::createTcpDeviceCoder()
 {
-	log_debug("Creating TcpFlakonCoder...");
+	log_debug("Creating TcpRDSCoder...");
 	TcpRdsCoder* coder = new TcpRdsCoder(this);
 	m_tcpDeviceCoder = coder;
 
@@ -245,6 +245,9 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 	}
 	else if (method == RPC_METHOD_AVARAGE_SPECTRUM) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM, data ) ) );
+	}
+	else if(method == RPC_METHOD_ENABLE_RECEIVER) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_FLAKON_REQUEST_ENABLE_RECEIVER, data ) ) );
 	}
 	else if(method == RPC_METHOD_WORK_MODE_M) {
 		sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));

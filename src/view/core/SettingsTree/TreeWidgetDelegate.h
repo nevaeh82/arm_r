@@ -20,7 +20,8 @@ private:
 		DefaultMode			= 0,
 		FrequencyMode		= 2,
 		AveragingMode		= 3,
-		LeadingOPMode		= 4
+		LeadingOPMode		= 4,
+		EnableReceiverMode	= 5
 	}UiMode;
 
 	UiMode m_mode;

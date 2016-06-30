@@ -9,18 +9,23 @@
 
 #include <QDateTime>
 
+#include "RdsPacket.pb.h"
+
 #include "Info/StationConfiguration.h"
-
-#include "CRCs.h"
-
 #include "TcpDefines.h"
+#include "CRCs.h"
 
 struct PrmSettings
 {
-	int filter;
 	int att1;
 	int att2;
-	int gen;
+	QString ip;
+};
+
+enum InputDataType
+{
+	spectrum,
+	correlation
 };
 
 class TcpRdsCoder : public BaseTcpDeviceCoder
@@ -33,17 +38,13 @@ private:
 	QByteArray m_dataFromTcpSocket;
 	int cnt;
 
-	float m_bandwidth;
-	float m_shift;
-	//int m_mainSt;
-
 	int m_freq;
 
 	int m_test;
 	QString m_sTest;
 
 	QDateTime m_specTime;
-	QDateTime m_corTime;
+	InputDataType m_inputData;
 
 //	int m_chanNum;
 //	int m_mode;
@@ -61,6 +62,10 @@ private:
 	QMap<int, PrmSettings> m_mapPrmSettings;
 	QMap<int, bool> m_mapDevState;
 
+	int m_indexConv1;
+	int m_indexConv2;
+	int m_indexSpect;
+
 
 public:
 	explicit TcpRdsCoder(QObject* parent = NULL);
@@ -76,7 +81,10 @@ private:
 	MessageSP messageFromPreparedData(const QByteArray& data);
 	MessageSP pointers(int index, float cf, QVector<QPointF> vec);
 	MessageSP configure(const QList<StationConfiguration>& lst);
+
 	MessageSP correlation(quint32 point1, quint32 point2, float timediff, float veracity, QVector<QPointF> points);
+	MessageSP correlationAll(const QByteArray &data);
+
 	MessageSP detectedBandwidth(int index, QVector<QPointF> vec);
 
 	void addPreambula(QByteArray& data);

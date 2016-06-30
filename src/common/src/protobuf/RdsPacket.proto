@@ -1,0 +1,409 @@
+syntax="proto2";
+option optimize_for = LITE_RUNTIME;
+package RdsProtobuf;
+
+//#################################################################################################
+// Оборудование
+//#################################################################################################
+
+//#### Настройки приемника
+message ReceiverSettings {
+	required int32 frequency = 1;// Частота
+	required int32 attenuator1 = 2;// Первый аттенюатор. 0 = 0 дБ, 1 = 10дБ! (надо сделать один суммарный аттенюатор)
+	required int32 attenuator2 = 3;// Второй аттенюатор. От 0 до 15. Какое значение – столько и дБ. 
+}
+
+//#### Параметры приемника
+message ReceiverOptions {
+	required string title = 1;// Название (может быть нужно если приемник «отдельный»)
+	required bool status = 2;// Вкл. или выкл.
+	required string ip = 3;// IP
+	required ReceiverSettings settings = 4;// Настройки приемника
+}
+
+//#### Параметры канала (cоответствует датчику)
+message ChannelOptions {
+
+	// Координаты датчика
+	message Coordinates {
+		required double latitude = 1;// Широта (град)
+		required double longitude = 2;// Долгота (град)
+		required double altitude = 3;// Высота (м)
+	}
+
+	required string title = 1;// Название
+	required ReceiverOptions receiver = 2;// Настройки приемника
+	optional Coordinates coordinates = 3;// Координаты датчика
+}
+
+//#### Параметры платформы с АЦП
+message DeviceOptions {
+	required string title = 1;// Название
+	required bool status = 2;// Вкл. или выкл.
+	required string ip = 3;// IP
+	required int32 sync = 4;// Тип синхронизации (0 = межплатная, 1 = GPS, 2 = GPS + delay, 3 = none). Чтобы различать платформы разного типа.
+	repeated ChannelOptions channels = 5;// Параметры каналов. Сколько их столько и каналов
+}
+
+//#################################################################################################
+// Общие сообщения
+//#################################################################################################
+
+//#### График
+message Plot {
+	repeated float data = 1;// Значения Y
+	required double axis_x_start = 2;// Начальное значение по оси Х
+	required double axis_x_step = 3;// Шаг по оси Х
+}
+
+//#### Выделенная область
+message TimeFreqArea {
+	required double time_start = 1;// Начальное время (мс)
+	required double time_end = 2;// Конечное время (мс)
+	required double freq_start = 3;// Начальная частота (МГц)
+	required double freq_end = 4;// Конечная частота (МГц)
+}
+
+//#### Частотный диапазон
+message Range {
+	required double start = 1;// Начальная частота (МГц)
+	required double end = 2;// Конечная частота (МГц)
+}
+
+//#### Сообщение с инфой о сигнале/диапазоне
+message Signal {
+
+	// Параметры сигнала
+	message SignalParameters {
+		optional string system = 1;// Система связи
+		optional string modulation = 2;// Вид модуляции
+		optional string type = 3;// Тип излучения (пакетное/непрерывное)
+		// и т.д.
+	}
+
+	required Range range = 1;// Полоса сигнала
+	optional SignalParameters parameters = 2;// Параметры сигнала (г-н Кислицин)
+	optional int32 type = 3;// Тип сигнала (белый, черный, серый и т.д.). Сейчас так: -1 = не сканируем вообще.
+	optional string info = 4;// Описание
+}
+
+//#### Данные свертки
+message Convolution {
+	required int32 first_detector_index  = 1;// Индекс первого датчика
+	required int32 second_detector_index = 2;// Индекс второго датчика
+	required double delay = 3;// Задержка времени м/у приходами сигналов на датчики (сек)
+	required double delay_accuracy = 4;// СКО случайной ошибки определения задержки (cек)
+	optional double doppler = 5;// Доплеровский сдвиг (Гц)
+	optional double doppler_accuracy = 6;// СКО случайной ошибки определения доплера (Гц)
+}
+
+//#### Обнаруженный сигнал
+message DetectedSignal {
+	required int64 date_time = 1;// Время измерения
+	optional int32 detector_index = 2;// Индекс датчика который обнаружил
+	required Signal signal = 3;
+	repeated Convolution convolution = 4;// Массив со свертками
+}
+
+//#################################################################################################
+// Get, Set and Current
+//#################################################################################################
+
+// Все сообщения из этого раздела могут быть Get и Current, и некоторые Set (помечены (*)).
+
+// С помощью GetMessage клиент запрашивает настройки. В ответ клиент получает текущие настройки CurrentMessage.
+
+// Некоторые настройки клиент может задавать (помечены (*)). В ответ на SetMessage клиент получает AnswerMessage. 
+// Если все правильно то это будет Confirmation. Если задаваемые значения не прошли проверку то будет Error + сообщение с соответствующими текущими настройками CurrentMessage.
+
+
+//#### Текущий режим (*). Для включения/выключения режима, перехода в другой режим
+message Mode {
+	oneof Message {
+		int32 index = 1;// Индекс режима 
+				// 0 = нет
+				// 1 = Location. Координатометрия
+				// 2 = Analysis. Для одного канала. Спектрограмма, спектр, модуль, фаза частота и анализ г-на Кислицина (частично готов).
+				// 3 = Correction. Режим коррекции частоты по реперному излучению (не готов).
+				// 4 = Detector. Обнаружение
+		bool status = 2;// Вкл. или выкл.
+	}
+}
+
+//#### Система
+message System {
+	
+	// Параметры системы. Задавать нельзя.
+	message SystemOptions {
+		required string title = 1;// Название
+		repeated DeviceOptions devices = 2;// Параметры платформ. Сколько их столько и платформ
+		repeated ReceiverOptions separate_receivers = 3;// Параметры «отдельных» приемников. Сколько их столько и приемников (в Завирухе нет)
+	}
+	
+	// Платформа (*). Для включения/выключения платформы
+	message Device {
+		required int32 device_Index = 1;// Индекс платформы
+		required bool status = 2;// Вкл. или выкл.
+	}
+
+	// Приемник (*). Для включения/выключения приемника, настройки его частоты и аттенюаторов.
+	message Receiver {
+		required int32 device_Index = 1;// Индекс платформы
+		required int32 channel_Index = 2;// Индекс канала платфомы
+		oneof messageType {
+			bool status = 3;// Вкл. или выкл.
+			ReceiverSettings settings = 4;// Настройки приемника (частота, аттенюаторы)
+		}
+	}
+	
+	// Приемник «отдельный» (*) (в Завирухе нет)
+	message SeparateReceiver {
+		required int32 receiver_Index = 1;// Индекс «отдельного» приемника
+		oneof messageType {
+			bool status = 2;// Вкл. или выкл.
+			ReceiverSettings settings = 3;// Настройки
+		}
+	}
+	
+	oneof Message {
+		SystemOptions options = 1;
+		Device device = 2;
+		Receiver receiver = 3;
+		SeparateReceiver separate_Receiver = 4;
+	}
+}
+
+//#### Координатометрия
+message Location {
+
+	// Настройки режима «Координатометрия» (*)
+	message LocationOptions {
+
+		// Фильтр
+		message FilterOptions {
+			required int32 range = 1;// Сдвиг относительно центральной частоты (кГц)
+			required int32 shift = 2;// Полоса (кГц)
+		}
+
+		required int32 duration = 1;// Длительность сигнала (мс)
+		required int32 central_frequency = 2;// Центральная частота (МГц). Все приемники перестраиваются на эту частоту автоматом. Перестраивать их с помощью  Receiver не нужно!!!
+		required bool convolution = 3;// Вычислять ли свертку
+		required bool doppler = 4;// Вычислять ли доплеровский сдвиг
+		required int32 averaging_frequency_band = 5;// Полоса усреднения по частоте (кГц). От 1 до 500 кГц. (Для графиков)
+		required int32 frequency_tuning_mode = 6;// Режим коррекции частоты (0 = нет, 1 = коррекция по реперному излучению, 2 = tau). Пока всегда д.б. = 2.
+		required FilterOptions filter = 7;// Фильтр 
+	}
+
+	oneof Message {
+		LocationOptions options = 1;
+	}
+}
+
+//#### Обнаружение
+message Detector {
+
+	// Настройки режима «Обнаружение» (*)
+	message DetectorOptions {
+		required int32 duration = 1;// Длительность сигнала (мс)
+		required bool convolution = 2;// Рассчитывать ли свертку для обнаруженных сигналов
+		required bool doppler = 3;// Рассчитывать ли доплеровский сдвиг для обнаруженных сигналов
+		required int32 loops_number = 4;// Количество циклов на одной центральной частоте
+		required int32 averaging_frequency_band = 5;// Полоса усреднения по частоте (кГц). От 50 до 1000 кГц. (Тут не только для графиков, влияет на обнаружение)
+		repeated Range range = 6;// Диапазоны в которых будет работать детектор.
+		required double band_threshold = 7;// Порог полосы сигнала (МГц). Сигналы уже порога отбрасываются.
+	}
+
+	// Список сигналов (*). Диапазоны, которые сканировать нужно особенным способом или вообще не нужно сканировать. 
+	message DetectorDefinedList {
+		repeated Signal signal = 1;// Обнаруженные в этих диапазонах сигналы обрабатываются соответствующим type образом.
+	}
+
+	oneof Message {
+		DetectorOptions options = 1;
+		DetectorDefinedList defined_signals = 2;
+	}
+}
+
+//#### Анализ 
+message Analysis {
+
+	// Настройки режима «Анализ» (*)
+	message AnalysisOptions {
+		required int32 detector_index = 1;// Индекс датчика (канала)
+		required int32 duration = 2;// Длительность сигнала (мс)
+		required int32 central_frequency = 3;// Центральная частота (МГц)
+		required TimeFreqArea selected_area = 4;// Выделенная для анализа область
+		required TimeFreqArea zoomed_area = 5;// Область зума спектрограммы (это чтобы ее перерисовать)
+		required bool analysis = 6;// Делать ли тех. анализ Кислицина
+	}
+	
+	oneof Message {
+		AnalysisOptions options = 1;
+	}
+}
+
+//#### Коррекция частоты (скоро)
+message Correction {
+}
+
+//#################################################################################################
+// Data
+//#################################################################################################
+
+// Сообщения из этого раздела содержат результаты работы режимов (режим указан в названии сообщения). Отправлять их может только сервер.
+
+//#### Статус сигналов. Для всех режимов
+message DataStatus {
+	repeated bool status = 1;// Статус сигнала соответствующего канала. Сколько же сколько и каналов. Если false значит оцифровать сигнал не удалось.
+}
+
+//#### График спектра режима Location (для одного датчика)
+message LocationSpectrum {
+	required Plot plot = 1;// График (по оси Х МГц)
+	required int32 detector_index = 2;// Индекс датчика
+}
+
+//#### График свертки режима Location (для одной пары датчиков)
+message LocationConvolution {
+	required Plot plot = 1;// График (по оси Х метры)	
+	required Convolution convolution = 2;// Свертка (для отображения, сами же свертки для отправки в решатель в LocationData)
+}
+
+//#### Свертки режима Location (для всех датчиков сразу, для отправки в решатель) Сделал, чтобы все сразу было и потом можно будет отключать передачу спектров. 
+message LocationData {
+	required int64 date_time = 1;// Время измерения
+	required Signal signal = 2;// Сигнал, для которого проводились измерения
+	repeated Convolution convolution = 3;// Массив со свертками
+}
+
+//#### График спектра режима Detector (для одного датчика)
+message DetectorSpectrum {
+	required Plot plot = 1;// График (по оси Х МГц)
+	required int32 detector_index = 2;// Индекс датчика
+	required int32 central_frequency = 3;// Частота приемника (в МГц) (это чтобы видеть где сканирует обнаружитель)
+	repeated int32 first_index = 4;// Индекс (номер точки в data) начальной частоты обнаруженного сигнала (это чтобы выделить на графике другим цветом. Сами же обнаруженные сигналы в DetectorDetected).
+	repeated int32 last_index = 5;// Индекс (номер точки в data) конечной частоты обнаруженного сигнала (это чтобы выделить на графике другим цветом. Сами же обнаруженные сигналы в DetectorDetected).
+}
+
+//#### Обнаруженные сигналы режима Detector
+message DetectorDetected {
+	repeated DetectedSignal signal = 1;
+}
+
+//#### Спектрограмма режима Analysis
+message AnalysisSpectrogram {
+	repeated float data = 1;// Значения в точках
+	required int32 columns = 2;// Количество «столбцов»
+	required TimeFreqArea area = 3;// Отображаемая область
+}
+
+//#### Спектр режима Analysis
+message AnalysisSpectrum {
+	required Plot plot = 1;// График (по оси Х МГц)
+}
+
+//#### Обнаруженные библиотекой тех. анализа Кислицина сигналы 
+message AnalysisDetected {
+	repeated DetectedSignal signal = 1;// Обнаруженные сигналы (тут в info сист. связи, модуляция и т.д., потом будет в SignalParameters, когда будет ясно что нужно)
+}
+
+//#################################################################################################
+// Сообщение от клиента
+//#################################################################################################
+
+message ClientMessage {
+	
+	// Запросить (забитые значения игнорируются, текущие значения в ответе сервера)
+	message GetMessage {
+		oneof Message { 
+			Mode mode = 1;
+			System system = 2;
+			Location location = 3;
+			Detector detector = 4;
+			Analysis analysis = 5;
+		}
+	}
+
+	// Задать
+	message SetMessage {
+		oneof Message { 
+			Mode mode = 1;
+			System system = 2;
+			Location location = 3;
+			Detector detector = 4;
+			Analysis analysis = 5;
+		}
+	}
+
+	oneof MessageType { 
+		GetMessage get = 1;
+		SetMessage set = 2;		
+	}
+}
+
+//#################################################################################################
+// Сообщение от сервера
+//#################################################################################################
+
+message ServerMessage{	
+
+	// Текущие настройки
+	message CurrentMessage {
+		oneof Request { 
+			Mode mode = 1;
+			System system = 2;
+			Location location = 3;
+			Detector detector = 4;
+			Analysis analysis = 5;
+		}
+	}
+
+	// Данные от режимов
+	message DataMessage{
+		oneof RequestType { 
+			DataStatus data_status = 1;
+			LocationSpectrum location_spectrum = 2;
+			LocationConvolution location_convolution = 3;
+			LocationData location_data = 4;
+			DetectorSpectrum detector_spectrum = 5;
+			DetectorDetected detector_detected = 6;
+			AnalysisSpectrogram analysis_spectrogram = 7;
+			AnalysisSpectrum analysis_spectrum = 8;
+			AnalysisDetected analysis_detected = 9;
+		}
+	}
+	
+	// Ответ
+	message AnswerMessage{
+		// Сообщение об ошибке
+		message Error {
+			required string str = 1;
+		}
+		// Подтверждение Set запроса. В случае Get запроса подтверждением является пакет с запрашиваемыми данными.
+		message Confirmation {
+			required string str = 1;
+		}
+	
+		oneof RequestType {
+			Error error = 1;
+			Confirmation confirmation = 2;
+		}
+	}
+
+	oneof MessageType { 
+		CurrentMessage current = 1;
+		DataMessage data = 2;	
+		AnswerMessage answer = 3;
+	}
+}
+
+//#################################################################################################
+// Пакет
+//#################################################################################################
+
+message Packet {
+	oneof PacketType { 
+		ClientMessage from_client = 1;
+		ServerMessage from_server = 2;
+	}
+}

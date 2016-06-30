@@ -58,7 +58,6 @@ void RpcConfigReader::readStationListInternalSlot(const QString& fileName)
 			stationConfiguration.longitude		= stationSettings.value("Longitude").toDouble();
 			stationConfiguration.hostPrm300		= stationSettings.value("IPprm300").toString();
 			stationConfiguration.hostADC		= stationSettings.value("IPADC").toString();
-			stationConfiguration.portADC		= stationSettings.value("portADC").toUInt();
 			stationSettings.endGroup();
 
 			stationList.append(stationConfiguration);

@@ -84,6 +84,10 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
         index = 0;
     }
 
+	//log_debug( QString("Data process : %1  : %2 index: %3").arg(index*vecFFT.size()).arg(m_pointCountWhole).arg(index) );
+
+	int t1 = index*vecFFT.size();
+	int t2 = m_pointCountWhole;
 
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
@@ -98,6 +102,11 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 int SpectrumWidgetDataSource::findIndex(qreal startx)
 {
 	int list_count = m_listStartx.size();
+
+	if(startx == 0) {
+		return 0;
+	}
+
 	if(m_listStartx.isEmpty())
 	{
 		m_listStartx.push_back(startx);
@@ -139,20 +148,22 @@ bool SpectrumWidgetDataSource::startPanorama(bool start)
 {
 	if(start)
 	{
-        if(m_spectrumWidget != NULL)
-            m_spectrumWidget->setZeroFrequency(m_startFreq);
+		if(m_spectrumWidget != NULL)
+			m_spectrumWidget->setZeroFrequency(m_startFreq);
 
-        slotChangeFreq();
+		slotChangeFreq();
 		return true;
 	}
 
-    m_timerRepeatSetFreq.stop();
+	m_timerRepeatSetFreq.stop();
 	return false;
 	/// start timer for loop panorama frequency
 }
 
 void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 {
+	log_debug( QString("BANDWIDTH %1 :::::::").arg(bandwidth) );
+
 	if(m_bandwidth != bandwidth)
 	{
 		m_bandwidth = bandwidth;
@@ -186,7 +197,7 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 	m_isPanoramaStart = enabled;
 
 	if (!m_isPanoramaStart){
-        startPanorama(enabled);
+		startPanorama(enabled);
 		log_debug("panorama stopped");
 		setBandwidth(m_bandwidthSingleSample);
 		return;
@@ -246,10 +257,11 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
 			return;
 		}
-        if(m_isPanoramaStart && m_spectrumCounter == 0)
-        {
-            return;
-        }
+
+//		if(m_isPanoramaStart && m_spectrumCounter == 0)
+//		{
+//			return;
+//		}
 
 
 		bool isComplex = true;
@@ -269,7 +281,11 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 		}
 
 		stream >> cf;
-		m_spectrumWidget->setZeroFrequency(cf);
+
+		if(!m_isPanoramaStart)
+		{
+			m_spectrumWidget->setZeroFrequency(cf);
+		}
 
 		stream >> vecFFT;
 		if (!vecFFT.size()) return;
@@ -300,31 +316,31 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
 
 
-		if(m_workFreq != cf) {
-			m_responseFreq = m_currentFreq;
+		//if(m_workFreq != cf) {
 			if(m_isPanoramaStart)
 			{
+				m_responseFreq = m_currentFreq;
 				m_spectrumCounter++;
 				m_timerRepeatSetFreq.stop();
 			}
-		}
+		//}
 		m_workFreq = cf;
 
 
-        if(m_isPanoramaStart)
-        {
-            if(m_responseFreq != m_currentFreq)
-            {
-                m_spectrumCounter = 0;
-                return;
-            }
-            if(m_spectrumCounter > 3)
-            {
-                m_spectrumCounter = 0;
-                slotChangeFreq();
-            }
-            m_spectrumCounter++;
-        }
+		if(m_isPanoramaStart)
+		{
+			if(m_responseFreq != m_currentFreq)
+			{
+				m_spectrumCounter = 0;
+				return;
+			}
+			if(m_spectrumCounter > 3)
+			{
+				m_spectrumCounter = 0;
+				slotChangeFreq();
+			}
+			m_spectrumCounter++;
+		}
 		return;
 	}
 

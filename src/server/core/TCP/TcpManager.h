@@ -26,6 +26,8 @@
 #include "Flakon/Server/PServer.h"
 #include "Flakon/Server/ClientServer.h"
 
+#include "Flakon/Server/SolverClient1.h"
+
 
 class TcpManager : public QObject, public ITcpManager, public ITcpListener, public IRpcListener
 {
@@ -57,6 +59,7 @@ private:
 	CoordinateCounter* m_coordinatesCounter;
 	PServer*		   m_pServer;
 	ClientTcpServer* m_clientTcpServer;
+	SolverClient1* m_clientSolver;
 
 	QMap<float, CoordinateCounter* > m_mapCoordinateCounter;
 

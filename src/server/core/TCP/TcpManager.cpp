@@ -14,7 +14,7 @@ TcpManager::TcpManager(QObject* parent)
 	, m_isCorrelAfterPoints(false)
 	, m_rpcConfigReader(NULL)
 {
-	m_coordinatesCounter = new CoordinateCounter(FLAKON_COORDINATE_COUNTER);
+	m_coordinatesCounter = new CoordinateCounter("rds");
 	m_coordinatesCounter->registerReceiver(this);
 
 	QThread* coordinateCounterThread = new QThread;
@@ -162,6 +162,23 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 			m_rdsController->setCoordinateCounter(m_coordinatesCounter);
 
 			break;
+		case SOLVER_CLIENT_DEVICE:
+			//QThread* clientSolverThread = new QThread;
+			controller = new SolverClient1(deviceName);
+			m_clientSolver = (SolverClient1*)controller;
+			m_coordinatesCounter->registerReceiver(m_clientSolver);
+
+			//m_clientSolver->getSolverEncoder()->registerReceiver(this);
+
+//			connect(clientSolverThread, SIGNAL(started()), m_clientSolver, SLOT(connectToSolverServer()));
+//			connect(m_clientSolver, SIGNAL(destroyed()), clientSolverThread, SLOT(quit()));
+//			connect(this, SIGNAL(threadTerminateSignal()), clientSolverThread, SLOT(quit()));
+//			connect(this, SIGNAL(threadTerminateSignal()), m_clientSolver, SLOT(deleteLater()));
+//			connect(clientSolverThread, SIGNAL(finished()), m_clientSolver, SLOT(stopServer()));
+//			connect(clientSolverThread, SIGNAL(finished()), clientSolverThread, SLOT(deleteLater()));
+//			m_clientSolver->moveToThread(clientSolverThread);
+//			clientSolverThread->start();
+			break;
 		default:
 			break;
 	}
@@ -190,8 +207,11 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	m_controllersMap.insert(deviceName, controller);
 
 	controller->registerReceiver(this);
-	if(m_rdsController) {
+	if(type == RDS_TCP_DEVICE) {
 		m_rdsController->registerReceiver(m_coordinatesCounter);
+	} else if(type == SOLVER_CLIENT_DEVICE) {
+		m_clientSolver->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
+		m_clientSolver->registerReceiver(this);
 	} else if (type == FLAKON_TCP_DEVICE) {
 		controller->registerReceiver(m_coordinatesCounter);
 	}
@@ -294,7 +314,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_POINTS, data, sender );
 
-				log_debug("SEND RDS POINTS!");
+				//log_debug("SEND RDS POINTS!");
 			}
 			else if(messageType == TCP_RDS_ANSWER_SYSTEM) {
 				if(m_rpcConfigReader) {
@@ -320,6 +340,36 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->call( RPC_SLOT_FLAKON_DEV_STATE, data, sender );
 			} else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data, sender );
+			}
+			else if( messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1 ) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_1, data);
+			}
+			else if( messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT_1 ) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_RESULT_1, data);
+			}
+			else if( messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_SOLVER_SETUP_1 ) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1, data);
+			}
+			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ERRORS) {
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, data, sender );
+			}
+			break;
+		case SOLVER_CLIENT_DEVICE:
+			{
+				if( messageType != TCP_SOLVER_MESSAGE ) {
+					break;
+				}
+
+				QByteArray inData = data.toByteArray();
+
+				if( inData == QByteArray() ) {
+					break;
+				} else {
+					m_clientSolver->getSolverEncoder()->readProtobuf( inData );
+				}
 			}
 			break;
 		case FLAKON_TCP_DEVICE:
@@ -350,6 +400,14 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE) {
 				//FROM COORDINATES COUNTER
 				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_SINGLE, data);
+			}
+			else if( TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1 ) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_DEF_1, data);
+			}
+			else if( TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT_1 ) {
+				//FROM COORDINATES COUNTER
+				m_rpcServer->call( RPC_SLOT_SERVER_SEND_BPLA_RESULT_1, data);
 			}
 			else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT) {
 				//FROM COORDINATES COUNTER

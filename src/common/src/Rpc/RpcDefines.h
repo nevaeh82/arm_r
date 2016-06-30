@@ -11,6 +11,9 @@
 #define RPC_METHOD_SS_CORRELATION1                "rpc_slot_ss_correlation1"
 
 #define RPC_METHOD_AVARAGE_SPECTRUM       "rpc_slot_avarage_spectrum"
+#define RPC_METHOD_ENABLE_RECEIVER        "rpc_slot_enable_receiver"
+
+#define RPC_METHOD_SOLVER_SETTINGS_SETUP        "rpc_slot_solver_settings_setup"
 
 #define RPC_METHOD_WORK_MODE       "rpc_slot_work_mode"
 #define RPC_METHOD_WORK_MODE_M       "rpc_slot_work_mode_m"
@@ -38,6 +41,8 @@
 #define RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION    "rpc_slot_server_send_response_modulation"
 #define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
 #define RPC_SLOT_SERVER_SEND_BPLA_RESULT			"rpc_slot_server_send_solver_result"
+#define RPC_SLOT_SERVER_SEND_BPLA_RESULT_1			"rpc_slot_server_send_solver_result_1"
+#define RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1		"rpc_slot_server_send_answer_result_1"
 #define RPC_SLOT_SERVER_SEND_HYPERBOLA				"rpc_slot_server_send_hyperbola"
 #define RPC_SLOT_SERVER_SEND_QUALITY_STATUS			"rpc_slot_server_send_quality_status"
 #define RPC_SLOT_SERVER_SEND_SOLVER_ERRORS			"rpc_slot_server_send_solver_errors"
@@ -55,6 +60,7 @@
 
 /// BPLA
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF               "rpc_slot_server_send_bpla_def"
+#define RPC_SLOT_SERVER_SEND_BPLA_DEF_1               "rpc_slot_server_send_bpla_def_1"
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF_AUTO          "rpc_slot_server_send_bpla_def_auto"
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF_SINGLE        "rpc_slot_server_send_bpla_def_single"
 

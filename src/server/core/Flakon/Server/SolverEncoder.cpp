@@ -187,3 +187,65 @@ QByteArray SolverEncoder::encode(const QByteArray &data)
 
 	return dataToSend;
 }
+
+QByteArray SolverEncoder::decode(const MessageSP message) {
+	QByteArray dataToSend;
+
+	//Zaviruha::Packet packet;
+	SolverClient::Packet packet;
+
+	SolverClient::Packet::Command* packetCommand = new SolverClient::Packet::Command();
+	packet.set_allocated_command(packetCommand);
+
+	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
+		packetCommand->set_action(SolverClient::sendSolverClientData);
+
+		SolverClient::Packet::ArgumentVariant* packetArgs = new SolverClient::Packet::ArgumentVariant();
+		SolverClient::Packet::ArgumentVariant::SolverInput* arg = new SolverClient::Packet::ArgumentVariant::SolverInput();
+		packetArgs->set_allocated_solverinput(arg);
+		packetCommand->set_allocated_arguments(packetArgs);
+		toProtobufSolverData( arg, message->data() );
+	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
+		packetCommand->set_action(SolverClient::sendSolverClientBla);
+	} else {
+		return QByteArray();
+	}
+
+	unsigned int size = packet.ByteSize();
+	dataToSend.resize(size);
+	packet.SerializeToArray(dataToSend.data(), size);
+
+	addPreambula(dataToSend);
+	return dataToSend;
+}
+
+void SolverEncoder::toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray &data) {
+	QDataStream stream(&data, QIODevice::ReadOnly);
+
+	DataFromFlaconInt receiveData;
+	double centerFrequency;
+	stream >> receiveData.numOfReferenceDetector_;
+	stream >> receiveData.time_;
+	stream >> receiveData.ranges_;
+	stream >> centerFrequency;
+
+	foreach (double range, receiveData.ranges_) {
+		arg->add_delays(range);
+	}
+
+//	QDateTime dateTime = QDateTime::currentDateTime();
+//	//Fill time form solver
+//	//TODO new solver has QDateTime
+//	dateTime.setTime(receiveData.time_);
+	arg->set_datetime( receiveData.time_ );
+	arg->set_centerfrequency(centerFrequency);
+}
+
+
+
+void SolverEncoder::addPreambula(QByteArray& data)
+{
+	uint size = data.size();
+	data.prepend((char*)&size, sizeof(unsigned int));
+	data.prepend(TCP_ZAVIRUHA_PREAMBULA_SOLVER);
+}

@@ -34,6 +34,7 @@
 #include "Server/Structs.h"
 
 #include "Server/ClientServer.h"
+#include "ProtoTypes1.pb.h"
 
 // Copy/paste from ARM OD UavDefines.h
 //typedef struct UAVPositionDataEnemy
@@ -95,7 +96,7 @@ private:
 	ISolver* m_solver;
 
 	double m_alt;
-	DataFromFlacon m_aData;
+	DataFromFlaconInt m_aData;
 
 	int countChanNum;
 	double m_centerFrequency;
@@ -125,12 +126,18 @@ public:
 	void onSendHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void onErrorOccured(const ErrorType& error_type, const QString& str);
 
+	void onSolver1ProtoData(const int &result, const QByteArray& data );
+	void onSolver1SetupAnswer(const QByteArray &data);
+
 signals:
 	void signalGetDataFromRadioLocation(const SolveResult& , const DataFromRadioLocation&);
 	void signalGetDataFromRadioLocationManualHeight(const SolveResult& , const DataFromRadioLocation&);
 	void signalGetOneDataFromRadioLocation(const SolveResult&, const OneDataFromRadioLocation&, const OneDataFromRadioLocation&);
 	void signalGetHyperbolesDataFromRadioLocation(const SolveResult&, const HyperbolesFromRadioLocation&);
 	void signalError(int, QString);
+
+	void signal1ProtoData( int, QByteArray data );
+	void signal1SetupAnswer( QByteArray data );
 
 
 	// ICoordinateCounter interface
@@ -146,8 +153,12 @@ private:
 
 	QList<UAVPositionDataEnemy> encodeSolverData(const DataFromRadioLocation& data, bool useCommonAlt = false);
 	UAVPositionDataEnemy encodeSolverData(const OneDataFromRadioLocation& data);
+
 	void sendDataToClientTcpServer();
+	void sendDataToClientTcpServer1(const SolverProtocol::Packet &data);
+
 	bool getIsSolverServer();
+	uint getSolverVersion();
 
 public slots:
 	void initSolver();
@@ -159,6 +170,9 @@ private slots:
 	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void slotErrorOccured(int error_type, QString str);
 	void slotSetCenterFrequency(const double& frequency);
+
+	void slotSolver1ProtoData( int result, QByteArray data );
+	void slotSolver1SetupAnswer(QByteArray data);
 
 signals:
 	void signalFinished();

@@ -18,6 +18,9 @@ public:
 	void recognize(const int id, const int type);
 	void sendCorrelation(const int id, const float frequency, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);
+	void sendEnableReceiver(const int id, const bool val);
+
+	void sendSolverSettings(const QByteArray& data);
 
 	void requestFlakonStatus();
 
@@ -34,6 +37,7 @@ protected slots:
 	void flakonStatusReceived(QByteArray data);
 
 	void sloverResultReceived(QByteArray data);
+	void sloverResultReceived1(QByteArray data);
 
 signals:
 	void signalEnableCorrelation(int, float, bool);
@@ -41,8 +45,8 @@ signals:
 private slots:
 	void slotEnableCorrelation(int, float, bool);
 	void solverQualityStatusReceived(QByteArray data);
-	void solverErrorsReceived(QByteArray data);
-
+	void solverErrorsReceived(QByteArray data);	
+	void sloverAnswerReceived1(QByteArray data);
 };
 
 #endif // RPCFLAKONCLIENT_H

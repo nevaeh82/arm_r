@@ -75,6 +75,9 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
 	QString second = list.at(list.size() - 1).toString();
 
 	setLabelName(base, second);
+
+	bool t = m_graphicsWidget->isVisible();
+
 	m_graphicsWidget->ZoomOutFull();
 }
 

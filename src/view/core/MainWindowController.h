@@ -27,6 +27,7 @@
 
 #include "Tabs/SolverResultWidgetController.h"
 #include "Tabs/SolverErrorsWidgetController.h"
+#include "Tabs/SolverSetupWidgetController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
@@ -50,8 +51,9 @@ private:
 
 	SolverResultWidgetController* m_solverWidgetController;
 	SolverErrorsWidgetController* m_solverErrorsWidgetController;
+	SolverSetupWidgetController* m_solverSetupWidgetController;
 
-    QThread *m_rpcClientThread;
+	QThread *m_rpcClientThread;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -66,12 +68,15 @@ private slots:
 	void serverStartedSlot();
 	void slotShowLists();
 	void slotShowSolverLog();
+	void slotShowSolverSetup();
 
 	void rpcConnectionEstablished();
 	void startTabManger();
 	void resetServer();
 
 	void slotShowSolverErrors();
+
+	void slotSendSolverSetupCommand( QByteArray data );
 private:
 
 	void init();

@@ -49,6 +49,16 @@ QWidget *TreeWidgetDelegate::createEditor(QWidget *parent, const QStyleOptionVie
 			}
 			return editor;
 		}
+		case EnableReceiverMode: {
+			QComboBox* editor = new QComboBox(parent);
+
+			editor->addItem("On");
+			editor->addItem("Off");
+
+			editor->setCurrentIndex(0);
+
+			return editor;
+		}
 
 		case DefaultMode:
 		default:
@@ -67,6 +77,16 @@ void TreeWidgetDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 			break;
 		}
 		case LeadingOPMode: {
+			QComboBox* cbEditor = static_cast<QComboBox*>(editor);
+			QString text = index.model()->data(index, Qt::EditRole).toString();
+			int value = cbEditor->findText(text);
+			cbEditor->setCurrentIndex(value);
+
+			connect(cbEditor, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
+
+			break;
+		}
+		case EnableReceiverMode: {
 			QComboBox* cbEditor = static_cast<QComboBox*>(editor);
 			QString text = index.model()->data(index, Qt::EditRole).toString();
 			int value = cbEditor->findText(text);
@@ -133,6 +153,8 @@ bool TreeWidgetDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
 		m_mode = AveragingMode;
 	} else if(propName == DB_LEADING_OP_PROPERTY) {
 		m_mode = LeadingOPMode;
+	} else if(propName == DB_ENABLE_RECEIVER_PROPERTY) {
+		m_mode = EnableReceiverMode;
 	} else {
 		m_mode = DefaultMode;
 	}

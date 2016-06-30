@@ -19,6 +19,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_rpcConfigClient = NULL;
 	m_rpcSettingsManager = NULL;
 	m_solverWidgetController = NULL;
+	m_solverSetupWidgetController = NULL;
 	m_solverErrorsWidgetController = NULL;
 
 	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
@@ -55,6 +56,13 @@ MainWindowController::~MainWindowController()
 		m_solverWidgetController->appendView(NULL);
 		resultWidget->close();
 		delete resultWidget;
+	}
+
+	SolverSetupWidget* setupWidget = m_solverSetupWidgetController->getView();
+	if( setupWidget ) {
+		m_solverSetupWidgetController->appendView(NULL);
+		setupWidget->close();
+		delete setupWidget;
 	}
 
 	SolverErrorsWidget* errorsWidget = m_solverErrorsWidgetController->getView();
@@ -116,13 +124,20 @@ void MainWindowController::init()
 	m_solverWidgetController = new SolverResultWidgetController(this);
 	m_solverWidgetController->appendView(solverWidget);
 
+	SolverSetupWidget* solverSetupWidget = new SolverSetupWidget(m_view);
+	m_solverSetupWidgetController = new SolverSetupWidgetController(this);
+	m_solverSetupWidgetController->appendView(solverSetupWidget);
+
 	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
 	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
+	connect(m_view, SIGNAL(signalShowSolverSetup()), this, SLOT(slotShowSolverSetup()));
 	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
+
+	connect( m_solverSetupWidgetController, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
 
 	serverStartedSlot();
 }
@@ -180,9 +195,19 @@ void MainWindowController::slotShowSolverLog()
 	m_solverWidgetController->slotShowWidget();
 }
 
+void MainWindowController::slotShowSolverSetup()
+{
+	m_solverSetupWidgetController->slotShowWidget();
+}
+
 void MainWindowController::slotShowSolverErrors()
 {
 	m_solverErrorsWidgetController->slotShowWidget();
+}
+
+void MainWindowController::slotSendSolverSetupCommand(QByteArray data)
+{
+	m_rpcFlakonClient->sendSolverSetupSettings( data );
 }
 
 void MainWindowController::rpcConnectionEstablished()
@@ -196,6 +221,9 @@ void MainWindowController::startTabManger()
 {
 	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
 	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
+
+	m_rpcFlakonClient->deregisterReceiver(m_solverSetupWidgetController);
+	m_rpcFlakonClient->registerReceiver(m_solverSetupWidgetController);
 
 	m_rpcFlakonClient->deregisterReceiver(m_solverErrorsWidgetController);
 	m_rpcFlakonClient->registerReceiver(m_solverErrorsWidgetController);

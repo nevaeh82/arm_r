@@ -44,6 +44,7 @@ private slots:
 	void recognize(quint64 client, int id, int);
 	void ssCorrelation(quint64 client, int id, float frequency, bool enable);
 	void setAvarageSpectrum(quint64 client, int id, int avarage);
+	void setEnableReceiver(quint64 client, int id, bool val);
 
 	///prm300 from rpc client
 	void setPrmFrequency(quint64 client, QString name, short freq);
@@ -63,6 +64,7 @@ private slots:
 	void requestFlakonStatus(quint64 client);
 	void sendResponseModulation(quint64 client, QString modulation);
 	void setWorkMode(quint64 client, int mode, bool isOn);
+	void setSolverSettingsSetup(quint64 client, QByteArray data);
 };
 
 

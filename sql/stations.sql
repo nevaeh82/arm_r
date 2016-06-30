@@ -38,7 +38,12 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (3,'Гал','192.168.10.24'),(4,'Пичора','192.168.110.14'),(5,'Набакиа','192.168.110.23'),(6,'Таглан','192.168.110.15'),(7,'Очамчир','192.168.110.16'),(8,'Папынрхуа','192.168.110.21');
+INSERT INTO `station` VALUES (3,'Канал 0','0'),
+							 (4,'Канал 1','0'),
+							 (5,'Канал 2','0'),
+							 (6,'Канал 3','0'),
+							 (7,'Канал 4','0'),
+							 (8,'Канал 5','0');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 

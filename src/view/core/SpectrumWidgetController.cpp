@@ -129,12 +129,16 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 		float* spectrum = list.at(0).value<float*>();
 		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
 
+
+		//log_debug(QString("Setup Spectrum : %1").arg(m_name));
+
 		if (list.count() == 2){
 			setSignal(spectrum, spectrumPeakHold);
 		} else {
 			int pointCount = list.at(2).toInt();
 			double bandwidth = list.at(3).toDouble();
 			bool isComplex = list.at(4).toBool();
+
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
 		//m_graphicsWidget->ZoomOutFull();
@@ -160,16 +164,16 @@ void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnable
 	correlationFlag = isEnabled;
 
 	if(correlationFlag) {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Correlation"));
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	}
 	else {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Correlation"));
+		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 	}
 }
 
 void SpectrumWidgetController::updateDBAreas()
 {
-	m_graphicsWidget->ClearAllDetectedAreas();
+	//m_graphicsWidget->ClearAllDetectedAreas();
 
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
@@ -354,7 +358,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 	stream >> vec;
 
-	m_graphicsWidget->ClearAllDetectedAreas();
+	//m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ /*+ m_current_frequency*/, 0, (*it).y()*TO_MHZ /*+ m_current_frequency*/, 0, false);
@@ -397,7 +401,7 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	{
 		return;
 	}
-	m_graphicsWidget->ClearAllDetectedAreas();
+	//m_graphicsWidget->ClearAllDetectedAreas();
 	updateDBAreas();
 
 	if(m_current_frequency == val*TO_MHZ) {

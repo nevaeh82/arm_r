@@ -30,6 +30,8 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_FLAKON_DEV_STATE, this, SLOT(flakonStatusReceived(QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT, this, SLOT(sloverResultReceived(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_BPLA_RESULT_1, this, SLOT(sloverResultReceived1(QByteArray)));
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1, this, SLOT(sloverAnswerReceived1(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_QUALITY_STATUS, this, SLOT(solverQualityStatusReceived(QByteArray)));
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, this, SLOT(solverErrorsReceived(QByteArray)));
 
@@ -75,12 +77,21 @@ void RpcFlakonClient::recognize(const int id, const int type)
 void RpcFlakonClient::sendCorrelation(const int id, const float frequency, bool enable)
 {
 	emit signalEnableCorrelation(id, frequency, enable);
-	//	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, station->getId(), enable );
 }
 
 void RpcFlakonClient::sendAvarageSpectrum(const int id, const int avarage)
 {
 	m_clientPeer->call( RPC_METHOD_AVARAGE_SPECTRUM, id, avarage );
+}
+
+void RpcFlakonClient::sendEnableReceiver(const int id, const bool val)
+{
+	m_clientPeer->call( RPC_METHOD_ENABLE_RECEIVER, id, val );
+}
+
+void RpcFlakonClient::sendSolverSettings(const QByteArray &data)
+{
+	m_clientPeer->call( RPC_METHOD_SOLVER_SETTINGS_SETUP, data );
 }
 
 void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
@@ -95,7 +106,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
-	log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
+//	log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}
@@ -141,6 +152,20 @@ void RpcFlakonClient::sloverResultReceived(QByteArray data)
 {
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_BPLA_RESULT, data );
+	}
+}
+
+void RpcFlakonClient::sloverResultReceived1(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_BPLA_RESULT_1, data );
+	}
+}
+
+void RpcFlakonClient::sloverAnswerReceived1(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1, data );
 	}
 }
 

@@ -19,7 +19,12 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_SET_CENTER, this, SLOT(setCenter(quint64, int, float)));
 	m_serverPeer->attachSlot(RPC_METHOD_RECOGNIZE, this, SLOT(recognize(quint64, int, int)));
 	m_serverPeer->attachSlot(RPC_METHOD_SS_CORRELATION, this, SLOT(ssCorrelation(quint64,int,float,bool)));
+
 	m_serverPeer->attachSlot(RPC_METHOD_AVARAGE_SPECTRUM, this, SLOT(setAvarageSpectrum(quint64,int,int)));
+	m_serverPeer->attachSlot(RPC_METHOD_ENABLE_RECEIVER, this, SLOT(setEnableReceiver(quint64,int,bool)));
+
+	m_serverPeer->attachSlot(RPC_METHOD_SOLVER_SETTINGS_SETUP, this, SLOT(setSolverSettingsSetup(quint64, QByteArray)));
+
 	m_serverPeer->attachSlot(RPC_METHOD_WORK_MODE, this, SLOT(setWorkMode(quint64,int,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FREQUENCY, this, SLOT(setPrmFrequency(quint64, QString, short)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_REQUEST_FREQUENCY, this, SLOT(requestPrmFrequency(quint64,QString)));
@@ -165,6 +170,23 @@ void RpcServer::setAvarageSpectrum(quint64 client, int id, int avarage)
 	dataStream << avarage;
 
 	dispatch( RPC_METHOD_AVARAGE_SPECTRUM, QVariant(byteArray), client );
+}
+
+void RpcServer::setEnableReceiver(quint64 client, int id, bool val)
+{
+	Q_UNUSED( id );
+
+	QByteArray byteArray;
+	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+	dataStream << id;
+	dataStream << val;
+
+	dispatch( RPC_METHOD_ENABLE_RECEIVER, QVariant(byteArray), client );
+}
+
+void RpcServer::setSolverSettingsSetup(quint64 client, QByteArray data) {
+
+	dispatch( RPC_METHOD_SOLVER_SETTINGS_SETUP, QVariant(data), 0 );
 }
 
 void RpcServer::setWorkMode(quint64 client, int mode, bool isOn)

@@ -2,15 +2,16 @@
 
 #include "TcpRdsCoder.h"
 
-#include "RdsPacket.pb.h"
-
 #include <QDebug>
 
 #define TO_KHZ 1000
-#define TIME_DEL 0
+#define TIME_DEL 100
 
 TcpRdsCoder::TcpRdsCoder(QObject* parent) :
-	BaseTcpDeviceCoder(parent)
+	BaseTcpDeviceCoder(parent),
+	m_indexConv1(-1),
+	m_indexConv2(-1),
+	m_indexSpect(-1)
 {
 	m_residueLength = 0;
 	cnt = 0;
@@ -18,7 +19,8 @@ TcpRdsCoder::TcpRdsCoder(QObject* parent) :
 	m_locConf.duration = 3;
 
 	m_specTime = QDateTime::currentDateTime();
-	m_corTime = QDateTime::currentDateTime();
+
+	m_inputData = spectrum;
 }
 
 TcpRdsCoder::~TcpRdsCoder()
@@ -97,19 +99,20 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(b);
 	}
 	else if(messageType == TCP_RDS_WORK_MODE) {
+		return QByteArray();
 	}
 	else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_GET_LOC_STATUS) {
 		RdsProtobuf::Location_LocationOptions* oMsg = msg.mutable_from_client()->mutable_get()->mutable_location()->mutable_options();
-		oMsg->set_baseindex(0);
-		oMsg->set_centralfreq(0);
-		oMsg->set_channum(0);
-		oMsg->set_convolution(0);
 		oMsg->set_duration(0);
-		oMsg->set_mode(0);
-		oMsg->set_spectrummean(0);
-		oMsg->set_tuningmode(0);
+		oMsg->set_central_frequency(0);
+		oMsg->set_convolution(0);
+		oMsg->set_doppler(0);
+		oMsg->set_averaging_frequency_band(0);
+		oMsg->set_frequency_tuning_mode(2);
+		oMsg->mutable_filter()->set_range(0);
+		oMsg->mutable_filter()->set_shift(0);
 	} else if( messageType == TCP_RDS_GET_PRM_STATUS ) {
 		RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_device();
 
@@ -132,73 +135,35 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	 else if( messageType == TCP_RDS_GET_SYSTEM ) {
 		RdsProtobuf::System_SystemOptions* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_options();
 		sMsg->set_title("111", 3);
-		sMsg->set_devices_num(1);
-		sMsg->set_separate_receivers_num(1);
-
-		RdsProtobuf::DeviceOptions* devMsg = sMsg->add_devices();
-		devMsg->set_title("111");
-		devMsg->set_status(true);
-		devMsg->set_ip("111");
-		devMsg->set_porthttp(0);
-		devMsg->set_portsctp(0);
-		devMsg->set_channelsnum(0);
-		devMsg->set_sync(0);
-		devMsg->set_board(0);
-
-		RdsProtobuf::ReceiverOptions* recMsg = sMsg->add_separate_receivers();
-		recMsg->set_title("111");
-		recMsg->set_status(true);
-		recMsg->set_ip("111");
-		recMsg->set_port(0);
-		recMsg->set_type(0);
-
-		recMsg->mutable_settingsprm300()->set_freq(0);
-		recMsg->mutable_settingsprm300()->set_filter(0);
-		recMsg->mutable_settingsprm300()->set_attenuator1(0);
-		recMsg->mutable_settingsprm300()->set_attenuator2(0);
-		recMsg->mutable_settingsprm300()->set_channum(0);
-		recMsg->mutable_settingsprm300()->set_generator(0);
 	} else if (message->type() == TCP_PRM300_REQUEST_SET_FREQUENCY) {
 		QString name;
 		unsigned short avalue;
 		stream >> name;
 		stream >> avalue;
 
-//		RdsProtobuf::System_Receiver* rMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver();
-
-//		rMsg->set_device_index(0);
-//		rMsg->set_channel_index(name.toInt());
-
-//		RdsProtobuf::Prm300 pMsg = RdsProtobuf::Prm300();
-//		rMsg->mutable_settingsprm300()->set_freq(avalue);
-//		rMsg->mutable_settingsprm300()->set_attenuator1(0);
-//		rMsg->mutable_settingsprm300()->set_attenuator2(0);
-//		rMsg->mutable_settingsprm300()->set_channum(0);
-//		rMsg->mutable_settingsprm300()->set_generator(0);
-//		rMsg->mutable_settingsprm300()->set_filter(0);
-
 		m_locConf.centralFreq = avalue;
 
 		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-		lMsg->set_baseindex(m_locConf.baseIndex);
-		lMsg->set_centralfreq(m_locConf.centralFreq);
-		lMsg->set_channum(m_locConf.chanNum);
+		lMsg->set_duration(m_locConf.duration);
+		lMsg->set_central_frequency(m_locConf.centralFreq);
 		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_duration(3);
-		lMsg->set_mode(m_locConf.mode);
-		lMsg->set_spectrummean(m_locConf.spectrumMean);
-		lMsg->set_tuningmode(m_locConf.tuningMode);
+		lMsg->set_doppler(m_locConf.doppler);
+		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
+		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
+
+		lMsg->mutable_filter()->set_range(m_locConf.range);
+		lMsg->mutable_filter()->set_shift(m_locConf.shift);
 	}
 	else if (messageType == TCP_FLAKON_REQUEST_SET_BANDWIDTH) {
 		float bandwidth;
 		stream >> bandwidth;
-		m_bandwidth = bandwidth;
+		m_locConf.range = bandwidth;
 		return QByteArray();
 	}
 	else if (messageType == TCP_FLAKON_REQUEST_SET_SHIFT) {
 		float shift;
 		stream >> shift;
-		m_shift = shift;
+		m_locConf.shift = shift;
 		return QByteArray();
 	}
 	else if(messageType == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
@@ -207,18 +172,19 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		m_locConf.baseIndex = m_mapPrm.key(mainSt, 0);
 
 		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-		lMsg->set_baseindex(m_locConf.baseIndex);
-		lMsg->set_centralfreq(m_locConf.centralFreq);
-		lMsg->set_channum(m_locConf.chanNum);
-		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_duration(3);
-		lMsg->set_mode(m_locConf.mode);
-		lMsg->set_spectrummean(m_locConf.spectrumMean);
-		lMsg->set_tuningmode(m_locConf.tuningMode);
 
-		//return QByteArray();
+		lMsg->set_duration(3);
+		lMsg->set_central_frequency(m_locConf.centralFreq);
+		lMsg->set_convolution(m_locConf.convolution);
+		lMsg->set_doppler(m_locConf.doppler);
+		lMsg->set_averaging_frequency_band(m_locConf.freqBand);
+		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
+
+		lMsg->mutable_filter()->set_range(m_locConf.range);
+		lMsg->mutable_filter()->set_shift(m_locConf.shift);
 	}
 	else if (messageType == TCP_FLAKON_REQUEST_SS_CORRELATION) {
+		//NOT usable more
 		float frequency;
 		bool enable;
 		int id;
@@ -226,9 +192,52 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		stream >> frequency;
 		stream >> enable;
 
-		RdsProtobuf::Location_FilterOptions* fMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_filter();
-		fMsg->set_range(m_bandwidth);
-		fMsg->set_shift(m_shift);
+		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
+		lMsg->set_duration(m_locConf.duration);
+		lMsg->set_central_frequency(m_locConf.centralFreq);
+		m_locConf.convolution = enable;
+		lMsg->set_convolution(m_locConf.convolution);
+		lMsg->set_doppler(m_locConf.doppler);
+		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
+		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
+
+		lMsg->mutable_filter()->set_range(m_locConf.range);
+		lMsg->mutable_filter()->set_shift(m_locConf.shift);
+	}
+	else if( message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM ) {
+		int val;
+
+		stream >> val;
+
+		if(m_locConf.freqBand == val) {
+			return QByteArray();
+		}
+		m_locConf.freqBand = val;
+
+		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
+		lMsg->set_duration(m_locConf.duration);
+		lMsg->set_central_frequency(m_locConf.centralFreq);
+		lMsg->set_convolution(m_locConf.convolution);
+		lMsg->set_doppler(m_locConf.doppler);
+		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
+		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
+
+		lMsg->mutable_filter()->set_range(m_locConf.range);
+		lMsg->mutable_filter()->set_shift(m_locConf.shift);
+	}
+	else if( message->type() == TCP_FLAKON_REQUEST_ENABLE_RECEIVER ) {
+		int id;
+		bool val;
+
+		stream >> id;
+		stream >> val;
+
+		RdsProtobuf::System_Receiver* rMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver();
+
+		rMsg->set_device_index(0);
+		rMsg->set_channel_index( id );
+
+		rMsg->set_status( val );
 	}
 	else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_ONE) {
 		stream >> name;
@@ -239,32 +248,15 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		rMsg->set_device_index(0);
 		rMsg->set_channel_index(m_mapPrm.key(name));
 
-		RdsProtobuf::Prm300 pMsg = RdsProtobuf::Prm300();
-		rMsg->mutable_settingsprm300()->set_freq(m_freq);
-		rMsg->mutable_settingsprm300()->set_attenuator1(val.att1);
-		rMsg->mutable_settingsprm300()->set_attenuator2(val.att2);
-		rMsg->mutable_settingsprm300()->set_channum(0);
-		rMsg->mutable_settingsprm300()->set_generator(0);
-		rMsg->mutable_settingsprm300()->set_filter(val.filter);
+		rMsg->mutable_settings()->set_frequency(m_locConf.centralFreq);
+		rMsg->mutable_settings()->set_attenuator1(val.att1);
+		rMsg->mutable_settings()->set_attenuator2(val.att2);
 
 		//dataToSend = prmSetAttenuerOne(int_value);
 	}
 	else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_TWO) {
-		int val;
-		QString name;
-		stream >> name;
-		stream >> val;
-
-		m_test = val;
-		m_sTest = name;
-		//dataToSend = prmSetAttenuerTwo(int_value);
 	}
 	else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
-		int val;
-		QString name;
-		stream >> name;
-		stream >> val;
-//		/dataToSend = prmSetFilter(int_value);
 	}
 	else {
 		return QByteArray();
@@ -305,7 +297,13 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 	RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
 	if( sMsg.has_data() ) {
-		if( sMsg.data().has_location_spectrum() ) {
+		if( sMsg.data().has_data_status() ) {
+			bool status;
+			foreach (bool val, sMsg.data().data_status().status()) {
+				status = val;
+			}
+		}
+		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
 			QDateTime tmp = QDateTime::currentDateTime();
 			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
 				return message;
@@ -313,47 +311,79 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 			m_specTime = QDateTime::currentDateTime();
 
-			int ind = sMsg.data().location_spectrum().index();
-			int len = sMsg.data().location_spectrum().length();
-			int range = sMsg.data().location_spectrum().signalrange();
+			int ind = sMsg.data().location_spectrum().detector_index();
 
-				log_debug(QString("Spectrum ID: %1").arg(ind));
-
-			double startFreq = sMsg.data().location_spectrum().startfreq();
-			double stepFreq = sMsg.data().location_spectrum().stepfreq();
-			int shiftFreq = sMsg.data().location_spectrum().freqshift();
+			double startFreq = sMsg.data().location_spectrum().plot().axis_x_start();
+			double stepFreq = sMsg.data().location_spectrum().plot().axis_x_step();
 
 			QVector<QPointF> vec;
 			double freq = startFreq;
 
-			for(int i = 0; i < sMsg.data().location_spectrum().data().size(); i++) {
-				double val = sMsg.data().location_spectrum().data().Get(i);
+			for(int i = 0; i < sMsg.data().location_spectrum().plot().data().size(); i++) {
+				double val = sMsg.data().location_spectrum().plot().data(i);
 				vec.append( QPointF(freq*TO_KHZ, val) );
 				freq += stepFreq;
 			}
 
-			message = pointers(ind, startFreq+10, vec);
-		} else if( sMsg.data().has_location_xcov() ) {
+			if(m_indexSpect != ind) {
+				message = pointers(ind, startFreq+10, vec);
+			}
+
+			m_indexSpect = ind;
+		} else if( sMsg.data().has_location_convolution() ) {   //Single convolution
 			QDateTime tmp = QDateTime::currentDateTime();
-			if( m_corTime.msecsTo(tmp) < TIME_DEL ) {
+			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
 				return message;
 			}
 
-			m_corTime = QDateTime::currentDateTime();
+			m_specTime = QDateTime::currentDateTime();
 
-			int index = sMsg.data().location_xcov().index();
-			float timediff = sMsg.data().location_xcov().timediff();
-			float veracity = sMsg.data().location_xcov().veracity();
+			float veracity = 0;
+			int index1 =  sMsg.data().location_convolution().convolution().first_detector_index();
+			int index2 =  sMsg.data().location_convolution().convolution().second_detector_index();
+			float timediff = sMsg.data().location_convolution().convolution().delay();
 
 			QVector<QPointF> vp;
-			for(int i = 0; i < sMsg.data().location_xcov().data().size(); i++) {
-				float p = sMsg.data().location_xcov().data(i);
-				QPointF point(i, p);
+			for(int i = 0; i < sMsg.data().location_convolution().plot().data_size(); i++) {
+				double p = sMsg.data().location_convolution().plot().data(i);
+				double x = sMsg.data().location_convolution().plot().axis_x_start() +
+						   sMsg.data().location_convolution().plot().axis_x_step()*i;
+
+				QPointF point( x, p );
 				vp.append(point);
 			}
 
-			message = correlation(m_locConf.baseIndex, index, timediff, veracity, vp);
-		} else if( sMsg.data().has_detector_spectrum() ) {
+			if(index1 != m_indexConv1 || index2 != m_indexConv2) {
+				message = correlation(index1, index2, timediff, veracity, vp);
+			}
+
+			m_indexConv1 = index1;
+			m_indexConv2 = index2;
+
+		}
+		else if( sMsg.data().has_location_data() ) {
+			RdsProtobuf::LocationData lMsg = sMsg.data().location_data();
+
+			qint64 dateTime =  lMsg.date_time();
+			RdsProtobuf::Signal sigMsg = lMsg.signal();
+			int csz = lMsg.convolution_size();
+
+			double start = sigMsg.range().start();
+			double end = sigMsg.range().end();
+			QString info = QString::fromStdString( sigMsg.info() );
+
+			foreach (RdsProtobuf::Convolution cnvMsg, lMsg.convolution()) {
+				int firstInd = cnvMsg.first_detector_index();
+				int secInd = cnvMsg.second_detector_index();
+
+				bool stat = cnvMsg.has_delay();
+				double delay = cnvMsg.delay();
+				double delay_acc = cnvMsg.delay_accuracy();
+			}
+
+			message = correlationAll(data);
+		}
+		else if( sMsg.data().has_detector_spectrum() ) {
 
 			QDateTime tmp = QDateTime::currentDateTime();
 			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
@@ -362,41 +392,47 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 			m_specTime = QDateTime::currentDateTime();
 
-
-			int ind = sMsg.data().detector_spectrum().index();
-			int len = sMsg.data().detector_spectrum().length();
-			int range = sMsg.data().detector_spectrum().signalrange();
-
-				log_debug(QString("Spectrum ID: %1").arg(ind));
-
-			double startFreq = sMsg.data().detector_spectrum().startfreq();
-			double stepFreq = sMsg.data().detector_spectrum().stepfreq();
-			int shiftFreq = sMsg.data().detector_spectrum().freqshift();
+			int ind = sMsg.data().detector_spectrum().detector_index();
+			int cFreq = sMsg.data().detector_spectrum().central_frequency();
 
 			QVector<QPointF> vec;
+			double startFreq = sMsg.data().detector_spectrum().plot().axis_x_start();
+			double stepFreq = sMsg.data().detector_spectrum().plot().axis_x_step();
+
 			double freq = startFreq;
 
-			for(int i = 0; i < sMsg.data().detector_spectrum().data().size(); i++) {
-				double val = sMsg.data().detector_spectrum().data().Get(i);
+			for( int i = 0; i < sMsg.data().detector_spectrum().plot().data_size(); i++ ) {
+				double val = sMsg.data().detector_spectrum(). plot().data(i);
 				vec.append( QPointF(freq*TO_KHZ, val) );
 				freq += stepFreq;
 			}
 
-			message = pointers(ind, startFreq+10, vec);
+			message = pointers(ind, cFreq, vec);
 
 			QVector<QPointF> pointsList;
-			int sz = sMsg.data().detector_spectrum().firstindex_size();
+			int sz = sMsg.data().detector_spectrum().first_index_size();
 
-			for(int i=0; i < sMsg.data().detector_spectrum().firstindex_size(); i++ ) {
-				int start = sMsg.data().detector_spectrum().firstindex(i);
-				int end = sMsg.data().detector_spectrum().lastindex(i);
+			for(int i=0; i < sz; i++ ) {
+				int start = sMsg.data().detector_spectrum().first_index(i);
+				int end = sMsg.data().detector_spectrum().last_index(i);
 				QPointF point( startFreq+stepFreq*start, startFreq+stepFreq*end );
 
 				pointsList.append(point);
 			}
 
 			emit onDetectSignal(ind, pointsList);
-			//message = detectedBandwidth(ind, pointsList);
+		}
+		else if( sMsg.data().has_detector_detected() ) {
+			int k = 0;
+		}
+		else if( sMsg.data().has_analysis_spectrogram() ) {
+			int k = 0;
+		}
+		else if( sMsg.data().has_analysis_spectrum() ) {
+			int k = 0;
+		}
+		else if( sMsg.data().has_analysis_detected() ) {
+			int k = 0;
 		}
 	} else if( sMsg.has_answer() ) {
 		QString answer;
@@ -417,45 +453,41 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 				RdsProtobuf::System_SystemOptions sysMsg = sMsg.current().system().options();
 				QString str = QString::fromStdString(sysMsg.title());
-				int devNums = sysMsg.devices_num();
-				int sDevNums = sysMsg.separate_receivers_num();
+				int devNums = sysMsg.devices_size();
 
 				for(int d = 0; d < sysMsg.devices().size(); d++) {
 					RdsProtobuf::DeviceOptions optMsg = sysMsg.devices(d);
 					QString optStr = QString::fromStdString(optMsg.title());
 					bool statDev = optMsg.status();
 					QString ipDev = QString::fromStdString(optMsg.ip());
-					quint32 PortDev = optMsg.porthttp();
 
 					m_mapDevState.insert(-1, statDev);
 
-					for(int i = 0; i < optMsg.channels().size(); i++) {
+					for(int i = 0; i < optMsg.channels_size(); i++) {
 						StationConfiguration configVal;
 						RdsProtobuf::ChannelOptions chMsg = optMsg.channels(i);
+
 						QString chStr = QString::fromStdString(chMsg.title());
-						bool inv = chMsg.inversion();
+
 						RdsProtobuf::ReceiverOptions recMsg = chMsg.receiver();
 						QString recStr = QString::fromStdString(recMsg.title());
+
 						bool stat = recMsg.status();
 						QString ip = QString::fromStdString(recMsg.ip());
-						int port = recMsg.port();
-						int type = recMsg.type();
-						RdsProtobuf::Prm300 prmMsg = recMsg.settingsprm300();
-						int freq = prmMsg.freq();
-						int filter = prmMsg.filter();
+
+						RdsProtobuf::ReceiverSettings prmMsg = recMsg.settings();
+						int freq = prmMsg.frequency();
 						int att1 = prmMsg.attenuator1();
 						int att2 = prmMsg.attenuator2();
-						int chNum = prmMsg.channum();
-						int gen = prmMsg.generator();
 
 						m_mapDevState.insert(i, stat);
 
 						PrmSettings settings;
 						settings.att1 = att1;
 						settings.att2 = att2;
-						settings.filter = filter;
-						settings.gen = gen;
-						m_mapPrmSettings.insert(chNum, settings);
+						settings.ip = ip;
+
+						m_mapPrmSettings.insert(i, settings);
 
 						//configVal.id			= chNum;
 						configVal.id			= i;
@@ -465,17 +497,20 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 						m_mapPrm.insert(i, chStr);
 
-						configVal.latitude		= 0; //to be done in proto
-						configVal.longitude		= 0;
+						if(chMsg.has_coordinates()) {
+							configVal.latitude		= chMsg.coordinates().latitude(); //to be done in proto
+							configVal.longitude		= chMsg.coordinates().longitude();
+							configVal.altitude		= chMsg.coordinates().altitude();
+						} else {
+							configVal.latitude		= 0; //to be done in proto
+							configVal.longitude		= 0;
+							configVal.altitude		= 0;
+						}
 						configVal.hostPrm300	= ip;
-						configVal.portPrm		= port;
-						configVal.typePrm		= type;
-						configVal.inversionPrm	= inv;
 						configVal.statusPrm		= stat;
-						configVal.freqPrm = freq;
+						configVal.freqPrm		= freq;
 						configVal.statusAdc		= statDev;
 						configVal.hostADC		= ipDev;
-						configVal.portADC		= PortDev;
 
 						resultList.append(configVal);
 					}
@@ -496,14 +531,17 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			}
 		} else if( sMsg.current().has_location() ) {
 			RdsProtobuf::Location_LocationOptions locMsg= sMsg.current().location().options();
-			m_locConf.chanNum = locMsg.channum();
-			m_locConf.mode = locMsg.mode();
-			m_locConf.baseIndex = locMsg.baseindex();
-			m_locConf.convolution = locMsg.convolution();
-			m_locConf.spectrumMean = locMsg.spectrummean();
-			m_locConf.tuningMode = locMsg.tuningmode();
 			m_locConf.duration = locMsg.duration();
-			m_locConf.centralFreq = locMsg.centralfreq();
+			m_locConf.centralFreq = locMsg.central_frequency();
+			m_locConf.convolution = locMsg.convolution();
+			m_locConf.doppler = locMsg.doppler();
+			m_locConf.freqBand = locMsg.averaging_frequency_band();
+			m_locConf.tuningMode = locMsg.frequency_tuning_mode();
+
+			m_locConf.chanNum = m_mapPrmSettings.size();
+
+			m_locConf.range = locMsg.filter().range();
+			m_locConf.shift = locMsg.filter().shift();
 
 			message = configureLoc(m_locConf);
 		}
@@ -554,6 +592,11 @@ MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, float timedif
 	stream << point1 << point2 << timediff << veracity << points;
 
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION, data));
+}
+
+MessageSP TcpRdsCoder::correlationAll(const QByteArray& data)
+{
+	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION_ALL, data));
 }
 
 MessageSP TcpRdsCoder::detectedBandwidth(int index, QVector<QPointF> vec)

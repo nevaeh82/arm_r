@@ -32,6 +32,7 @@ private:
 signals:
 	void signalShowLists();
 	void signalShowSolverLog();
+	void signalShowSolverSetup();
 	void signalShowSolverErrors();
 	void signalResetSerevr();
 

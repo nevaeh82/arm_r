@@ -180,11 +180,25 @@ void TabSpectrumWidgetController::createRPC()
 
 void TabSpectrumWidgetController::createView()
 {
+	int id1 = 0;
+	int id2 = 0;
+
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 
-		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, i, 0);
+		id1 = i-1;
+		id2 = i+1;
+
+		if( id1 < 0 ) {
+			id1 = 0;
+		}
+
+		if(id2 > 2) {
+			id2 = 2;
+		}
+
+		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, id1, id2, 0);
 		correlationDataSource->registerReceiver(correlationWidget);
 
 
@@ -380,7 +394,7 @@ void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
 
 void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 {
-    m_isPanoramaEnabled = isEnabled;
+	m_isPanoramaEnabled = isEnabled;
 
 	double panoramaStartValue = 300;
 	double panoramaEndValue = 300;
@@ -428,6 +442,13 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 		if (m_rpcFlakonClient == NULL) return;
 
 		m_rpcFlakonClient->sendAvarageSpectrum( m_station->getId(), property.value.toInt() );
+		return;
+	}
+
+	if( DB_ENABLE_RECEIVER_PROPERTY == property.name ) {
+		if (m_rpcFlakonClient == NULL) return;
+
+		m_rpcFlakonClient->sendEnableReceiver( m_station->getId(), property.value.toBool() );
 		return;
 	}
 

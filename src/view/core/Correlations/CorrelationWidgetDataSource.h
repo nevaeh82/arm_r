@@ -21,7 +21,8 @@ private:
 
 	//ICorrelationControllersContainer*	m_commonCorrelations;
 	ITabManager*	m_tabManager;
-	int	m_id;
+	int	m_id1;
+	int	m_id2;
 
 	qreal	m_startxCor;
 	bool	m_needSetup;
@@ -34,7 +35,7 @@ private:
 	QList<ICorrelationListener*> m_correlationListeners;
 
 public:
-	explicit CorrelationWidgetDataSource(IGraphicWidget*, ITabManager *tabManager, int id, QObject *parent);
+	explicit CorrelationWidgetDataSource(IGraphicWidget*, ITabManager *tabManager, int id1, int id2, QObject *parent);
 
 	void onMethodCalled(const QString&, const QVariant&);
 	void sendCommand(int);

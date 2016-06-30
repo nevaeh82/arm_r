@@ -29,8 +29,11 @@ public:
 	void recognize(const int id, const int type);
 	void sendCorrelation(const int id, const float frequency, const bool enable);
 	void sendAvarageSpectrum(const int id, const int avarage);
+	void sendEnableReceiver(const int id, const bool val);
 
 	void sendWorkMode(const int mode, const bool isOn);
+
+	void sendSolverSetupSettings(const QByteArray& data);
 
 	void requestFlakonStatus();
 
@@ -48,7 +51,11 @@ signals:
 	void sendCorrelationSignal(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSignal(int id, int avarage);
 
+	void sendEnableReceiverSignal(int id, bool val);
+
 	void sendWorkModeSignal(int mode, bool isOn);
+
+	void sendSolverSetupSettingsSignal(QByteArray data);
 
 	void requestFlakonStatusSignal();
 
@@ -65,6 +72,9 @@ private slots:
 	void recognizeSlot(int id, int type);
 	void sendCorrelationSlot(int id, float frequency, bool enable);
 	void sendAvarageSpectrumSlot(int id, int avarage);
+	void sendEnableReceiverSlot(int id, bool val);
+
+	void sendSolverSetupSettingsSlot(QByteArray data);
 
 	void sendWorkModeSlot(int mode, bool isOn);
 

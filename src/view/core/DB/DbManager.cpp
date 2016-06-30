@@ -227,6 +227,17 @@ Object DbManager::createStation(const QString &stationName)
 		log_debug("Failed to create averaging property");
 	}
 
+	prop.name = DB_ENABLE_RECEIVER_PROPERTY;
+	prop.value = "0";
+	prop.state = 0;
+	prop.isEditable = true;
+
+	recordId = m_dbController->addProperty(prop);
+
+	if (recordId == INVALID_INDEX) {
+		log_debug("Failed to create leading OP property");
+	}
+
 
 	prop.name = DB_PANORAMA_START_PROPERTY;
 	prop.value = "0";

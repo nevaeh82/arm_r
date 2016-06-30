@@ -3,38 +3,39 @@
 
 #include "RadiolocationInterface.h"
 
-
-
 /**
  *@class ISolverListener
- * интерфейс слушателя солвера
+ * РёРЅС‚РµСЂС„РµР№СЃ СЃР»СѓС€Р°С‚РµР»СЏ СЃРѕР»РІРµСЂР°
  */
 class ISolverListener
 {
 public:
-	/* Отправка рассчитанных данных траектории с автоматическим определением высоты */
+	/* РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹ */
 	virtual void onSendDataFromRadioLocation
 		(const SolveResult& result, const DataFromRadioLocation& allData)=0;
 
-	/* Отправка рассчитанных данных траектории с автоматическим определением высоты */
+	/* РћС‚РїСЂР°РІРєР° СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… С‚СЂР°РµРєС‚РѕСЂРёРё СЃ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРёРј РѕРїСЂРµРґРµР»РµРЅРёРµРј РІС‹СЃРѕС‚С‹ */
     virtual void onSendDataFromRadioLocationManualHeigh
 		(const SolveResult& result, const DataFromRadioLocation& allData)=0;
 
 	/** 
-	 * Отправка двух возможных одинарных отметок рассчитанных данных 
-	 * @note в случае если возможно рассчитать одну отметку, то oneData_1 = oneData_2
+	 * РћС‚РїСЂР°РІРєР° РґРІСѓС… РІРѕР·РјРѕР¶РЅС‹С… РѕРґРёРЅР°СЂРЅС‹С… РѕС‚РјРµС‚РѕРє СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С… 
+	 * @note РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РІРѕР·РјРѕР¶РЅРѕ СЂР°СЃСЃС‡РёС‚Р°С‚СЊ РѕРґРЅСѓ РѕС‚РјРµС‚РєСѓ, С‚Рѕ oneData_1 = oneData_2
 	 */
 	virtual void onSendOneDataFromRadioLocation
 		(const SolveResult& result, const OneDataFromRadioLocation& oneData_1,
 		 const OneDataFromRadioLocation& oneData_2)=0;
 
-	/* Отправка гипербол, рассчитанных по разностям расстояний */
+	/* РћС‚РїСЂР°РІРєР° РіРёРїРµСЂР±РѕР», СЂР°СЃСЃС‡РёС‚Р°РЅРЅС‹С… РїРѕ СЂР°Р·РЅРѕСЃС‚СЏРј СЂР°СЃСЃС‚РѕСЏРЅРёР№ */
 	virtual void onSendHyperbolesFromRadioLocation
 		(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb)=0;
 
-	/* Отправка сообщения об ошибке */
+	/* РћС‚РїСЂР°РІРєР° СЃРѕРѕР±С‰РµРЅРёСЏ РѕР± РѕС€РёР±РєРµ */
 	virtual void onErrorOccured(const ErrorType& error_type, 
 								const QString& str)=0;
+
+        virtual void onSolver1ProtoData( const int& result, const QByteArray& data ) = 0;
+        virtual void onSolver1SetupAnswer(const QByteArray &data) = 0;
 
 	virtual ~ISolverListener(){}
 };

@@ -4,15 +4,17 @@
 
 #include "Interfaces/ICorrelationWidget.h"
 
-#define TIME_WAIT_CORRELATION 2000
+#define TIME_WAIT_CORRELATION 5000
 
-CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent)
+CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id1, int id2, QObject *parent)
 	: BaseDataSource(parent)
 	, m_needSetup(false)
 {
 	m_correlationWidget = correlationWidget;
 
-	m_id = id;
+	m_id1 = id1;
+	m_id2 = id2;
+
 	m_tabManager = tabManager;
 
 	m_mapPeaksCorrelation = new float[1];
@@ -125,12 +127,12 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 		stream >> point1 >> point2;
 
-		if( point1 == m_id ) {
-			m_correlationWidget->setVisible(false);
-			return;
-		}
+//		if( point1 == m_id ) {
+//			m_correlationWidget->setVisible(false);
+//			return;
+//		}
 
-		if( point2 != m_id ){
+		if( point2 != m_id2 || point1 != m_id1 ){
 			return;
 		}
 

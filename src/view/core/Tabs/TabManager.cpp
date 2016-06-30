@@ -127,7 +127,6 @@ void TabManager::setStationsConfiguration(const QList<StationConfiguration>& sta
 		station->setLongitude(stationConf.longitude);
 		station->setPrm300Ip(stationConf.hostPrm300);
 		station->setAdcIp(stationConf.hostADC);
-		station->setAdcPort(stationConf.portADC);
 		station->setCenter( stationConf.freqPrm );
 
 		m_stationsMap.insert(station->getId(), station);

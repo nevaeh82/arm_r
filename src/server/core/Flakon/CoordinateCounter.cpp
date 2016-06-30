@@ -1,7 +1,8 @@
 #include <Logger/Logger.h>
 
-#include "CoordinateCounter.h"
+#include "RdsPacket.pb.h"
 
+#include "CoordinateCounter.h"
 #include "Info/StationConfiguration.h"
 
 #define GOOD_LIMIT 0.7
@@ -97,91 +98,117 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		return;
 	}
 
-	if (argument->type() != TCP_FLAKON_ANSWER_CORRELATION || !isInit) {
+	if ( argument->type() != TCP_FLAKON_ANSWER_CORRELATION_ALL || !isInit) {
 		return;
 	}
 
-	QByteArray inputData = argument->data();
-	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
+	QByteArray protoData = argument->data();
 
-	QVector<QPointF> points;
-	int point1, point2;
-	float timeDiff, veracity;
+	RdsProtobuf::Packet msg;
+	msg.ParseFromArray(protoData.data(), protoData.size());
 
-	inputDataStream >> point1 >> point2 >> timeDiff >> veracity >> points;
-	//std::numeric_limits<double>::quiet_NaN()
-
-	m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
-	m_aData.time_ = QTime::currentTime();	//Time
-
-	if(veracity > VERACITY) {
-		m_rangesMap.insert(point2, timeDiff);
-	} else {
-		//m_rangesMap.insert(point2, std::numeric_limits<double>::quiet_NaN());
-		m_rangesMap.insert(point2, timeDiff);
-	}
-	m_rangesMap.insert(m_main_point, 0);
-
-	if(!countChanNum) {
+	if( !msg.has_from_server() || !msg.from_server().has_data() ||
+		!msg.from_server().data().has_location_data() ) {
 		return;
 	}
 
-	//m_map_vec_corr.insert(point2, points);
-	if( m_rangesMap.size() >= countChanNum ) {
-		foreach (int key, m_rangesMap.keys()) {
-			m_aData.ranges_.insert(key, m_rangesMap.value(key));
+	RdsProtobuf::ServerMessage sMsg = msg.from_server();
+	RdsProtobuf::LocationData lMsg = sMsg.data().location_data();
+
+	qint64 dateTime =  lMsg.date_time();
+	//RdsProtobuf::Signal sigMsg = lMsg.signal();
+	//	double start = sigMsg.range().start();
+	//	double end = sigMsg.range().end();
+	//	QString info = QString::fromStdString( sigMsg.info() );
+	int csz = lMsg.convolution_size();
+
+	for( int i = 0; i < lMsg.convolution_size(); i++ ) {
+		m_aData.ranges_.append( 0 );
+	}
+
+	SolverProtocol::Packet solverPkt;
+
+	SolverProtocol::MeasurementsData* solverData =
+			solverPkt.mutable_datafromclient()->mutable_measurementsdata(); ;
+
+	foreach (RdsProtobuf::Convolution cnvMsg, lMsg.convolution()) {
+		int firstInd = cnvMsg.first_detector_index();
+		int secInd = cnvMsg.second_detector_index();
+
+		double delay = cnvMsg.delay();
+		int maxInd = m_aData.ranges_.size() - 1;
+
+		if( m_main_point > maxInd || firstInd > maxInd || secInd > maxInd ) {
+			continue;
 		}
 
-		sendDataToClientTcpServer();
-		m_aData.ranges_.clear();
-		m_rangesMap.clear();
+		if(m_main_point == firstInd) {
+			m_aData.ranges_.replace( secInd, delay );
+		} else if(m_main_point == secInd) {
+			m_aData.ranges_.replace( firstInd, delay );
+		}
+
+		SolverProtocol::MeasurementsData_DataPacket* data = solverData->add_data_packet();
+		data->set_first_detector_index( firstInd );
+		data->set_second_detector_index( secInd );
+		data->set_time_delay( delay );
+		data->set_time_delay_sdv( cnvMsg.delay_accuracy() );
+
+		if( cnvMsg.has_doppler() && cnvMsg.has_doppler_accuracy() ) {
+			data->set_dopler( cnvMsg.doppler() );
+			data->set_dopler_sdv( cnvMsg.doppler_accuracy() );
+		}
 	}
 
+	solverData->set_central_frequency( m_centerFrequency );
+	solverData->set_datetime( dateTime );
 
+	m_aData.numOfReferenceDetector_ = m_main_point;
+	m_aData.time_ = lMsg.date_time();
 
+	sendDataToClientTcpServer();
+	sendDataToClientTcpServer1(solverPkt);
 
-//	if((m_prevStation > point2) /*&& (m_map_vec_corr.count() > 4)*/) {
-//		QVector< QVector<QPointF> > vec_p;
-//		QMap<int, QVector<QPointF> >::iterator it;
+	m_aData.ranges_.clear();
+//	QByteArray inputData = argument->data();
+//	QDataStream inputDataStream(&inputData, QIODevice::ReadOnly);
 
-//		for(it = m_map_vec_corr.begin(); it != m_map_vec_corr.end(); ++it) {
-//			vec_p.append(it.value());
-//		}
+//	QVector<QPointF> points;
+//	int point1, point2;
+//	int cf;
+//	float timeDiff, veracity;
 
-//		QVector<double> aDR;
-//		aDR.clear();
-//		bool isSolverServer = getIsSolverServer();
+//	inputDataStream >> point1 >> point2 >> timeDiff >> veracity >> cf >> points;
+//	//std::numeric_limits<double>::quiet_NaN()
+//	m_centerFrequency = cf;
 
-//		ZDR mZDR;
-//		mZDR.getDataFromFlackon(m_main_point, vec_p, m_corr_threshold, aDR);
-//		m_map_vec_corr.clear();
+//	m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
+//	m_aData.time_ = QTime::currentTime();	//Time
 
-//		if (aDR.size() == 2) {
-//			// form data and calculate coordinates
-//			m_aData.numOfReferenceDetector_= m_main_point; // reference detector number
-//			m_aData.time_ = QTime::currentTime();	//Time
-//			m_aData.ranges_ = aDR;					//Adjusted difference in distance (maxima correlation graphs)
+//	if(veracity > VERACITY) {
+//		m_rangesMap.insert(point2, timeDiff);
+//	} else {
+//		//m_rangesMap.insert(point2, std::numeric_limits<double>::quiet_NaN());
+//		m_rangesMap.insert(point2, timeDiff);
+//	}
+//	m_rangesMap.insert(m_main_point, 0);
 
-//			if( !isSolverServer ) {
-//				m_solver->GetData(m_aData);
-//			} else {
-//				m_aData.ranges_.insert(m_main_point, 0);
-
-//				for( int i = 0; i < m_aData.ranges_.size(); i++ ) {
-//					m_aData.ranges_[i] = m_aData.ranges_[i] / (3 * pow(10.0, 8));
-//					log_debug(QString("Range: %1 - %2").arg(i).arg(m_aData.ranges_[i]));
-//				}
-
-//				sendDataToClientTcpServer();
-//			}
-
-//			//QString dataToFile = QTime::currentTime().toString("hh:mm:ss:zzz") + " " + QString::number(aDR.at(0)) + " " + QString::number(aDR.at(1)) + " " + QString::number(aDR.at(2)) + " " + QString::number(aDR.at(3)) + " " + QString::number(aDR.at(4)) + " " + QString::number(m_main_point) + "\n";
-
-//			//m_logManager->writeToFile(dataToFile);
-//		}
+//	if(!countChanNum) {
+//		return;
 //	}
 
-	m_prevStation = point2;
+//	//m_map_vec_corr.insert(point2, points);
+//	if( m_rangesMap.size() >= countChanNum ) {
+//		foreach (int key, m_rangesMap.keys()) {
+//			m_aData.ranges_.insert(key, m_rangesMap.value(key));
+//		}
+
+//		sendDataToClientTcpServer();
+//		m_aData.ranges_.clear();
+//		m_rangesMap.clear();
+//	}
+
+//	m_prevStation = point2;
 }
 
 void CoordinateCounter::onSendDataFromRadioLocation(const SolveResult &result, const DataFromRadioLocation &allData)
@@ -192,7 +219,6 @@ void CoordinateCounter::onSendDataFromRadioLocation(const SolveResult &result, c
 void CoordinateCounter::onSendDataFromRadioLocationManualHeigh(const SolveResult &result, const DataFromRadioLocation &allData)
 {
 	emit signalGetDataFromRadioLocationManualHeight(result, allData);
-
 }
 
 void CoordinateCounter::onSendOneDataFromRadioLocation(const SolveResult &result, const OneDataFromRadioLocation &oneData_1, const OneDataFromRadioLocation &oneData_2)
@@ -208,6 +234,16 @@ void CoordinateCounter::onSendHyperbolesFromRadioLocation(const SolveResult &res
 void CoordinateCounter::onErrorOccured(const ErrorType &error_type, const QString &str)
 {
 	emit signalError((int)error_type, str);
+}
+
+void CoordinateCounter::onSolver1ProtoData(const int &result, const QByteArray &data)
+{
+	emit signal1ProtoData( result, data );
+}
+
+void CoordinateCounter::onSolver1SetupAnswer(const QByteArray &data)
+{
+	emit signal1SetupAnswer( data );
 }
 
 void CoordinateCounter::sendData(const MessageSP message)
@@ -448,6 +484,34 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 	}
 }
 
+void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)
+{
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+	}
+
+	QByteArray dataResult;
+	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
+
+	dataResultStream << result;
+
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT_1, dataResult));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
+}
+
+void CoordinateCounter::slotSolver1SetupAnswer(QByteArray data)
+{
+	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_SOLVER_SETUP_1, data));
+
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, messageResult);
+	}
+}
+
 void CoordinateCounter::slotErrorOccured(int error_type, QString str)
 {
 	log_debug(QString("ERROR = %1").arg(error_type));
@@ -459,7 +523,7 @@ void CoordinateCounter::slotErrorOccured(int error_type, QString str)
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ERRORS, strBA));
 
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, messageResult);
+		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, messageResult);
 	}
 }
 
@@ -543,6 +607,9 @@ void CoordinateCounter::initSolver()
 	connect(this, SIGNAL(signalGetOneDataFromRadioLocation(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)), this, SLOT(slotOneCatchDataFromRadioLocationManual(SolveResult,OneDataFromRadioLocation,OneDataFromRadioLocation)));
 	connect(this, SIGNAL(signalError(int ,QString)), this, SLOT(slotErrorOccured(int ,QString)));
 
+	connect(this, SIGNAL(signal1ProtoData(int,QByteArray)), this, SLOT(slotSolver1ProtoData(int,QByteArray)));
+	connect(this, SIGNAL(signal1SetupAnswer(QByteArray)), this, SLOT(slotSolver1SetupAnswer(QByteArray)));
+
 }
 
 void CoordinateCounter::slotSetCenterFrequency(const double& frequency)
@@ -608,6 +675,7 @@ UAVPositionDataEnemy CoordinateCounter::encodeSolverData(const OneDataFromRadioL
 }
 
 void CoordinateCounter::sendDataToClientTcpServer() {
+
 	QByteArray dataToSend;
 	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
 	dataStream << m_aData;
@@ -619,9 +687,28 @@ void CoordinateCounter::sendDataToClientTcpServer() {
 	}
 }
 
+void CoordinateCounter::sendDataToClientTcpServer1(const SolverProtocol::Packet& data)
+{
+	QByteArray outData;
+	outData.resize( data.ByteSize() );
+	data.SerializeToArray( outData.data(), outData.size() );
+
+	MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA_1, outData));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, message);
+	}
+}
+
 bool CoordinateCounter::getIsSolverServer()
 {
 	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 	return settings.value("ClientTCPServer/isSolverServer", false).toBool();
+}
+
+uint CoordinateCounter::getSolverVersion()
+{
+	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
+	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+	return settings.value("ClientTCPServer/SolverVersion", 0).toUInt();
 }

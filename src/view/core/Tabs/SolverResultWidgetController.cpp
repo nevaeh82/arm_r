@@ -79,12 +79,50 @@ void SolverResultWidgetController::addResultToLog(const QByteArray& inData)
 
 }
 
+void SolverResultWidgetController::addResultToLog1(const QByteArray& inData)
+{
+	QByteArray data = inData;
+
+	QDataStream ds(&data, QIODevice::ReadOnly);
+	int sourceType;
+
+	ds >> sourceType;
+
+	SolverProtocol::EstimateQuality quality = SolverProtocol::EstimateQuality(sourceType);
+
+	QString source;
+
+	switch(quality)
+	{
+		case SolverProtocol::GOOD_QUALITY:
+			source = tr("Good quality");
+			break;
+		case SolverProtocol::BAD_QUALITY:
+			source = tr("Bad quality");
+			break;
+		default:
+			break;
+	}
+
+	QString log = source;
+
+	m_view->appendSolverResult(QDateTime::currentDateTime().toString() + tr(" Found solve ") + log);
+
+}
+
 void SolverResultWidgetController::onMethodCalledSlot(QString method, QVariant argument)
 {
 	if( method == RPC_SLOT_SERVER_SEND_BPLA_RESULT ) {
 		addResultToLog(argument.toByteArray());
 		return;
+	} else if( method == RPC_SLOT_SERVER_SEND_BPLA_RESULT_1 ) {
+		addResultToLog1(argument.toByteArray());
+		return;
 	}
+//	else if( method == RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1 ) {
+//		addResultToLog1(argument.toByteArray());
+//		return;
+//	}
 }
 
 QString SolverResultWidgetController::getSolverResultToString(const SolveResult &result)

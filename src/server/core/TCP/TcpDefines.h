@@ -5,6 +5,9 @@
 #define TCP_ZAVIRUHA_PREAMBULA_SOLVER "Zav"
 #define TCP_ZAVIRUHA_PREAMBULA_LEN 7
 
+#define TCP_ZAVIRUHA_PREAMBULA_SOLVER1 "SolverPacket"
+#define TCP_ZAVIRUHA_PREAMBULA_LEN1 16
+
 #define TCP_RDS_PREAMBULA "RdsPacket"
 
 #define TCP_EMPTY_MESSAGE	"tcpEmptyMessage"
@@ -40,8 +43,11 @@
 #define TCP_FLAKON_ANSWER_FFT							"tcpFlakonAnswerFFT"
 #define TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH			"tcpFlakonAnswerDetectedBandwidth"
 #define TCP_FLAKON_ANSWER_CORRELATION					"tcpFlakonAnswerCorrelation"
+#define TCP_FLAKON_ANSWER_CORRELATION_ALL				"tcpFlakonAnswerCorrelationAll"
 #define TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION		"tcpFlakonRequestMainStationCorrelation"
 #define TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM				"tcpFlakonRequestAverageSpectrum"
+#define TCP_FLAKON_REQUEST_ENABLE_RECEIVER				"tcpFlakonRequestEnableReceiver"
+#define TCP_FLAKON_SOLVER_SETTINGS_SETUP				"tcpFlakonSolverSettngsSetup"
 #define TCP_FLAKON_REQUEST_SET_BANDWIDTH				"tcpFlakonRequestSetBandwidth"
 #define TCP_FLAKON_REQUEST_SET_SHIFT					"tcpFlakonRequestSetShift"
 #define TCP_FLAKON_REQUEST_RECOGNIZE					"tcpFlakonRequestRecognize"
@@ -68,14 +74,19 @@
 
 /// Flakon Coordinates Counter
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA					"tcpFlakonCoordinatesCounterAnswerBPLA"
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1				"tcpFlakonCoordinatesCounterAnswerBPLA1"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO				"tcpFlakonCoordinatesCounterAnswerBPLAAuto"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_SINGLE			"tcpFlakonCoordinatesCounterAnswerBPLASingle"
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER			"tcpFlakonCoordinatesCounterRequestSetSolver"
 #define TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR		"tcpFlakonCoordinatesCounterRequestSetSolverClear"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT				"tcpFlakonCoordinatesCounterAnswerBPLAResult"
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT_1				"tcpFlakonCoordinatesCounterAnswerBPLAResult1"
+#define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_SOLVER_SETUP_1		"tcpFlakonCoordinatesCounterAnswerSolverSetup1"
 #define TCP_FLAKON_COORDINATES_COUNTER_ANSWER_HYPERBOLA				"tcpFlakonCoordinatesCounterAnswerHyperbola"
 #define TCP_FLAKON_COORDINATES_COUNTER_QUALITY_STATUS				"tcpFlakonCoordinatesCounterQualityStatus"
 #define TCP_FLAKON_COORDINATES_COUNTER_ERRORS						"tcpFlakonCoordinatesCounterErrors"
+
+#define TCP_SOLVER_MESSAGE											"tcpSolverMessage"
 
 /// Atlant device external
 #define Atlant_Direction_MsgA	"DIRECTION_ANSWER_MESSAGE"
@@ -85,6 +96,8 @@
 /// CLIENT_TCP_SERVER commands
 #define CLIENT_TCP_SERVER_SOLVER_DATA	"tcpClientSolverData"
 #define CLIENT_TCP_SERVER_BPLA_DATA		"tcpClientBPLAData"
+
+#define CLIENT_TCP_SERVER_SOLVER_DATA_1	"tcpClientSolverData1" //Version 1
 
 /// PRM300 device external
 namespace PRM300External {

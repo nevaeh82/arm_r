@@ -16,6 +16,7 @@
 #include "TcpDevicesDefines.h"
 
 #include "SolverEncoder.h"
+#include "SolverEncoder1.h"
 
 #include "SolverPacket.pb.h"
 
@@ -33,9 +34,9 @@ public:
 	ClientTcpServer(QObject* parent = 0);
 	~ClientTcpServer();
 
-	void onMessageReceived(const quint32 deviceType,
+	void onMessageReceived( const quint32 deviceType,
 								   const QString& device,
-								   const MessageSP argument);
+								   const MessageSP argument );
 
 	SolverEncoder* getSolverEncoder();
 
@@ -45,11 +46,6 @@ public slots:
 
 private:
 	int getClientTcpPortValue();
-
-	QByteArray decode(const MessageSP message);
-	void toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray& data);
-	void addPreambula(QByteArray& data);
-
 	SolverEncoder* m_encoder;
 
 signals:
@@ -57,6 +53,11 @@ signals:
 };
 
 inline QDataStream& operator<<(QDataStream& out, const DataFromFlacon& object)
+{
+	return out << object.numOfReferenceDetector_ << object.time_ << object.ranges_;
+}
+
+inline QDataStream& operator<<(QDataStream& out, const DataFromFlaconInt& object)
 {
 	return out << object.numOfReferenceDetector_ << object.time_ << object.ranges_;
 }

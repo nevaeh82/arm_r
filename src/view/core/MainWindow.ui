@@ -151,6 +151,7 @@
     <addaction name="actionLists"/>
     <addaction name="actionSolverLogs"/>
     <addaction name="actionSolverErrors"/>
+    <addaction name="actionSolverSetup"/>
    </widget>
    <widget class="QMenu" name="menuServer">
     <property name="title">
@@ -199,6 +200,11 @@
   <action name="actionSolverErrors">
    <property name="text">
     <string>SolverErrors</string>
+   </property>
+  </action>
+  <action name="actionSolverSetup">
+   <property name="text">
+    <string>SolverSetup</string>
    </property>
   </action>
  </widget>
