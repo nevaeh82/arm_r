@@ -37,3 +37,7 @@
 [submodule "redist/libmysql"]
 	path = redist/libmysql
 	url = git@192.168.137.67:externals/libmysql.git
+[submodule "redist/SingleApplication"]
+	path = redist/SingleApplication
+	url = git@192.168.137.67:externals/singleapplication.git
+	branch = master
