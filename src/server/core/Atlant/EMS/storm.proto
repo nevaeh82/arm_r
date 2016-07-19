@@ -1,5 +1,5 @@
 package Storm;
-
+option optimize_for = LITE_RUNTIME;
 //запрос пеленгования одного источника
 // "DIRECTION_FINDING_REQUEST"
 message DirectionFindingRequest

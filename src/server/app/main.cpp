@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	Logger().setupLogger("logs/ARM_R_server.log");
 
 	ARM_R_Application a(argc, argv);
-	if( a.isRunning() ) {
+	if( !a.instance() ) {
 		return 0;
 	}
 

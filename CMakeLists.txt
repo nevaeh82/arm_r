@@ -3,7 +3,7 @@ project(ZaviruhaR)
 if(WIN32)
 	cmake_minimum_required(VERSION 3.0)
 else()
-	cmake_minimum_required(VERSION 2.6.3)
+        cmake_minimum_required(VERSION 2.8.4)
 endif()
 
 if(NOT VERSION)
@@ -23,6 +23,7 @@ option(CREATE_TR "Dynamical create qrc with qm files" ON)
 option(CREATE_BUNDLE "Create bundle on install" ON)
 option(USE_SHARED_OUTPUT "Place all build binaries on one common direcotory bin" ON)
 option(NO_BACKTRACE "Build without backtrace" OFF)
+option(USE_QT5 "qt5" ON)
 
 # proccess options
 if(NO_BACKTRACE)
@@ -50,7 +51,7 @@ endif()
 
 add_definitions(-DTBB_USE_CAPTURED_EXCEPTION=1)
 
-list(APPEND qt_libs QtCore QtSql QtNetwork QtGui QtAxContainer QtMultimedia)
+list(APPEND qt_libs QtCore QtSql QtNetwork QtGui QtAxContainer QtMultimedia QtCharts)
 
 if (USE_QT5)
     list(APPEND qt_libs QtLinguistTools)
@@ -77,7 +78,7 @@ find_package(Threads REQUIRED)
 #find_package(Tbb REQUIRED)
 #find_package(GraphicsIpp REQUIRED)
 find_package(Protobuf REQUIRED)
-find_package(QtSingleApplication REQUIRED)
+find_package(SingleApplication REQUIRED)
 #find_package(Solver REQUIRED)
 
 # add settings to installation

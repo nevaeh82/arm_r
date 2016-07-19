@@ -153,7 +153,8 @@ void TabManager::addStationTabs()
 	commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
 
 	if (m_rpcFlakonClient != NULL) {
-		m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
+		QHostAddress addr = QHostAddress(m_rpcHost);
+		m_rpcFlakonClient->init(m_rpcPort, addr);
 	}
 
 	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);

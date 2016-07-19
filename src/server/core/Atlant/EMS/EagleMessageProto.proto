@@ -1,5 +1,5 @@
 package EMS;
-
+option optimize_for = LITE_RUNTIME; 
 option java_package = "EMS";
 option java_outer_classname = "EagleMessageProto";
 

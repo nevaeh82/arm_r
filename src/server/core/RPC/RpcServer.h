@@ -12,6 +12,7 @@
 #include <QHostAddress>
 #include <QTime>
 
+#include <QPointF>
 #include <Rpc/RpcRoutedServer.h>
 
 #include "Rpc/RpcMessageStruct.h"

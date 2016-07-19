@@ -13,9 +13,6 @@
 [submodule "redist/ipp"]
 	path = redist/ipp
 	url = git@192.168.137.67:externals/ipp.git
-[submodule "redist/qtsingleapplication"]
-	path = redist/qtsingleapplication
-	url = git@192.168.137.67:externals/qtsingleapplication.git
 [submodule "cmake"]
 	path = cmake
 	url = git@192.168.137.67:externals/cmake.git
