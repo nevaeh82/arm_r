@@ -43,6 +43,29 @@ QString SpectrumWidget::getSpectrumName() const
 	return ui->spectrumNameLB->text();
 }
 
+ChartView *SpectrumWidget::getChartWidget()
+{
+	QLineSeries *series = new QLineSeries();
+	for (int i = 0; i < 500; i++) {
+		QPointF p((qreal) i, qSin(M_PI / 50 * i) * 100);
+		p.ry() += qrand() % 20;
+		*series << p;
+	}
+//![1]
+
+	Chart *chart = new Chart();
+	chart->addSeries(series);
+	chart->setTitle("Zoom in/out example");
+	chart->setAnimationOptions(QChart::SeriesAnimations);
+	chart->legend()->hide();
+	chart->createDefaultAxes();
+
+	ChartView *chartView = new ChartView(chart);
+	chartView->setRenderHint(QPainter::Antialiasing);
+	//ui->chartView;
+	return chartView;
+}
+
 //Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
 //{
 //	return ui->graphicsWidget;

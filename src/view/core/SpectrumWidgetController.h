@@ -28,6 +28,9 @@
 
 #include "ControlPanel/ControlPanelController.h"
 
+#include "Charts/chartview.h"
+
+
 #define TO_MHZ	1000000.0
 #define TO_MHZ2	1000.0
 
@@ -64,6 +67,8 @@ private:
 
 	double	m_threshold;
 	int		m_rett;
+
+	ChartView* m_chart;
 
 //	Q_MG_SpectrumInterface* m_graphicsWidget;
 

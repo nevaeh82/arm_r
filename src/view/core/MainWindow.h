@@ -7,9 +7,14 @@
 #include "ControlPanel/ControlPanelWidget.h"
 #include "Tabs/TabManager.h"
 
+#include "Charts/chart.h"
+#include "Charts/chartview.h"
+
 namespace Ui {
 class MainWindow;
 }
+
+QT_CHARTS_USE_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -25,6 +30,7 @@ public:
 
 private:
 	Ui::MainWindow* ui;
+	//ChartView* getChartWidget();
 
 private:
 	void init();

@@ -10,9 +10,19 @@
 
 #include "Prm300ControlWidget.h"
 
+#include "Charts/chart.h"
+#include "Charts/chartview.h"
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtCore/QtMath>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+
 namespace Ui {
 class SpectrumWidget;
 }
+
+QT_CHARTS_USE_NAMESPACE
 
 class SpectrumWidget : public QWidget
 {
@@ -31,6 +41,8 @@ public:
 
 	void setSpectrumName(const QString& name);
 	QString getSpectrumName() const;
+
+	ChartView* getChartWidget();
 
 //	Q_MG_SpectrumInterface* getGraphicsWidget();
 

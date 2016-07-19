@@ -103,7 +103,7 @@ void MainWindowController::init()
 	m_controlPanelController->setDbManager(m_dbManager);
 	m_tabManager->setControlPanelController(m_controlPanelController);
 
-	m_view->getStackedWidget()->setCurrentIndex(1);
+	//m_view->getStackedWidget()->setCurrentIndex(1);
 
 	/// Problem here:
 

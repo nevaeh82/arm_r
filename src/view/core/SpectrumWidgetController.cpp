@@ -458,6 +458,7 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 
 void SpectrumWidgetController::init()
 {
+	m_chart = m_view->getChartWidget();
 //	m_graphicsWidget = m_view->getGraphicsWidget();
 
 //	m_graphicsWidget->SetZoomOutMaxOnDataSet(true);
