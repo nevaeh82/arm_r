@@ -25,6 +25,7 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
 
 	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
+	connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
 }
 
 RpcFlakonClientWrapper::~RpcFlakonClientWrapper()
@@ -171,6 +172,15 @@ void RpcFlakonClientWrapper::sendSolverSetupSettingsSlot(QByteArray data)
 	m_rpcClient->sendSolverSettings( data );
 }
 
+void RpcFlakonClientWrapper::sendRdsProtoSlot(QByteArray data)
+{
+	if(NULL == m_rpcClient) {
+		return;
+	}
+
+	m_rpcClient->sendRdsProto( data );
+}
+
 void RpcFlakonClientWrapper::sendWorkModeSlot(int mode, bool isOn)
 {
 	if(NULL == m_rpcClient) {
@@ -238,6 +248,11 @@ void RpcFlakonClientWrapper::sendWorkMode(const int mode, const bool isOn)
 void RpcFlakonClientWrapper::sendSolverSetupSettings(const QByteArray &data)
 {
 	emit sendSolverSetupSettingsSignal( data );
+}
+
+void RpcFlakonClientWrapper::sendRdsProto(const QByteArray &data)
+{
+	emit sendRdsProtoSignal( data );
 }
 
 void RpcFlakonClientWrapper::requestFlakonStatus()

@@ -89,7 +89,7 @@ private:
 
 	void addPreambula(QByteArray& data);
 	QByteArray getMessage(const QByteArray& input);
-	MessageSP configureLoc(const LocSystemConfiguration &conf);
+	MessageSP configureLoc(const QByteArray &data);
 
 signals:
 	void onChangeDevState(QMap<int, bool>);

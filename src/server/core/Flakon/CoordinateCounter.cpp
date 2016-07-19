@@ -246,33 +246,15 @@ void CoordinateCounter::onSolver1SetupAnswer(const QByteArray &data)
 	emit signal1SetupAnswer( data );
 }
 
+
+//Here Now parse solver protobuf
 void CoordinateCounter::sendData(const MessageSP message)
 {
 	QString messageType = message->type();
 
 	if (messageType == TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER) {
 		QByteArray messageData = message->data();
-		/*TODO: REPLACE DATASTREAM WITH PROTOBUF WHEN TCPSERVER WILL BE TESTED*/
-		/*
-		Zaviruha::Packet packet;
-		if (!packet.ParseFromArray(messageData, messageData.size())){
-			return;
-		}
-
-		double alt = packet.command().arguments().solverdata(0).altitude();*/
-
-		int id;
-		int track_length;
-		double alt;
-
-		QDataStream dataStream(&messageData, QIODevice::ReadOnly);
-		dataStream >> id >> track_length >> alt;
-
-		m_solver->SetHeighApriori(alt);
-		m_alt = alt;
-	}
-	else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR) {
-		m_solver->Clear();
+		sendRawDataToClientTcpServer1(messageData);
 	}
 }
 
@@ -333,7 +315,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 
 	dataResultStream << sourceType;
-	dataResultStream << (int)result;;
+	dataResultStream << (int)result;
 
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT, dataResult));
 
@@ -488,7 +470,7 @@ void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)
 {
 	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
 	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(FLAKON_TCP_DEVICE, m_likeADeviceName, message);
+		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
 	}
 
 	QByteArray dataResult;
@@ -694,6 +676,14 @@ void CoordinateCounter::sendDataToClientTcpServer1(const SolverProtocol::Packet&
 	data.SerializeToArray( outData.data(), outData.size() );
 
 	MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA_1, outData));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, message);
+	}
+}
+
+void CoordinateCounter::sendRawDataToClientTcpServer1(const QByteArray& data)
+{
+	MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA_1, data));
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, message);
 	}

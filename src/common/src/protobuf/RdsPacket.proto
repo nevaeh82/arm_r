@@ -91,7 +91,7 @@ message Signal {
 message Convolution {
 	required int32 first_detector_index  = 1;// Индекс первого датчика
 	required int32 second_detector_index = 2;// Индекс второго датчика
-	required double delay = 3;// Задержка времени м/у приходами сигналов на датчики (сек)
+	required double delay = 3;// Задержка времени м/у приходами сигналов на датчики (сек). T_1 - T_2
 	required double delay_accuracy = 4;// СКО случайной ошибки определения задержки (cек)
 	optional double doppler = 5;// Доплеровский сдвиг (Гц)
 	optional double doppler_accuracy = 6;// СКО случайной ошибки определения доплера (Гц)
@@ -123,8 +123,8 @@ message Mode {
 		int32 index = 1;// Индекс режима 
 				// 0 = нет
 				// 1 = Location. Координатометрия
-				// 2 = Analysis. Для одного канала. Спектрограмма, спектр, модуль, фаза частота и анализ г-на Кислицина (частично готов).
-				// 3 = Correction. Режим коррекции частоты по реперному излучению (не готов).
+				// 2 = Analysis. Для одного канала. Спектрограмма, спектр, модуль, фаза частота и анализ г-на Кислицина.
+				// 3 = Correction. Режим коррекции частоты по реперному излучению.
 				// 4 = Detector. Обнаружение
 		bool status = 2;// Вкл. или выкл.
 	}
@@ -242,8 +242,27 @@ message Analysis {
 	}
 }
 
-//#### Коррекция частоты (скоро)
+//#### Коррекция частоты
 message Correction {
+
+	// Настройки режима «Коррекция» (*)
+	message CorrectionOptions {
+		required int32 duration = 1;// Длительность сигнала (мс)
+		required int32 loops_number = 2;// Количество циклов для диапазона
+		repeated Range range = 3;// Диапазоны в которых будет работать детектор.
+	}
+	
+	// Коэффициенты коррекции (shift_freq = a*central_freq + b). Нужно чтобы пользователь знал когда последний раз рассчитывались коэф. и какие они.
+	message CorrectionCoefficient {
+		required int64 date_time = 1;// Время измерения
+		repeated double a = 2;
+		repeated double b = 3;
+	}
+
+	oneof Message {
+		CorrectionOptions options = 1;
+		CorrectionCoefficient coefficient = 2;
+	}
 }
 
 //#################################################################################################
@@ -302,9 +321,25 @@ message AnalysisSpectrum {
 	required Plot plot = 1;// График (по оси Х МГц)
 }
 
+//#### Огибающая, фаза и частота режима Analysis
+message AnalysisAbsPhaseFreq {
+	required Plot plot_abs = 1;// График  (по оси Х мс)
+	required Plot plot_phase = 2;// График (по оси Х мс)
+	required Plot plot_freq = 3;// График (по оси Х мс). Отсчитывается от центральной частоты приемника!!!
+	optional Plot plot_lambda = 4;// График (по оси Х мс). Это обнаруженные импульсы (0 если нет импульса, 1 если есть). 
+				      // Т.е. по идее огибающую, фазу и частоту надо выводить после умножения на лямбду чтобы шум между импульсами не мешал. 
+				      // Отправляю не умноженными чтобы была возможность отключить если импульсы обнаружены плохо.
+}
+
 //#### Обнаруженные библиотекой тех. анализа Кислицина сигналы 
 message AnalysisDetected {
 	repeated DetectedSignal signal = 1;// Обнаруженные сигналы (тут в info сист. связи, модуляция и т.д., потом будет в SignalParameters, когда будет ясно что нужно)
+}
+
+//#### Частотные сдвиги
+message CorrectionShift {
+	repeated double shift = 1;// Сдвиг (Гц)
+	repeated double frequency = 2;// Частота приемника (в МГц)
 }
 
 //#################################################################################################
@@ -321,6 +356,7 @@ message ClientMessage {
 			Location location = 3;
 			Detector detector = 4;
 			Analysis analysis = 5;
+			Correction correction = 6;
 		}
 	}
 
@@ -332,6 +368,7 @@ message ClientMessage {
 			Location location = 3;
 			Detector detector = 4;
 			Analysis analysis = 5;
+			Correction correction = 6;
 		}
 	}
 
@@ -355,6 +392,7 @@ message ServerMessage{
 			Location location = 3;
 			Detector detector = 4;
 			Analysis analysis = 5;
+			Correction correction = 6;
 		}
 	}
 
@@ -369,7 +407,9 @@ message ServerMessage{
 			DetectorDetected detector_detected = 6;
 			AnalysisSpectrogram analysis_spectrogram = 7;
 			AnalysisSpectrum analysis_spectrum = 8;
-			AnalysisDetected analysis_detected = 9;
+			AnalysisAbsPhaseFreq analysis_abs_phase_freq = 9;
+			AnalysisDetected analysis_detected = 10;
+			CorrectionShift correction_shift = 11;
 		}
 	}
 	

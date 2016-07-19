@@ -28,6 +28,7 @@
 #include "Tabs/SolverResultWidgetController.h"
 #include "Tabs/SolverErrorsWidgetController.h"
 #include "Tabs/SolverSetupWidgetController.h"
+#include "Tabs/LocationSetupWidgetController.h"
 
 class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
 {
@@ -53,6 +54,8 @@ private:
 	SolverErrorsWidgetController* m_solverErrorsWidgetController;
 	SolverSetupWidgetController* m_solverSetupWidgetController;
 
+	LocationSetupWidgetController* m_locationSetupController;
+
 	QThread *m_rpcClientThread;
 
 public:
@@ -77,11 +80,14 @@ private slots:
 	void slotShowSolverErrors();
 
 	void slotSendSolverSetupCommand( QByteArray data );
+	void slotSendRdsData(QByteArray data);
+	void slotShowLocationSetup();
 private:
 
 	void init();
 
 	// IRpcListener interface
+	void readProto(const QByteArray &data);
 public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };

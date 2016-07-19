@@ -36,6 +36,7 @@ signals:
 	void signalShowSolverErrors();
 	void signalResetSerevr();
 
+	void signalShowLocationSetup();
 };
 
 

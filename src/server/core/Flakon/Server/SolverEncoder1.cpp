@@ -104,6 +104,10 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onSolver1SetupAnswer( inputData );
 		}
+
+		foreach (ISolverListener* listener, m_receiversList) {
+			listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, inputData );
+		}
 	}
 
 	if( solverPacket.has_message() ) {
@@ -111,6 +115,10 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onErrorOccured( INTERNAL_ERROR, QString::fromStdString(solverPacket.message().message()) );
+		}
+
+		foreach (ISolverListener* listener, m_receiversList) {
+			listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, inputData );
 		}
 	}
 }
@@ -152,32 +160,6 @@ QByteArray SolverEncoder1::decode(const MessageSP message) {
 	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA_1 ) {
 		dataToSend = message->data();
 	}
-
-	//Zaviruha::Packet packet;
-//	SolverClient::Packet packet;
-
-//	SolverClient::Packet::Command* packetCommand = new SolverClient::Packet::Command();
-//	packet.set_allocated_command(packetCommand);
-
-//	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
-//		packetCommand->set_action(SolverClient::sendSolverClientData);
-
-//		SolverClient::Packet::ArgumentVariant* packetArgs = new SolverClient::Packet::ArgumentVariant();
-//		SolverClient::Packet::ArgumentVariant::SolverInput* arg = new SolverClient::Packet::ArgumentVariant::SolverInput();
-//		packetArgs->set_allocated_solverinput(arg);
-//		packetCommand->set_allocated_arguments(packetArgs);
-//		toProtobufSolverData( arg, message->data() );
-//	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
-//		packetCommand->set_action(SolverClient::sendSolverClientBla);
-//	} else {
-//		return QByteArray();
-//	}
-
-//	unsigned int size = packet.ByteSize();
-//	dataToSend.resize(size);
-//	packet.SerializeToArray(dataToSend.data(), size);
-
-//	return dataToSend;
 
 	addPreambula(dataToSend);
 	return dataToSend;

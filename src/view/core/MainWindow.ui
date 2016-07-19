@@ -149,9 +149,12 @@
     </property>
     <addaction name="actionAtlantSetup"/>
     <addaction name="actionLists"/>
+    <addaction name="separator"/>
     <addaction name="actionSolverLogs"/>
     <addaction name="actionSolverErrors"/>
     <addaction name="actionSolverSetup"/>
+    <addaction name="separator"/>
+    <addaction name="actionLocationSetup"/>
    </widget>
    <widget class="QMenu" name="menuServer">
     <property name="title">
@@ -205,6 +208,11 @@
   <action name="actionSolverSetup">
    <property name="text">
     <string>SolverSetup</string>
+   </property>
+  </action>
+  <action name="actionLocationSetup">
+   <property name="text">
+    <string>LocationSetup</string>
    </property>
   </action>
  </widget>

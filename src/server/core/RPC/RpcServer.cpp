@@ -24,6 +24,7 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_ENABLE_RECEIVER, this, SLOT(setEnableReceiver(quint64,int,bool)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_SOLVER_SETTINGS_SETUP, this, SLOT(setSolverSettingsSetup(quint64, QByteArray)));
+	m_serverPeer->attachSlot(RPC_METHOD_SEND_RDS_PROTO, this, SLOT(setRdsProtoSetup(quint64, QByteArray)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_WORK_MODE, this, SLOT(setWorkMode(quint64,int,bool)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FREQUENCY, this, SLOT(setPrmFrequency(quint64, QString, short)));
@@ -187,6 +188,11 @@ void RpcServer::setEnableReceiver(quint64 client, int id, bool val)
 void RpcServer::setSolverSettingsSetup(quint64 client, QByteArray data) {
 
 	dispatch( RPC_METHOD_SOLVER_SETTINGS_SETUP, QVariant(data), 0 );
+}
+
+void RpcServer::setRdsProtoSetup(quint64 client, QByteArray data) {
+
+	dispatch( RPC_METHOD_SEND_RDS_PROTO, QVariant(data), 0 );
 }
 
 void RpcServer::setWorkMode(quint64 client, int mode, bool isOn)

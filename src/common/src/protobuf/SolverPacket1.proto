@@ -232,10 +232,12 @@ message Packet {
             message PositionLines {
 
                 message PositionLine {
-                    required string targetID = 1;         //идентификатор цели, которой соответствует линия
-                    required double lineAccuracy = 2;     //точность линии положения (м.)
-                    repeated Coordinates lineCoordinates = 3; //последовательность координат, образующая линию
-                    repeated Coordinates lineAreaCoordinates = 4; //последовательность координат, образующая
+                    required int32 first_detector_index  = 1; //!индекс первого датчика
+                    required int32 second_detector_index = 2; //!индекс второго датчика
+                    required string targetID = 3;             //идентификатор цели, которой соответствует линия
+                    required double lineAccuracy = 4;         //точность линии положения (м.)
+                    repeated Coordinates lineCoordinates = 5; //последовательность координат, образующая линию
+                    repeated Coordinates lineAreaCoordinates = 6; //последовательность координат, образующая
                                                                   //область ответственности линии
                 }
 

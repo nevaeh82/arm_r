@@ -49,5 +49,7 @@ void MainWindow::init()
 	connect(ui->actionSolverErrors, SIGNAL(triggered()), this, SIGNAL(signalShowSolverErrors()));
 	connect(ui->actionSolverSetup, SIGNAL(triggered()), this, SIGNAL(signalShowSolverSetup()));
 
+	connect(ui->actionLocationSetup, SIGNAL(triggered()), this, SIGNAL(signalShowLocationSetup()));
+
 	connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
 }

@@ -94,6 +94,11 @@ void RpcFlakonClient::sendSolverSettings(const QByteArray &data)
 	m_clientPeer->call( RPC_METHOD_SOLVER_SETTINGS_SETUP, data );
 }
 
+void RpcFlakonClient::sendRdsProto(const QByteArray &data)
+{
+	m_clientPeer->call( RPC_METHOD_SEND_RDS_PROTO, data );
+}
+
 void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
 {
 	m_clientPeer->call( RPC_METHOD_WORK_MODE, mode, isOn );

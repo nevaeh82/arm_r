@@ -331,10 +331,10 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 
 				//log_debug("to RPC FLAKON_COORDINATE_COUNTER and RPC_SLOT_SERVER_SEND_CORRELATION");
 			} else if( messageType == TCP_RDS_ANSWER_LOCSYSTEM ) {
-				m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM, data);
-				IRpcListener *sender1 = NULL;
-				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
-					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
+				m_rpcServer->call(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+//				IRpcListener *sender1 = NULL;
+//				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
+//					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
 			} else if (messageType == TCP_FLAKON_STATUS) {
 				m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
 				m_rpcServer->call( RPC_SLOT_FLAKON_DEV_STATE, data, sender );

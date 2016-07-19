@@ -65,6 +65,7 @@ private slots:
 	void sendResponseModulation(quint64 client, QString modulation);
 	void setWorkMode(quint64 client, int mode, bool isOn);
 	void setSolverSettingsSetup(quint64 client, QByteArray data);
+	void setRdsProtoSetup(quint64 client, QByteArray data);
 };
 
 

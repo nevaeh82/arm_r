@@ -1,5 +1,7 @@
 #include "MainWindowController.h"
 
+#include "RdsPacket.pb.h"
+
 #define SERVER_NAME "ARM_R_Server"
 
 #define DEFAULT_RPC_PORT		24500
@@ -128,6 +130,10 @@ void MainWindowController::init()
 	m_solverSetupWidgetController = new SolverSetupWidgetController(this);
 	m_solverSetupWidgetController->appendView(solverSetupWidget);
 
+	m_locationSetupController = new LocationSetupWidgetController(this);
+	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);
+	m_locationSetupController->appendView(locationSetupWgt);
+
 	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
 	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
@@ -137,7 +143,10 @@ void MainWindowController::init()
 	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
 
+	connect(m_view, SIGNAL(signalShowLocationSetup()), this, SLOT(slotShowLocationSetup()));
+
 	connect( m_solverSetupWidgetController, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
+	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
 	serverStartedSlot();
 }
@@ -205,9 +214,19 @@ void MainWindowController::slotShowSolverErrors()
 	m_solverErrorsWidgetController->slotShowWidget();
 }
 
+void MainWindowController::slotShowLocationSetup()
+{
+	m_locationSetupController->slotShowWidget();
+}
+
 void MainWindowController::slotSendSolverSetupCommand(QByteArray data)
 {
 	m_rpcFlakonClient->sendSolverSetupSettings( data );
+}
+
+void MainWindowController::slotSendRdsData(QByteArray data)
+{
+	m_rpcFlakonClient->sendRdsProto(data);
 }
 
 void MainWindowController::rpcConnectionEstablished()
@@ -264,9 +283,9 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 		m_tabManager->addStationTabs();
 		m_controlPanelController->setMapStations(m_tabManager->getStations());
 
-	} else if(method == RPC_METHOD_CONFIG_ANSWER_LOCSYSTEM) {
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		LocSystemConfiguration config;
+	} else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
+		//data
+		readProto( data );
 	}
 	else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
 
@@ -282,5 +301,29 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 		dataStream >> dbConfig;
 
 		m_dbStationController->connectToDB(dbConfig);
+	}
+}
+
+void MainWindowController::readProto(const QByteArray& data)
+{
+	RdsProtobuf::Packet pkt;
+	pkt.ParseFromArray( data.data(), data.size() );
+
+	if( !pkt.has_from_server() ) {
+		return;
+	}
+
+	if( pkt.from_server().has_current() ) {
+		if( pkt.from_server().current().has_location() ) {
+			m_locationSetupController->setLocationSetup( pkt.from_server().current().location() );
+		}
+
+		if( pkt.from_server().current().has_detector() ) {
+			m_locationSetupController->setDetectorSetup( pkt.from_server().current().detector() );
+		}
+
+		if( pkt.from_server().current().has_correction() ) {
+			m_locationSetupController->setCorrectionSetup( pkt.from_server().current().correction() );
+		}
 	}
 }

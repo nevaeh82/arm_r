@@ -34,6 +34,7 @@ public:
 	void sendWorkMode(const int mode, const bool isOn);
 
 	void sendSolverSetupSettings(const QByteArray& data);
+	void sendRdsProto(const QByteArray& data);
 
 	void requestFlakonStatus();
 
@@ -56,6 +57,7 @@ signals:
 	void sendWorkModeSignal(int mode, bool isOn);
 
 	void sendSolverSetupSettingsSignal(QByteArray data);
+	void sendRdsProtoSignal(QByteArray data);
 
 	void requestFlakonStatusSignal();
 
@@ -75,6 +77,7 @@ private slots:
 	void sendEnableReceiverSlot(int id, bool val);
 
 	void sendSolverSetupSettingsSlot(QByteArray data);
+	void sendRdsProtoSlot(QByteArray data);
 
 	void sendWorkModeSlot(int mode, bool isOn);
 

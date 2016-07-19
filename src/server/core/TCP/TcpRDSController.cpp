@@ -275,4 +275,7 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 //		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_PRM_STATUS, data ) ) );
 	}
+	else if(method == RPC_METHOD_SEND_RDS_PROTO) {
+		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SEND_PROTO, data ) ) );
+	}
 }

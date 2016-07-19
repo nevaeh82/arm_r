@@ -20,8 +20,6 @@ SolverSetupWidget::SolverSetupWidget(QWidget *parent) :
 	this->hide();
 
 	connect( ui->pushButton, SIGNAL(clicked(bool)), this, SIGNAL(onSendSignal()) );
-
-	connect( ui->getVersion, SIGNAL(clicked(bool)), this, SIGNAL(onGetVersion()) );
 }
 
 SolverSetupWidget::~SolverSetupWidget()

@@ -156,6 +156,7 @@ private:
 
 	void sendDataToClientTcpServer();
 	void sendDataToClientTcpServer1(const SolverProtocol::Packet &data);
+	void sendRawDataToClientTcpServer1(const QByteArray &data);
 
 	bool getIsSolverServer();
 	uint getSolverVersion();

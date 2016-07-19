@@ -1,5 +1,6 @@
 #include <Logger/Logger.h>
 
+#include "RDSExchange.h"
 #include "TcpRdsCoder.h"
 
 #include <QDebug>
@@ -104,15 +105,7 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_GET_LOC_STATUS) {
-		RdsProtobuf::Location_LocationOptions* oMsg = msg.mutable_from_client()->mutable_get()->mutable_location()->mutable_options();
-		oMsg->set_duration(0);
-		oMsg->set_central_frequency(0);
-		oMsg->set_convolution(0);
-		oMsg->set_doppler(0);
-		oMsg->set_averaging_frequency_band(0);
-		oMsg->set_frequency_tuning_mode(2);
-		oMsg->mutable_filter()->set_range(0);
-		oMsg->mutable_filter()->set_shift(0);
+		createGetLocationStatus(msg);
 	} else if( messageType == TCP_RDS_GET_PRM_STATUS ) {
 		RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_device();
 
@@ -257,6 +250,9 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_TWO) {
 	}
 	else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
+	}
+	else if( message->type() == TCP_RDS_SEND_PROTO ) {
+		return msgData;
 	}
 	else {
 		return QByteArray();
@@ -543,7 +539,13 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			m_locConf.range = locMsg.filter().range();
 			m_locConf.shift = locMsg.filter().shift();
 
-			message = configureLoc(m_locConf);
+			message = configureLoc(data);
+		}
+		else if( sMsg.current().has_detector() ) {
+			message = configureLoc(data);
+		}
+		else if( sMsg.current().has_correction() ) {
+			message = configureLoc(data);
 		}
 	}
 
@@ -575,14 +577,9 @@ MessageSP TcpRdsCoder::configure(const QList<StationConfiguration>& lst)
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, ba));
 }
 
-MessageSP TcpRdsCoder::configureLoc(const LocSystemConfiguration& conf)
+MessageSP TcpRdsCoder::configureLoc(const QByteArray& data)
 {
-
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << conf;
-
-	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, ba));
+	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
 }
 
 MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, float timediff, float veracity, QVector<QPointF> points)
