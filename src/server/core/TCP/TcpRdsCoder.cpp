@@ -301,13 +301,21 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 		}
 		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
 			QDateTime tmp = QDateTime::currentDateTime();
+
+			int ind = sMsg.data().location_spectrum().detector_index();
+
+			m_specTime = m_mapSendSpectrumTime.value(ind, tmp);
+
 			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
+
+				if(!m_mapSendSpectrumTime.contains(ind)) {
+					m_mapSendSpectrumTime.insert(ind, tmp);
+				}
+
 				return message;
 			}
 
-			m_specTime = QDateTime::currentDateTime();
-
-			int ind = sMsg.data().location_spectrum().detector_index();
+			m_mapSendSpectrumTime.insert(ind, tmp);
 
 			double startFreq = sMsg.data().location_spectrum().plot().axis_x_start();
 			double stepFreq = sMsg.data().location_spectrum().plot().axis_x_step();

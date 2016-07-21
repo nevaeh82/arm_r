@@ -66,6 +66,8 @@ private:
 	int m_indexConv2;
 	int m_indexSpect;
 
+	QMap<int, QDateTime> m_mapSendSpectrumTime;
+
 
 public:
 	explicit TcpRdsCoder(QObject* parent = NULL);
