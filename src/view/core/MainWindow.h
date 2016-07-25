@@ -28,6 +28,9 @@ private:
 
 private:
 	void init();
+private slots:
+    void showError(QString);
+    void showConfirm(QString);
 
 signals:
 	void signalShowLists();

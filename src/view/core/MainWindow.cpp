@@ -51,5 +51,15 @@ void MainWindow::init()
 
 	connect(ui->actionLocationSetup, SIGNAL(triggered()), this, SIGNAL(signalShowLocationSetup()));
 
-	connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
+    connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
+}
+
+void MainWindow::showError(QString msg)
+{
+   // QMessageBox::critical(this, "Error", msg, QMessageBox::Ok);
+}
+
+void MainWindow::showConfirm(QString msg)
+{
+    //QMessageBox::information(this, "Confirm", msg, QMessageBox::Ok);
 }

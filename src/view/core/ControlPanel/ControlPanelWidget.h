@@ -34,6 +34,8 @@ public:
 	void changeCorrelationStatusActive(const bool isActive);
 
 	void changeQualityStatus(const int status);
+
+    void onSetMode(int modeId, bool isOn);
 signals:
 	void commonFreqChangedSignal(int value);
 	void bandwidthChangedSignal(int start, int end);
@@ -61,6 +63,7 @@ private slots:
 	void onSetBandWidthSlot();
 	void slotChangeMode(int index);
 	void slotOnWorkMode();
+    void slotTurnWorkMode(bool val);
 
 public slots:
 	void slotChangeCommonFreq(int value);

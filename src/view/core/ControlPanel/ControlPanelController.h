@@ -81,6 +81,8 @@ public:
 
 	virtual void onMethodCalled(const QString &method, const QVariant &argument);
 
+    void onSetSystem(int modeId, bool isOn);
+
 signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);

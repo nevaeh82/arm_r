@@ -332,6 +332,12 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
 {
 	if (m_rpcFlakonClient == NULL) return;
 
+    log_debug(QString("set Range: %1").arg(m_station->getBandwidth()));
+    log_debug(QString("set Shift: %1").arg(m_station->getShift()));
+
+    float range = m_station->getBandwidth();
+    float shift = m_station->getShift();
+
 	m_rpcFlakonClient->sendBandwidth(m_station->getId(), m_station->getBandwidth());
 	m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
 	m_rpcFlakonClient->sendCenter(m_station->getId(), m_station->getCenter());
@@ -371,7 +377,7 @@ void TabSpectrumWidgetController::recognize()
 
 void TabSpectrumWidgetController::setPanorama(bool state)
 {
-	emit signalPanoramaState(state);
+    emit signalPanoramaState(state);
 }
 
 /// in this thread set points from rpc (flakon)
@@ -458,10 +464,10 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
 		//m_view->setIndicatorState(2);
-		if(!m_isPanoramaEnabled)
-			m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
-		commandCode = COMMAND_PRM_SET_FREQ;
-		commandType = TypeGraphicCommand;
+        //if(!m_isPanoramaEnabled)
+        //	m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm
+//		commandCode = COMMAND_PRM_SET_FREQ;
+//		commandType = TypeGraphicCommand;
 	}
 	else if(DB_PANORAMA_START_PROPERTY == inProperty.name) {
 		commandCode = COMMAND_SET_PANORAMA_START_VALUE;

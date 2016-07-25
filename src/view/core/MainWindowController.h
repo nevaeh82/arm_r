@@ -65,6 +65,8 @@ public:
 	void appendView(MainWindow *view);
 
 signals:
+    void signalMessageConfirm(QString mesage);
+    void signalMessageError(QString message);
 
 private slots:
 	void serverFailedToStartSlot();

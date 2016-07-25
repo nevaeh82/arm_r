@@ -20,8 +20,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
 
-	connect(ui->workMode, SIGNAL(valueChanged(int)), this, SLOT(slotOnWorkMode()));
-	connect(ui->workModeOn, SIGNAL(clicked(bool)), this, SLOT(slotOnWorkMode()));
+    connect(ui->workMode, SIGNAL(activated(int)), this, SLOT(slotOnWorkMode()));
+    connect(ui->workModeOn, SIGNAL(clicked(bool)), this, SLOT(slotTurnWorkMode(bool)));
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
 	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
@@ -44,6 +44,9 @@ void ControlPanelWidget::onSetCommonFrequencySlot()
 
 void ControlPanelWidget::onSetBandWidthSlot()
 {
+    ui->panoramaCB->setChecked(false);
+    emit panoramaCheckedSignal(false);
+    qApp->processEvents();
     emit bandwidthChangedSignal(ui->startFreqSB->value(), ui->endFreqSB->value());
 }
 
@@ -71,7 +74,15 @@ void ControlPanelWidget::slotChangeMode(int index)
 
 void ControlPanelWidget::slotOnWorkMode()
 {
-	emit signalWorkMode(ui->workMode->value(), ui->workModeOn->isChecked());
+    int mode = ui->workMode->currentIndex();
+    ui->workModeOn->setChecked(true);
+    emit signalWorkMode(mode, true);
+}
+
+void ControlPanelWidget::slotTurnWorkMode(bool val)
+{
+    int mode = ui->workMode->currentIndex();
+    emit signalWorkMode(mode, val);
 }
 
 void ControlPanelWidget::changeCorrelationStatus(QString correlationValue)
@@ -89,8 +100,6 @@ void ControlPanelWidget::changeCorrelationStatusActive(const bool isActive)
 	}
 }
 
-
-
 void ControlPanelWidget::changeQualityStatus(const int status)
 {
 	if(1 == status) {
@@ -98,7 +107,13 @@ void ControlPanelWidget::changeQualityStatus(const int status)
 	}
 	else {
 		ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
-	}
+    }
+}
+
+void ControlPanelWidget::onSetMode(int modeId, bool isOn)
+{
+    ui->workMode->setCurrentIndex( modeId );
+    ui->workModeOn->setChecked( isOn );
 }
 
 void ControlPanelWidget::slotChangeCommonFreq(int value)

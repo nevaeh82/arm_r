@@ -153,7 +153,6 @@ void SolverEncoder::readProtobuf(const QByteArray& inputData)
 					listener->onErrorOccured(errType, errString);
 				}
 			}
-
 		}
 	}
 }
@@ -240,8 +239,6 @@ void SolverEncoder::toProtobufSolverData(SolverClient::Packet::ArgumentVariant::
 	arg->set_datetime( receiveData.time_ );
 	arg->set_centerfrequency(centerFrequency);
 }
-
-
 
 void SolverEncoder::addPreambula(QByteArray& data)
 {

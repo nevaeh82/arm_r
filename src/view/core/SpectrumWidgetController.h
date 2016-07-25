@@ -171,6 +171,7 @@ private slots:
 	void addToBlackList();
 	void recognizeSignal();
 	void toggleCorrelation();
+    void toggleOffCorrelation();
 	void clearLabels();
 
 	void slotSelectionCleared();

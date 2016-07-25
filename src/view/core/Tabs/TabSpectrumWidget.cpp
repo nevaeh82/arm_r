@@ -41,7 +41,7 @@ TabSpectrumWidget::~TabSpectrumWidget()
 
 void TabSpectrumWidget::activate()
 {
-	log_debug("Activate tab");
+    log_debug(("Activate tab"));
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}

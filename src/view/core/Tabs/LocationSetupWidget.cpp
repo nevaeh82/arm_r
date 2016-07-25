@@ -1,6 +1,8 @@
 #include "LocationSetupWidget.h"
 #include "ui_LocationSetupWidget.h"
 
+#include "Logger/Logger.h"
+
 LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::LocationSetupWidget)
@@ -35,6 +37,8 @@ LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
 
 	connect(ui->pbAddRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onAddRangeCor()));
 	connect(ui->pbRemoveRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onRemoveRangeCor()));
+
+    ui->toolBox->setCurrentIndex(0);
 }
 
 LocationSetupWidget::~LocationSetupWidget()
@@ -52,6 +56,9 @@ void LocationSetupWidget::setLocationData(const RdsProtobuf::Location &data)
 	ui->cbDoppler->setChecked( opt.doppler() );
 	ui->sbAverageFreq->setValue( opt.averaging_frequency_band() );
 	ui->sbFreqTuning->setValue( opt.frequency_tuning_mode() );
+
+    log_debug(QString("Range: %1").arg(opt.filter().range()));
+    log_debug(QString("Shift: %1").arg(opt.filter().shift()));
 
 	ui->sbRange->setValue( opt.filter().range() );
 	ui->sbShift->setValue( opt.filter().shift() );
@@ -83,7 +90,7 @@ void LocationSetupWidget::setDetectorData(const RdsProtobuf::Detector &data)
 	ui->cbDopplerDet->setChecked( opt.doppler() );
 	ui->sbLoopsDet->setValue( opt.loops_number() );
 	ui->sbAverageFreqDet->setValue( opt.averaging_frequency_band() );
-	ui->sbThresholdDet->setValue( opt.band_threshold() );
+    ui->sbThresholdDet->setValue( opt.band_threshold()*1000 );
 
 	ui->listRangesDet->clear();
 	for(int i = 0; i < opt.range_size(); i++) {
@@ -103,7 +110,7 @@ RdsProtobuf::Detector LocationSetupWidget::getDetectorData() const
 	opt->set_doppler( ui->cbDopplerDet->isChecked() );
 	opt->set_loops_number( ui->sbLoopsDet->value() );
 	opt->set_averaging_frequency_band( ui->sbAverageFreqDet->value() );
-	opt->set_band_threshold( ui->sbThresholdDet->value() );
+    opt->set_band_threshold( (double)ui->sbThresholdDet->value() / 1000 );
 
 	for( int i = 0; i < ui->listRangesDet->count(); i++ ) {
 		RdsProtobuf::Range* range = opt->add_range();

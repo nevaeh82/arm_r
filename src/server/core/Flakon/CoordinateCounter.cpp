@@ -8,6 +8,8 @@
 #define GOOD_LIMIT 0.7
 #define VERACITY 1
 
+#define DELAY 1000
+
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent),
 	isInit(false),
@@ -15,6 +17,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 {
 	QDir dir;
 	dir.mkdir("./logs/SpecialLogs");
+    m_resTime.start();
 
 	m_logManager = new LogManager("./logs/SpecialLogs/logDistances.log");
 	if(!m_logManager->isFileOpened()) {
@@ -136,17 +139,6 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		int secInd = cnvMsg.second_detector_index();
 
 		double delay = cnvMsg.delay();
-		int maxInd = m_aData.ranges_.size() - 1;
-
-		if( m_main_point > maxInd || firstInd > maxInd || secInd > maxInd ) {
-			continue;
-		}
-
-		if(m_main_point == firstInd) {
-			m_aData.ranges_.replace( secInd, delay );
-		} else if(m_main_point == secInd) {
-			m_aData.ranges_.replace( firstInd, delay );
-		}
 
 		SolverProtocol::MeasurementsData_DataPacket* data = solverData->add_data_packet();
 		data->set_first_detector_index( firstInd );
@@ -241,11 +233,27 @@ void CoordinateCounter::onSolver1ProtoData(const int &result, const QByteArray &
 	emit signal1ProtoData( result, data );
 }
 
+void CoordinateCounter::onSolverBlaData(const QByteArray &data)
+{
+
+    if( m_resTime.elapsed() > DELAY ) {
+        SolverProtocol::Packet pkt;
+        pkt.ParseFromArray(data.data(), data.size());
+
+        emit signal1BlaData( data );
+        m_resTime.restart();
+    }
+}
+
+void CoordinateCounter::onSolverWorkData(const QByteArray &data)
+{
+     emit signal1BlaData( data );
+}
+
 void CoordinateCounter::onSolver1SetupAnswer(const QByteArray &data)
 {
 	emit signal1SetupAnswer( data );
 }
-
 
 //Here Now parse solver protobuf
 void CoordinateCounter::sendData(const MessageSP message)
@@ -277,7 +285,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	int sourceType = AUTO_HEIGH;
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
-	if( result == SOLVED ) {
+    if( result == SOLVED ) {
 		QByteArray dataToSend;
 		QDataStream ds(&dataToSend, QIODevice::WriteOnly);
 
@@ -466,13 +474,17 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 	}
 }
 
+void CoordinateCounter::slotSolverBlaData( QByteArray data ) {
+
+         //log_debug("ON SEND BALDATA >>>>>>>>>!");
+         MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
+         foreach (ITcpListener* receiver, m_receiversList) {
+             receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
+         }
+}
+
 void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)
 {
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
-	}
-
 	QByteArray dataResult;
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
@@ -496,7 +508,7 @@ void CoordinateCounter::slotSolver1SetupAnswer(QByteArray data)
 
 void CoordinateCounter::slotErrorOccured(int error_type, QString str)
 {
-	log_debug(QString("ERROR = %1").arg(error_type));
+    //log_debug(QString("ERROR = %1").arg(error_type));
 
 	QByteArray strBA;
 	QDataStream dataStream(&strBA, QIODevice::WriteOnly);
@@ -590,6 +602,10 @@ void CoordinateCounter::initSolver()
 	connect(this, SIGNAL(signalError(int ,QString)), this, SLOT(slotErrorOccured(int ,QString)));
 
 	connect(this, SIGNAL(signal1ProtoData(int,QByteArray)), this, SLOT(slotSolver1ProtoData(int,QByteArray)));
+
+    connect(this, SIGNAL(signal1BlaData(QByteArray)),
+            this, SLOT(slotSolverBlaData(QByteArray)));
+
 	connect(this, SIGNAL(signal1SetupAnswer(QByteArray)), this, SLOT(slotSolver1SetupAnswer(QByteArray)));
 
 }

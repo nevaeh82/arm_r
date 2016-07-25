@@ -4,9 +4,11 @@
 #include "TcpRdsCoder.h"
 
 #include <QDebug>
+#include <QSettings>
+#include <QTextCodec>
 
 #define TO_KHZ 1000
-#define TIME_DEL 100
+#define TIME_DEL 1000
 
 TcpRdsCoder::TcpRdsCoder(QObject* parent) :
 	BaseTcpDeviceCoder(parent),
@@ -22,6 +24,11 @@ TcpRdsCoder::TcpRdsCoder(QObject* parent) :
 	m_specTime = QDateTime::currentDateTime();
 
 	m_inputData = spectrum;
+
+    QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    m_upTime = settings.value("SpectrumUpTime/time", TIME_DEL).toInt();
+
 }
 
 TcpRdsCoder::~TcpRdsCoder()
@@ -100,7 +107,9 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(b);
 	}
 	else if(messageType == TCP_RDS_WORK_MODE) {
-		return QByteArray();
+        RdsProtobuf::Mode* sMsg = msg.mutable_from_client()->mutable_get()->mutable_mode();
+        sMsg->set_index(0);
+        sMsg->set_status(true);
 	}
 	else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
@@ -112,18 +121,18 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		dMsg->set_device_index(0);
 		dMsg->set_status(true);
 	} else if( messageType == TCP_RDS_SET_PRM_STATUS ) {
-		int ind;
-		stream >> ind;
+        int ind;
+        stream >> ind;
 
-		RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_device();
+        RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_device();
 
-		if(ind < 0) {
-			dMsg->set_device_index(0);
-			dMsg->set_status(true);
-		} else {
-			dMsg->set_device_index(ind);
-			dMsg->set_status(true);
-		}
+        if(ind < 0) {
+            dMsg->set_device_index(0);
+            dMsg->set_status(true);
+        } else {
+            dMsg->set_device_index(ind);
+            dMsg->set_status(true);
+        }
 	}
 	 else if( messageType == TCP_RDS_GET_SYSTEM ) {
 		RdsProtobuf::System_SystemOptions* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_options();
@@ -299,14 +308,13 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				status = val;
 			}
 		}
-		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
-			QDateTime tmp = QDateTime::currentDateTime();
-
+		if( sMsg.data().has_location_spectrum() ) {        //Spectrum			
 			int ind = sMsg.data().location_spectrum().detector_index();
 
+            QDateTime tmp = QDateTime::currentDateTime();
 			m_specTime = m_mapSendSpectrumTime.value(ind, tmp);
 
-			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
+            if( m_specTime.msecsTo(tmp) < m_upTime ) {
 
 				if(!m_mapSendSpectrumTime.contains(ind)) {
 					m_mapSendSpectrumTime.insert(ind, tmp);
@@ -329,22 +337,30 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				freq += stepFreq;
 			}
 
-			if(m_indexSpect != ind) {
 				message = pointers(ind, startFreq+10, vec);
-			}
 
 			m_indexSpect = ind;
 		} else if( sMsg.data().has_location_convolution() ) {   //Single convolution
-			QDateTime tmp = QDateTime::currentDateTime();
-			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
-				return message;
-			}
-
-			m_specTime = QDateTime::currentDateTime();
-
 			float veracity = 0;
 			int index1 =  sMsg.data().location_convolution().convolution().first_detector_index();
 			int index2 =  sMsg.data().location_convolution().convolution().second_detector_index();
+
+            QDateTime tmp = QDateTime::currentDateTime();
+            int ind = (index1<<8)+index2;
+            m_specTime = m_mapSendConvolutionTime.value(ind, tmp);
+
+            if( m_specTime.msecsTo(tmp) < m_upTime ) {
+
+                if(!m_mapSendConvolutionTime.contains(ind)) {
+                    m_mapSendConvolutionTime.insert(ind, tmp);
+                }
+
+                return message;
+            }
+
+            m_mapSendConvolutionTime.insert(ind, tmp);
+
+
 			float timediff = sMsg.data().location_convolution().convolution().delay();
 
 			QVector<QPointF> vp;
@@ -388,15 +404,22 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			message = correlationAll(data);
 		}
 		else if( sMsg.data().has_detector_spectrum() ) {
-
-			QDateTime tmp = QDateTime::currentDateTime();
-			if( m_specTime.msecsTo(tmp) < TIME_DEL ) {
-				return message;
-			}
-
-			m_specTime = QDateTime::currentDateTime();
-
 			int ind = sMsg.data().detector_spectrum().detector_index();
+
+            QDateTime tmp = QDateTime::currentDateTime();
+            m_specTime = m_mapSendDetectorTime.value(ind, tmp);
+
+            if( m_specTime.msecsTo(tmp) < m_upTime ) {
+
+                if(!m_mapSendDetectorTime.contains(ind)) {
+                    m_mapSendDetectorTime.insert(ind, tmp);
+                }
+
+                return message;
+            }
+
+            m_mapSendDetectorTime.insert(ind, tmp);
+
 			int cFreq = sMsg.data().detector_spectrum().central_frequency();
 
 			QVector<QPointF> vec;
@@ -424,6 +447,10 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				pointsList.append(point);
 			}
 
+            //Test
+//            QPointF point( startFreq+stepFreq*10, startFreq+stepFreq*10000 );
+//            pointsList.append(point);
+            // =========
 			emit onDetectSignal(ind, pointsList);
 		}
 		else if( sMsg.data().has_detector_detected() ) {
@@ -442,15 +469,18 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 		QString answer;
 		if( sMsg.answer().has_error() ) {
 			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
+            message = configureLoc(data);
 		} else if( sMsg.answer().has_confirmation() ) {
 			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
+            message = configureLoc(data);
 		}
 	} else if( sMsg.has_current() ) {
 		if( sMsg.current().has_mode() ) {
-			uint mode = sMsg.current().mode().index();
-			bool stat = sMsg.current().mode().status();
-			int i = 0;
-			i = i+1;
+            int mode = sMsg.current().mode().index();
+//			bool stat = sMsg.current().mode().status();
+//			int i = 0;
+//			i = i+1;
+            message = configureLoc(data);
 		} else if( sMsg.current().has_system() ) {
 			if( sMsg.current().system().has_options() ) {
 				QList<StationConfiguration> resultList;

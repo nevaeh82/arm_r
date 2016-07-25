@@ -116,6 +116,9 @@ void MainWindowController::init()
 
 	m_view->getStackedWidget()->setCurrentIndex(1);
 
+    connect(this, SIGNAL(signalMessageError(QString)), m_view, SLOT(showError(QString)));
+    connect(this, SIGNAL(signalMessageConfirm(QString)), m_view, SLOT(showConfirm(QString)));
+
 	/// Problem here:
 
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
@@ -147,6 +150,9 @@ void MainWindowController::init()
 
 	connect( m_solverSetupWidgetController, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
+
+    connect(m_controlPanelController, SIGNAL(signalSetComonFreq(int)),
+            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	serverStartedSlot();
 }
@@ -316,6 +322,9 @@ void MainWindowController::readProto(const QByteArray& data)
 	if( pkt.from_server().has_current() ) {
 		if( pkt.from_server().current().has_location() ) {
 			m_locationSetupController->setLocationSetup( pkt.from_server().current().location() );
+            m_controlPanelController->setResponseFreq(
+                        pkt.from_server().current().location().options().central_frequency()
+                        );
 		}
 
 		if( pkt.from_server().current().has_detector() ) {
@@ -325,5 +334,21 @@ void MainWindowController::readProto(const QByteArray& data)
 		if( pkt.from_server().current().has_correction() ) {
 			m_locationSetupController->setCorrectionSetup( pkt.from_server().current().correction() );
 		}
+
+        if(pkt.from_server().current().has_mode()) {
+            m_controlPanelController->onSetSystem( pkt.from_server().current().mode().index(),
+                                                   pkt.from_server().current().mode().status() );
+        }
 	}
+
+    if(pkt.from_server().has_answer()) {
+        if(pkt.from_server().answer().has_confirmation()) {
+            emit signalMessageConfirm(
+                    QString::fromStdString(pkt.from_server().answer().confirmation().str()));
+        }
+        if(pkt.from_server().answer().has_error()) {
+            emit signalMessageError(
+                     QString::fromStdString(pkt.from_server().answer().error().str()));
+        }
+    }
 }

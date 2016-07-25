@@ -74,7 +74,7 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SIGNAL(onSignalWorkMode(int,bool)));
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
 
-	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
+    connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
 	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
 
@@ -114,6 +114,7 @@ void ControlPanelController::setCorrelationFrequencyValue(double value)
 
 void ControlPanelController::setResponseFreq(quint32 freq)
 {
+    m_currentFreq = freq;
 	m_view->slotChangeCommonFreq(freq);
 }
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
@@ -139,6 +140,8 @@ void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 	m_currentFreq = value;
 
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+
+    emit signalSetComonFreq(m_currentFreq);
 }
 
 void ControlPanelController::onBandWidthChangedSlot(int start, int end)
@@ -398,5 +401,10 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 		stream >> status;
 
 		m_view->changeQualityStatus(status);
-	}
+    }
+}
+
+void ControlPanelController::onSetSystem(int modeId, bool isOn)
+{
+    m_view->onSetMode( modeId, isOn );
 }

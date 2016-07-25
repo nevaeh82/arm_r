@@ -92,10 +92,18 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
 		m_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
-		if((m_startx != m_responseFreq) || (m_spectrum[i] > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
-		{
-			m_spectrumPeakHold[i] = m_spectrum[i];
-		}
+//		if((m_startx != m_responseFreq) || (m_spectrum[i] > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
+//		{
+//			m_spectrumPeakHold[i] = m_spectrum[i];
+//		}
+
+        if((m_startx != m_responseFreq) || (m_spectrum[index*vecFFT.size()+i] >
+             m_spectrumPeakHold[index*vecFFT.size()+i]) ||
+            (m_spectrumPeakHold[index*vecFFT.size()+i] == 0))
+        {
+            m_spectrumPeakHold[index*vecFFT.size()+i] =
+                    m_spectrum[index*vecFFT.size()+i];
+        }
 	}
 }
 

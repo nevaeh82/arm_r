@@ -114,6 +114,8 @@ private:
 	LogManager* m_logManager2;
 	LogManager* m_logManager3;
 
+    QTime m_resTime;
+
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);
 	virtual ~CoordinateCounter();
@@ -127,6 +129,10 @@ public:
 	void onErrorOccured(const ErrorType& error_type, const QString& str);
 
 	void onSolver1ProtoData(const int &result, const QByteArray& data );
+
+    void onSolverBlaData(const QByteArray &data);
+    void onSolverWorkData(const QByteArray &data);
+
 	void onSolver1SetupAnswer(const QByteArray &data);
 
 signals:
@@ -137,6 +143,7 @@ signals:
 	void signalError(int, QString);
 
 	void signal1ProtoData( int, QByteArray data );
+    void signal1BlaData( QByteArray data );
 	void signal1SetupAnswer( QByteArray data );
 
 
@@ -174,6 +181,7 @@ private slots:
 
 	void slotSolver1ProtoData( int result, QByteArray data );
 	void slotSolver1SetupAnswer(QByteArray data);
+    void slotSolverBlaData( QByteArray data );
 
 signals:
 	void signalFinished();

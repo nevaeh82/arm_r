@@ -414,7 +414,7 @@ message ServerMessage{
 	}
 	
 	// Ответ
-	message AnswerMessage{
+	message AnswerMessage {
 		// Сообщение об ошибке
 		message Error {
 			required string str = 1;

@@ -368,16 +368,32 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QSpinBox" name="workMode">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>8</number>
-       </property>
-       <property name="value">
-        <number>1</number>
-       </property>
+      <widget class="QComboBox" name="workMode">
+       <item>
+        <property name="text">
+         <string>Off</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Location</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Analysis</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Correction</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Detector</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>

@@ -56,5 +56,7 @@ private slots:
 
 	void slotOnUpdateCor();
 	void slotOnSetCor();
+
+    void slotOnSetCommonFreq(int freq);
 };
 

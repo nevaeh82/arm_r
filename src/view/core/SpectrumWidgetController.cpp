@@ -132,15 +132,15 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 		//log_debug(QString("Setup Spectrum : %1").arg(m_name));
 
-		if (list.count() == 2){
+        if (list.count() == 2){
 			setSignal(spectrum, spectrumPeakHold);
-		} else {
-			int pointCount = list.at(2).toInt();
-			double bandwidth = list.at(3).toDouble();
-			bool isComplex = list.at(4).toBool();
+        } else {
+            int pointCount = list.at(2).toInt();
+            double bandwidth = list.at(3).toDouble();
+            bool isComplex = list.at(4).toBool();
 
-			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-		}
+            setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+        }
 		//m_graphicsWidget->ZoomOutFull();
 
 		return;
@@ -163,12 +163,12 @@ void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnable
 {
 	correlationFlag = isEnabled;
 
-	if(correlationFlag) {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-	}
-	else {
-		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
-	}
+//	if(correlationFlag) {
+//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+//	}
+//	else {
+//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+//	}
 }
 
 void SpectrumWidgetController::updateDBAreas()
@@ -224,7 +224,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	float minv = 0.0;
 	m_mux.lock();
 
-	m_graphicsWidget->SetAutoscaleY(false);
+    m_graphicsWidget->SetAutoscaleY(false);
 	m_graphicsWidget->SetAlign(0);
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
@@ -247,8 +247,8 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	float maxv = 0.0;
 	float minv = 0.0;
 
-	m_graphicsWidget->SetAutoscaleY(false);
-	m_graphicsWidget->SetAlign(0);
+    m_graphicsWidget->SetAutoscaleY(false);
+    m_graphicsWidget->SetAlign(0);
 	m_mux.unlock();
 
 	if(m_controlPanelMode == 3)
@@ -358,7 +358,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 	stream >> vec;
 
-	//m_graphicsWidget->ClearAllDetectedAreas();
+    m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ /*+ m_current_frequency*/, 0, (*it).y()*TO_MHZ /*+ m_current_frequency*/, 0, false);
@@ -403,6 +403,8 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	}
 	//m_graphicsWidget->ClearAllDetectedAreas();
 	updateDBAreas();
+
+    m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
 
 	if(m_current_frequency == val*TO_MHZ) {
 		return;
@@ -486,13 +488,15 @@ void SpectrumWidgetController::init()
 	m_graphicsContextMenu->addAction(new QAction(tr("Add to black list"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Determine signal"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Enable correlation"),this) );
+    m_graphicsContextMenu->addAction(new QAction(tr("Disable correlation"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Cleanup text fields"),this) );
 
 	connect(m_graphicsContextMenu->actions().at(0),SIGNAL(triggered()),SLOT(addToWhiteList()));
 	connect(m_graphicsContextMenu->actions().at(1),SIGNAL(triggered()),SLOT(addToBlackList()));
 	connect(m_graphicsContextMenu->actions().at(2),SIGNAL(triggered()),SLOT(recognizeSignal()));
 	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(toggleCorrelation()));
-	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(clearLabels()));
+    connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(toggleOffCorrelation()));
+    connect(m_graphicsContextMenu->actions().at(5),SIGNAL(triggered()),SLOT(clearLabels()));
 	connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
@@ -629,13 +633,26 @@ void SpectrumWidgetController::toggleCorrelation()
 {
 	/// TODO: recheck new Message to memory leak
 	//	m_enableCorrelation = !m_enableCorrelation;
-	m_tab->enableCorrelation( !correlationFlag );
+    m_tab->enableCorrelation( true );
 
 
 	//	if(m_enableCorrelation)
 	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
 	//	else
 	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+}
+
+void SpectrumWidgetController::toggleOffCorrelation()
+{
+    /// TODO: recheck new Message to memory leak
+    //	m_enableCorrelation = !m_enableCorrelation;
+    m_tab->enableCorrelation( false );
+
+
+    //	if(m_enableCorrelation)
+    //		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+    //	else
+    //		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 void SpectrumWidgetController::clearLabels()

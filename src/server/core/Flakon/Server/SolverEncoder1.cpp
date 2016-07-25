@@ -1,6 +1,8 @@
 #include "Logger/Logger.h"
 #include "SolverEncoder1.h"
 
+#include "SolverExchange.h"
+
 SolverEncoder1::SolverEncoder1(QObject* parent) :
 	BaseTcpDeviceCoder(parent)
 {
@@ -29,7 +31,7 @@ void SolverEncoder1::onDataReceived(const QVariant& argument)
 
 void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 {
-	SolverProtocol::Packet packet;
+    SolverProtocol::Packet packet;
 	packet.ParseFromArray( inputData, inputData.size() );
 
 	if( !packet.has_datafromsolver() ) {
@@ -38,12 +40,37 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 
 	SolverProtocol::Packet_DataFromSolver solverPacket = packet.datafromsolver();
 
-	if( solverPacket.has_solution_manual_altitude() ) {
+    if( solverPacket.has_solution_manual_altitude() ||
+        solverPacket.has_solution_automatic_altitude() )
+    {
+        SolverProtocol::Packet solutionPacket;
+        if(solverPacket.has_solution_manual_altitude()) {
+            createSolverPacketSolutionManual(solutionPacket,
+                                             solverPacket.solution_manual_altitude());
+        }
+
+        if(solverPacket.has_solution_automatic_altitude()) {
+            createSolverPacketSolutionAuto(solutionPacket,
+                                             solverPacket.solution_automatic_altitude());
+        }
+
+        foreach (ISolverListener* listener, m_receiversList) {
+            QByteArray blaRawData;
+            blaRawData.resize(solutionPacket.ByteSize());
+            solutionPacket.SerializeToArray( blaRawData.data(), blaRawData.size() );
+            listener->onSolverBlaData(blaRawData);
+        }
+
 		int size = solverPacket.solution_manual_altitude().trajectory().size();
 		bool anyPackage = false;
 		anyPackage |= solverPacket.solution_manual_altitude().has_particles();
 		anyPackage |= solverPacket.solution_manual_altitude().has_singlemarks();
 		anyPackage |= solverPacket.solution_manual_altitude().has_positionlines();
+        if(solverPacket.solution_manual_altitude().has_positionlines()) {
+            int sz = solverPacket.solution_manual_altitude().positionlines().positionline_size();
+            int k = 0;
+            k++;
+        }
 
 		if( size > 0 ) {
 			SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory trajectory = solverPacket.solution_manual_altitude().trajectory().Get( size-1 );
@@ -54,72 +81,59 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 						trajectory.motionestimate().Get( motionSize - 1 );
 
 				foreach (ISolverListener* listener, m_receiversList) {
-					listener->onSolver1ProtoData( (int)motionPacket.quality(), inputData );
+                    listener->onSolver1ProtoData( (int)motionPacket.quality(), QByteArray() );
 				}
 			}
 		} else if( anyPackage ) {
 			foreach (ISolverListener* listener, m_receiversList) {
-				listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, inputData );
+                listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, QByteArray() );
 			}
 		}
-	}
-
-	if( solverPacket.has_solution_automatic_altitude() ) {
-		int size = solverPacket.solution_automatic_altitude().trajectory_size();
-
-		bool anyPackage = false;
-		anyPackage |= solverPacket.solution_automatic_altitude().has_particles();
-		anyPackage |= solverPacket.solution_automatic_altitude().has_singlemarks();
-		anyPackage |= solverPacket.solution_automatic_altitude().has_positionlines();
-
-		if( size > 0 ) {
-			SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory trajectory = solverPacket.solution_automatic_altitude().trajectory().Get( size-1 );
-			int motionSize = trajectory.motionestimate().size();
-
-			if(motionSize > 0) {
-				SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate motionPacket =
-						trajectory.motionestimate().Get( motionSize - 1 );
-
-				foreach (ISolverListener* listener, m_receiversList) {
-					listener->onSolver1ProtoData( motionPacket.quality(), inputData );
-				}
-			}
-		} else if( anyPackage ) {
-			foreach (ISolverListener* listener, m_receiversList) {
-				listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, inputData );
-			}
-		}
-	}
-
-	if( solverPacket.has_data_associations_manual_altitude() ) {
-		int k = 0;
-	}
-
-	if( solverPacket.has_data_associations_automatic_altitude() ) {
-		int k = 0;
 	}
 
 	if( solverPacket.has_solverresponse() ) {
-		int k = 0;
+        SolverProtocol::Packet responsePacket;
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onSolver1SetupAnswer( inputData );
 		}
 
+        createSolverResponseMessage(responsePacket, solverPacket.solverresponse());
+
+        bool test = isSolverMessageSolverResponse(responsePacket);
+
+        QByteArray messageRawData;
+        messageRawData.resize(responsePacket.ByteSize());
+        responsePacket.SerializeToArray(messageRawData.data(), messageRawData.size());
+
 		foreach (ISolverListener* listener, m_receiversList) {
-			listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, inputData );
+            listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, messageRawData );
 		}
+
+        foreach (ISolverListener* listener, m_receiversList) {
+            listener->onSolverWorkData( messageRawData );
+        }
 	}
 
 	if( solverPacket.has_message() ) {
-		int k = 0;
+        SolverProtocol::Packet messagePacket;
 
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onErrorOccured( INTERNAL_ERROR, QString::fromStdString(solverPacket.message().message()) );
 		}
 
+        createSolverPacketMessage(messagePacket, solverPacket.message());
+
+        QByteArray messageRawData;
+        messageRawData.resize(messagePacket.ByteSize());
+        messagePacket.SerializeToArray(messageRawData.data(), messageRawData.size());
+
 		foreach (ISolverListener* listener, m_receiversList) {
-			listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, inputData );
+            listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, messageRawData );
 		}
+
+        foreach (ISolverListener* listener, m_receiversList) {
+            listener->onSolverWorkData( messageRawData );
+        }
 	}
 }
 
