@@ -92,12 +92,12 @@ signals:
 	void onSignalWorkMode(int, bool);
 
 public slots:
+    void onCommonFrequencyChangedSlot(int value);
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled);
 	void onAutoSearchStateChangedSlot(bool isEnabled);
 
-	void onCommonFrequencyChangedSlot(int value);
 	void onBandWidthChangedSlot(int start, int end);
 
 	void slotManualMode();

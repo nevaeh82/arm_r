@@ -87,7 +87,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		stream >> conf;
 
 		countChanNum = conf.chanNum;
-		m_centerFrequency = conf.centralFreq;
+        //m_centerFrequency = conf.centralFreq;
 
 		if(m_main_point != conf.baseIndex || !isInit) {
 			m_aData.ranges_.clear();

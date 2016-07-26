@@ -2,10 +2,33 @@
 
 #include <QDebug>
 
+#include <math.h>
+
 #include "CommonSpectrumTabWidget.h"
 #include "TabSpectrumWidgetController.h"
 
 #define DEFAULT_RPC_PORT		24500
+
+
+
+/////////////// C A L C U L A T E D E L A Y S C O U N T ///////////////
+
+
+int factorial(int n){
+ return ( n <= 1 ) ? 1 : factorial(n - 1) * n;
+}
+
+///////// C A L C U L A T E C O M B I N A T I O N S C O U N T /////////
+
+int CalculateCombinationsCount( const int N_elems, const int M_comb ) {
+ return factorial( N_elems ) / factorial( N_elems - M_comb )
+ / factorial( M_comb );
+}
+
+int CalculateDelaysCount( const int siz_det ) {
+ return CalculateCombinationsCount( siz_det, 2);
+}
+
 
 TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	: QObject( parent )
@@ -144,7 +167,8 @@ void TabManager::addStationTabs()
 {
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
-	m_correlationControllers->init(m_stationsMap.count());
+
+    m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()) );
 
 	QStringList stationNamesList = createStationNamesList();
 

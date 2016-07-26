@@ -407,8 +407,9 @@ void SpectrumWidgetDataSource::slotChangeFreq()
 	}
 
     log_info(QString("Current frequency is %1").arg(m_currentFreq));
-    if(m_dbmanager != NULL)
+    if(m_dbmanager != NULL) {
         m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+    }
 
     m_timerRepeatSetFreq.start(7000);
 

@@ -130,8 +130,7 @@ public:
 
 	void updateDBAreas();
 
-
-
+    double getCenterSelection();
 
 private:
 	void init();

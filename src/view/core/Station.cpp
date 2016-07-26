@@ -166,7 +166,7 @@ float Station::getCenter() const
 {
 	float center = 0;
 
-	QVariant value = m_dbManager->getPropertyValue( getName(), DB_CENTER_PROPERTY );
+    QVariant value = m_dbManager->getPropertyValue( getName(), DB_FREQUENCY_PROPERTY );
 	if( value.canConvert( QVariant::Double ) ) {
 		center = value.toFloat();
 	}

@@ -196,6 +196,7 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 
 		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
 		lMsg->set_duration(m_locConf.duration);
+        m_locConf.centralFreq = frequency;
 		lMsg->set_central_frequency(m_locConf.centralFreq);
 		m_locConf.convolution = enable;
 		lMsg->set_convolution(m_locConf.convolution);

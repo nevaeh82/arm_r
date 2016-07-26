@@ -184,6 +184,11 @@ void SpectrumWidgetController::updateDBAreas()
 
 }
 
+double SpectrumWidgetController::getCenterSelection()
+{
+    return m_centerFreqSelTemp;
+}
+
 QString SpectrumWidgetController::getSpectrumName() const
 {
 	return m_view->getSpectrumName();
@@ -408,7 +413,28 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 
 	if(m_current_frequency == val*TO_MHZ) {
 		return;
-	}
+    } /*else {
+
+        double df = (m_current_frequency - val*TO_MHZ) / TO_MHZ;
+        m_centerFreqSelTemp;
+        m_bandwidhtTemp;
+
+        double x1 = m_centerFreqSelTemp - m_bandwidhtTemp / 2;
+        double x2 = m_centerFreqSelTemp + m_bandwidhtTemp / 2;
+
+        x1+= df;
+        x2+= df;
+
+        //Setting selection
+        SpectrumSelection selection;
+        selection.start = QPointF(x1, 0);
+        selection.end = QPointF(x2, 0);
+
+//        m_graphicsWidget->SetSelection(x1, 0, x2, 0);
+//        slotSelectionFinished(x1, 0, x2, 0);
+
+//        m_tab->setSelectedArea(selection);
+    }*/
 
 	m_current_frequency = val*TO_MHZ;
 	double zeroFreq = m_current_frequency - m_bandwidth/2;

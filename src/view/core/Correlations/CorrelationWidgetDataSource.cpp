@@ -132,7 +132,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 //			return;
 //		}
 
-		if( point2 != m_id2 || point1 != m_id1 ){
+        if( point2 != m_id2 || point1 != m_id1 ) {
 			return;
 		}
 

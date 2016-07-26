@@ -283,7 +283,6 @@ void TabSpectrumWidgetController::setIndicator(int state)
 			m_timerStatus.stop();
 		}
 	}
-
 }
 }
 
@@ -338,11 +337,13 @@ void TabSpectrumWidgetController::enableCorrelation(bool enable)
     float range = m_station->getBandwidth();
     float shift = m_station->getShift();
 
+    double cfreq = m_view->getSpectrumWidget()->getCenterSelection();
+
 	m_rpcFlakonClient->sendBandwidth(m_station->getId(), m_station->getBandwidth());
 	m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
-	m_rpcFlakonClient->sendCenter(m_station->getId(), m_station->getCenter());
+    m_rpcFlakonClient->sendCenter(m_station->getId(), cfreq/*m_station->getCenter()*/);
 
-	m_rpcFlakonClient->sendCorrelation( m_station->getId(), m_station->getCenter(), enable );
+    m_rpcFlakonClient->sendCorrelation( m_station->getId(), m_station->getCenter(), enable );
 
 	m_currentCorrelation = m_station->getCenter();
 	dynamic_cast<ControlPanelController*>(m_controlPanelController)->setCorrelationFrequencyValue(m_currentCorrelation);
@@ -463,6 +464,11 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
+
+        if(m_isPanoramaEnabled && m_controlPanelController) {
+            //m_controlPanelController->changeFreq(m_station->getCenter());
+            m_controlPanelControllerTrue->onCommonFrequencyChangedSlot(m_station->getCenter());
+        }
 		//m_view->setIndicatorState(2);
         //if(!m_isPanoramaEnabled)
         //	m_spectrumWidget->setZeroFrequency(property.value.toDouble());	//remove it to class then answer from prm

@@ -25,6 +25,7 @@ public:
 	virtual void setPanorama(bool) = 0;
 
 	virtual void setSelection(double start, double end) = 0;
+    virtual double getCenterSelection() = 0;
 
 	virtual void setFFTSetup(float* spectrum, float* spectrum_peak_hold) = 0;
 
