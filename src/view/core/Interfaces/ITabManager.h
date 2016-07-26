@@ -15,6 +15,7 @@ public:
 	virtual QString getStationName(const int id) = 0;
 	virtual void setActiveTab(const int id) = 0;
 	virtual void setResponseCommonFreq(quint32 freq)	= 0;
+    virtual int getChannelCount() = 0;
 
 };
 

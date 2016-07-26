@@ -62,6 +62,8 @@ public:
 	TabManager(QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
 
+    int getChannelCount();
+
 	void setRpcConfig(const quint16& port, const QString& host);
 
 	void start();

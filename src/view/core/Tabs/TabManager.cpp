@@ -233,6 +233,11 @@ void TabManager::addStationTabs()
 	emit readyToStart();
 }
 
+int TabManager::getChannelCount()
+{
+    return m_stationsMap.size();
+}
+
 void TabManager::clearAllInformation()
 {
 	m_rpcFlakonClient->clearAllReceiversList();

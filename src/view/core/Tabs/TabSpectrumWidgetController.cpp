@@ -182,21 +182,29 @@ void TabSpectrumWidgetController::createView()
 {
 	int id1 = 0;
 	int id2 = 0;
+    int cnt = m_correlationControllers->count();
+    int chCnt = m_tabManager->getChannelCount();
+    QList<int> ids;
+    for(int k = 0; k < chCnt; k++) {
+        ids.append( k );
+    }
 
-	for(int i = 0; i < m_correlationControllers->count(); i++){
+    int listPos = 0;
+    int inc = 1;
+
+    for(int i = 0; i < m_correlationControllers->count(); i++) {
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
 		m_view->insertCorrelationWidget(correlationWidget);
 
-		id1 = i-1;
-		id2 = i+1;
+        if((listPos+1) > (chCnt-1)) {
+            listPos=inc;
+            inc+=1;
+        }
 
-		if( id1 < 0 ) {
-			id1 = 0;
-		}
+        id1 = ids.at( inc-1 );
+        id2 = ids.at( listPos+1 );
 
-		if(id2 > 2) {
-			id2 = 2;
-		}
+        listPos++;
 
 		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, id1, id2, 0);
 		correlationDataSource->registerReceiver(correlationWidget);
@@ -318,13 +326,21 @@ void TabSpectrumWidgetController::setSelectedArea(const SpectrumSelection& selec
 void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 {
 	switch (type){
-		case TypePanoramaCommand :
-			emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
-			return;
-		case TypeGraphicCommand :
-			m_rpcPrmClient->setCommand(msg);
-			return;
-	}
+    case TypePanoramaCommand :
+    {
+        if(m_spectrumDataSource){
+            emit signalPanoramaState(m_spectrumDataSource->isPanoramaEnabled());
+            return;
+        }
+    }
+    case TypeGraphicCommand :
+    {
+        if(m_rpcPrmClient){
+            m_rpcPrmClient->setCommand(msg);
+        }
+        return;
+    }
+    }
 }
 
 void TabSpectrumWidgetController::enableCorrelation(bool enable)
