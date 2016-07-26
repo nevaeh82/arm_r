@@ -77,7 +77,7 @@ private:
     int m_upTime;
 
 public:
-	explicit TcpRdsCoder(QObject* parent = NULL);
+    explicit TcpRdsCoder(unsigned char zone, unsigned char typeRDS, QObject* parent = NULL);
 	virtual ~TcpRdsCoder();
 
 	// ITcpDeviceCoder interface

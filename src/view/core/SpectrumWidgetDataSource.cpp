@@ -298,6 +298,11 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 
 		float cf;
 
+        unsigned int zone;
+        stream >> zone;
+        unsigned int typeRds;
+        stream >> typeRds;
+
 		stream >> id;
 		if (id != m_spectrumWidget->getId()) {
 			return;

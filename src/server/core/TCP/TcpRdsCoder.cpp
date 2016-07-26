@@ -10,13 +10,16 @@
 #define TO_KHZ 1000
 #define TIME_DEL 1000
 
-TcpRdsCoder::TcpRdsCoder(QObject* parent) :
+TcpRdsCoder::TcpRdsCoder(unsigned char zone, unsigned char typeRDS, QObject* parent) :
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
-    m_indexSpect(-1),
-    m_coordCounter(NULL)
+    m_indexSpect(-1)
 {
+
+    m_header.zone = zone;
+    m_header.typeRds = typeRDS;
+
 	m_residueLength = 0;
 	cnt = 0;
 
@@ -620,7 +623,7 @@ MessageSP TcpRdsCoder::pointers(int index, float cf, QVector<QPointF> vec)
 	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << index << cf << vec;
+    dataStream << m_header.zone << m_header.typeRds << index << cf << vec;
 
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }

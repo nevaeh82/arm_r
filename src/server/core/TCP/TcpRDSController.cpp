@@ -42,7 +42,7 @@ void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 void TcpRDSController::createTcpDeviceCoder()
 {
 	log_debug("Creating TcpRDSCoder...");
-	TcpRdsCoder* coder = new TcpRdsCoder(this);
+    TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, this);
 	m_tcpDeviceCoder = coder;
 
     coder->setCoordinatesCounter(m_coordinateCounter);
@@ -75,6 +75,9 @@ bool TcpRDSController::init()
 		QString name = settings.value("name", "Unknown").toString();
 		if(name == m_tcpDeviceName)
 		{
+            m_flakonSettingStruct.id = settings.value("id", 10).toInt();
+            m_flakonSettingStruct.zone = settings.value("zone", 0).toInt();
+            m_flakonSettingStruct.typeRds = settings.value("typeRds", 0).toInt();
 			m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
 			m_flakonSettingStruct.port = settings.value("Port", 1111).toInt();
 			m_flakonSettingStruct.name = settings.value("name", "rds").toString();

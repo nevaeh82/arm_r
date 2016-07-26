@@ -144,6 +144,10 @@ typedef struct ZaviruhaPayloadPacketHeader
 	unsigned int magic;
 	//! Номер пакета
 	unsigned int number;
+    //! Идентификатор зоны (сектор (запад(0) / восток(1)))
+    unsigned int zone;
+    //! Идентификатор метода обратбоки сингала (тип пункта) - цифровой (1)/аналогвый(0)
+    unsigned int typeRds;
 	//! Идентификатор устройства (0 - Flacon, 1 - Cофья, 2 - Токсово, 3 - Всеволжск)
 	unsigned int id;
 	//! Флаги, не использую

@@ -18,6 +18,10 @@ typedef struct FlakonSettings : public BaseSetting
 		return type;
 	}
 
+    unsigned int id;
+    unsigned int zone;
+    unsigned int typeRds;
+
 }FlakonSettings;
 
 inline QDataStream& operator<<(QDataStream& out, const FlakonSettings &object)
