@@ -282,11 +282,17 @@ void MainWindowController::onMethodCalled(const QString& method, const QVariant&
 
 		QDataStream dataStream(&data, QIODevice::ReadOnly);
 		QList<StationConfiguration> stationList;
+        unsigned int zone;
+        unsigned int typeRds;
+        dataStream >> zone;
+        dataStream >> typeRds;
 		dataStream >> stationList;
+
+       // m_tabManager->addZoneType(zone, typeRds);
 
 		m_tabManager->clearAllInformation();
 		m_tabManager->setStationsConfiguration(stationList);
-		m_tabManager->addStationTabs();
+        m_tabManager->addStationTabs(zone, typeRds);
 		m_controlPanelController->setMapStations(m_tabManager->getStations());
 
 	} else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {

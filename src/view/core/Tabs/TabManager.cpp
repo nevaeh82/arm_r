@@ -32,7 +32,8 @@ int CalculateDelaysCount( const int siz_det ) {
 
 TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	: QObject( parent )
-	, m_tabWidget( tabWidget )
+  //  , m_tabWidgetZone(tabWidget)
+    , m_tabWidgetZone( tabWidget )
 	, m_correlationControllers( NULL )
 	, m_currentTabWidget( NULL )
 	, m_dbManager( NULL )
@@ -42,8 +43,11 @@ TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	, m_controlPanelController( NULL )
 	, m_panelController(NULL)
 {
+    m_tabWidget = new QTabWidget();
+   // m_tabWidgetZone->addTab(new QTabWidget(), QString("0"));
+    //m_tabWidgetZone = new QTabWidget(m_tabWidget);
 	m_rpcFlakonClient = NULL;
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
+//	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 }
 
 TabManager::~TabManager()
@@ -163,8 +167,10 @@ void TabManager::setAtlantConfiguration(const AtlantConfiguration& atlantConfig)
 	m_tabWidget->addTab(atlant, tr("Atlant"));
 }
 
-void TabManager::addStationTabs()
+void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 {
+
+    m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone) + " - " + QString::number(typeRds));
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 
@@ -208,7 +214,7 @@ void TabManager::addStationTabs()
 
 		int index = m_tabWidget->addTab(tabSpectrumWidget, station->getName());
 
-		//QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
+        //QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 		if (tabBar != NULL) {
 			tabBar->setTabButton(index, QTabBar::LeftSide, tabSpectrumWidget->getIndicator());
@@ -230,7 +236,18 @@ void TabManager::addStationTabs()
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
 
-	emit readyToStart();
+    emit readyToStart();
+}
+
+void TabManager::addZoneType(unsigned int zone, unsigned int typeRds)
+{
+    m_tabWidgetZone->addTab(m_tabWidget, QString(QString::number(zone) + " - " + QString::number(typeRds)));
+//    int index = m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone));
+//    QTabBar* tabBar = m_tabWidgetZone->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
+//    if (tabBar != NULL) {
+//        tabBar->setTabButton(index, QTabBar::LeftSide, new QLabel(QString::number(zone) + " - " + QString::number(typeRds)));
+//    }
+
 }
 
 int TabManager::getChannelCount()

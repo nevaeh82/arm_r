@@ -10,7 +10,7 @@
 #define TO_KHZ 1000
 #define TIME_DEL 1000
 
-TcpRdsCoder::TcpRdsCoder(unsigned char zone, unsigned char typeRDS, QObject* parent) :
+TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent) :
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
@@ -636,6 +636,8 @@ MessageSP TcpRdsCoder::configure(const QList<StationConfiguration>& lst)
 
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
+    dataStream << m_header.zone;
+    dataStream << m_header.typeRds;
 	dataStream << lst;
 
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, ba));

@@ -38,6 +38,7 @@ class TabManager: public QObject, public ITabManager, public IControlPanelListen
 	Q_OBJECT
 
 private:
+    QTabWidget* m_tabWidgetZone;
 	QTabWidget* m_tabWidget;
 
 	QMap<int, Station *>   m_stationsMap;
@@ -84,7 +85,8 @@ public:
 
 	QMap<int, Station *>& getStations();
 
-	void addStationTabs();
+    void addStationTabs(unsigned int zone, unsigned typeRds);
+    void addZoneType(unsigned int zone, unsigned typeRds);
 
 	void clearAllInformation();
 	void onClose();
