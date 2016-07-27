@@ -6,10 +6,11 @@
 
 TcpRDSController::TcpRDSController(QObject* parent) :
     TcpDeviceController(parent),
-    m_stationShift(0)
+    m_stationShift(0),
+    m_serverId(serverId)
 {
 	m_tcpDeviceName = RDS_TCP_DEVICE;
-	log_debug(QString("Created %1").arg(m_tcpDeviceName));
+    log_debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	m_coordinateCounter = 0;
 
@@ -18,7 +19,8 @@ TcpRDSController::TcpRDSController(QObject* parent) :
 
 TcpRDSController::TcpRDSController(const QString& tcpDeviceName, QObject* parent) :
     TcpDeviceController(tcpDeviceName, parent),
-    m_stationShift(0)
+    m_stationShift(0),
+    m_serverId(serverId)
 {
     m_coordinateCounter = 0;
 	init();
@@ -67,37 +69,40 @@ bool TcpRDSController::init()
 {
 	QSettings settings("./TCP/coders.ini", QSettings::IniFormat, this);
 
-	QStringList childKeys = settings.childGroups();
+    QStringList childKeys = settings.childGroups();
 
-	foreach (const QString &childKey, childKeys)
+    foreach (const QString &childKey, childKeys)
 	{
-		settings.beginGroup(childKey);
-		QString name = settings.value("name", "Unknown").toString();
-		if(name == m_tcpDeviceName)
-		{
-            m_flakonSettingStruct.id = settings.value("id", 10).toInt();
-            m_flakonSettingStruct.zone = settings.value("zone", 0).toInt();
-            m_flakonSettingStruct.typeRds = settings.value("typeRds", 0).toInt();
-			m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
-			m_flakonSettingStruct.port = settings.value("Port", 1111).toInt();
-			m_flakonSettingStruct.name = settings.value("name", "rds").toString();
-			m_flakonSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
+        QString n = m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId);
+        if(childKey == m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId))
+        {
+            settings.beginGroup(childKey);
+            QString name = settings.value("name", "Unknown").toString();
+          //  int serverId = settings.value("id", 0).toInt();
+          //  QString n = m_tcpDeviceName + "-" + QString::number(m_serverId);
+            //if(name == m_tcpDeviceName + "-" + QString::number(m_serverId))
 
-			m_host = m_flakonSettingStruct.host;
-			m_port = m_flakonSettingStruct.port;
-			m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
+                m_flakonSettingStruct.zone = settings.value("zone", 0).toInt();
+                m_flakonSettingStruct.typeRds = settings.value("typeRds", 0).toInt();
+                m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
+                m_flakonSettingStruct.port = settings.value("Port", 1111).toInt();
+                m_flakonSettingStruct.name = settings.value("name", "RDS").toString();
+                m_flakonSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
 
-            m_stationShift = settings.value( "shift", 0 ).toUInt();
+                m_host = m_flakonSettingStruct.host;
+                m_port = m_flakonSettingStruct.port;
+                m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
 
-			QByteArray baseInfo;
-			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
-			dsBaseInfo << m_flakonSettingStruct;
+                m_stationShift = settings.value( "shift", 0 ).toUInt();
+
+                QByteArray baseInfo;
+                QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
+                dsBaseInfo << m_flakonSettingStruct;
 
 
-			settings.endGroup();
-			return true;
-		}
-		settings.endGroup();
+                settings.endGroup();
+                return true;
+            }
 	}
 	return false;
 }

@@ -22,8 +22,8 @@ private:
 	QMap<QString, BaseTcpDeviceController*> m_stations;
 
 public:
-	explicit TcpRDSController(QObject* parent = NULL);
-	explicit TcpRDSController(const QString& tcpDeviceName, QObject* parent = NULL);
+    explicit TcpRDSController(int serverId, QObject* parent = NULL);
+    explicit TcpRDSController(int serverId, const QString& tcpDeviceName, QObject* parent = NULL);
 	virtual ~TcpRDSController();
 
 	QMap<QString, BaseTcpDeviceController*>& stations();
@@ -45,6 +45,7 @@ public:
     uint m_stationShift;
 
 private:
+    int m_serverId;
 	FlakonSettings m_flakonSettingStruct;
 	CoordinateCounter* m_coordinateCounter;
 

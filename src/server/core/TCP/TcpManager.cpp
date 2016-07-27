@@ -5,7 +5,7 @@
 
 #include "TcpManager.h"
 
-TcpManager::TcpManager(QObject* parent)
+TcpManager::TcpManager(int serverId, QObject* parent)
 	: QObject(parent)
 	, m_rpcServer( NULL )
 	, m_flakonController( NULL )
@@ -13,8 +13,9 @@ TcpManager::TcpManager(QObject* parent)
 	, m_timePoints(QTime::currentTime())
 	, m_isCorrelAfterPoints(false)
 	, m_rpcConfigReader(NULL)
+    , m_serverId(serverId)
 {
-	m_coordinatesCounter = new CoordinateCounter("rds");
+    m_coordinatesCounter = new CoordinateCounter("RDS");
 	m_coordinatesCounter->registerReceiver(this);
 
 	QThread* coordinateCounterThread = new QThread;
@@ -154,7 +155,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 			addStationToFlakon(deviceName, controller);
 			break;
 		case RDS_TCP_DEVICE:
-			controller = new TcpRDSController(deviceName);
+            controller = new TcpRDSController(m_serverId, deviceName);
 
 			log_debug(QString("Created TcpRdsController"));
 			m_rdsController = (TcpRDSController*) controller;

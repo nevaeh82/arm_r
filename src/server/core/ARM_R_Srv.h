@@ -19,10 +19,11 @@ class ARM_R_Srv : public QObject
 	Q_OBJECT
 
 public:
-	explicit ARM_R_Srv(QObject* parent = NULL);
+    explicit ARM_R_Srv(int serverId, QObject* parent = NULL);
 	virtual ~ARM_R_Srv();
 
 private:
+    int m_serverId;
 	RpcServer* m_rpcServer;
 	BaseTcpServerController* m_tcpServer;
 	TcpManager* m_tcpManager;

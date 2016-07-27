@@ -34,6 +34,7 @@ class TcpManager : public QObject, public ITcpManager, public ITcpListener, publ
 	Q_OBJECT
 
 private:
+    int m_serverId;
 	IRpcControllerBase* m_rpcServer;
 	ITcpServerController* m_tcpServer;
 	QMap< QString, TcpDeviceController* > m_controllersMap;
@@ -66,7 +67,7 @@ private:
 	float m_currentFrequencyCorrelation;
 
 public:
-	explicit TcpManager(QObject* parent = NULL);
+    explicit TcpManager(int serverId, QObject* parent = NULL);
 	virtual ~TcpManager();
 
 	// ITcpManager interface

@@ -3,8 +3,9 @@
 #include "ARM_R_Srv.h"
 
 
-ARM_R_Srv::ARM_R_Srv(QObject* parent) :
-	QObject(parent)
+ARM_R_Srv::ARM_R_Srv(int serverId, QObject* parent) :
+    QObject(parent),
+    m_serverId(serverId)
 {
 	qRegisterMetaType<MessageSP>("MessageSP");
 	qRegisterMetaType<DataFromFlacon> ("DataFromFlacon");
@@ -25,7 +26,7 @@ ARM_R_Srv::ARM_R_Srv(QObject* parent) :
 	m_tcpServer->createTcpServerCoder();
 	m_tcpServer->start(QHostAddress::Any, 6662);
 
-	m_tcpManager = new TcpManager;
+    m_tcpManager = new TcpManager(m_serverId);
 
 	QThread* tcpManagerThread = new QThread;
 	connect(tcpManagerThread, SIGNAL(finished()), m_tcpManager, SLOT(deleteLater()));
