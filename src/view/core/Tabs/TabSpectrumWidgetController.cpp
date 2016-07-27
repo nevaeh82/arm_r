@@ -483,7 +483,7 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 
         if(m_isPanoramaEnabled && m_controlPanelController) {
             //m_controlPanelController->changeFreq(m_station->getCenter());
-            m_controlPanelControllerTrue->onCommonFrequencyChangedSlot(m_station->getCenter());
+            m_controlPanelControllerTrue->changeFrequency(m_station->getCenter());
         }
 		//m_view->setIndicatorState(2);
         //if(!m_isPanoramaEnabled)

@@ -46,6 +46,8 @@ message Packet {
             getMultitargetTrackingSettings= 23;//получить настройки алгоритмов трекинга
             getAllSettingsFromSolver = 24;     //получить все настройки у решателя
             getDataBaseRecordingSettings = 25; //получить настройки записи в базу данных
+            getMinDelaysCountForSingleMarks = 26; //получить минимальное количество задержек,
+                                                  //необходимое для расчета одиночных отметок
         }
 
         //запросы на задание каких-либо данных решателю
@@ -151,6 +153,12 @@ message Packet {
             message SetDataBaseRecordingSettings{
                 required DataBaseRecordingSettings dataBaseRecordingSettings = 1;
             }
+
+            //задать минимальное количество задержек, необходимое для расчета одиночных отметок
+            message SetMinDelaysCountForSingleMarks{
+                required int32 minDelaysCountForSingleMarks = 1;
+            }
+
             optional SetClientType setClientType = 1;
             optional SetSolutionConfiguration setSolutionConfiguration = 2;
             optional SetTrajectoriesMaxLength setTrajectoriesMaxLength = 3;
@@ -171,6 +179,7 @@ message Packet {
             optional SetSettingsOfCorrectionsCalculation setSettingsOfCorrectionsCalculation = 18;
             optional SetMultitargetTrackingSettings setMultitargetTrackingSettings = 19;
             optional SetDataBaseRecordingSettings setDataBaseRecordingSettings = 20;
+            optional SetMinDelaysCountForSingleMarks setMinDelaysCountForSingleMarks = 21;
         }
 
         optional MeasurementsData measurementsData = 1; //могут быть входные данные
@@ -212,8 +221,9 @@ message Packet {
                     required CoordinatesAccuracy coordinates_acc = 2; // точность координат
                     required ErrorEllips error_ellips = 3;  //эллипс ошибок определения координат
                 }
-                required int64 datetime = 1;          // время привязки данных
-                repeated SingleMark singleMark = 2;   // массив одиночных отметок
+                required int64 datetime = 1;           // время привязки данных
+                required double central_frequency = 2; //центральная частота сигнала
+                repeated SingleMark singleMark = 3;    // массив одиночных отметок
             }
 
             //облака частиц, характеризующих цель
@@ -290,6 +300,7 @@ message Packet {
             optional string messageOfCorrectingProcess = 22; //!сообщение о ходе вычисления поправок
             optional MultitargetTrackingSettings multitargetTrackingSettings = 23;
             optional DataBaseRecordingSettings dataBaseRecordingSettings = 24;
+            optional int32 minDelaysCountForSingleMarks = 25;
         }
 
         //сообщение, от решателя клиенту(клиентам)

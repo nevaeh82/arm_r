@@ -78,6 +78,7 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
     if(m_isPanoramaStart)
     {
            index = findIndex(m_startx);
+           log_debug(QString("PANORAMA INDEX %1").arg(index));
     }
     else
     {
@@ -137,6 +138,9 @@ int SpectrumWidgetDataSource::findIndex(qreal startx)
 	int index = -1;
 
 	if(m_listStartx.size() != list_count){
+        if(index>m_listStartx.size()){
+            index = m_listStartx.size();
+        }
 		return index;
 	}
 
@@ -149,6 +153,9 @@ int SpectrumWidgetDataSource::findIndex(qreal startx)
 		}
 	}
 
+    if(index>m_listStartx.size()){
+        index = m_listStartx.size();
+    }
 	return index;
 }
 
@@ -157,9 +164,17 @@ bool SpectrumWidgetDataSource::startPanorama(bool start)
 	if(start)
 	{
 		if(m_spectrumWidget != NULL)
-			m_spectrumWidget->setZeroFrequency(m_startFreq);
+           // m_spectrumWidget->setZeroFrequency(m_startFreq);
 
-		slotChangeFreq();
+        m_currentFreq = m_startFreq;
+
+        log_info(QString("Current frequency is %1").arg(m_currentFreq));
+        if(m_dbmanager != NULL) {
+            m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+        }
+
+        m_timerRepeatSetFreq.start(7000);
+
 		return true;
 	}
 
@@ -290,10 +305,14 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 
 		stream >> cf;
 
-		if(!m_isPanoramaStart)
-		{
-			m_spectrumWidget->setZeroFrequency(cf);
-		}
+        cf = (int)cf;
+
+        m_responseFreq = cf;
+
+        if(!m_isPanoramaStart)
+        {
+            m_spectrumWidget->setZeroFrequency(cf);
+        }
 
 		stream >> vecFFT;
 		if (!vecFFT.size()) return;
@@ -324,24 +343,24 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 		onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, data);
 
 
-		//if(m_workFreq != cf) {
+       // if(m_workFreq != cf) {
 			if(m_isPanoramaStart)
 			{
-				m_responseFreq = m_currentFreq;
+                m_responseFreq = cf;
 				m_spectrumCounter++;
 				m_timerRepeatSetFreq.stop();
 			}
-		//}
-		m_workFreq = cf;
+      //  }
+        m_workFreq = cf;
 
 
 		if(m_isPanoramaStart)
 		{
-			if(m_responseFreq != m_currentFreq)
-			{
-				m_spectrumCounter = 0;
-				return;
-			}
+//			if(m_responseFreq != m_currentFreq)
+//			{
+//				m_spectrumCounter = 0;
+//				return;
+//			}
 			if(m_spectrumCounter > 3)
 			{
 				m_spectrumCounter = 0;
@@ -394,17 +413,17 @@ void SpectrumWidgetDataSource::slotChangeFreq()
 //	{
 //		return;
 //	}
-	if(m_currentFreq == m_responseFreq)
-	{
+    if(m_currentFreq == m_responseFreq)
+    {
         if(m_currentFreq >= m_endFreq)
-		{
+        {
             m_currentFreq = m_startFreq;
-		}
+        }
         else
         {
             m_currentFreq += freqStep;
         }
-	}
+    }
 
     log_info(QString("Current frequency is %1").arg(m_currentFreq));
     if(m_dbmanager != NULL) {

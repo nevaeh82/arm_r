@@ -173,7 +173,7 @@ void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnable
 
 void SpectrumWidgetController::updateDBAreas()
 {
-	//m_graphicsWidget->ClearAllDetectedAreas();
+    m_graphicsWidget->ClearAllDetectedAreas();
 
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
@@ -238,7 +238,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 
 	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
-	setZeroFrequency(value.toDouble());
+    setZeroFrequency(value.toDouble());
 
 	m_mux.unlock();
 
@@ -407,7 +407,7 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 		return;
 	}
 	//m_graphicsWidget->ClearAllDetectedAreas();
-	updateDBAreas();
+    //updateDBAreas();
 
     m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
 
@@ -444,12 +444,14 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 		m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
 	}
 
-	QList<StationsFrequencyAndBandwith> list;
-	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
-	setDetectedAreas(2, list);
+    updateDBAreas();
 
-	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
-	setDetectedAreas(1, list);
+//	QList<StationsFrequencyAndBandwith> list;
+//	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
+//	setDetectedAreas(2, list);
+
+//	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+//	setDetectedAreas(1, list);
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)

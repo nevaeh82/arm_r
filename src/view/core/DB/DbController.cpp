@@ -377,7 +377,7 @@ Object DbController::getObjectByParam(const QString &paramName, const QVariant v
 	QString sql = QString("SELECT * FROM Objects WHERE %1 = :value;").arg(paramName);
 	bool succeeded = query.prepare(sql);
 
-	qDebug( ">>>> Getting object by param : %1" );
+    //qDebug( ">>>> Getting object by param : %1" );
 	qDebug( paramName.toLocal8Bit().data() );
 	qDebug( value.toString().toAscii().data() );
 

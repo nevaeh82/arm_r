@@ -83,6 +83,7 @@ public:
 
     void onSetSystem(int modeId, bool isOn);
 
+    void changeFrequency(int value);
 signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);
@@ -92,11 +93,11 @@ signals:
 	void onSignalWorkMode(int, bool);
 
 public slots:
-    void onCommonFrequencyChangedSlot(int value);
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled);
 	void onAutoSearchStateChangedSlot(bool isEnabled);
+    void onCommonFrequencyChangedSlot(int value);
 
 	void onBandWidthChangedSlot(int start, int end);
 

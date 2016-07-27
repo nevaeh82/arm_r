@@ -96,7 +96,7 @@ void CommonSpectrumTabWidget::activate()
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
 		QVariant value = m_dbManager->getPropertyValue(widget->getSpectrumName(), DB_FREQUENCY_PROPERTY);
-		widget->setZeroFrequency(value.toDouble());
+        widget->setZeroFrequency(value.toDouble());
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
 	}
 }

@@ -23,7 +23,7 @@ SettingsNode DbManager::getSettingsNode(const QString &objectName)
 {
 	SettingsNode settingsNode;
 
-	log_debug(QString(">>> Getting Settings node %1").arg(objectName));
+    //log_debug(QString(">>> Getting Settings node %1").arg(objectName));
 
 	Object obj = m_dbController->getObject(objectName);
 
@@ -97,6 +97,7 @@ QString DbManager::getObjectName(const uint id) const
 		return QString();
 	}
 
+    //return QString();
 	return obj.name;
 }
 

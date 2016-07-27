@@ -131,6 +131,12 @@ void ControlPanelController::onAutoSearchStateChangedSlot(bool isEnabled)
 	}
 }
 
+void ControlPanelController::changeFrequency(int value)
+{
+    m_currentFreq = value;
+    emit signalSetComonFreq(m_currentFreq);
+}
+
 void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 {
 	if (NULL == m_dbManager) {
