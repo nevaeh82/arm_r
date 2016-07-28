@@ -32,7 +32,7 @@ int CalculateDelaysCount( const int siz_det ) {
 
 TabManager::TabManager(QTabWidget *tabWidget, QObject *parent)
 	: QObject( parent )
-  //  , m_tabWidgetZone(tabWidget)
+//    , m_tabWidget(tabWidget)
     , m_tabWidgetZone( tabWidget )
 	, m_correlationControllers( NULL )
 	, m_currentTabWidget( NULL )
