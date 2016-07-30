@@ -118,5 +118,5 @@ void ControlPanelWidget::onSetMode(int modeId, bool isOn)
 
 void ControlPanelWidget::slotChangeCommonFreq(int value)
 {
-	ui->commonFreqSB->setValue(value);
+	ui->commonFreqSB->setValue(value);        
 }

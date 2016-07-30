@@ -411,9 +411,9 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 
     m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
 
-	if(m_current_frequency == val*TO_MHZ) {
-		return;
-    } /*else {
+   /* if(m_current_frequency == val*TO_MHZ) {
+        return;
+    }*/ /*else {
 
         double df = (m_current_frequency - val*TO_MHZ) / TO_MHZ;
         m_centerFreqSelTemp;

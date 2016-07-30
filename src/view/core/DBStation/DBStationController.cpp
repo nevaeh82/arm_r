@@ -277,10 +277,16 @@ int DBStationController::getStationID(const QString& name)
 		return INVALID_INDEX;
 	}
 
+    QSqlQuery queryAdd( m_db );
+    bool erradd = queryAdd.prepare( "INSERT into station (name, ip) VALUES (:name,:ip)" );
+    VALIDATE_QUERY( queryAdd );
+
+    queryAdd.bindValue( "name", name );
+    queryAdd.bindValue( "ip", "ip" );
+    erradd = queryAdd.exec();
+
 	QSqlQuery query( m_db );
 	bool err = query.prepare( "SELECT id FROM station WHERE name=:name" );
-
-	VALIDATE_QUERY( query );
 
 	query.bindValue( "name", name );
 	err = query.exec();

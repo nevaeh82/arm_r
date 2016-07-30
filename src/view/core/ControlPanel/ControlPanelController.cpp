@@ -7,7 +7,7 @@
 #include "Rpc/RpcDefines.h"
 
 #define TIMER_INTERVAL 5000
-#define TIMERCHECK_INTERVAL 60000
+#define TIMERCHECK_INTERVAL 5000
 #define TIMERINTERVAL_KEY "ControlPanel"
 
 ControlPanelController::ControlPanelController(QObject *parent)
@@ -204,7 +204,7 @@ void ControlPanelController::slotViewMode()
     ControlPanelSettingsPath.append("./Scan/CheckTimer.ini");
     QSettings ControlPanelSettings( ControlPanelSettingsPath, QSettings::IniFormat );
 
-    int interval = ControlPanelSettings.value("timer", 10000).toInt();
+    int interval = ControlPanelSettings.value("timer", 3000).toInt();
     m_timerCheck.start(interval);
 	/// TODo in next release
 //	ListWhiteDialog* listView = new ListWhiteDialog(m_view);
@@ -230,6 +230,8 @@ void ControlPanelController::slotChangeFreq()
     }
     m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 	m_currentFreq += INTERVAL;
+
+    changeFrequency(m_currentFreq);
 }
 
 void ControlPanelController::slotCheckModeSetFreq()
@@ -250,14 +252,13 @@ void ControlPanelController::slotCheckModeSetFreq()
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, (*m_itCheckMode).frequency);
 	m_dbManager->updatePropertyForAllObjects(DB_SELECTED_PROPERTY, (*m_itCheckMode).bandwidth);
 
-	foreach(Station* st, m_stationsMap)
-	{
-		m_rpcFlakonClient->sendBandwidth(st->getId(), (*m_itCheckMode).bandwidth*1000);
-		if(st->getName() == (*m_itCheckMode).stationName)
-		{
-			m_mainStation = st;
-		}
-	}
+    changeFrequency(freq);
+
+//	foreach(Station* st, m_stationsMap)
+//	{
+        m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
+        m_rpcFlakonClient->sendShift(0, 0);
+//	}
 
 	/// set main station fo correlations
 	QString leadStation;
@@ -271,18 +272,14 @@ void ControlPanelController::slotCheckModeSetFreq()
 		leadStation = tr("Auto");
 	}
 
-	if(m_mainStation == 0) {
-		return;
-	}
+//	if(m_mode == 3)
+//	{
+//		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
 
-	if(m_mode == 3)
-	{
-		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
-
-		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
+//		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
 
 		m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
-	}
+//	}
 
 	m_itCheckMode++;
 }
