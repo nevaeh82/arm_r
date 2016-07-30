@@ -40,9 +40,14 @@ public:
 
 	void clearAllReceiversList();
 
+    //config
+    void getDbConfiguration(QString file);
+    void getStationLists(QString file);
+
 signals:
 	void initSignal();
 	void stopSignal();
+    void connectionEstablishedSignal();
 
 	void sendMainStationCorrelationSignal(int id, QString value);
 	void sendBandwidthSignal(int id, float bandwidth);
@@ -63,6 +68,10 @@ signals:
 
 	void initFinishedSignal();
 
+    void signalGetDbConfiguration(QString);
+    void signalGetStationLists(QString);
+
+
 private slots:
 	void initSlot();
 	void stopSlot();
@@ -82,6 +91,10 @@ private slots:
 	void sendWorkModeSlot(int mode, bool isOn);
 
 	void requestFlakonStatusSlot();
+
+    void slotGetDbConfiguration(QString file);
+    void slotGetStationLists(QString file);
+
 	
 };
 

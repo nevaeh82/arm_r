@@ -16,9 +16,6 @@ public:
 	virtual QString getFlakonHost()		= 0;
 	virtual QString getFlakonPort()		= 0;
 
-	virtual QString getAtlantHost()		= 0;
-	virtual QString getAtlantPort()		= 0;
-
 	virtual QMap<QString, int> getAllInfo()		= 0;
 };
 

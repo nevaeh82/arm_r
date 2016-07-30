@@ -9,7 +9,6 @@ RpcConfigReader::RpcConfigReader(QObject* parent) :
 {
 	m_settingsManager = RpcSettingsManager::instance();
 	connect(this, SIGNAL(readStationListInternalSignal(QString)), this, SLOT(readStationListInternalSlot(QString)));
-	connect(this, SIGNAL(readAtlantConfigurationInternalSignal(QString)), this, SLOT(readAtlantConfigurationInternalSlot(QString)));
 	connect(this, SIGNAL(readDbConfigurationInternalSignal(QString)), this, SLOT(readDbConfigurationInternalSlot(QString)));
 }
 
@@ -29,8 +28,6 @@ void RpcConfigReader::onMethodCalled(const QString& method, const QVariant& argu
 
 	if (method == RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST) {
 		emit readStationListInternalSignal(fileName);
-	} else if (method == RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION) {
-		emit readAtlantConfigurationInternalSignal(fileName);
 	} else if (method == RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION) {
 		emit readDbConfigurationInternalSignal(fileName);
 	}
@@ -71,21 +68,6 @@ void RpcConfigReader::readStationListInternalSlot(const QString& fileName)
 	} else {
 		emit getStationList();
 	}
-}
-
-void RpcConfigReader::readAtlantConfigurationInternalSlot(const QString& filename)
-{
-	m_settingsManager->setIniFile(filename);
-	AtlantConfiguration atlantConfiguration;
-
-	atlantConfiguration.hostByRpc	= m_settingsManager->getRpcHost();
-	atlantConfiguration.portByRpc	= m_settingsManager->getRpcPort().toUInt();
-
-	QByteArray dataToSend;
-	QDataStream dataStream(&dataToSend, QIODevice::WriteOnly);
-	dataStream << atlantConfiguration;
-
-	m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION, QVariant(dataToSend));
 }
 
 void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)

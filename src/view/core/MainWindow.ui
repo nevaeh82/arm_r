@@ -147,7 +147,6 @@
     <property name="title">
      <string>Settings</string>
     </property>
-    <addaction name="actionAtlantSetup"/>
     <addaction name="actionLists"/>
     <addaction name="separator"/>
     <addaction name="actionSolverLogs"/>
@@ -161,6 +160,7 @@
      <string>Server</string>
     </property>
     <addaction name="actionRestartServer"/>
+    <addaction name="actionConnections"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSettings"/>
@@ -213,6 +213,11 @@
   <action name="actionLocationSetup">
    <property name="text">
     <string>LocationSetup</string>
+   </property>
+  </action>
+  <action name="actionConnections">
+   <property name="text">
+    <string>Connections</string>
    </property>
   </action>
  </widget>

@@ -159,7 +159,7 @@ void TabSpectrumWidgetController::init()
 {
 	createView();
 	createTree();
-	createRPC();
+    //createRPC();
 }
 
 void TabSpectrumWidgetController::createRPC()

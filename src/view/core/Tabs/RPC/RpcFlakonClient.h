@@ -4,8 +4,9 @@
 #include <Rpc/RpcRoutedClient.h>
 
 #include "Interfaces/IStation.h"
+#include "Interfaces/IRpcConfigClient.h"
 
-class RpcFlakonClient : public RpcRoutedClient
+class RpcFlakonClient : public RpcRoutedClient, public IRpcConfigClient
 {
 	Q_OBJECT
 public:
@@ -42,12 +43,27 @@ protected slots:
 
 signals:
 	void signalEnableCorrelation(int, float, bool);
+    void connectionEstablishedSignal();
 
 private slots:
 	void slotEnableCorrelation(int, float, bool);
 	void solverQualityStatusReceived(QByteArray data);
 	void solverErrorsReceived(QByteArray data);	
 	void sloverAnswerReceived1(QByteArray data);
+
+public:
+    virtual void requestGetStationList(const QString& filename);
+    virtual void requestGetDbConfiguration(const QString& filename);
+
+signals:
+    void getStationListSignal(QString);
+//    void connectionEstablishedSignal();
+
+private slots:
+    void receivedStationListSlot(QByteArray data);
+    void receivedDbConfigurationSlot(QByteArray data);
+    void receivedLocSystem(QByteArray data);
+
 };
 
 #endif // RPCFLAKONCLIENT_H

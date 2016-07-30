@@ -6,6 +6,7 @@
 
 #include "ControlPanel/ControlPanelWidget.h"
 #include "Tabs/TabManager.h"
+#include "Tabs/ServerConnectionsWidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,7 @@ public:
 	QTabWidget* getWorkTabsWidget() const;
 	QStackedWidget* getStackedWidget() const;
 
+
 private:
 	Ui::MainWindow* ui;
 
@@ -38,6 +40,7 @@ signals:
 	void signalShowSolverSetup();
 	void signalShowSolverErrors();
 	void signalResetSerevr();
+    void signalServerConnections();
 
 	void signalShowLocationSetup();
 };

@@ -33,8 +33,6 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_ATT2, this, SLOT(setPrmAtt2(quint64, QString, int)));
 	m_serverPeer->attachSlot(RPC_METHOD_PRM_SET_FILTER, this, SLOT(setPrmFilter(quint64, QString, int)));
 
-	m_serverPeer->attachSlot(RPC_METHOD_SET_ATLANT_FREQUENCY, this, SLOT(setAtlantFrequency(quint64,QByteArray)));
-
 	m_serverPeer->attachSlot(RPC_METHOD_SET_DATA_TO_SOLVER, this, SLOT(setDataToSolver(quint64,QByteArray)));
 	m_serverPeer->attachSlot(RPC_METHOD_SET_CLEAR_TO_SOLVER, this, SLOT(setClearToSolver(quint64,QByteArray)));
 
@@ -42,7 +40,6 @@ RpcServer::RpcServer(QObject* parent) :
 	m_serverPeer->attachSlot(RPC_METHOD_FLAKON_REQUEST_STATUS, this, SLOT(requestFlakonStatus(quint64)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, this, SLOT(requestGetStationListSlot(quint64,QString)));
-	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, this, SLOT(requestGetAtlantConfigurationSlot(quint64,QString)));
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, this, SLOT(requestGetDbConfigurationSlot(quint64,QString)));
 }
 
@@ -88,11 +85,6 @@ void RpcServer::logClientDisconected(quint64 client)
 void RpcServer::requestGetStationListSlot(quint64, QString configFilename)
 {
 	dispatch( RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, QVariant(configFilename) );
-}
-
-void RpcServer::requestGetAtlantConfigurationSlot(quint64, QString configFilename)
-{
-	dispatch( RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION, QVariant(configFilename) );
 }
 
 void RpcServer::requestGetDbConfigurationSlot(quint64, QString configFilename)
@@ -283,11 +275,6 @@ void RpcServer::sendResponseModulation(quint64 client, QString modulation)
 	Q_UNUSED( modulation );
 	/// TODO
 	//	m_serverPeer->call(client, RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION, modulation);
-}
-
-void RpcServer::setAtlantFrequency(quint64 client, QByteArray data)
-{
-	dispatch( RPC_METHOD_SET_ATLANT_FREQUENCY, QVariant(data), client );
 }
 
 void RpcServer::requestStatus(quint64 client, QString name)

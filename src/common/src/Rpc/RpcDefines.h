@@ -31,8 +31,6 @@
 #define RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST				"rpcMethodConfigRequestGetStationList"
 #define RPC_METHOD_CONFIG_ANSWER_STATION_LIST					"rpcMethodConfigAnswerStationList"
 #define RPC_METHOD_CONFIG_RDS_ANSWER							"rpcMethodConfigRdsAnswer"
-#define RPC_METHOD_CONFIG_REQUEST_GET_ATLANT_CONFIGURATION		"rpcMethodConfigRequsetGetAtlantConfiguration"
-#define RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION			"rpcMethodConfigAnswerAtlantConfiguration"
 #define RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION			"rpcMethodConfigRequsetGetDBConfiguration"
 #define RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION				"rpcMethodConfigAnswerDBConfiguration"
 
@@ -53,13 +51,6 @@
 ///PRM to RPC client
 #define RPC_SLOT_SERVER_PRM_STATUS                   "rpc_slot_server_prm_status"
 #define RPC_PRM_FREQUENCY_CHANGED                    "rpc_prm_frequency_changed"
-
-///ATLANT
-#define RPC_SLOT_SERVER_ATLANT_DIRECTION            "rpc_slot_server_atlant_direction"
-#define RPC_SLOT_SERVER_ATLANT_POSITION             "rpc_slot_server_atlant_position"
-
-/// ATLANT from client
-#define RPC_METHOD_SET_ATLANT_FREQUENCY             "rpc_slot_set_atlant_frequency"
 
 /// BPLA
 #define RPC_SLOT_SERVER_SEND_BPLA_DEF               "rpc_slot_server_send_bpla_def"

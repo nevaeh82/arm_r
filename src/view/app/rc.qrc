@@ -15,5 +15,7 @@
         <file>images/icons/ListWhiteDialog.png</file>
         <file>images/icons/ExistInDB.png</file>
         <file>images/bullet_yellow.png</file>
+        <file>images/ActionsListAdd.png</file>
+        <file>images/minus.png</file>
     </qresource>
 </RCC>

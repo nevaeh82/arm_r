@@ -19,15 +19,6 @@
 #define ARM_R_SERVER_BPLA_COORDS        5001
 #define ARM_R_SERVER_BPLA_COORDS_AUTO   5002
 
-/// ATLANT
-#define ARM_R_SERVER_ATLANT_DIRECTION   7001
-#define ARM_R_SERVER_ATLANT_POSITION    7002
-
-/// Atlant device internal
-#define TCP_ATLANT_ANSWER_DIRECTION			"tcpAtlantAnswerDirection"
-#define TCP_ATLANT_ANSWER_POSITION			"tcpAtlantAnswerPosition"
-#define TCP_ATLANT_REQUEST_SET_FREQUENCY	"tcpAtlantRequestSetFrequency"
-
 /// PRM300 device internal
 #define TCP_PRM300_STATUS						"tcpPRM300Status"
 #define TCP_PRM300_ANSWER_STATUS				"tcpPRM300AnswerStatus"
@@ -88,11 +79,6 @@
 #define TCP_FLAKON_COORDINATES_COUNTER_ERRORS						"tcpFlakonCoordinatesCounterErrors"
 
 #define TCP_SOLVER_MESSAGE											"tcpSolverMessage"
-
-/// Atlant device external
-#define Atlant_Direction_MsgA	"DIRECTION_ANSWER_MESSAGE"
-#define Atlant_Position_MsgA	"POSITION_ANSWER_MESSAGE"
-#define Atlant_Direction_Finding_Request	"DIRECTION_FINDING_REQUEST"
 
 /// CLIENT_TCP_SERVER commands
 #define CLIENT_TCP_SERVER_SOLVER_DATA	"tcpClientSolverData"

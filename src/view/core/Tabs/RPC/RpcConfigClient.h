@@ -17,17 +17,14 @@ public:
 	// IRpcConfigClient interface
 public:
 	virtual void requestGetStationList(const QString& filename);
-	virtual void requestGetAtlantConfiguration(const QString& filename);
 	virtual void requestGetDbConfiguration(const QString& filename);
 
 signals:
 	void getStationListSignal(QString);
-	void getAtlantConfigSignal(QString);
 	void connectionEstablishedSignal();
 
 private slots:
 	void receivedStationListSlot(QByteArray data);
-	void receivedAtlantConfigSlot(QByteArray data);
 	void receivedDbConfigurationSlot(QByteArray data);
 	void receivedLocSystem(QByteArray data);
 };

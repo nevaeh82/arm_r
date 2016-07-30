@@ -54,15 +54,7 @@ QByteArray TcpServerCoder::decode(const MessageSP message)
 		packetCommand->set_action(Zaviruha::sendBplaPoints);
 	} else if (messageType == QString(ARM_R_SERVER_BPLA_COORDS_AUTO)) {
 		packetCommand->set_action(Zaviruha::sendBplaPointsAuto);
-	} else if (messageType == QString(ARM_R_SERVER_ATLANT_DIRECTION)) {
-		dataToSend = messageData;
-		addPreambula(dataToSend);
-		return messageData;
-	} else if (messageType == QString(ARM_R_SERVER_ATLANT_POSITION)) {
-		dataToSend = messageData;
-		addPreambula(dataToSend);
-		return messageData;
-	}
+    }
 
 	if (messageType == QString(ARM_R_SERVER_BPLA_COORDS)
 		|| messageType == QString(ARM_R_SERVER_BPLA_COORDS_AUTO)) {

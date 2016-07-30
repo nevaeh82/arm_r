@@ -14,7 +14,6 @@
 
 #include "Tcp/TcpDeviceController.h"
 #include "Tcp/TcpFlakonController.h"
-#include "Tcp/TcpAtlantController.h"
 #include "Tcp/TcpPRM300Controller.h"
 #include "Tcp/TcpRDSController.h"
 #include "Tcp/Interfaces/ITcpManager.h"

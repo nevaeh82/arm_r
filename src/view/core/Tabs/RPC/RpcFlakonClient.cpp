@@ -9,6 +9,13 @@
 RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
 {
+
+    connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
+
+    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
+    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_RDS_ANSWER, this, SLOT(receivedLocSystem(QByteArray)));
+    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
+
 	//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
 
 	//	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_POINTS, this, SLOT(pointsReceived(QByteArray)));
@@ -111,7 +118,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
-//	log_debug(QString("Receive Points >>>>>  %1").arg(data.size()));
+    log_debug(QString("Receive Points >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}
@@ -191,5 +198,39 @@ void RpcFlakonClient::solverErrorsReceived(QByteArray data)
 void RpcFlakonClient::slotEnableCorrelation(int id, float frequency, bool state)
 {
 	m_clientPeer->call( RPC_METHOD_SS_CORRELATION, id, frequency,state );
+}
+
+///config
+///
+
+void RpcFlakonClient::receivedStationListSlot(QByteArray data)
+{
+foreach (IRpcListener* listener, m_receiversList) {
+    listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
+}
+}
+
+void RpcFlakonClient::receivedLocSystem(QByteArray data)
+{
+foreach (IRpcListener* listener, m_receiversList) {
+    listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+}
+}
+
+void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)
+{
+foreach (IRpcListener* listener, m_receiversList) {
+    listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
+}
+}
+
+void RpcFlakonClient::requestGetStationList(const QString& filename)
+{
+m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, filename);
+}
+
+void RpcFlakonClient::requestGetDbConfiguration(const QString& filename)
+{
+m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, filename);
 }
 

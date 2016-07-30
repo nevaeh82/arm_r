@@ -19,9 +19,9 @@ int main(int argc, char *argv[])
 
 
 	ARM_R_Application a(argc, argv);
-	if( a.isRunning() ) {
-		return 0;
-	}
+//	if( a.isRunning() ) {
+//		return 0;
+//	}
 
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));

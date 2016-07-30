@@ -13,24 +13,23 @@
 #include "MainWindow.h"
 
 #include "Tabs/TabManager.h"
-#include "ControlPanel/ControlPanelController.h"
 
-#include "Tabs/Rpc/RpcFlakonClientWrapper.h"
 
 #include "DBStation/DBStationController.h"
 #include "DBStation/ListsDialog.h"
 #include "DBStation/ListsDialogController.h"
 
-#include "Tabs/RPC/RpcConfigClient.h"
+//#include "Tabs/RPC/RpcConfigClient.h"
 
 #include <Sleeper.h>
 
 #include "Tabs/SolverResultWidgetController.h"
 #include "Tabs/SolverErrorsWidgetController.h"
 #include "Tabs/SolverSetupWidgetController.h"
-#include "Tabs/LocationSetupWidgetController.h"
 
-class MainWindowController : public QObject, public IController<MainWindow>, public IRpcListener
+#include "Tabs/ServerConnectionWidgetController.h"
+
+class MainWindowController : public QObject, public IController<MainWindow>//, public IRpcListener
 {
 	Q_OBJECT
 
@@ -38,25 +37,22 @@ private:
 	MainWindow* m_view;
 
 	SkyHobbit::Common::ServiceControl::ServiceHandler* m_serverHandler;
-	TabManager*				m_tabManager;
+    //TabManager*				m_tabManager;
 	IDbManager*				m_dbManager;
-	ControlPanelController* m_controlPanelController;
+    //ControlPanelController* m_controlPanelController;
 	DBStationController*	m_dbStationController;
-
-	RpcConfigClient*		m_rpcConfigClient;
-	IRpcSettingsManager*	m_rpcSettingsManager;
-
-	RpcFlakonClientWrapper *m_rpcFlakonClient;
-	QString m_rpcHost;
-	uint m_rpcPort;
 
 	SolverResultWidgetController* m_solverWidgetController;
 	SolverErrorsWidgetController* m_solverErrorsWidgetController;
 	SolverSetupWidgetController* m_solverSetupWidgetController;
 
-	LocationSetupWidgetController* m_locationSetupController;
 
-	QThread *m_rpcClientThread;
+    ServerConnectionWidgetController* m_serverConnectionController;
+
+    //QThread *m_rpcClientThread;
+
+    QMap<int, TabManager*> m_mapTabManager;
+    ListsDialog* m_listForm;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -74,24 +70,22 @@ private slots:
 	void slotShowLists();
 	void slotShowSolverLog();
 	void slotShowSolverSetup();
+    void slotServerConnections();
 
-	void rpcConnectionEstablished();
-	void startTabManger();
+//	void rpcConnectionEstablished();
+    void startTabManger(int id);
 	void resetServer();
 
 	void slotShowSolverErrors();
 
-	void slotSendSolverSetupCommand( QByteArray data );
-	void slotSendRdsData(QByteArray data);
-	void slotShowLocationSetup();
+    void addedNewConnectionSlot(int id, QString Ip, quint16 port);
 private:
 
 	void init();
 
-	// IRpcListener interface
-	void readProto(const QByteArray &data);
+
 public:
-	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+    //virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };
 
 #endif // MAINWINDOWCONTROLLER_H

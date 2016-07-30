@@ -31,8 +31,6 @@ public:
 
 	virtual QString getFlakonHost();
 	virtual QString getFlakonPort();
-	virtual QString getAtlantHost();
-	virtual QString getAtlantPort();
 };
 
 #endif // TCPSETTINGSMANAGER_H

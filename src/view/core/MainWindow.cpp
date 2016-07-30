@@ -52,6 +52,9 @@ void MainWindow::init()
 	connect(ui->actionLocationSetup, SIGNAL(triggered()), this, SIGNAL(signalShowLocationSetup()));
 
     connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
+
+    connect(ui->actionConnections, SIGNAL(triggered()), this, SIGNAL(signalServerConnections()));
+
 }
 
 void MainWindow::showError(QString msg)

@@ -11,44 +11,19 @@ MainWindowController::MainWindowController(QObject *parent)
 	: QObject(parent)
 	, m_dbManager(0)
 	, m_dbStationController(0)
-	, m_rpcPort(24500)
-	, m_rpcHost("127.0.0.1")
+//	, m_rpcPort(24500)
+//	, m_rpcHost("127.0.0.1")
 	, m_serverHandler(0)
 {
 	m_view = NULL;
-	m_tabManager = NULL;
-	m_controlPanelController = NULL;
-	m_rpcConfigClient = NULL;
-	m_rpcSettingsManager = NULL;
+//	m_tabManager = NULL;
+//	m_controlPanelController = NULL;
+
 	m_solverWidgetController = NULL;
 	m_solverSetupWidgetController = NULL;
 	m_solverErrorsWidgetController = NULL;
 
-	QString rpcSettingsFile = QCoreApplication::applicationDirPath();
-	rpcSettingsFile.append("./Tabs/RPC.ini");
-	QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
-	rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-	m_rpcHost = rpcSettings.value("RPC_UI/IP", "192.168.0.1").toString();
-	m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
-
-	QString serverName = "./" + QString(SERVER_NAME);
-	#ifdef QT_DEBUG
-		serverName += "d";
-	#endif
-	m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
-
-	m_rpcFlakonClient = new RpcFlakonClientWrapper;
-    m_rpcClientThread = new QThread;
-    connect(m_rpcFlakonClient, SIGNAL(destroyed()), m_rpcClientThread, SLOT(terminate()));
-    connect(m_rpcClientThread, SIGNAL(finished()), m_rpcFlakonClient, SLOT(deleteLater()), Qt::DirectConnection);
-    connect(m_rpcClientThread, SIGNAL(destroyed()), m_rpcFlakonClient, SLOT(deleteLater()));
-    //connect(this, SIGNAL(signalFinishRPC()), m_rpcClientThread, SLOT(quit()));
-	//connect(this, SIGNAL(signalFinishRPC()), m_rpcClient, SLOT(deleteLater()));
-	//connect(this, SIGNAL(signalFinishRPC()), rpcClientThread, SLOT(deleteLater()));
-
-    m_rpcFlakonClient->moveToThread(m_rpcClientThread);
-    m_rpcClientThread->start();
 }
 
 MainWindowController::~MainWindowController()
@@ -74,50 +49,35 @@ MainWindowController::~MainWindowController()
 		delete errorsWidget;
 	}
 
-	m_tabManager->onClose();
-	m_tabManager->clearAllInformation();
-    m_rpcClientThread->exit();
-    m_rpcClientThread->deleteLater();
+    foreach( int key, m_mapTabManager.keys() )
+    {
+        TabManager *tab = m_mapTabManager.value(key);
+        tab->onClose();
+        tab->clearAllInformation();
+    }
+    m_mapTabManager.clear();
 }
 
 void MainWindowController::appendView(MainWindow *view)
 {
 	m_view = view;
 
-	init();
+    init();
+
+    m_listForm = new ListsDialog(m_view);
 }
 
 void MainWindowController::init()
 {
-	m_dbStationController = new DBStationController(this);
 
-	m_rpcSettingsManager = RpcSettingsManager::instance();
+    m_dbStationController = new DBStationController(this);
 
-	m_rpcConfigClient = new RpcConfigClient(this);
-	m_rpcConfigClient->registerReceiver(this);
+    m_dbManager = new DbManager(this);
 
-	m_tabManager = new TabManager(m_view->getWorkTabsWidget(), this);
-	connect(m_tabManager, SIGNAL(readyToStart()), this, SLOT(startTabManger()));
-	m_tabManager->setDbStationController(m_dbStationController);
-
-	m_tabManager->setFlakonRpc(m_rpcFlakonClient, m_rpcHost, m_rpcPort);
-
-	m_controlPanelController = new ControlPanelController(this);
-	m_controlPanelController->appendView(m_view->getControlPanelWidget());
-	m_controlPanelController->setDbStationController(m_dbStationController);
-	m_controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
-	m_controlPanelController->registerReceiver(m_tabManager);
-	m_tabManager->setControlPanelController((ICorrelationListener* )m_controlPanelController);
-
-	m_dbManager = new DbManager(this);
-	m_tabManager->setDbManager(m_dbManager);
-	m_controlPanelController->setDbManager(m_dbManager);
-	m_tabManager->setControlPanelController(m_controlPanelController);
 
 	m_view->getStackedWidget()->setCurrentIndex(1);
 
-    connect(this, SIGNAL(signalMessageError(QString)), m_view, SLOT(showError(QString)));
-    connect(this, SIGNAL(signalMessageConfirm(QString)), m_view, SLOT(showConfirm(QString)));
+
 
 	/// Problem here:
 
@@ -133,26 +93,31 @@ void MainWindowController::init()
 	m_solverSetupWidgetController = new SolverSetupWidgetController(this);
 	m_solverSetupWidgetController->appendView(solverSetupWidget);
 
-	m_locationSetupController = new LocationSetupWidgetController(this);
-	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);
-	m_locationSetupController->appendView(locationSetupWgt);
+//	m_locationSetupController = new LocationSetupWidgetController(this);
+//	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);
+//	m_locationSetupController->appendView(locationSetupWgt);
 
 	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
 	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
 
+    ServerConnectionsWidget* serverConnectionsWidget = new ServerConnectionsWidget(m_view);
+    m_serverConnectionController = new ServerConnectionWidgetController(this);
+    m_serverConnectionController->appendView(serverConnectionsWidget);
+    connect(m_serverConnectionController, SIGNAL(signalAddedNewConnection(int,QString,quint16)), this, SLOT(addedNewConnectionSlot(int, QString, quint16)));
+
+
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
 	connect(m_view, SIGNAL(signalShowSolverSetup()), this, SLOT(slotShowSolverSetup()));
 	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
+    connect(m_view, SIGNAL(signalServerConnections()), this, SLOT(slotServerConnections()));
 
-	connect(m_view, SIGNAL(signalShowLocationSetup()), this, SLOT(slotShowLocationSetup()));
+    //сделать динамически добавляемую менюшку. Для каждого сервера отдельный вызов
+//    connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
-	connect( m_solverSetupWidgetController, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
-	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
-
-    connect(m_controlPanelController, SIGNAL(signalSetComonFreq(int)),
-            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+//    connect(m_controlPanelController, SIGNAL(signalSetComonFreq(int)),
+//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	serverStartedSlot();
 }
@@ -175,22 +140,18 @@ void MainWindowController::serverStartedSlot()
 	timer.stop();
 	log_debug("Sleeper is off");
 
-	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
-	QString host = m_rpcSettingsManager->getRpcHost();
-	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
+//	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
+//	QString host = m_rpcSettingsManager->getRpcHost();
+//	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
 
-	m_tabManager->setRpcConfig(port, host);
-	m_rpcConfigClient->start(port, QHostAddress(host));
-	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
+//	m_tabManager->setRpcConfig(port, host);
+
 }
 
 void MainWindowController::slotShowLists()
-{
-	ListsDialog* listForm = new ListsDialog(m_view);
+{	
 	ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
 	bool isOpen = m_dbStationController->getDataBase().isOpen();
-
-	connect(listForm, SIGNAL(onClosing()), m_tabManager, SLOT(slotUpdateDBStationsLists()));
 
 	m_dbStationController->registerReceiver( listController );
 
@@ -201,8 +162,8 @@ void MainWindowController::slotShowLists()
 		return;
 	}
 
-	listController->appendView(listForm);
-	listForm->show();
+    listController->appendView(m_listForm);
+    m_listForm->show();
 }
 
 void MainWindowController::slotShowSolverLog()
@@ -212,7 +173,12 @@ void MainWindowController::slotShowSolverLog()
 
 void MainWindowController::slotShowSolverSetup()
 {
-	m_solverSetupWidgetController->slotShowWidget();
+    m_solverSetupWidgetController->slotShowWidget();
+}
+
+void MainWindowController::slotServerConnections()
+{
+    m_serverConnectionController->slotShowWidget();
 }
 
 void MainWindowController::slotShowSolverErrors()
@@ -220,41 +186,49 @@ void MainWindowController::slotShowSolverErrors()
 	m_solverErrorsWidgetController->slotShowWidget();
 }
 
-void MainWindowController::slotShowLocationSetup()
+
+
+void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 port)
 {
-	m_locationSetupController->slotShowWidget();
+//    QString rpcSettingsFile = QCoreApplication::applicationDirPath();
+//    rpcSettingsFile.append("./Tabs/RPC.ini");
+//    QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
+//    rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
+
+//    m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
+//    m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+
+//    QString serverName = "./" + QString(SERVER_NAME);
+//    #ifdef QT_DEBUG
+//        serverName += "d";
+//    #endif
+//    m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
+
+
+    TabManager* tabManager = new TabManager(id, m_view->getWorkTabsWidget(), this);
+    tabManager->setDbStationController(m_dbStationController);
+    tabManager->setDbManager(m_dbManager);
+    tabManager->addControlPanelWidget(m_view->getControlPanelWidget());
+
+    tabManager->initRpcConfig();
+    tabManager->setcpController();
+    tabManager->setRpcFlakon(port, Ip);
+
+
+    connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
+    connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));
+    connect(m_view, SIGNAL(signalShowLocationSetup()), tabManager, SLOT(slotShowLocationSetup()));
+
+    //tabManager->setFlakonRpc(ip, port);
+    tabManager->setRpcConfig(port, Ip);
+    m_mapTabManager.insert(id, tabManager);
 }
 
-void MainWindowController::slotSendSolverSetupCommand(QByteArray data)
+void MainWindowController::startTabManger(int id)
 {
-	m_rpcFlakonClient->sendSolverSetupSettings( data );
-}
-
-void MainWindowController::slotSendRdsData(QByteArray data)
-{
-	m_rpcFlakonClient->sendRdsProto(data);
-}
-
-void MainWindowController::rpcConnectionEstablished()
-{
-	m_rpcConfigClient->requestGetDbConfiguration("./Tabs/Db.ini");
-	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
-	m_rpcConfigClient->requestGetAtlantConfiguration("./Tabs/RPC.ini");
-}
-
-void MainWindowController::startTabManger()
-{
-	m_rpcFlakonClient->deregisterReceiver(m_solverWidgetController);
-	m_rpcFlakonClient->registerReceiver(m_solverWidgetController);
-
-	m_rpcFlakonClient->deregisterReceiver(m_solverSetupWidgetController);
-	m_rpcFlakonClient->registerReceiver(m_solverSetupWidgetController);
-
-	m_rpcFlakonClient->deregisterReceiver(m_solverErrorsWidgetController);
-	m_rpcFlakonClient->registerReceiver(m_solverErrorsWidgetController);
-
-	m_view->getStackedWidget()->setCurrentIndex(0);
-	m_tabManager->start();
+    m_mapTabManager.value(id)->startTab(m_solverWidgetController, m_solverErrorsWidgetController, m_solverSetupWidgetController);
+    m_view->getStackedWidget()->setCurrentIndex(0);
+    m_mapTabManager.value(id)->start();
 }
 
 void MainWindowController::resetServer()
@@ -273,88 +247,4 @@ void MainWindowController::resetServer()
 	param.append("/IM");
 	param.append("ZaviruhaRServer.exe");
 	QProcess::execute("taskkill", param);
-}
-
-void MainWindowController::onMethodCalled(const QString& method, const QVariant& argument)
-{
-	QByteArray data = argument.toByteArray();
-	if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		QList<StationConfiguration> stationList;
-        unsigned int zone;
-        unsigned int typeRds;
-        dataStream >> zone;
-        dataStream >> typeRds;
-		dataStream >> stationList;
-
-       // m_tabManager->addZoneType(zone, typeRds);
-
-		m_tabManager->clearAllInformation();
-		m_tabManager->setStationsConfiguration(stationList);
-        m_tabManager->addStationTabs(zone, typeRds);
-		m_controlPanelController->setMapStations(m_tabManager->getStations());
-
-	} else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
-		//data
-		readProto( data );
-	}
-	else if (method == RPC_METHOD_CONFIG_ANSWER_ATLANT_CONFIGURATION) {
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		AtlantConfiguration atlantConfiguration;
-		dataStream >> atlantConfiguration;
-
-		m_tabManager->setAtlantConfiguration(atlantConfiguration);
-	} else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		DBConnectionStruct dbConfig;
-		dataStream >> dbConfig;
-
-		m_dbStationController->connectToDB(dbConfig);
-	}
-}
-
-void MainWindowController::readProto(const QByteArray& data)
-{
-	RdsProtobuf::Packet pkt;
-	pkt.ParseFromArray( data.data(), data.size() );
-
-	if( !pkt.has_from_server() ) {
-		return;
-	}
-
-	if( pkt.from_server().has_current() ) {
-		if( pkt.from_server().current().has_location() ) {
-			m_locationSetupController->setLocationSetup( pkt.from_server().current().location() );
-            m_controlPanelController->setResponseFreq(
-                        pkt.from_server().current().location().options().central_frequency()
-                        );
-		}
-
-		if( pkt.from_server().current().has_detector() ) {
-			m_locationSetupController->setDetectorSetup( pkt.from_server().current().detector() );
-		}
-
-		if( pkt.from_server().current().has_correction() ) {
-			m_locationSetupController->setCorrectionSetup( pkt.from_server().current().correction() );
-		}
-
-        if(pkt.from_server().current().has_mode()) {
-            m_controlPanelController->onSetSystem( pkt.from_server().current().mode().index(),
-                                                   pkt.from_server().current().mode().status() );
-        }
-	}
-
-    if(pkt.from_server().has_answer()) {
-        if(pkt.from_server().answer().has_confirmation()) {
-            emit signalMessageConfirm(
-                    QString::fromStdString(pkt.from_server().answer().confirmation().str()));
-        }
-        if(pkt.from_server().answer().has_error()) {
-            emit signalMessageError(
-                     QString::fromStdString(pkt.from_server().answer().error().str()));
-        }
-    }
 }

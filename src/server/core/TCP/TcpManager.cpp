@@ -144,10 +144,6 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 			m_flakonStations.clear();
 
 			break;
-		case ATLANT_TCP_DEVICE:
-			controller = new TcpAtlantController(deviceName);
-			log_debug(QString("Created TcpAtlantController"));
-			break;
 		case PRM300_TCP_DEVICE:
 			controller = new TcpPRM300Controller(deviceName);
 			log_debug(QString("Created TcpPRM300Controller"));
@@ -428,14 +424,6 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 				m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
 			} else if(messageType == RPC_CORRELATION_CONTROL) {
 				addSolver(data.toByteArray());
-			}
-			break;
-		case ATLANT_TCP_DEVICE:
-			if (messageType == TCP_ATLANT_ANSWER_DIRECTION) {
-				m_rpcServer->call( RPC_SLOT_SERVER_ATLANT_DIRECTION, data);
-			}
-			else if (messageType == TCP_ATLANT_ANSWER_POSITION) {
-				m_rpcServer->call( RPC_SLOT_SERVER_ATLANT_POSITION, data, sender );
 			}
 			break;
 		case PRM300_TCP_DEVICE:

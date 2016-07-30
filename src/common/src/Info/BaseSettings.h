@@ -8,7 +8,6 @@ enum BaseSettingsType
 	TypeRetranslator = -1,
 	TypeFlakon = 1,
 	TypePRM300 = 2,
-	TypeAtlant = 3,
 	TypeRDS = 6,
 	TypeSolverClient = 7,
 	typeUnknown = 0

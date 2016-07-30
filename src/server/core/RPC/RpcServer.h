@@ -34,7 +34,6 @@ private slots:
 	void logClientDisconected(quint64 client);
 
 	void requestGetStationListSlot(quint64 client, QString configFilename);
-	void requestGetAtlantConfigurationSlot(quint64 client, QString configFilename);
 	void requestGetDbConfigurationSlot(quint64 client, QString configFilename);
 
 	void setMainStationCorrelation(quint64 client, int id, QString station);
@@ -56,9 +55,6 @@ private slots:
 	/// solver
 	void setDataToSolver(quint64 client, QByteArray data);
 	void setClearToSolver(quint64 client, QByteArray data);
-
-	/// ATLANT from client
-	void setAtlantFrequency(quint64 clint, QByteArray data);
 
 	void requestStatus(quint64 client, QString name);
 	void requestFlakonStatus(quint64 client);
