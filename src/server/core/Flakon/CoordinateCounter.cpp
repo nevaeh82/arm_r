@@ -13,7 +13,8 @@
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent),
 	isInit(false),
-	m_main_point(0)
+    m_main_point(0),
+    m_stationsShift(0)
 {
 	QDir dir;
 	dir.mkdir("./logs/SpecialLogs");
@@ -56,6 +57,8 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	log_debug(QString("Created %1").arg(m_likeADeviceName));
 
 	connect(this, SIGNAL(signalSetCenterFrequency(double)), this, SLOT(slotSetCenterFrequency(double)));
+
+    connect(this, SIGNAL(signalSetShift(double)), this, SLOT(slotSetShift(double)));
 }
 
 CoordinateCounter::~CoordinateCounter()
@@ -135,8 +138,8 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 			solverPkt.mutable_datafromclient()->mutable_measurementsdata(); ;
 
 	foreach (RdsProtobuf::Convolution cnvMsg, lMsg.convolution()) {
-		int firstInd = cnvMsg.first_detector_index();
-		int secInd = cnvMsg.second_detector_index();
+        int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
+        int secInd = cnvMsg.second_detector_index() + m_stationsShift;
 
 		double delay = cnvMsg.delay();
 
@@ -152,7 +155,8 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		}
 	}
 
-	solverData->set_central_frequency( m_centerFrequency );
+    double cf = m_centerFrequency + ( m_shift / 1000 );
+    solverData->set_central_frequency( cf );
 	solverData->set_datetime( dateTime );
 
 	m_aData.numOfReferenceDetector_ = m_main_point;
@@ -273,7 +277,17 @@ QObject* CoordinateCounter::asQObject()
 
 void CoordinateCounter::setCenterFrequency(const double& frequency)
 {
-	emit signalSetCenterFrequency(frequency);
+    emit signalSetCenterFrequency(frequency);
+}
+
+void CoordinateCounter::setShift(const double shift)
+{
+    emit signalSetShift(shift);
+}
+
+void CoordinateCounter::setStationsShift(const uint val)
+{
+    m_stationsShift = val;
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -613,6 +627,11 @@ void CoordinateCounter::initSolver()
 void CoordinateCounter::slotSetCenterFrequency(const double& frequency)
 {
 	m_centerFrequency = frequency;
+}
+
+void CoordinateCounter::slotSetShift(const double val)
+{
+   m_shift = val;
 }
 
 QList<UAVPositionDataEnemy> CoordinateCounter::encodeSolverData(

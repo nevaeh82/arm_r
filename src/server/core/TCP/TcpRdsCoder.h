@@ -15,6 +15,8 @@
 #include "TcpDefines.h"
 #include "CRCs.h"
 
+#include "Flakon/CoordinateCounter.h"
+
 struct PrmSettings
 {
 	int att1;
@@ -45,6 +47,8 @@ private:
 
 	QDateTime m_specTime;
 	InputDataType m_inputData;
+
+    CoordinateCounter* m_coordCounter;
 
 //	int m_chanNum;
 //	int m_mode;
@@ -81,6 +85,8 @@ public:
 	virtual MessageSP encode(const QByteArray& data);
 	virtual QByteArray decode(const MessageSP message);
 	virtual QObject* asQObject();
+
+    void setCoordinatesCounter(CoordinateCounter* obj);
 
 private:
 	MessageSP messageFromPreparedData(const QByteArray& data);

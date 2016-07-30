@@ -5,17 +5,22 @@
 #include "TcpRDSController.h"
 
 TcpRDSController::TcpRDSController(QObject* parent) :
-	TcpDeviceController(parent)
+    TcpDeviceController(parent),
+    m_stationShift(0)
 {
 	m_tcpDeviceName = RDS_TCP_DEVICE;
 	log_debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	m_coordinateCounter = 0;
+
+    init();
 }
 
 TcpRDSController::TcpRDSController(const QString& tcpDeviceName, QObject* parent) :
-	TcpDeviceController(tcpDeviceName, parent)
+    TcpDeviceController(tcpDeviceName, parent),
+    m_stationShift(0)
 {
+    m_coordinateCounter = 0;
 	init();
 }
 
@@ -31,6 +36,7 @@ QMap<QString, BaseTcpDeviceController*>& TcpRDSController::stations()
 void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 {
 	m_coordinateCounter = obj;
+    m_coordinateCounter->setStationsShift(m_stationShift);
 }
 
 void TcpRDSController::createTcpDeviceCoder()
@@ -39,6 +45,7 @@ void TcpRDSController::createTcpDeviceCoder()
 	TcpRdsCoder* coder = new TcpRdsCoder(this);
 	m_tcpDeviceCoder = coder;
 
+    coder->setCoordinatesCounter(m_coordinateCounter);
 
 	connect(coder, SIGNAL(onChangeDevState(QMap<int, bool>)), this, SLOT(slotTcpConnectionStatus(QMap<int, bool>)) );
 	connect(coder, SIGNAL(onDetectSignal(int, QVector<QPointF>)), this, SLOT(slotDetectSignal(int,QVector<QPointF>)) );
@@ -76,6 +83,8 @@ bool TcpRDSController::init()
 			m_host = m_flakonSettingStruct.host;
 			m_port = m_flakonSettingStruct.port;
 			m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
+
+            m_stationShift = settings.value( "shift", 0 ).toUInt();
 
 			QByteArray baseInfo;
 			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
@@ -205,6 +214,7 @@ void TcpRDSController::onGetStations()
 
 	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
     sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
+    sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
 	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 }
 
@@ -231,9 +241,9 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 		///WTF?? OMG.... FACEPALM.TIFF
 		bool result = false;
 		const double frequency = argument.toDouble(&result);
-		if(result) {
-			m_coordinateCounter->setCenterFrequency(frequency);
-		}
+//		if(result) {
+//			m_coordinateCounter->setCenterFrequency(frequency);
+//		}
 
 		//m_coordinateCounter->setCenterFrequency(frequency);
 	}

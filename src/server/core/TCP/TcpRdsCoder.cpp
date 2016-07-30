@@ -14,7 +14,8 @@ TcpRdsCoder::TcpRdsCoder(QObject* parent) :
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
-	m_indexSpect(-1)
+    m_indexSpect(-1),
+    m_coordCounter(NULL)
 {
 	m_residueLength = 0;
 	cnt = 0;
@@ -108,7 +109,7 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	}
 	else if(messageType == TCP_RDS_WORK_MODE) {
         RdsProtobuf::Mode* sMsg = msg.mutable_from_client()->mutable_get()->mutable_mode();
-        sMsg->set_index(0);
+        //sMsg->set_index(0);
         sMsg->set_status(true);
 	}
 	else if(messageType == TCP_RDS_GET_STATUS) {
@@ -184,6 +185,10 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 
 		lMsg->mutable_filter()->set_range(m_locConf.range);
 		lMsg->mutable_filter()->set_shift(m_locConf.shift);
+
+        if(m_coordCounter) {
+            m_coordCounter->setShift( m_locConf.shift );
+        }
 	}
 	else if (messageType == TCP_FLAKON_REQUEST_SS_CORRELATION) {
 		//NOT usable more
@@ -206,6 +211,10 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 
 		lMsg->mutable_filter()->set_range(m_locConf.range);
 		lMsg->mutable_filter()->set_shift(m_locConf.shift);
+
+        if(m_coordCounter) {
+            m_coordCounter->setShift( m_locConf.shift );
+        }
 	}
 	else if( message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM ) {
 		int val;
@@ -286,7 +295,12 @@ void TcpRdsCoder::addPreambula(QByteArray& data)
 
 QObject* TcpRdsCoder::asQObject()
 {
-	return this;
+    return this;
+}
+
+void TcpRdsCoder::setCoordinatesCounter(CoordinateCounter *obj)
+{
+    m_coordCounter = obj;
 }
 
 MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
@@ -339,6 +353,11 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			}
 
 				message = pointers(ind, startFreq+10, vec);
+
+                if(m_coordCounter) {
+                    m_coordCounter->setCenterFrequency(startFreq+10);
+                    m_coordCounter->setShift( m_locConf.shift );
+                }
 
 			m_indexSpect = ind;
 		} else if( sMsg.data().has_location_convolution() ) {   //Single convolution
@@ -578,6 +597,9 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			m_locConf.range = locMsg.filter().range();
 			m_locConf.shift = locMsg.filter().shift();
 
+            if(m_coordCounter) {
+                m_coordCounter->setShift( m_locConf.shift );
+            }
 			message = configureLoc(data);
 		}
 		else if( sMsg.current().has_detector() ) {

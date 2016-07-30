@@ -208,8 +208,9 @@ message Packet {
                 }
 
                 required string targetID = 1;               //айдишник цели
-                repeated MotionEstimate motionEstimate = 2; //последовательность оценок параметров движения
-                required ErrorEllips error_ellips = 3;  //эллипс ошибок, построенный для последней оценки координат цели
+                required double central_frequency = 2;      //частота сигнала цели
+                repeated MotionEstimate motionEstimate = 3; //последовательность оценок параметров движения
+                required ErrorEllips error_ellips = 4;  //эллипс ошибок, построенный для последней оценки координат цели
             }
 
             //одиночные отметки от целей

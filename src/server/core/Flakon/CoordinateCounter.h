@@ -99,7 +99,10 @@ private:
 	DataFromFlaconInt m_aData;
 
 	int countChanNum;
+
 	double m_centerFrequency;
+    double m_shift;
+    uint m_stationsShift;
 
 	QString m_likeADeviceName;
 
@@ -152,6 +155,9 @@ public:
 	virtual void sendData(const MessageSP message);
 	virtual QObject* asQObject();
 	virtual void setCenterFrequency(const double &frequency);
+    void setShift( const double shift );
+
+    void setStationsShift(const uint val);
 
 private:
 	/// Solver dll
@@ -178,6 +184,7 @@ private slots:
 	void slotCatchDataHyperbolesFromRadioLocation(const SolveResult& result, const HyperbolesFromRadioLocation& hyperb);
 	void slotErrorOccured(int error_type, QString str);
 	void slotSetCenterFrequency(const double& frequency);
+    void slotSetShift(const double shift);
 
 	void slotSolver1ProtoData( int result, QByteArray data );
 	void slotSolver1SetupAnswer(QByteArray data);
@@ -186,6 +193,7 @@ private slots:
 signals:
 	void signalFinished();
 	void signalSetCenterFrequency(const double& frequency);
+    void signalSetShift(const double shift);
 };
 
 inline QDataStream& operator<<(QDataStream& out, const UAVPositionDataEnemy& object)
