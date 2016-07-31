@@ -4,7 +4,7 @@
 
 #include "TcpRDSController.h"
 
-TcpRDSController::TcpRDSController(QObject* parent) :
+TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
     TcpDeviceController(parent),
     m_stationShift(0),
     m_serverId(serverId)
@@ -17,7 +17,7 @@ TcpRDSController::TcpRDSController(QObject* parent) :
     init();
 }
 
-TcpRDSController::TcpRDSController(const QString& tcpDeviceName, QObject* parent) :
+TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, QObject* parent) :
     TcpDeviceController(tcpDeviceName, parent),
     m_stationShift(0),
     m_serverId(serverId)

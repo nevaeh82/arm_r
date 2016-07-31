@@ -433,8 +433,6 @@ QTabWidget *TabManager::getTabWidgetZone()
 
 void TabManager::initRpcConfig()
 {
-
-
     m_rpcConfigClient = new RpcConfigClient;
     m_rpcConfigClient->registerReceiver(this);
 
