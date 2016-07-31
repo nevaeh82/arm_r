@@ -22,8 +22,11 @@ void SolverSetupWidgetController::appendView(SolverSetupWidget *view)
 {
 	m_view = view;
 
-	connect(m_view, SIGNAL(onSendSignal()), this, SLOT(slotSendSettings()));
-	connect(m_view, SIGNAL(onGetVersion()), this, SLOT( slotGetVersion()) );
+    if(m_view != NULL)
+    {
+        connect(m_view, SIGNAL(onSendSignal()), this, SLOT(slotSendSettings()));
+        connect(m_view, SIGNAL(onGetVersion()), this, SLOT( slotGetVersion()) );
+    }
 }
 
 void SolverSetupWidgetController::onMethodCalled(const QString &method, const QVariant &argument)

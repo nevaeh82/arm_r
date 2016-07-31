@@ -59,8 +59,8 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 
     connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
-    connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
-            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+//    connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
+//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
     connect(this, SIGNAL(signalMessageError(QString)), this, SLOT(slotShowError(QString)));
     connect(this, SIGNAL(signalMessageConfirm(QString)), this, SLOT(slotShowConfirm(QString)));
@@ -144,6 +144,9 @@ void TabManager::setcpController()
     controlPanelController->setDbManager(m_dbManager);
     this->setControlPanelController((ICorrelationListener* )controlPanelController);
     setControlPanelController(controlPanelController);
+
+    connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
+            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 }
 
 void TabManager::addControlPanelWidget(ControlPanelWidget *cpWidget)
@@ -409,6 +412,8 @@ void TabManager::setControlPanelController(ICorrelationListener* controller)
 void TabManager::setControlPanelController(ControlPanelController *controller)
 {
 	m_panelController = controller;
+//    connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
+//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 }
 
 void TabManager::setResponseCommonFreq(quint32 freq)
