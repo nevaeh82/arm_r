@@ -67,11 +67,13 @@ private:
 	ControlPanelController*	m_panelController;
     int m_id;
     QThread *m_rpcClientThread;
-    //QThread *m_rpcClientConfigThread;
+    QThread *m_rpcClientConfigThread;
     ControlPanelWidget* m_cpWidget;
 
     LocationSetupWidgetController* m_locationSetupController;
-    //RpcConfigClient* m_rpcConfigClient;
+    RpcConfigClient* m_rpcConfigClient;
+
+    int m_tabId;
 
 private:
     // IRpcListener interface
@@ -106,8 +108,8 @@ public:
 
 	QMap<int, Station *>& getStations();
 
-    void addStationTabs(unsigned int zone, unsigned typeRds);
-    void addZoneType(unsigned int zone, unsigned typeRds);
+    void addStationTabs(unsigned int zone, unsigned int typeRds);
+    void addZoneType(unsigned int zone, unsigned int typeRds);
 
 	void clearAllInformation();
 	void onClose();
@@ -121,6 +123,8 @@ public:
 
 
 
+
+
 private slots:
 	void changeTabSlot(int index);
     void slotUpdateDBStationsLists();
@@ -128,7 +132,7 @@ private slots:
     void slotShowLocationSetup();
     void slotSendRdsData(QByteArray data);
     void rpcConnectionEstablished();
-//    void rpcConnectionEstablishedFlakon();
+    void rpcConnectionEstablishedFlakon();
     void slotShowError(QString);
     void slotShowConfirm(QString);
 
@@ -145,6 +149,10 @@ signals:
 
 public:
     virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+    QTabWidget *getTabWidgetZone();
+
+    int getTabId();
 };
 
 #endif // TABMANAGER_H

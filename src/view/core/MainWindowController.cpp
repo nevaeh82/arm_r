@@ -65,6 +65,32 @@ void MainWindowController::appendView(MainWindow *view)
     init();
 
     m_listForm = new ListsDialog(m_view);
+
+    connectToServers();
+}
+
+void MainWindowController::connectToServers()
+{
+
+    QString settingsFile = QCoreApplication::applicationDirPath();
+    settingsFile.append("/TCP/servers.ini");
+    QSettings settings(settingsFile, QSettings::IniFormat, this);
+
+    QStringList childKeys = settings.childGroups();
+
+    foreach (const QString &childKey, childKeys)
+    {
+        settings.beginGroup(childKey);
+
+        int id = settings.value("id", 0).toInt();
+        QString ip = settings.value("ip", "127.0.0.1").toString();
+        quint16 port = settings.value("port", 0).toInt();
+
+        emit signalAddedNewConnectionFromFile(id, ip, port);
+
+        settings.endGroup();
+    }
+    m_serverConnectionController->init();
 }
 
 void MainWindowController::init()
@@ -105,6 +131,8 @@ void MainWindowController::init()
     m_serverConnectionController = new ServerConnectionWidgetController(this);
     m_serverConnectionController->appendView(serverConnectionsWidget);
     connect(m_serverConnectionController, SIGNAL(signalAddedNewConnection(int,QString,quint16)), this, SLOT(addedNewConnectionSlot(int, QString, quint16)));
+    connect(m_serverConnectionController, SIGNAL(signalRemoveConnection(int)), this, SLOT(removeConnectionSlot(int)));
+    connect(this, SIGNAL(signalAddedNewConnectionFromFile(int,QString,quint16)), m_serverConnectionController, SLOT(addedNewConnectionExtSlot(int,QString,quint16)));
 
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
@@ -186,8 +214,6 @@ void MainWindowController::slotShowSolverErrors()
 	m_solverErrorsWidgetController->slotShowWidget();
 }
 
-
-
 void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 port)
 {
 //    QString rpcSettingsFile = QCoreApplication::applicationDirPath();
@@ -222,6 +248,25 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
     //tabManager->setFlakonRpc(ip, port);
     tabManager->setRpcConfig(port, Ip);
     m_mapTabManager.insert(id, tabManager);
+}
+
+void MainWindowController::removeConnectionSlot(int id)
+{
+    TabManager* tabManager = m_mapTabManager.take(id);
+    if(tabManager == NULL) {
+        return;
+    }
+
+    m_view->getWorkTabsWidget()->removeTab(tabManager->getTabId());
+    int count = m_view->getWorkTabsWidget()->count();
+
+    if(count < 1)
+    {
+//        m_view->getWorkTabsWidget()->close();
+        m_view->getStackedWidget()->setCurrentIndex(1);
+    }
+
+    delete tabManager;
 }
 
 void MainWindowController::startTabManger(int id)

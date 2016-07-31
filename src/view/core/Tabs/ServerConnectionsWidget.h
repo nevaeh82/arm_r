@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QMap>
+#include <QSettings>
+#include <QFile>
 #include "ServerConnectionSingleLineWidget.h"
 
 namespace Ui {
@@ -17,17 +19,27 @@ public:
     explicit ServerConnectionsWidget(QWidget *parent = 0);
     ~ServerConnectionsWidget();
 
+    void init();
+
 private:
     Ui::ServerConnectionsWidget *ui;
     QMap<int, ServerConnectionSingleLineWidget*> m_maplines;
     int m_counter;
 
-private slots:
+    void saveServers()
+;
+
+public slots:
     void addNewLineSlot(int id, QString ip, quint16 port);
+    void addNewLineFromFileSlot(int id, QString ip, quint16 port);
+
+private slots:
+
     void removeLineSlot(int id);
 
 signals:
     void signalAddedNewConnectionSignal(int, QString, quint16);
+    void signalRemoveConnection(int);
 };
 
 #endif // SERVERCONNECTIONSWIDGET_H

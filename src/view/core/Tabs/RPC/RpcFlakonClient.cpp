@@ -212,16 +212,16 @@ foreach (IRpcListener* listener, m_receiversList) {
 
 void RpcFlakonClient::receivedLocSystem(QByteArray data)
 {
-foreach (IRpcListener* listener, m_receiversList) {
-    listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
-}
+    foreach (IRpcListener* listener, m_receiversList) {
+        listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+    }
 }
 
 void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)
 {
-foreach (IRpcListener* listener, m_receiversList) {
-    listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
-}
+    foreach (IRpcListener* listener, m_receiversList) {
+        listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
+    }
 }
 
 void RpcFlakonClient::requestGetStationList(const QString& filename)

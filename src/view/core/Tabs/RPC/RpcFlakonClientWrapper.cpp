@@ -25,10 +25,7 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
 
 	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
-	connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
-
-    connect(this, SIGNAL(signalGetDbConfiguration(QString)), this, SLOT(slotGetDbConfiguration(QString)));
-    connect(this, SIGNAL(signalGetStationLists(QString)), this, SLOT(slotGetStationLists(QString)));
+    connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
 }
 
 RpcFlakonClientWrapper::~RpcFlakonClientWrapper()
@@ -82,7 +79,7 @@ void RpcFlakonClientWrapper::initSlot()
 	m_rpcClient = new RpcFlakonClient(this);
 	m_rpcClient->start(m_port, m_address);
 
-	emit initFinishedSignal();
+    emit initFinishedSignal();
     emit connectionEstablishedSignal();
 }
 
@@ -267,30 +264,6 @@ void RpcFlakonClientWrapper::requestFlakonStatus()
 void RpcFlakonClientWrapper::clearAllReceiversList()
 {
 	if(m_rpcClient) {
-		m_rpcClient->clearReceiversList();
-    }
-}
-
-void RpcFlakonClientWrapper::getDbConfiguration(QString file)
-{
-    emit signalGetDbConfiguration(file);
-}
-
-void RpcFlakonClientWrapper::getStationLists(QString file)
-{
-    emit signalGetStationLists(file);
-}
-
-void RpcFlakonClientWrapper::slotGetDbConfiguration(QString file)
-{
-    if(m_rpcClient) {
-        m_rpcClient->requestGetDbConfiguration(file);
-    }
-}
-
-void RpcFlakonClientWrapper::slotGetStationLists(QString file)
-{
-    if(m_rpcClient) {
-        m_rpcClient->requestGetStationList(file);
+        m_rpcClient->clearReceiversList();
     }
 }

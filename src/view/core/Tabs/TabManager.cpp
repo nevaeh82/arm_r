@@ -43,9 +43,10 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	, m_controlPanelController( NULL )
     , m_panelController(NULL)
     , m_rpcFlakonClient(NULL)
-//    , m_rpcConfigClient(NULL)
+    , m_rpcConfigClient(NULL)
     , m_tabWidget(NULL)
     , m_id(id)
+    , m_tabId(0)
 {
     m_tabWidget = new QTabWidget(tabWidget);
 
@@ -61,18 +62,31 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
     connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
             m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
-    connect(this, SIGNAL(signalMessageError(QString)), m_tabWidget, SLOT(slotShowError(QString)));
-    connect(this, SIGNAL(signalMessageConfirm(QString)), m_tabWidget, SLOT(slotShowConfirm(QString)));
+    connect(this, SIGNAL(signalMessageError(QString)), this, SLOT(slotShowError(QString)));
+    connect(this, SIGNAL(signalMessageConfirm(QString)), this, SLOT(slotShowConfirm(QString)));
+    connect(this, SIGNAL(signalMethodCalled(QString,QVariant)), this, SLOT(slotMethodCalled(QString,QVariant)));
 }
 
 TabManager::~TabManager()
 {
+    m_rpcFlakonClient->stop();
+  //  m_rpcConfigClient->stop();
+
+    QMapIterator<QString, ITabWidget*> i(m_tabWidgetsMap);
+    while (i.hasNext())
+    {
+        i.next();
+
+        ITabWidget* st = i.value();
+        delete st;
+    }
+
     disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
     m_rpcClientThread->exit();
     m_rpcClientThread->deleteLater();
 
-//    m_rpcClientConfigThread->exit();
-//    m_rpcClientConfigThread->deleteLater();
+    m_rpcClientConfigThread->exit();
+    m_rpcClientConfigThread->deleteLater();
 
     m_locationSetupController->deleteLater();
 }
@@ -89,13 +103,13 @@ void TabManager::slotShowLocationSetup()
 
 void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErrorsWidgetController *errorSolver, SolverSetupWidgetController *setupSolver)
 {
-//    m_rpcFlakonClient->deregisterReceiver(resultSolver);
+    m_rpcFlakonClient->deregisterReceiver(resultSolver);
     m_rpcFlakonClient->registerReceiver(resultSolver);
 
-//    m_rpcFlakonClient->deregisterReceiver(errorSolver);
+    m_rpcFlakonClient->deregisterReceiver(errorSolver);
     m_rpcFlakonClient->registerReceiver(errorSolver);
 
-//    m_rpcFlakonClient->deregisterReceiver(setupSolver);
+    m_rpcFlakonClient->deregisterReceiver(setupSolver);
     m_rpcFlakonClient->registerReceiver(setupSolver);
 
     connect( setupSolver, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
@@ -103,9 +117,6 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 
 void TabManager::setRpcFlakon(const quint16& port, const QString& host)
 {
-    m_rpcHost = host;
-    m_rpcPort = port;
-//    m_rpcConfigClient->start(m_rpcPort, QHostAddress(m_rpcHost));
 
 }
 
@@ -115,30 +126,13 @@ void TabManager::setRpcConfig(const quint16& port, const QString& host)
 	m_rpcHost = host;
     m_rpcPort = port;
 
-
-    if (m_rpcFlakonClient != NULL) {
-        log_debug("Flokon RPC client to init started!");
-        m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
-         m_rpcFlakonClient->registerReceiver(this);
-    }
+    m_rpcConfigClient->start(port, QHostAddress(host));
 
 
     //if (m_rpcFlakonClient != NULL) {
        // m_rpcFlakonClient->init(port, QHostAddress(host));
    // }
 }
-
-void TabManager::rpcConnectionEstablished()
-{
-    log_debug("FlokonRPC started and request pareameters!");
-    m_rpcFlakonClient->getDbConfiguration("./Tabs/Db.ini");
-    m_rpcFlakonClient->getStationLists("./Tabs/Tabs.ini");
-}
-
-//void TabManager::rpcConnectionEstablishedFlakon()
-//{
-//    log_debug("FlokonRPC started!");
-//}
 
 void TabManager::setcpController()
 {
@@ -177,7 +171,7 @@ QStringList TabManager::createStationNamesList()
 
 QMap<int, Station *> &TabManager::getStations()
 {
-	return m_stationsMap;
+    return m_stationsMap;
 }
 
 void TabManager::setDbManager(IDbManager *dbManager)
@@ -263,7 +257,7 @@ void TabManager::setStationsConfiguration(const QList<StationConfiguration>& sta
 void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 {
 
-    m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone) + " - " + QString::number(typeRds));
+    m_tabId = m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone) + " - " + QString::number(typeRds));
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 
@@ -427,25 +421,35 @@ void TabManager::setResponseCommonFreq(quint32 freq)
     m_panelController->setResponseFreq(freq);
 }
 
+int TabManager::getTabId()
+{
+    return m_tabWidgetZone->currentIndex();
+}
+
+QTabWidget *TabManager::getTabWidgetZone()
+{
+    return m_tabWidgetZone;
+}
+
 void TabManager::initRpcConfig()
 {
 
 
-//    m_rpcConfigClient = new RpcConfigClient;
-//    m_rpcConfigClient->registerReceiver(this);
+    m_rpcConfigClient = new RpcConfigClient;
+    m_rpcConfigClient->registerReceiver(this);
 
-//    m_rpcClientConfigThread = new QThread;
-//    connect(m_rpcConfigClient, SIGNAL(destroyed()), m_rpcClientConfigThread, SLOT(terminate()));
-//    connect(m_rpcClientConfigThread, SIGNAL(finished()), m_rpcConfigClient, SLOT(deleteLater()), Qt::DirectConnection);
-//    connect(m_rpcClientConfigThread, SIGNAL(destroyed()), m_rpcConfigClient, SLOT(deleteLater()));
+    m_rpcClientConfigThread = new QThread;
+    connect(m_rpcConfigClient, SIGNAL(destroyed()), m_rpcClientConfigThread, SLOT(terminate()));
+    connect(m_rpcClientConfigThread, SIGNAL(finished()), m_rpcConfigClient, SLOT(deleteLater()), Qt::DirectConnection);
+    connect(m_rpcClientConfigThread, SIGNAL(destroyed()), m_rpcConfigClient, SLOT(deleteLater()));
 
-//    m_rpcConfigClient->moveToThread(m_rpcClientConfigThread);
-//    m_rpcClientConfigThread->start();
+    m_rpcConfigClient->moveToThread(m_rpcClientConfigThread);
+    m_rpcClientConfigThread->start();
 
-//    connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
-    connect(this, SIGNAL(signalMethodCalled(QString,QVariant)), this, SLOT(slotMethodCalled(QString,QVariant)), Qt::QueuedConnection);
+    connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
 
     m_rpcFlakonClient = new RpcFlakonClientWrapper;
+    m_rpcFlakonClient->registerReceiver(this);
     m_rpcClientThread = new QThread;
     connect(m_rpcFlakonClient, SIGNAL(destroyed()), m_rpcClientThread, SLOT(terminate()));
     connect(m_rpcClientThread, SIGNAL(finished()), m_rpcFlakonClient, SLOT(deleteLater()), Qt::DirectConnection);
@@ -454,7 +458,9 @@ void TabManager::initRpcConfig()
     m_rpcFlakonClient->moveToThread(m_rpcClientThread);
     m_rpcClientThread->start();
 
-    connect(m_rpcFlakonClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
+    connect(m_rpcFlakonClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablishedFlakon()));
+
+
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
@@ -483,42 +489,11 @@ void TabManager::onGlobalPanoramaEnabled(const bool isEnabled)
 	}
 }
 
-void TabManager::slotMethodCalled(const QString& method, const QVariant& argument)
-{
-    QByteArray data = argument.toByteArray();
-    if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
-
-        QDataStream dataStream(&data, QIODevice::ReadOnly);
-        QList<StationConfiguration> stationList;
-        unsigned int zone;
-        unsigned int typeRds;
-        dataStream >> zone;
-        dataStream >> typeRds;
-        dataStream >> stationList;
-
-       // m_tabManager->addZoneType(zone, typeRds);
-
-        clearAllInformation();
-        setStationsConfiguration(stationList);
-        addStationTabs(zone, typeRds);
-        m_panelController->setMapStations(getStations());
-
-    } else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
-        //data
-        readProto( data );
-    } else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
-
-        QDataStream dataStream(&data, QIODevice::ReadOnly);
-        DBConnectionStruct dbConfig;
-        dataStream >> dbConfig;
-
-        m_dbStationController->connectToDB(dbConfig);
-    }
-}
 
 void TabManager::onMethodCalled(const QString& method, const QVariant& argument)
 {
     emit signalMethodCalled(method, argument);
+
 }
 
 void TabManager::readProto(const QByteArray& data)
@@ -564,12 +539,63 @@ void TabManager::readProto(const QByteArray& data)
     }
 }
 
+
+void TabManager::rpcConnectionEstablished()
+{
+    m_rpcConfigClient->requestGetDbConfiguration("./Tabs/Db.ini");
+    m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
+
+    if (m_rpcFlakonClient != NULL) {
+        m_rpcFlakonClient->init(m_rpcPort, QHostAddress(m_rpcHost));
+    }
+}
+
+void TabManager::rpcConnectionEstablishedFlakon()
+{
+int y  = 0;
+y = 10;
+}
+
 void TabManager::slotShowError(QString msg)
 {
-    QMessageBox::critical(0, "Error", msg, QMessageBox::Ok);
+    //QMessageBox::critical(0, "Error", msg, QMessageBox::Ok);
 }
 
 void TabManager::slotShowConfirm(QString msg)
 {
-    QMessageBox::information(0, "Confirm", msg, QMessageBox::Ok);
+    //QMessageBox::information(0, "Confirm", msg, QMessageBox::Ok);
+}
+
+void TabManager::slotMethodCalled(const QString &method, const QVariant &argument)
+{
+    QByteArray data = argument.toByteArray();
+    if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
+
+        QDataStream dataStream(&data, QIODevice::ReadOnly);
+        QList<StationConfiguration> stationList;
+        unsigned int zone;
+        unsigned int typeRds;
+        dataStream >> zone;
+        dataStream >> typeRds;
+        dataStream >> stationList;
+
+       // m_tabManager->addZoneType(zone, typeRds);
+
+        //TODO понять как очистить конкретный таб
+        //clearAllInformation();
+        setStationsConfiguration(stationList);
+        addStationTabs(zone, typeRds);
+        m_panelController->setMapStations(getStations());
+
+    } else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
+        //data
+        readProto( data );
+    } else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
+
+        QDataStream dataStream(&data, QIODevice::ReadOnly);
+        DBConnectionStruct dbConfig;
+        dataStream >> dbConfig;
+
+        m_dbStationController->connectToDB(dbConfig);
+    }
 }

@@ -44,6 +44,7 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 {
 	log_debug("~() <<<<<<<<<<<");
 	m_dbManager->deregisterReceiver(m_treeModel);
+    m_dbManager->deregisterReceiver(this);
 
 	m_rpcPrmClient->deregisterReceiver( m_spectrumDataSource );
 	m_rpcPrmClient->deregisterReceiver( this );
@@ -159,7 +160,7 @@ void TabSpectrumWidgetController::init()
 {
 	createView();
 	createTree();
-    //createRPC();
+    createRPC();
 }
 
 void TabSpectrumWidgetController::createRPC()

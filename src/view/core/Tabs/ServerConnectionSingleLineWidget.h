@@ -16,6 +16,7 @@ public:
     ~ServerConnectionSingleLineWidget();
     QString getIp();
     quint16 getPort();
+    void accept(QString ip, quint16 port);
 
 private:
     Ui::ServerConnectionSingleLineWidget *ui;

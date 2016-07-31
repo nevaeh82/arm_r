@@ -21,6 +21,7 @@ void ServerConnectionWidgetController::appendView(ServerConnectionsWidget *view)
 {
     m_view = view;
     connect(m_view, SIGNAL(signalAddedNewConnectionSignal(int, QString,quint16)), this, SLOT(addedNewConnectionSlot(int, QString, quint16)));
+    connect(m_view, SIGNAL(signalRemoveConnection(int)), this, SLOT(removeConnectionSlot(int)));
 }
 
 void ServerConnectionWidgetController::onMethodCalled(const QString &method, const QVariant &argument)
@@ -31,6 +32,11 @@ void ServerConnectionWidgetController::onMethodCalled(const QString &method, con
 ServerConnectionsWidget* ServerConnectionWidgetController::getView()
 {
     return m_view;
+}
+
+void ServerConnectionWidgetController::init()
+{
+    m_view->init();
 }
 
 void ServerConnectionWidgetController::slotShowWidget()
@@ -46,6 +52,16 @@ void ServerConnectionWidgetController::addedNewConnectionSlot(int id, QString ip
     emit signalAddedNewConnection(id, ip, port);
 }
 
+void ServerConnectionWidgetController::removeConnectionSlot(int id)
+{
+    emit signalRemoveConnection(id);
+}
+
+void ServerConnectionWidgetController::addedNewConnectionExtSlot(int id, QString ip, quint16 port)
+{
+    m_view->addNewLineFromFileSlot(id, ip, port);
+}
+
 void ServerConnectionWidgetController::onMethodCalledSlot(QString method, QVariant argument)
 {
 //	if( method == RPC_SLOT_SERVER_SEND_SOLVER_ERRORS ) {
@@ -53,4 +69,3 @@ void ServerConnectionWidgetController::onMethodCalledSlot(QString method, QVaria
 //		return;
 //	}
 }
-

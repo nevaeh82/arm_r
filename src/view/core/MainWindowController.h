@@ -63,6 +63,7 @@ public:
 signals:
     void signalMessageConfirm(QString mesage);
     void signalMessageError(QString message);
+    void signalAddedNewConnectionFromFile(int id, QString Ip, quint16 port);
 
 private slots:
 	void serverFailedToStartSlot();
@@ -79,10 +80,13 @@ private slots:
 	void slotShowSolverErrors();
 
     void addedNewConnectionSlot(int id, QString Ip, quint16 port);
+    void removeConnectionSlot(int id);
 private:
 
 	void init();
 
+
+    void connectToServers();
 
 public:
     //virtual void onMethodCalled(const QString& method, const QVariant& argument);

@@ -63,7 +63,7 @@ bool TcpFlakonController::init()
 		QString name = settings.value("name", "Unknown").toString();
 		if(name == m_tcpDeviceName)
 		{
-			m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
+            m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
 			m_flakonSettingStruct.port = settings.value("Port", 2323).toInt();
 //			m_flakonSettingStruct.type = settings.value("type", -1).toInt();
 			m_flakonSettingStruct.name = settings.value("name", "").toString();

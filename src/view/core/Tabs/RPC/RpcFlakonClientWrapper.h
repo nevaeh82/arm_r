@@ -38,16 +38,11 @@ public:
 
 	void requestFlakonStatus();
 
-	void clearAllReceiversList();
-
-    //config
-    void getDbConfiguration(QString file);
-    void getStationLists(QString file);
+    void clearAllReceiversList();
 
 signals:
 	void initSignal();
-	void stopSignal();
-    void connectionEstablishedSignal();
+    void stopSignal();
 
 	void sendMainStationCorrelationSignal(int id, QString value);
 	void sendBandwidthSignal(int id, float bandwidth);
@@ -66,11 +61,8 @@ signals:
 
 	void requestFlakonStatusSignal();
 
-	void initFinishedSignal();
-
-    void signalGetDbConfiguration(QString);
-    void signalGetStationLists(QString);
-
+    void initFinishedSignal();
+    void connectionEstablishedSignal();
 
 private slots:
 	void initSlot();
@@ -90,11 +82,7 @@ private slots:
 
 	void sendWorkModeSlot(int mode, bool isOn);
 
-	void requestFlakonStatusSlot();
-
-    void slotGetDbConfiguration(QString file);
-    void slotGetStationLists(QString file);
-
+    void requestFlakonStatusSlot();
 	
 };
 

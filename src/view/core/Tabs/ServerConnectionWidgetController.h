@@ -27,10 +27,13 @@ public:
     void appendView(ServerConnectionsWidget* view);
     virtual void onMethodCalled(const QString& method, const QVariant& argument);
     ServerConnectionsWidget* getView();
+    void init();
 
 public slots:
     void slotShowWidget();
     void addedNewConnectionSlot(int id, QString ip, quint16 port);
+    void removeConnectionSlot(int id);
+    void addedNewConnectionExtSlot(int id, QString ip, quint16 port);
 
 signals:
     void onMethodCalledSignal(QString, QVariant);
@@ -40,6 +43,7 @@ private slots:
 
 signals:
     void signalAddedNewConnection(int, QString, quint16);
+    void signalRemoveConnection(int);
 
 };
 

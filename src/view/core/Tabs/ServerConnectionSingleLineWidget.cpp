@@ -27,6 +27,21 @@ quint16 ServerConnectionSingleLineWidget::getPort()
     return ui->sbPort->value();
 }
 
+void ServerConnectionSingleLineWidget::accept(QString ip, quint16 port)
+{
+    ui->leIp->setText(ip);
+    ui->sbPort->setValue(port);
+    if(ip == "...")
+    {
+        ui->tblAddConnection->show();
+        ui->tblRemoveConnection->hide();
+    } else {
+        ui->tblAddConnection->hide();
+        ui->tblRemoveConnection->show();
+    }
+
+}
+
 void ServerConnectionSingleLineWidget::removeServerConnection(bool state)
 {
     emit removeLine(m_id);
