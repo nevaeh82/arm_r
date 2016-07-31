@@ -19,6 +19,7 @@ enum DeviceTypesEnum
 };
 
 #define FLAKON_COORDINATE_COUNTER "flakonCoordinateCounter"
+#define RDS_NAME "RDS"
 
 #define FLAKON_ROUTE_ID		201
 #define RDS_ROUTE_ID		203

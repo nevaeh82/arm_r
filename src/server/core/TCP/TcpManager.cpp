@@ -297,7 +297,9 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 	if(deviceName == FLAKON_COORDINATE_COUNTER) {
 		/// HACK, fix it
 		sender =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
-	}
+    } else if(deviceName == RDS_NAME ) {
+        sender = (IRpcListener*)m_controllersMap.value("rds", NULL);
+    }
 	else {
 		sender = (IRpcListener*)m_controllersMap.value(deviceName,NULL);
 	}
