@@ -8,7 +8,7 @@
 #define GOOD_LIMIT 0.7
 #define VERACITY 1
 
-#define DELAY 1000
+#define DELAY 500
 
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent),
