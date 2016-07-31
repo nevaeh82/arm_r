@@ -50,7 +50,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 {
     m_tabWidget = new QTabWidget(tabWidget);
 
-//	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 
 
     m_locationSetupController = new LocationSetupWidgetController(this);
