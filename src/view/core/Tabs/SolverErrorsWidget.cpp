@@ -27,6 +27,8 @@ SolverErrorsWidget::~SolverErrorsWidget()
 
 void SolverErrorsWidget::appendSolverError(const QString &error)
 {
+    ui->teLogResults->clear();
+
 	ui->teLogResults->append(error);
 
 	QScrollBar *tempScrollBar = ui->teLogResults->verticalScrollBar();

@@ -133,7 +133,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 		//log_debug(QString("Setup Spectrum : %1").arg(m_name));
 
         if (list.count() == 2){
-			setSignal(spectrum, spectrumPeakHold);
+            setSignal(spectrum, spectrumPeakHold);
         } else {
             int pointCount = list.at(2).toInt();
             double bandwidth = list.at(3).toDouble();
@@ -258,7 +258,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	if(m_controlPanelMode == 3)
 	{
-		m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+        m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 		m_graphicsWidget->ZoomOutFull();
 		return;
 	}
@@ -319,7 +319,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		}
 	}
 
-	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+    m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 
 	m_graphicsWidget->ZoomOutFull();
 }

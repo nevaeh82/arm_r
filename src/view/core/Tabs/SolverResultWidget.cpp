@@ -27,6 +27,8 @@ SolverResultWidget::~SolverResultWidget()
 
 void SolverResultWidget::appendSolverResult(const QString &log)
 {
+    ui->teLogResults->clear();
+
 	ui->teLogResults->append(log);
 
 	QScrollBar *tempScrollBar = ui->teLogResults->verticalScrollBar();
