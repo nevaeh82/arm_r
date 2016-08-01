@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QSettings>
 #include <QFile>
+#include <QMessageBox>
 #include "ServerConnectionSingleLineWidget.h"
 
 namespace Ui {
@@ -26,8 +27,9 @@ private:
     QMap<int, ServerConnectionSingleLineWidget*> m_maplines;
     int m_counter;
 
-    void saveServers()
-;
+    void saveServers();
+
+    int checkExistServers(QString ip, quint16 port);
 
 public slots:
     void addNewLineSlot(int id, QString ip, quint16 port);

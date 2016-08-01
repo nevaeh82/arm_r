@@ -257,13 +257,19 @@ void MainWindowController::removeConnectionSlot(int id)
         return;
     }
 
-    m_view->getWorkTabsWidget()->removeTab(tabManager->getTabId());
-    int count = m_view->getWorkTabsWidget()->count();
+    tabManager->clearAllInformation();
 
-    if(count < 1)
+    int tabID = tabManager->getTabId();
+    if(tabID != -1)
     {
-//        m_view->getWorkTabsWidget()->close();
-        m_view->getStackedWidget()->setCurrentIndex(1);
+        m_view->getWorkTabsWidget()->removeTab(tabManager->getTabId());
+        int count = m_view->getWorkTabsWidget()->count();
+
+        if(count < 1)
+        {
+    //        m_view->getWorkTabsWidget()->close();
+            m_view->getStackedWidget()->setCurrentIndex(1);
+        }
     }
 
     delete tabManager;

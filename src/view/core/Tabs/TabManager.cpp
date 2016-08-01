@@ -46,7 +46,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
     , m_rpcConfigClient(NULL)
     , m_tabWidget(NULL)
     , m_id(id)
-    , m_tabId(0)
+    , m_tabId(-1)
 {
     m_tabWidget = new QTabWidget(tabWidget);
 
@@ -89,6 +89,11 @@ TabManager::~TabManager()
     m_rpcClientConfigThread->deleteLater();
 
     m_locationSetupController->deleteLater();
+
+    if(m_tabWidget != NULL)
+    {
+        delete m_tabWidget;
+    }
 }
 
 void TabManager::slotSendRdsData(QByteArray data)
@@ -279,6 +284,10 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 	foreach (Station* station, m_stationsMap) {
+        if(m_tabWidgetsMap.contains(station->getName()))
+        {
+            continue;
+        }
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(
@@ -346,13 +355,13 @@ void TabManager::clearAllInformation()
 	m_rpcFlakonClient->clearAllReceiversList();
 
 	m_currentTabWidget = NULL;
-	m_tabWidget->setEnabled(false);
+//	m_tabWidget->setEnabled(false);
 
 	QString tabName = tr("Common");
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = dynamic_cast<CommonSpectrumTabWidget*>(m_tabWidgetsMap.take(tabName));
 	if (commonTabSpectrumWidget != NULL) {
 		commonTabSpectrumWidget->clearSpectrumWidgetsContainer();
-		delete commonTabSpectrumWidget;
+        commonTabSpectrumWidget->deleteLater();
 		commonTabSpectrumWidget = NULL;
 	}
 
@@ -428,7 +437,7 @@ void TabManager::setResponseCommonFreq(quint32 freq)
 
 int TabManager::getTabId()
 {
-    return m_tabWidgetZone->currentIndex();
+    return m_tabId;
 }
 
 QTabWidget *TabManager::getTabWidgetZone()

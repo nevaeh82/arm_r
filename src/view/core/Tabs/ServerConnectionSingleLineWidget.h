@@ -16,11 +16,15 @@ public:
     ~ServerConnectionSingleLineWidget();
     QString getIp();
     quint16 getPort();
+    int getId();
     void accept(QString ip, quint16 port);
+    void setDefault();
+    bool isBlank();
 
 private:
     Ui::ServerConnectionSingleLineWidget *ui;
     int m_id;
+    bool m_isBlank;
 
 private slots:
     void addServerConnection(bool state);

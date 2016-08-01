@@ -50,11 +50,39 @@ void ServerConnectionsWidget::saveServers()
               settings.setValue("port", line->getPort());
               settings.endGroup();
             }
-      }
+    }
+}
+
+int ServerConnectionsWidget::checkExistServers(QString ip, quint16 port)
+{
+    int counter = 0;
+    QMapIterator<int, ServerConnectionSingleLineWidget*> i(m_maplines);
+    while (i.hasNext())
+    {
+        i.next();
+        ServerConnectionSingleLineWidget* line = i.value();
+        QString iip = line->getIp();
+        quint16 iport = line->getPort();
+        if(line->getIp() == ip && line->getPort() == port)
+        {
+            if(counter > 0)
+            {
+                QMessageBox::critical(this, tr("Error"), tr(QString("This server is added earlier with id = %1!").arg(QString::number(line->getId())).toStdString().c_str()));
+                m_maplines.value(m_counter-1)->setDefault();
+                return line->getId();
+            }
+            counter++;
+        }
+    }
+    return -1;
 }
 
 void ServerConnectionsWidget::addNewLineSlot(int id, QString ip, quint16 port)
 {
+    if(checkExistServers(ip, port) > -1)
+    {
+        return;
+    }
     ServerConnectionSingleLineWidget *line = new ServerConnectionSingleLineWidget(m_counter);
     m_maplines.value(id)->accept(ip, port);
     ui->vloyoutConnactions->addWidget(line);
@@ -66,6 +94,10 @@ void ServerConnectionsWidget::addNewLineSlot(int id, QString ip, quint16 port)
 
 void ServerConnectionsWidget::addNewLineFromFileSlot(int id, QString ip, quint16 port)
 {
+    if(checkExistServers(ip, port) > -1)
+    {
+        return;
+    }
     ServerConnectionSingleLineWidget *line = new ServerConnectionSingleLineWidget(m_counter);
     line->accept(ip, port);
     ui->vloyoutConnactions->addWidget(line);

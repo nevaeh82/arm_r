@@ -5,6 +5,7 @@
 RpcServer::RpcServer(QObject* parent) :
 	RpcRoutedServer( parent )
 {
+    qRegisterMetaType<QAbstractSocket::SocketError>();
 	connect(m_serverPeer, SIGNAL(clientConnected(quint64)), this, SLOT(logConnectionSuccess(quint64)));
 	connect(m_serverPeer, SIGNAL(clientDisconnected(quint64)), this, SLOT(logClientDisconected(quint64)));
 

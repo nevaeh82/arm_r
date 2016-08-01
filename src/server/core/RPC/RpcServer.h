@@ -19,6 +19,7 @@
 
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(QVector<QPointF>)
+Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 
 class RpcServer : public RpcRoutedServer
 {
