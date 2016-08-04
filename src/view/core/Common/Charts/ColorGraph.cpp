@@ -105,9 +105,10 @@ void ColorGraph::drawScatterPlot(QCPPainter *painter, QVector<QCPData> *scatterD
       {
           QColor color = m_colorMap->color(-100, -50, scatterData->at(i).value);
           painter->setPen(color);
-//          log_debug(QString("Color = %1 %2 %3 %4").arg(color.alpha()).arg(color.red()).arg(color.green()).arg(color.blue()));
+          log_debug(QString("Color = %1 %2 %3 %4").arg(color.alpha()).arg(color.red()).arg(color.green()).arg(color.blue()));
 
-          mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(m_timming/*scatterData->at(i).value*/));
+//          mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(scatterData->at(i).value));
+          mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(1/*scatterData->at(i).value*/));
 
       }
   }
@@ -146,6 +147,6 @@ void ColorGraph::drawScatterPlot(QCPPainter *painter, QVector<QCPData> *scatterD
 //          painter->setPen(color);
 //          mScatterStyle.drawShape(painter,  scatterData->at(i).key, scatterData->at(i).value);
 //      }
-//       // mScatterStyle.drawShape(painter, valueAxis->coordToPixel(scatterData->at(i).value), keyAxis->coordToPixel(scatterData->at(i).key));
+////        mScatterStyle.drawShape(painter, valueAxis->coordToPixel(scatterData->at(i).value), keyAxis->coordToPixel(scatterData->at(i).key));
 
 //}

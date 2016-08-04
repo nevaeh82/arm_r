@@ -276,7 +276,7 @@ void SpectrumWidgetDataSource::setName(QString name)
 
 void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
-    log_debug("SpectrumWidgetDataSource");
+//    log_debug("SpectrumWidgetDataSource");
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
 			return;

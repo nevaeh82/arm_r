@@ -152,7 +152,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 	}
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-        log_debug("Received points");
+//        log_debug("Received points");
 		QList<QVariant> list = arg.toList();
 
 		float* spectrum = list.at(0).value<float*>();
@@ -253,20 +253,18 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 void SpectrumWidgetController::initGraph(double timming)
 {
      //= new ColorGraph(timming, m_sonogramWidget->xAxis,  m_sonogramWidget->yAxis);
-    ColorGraph* graph = m_sonogramWidget->addGraph(timming, 0, m_sonogramWidget->xAxis,  m_sonogramWidget->yAxis);
-
-
     m_sonogramWidget->xAxis->setRange(0, m_pointCount);
-    m_sonogramWidget->yAxis->setRange(0, 60);
+    m_sonogramWidget->yAxis->setRange(-100, 100);
+    m_mapGraph = m_sonogramWidget->addGraph(m_sonogramWidget->xAxis,  m_sonogramWidget->yAxis);
 
     m_mapColor.addColorStop( 0.1, Qt::blue);
     m_mapColor.addColorStop( 0.9, Qt::red);
 
-    graph->setColorMap(&m_mapColor);
-    graph->setScatterStyle(QCPScatterStyle::ssDisc);
-    graph->setLineStyle(QCPGraph::lsNone);
+    m_mapGraph->setColorMap(&m_mapColor);
+    m_mapGraph->setScatterStyle(QCPScatterStyle::ssSquare);
+    m_mapGraph->setLineStyle(QCPGraph::lsNone);
 
-    m_mapGraph.insert(timming, graph);
+    //m_mapGraph.insert(timming, graph);
 }
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
@@ -312,12 +310,13 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
     }
 
 
-    if(m_timmingCount > m_timmingGlobal){
-        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
-    } else {
-        m_timmingCount++;
-        initGraph(m_timmingCurPos);
-    }
+//    if(m_timmingCount > m_timmingGlobal){
+//        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
+        m_mapGraph->setData(vecx, vecy);
+//    } else {
+//        m_timmingCount++;
+//        initGraph(m_timmingCurPos);
+//    }
 
     m_sonogramWidget->replot();
 	m_mux.unlock();
@@ -417,13 +416,15 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
         m_sonogramWidget->replot();
     }
 
-    if(m_timmingCount > m_timmingGlobal){
-        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
-    } else {
-        m_timmingCount++;
-        initGraph(m_timmingCurPos);
+//    if(m_timmingCount > m_timmingGlobal){
+//        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
+//    } else {
+//        m_timmingCount++;
+//        initGraph(m_timmingCurPos);
 
-    }
+//    }
+
+    m_mapGraph->setData(vecx, vecy);
 
 
     m_sonogramWidget->replot();
