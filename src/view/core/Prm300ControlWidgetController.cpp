@@ -1,11 +1,16 @@
 #include "Prm300ControlWidgetController.h"
 
+#include "RDSExchange.h"
+
 Prm300ControlWidgetController::Prm300ControlWidgetController(const QString& name, QObject *parent)
 	: QObject( parent )
 	, m_dbManager( 0 )
 	, m_view( NULL )
 	, m_rpcPrmClient( NULL )
+    , m_rpcFlakonClient( NULL )
 	, m_stationName( name )
+    , m_stationId( 0 )
+    , m_platformId( 0 )
 {
 }
 
@@ -38,7 +43,18 @@ void Prm300ControlWidgetController::appendView(Prm300ControlWidget *view)
 
 void Prm300ControlWidgetController::setRpcPrmClient(RpcPrmClient *client)
 {
-	m_rpcPrmClient = client;
+    if(!client) {
+        return;
+    }
+    m_rpcPrmClient = client;
+}
+
+void Prm300ControlWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *client)
+{
+    if(!client) {
+        return;
+    }
+    m_rpcFlakonClient = client;
 }
 
 void Prm300ControlWidgetController::setDbManager(IDbManager *dbManager)
@@ -48,7 +64,12 @@ void Prm300ControlWidgetController::setDbManager(IDbManager *dbManager)
 
 void Prm300ControlWidgetController::setName(const QString &name)
 {
-	m_stationName = name;
+    m_stationName = name;
+}
+
+void Prm300ControlWidgetController::setId(const uint id)
+{
+    m_stationId = id;
 }
 
 void Prm300ControlWidgetController::init()
@@ -58,6 +79,7 @@ void Prm300ControlWidgetController::init()
 //	connect(m_view, SIGNAL(signalSetAtt2Value(int)), this, SLOT(slotSetAtt2(int)));
 //	connect(m_view, SIGNAL(signalSetFilter(int)), this, SLOT(slotSetFilter(int)));
 	connect(m_view, SIGNAL(signalOnSetParams()), this, SLOT(slotSetAtt1()));
+    connect(m_view, SIGNAL(signalOnEnableReceiver(bool)), this, SLOT(slotEnableReceiver(bool)));
 	m_view->hide();
 }
 
@@ -87,5 +109,19 @@ void Prm300ControlWidgetController::slotSetAtt2(int value)
 void Prm300ControlWidgetController::slotSetFilter(int index)
 {
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_FILTER, QVariant::fromValue(index));
-	m_rpcPrmClient->setCommand(msg);
+    m_rpcPrmClient->setCommand(msg);
+}
+
+void Prm300ControlWidgetController::slotEnableReceiver(bool val)
+{
+    if(!m_rpcFlakonClient) {
+        return;
+    }
+
+    RdsProtobuf::Packet pkt;
+
+    createSetEnableReceiver( pkt, m_platformId, m_stationId, val );
+    //createGetLocationStatus(pkt);
+
+    m_rpcFlakonClient->sendRdsProto( pack(pkt) );
 }

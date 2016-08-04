@@ -9,6 +9,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 {
 	m_dbManager = NULL;
 	m_rpcClient = NULL;
+    m_rpcFlakonClient = NULL;
 
 	m_prm300WidgetController = NULL;
 
@@ -79,6 +80,7 @@ void SpectrumWidgetController::setSpectrumName(const QString &name)
 
 	if(m_prm300WidgetController) {
 		m_prm300WidgetController->setName(m_name);
+        m_prm300WidgetController->setId(m_id);
 	}
 }
 
@@ -151,7 +153,13 @@ void SpectrumWidgetController::setRpcPrmClient(RpcPrmClient *rpcClient)
 {
 	m_rpcClient = rpcClient;
 	m_prm300WidgetController->setRpcPrmClient(m_rpcClient);
-	m_rpcClient->registerReceiver(m_prm300WidgetController);
+    m_rpcClient->registerReceiver(m_prm300WidgetController);
+}
+
+void SpectrumWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcClient)
+{
+    m_rpcFlakonClient = rpcClient;
+    m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
 }
 
 void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
@@ -546,6 +554,8 @@ void SpectrumWidgetController::init()
 
 	m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
 	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
+
+    m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
 }
 
 void SpectrumWidgetController::slotSetEnablePanorama(bool state)

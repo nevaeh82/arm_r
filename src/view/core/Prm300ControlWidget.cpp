@@ -11,6 +11,8 @@ Prm300ControlWidget::Prm300ControlWidget(QWidget *parent) :
 	connect(ui->pbAtt2Up, SIGNAL(clicked()), this, SLOT(slotAtt2Up()));
 	connect(ui->pbAtt2Down, SIGNAL(clicked()), this, SLOT(slotAtt2Down()));
 	connect(ui->cbFilter, SIGNAL(activated(int)), this, SLOT(setPrmParams()));
+
+    connect(ui->cbEnable, SIGNAL(toggled(bool)), this, SIGNAL(signalOnEnableReceiver(bool)));
 }
 
 Prm300ControlWidget::~Prm300ControlWidget()

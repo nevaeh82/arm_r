@@ -40,6 +40,31 @@ inline void createSetCorrectionOptions(RdsProtobuf::Packet& msg, RdsProtobuf::Co
 	msg.mutable_from_client()->mutable_set()->mutable_correction()->CopyFrom(cor);
 }
 
+inline void createSetEnablePlatform(RdsProtobuf::Packet &msg, uint platform,
+                                    bool enable)
+{
+    msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_device()->set_device_index(platform);
+    msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_device()->set_status(enable);
+}
+
+inline void createSetEnableReceiver(RdsProtobuf::Packet &msg, uint platform,
+                                    uint receiver, bool enable)
+{
+    msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_device_index(platform);
+    msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_channel_index(receiver);
+    msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_status(enable);
+}
+
+inline bool isSetEnableReceiver(RdsProtobuf::Packet &msg)
+{
+    if(msg.has_from_client() && msg.from_client().has_set() && msg.from_client().set().has_system()
+            && msg.from_client().set().system().has_receiver() ) {
+        return true;
+    }
+
+    return false;
+}
+
 inline QByteArray pack(RdsProtobuf::Packet pkt)
 {
 	QByteArray data;

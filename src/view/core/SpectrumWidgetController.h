@@ -70,6 +70,7 @@ private:
 	Prm300ControlWidgetController* m_prm300WidgetController;
 
 	RpcPrmClient* m_rpcClient;
+    RpcFlakonClientWrapper* m_rpcFlakonClient;
 
 	IDbManager* m_dbManager;
 	DBStationController* m_dbStationController;
@@ -125,6 +126,7 @@ public:
 	void onDataArrived(const QString& method, const QVariant& arg);
 
 	void setRpcPrmClient(RpcPrmClient* rpcClient);
+    void setRpcFlakonClient(RpcFlakonClientWrapper* rpcClient);
 
 	void onCorrelationStateChanged(const bool isEnabled);
 

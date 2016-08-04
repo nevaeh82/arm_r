@@ -298,6 +298,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		tabController->setDbStationController(m_dbStationController);
 		tabController->setStationNamesList(stationNamesList);
 		tabController->setRpcFlakonClient(m_rpcFlakonClient);
+        tabSpectrumWidget->setRpcFlakonClient(m_rpcFlakonClient);
 		tabController->appendView(tabSpectrumWidget);
 		tabController->setControlPanelController(m_controlPanelController);
 		tabController->setControlPanelControllerTrue(m_panelController);
@@ -582,6 +583,11 @@ void TabManager::slotMethodCalled(const QString &method, const QVariant &argumen
 {
     QByteArray data = argument.toByteArray();
     if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
+
+        //TODO reinit, now it is failing when server restart
+        if(!m_stationsMap.isEmpty()) {
+            return;
+        }
 
         QDataStream dataStream(&data, QIODevice::ReadOnly);
         QList<StationConfiguration> stationList;

@@ -125,7 +125,18 @@ void TabSpectrumWidget::setRpcPrmClient(RpcPrmClient* client)
 
 RpcPrmClient *TabSpectrumWidget::getRpcClient()
 {
-	return m_rpcPrmClient;
+    return m_rpcPrmClient;
+}
+
+void TabSpectrumWidget::setRpcFlakonClient(RpcFlakonClientWrapper *client)
+{
+    m_rpcFlakonClient = client;
+    m_spectrumWidgetController->setRpcFlakonClient(m_rpcFlakonClient);
+}
+
+RpcFlakonClientWrapper* TabSpectrumWidget::getRpcFlakonClient()
+{
+    return m_rpcFlakonClient;
 }
 
 void TabSpectrumWidget::setIndicatorStateSlot(int state)
@@ -147,5 +158,6 @@ void TabSpectrumWidget::setIndicatorStateSlot(int state)
 		default:
 			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
-	}
+    }
 }
+

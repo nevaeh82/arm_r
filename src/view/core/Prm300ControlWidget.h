@@ -38,6 +38,8 @@ private slots:
 
 signals:
 	void signalOnSetParams();
+
+    void signalOnEnableReceiver(bool);
 };
 
 #endif // PRM300CONTROLWIDGET_H

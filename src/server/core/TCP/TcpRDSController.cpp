@@ -177,14 +177,15 @@ void TcpRDSController::slotTcpConnectionStatus(QMap<int, bool> map)
 		state.state = map.value(key);
 		stateList.append(state);
 
-		if(!state.state) {
-			QByteArray data;
-			QDataStream stream(&data, QIODevice::ReadWrite);
+        //Auto enable receiver todo. Now in bugs.
+//		if(!state.state) {
+//			QByteArray data;
+//			QDataStream stream(&data, QIODevice::ReadWrite);
 
-			stream << state.id;
+//			stream << state.id;
 
-			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
-		}
+//			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
+//		}
 
 	}
 	dataStream << stateList;

@@ -40,6 +40,8 @@ private:
 	QLabel* m_indicatorLabel;
 
 	RpcPrmClient*	m_rpcPrmClient;
+    RpcFlakonClientWrapper* m_rpcFlakonClient;
+
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
 	virtual ~TabSpectrumWidget();
@@ -62,6 +64,9 @@ public:
 
 	void setRpcPrmClient(RpcPrmClient* client);
 	RpcPrmClient* getRpcClient();
+
+    void setRpcFlakonClient(RpcFlakonClientWrapper* client);
+    RpcFlakonClientWrapper* getRpcFlakonClient();
 
 signals:
 	void setIndicatorStateSignal(int state);

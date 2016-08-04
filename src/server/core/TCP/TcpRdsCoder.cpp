@@ -274,6 +274,12 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
 	}
 	else if( message->type() == TCP_RDS_SEND_PROTO ) {
+
+        RdsProtobuf::Packet pkt;
+        pkt.ParseFromArray( msgData.data(), msgData.size() );
+
+        isSetEnableReceiver(pkt);
+
 		return msgData;
 	}
 	else {
