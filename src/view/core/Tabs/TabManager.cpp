@@ -570,6 +570,7 @@ void TabManager::readProto(const QByteArray& data)
 
 void TabManager::rpcConnectionEstablished()
 {
+	log_debug("rpcConnectionEstablished");
 	m_rpcConfigClient->requestGetDbConfiguration("./Tabs/Db.ini");
 	m_rpcConfigClient->requestGetStationList("./Tabs/Tabs.ini");
 

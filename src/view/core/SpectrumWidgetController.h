@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QList>
+#include <QVector>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
@@ -17,6 +18,10 @@
 
 #include "modules/gui/multi_graphics/components_relation.h"
 #include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
+#include "Common/Charts/qcustomplot.h"
+#include "Common/Charts/QCPLinearColorMap.h"
+#include "Common/Charts/ColorGraph.h"
+#include "Common/Charts/QColorCustomPlot.h"
 
 #include "Prm300ControlWidgetController.h"
 
@@ -66,6 +71,12 @@ private:
 	int		m_rett;
 
 	Q_MG_SpectrumInterface* m_graphicsWidget;
+    QColorCustomPlot      *m_sonogramWidget;
+    QMap<double, ColorGraph*> m_mapGraph;
+    int m_timming;
+    int m_timmingGlobal;
+    int m_timmingCount;
+    double m_timmingCurPos;
 
 	Prm300ControlWidgetController* m_prm300WidgetController;
 
@@ -75,6 +86,7 @@ private:
 	IDbManager* m_dbManager;
 	DBStationController* m_dbStationController;
 	ControlPanelController* m_controlPanelController;
+    QCPLinearColorMap       m_mapColor;
 
 	bool nextClearState;
 	SpectrumSelection tmpSelection;
@@ -146,6 +158,8 @@ private:
 
 	void setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list);
 
+
+    void initGraph(double timming);
 
 signals:
 	void doubleClickedSignal(int);

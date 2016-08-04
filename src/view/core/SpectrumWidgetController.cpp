@@ -7,6 +7,11 @@
 
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
+    m_timming = 0;
+    m_timmingGlobal = 50;
+    m_timmingCount = 0;
+    m_timmingCurPos = 0;
+
 	m_dbManager = NULL;
 	m_rpcClient = NULL;
 	m_rpcFlakonClient = NULL;
@@ -31,6 +36,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
+    m_sonogramWidget = NULL;
 
 	m_controlPanelController = NULL;
 	nextClearState = false;
@@ -104,6 +110,26 @@ void SpectrumWidgetController::setup()
 
 	m_graphicsWidget->Setup(true,9000,"",spectrum,PointCount, 0, 0);
 
+    QVector<double> vecy;
+    QVector<double> vecx;
+    for(int i = 0; i < PointCount; i++)
+    {
+        vecx.append((double)i);
+        vecy.append((double)spectrum[i]);
+    }
+
+//    int count = m_sonogramWidget->graphCount();
+//    if(count == 0)
+//    {
+//        m_sonogramWidget->addGraph();
+
+//        m_sonogramWidget->xAxis->setRange(0, PointCount);
+//        m_sonogramWidget->yAxis->setRange(-100, -75);
+//        m_sonogramWidget->replot();
+//    }
+//    m_sonogramWidget->graph(0)->setData(vecx, vecy);
+//    m_sonogramWidget->replot();
+
 	delete[] spectrum;
 }
 
@@ -126,6 +152,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 	}
 
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
+        log_debug("Received points");
 		QList<QVariant> list = arg.toList();
 
 		float* spectrum = list.at(0).value<float*>();
@@ -223,6 +250,25 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 	setFFTSetup(spectrum, spectrum_peak_hold);
 }
 
+void SpectrumWidgetController::initGraph(double timming)
+{
+     //= new ColorGraph(timming, m_sonogramWidget->xAxis,  m_sonogramWidget->yAxis);
+    ColorGraph* graph = m_sonogramWidget->addGraph(timming, 0, m_sonogramWidget->xAxis,  m_sonogramWidget->yAxis);
+
+
+    m_sonogramWidget->xAxis->setRange(0, m_pointCount);
+    m_sonogramWidget->yAxis->setRange(0, 60);
+
+    m_mapColor.addColorStop( 0.1, Qt::blue);
+    m_mapColor.addColorStop( 0.9, Qt::red);
+
+    graph->setColorMap(&m_mapColor);
+    graph->setScatterStyle(QCPScatterStyle::ssDisc);
+    graph->setLineStyle(QCPGraph::lsNone);
+
+    m_mapGraph.insert(timming, graph);
+}
+
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
 {
 	if(m_stopFlag == false)
@@ -250,6 +296,32 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 
 	m_graphicsWidget->ZoomOutFull();
 
+    QVector<double> vecy;
+    QVector<double> vecx;
+    for(int i = 0; i < m_pointCount; i++)
+    {
+        vecx.append((double)i);
+        vecy.append((double)spectrum[i]);
+    }
+
+    m_timmingCurPos = (m_timming++)%50;
+    int count = m_sonogramWidget->graphCount();
+    if(count == 0)
+    {
+        initGraph(m_timmingCurPos);
+
+        m_sonogramWidget->replot();
+    }
+
+
+    if(m_timmingCount > m_timmingGlobal){
+        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
+    } else {
+        m_timmingCount++;
+        initGraph(m_timmingCurPos);
+    }
+
+    m_sonogramWidget->replot();
 	m_mux.unlock();
 
 }
@@ -329,7 +401,36 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		}
 	}
 
-	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+    m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+
+    QVector<double> vecy;
+    QVector<double> vecx;
+    for(int i = 0; i < m_pointCount; i++)
+    {
+        vecx.append((double)i);
+        vecy.append((double)spectrum[i]);
+    }
+
+    m_timmingCurPos = (m_timming++)%50;
+    int count = m_sonogramWidget->graphCount();
+    if(count == 0)
+    {
+        initGraph(m_timmingCurPos);
+        m_sonogramWidget->replot();
+    }
+
+    if(m_timmingCount > m_timmingGlobal){
+        m_mapGraph.value(m_timmingCurPos)->setData(vecx, vecy);
+    } else {
+        m_timmingCount++;
+        initGraph(m_timmingCurPos);
+
+    }
+
+
+    m_sonogramWidget->replot();
+
+	//m_graphicsWidget->ZoomOutFull();
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
@@ -518,6 +619,7 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 void SpectrumWidgetController::init()
 {
 	m_graphicsWidget = m_view->getGraphicsWidget();
+    m_sonogramWidget = m_view->getSonogramWidget();
 
 	m_graphicsWidget->SetZoomOutMaxOnDataSet(true);
 	m_graphicsWidget->SetAlign(2);

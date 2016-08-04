@@ -154,6 +154,8 @@ void RpcFlakonClient::flakonStatusReceived(QByteArray data)
 //	QList<DevState> stateList;
 
 //	dataStream >> stateList;
+    log_debug(QString("flakonStatusReceived >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+
 
 	foreach( IRpcListener *listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_FLAKON_STATUS, QVariant(data) );
@@ -205,13 +207,18 @@ void RpcFlakonClient::slotEnableCorrelation(int id, float frequency, bool state)
 
 void RpcFlakonClient::receivedStationListSlot(QByteArray data)
 {
-foreach (IRpcListener* listener, m_receiversList) {
-    listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
-}
+
+    log_debug(QString("receivedStationListSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+
+    foreach (IRpcListener* listener, m_receiversList) {
+        listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
+    }
 }
 
 void RpcFlakonClient::receivedLocSystem(QByteArray data)
 {
+    log_debug(QString("receivedLocSystem >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+
     foreach (IRpcListener* listener, m_receiversList) {
         listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
     }
@@ -219,6 +226,8 @@ void RpcFlakonClient::receivedLocSystem(QByteArray data)
 
 void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)
 {
+    log_debug(QString("receivedDbConfigurationSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+
     foreach (IRpcListener* listener, m_receiversList) {
         listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
     }
@@ -226,11 +235,11 @@ void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)
 
 void RpcFlakonClient::requestGetStationList(const QString& filename)
 {
-m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, filename);
+    m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, filename);
 }
 
 void RpcFlakonClient::requestGetDbConfiguration(const QString& filename)
 {
-m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, filename);
+    m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, filename);
 }
 

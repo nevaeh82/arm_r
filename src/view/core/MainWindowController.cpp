@@ -234,6 +234,7 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	//    m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
 
 
+	log_debug("addedNewConnectionSlot");
 	TabManager* tabManager = new TabManager(id, m_view->getWorkTabsWidget(), this);
 	tabManager->setDbStationController(m_dbStationController);
 	tabManager->setDbManager(m_dbManager);
