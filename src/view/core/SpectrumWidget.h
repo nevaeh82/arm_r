@@ -9,6 +9,7 @@
 #include "SpectrumWidgetController.h"
 
 #include "Prm300ControlWidget.h"
+#include "Common/Charts/QColorCustomPlot.h"
 
 namespace Ui {
 class SpectrumWidget;
@@ -30,15 +31,14 @@ public:
 	void setPanorama(bool);
 
 	void setSpectrumName(const QString& name);
-	QString getSpectrumName() const;
+	QString getSpectrumName() const;    
 
 	Q_MG_SpectrumInterface* getGraphicsWidget();
+    QColorCustomPlot*       getSonogramWidget();
 
 	void setControlPrmState(bool state);
 
 	Prm300ControlWidget* getPrm300Widget();
-
-
 
 public slots:
 	void slotSetEnableSpactrum(bool state);

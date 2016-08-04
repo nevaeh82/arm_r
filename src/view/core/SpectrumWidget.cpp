@@ -45,7 +45,12 @@ QString SpectrumWidget::getSpectrumName() const
 
 Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
 {
-	return ui->graphicsWidget;
+    return ui->graphicsWidget;
+}
+
+QColorCustomPlot *SpectrumWidget::getSonogramWidget()
+{
+    return ui->sonogramWidget;
 }
 
 void SpectrumWidget::setControlPrmState(bool state)
