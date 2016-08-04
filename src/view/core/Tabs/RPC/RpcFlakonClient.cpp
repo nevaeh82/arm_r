@@ -118,7 +118,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
-    log_debug(QString("Receive Points >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+//    log_debug(QString("Receive Points >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}
