@@ -11,13 +11,13 @@ MainWindowController::MainWindowController(QObject *parent)
 	: QObject(parent)
 	, m_dbManager(0)
 	, m_dbStationController(0)
-//	, m_rpcPort(24500)
-//	, m_rpcHost("127.0.0.1")
+	//	, m_rpcPort(24500)
+	//	, m_rpcHost("127.0.0.1")
 	, m_serverHandler(0)
 {
 	m_view = NULL;
-//	m_tabManager = NULL;
-//	m_controlPanelController = NULL;
+	//	m_tabManager = NULL;
+	//	m_controlPanelController = NULL;
 
 	m_solverWidgetController = NULL;
 	m_solverSetupWidgetController = NULL;
@@ -49,56 +49,59 @@ MainWindowController::~MainWindowController()
 		delete errorsWidget;
 	}
 
-    foreach( int key, m_mapTabManager.keys() )
-    {
-        TabManager *tab = m_mapTabManager.value(key);
-        tab->onClose();
-        tab->clearAllInformation();
-    }
-    m_mapTabManager.clear();
+	foreach( int key, m_mapTabManager.keys() )
+	{
+		TabManager *tab = m_mapTabManager.value(key);
+
+		tab->removeDbManager();
+
+		tab->onClose();
+		tab->clearAllInformation();
+	}
+	m_mapTabManager.clear();
 }
 
 void MainWindowController::appendView(MainWindow *view)
 {
 	m_view = view;
 
-    init();
+	init();
 
-    m_listForm = new ListsDialog(m_view);
+	m_listForm = new ListsDialog(m_view);
 
-    connectToServers();
+	connectToServers();
 }
 
 void MainWindowController::connectToServers()
 {
 
-    QString settingsFile = QCoreApplication::applicationDirPath();
-    settingsFile.append("/TCP/servers.ini");
-    QSettings settings(settingsFile, QSettings::IniFormat, this);
+	QString settingsFile = QCoreApplication::applicationDirPath();
+	settingsFile.append("/TCP/servers.ini");
+	QSettings settings(settingsFile, QSettings::IniFormat, this);
 
-    QStringList childKeys = settings.childGroups();
+	QStringList childKeys = settings.childGroups();
 
-    foreach (const QString &childKey, childKeys)
-    {
-        settings.beginGroup(childKey);
+	foreach (const QString &childKey, childKeys)
+	{
+		settings.beginGroup(childKey);
 
-        int id = settings.value("id", 0).toInt();
-        QString ip = settings.value("ip", "127.0.0.1").toString();
-        quint16 port = settings.value("port", 0).toInt();
+		int id = settings.value("id", 0).toInt();
+		QString ip = settings.value("ip", "127.0.0.1").toString();
+		quint16 port = settings.value("port", 0).toInt();
 
-        emit signalAddedNewConnectionFromFile(id, ip, port);
+		emit signalAddedNewConnectionFromFile(id, ip, port);
 
-        settings.endGroup();
-    }
-    m_serverConnectionController->init();
+		settings.endGroup();
+	}
+	m_serverConnectionController->init();
 }
 
 void MainWindowController::init()
 {
 
-    m_dbStationController = new DBStationController(this);
+	m_dbStationController = new DBStationController(this);
 
-    m_dbManager = new DbManager(this);
+	m_dbManager = new DbManager(this);
 
 
 	m_view->getStackedWidget()->setCurrentIndex(1);
@@ -119,33 +122,33 @@ void MainWindowController::init()
 	m_solverSetupWidgetController = new SolverSetupWidgetController(this);
 	m_solverSetupWidgetController->appendView(solverSetupWidget);
 
-//	m_locationSetupController = new LocationSetupWidgetController(this);
-//	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);
-//	m_locationSetupController->appendView(locationSetupWgt);
+	//	m_locationSetupController = new LocationSetupWidgetController(this);
+	//	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);
+	//	m_locationSetupController->appendView(locationSetupWgt);
 
 	SolverErrorsWidget* solverErrorsWidget = new SolverErrorsWidget(m_view);
 	m_solverErrorsWidgetController = new SolverErrorsWidgetController(this);
 	m_solverErrorsWidgetController->appendView(solverErrorsWidget);
 
-    ServerConnectionsWidget* serverConnectionsWidget = new ServerConnectionsWidget(m_view);
-    m_serverConnectionController = new ServerConnectionWidgetController(this);
-    m_serverConnectionController->appendView(serverConnectionsWidget);
-    connect(m_serverConnectionController, SIGNAL(signalAddedNewConnection(int,QString,quint16)), this, SLOT(addedNewConnectionSlot(int, QString, quint16)));
-    connect(m_serverConnectionController, SIGNAL(signalRemoveConnection(int)), this, SLOT(removeConnectionSlot(int)));
-    connect(this, SIGNAL(signalAddedNewConnectionFromFile(int,QString,quint16)), m_serverConnectionController, SLOT(addedNewConnectionExtSlot(int,QString,quint16)));
+	ServerConnectionsWidget* serverConnectionsWidget = new ServerConnectionsWidget(m_view);
+	m_serverConnectionController = new ServerConnectionWidgetController(this);
+	m_serverConnectionController->appendView(serverConnectionsWidget);
+	connect(m_serverConnectionController, SIGNAL(signalAddedNewConnection(int,QString,quint16)), this, SLOT(addedNewConnectionSlot(int, QString, quint16)));
+	connect(m_serverConnectionController, SIGNAL(signalRemoveConnection(int)), this, SLOT(removeConnectionSlot(int)));
+	connect(this, SIGNAL(signalAddedNewConnectionFromFile(int,QString,quint16)), m_serverConnectionController, SLOT(addedNewConnectionExtSlot(int,QString,quint16)));
 
 
 	connect(m_view, SIGNAL(signalShowSolverLog()), this, SLOT(slotShowSolverLog()));
 	connect(m_view, SIGNAL(signalShowSolverSetup()), this, SLOT(slotShowSolverSetup()));
 	connect(m_view, SIGNAL(signalShowSolverErrors()), this, SLOT(slotShowSolverErrors()));
 	connect(m_view, SIGNAL(signalResetSerevr()), this, SLOT(resetServer()));
-    connect(m_view, SIGNAL(signalServerConnections()), this, SLOT(slotServerConnections()));
+	connect(m_view, SIGNAL(signalServerConnections()), this, SLOT(slotServerConnections()));
 
-    //сделать динамически добавляемую менюшку. Для каждого сервера отдельный вызов
-//    connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
+	//сделать динамически добавляемую менюшку. Для каждого сервера отдельный вызов
+	//    connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
-//    connect(m_controlPanelController, SIGNAL(signalSetComonFreq(int)),
-//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+	//    connect(m_controlPanelController, SIGNAL(signalSetComonFreq(int)),
+	//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	serverStartedSlot();
 }
@@ -168,11 +171,11 @@ void MainWindowController::serverStartedSlot()
 	timer.stop();
 	log_debug("Sleeper is off");
 
-//	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
-//	QString host = m_rpcSettingsManager->getRpcHost();
-//	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
+	//	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
+	//	QString host = m_rpcSettingsManager->getRpcHost();
+	//	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
 
-//	m_tabManager->setRpcConfig(port, host);
+	//	m_tabManager->setRpcConfig(port, host);
 
 }
 
@@ -190,8 +193,8 @@ void MainWindowController::slotShowLists()
 		return;
 	}
 
-    listController->appendView(m_listForm);
-    m_listForm->show();
+	listController->appendView(m_listForm);
+	m_listForm->show();
 }
 
 void MainWindowController::slotShowSolverLog()
@@ -201,12 +204,12 @@ void MainWindowController::slotShowSolverLog()
 
 void MainWindowController::slotShowSolverSetup()
 {
-    m_solverSetupWidgetController->slotShowWidget();
+	m_solverSetupWidgetController->slotShowWidget();
 }
 
 void MainWindowController::slotServerConnections()
 {
-    m_serverConnectionController->slotShowWidget();
+	m_serverConnectionController->slotShowWidget();
 }
 
 void MainWindowController::slotShowSolverErrors()
@@ -216,82 +219,82 @@ void MainWindowController::slotShowSolverErrors()
 
 void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 port)
 {
-//    QString rpcSettingsFile = QCoreApplication::applicationDirPath();
-//    rpcSettingsFile.append("./Tabs/RPC.ini");
-//    QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
-//    rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
+	//    QString rpcSettingsFile = QCoreApplication::applicationDirPath();
+	//    rpcSettingsFile.append("./Tabs/RPC.ini");
+	//    QSettings rpcSettings( rpcSettingsFile, QSettings::IniFormat );
+	//    rpcSettings.setIniCodec( QTextCodec::codecForName("UTF-8") );
 
-//    m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
-//    m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
+	//    m_rpcHost = rpcSettings.value("RPC_UI/IP", "127.0.0.1").toString();
+	//    m_rpcPort = rpcSettings.value("RPC_UI/Port", DEFAULT_RPC_PORT).toUInt();
 
-//    QString serverName = "./" + QString(SERVER_NAME);
-//    #ifdef QT_DEBUG
-//        serverName += "d";
-//    #endif
-//    m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
-
-
-    TabManager* tabManager = new TabManager(id, m_view->getWorkTabsWidget(), this);
-    tabManager->setDbStationController(m_dbStationController);
-    tabManager->setDbManager(m_dbManager);
-    tabManager->addControlPanelWidget(m_view->getControlPanelWidget());
-
-    tabManager->initRpcConfig();
-    tabManager->setcpController();
-    tabManager->setRpcFlakon(port, Ip);
+	//    QString serverName = "./" + QString(SERVER_NAME);
+	//    #ifdef QT_DEBUG
+	//        serverName += "d";
+	//    #endif
+	//    m_serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, QStringList(), NULL, this);
 
 
-    connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
-    connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));
-    connect(m_view, SIGNAL(signalShowLocationSetup()), tabManager, SLOT(slotShowLocationSetup()));
+	TabManager* tabManager = new TabManager(id, m_view->getWorkTabsWidget(), this);
+	tabManager->setDbStationController(m_dbStationController);
+	tabManager->setDbManager(m_dbManager);
+	tabManager->addControlPanelWidget(m_view->getControlPanelWidget());
 
-    //tabManager->setFlakonRpc(ip, port);
-    tabManager->setRpcConfig(port, Ip);
-    m_mapTabManager.insert(id, tabManager);
+	tabManager->initRpcConfig();
+	tabManager->setupController();
+	tabManager->setRpcFlakon(port, Ip);
+
+
+	connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
+	connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));
+	connect(m_view, SIGNAL(signalShowLocationSetup()), tabManager, SLOT(slotShowLocationSetup()));
+
+	//tabManager->setFlakonRpc(ip, port);
+	tabManager->setRpcConfig(port, Ip);
+	m_mapTabManager.insert(id, tabManager);
 }
 
 void MainWindowController::removeConnectionSlot(int id)
 {
-    TabManager* tabManager = m_mapTabManager.take(id);
-    if(tabManager == NULL) {
-        return;
-    }
+	TabManager* tabManager = m_mapTabManager.take(id);
+	if(tabManager == NULL) {
+		return;
+	}
 
-    tabManager->clearAllInformation();
+	tabManager->clearAllInformation();
 
-    int tabID = tabManager->getTabId();
-    if(tabID != -1)
-    {
-        m_view->getWorkTabsWidget()->removeTab(tabManager->getTabId());
-        int count = m_view->getWorkTabsWidget()->count();
+	int tabID = tabManager->getTabId();
+	if(tabID != -1)
+	{
+		m_view->getWorkTabsWidget()->removeTab(tabManager->getTabId());
+		int count = m_view->getWorkTabsWidget()->count();
 
-        if(count < 1)
-        {
-    //        m_view->getWorkTabsWidget()->close();
-            m_view->getStackedWidget()->setCurrentIndex(1);
-        }
-    }
+		if(count < 1)
+		{
+			//        m_view->getWorkTabsWidget()->close();
+			m_view->getStackedWidget()->setCurrentIndex(1);
+		}
+	}
 
-    delete tabManager;
+	delete tabManager;
 }
 
 void MainWindowController::startTabManger(int id)
 {
-    m_mapTabManager.value(id)->startTab(m_solverWidgetController, m_solverErrorsWidgetController, m_solverSetupWidgetController);
-    m_view->getStackedWidget()->setCurrentIndex(0);
-    m_mapTabManager.value(id)->start();
+	m_mapTabManager.value(id)->startTab(m_solverWidgetController, m_solverErrorsWidgetController, m_solverSetupWidgetController);
+	m_view->getStackedWidget()->setCurrentIndex(0);
+	m_mapTabManager.value(id)->start();
 }
 
 void MainWindowController::resetServer()
 {
 	/// todo: Is that logic need in future?
-//	QStringList serverPIDList;
-//	bool searchResult;
-//	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
+	//	QStringList serverPIDList;
+	//	bool searchResult;
+	//	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
 
-//	if( searchResult ) {
-//		m_serverHandler->killProcessExist( serverPIDList );
-//	}
+	//	if( searchResult ) {
+	//		m_serverHandler->killProcessExist( serverPIDList );
+	//	}
 
 	QStringList param;
 	param.append("/F");

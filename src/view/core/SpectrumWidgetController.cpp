@@ -9,7 +9,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 {
 	m_dbManager = NULL;
 	m_rpcClient = NULL;
-    m_rpcFlakonClient = NULL;
+	m_rpcFlakonClient = NULL;
 
 	m_prm300WidgetController = NULL;
 
@@ -80,7 +80,7 @@ void SpectrumWidgetController::setSpectrumName(const QString &name)
 
 	if(m_prm300WidgetController) {
 		m_prm300WidgetController->setName(m_name);
-        m_prm300WidgetController->setId(m_id);
+		m_prm300WidgetController->setId(m_id);
 	}
 }
 
@@ -134,15 +134,15 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 		//log_debug(QString("Setup Spectrum : %1").arg(m_name));
 
-        if (list.count() == 2){
-            setSignal(spectrum, spectrumPeakHold);
-        } else {
-            int pointCount = list.at(2).toInt();
-            double bandwidth = list.at(3).toDouble();
-            bool isComplex = list.at(4).toBool();
+		if (list.count() == 2){
+			setSignal(spectrum, spectrumPeakHold);
+		} else {
+			int pointCount = list.at(2).toInt();
+			double bandwidth = list.at(3).toDouble();
+			bool isComplex = list.at(4).toBool();
 
-            setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
-        }
+			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+		}
 		//m_graphicsWidget->ZoomOutFull();
 
 		return;
@@ -153,13 +153,13 @@ void SpectrumWidgetController::setRpcPrmClient(RpcPrmClient *rpcClient)
 {
 	m_rpcClient = rpcClient;
 	m_prm300WidgetController->setRpcPrmClient(m_rpcClient);
-    m_rpcClient->registerReceiver(m_prm300WidgetController);
+	m_rpcClient->registerReceiver(m_prm300WidgetController);
 }
 
 void SpectrumWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcClient)
 {
-    m_rpcFlakonClient = rpcClient;
-    m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
+	m_rpcFlakonClient = rpcClient;
+	m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
 }
 
 void SpectrumWidgetController::onCorrelationStateChanged(const bool isEnabled)
@@ -171,17 +171,17 @@ void SpectrumWidgetController::onCorrelationStateChangedSlot(const bool isEnable
 {
 	correlationFlag = isEnabled;
 
-//	if(correlationFlag) {
-//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-//	}
-//	else {
-//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
-//	}
+	//	if(correlationFlag) {
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+	//	}
+	//	else {
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	//	}
 }
 
 void SpectrumWidgetController::updateDBAreas()
 {
-    m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas();
 
 	QList<StationsFrequencyAndBandwith> list;
 	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
@@ -194,7 +194,7 @@ void SpectrumWidgetController::updateDBAreas()
 
 double SpectrumWidgetController::getCenterSelection()
 {
-    return m_centerFreqSelTemp;
+	return m_centerFreqSelTemp;
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -237,7 +237,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	float minv = 0.0;
 	m_mux.lock();
 
-    m_graphicsWidget->SetAutoscaleY(false);
+	m_graphicsWidget->SetAutoscaleY(false);
 	m_graphicsWidget->SetAlign(0);
 	//ui->graphicsWidget->SetZeroFrequencyHz(spectrum[0]/* + bandwidth*/);
 
@@ -246,7 +246,9 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 
 	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
-    setZeroFrequency(value.toDouble());
+	setZeroFrequency(value.toDouble());
+
+	m_graphicsWidget->ZoomOutFull();
 
 	m_mux.unlock();
 
@@ -260,13 +262,13 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	float maxv = 0.0;
 	float minv = 0.0;
 
-    m_graphicsWidget->SetAutoscaleY(false);
-    m_graphicsWidget->SetAlign(0);
+	m_graphicsWidget->SetAutoscaleY(false);
+	m_graphicsWidget->SetAlign(0);
 	m_mux.unlock();
 
 	if(m_controlPanelMode == 3)
 	{
-        m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
+		m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 		m_graphicsWidget->ZoomOutFull();
 		return;
 	}
@@ -327,9 +329,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		}
 	}
 
-    m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
-
-	m_graphicsWidget->ZoomOutFull();
+	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
@@ -371,7 +371,7 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 
 	stream >> vec;
 
-    m_graphicsWidget->ClearAllDetectedAreas();
+	m_graphicsWidget->ClearAllDetectedAreas();
 	QVector<QPointF>::iterator it;
 	for(it = vec.begin(); it != vec.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ /*+ m_current_frequency*/, 0, (*it).y()*TO_MHZ /*+ m_current_frequency*/, 0, false);
@@ -414,52 +414,58 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 	{
 		return;
 	}
+
+	double tmp = (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ + 10);
+
+	if(val == (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ + 10)) {
+		return;
+	}
 	//m_graphicsWidget->ClearAllDetectedAreas();
-    //updateDBAreas();
+	//updateDBAreas();
 
-    m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
+	m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
 
-   /* if(m_current_frequency == val*TO_MHZ) {
-        return;
-    }*/ /*else {
+	/* if(m_current_frequency == val*TO_MHZ) {
+		return;
+	}*/ /*else {
 
-        double df = (m_current_frequency - val*TO_MHZ) / TO_MHZ;
-        m_centerFreqSelTemp;
-        m_bandwidhtTemp;
+		double df = (m_current_frequency - val*TO_MHZ) / TO_MHZ;
+		m_centerFreqSelTemp;
+		m_bandwidhtTemp;
 
-        double x1 = m_centerFreqSelTemp - m_bandwidhtTemp / 2;
-        double x2 = m_centerFreqSelTemp + m_bandwidhtTemp / 2;
+		double x1 = m_centerFreqSelTemp - m_bandwidhtTemp / 2;
+		double x2 = m_centerFreqSelTemp + m_bandwidhtTemp / 2;
 
-        x1+= df;
-        x2+= df;
+		x1+= df;
+		x2+= df;
 
-        //Setting selection
-        SpectrumSelection selection;
-        selection.start = QPointF(x1, 0);
-        selection.end = QPointF(x2, 0);
+		//Setting selection
+		SpectrumSelection selection;
+		selection.start = QPointF(x1, 0);
+		selection.end = QPointF(x2, 0);
 
 //        m_graphicsWidget->SetSelection(x1, 0, x2, 0);
 //        slotSelectionFinished(x1, 0, x2, 0);
 
 //        m_tab->setSelectedArea(selection);
-    }*/
+	}*/
 
 	m_current_frequency = val*TO_MHZ;
-	double zeroFreq = m_current_frequency - m_bandwidth/2;
+	double zeroFreq = m_current_frequency - /*m_bandwidth/2*/10000000;
 
 	//If not activated spectrum - laggy counting of zero frequency ???
 	if(m_graphicsWidget->isActivated()) {
 		m_graphicsWidget->SetZeroFrequencyHz(zeroFreq);
 	}
 
-    updateDBAreas();
+	updateDBAreas();
 
-//	QList<StationsFrequencyAndBandwith> list;
-//	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
-//	setDetectedAreas(2, list);
+	//	QList<StationsFrequencyAndBandwith> list;
+	//	bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", list );
+	//	setDetectedAreas(2, list);
 
-//	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
-//	setDetectedAreas(1, list);
+	//	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
+	//	setDetectedAreas(1, list);
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)
@@ -524,15 +530,15 @@ void SpectrumWidgetController::init()
 	m_graphicsContextMenu->addAction(new QAction(tr("Add to black list"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Determine signal"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Enable correlation"),this) );
-    m_graphicsContextMenu->addAction(new QAction(tr("Disable correlation"),this) );
+	m_graphicsContextMenu->addAction(new QAction(tr("Disable correlation"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Cleanup text fields"),this) );
 
 	connect(m_graphicsContextMenu->actions().at(0),SIGNAL(triggered()),SLOT(addToWhiteList()));
 	connect(m_graphicsContextMenu->actions().at(1),SIGNAL(triggered()),SLOT(addToBlackList()));
 	connect(m_graphicsContextMenu->actions().at(2),SIGNAL(triggered()),SLOT(recognizeSignal()));
 	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(toggleCorrelation()));
-    connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(toggleOffCorrelation()));
-    connect(m_graphicsContextMenu->actions().at(5),SIGNAL(triggered()),SLOT(clearLabels()));
+	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(toggleOffCorrelation()));
+	connect(m_graphicsContextMenu->actions().at(5),SIGNAL(triggered()),SLOT(clearLabels()));
 	connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
@@ -555,7 +561,7 @@ void SpectrumWidgetController::init()
 	m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
 	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
 
-    m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
+	m_prm300WidgetController->setRpcFlakonClient(m_rpcFlakonClient);
 }
 
 void SpectrumWidgetController::slotSetEnablePanorama(bool state)
@@ -671,7 +677,7 @@ void SpectrumWidgetController::toggleCorrelation()
 {
 	/// TODO: recheck new Message to memory leak
 	//	m_enableCorrelation = !m_enableCorrelation;
-    m_tab->enableCorrelation( true );
+	m_tab->enableCorrelation( true );
 
 
 	//	if(m_enableCorrelation)
@@ -682,15 +688,15 @@ void SpectrumWidgetController::toggleCorrelation()
 
 void SpectrumWidgetController::toggleOffCorrelation()
 {
-    /// TODO: recheck new Message to memory leak
-    //	m_enableCorrelation = !m_enableCorrelation;
-    m_tab->enableCorrelation( false );
+	/// TODO: recheck new Message to memory leak
+	//	m_enableCorrelation = !m_enableCorrelation;
+	m_tab->enableCorrelation( false );
 
 
-    //	if(m_enableCorrelation)
-    //		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-    //	else
-    //		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	//	if(m_enableCorrelation)
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
+	//	else
+	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
 }
 
 void SpectrumWidgetController::clearLabels()
@@ -789,13 +795,13 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 	m_tab->setShowControlPrm(state);
 	switch(state)
 	{
-		case true:
-			m_view->getPrm300Widget()->show();
-			break;
+	case true:
+		m_view->getPrm300Widget()->show();
+		break;
 
-		default:
-			m_view->getPrm300Widget()->hide();
-			break;
+	default:
+		m_view->getPrm300Widget()->hide();
+		break;
 	}
 }
 

@@ -11,8 +11,7 @@
 #include "Tabs/RPC/RpcPrmClient.h"
 #include "Interfaces/ITabManager.h"
 #include "Db/DbManager.h"
-
-#define freqStep	20
+#include "Tabs/Controls/PanoramaFreqControl.h"
 
 class SpectrumWidgetDataSourceTest;
 
@@ -20,12 +19,13 @@ class SpectrumWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT
 
-friend class SpectrumWidgetDataSourceTest;
+	friend class SpectrumWidgetDataSourceTest;
 
 private:
 	IGraphicWidget* m_spectrumWidget;
 
-    QString m_name;
+	QString m_name;
+	int m_id;
 
 	int		m_pointCount;
 	int		m_pointCountWhole;
@@ -50,14 +50,16 @@ private:
 	double m_endFreq;
 	double m_responseFreq;
 	QTimer m_timerChangeFreqPanorama;
-    QTimer m_timerRepeatSetFreq;
+	QTimer m_timerRepeatSetFreq;
 
-//	RpcPrmClient*		m_rpcPrmClient;
+	//	RpcPrmClient*		m_rpcPrmClient;
 	ITabManager*		m_tabManager;
 
-    int m_spectrumCounter;
+	int m_spectrumCounter;
 
-    IDbManager* m_dbmanager;
+	IDbManager* m_dbmanager;
+
+	PanoramaFreqControl* m_panoramaFreqControl;
 
 
 public:
@@ -70,19 +72,21 @@ public:
 	void setPanorama(bool enabled, double start = 0.0f, double end = 0.0f);
 	bool isPanoramaEnabled();
 
-//	void setPrmRpcClient(RpcPrmClient *rpcClient);
+	//	void setPrmRpcClient(RpcPrmClient *rpcClient);
 	void setTabManager(ITabManager* manager);
-    void setDBManager(IDbManager* manager);
-    void setName(QString name);
+	void setDBManager(IDbManager* manager);
+	void setName(QString name);
+	void setId(int id);
 
+	void setPanoramaFreqControl(PanoramaFreqControl *control);
 signals:
 	void onMethodCalledSignal(QString, QVariant);
 
 private slots:
 	void onMethodCalledSlot(QString, QVariant);
 
-    void slotRepeatSetFrequency();
-    void slotChangeFreq();
+	void slotRepeatSetFrequency();
+	void slotChangeFreq();
 
 private:
 	void dataProccess(QVector<QPointF>& vecFFT, bool);

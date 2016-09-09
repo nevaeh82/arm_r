@@ -39,13 +39,14 @@
 #include "RPC/RpcConfigClient.h"
 
 #include "LocationSetupWidgetController.h"
+#include "Controls/PanoramaFreqControl.h"
 
 class TabManager: public QObject, public ITabManager, public IControlPanelListener, public IRpcListener
 {
 	Q_OBJECT
 
 private:
-    QTabWidget* m_tabWidgetZone;
+	QTabWidget* m_tabWidgetZone;
 	QTabWidget* m_tabWidget;
 
 	QMap<int, Station *>   m_stationsMap;
@@ -64,37 +65,42 @@ private:
 
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
-	ControlPanelController*	m_panelController;
-    int m_id;
-    QThread *m_rpcClientThread;
-    QThread *m_rpcClientConfigThread;
-    ControlPanelWidget* m_cpWidget;
+	ControlPanelController* m_panelController;
+	int m_id;
+	QThread *m_rpcClientThread;
+	QThread *m_rpcClientConfigThread;
+	ControlPanelWidget* m_cpWidget;
 
-    LocationSetupWidgetController* m_locationSetupController;
-    RpcConfigClient* m_rpcConfigClient;
+	LocationSetupWidgetController* m_locationSetupController;
+	PanoramaFreqControl* m_panoramaFreqControl;
 
-    int m_tabId;
+	RpcConfigClient* m_rpcConfigClient;
+
+	QList<ITabWidget*> m_tabWidgetList;
+
+	int m_tabId;
 
 private:
-    // IRpcListener interface
-    void readProto(const QByteArray &data);
+	// IRpcListener interface
+	void readProto(const QByteArray &data);
 
 public:
-    TabManager(int id, QTabWidget* tabWidget, QObject *parent = 0);
+	TabManager(int id, QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
-    void initRpcConfig();
-    void startTab(SolverResultWidgetController* resultSolver, SolverErrorsWidgetController* errorSolver, SolverSetupWidgetController* setupSolver);
+	void initRpcConfig();
+	void startTab(SolverResultWidgetController* resultSolver, SolverErrorsWidgetController* errorSolver, SolverSetupWidgetController* setupSolver);
 
-    int getChannelCount();
+	int getChannelCount();
 
-    void setRpcFlakon(const quint16& port, const QString& host);
+	void setRpcFlakon(const quint16& port, const QString& host);
 	void setRpcConfig(const quint16& port, const QString& host);
-    void setcpController();
-    void addControlPanelWidget(ControlPanelWidget* cpWidget);
+	void setupController();
+	void addControlPanelWidget(ControlPanelWidget* cpWidget);
 	void start();
 	void setDbManager(IDbManager* dbManager);
+	void removeDbManager();
 	void setDbStationController(DBStationController* controller);
-    //void setFlakonRpc(QString rpcHost, uint rpcPort);
+	//void setFlakonRpc(QString rpcHost, uint rpcPort);
 
 	virtual QString getStationName(const int id);
 	virtual void setActiveTab(const int id);
@@ -108,8 +114,8 @@ public:
 
 	QMap<int, Station *>& getStations();
 
-    void addStationTabs(unsigned int zone, unsigned int typeRds);
-    void addZoneType(unsigned int zone, unsigned int typeRds);
+	void addStationTabs(unsigned int zone, unsigned int typeRds);
+	void addZoneType(unsigned int zone, unsigned int typeRds);
 
 	void clearAllInformation();
 	void onClose();
@@ -119,40 +125,36 @@ public:
 
 	void setResponseCommonFreq(quint32 freq);private:
 	int readStationSettings(const QString &settingsFile);
-	void readRpcSettings();	
-
-
-
-
+	void readRpcSettings();
 
 private slots:
 	void changeTabSlot(int index);
-    void slotUpdateDBStationsLists();
-    void slotSendSolverSetupCommand(QByteArray);
-    void slotShowLocationSetup();
-    void slotSendRdsData(QByteArray data);
-    void rpcConnectionEstablished();
-    void rpcConnectionEstablishedFlakon();
-    void slotShowError(QString);
-    void slotShowConfirm(QString);
+	void slotUpdateDBStationsLists();
+	void slotSendSolverSetupCommand(QByteArray);
+	void slotShowLocationSetup();
+	void slotSendRdsData(QByteArray data);
+	void rpcConnectionEstablished();
+	void rpcConnectionEstablishedFlakon();
+	void slotShowError(QString);
+	void slotShowConfirm(QString);
 
-    void slotMethodCalled(const QString& method, const QVariant& argument);
+	void slotMethodCalled(const QString& method, const QVariant& argument);
 
 
 signals:
-    void readyToStart(int);
-    void signalMessageConfirm(QString);
-    void signalMessageError(QString);
+	void readyToStart(int);
+	void signalMessageConfirm(QString);
+	void signalMessageError(QString);
 
-    void signalMethodCalled(const QString& method, const QVariant& argument);
+	void signalMethodCalled(const QString& method, const QVariant& argument);
 
 
 public:
-    virtual void onMethodCalled(const QString& method, const QVariant& argument);
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
-    QTabWidget *getTabWidgetZone();
+	QTabWidget *getTabWidgetZone();
 
-    int getTabId();
+	int getTabId();
 };
 
 #endif // TABMANAGER_H

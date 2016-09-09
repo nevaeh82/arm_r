@@ -33,9 +33,8 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
 {
+	resetDbManager();
 	delete ui;
-	m_dbManager->deregisterReceiver(m_treeModel);
-
 }
 
 void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
@@ -50,6 +49,14 @@ void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
 
 	m_dbManager->registerReceiver(m_treeModel);
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+}
+
+void CommonSpectrumTabWidget::resetDbManager()
+{
+	if(m_dbManager) {
+		m_dbManager->deregisterReceiver(m_treeModel);
+		m_dbManager = NULL;
+	}
 }
 
 void CommonSpectrumTabWidget::setDbStationController(DBStationController *)

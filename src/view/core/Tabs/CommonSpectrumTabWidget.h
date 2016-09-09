@@ -62,6 +62,8 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager* dbManager);
+	virtual void resetDbManager();
+
     virtual void setDbStationController(DBStationController*);
 	virtual void setStationNamesList(const QStringList &stationsList);
 

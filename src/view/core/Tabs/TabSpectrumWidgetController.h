@@ -24,6 +24,7 @@
 #include "Rpc/RpcFlakonClientWrapper.h"
 
 #include "ControlPanel/ControlPanelController.h"
+#include "Controls/PanoramaFreqControl.h"
 
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>,
 		public ITabWidget, public ITabSpectrum, public IDbChangedListener, public IRpcListener
@@ -65,6 +66,8 @@ private:
 
 	QList<QThread*> m_threadSrcList;
 
+	PanoramaFreqControl* m_panoramaFreqControl;
+
 public:
 	explicit TabSpectrumWidgetController(
 			IStation*, ICorrelationControllersContainer*, ITabManager*, TabSpectrumWidget*,
@@ -85,6 +88,8 @@ public:
 	virtual TypeTabWidgetEnum getWidgetType() const;
 
 	virtual void setDbManager(IDbManager*);
+	virtual void resetDbManager();
+
 	virtual void setDbStationController(DBStationController* controller);
 	virtual void setStationNamesList(const QStringList &stationsList);
 	virtual void setRpcFlakonClient(RpcFlakonClientWrapper *client);
@@ -111,10 +116,10 @@ public:
 	virtual void onPropertyChanged(const Property &);
 	virtual void onCleanSettings();
 
-    /// update white and black lists
-    virtual void updateDbStationsLists();
+	/// update white and black lists
+	virtual void updateDbStationsLists();
 
-    virtual void updateListsSelections();
+	virtual void updateListsSelections();
 
 
 	// interface IRpcReceiver
@@ -124,6 +129,7 @@ public:
 	void setControlPanelController(ICorrelationListener* controller);
 	void setControlPanelControllerTrue(ControlPanelController* controller);
 
+	void setPanoramaFreqControl(PanoramaFreqControl *control);
 private:
 	void init();
 
@@ -138,8 +144,8 @@ signals:
 
 	void signalPanoramaState(bool state);
 
-    void signalUpdateDBStationsLists();
-    void signalUpdateDBAreas();
+	void signalUpdateDBStationsLists();
+	void signalUpdateDBAreas();
 
 private slots:
 	void slotGetPointsFromRpc(QByteArray points);
