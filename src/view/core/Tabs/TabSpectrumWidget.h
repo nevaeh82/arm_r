@@ -14,6 +14,7 @@
 #include "SpectrumWidgetController.h"
 
 #include "Correlations/CorrelationWidget.h"
+#include "Analysis/AnalysisWidget.h"
 
 #include "RPC/RpcPrmClient.h"
 
@@ -30,17 +31,18 @@ private:
 
 	QList<ISpectrumWidget*> m_spectrumWidgetsList;
 	QList<ICorrelationWidget*> m_correlationWidgetsList;
+	QList<IAnalysisWidget*> m_analysisWidgetsList;
 
 	SpectrumWidget* m_spectrumWidget;
 	SpectrumWidgetController* m_spectrumWidgetController;
 
 	QPixmap* m_pmRoundRed;
 	QPixmap* m_pmRoundGreen;
-    QPixmap* m_pmRoundYellow;
+	QPixmap* m_pmRoundYellow;
 	QLabel* m_indicatorLabel;
 
 	RpcPrmClient*	m_rpcPrmClient;
-    RpcFlakonClientWrapper* m_rpcFlakonClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
@@ -60,13 +62,15 @@ public:
     virtual void updateDBListsAreas();
 
 	QTreeView *getTreeView() const;
+
 	void insertCorrelationWidget(ICorrelationWidget *correlationWidget);
+	void insertAnalysisWidget(IAnalysisWidget *analysisWidget);
 
 	void setRpcPrmClient(RpcPrmClient* client);
 	RpcPrmClient* getRpcClient();
 
-    void setRpcFlakonClient(RpcFlakonClientWrapper* client);
-    RpcFlakonClientWrapper* getRpcFlakonClient();
+	void setRpcFlakonClient(RpcFlakonClientWrapper* client);
+	RpcFlakonClientWrapper* getRpcFlakonClient();
 
 signals:
 	void setIndicatorStateSignal(int state);
@@ -76,6 +80,7 @@ signals:
 
 private slots:
 	void setIndicatorStateSlot(int state);
+	void slotSetWorkMode(int mode, bool isOn);
 
 
 };

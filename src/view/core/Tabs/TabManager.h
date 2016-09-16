@@ -51,7 +51,8 @@ private:
 
 	QMap<int, Station *>   m_stationsMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	ICorrelationControllersContainer*	m_correlationControllers;
+	ICorrelationControllersContainer* m_correlationControllers;
+	QMap<int, IAnalysisWidget*> m_analysisControllertMap;
 
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;
@@ -83,6 +84,7 @@ private:
 private:
 	// IRpcListener interface
 	void readProto(const QByteArray &data);
+	void initAnalysisControllers(int count);
 
 public:
 	TabManager(int id, QTabWidget* tabWidget, QObject *parent = 0);

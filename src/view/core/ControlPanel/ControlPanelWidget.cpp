@@ -20,7 +20,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
 
-    connect(ui->workMode, SIGNAL(activated(int)), this, SLOT(slotOnWorkMode()));
+	//connect(ui->workMode, SIGNAL(activated(int)), this, SLOT(slotOnWorkMode()));
+	connect(ui->workMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOnWorkMode()));
     connect(ui->workModeOn, SIGNAL(clicked(bool)), this, SLOT(slotTurnWorkMode(bool)));
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");

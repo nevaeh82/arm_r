@@ -14,7 +14,9 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
-    m_indexSpect(-1)
+	m_indexSpect(-1),
+	m_analysisIndex(0),
+	m_analysisCfreq(0)
 {
 
     m_header.zone = zone;
@@ -482,17 +484,47 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
             // =========
 			emit onDetectSignal(ind, pointsList);
 		}
+		else if( sMsg.data().has_analysis_spectrum() ) {
+
+			QDateTime tmp = QDateTime::currentDateTime();
+			m_specTime = m_mapSendAnalysisTime.value(m_analysisIndex, tmp);
+
+			if( m_specTime.msecsTo(tmp) < m_upTime ) {
+
+				if(!m_mapSendAnalysisTime.contains(m_analysisIndex)) {
+					m_mapSendAnalysisTime.insert(m_analysisIndex, tmp);
+				}
+
+				return message;
+			}
+
+			m_mapSendAnalysisTime.insert(m_analysisIndex, tmp);
+
+			QVector<QPointF> vec;
+			double startFreq = sMsg.data().analysis_spectrum().plot().axis_x_start();
+			double stepFreq = sMsg.data().analysis_spectrum().plot().axis_x_step();
+
+			double freq = startFreq;
+
+			for( int i = 0; i < sMsg.data().analysis_spectrum().plot().data_size(); i++ ) {
+				double val = sMsg.data().analysis_spectrum(). plot().data(i);
+				vec.append( QPointF(freq*TO_KHZ, val) );
+				freq += stepFreq;
+			}
+
+			message = pointers(m_analysisIndex, m_analysisCfreq, vec);
+		}
 		else if( sMsg.data().has_detector_detected() ) {
 			int k = 0;
 		}
 		else if( sMsg.data().has_analysis_spectrogram() ) {
 			int k = 0;
 		}
-		else if( sMsg.data().has_analysis_spectrum() ) {
-			int k = 0;
-		}
 		else if( sMsg.data().has_analysis_detected() ) {
 			int k = 0;
+		}
+		else if( sMsg.data().has_analysis_abs_phase_freq() ) {
+			message = configureLoc(data);
 		}
 	} else if( sMsg.has_answer() ) {
 		QString answer;
@@ -580,7 +612,6 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				}
 				message = configure(resultList);
 				emit onChangeDevState(m_mapDevState);
-
 			} else if( sMsg.current().system().has_device()) {
 				RdsProtobuf::System_Device dMsg = sMsg.current().system().device();
 				m_mapDevState.insert(-1, dMsg.status());
@@ -615,6 +646,14 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			message = configureLoc(data);
 		}
 		else if( sMsg.current().has_correction() ) {
+			message = configureLoc(data);
+		}
+		else if( sMsg.current().has_analysis() ) {
+			if( sMsg.current().analysis().has_options() ) {
+				m_analysisIndex = sMsg.current().analysis().options().detector_index();
+				m_analysisCfreq = sMsg.current().analysis().options().central_frequency();
+			}
+
 			message = configureLoc(data);
 		}
 	}

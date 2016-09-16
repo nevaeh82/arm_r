@@ -26,6 +26,8 @@
 #include "ControlPanel/ControlPanelController.h"
 #include "Controls/PanoramaFreqControl.h"
 
+#include "Analysis/AnalysisWidgetDataSource.h"
+
 class TabSpectrumWidgetController : public QObject, public IController<TabSpectrumWidget>,
 		public ITabWidget, public ITabSpectrum, public IDbChangedListener, public IRpcListener
 {
@@ -36,9 +38,13 @@ private:
 	ISpectrumWidget* m_spectrumWidget;
 	SpectrumWidgetDataSource* m_spectrumDataSource;
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
+	QList<AnalysisWidgetDataSource*> m_analysisDataSourcesList;
 
 	IStation*		    m_station;
+
 	ICorrelationControllersContainer*  m_correlationControllers;
+	QMap<int, IAnalysisWidget*> m_analysisControllers;
+
 	IDbManager*         m_dbManager;
 	ITabManager*        m_tabManager;
 
@@ -70,7 +76,7 @@ private:
 
 public:
 	explicit TabSpectrumWidgetController(
-			IStation*, ICorrelationControllersContainer*, ITabManager*, TabSpectrumWidget*,
+			IStation*, ICorrelationControllersContainer*, QMap<int, IAnalysisWidget*> analysisContainer, ITabManager*, TabSpectrumWidget*,
 			const QString rpcHost, const quint16 rpcPort, QObject *parent = 0);
 	virtual ~TabSpectrumWidgetController();
 
@@ -137,6 +143,9 @@ private:
 	void createView();
 	void createTree();
 
+	void initCorrelationsView();
+	void initAnalysisView();
+
 signals:
 	void signalGetPointsFromRPCFlakon(QByteArray points);
 	void signalChangeIndicator(int state);
@@ -156,7 +165,7 @@ private slots:
 
 	void slotCheckStatus();
 
-	void slotOnSetWorkMode(int,bool);
+	void slotOnSetWorkMode(int mode, bool isOn);
 
 };
 

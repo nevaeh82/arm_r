@@ -39,6 +39,9 @@
 #define RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH		"rpc_slot_server_send_detected_bandwidth"
 #define RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION    "rpc_slot_server_send_response_modulation"
 #define RPC_SLOT_SERVER_SEND_CORRELATION            "rpc_slot_server_send_correlation"
+
+#define RPC_SLOT_SERVER_SEND_ANALYSIS				"rpc_slot_server_send_analysis"
+
 #define RPC_SLOT_SERVER_SEND_BPLA_RESULT			"rpc_slot_server_send_solver_result"
 #define RPC_SLOT_SERVER_SEND_BPLA_RESULT_1			"rpc_slot_server_send_solver_result_1"
 #define RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1		"rpc_slot_server_send_answer_result_1"

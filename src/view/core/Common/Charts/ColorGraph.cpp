@@ -5,11 +5,17 @@ ColorGraph::ColorGraph(double timming, QCPAxis *keyAxis, QCPAxis *valueAxis)
 {
     m_timming = timming;
     m_timmingGlobal = 50;
+	icc = 0;
 }
 
 void ColorGraph::setColorMap(QCPLinearColorMap *map)
 {
-    m_colorMap = map;
+	m_colorMap = map;
+}
+
+void ColorGraph::appendAxis(int val)
+{
+	icc = val;
 }
 
 //void ColorGraph::draw(QCPPainter *painter)
@@ -70,6 +76,7 @@ void ColorGraph::drawScatterPlot(QCPPainter *painter, QVector<QCPData> *scatterD
   // draw error bars:
   if (mErrorType != etNone)
   {
+	painter->setAntialiasing(false);
     applyErrorBarsAntialiasingHint(painter);
     painter->setPen(mErrorPen);
     if (keyAxis->orientation() == Qt::Vertical)
@@ -98,18 +105,16 @@ void ColorGraph::drawScatterPlot(QCPPainter *painter, QVector<QCPData> *scatterD
         mScatterStyle.drawShape(painter, valueAxis->coordToPixel(scatterData->at(i).value), keyAxis->coordToPixel(scatterData->at(i).key));
 
       }
-  }else
-  {
+  } else {
     for (int i=0; i<scatterData->size(); ++i)
       if (!qIsNaN(scatterData->at(i).value))
       {
           QColor color = m_colorMap->color(-100, -50, scatterData->at(i).value);
           painter->setPen(color);
-          log_debug(QString("Color = %1 %2 %3 %4").arg(color.alpha()).arg(color.red()).arg(color.green()).arg(color.blue()));
+		  //log_debug(QString("Color = %1 %2 %3 %4").arg(color.alpha()).arg(color.red()).arg(color.green()).arg(color.blue()));
 
 //          mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(scatterData->at(i).value));
-          mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(1/*scatterData->at(i).value*/));
-
+		  mScatterStyle.drawShape(painter, keyAxis->coordToPixel(scatterData->at(i).key), valueAxis->coordToPixel(icc/*scatterData->at(i).value*/));
       }
   }
 }

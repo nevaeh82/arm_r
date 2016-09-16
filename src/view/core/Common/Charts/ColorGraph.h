@@ -12,6 +12,8 @@ public:
   ColorGraph(double timming, QCPAxis *keyAxis, QCPAxis *valueAxis);
   virtual ~ColorGraph() {}
   void setColorMap(QCPLinearColorMap *map);
+  int icc;
+  void appendAxis(int val);
 
 protected:
 //  virtual void draw( QCPPainter *painter);

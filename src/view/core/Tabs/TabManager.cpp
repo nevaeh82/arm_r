@@ -285,6 +285,8 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()) );
 	m_panoramaFreqControl->initChannelCount( m_stationsMap.count() );
 
+	initAnalysisControllers(3);
+
 	QStringList stationNamesList = createStationNamesList();
 
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = new CommonSpectrumTabWidget(m_tabWidget);
@@ -307,7 +309,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		TabSpectrumWidget* tabSpectrumWidget = new TabSpectrumWidget(m_tabWidget);
 
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(
-					station, m_correlationControllers, this, tabSpectrumWidget,
+					station, m_correlationControllers, m_analysisControllertMap, this, tabSpectrumWidget,
 					m_rpcHost, m_rpcPort, this);
 
 		tabController->setDbManager(m_dbManager);
@@ -567,6 +569,17 @@ void TabManager::readProto(const QByteArray& data)
 	}
 }
 
+void TabManager::initAnalysisControllers(int count)
+{
+	for(int i = 0; i<count; i++) {
+
+		AnalysisWidget* wgt = new AnalysisWidget(i);
+		AnalysisWidgetController* controller = new AnalysisWidgetController(i, this);
+		controller->appendView(wgt);
+
+		m_analysisControllertMap.insert(i, controller);
+	}
+}
 
 void TabManager::rpcConnectionEstablished()
 {

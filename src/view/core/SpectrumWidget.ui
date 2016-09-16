@@ -49,14 +49,7 @@
    <item row="1" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QColorCustomPlot" name="sonogramWidget" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="sonogramQwtLayout"/>
      </item>
      <item>
       <spacer name="verticalSpacer_2">
@@ -164,12 +157,6 @@
    <class>Prm300ControlWidget</class>
    <extends>QWidget</extends>
    <header>Prm300ControlWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QColorCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>Common/Charts/QColorCustomPlot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

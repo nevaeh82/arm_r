@@ -325,7 +325,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 					//m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender );
 				IRpcListener *sender1 = NULL;
 				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
-					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
+					//m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
 					m_rpcServer->call( RPC_SLOT_SERVER_SEND_CORRELATION, data, sender );
 
 				//log_debug("to RPC FLAKON_COORDINATE_COUNTER and RPC_SLOT_SERVER_SEND_CORRELATION");

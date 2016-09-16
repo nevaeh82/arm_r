@@ -37,3 +37,6 @@
 [submodule "redist/libmysql"]
 	path = redist/libmysql
 	url = git@192.168.137.67:externals/libmysql.git
+[submodule "redist/qwt"]
+	path = redist/qwt
+	url = git@192.168.137.67:pyarovoy/qwt-6-1-3.git

@@ -1,6 +1,8 @@
 #include "SpectrumWidgetDataSource.h"
 #include "Rpc/RpcDefines.h"
 
+#include <stddef.h>
+
 #define TO_KHZ 1000
 #define TO_HZ				1000000
 #define BANDWIDTH_SINGLE	20000000

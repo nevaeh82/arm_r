@@ -3,9 +3,8 @@
 
 #include "Info/StationConfiguration.h"
 
-TabSpectrumWidgetController::TabSpectrumWidgetController(
-		IStation* station,
-		ICorrelationControllersContainer* correlationControllers,
+TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
+		ICorrelationControllersContainer* correlationControllers, QMap<int, IAnalysisWidget *> analysisContainer,
 		ITabManager* tabManager,
 		TabSpectrumWidget* tabSpectrumWidget,
 		const QString rpcHost,
@@ -33,6 +32,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(
 	, m_isPanoramaEnabled(false)
 	, m_controlPanelControllerTrue( NULL)
 	, m_panoramaFreqControl( NULL )
+	, m_analysisControllers(analysisContainer)
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
@@ -61,6 +61,10 @@ TabSpectrumWidgetController::~TabSpectrumWidgetController()
 		correlationWidgetDataSource->deregisterCorrelationReceiver( (ICorrelationListener*) m_spectrumWidget );
 
 		correlationWidgetDataSource->deleteLater();
+	}
+
+	foreach (AnalysisWidgetDataSource* analysisDataSource, m_analysisDataSourcesList){
+		analysisDataSource->deleteLater();
 	}
 
 	m_spectrumDataSource->deregisterReceiver(m_spectrumWidget);
@@ -189,6 +193,10 @@ void TabSpectrumWidgetController::createRPC()
 		m_rpcPrmClient->registerReceiver(correlationWidgetDataSource);
 	}
 
+	foreach (AnalysisWidgetDataSource* analysisWidgetDataSource, m_analysisDataSourcesList){
+		m_rpcPrmClient->registerReceiver(analysisWidgetDataSource);
+	}
+
 	m_view->setRpcPrmClient(m_rpcPrmClient);
 
 	//	m_spectrumDataSource->setPrmRpcClient(m_rpcPrmClient);
@@ -196,17 +204,54 @@ void TabSpectrumWidgetController::createRPC()
 
 void TabSpectrumWidgetController::createView()
 {
+	initCorrelationsView();
+	initAnalysisView();
+
+	m_spectrumWidget = m_view->getSpectrumWidget();
+
+	m_spectrumWidget->setTab(this);
+	m_spectrumWidget->setId(m_station->getId());
+	m_spectrumWidget->setSpectrumName(m_station->getName());
+	m_spectrumWidget->setDbManager(m_dbManager);
+	m_spectrumWidget->setDbStationController(m_dbStationController);
+
+	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
+
+	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
+	m_spectrumDataSource->setDBManager(m_dbManager);
+	m_spectrumDataSource->setName(m_station->getName());
+	m_spectrumDataSource->setPanoramaFreqControl(m_panoramaFreqControl);
+	m_spectrumDataSource->setId(m_station->getId());
+	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
+
+	m_spectrumDataSource->setTabManager(m_tabManager);
+
+	//For correlation state messages
+	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
+		correlationWidgetDataSource->registerCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
+	}
+
+	if (m_rpcFlakonClient != NULL) {
+		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
+	}
+	if(m_rpcPrmClient != NULL)
+	{
+		m_rpcPrmClient->registerReceiver( m_spectrumDataSource );
+	}
+}
+
+void TabSpectrumWidgetController::initCorrelationsView()
+{
 	int id1 = 0;
 	int id2 = 0;
-	int cnt = m_correlationControllers->count();
+	int listPos = 0;
+	int inc = 1;
 	int chCnt = m_tabManager->getChannelCount();
+
 	QList<int> ids;
 	for(int k = 0; k < chCnt; k++) {
 		ids.append( k );
 	}
-
-	int listPos = 0;
-	int inc = 1;
 
 	for(int i = 0; i < m_correlationControllers->count(); i++) {
 		ICorrelationWidget* correlationWidget = m_correlationControllers->get(i);
@@ -245,36 +290,36 @@ void TabSpectrumWidgetController::createView()
 
 		m_correlationDataSourcesList.append(correlationDataSource);
 	}
+}
 
-	m_spectrumWidget = m_view->getSpectrumWidget();
+void TabSpectrumWidgetController::initAnalysisView()
+{
+	for(int i = 0; i < m_analysisControllers.count(); i++) {
+		IAnalysisWidget* analysisWidget = m_analysisControllers.value(i);
+		m_view->insertAnalysisWidget(analysisWidget);
 
-	m_spectrumWidget->setTab(this);
-	m_spectrumWidget->setId(m_station->getId());
-	m_spectrumWidget->setSpectrumName(m_station->getName());
-	m_spectrumWidget->setDbManager(m_dbManager);
-	m_spectrumWidget->setDbStationController(m_dbStationController);
+		AnalysisWidgetDataSource* analysisDataSource = new AnalysisWidgetDataSource(analysisWidget, m_tabManager, analysisWidget->getType(), 0);
+		analysisDataSource->registerReceiver(analysisWidget);
 
-	connect(m_view, SIGNAL(spectrumDoubleClickedSignal(int)), this, SLOT(spectrumDoubleClickedSlot(int)));
 
-	m_spectrumDataSource = new SpectrumWidgetDataSource(m_spectrumWidget, this);
-	m_spectrumDataSource->setDBManager(m_dbManager);
-	m_spectrumDataSource->setName(m_station->getName());
-	m_spectrumDataSource->setPanoramaFreqControl(m_panoramaFreqControl);
-	m_spectrumDataSource->setId(m_station->getId());
-	m_spectrumDataSource->registerReceiver(m_spectrumWidget);
+		//Maybe it will improve perfomance
+		QThread* thread = new QThread;
+		connect(analysisDataSource, SIGNAL(destroyed()), thread, SLOT(terminate()));
+		connect(thread, SIGNAL(finished()), analysisDataSource, SLOT(deleteLater()), Qt::DirectConnection);
+		connect(thread, SIGNAL(destroyed()), analysisDataSource, SLOT(deleteLater()));
 
-	m_spectrumDataSource->setTabManager(m_tabManager);
+		analysisDataSource->moveToThread(thread);
+		thread->start();
 
-	foreach (CorrelationWidgetDataSource* correlationWidgetDataSource, m_correlationDataSourcesList){
-		correlationWidgetDataSource->registerCorrelationReceiver(dynamic_cast<ICorrelationListener*>(m_spectrumWidget));
-	}
+		m_threadSrcList.append(thread);
 
-	if (m_rpcFlakonClient != NULL) {
-		m_rpcFlakonClient->registerReceiver( m_spectrumDataSource );
-	}
-	if(m_rpcPrmClient != NULL)
-	{
-		m_rpcPrmClient->registerReceiver( m_spectrumDataSource );
+		//---------------------------------------
+
+		if( m_rpcFlakonClient != NULL ) {
+			m_rpcFlakonClient->registerReceiver( analysisDataSource );
+		}
+
+		m_analysisDataSourcesList.append(analysisDataSource);
 	}
 }
 
@@ -453,9 +498,8 @@ void TabSpectrumWidgetController::slotCheckStatus()
 	checkStatus();
 }
 
-void TabSpectrumWidgetController::slotOnSetWorkMode(int, bool)
+void TabSpectrumWidgetController::slotOnSetWorkMode(int mode, bool isOn)
 {
-
 }
 
 void TabSpectrumWidgetController::onSettingsNodeChanged(const SettingsNode& property)

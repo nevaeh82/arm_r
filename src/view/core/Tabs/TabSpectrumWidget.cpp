@@ -17,12 +17,13 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	m_spectrumWidgetController->appendView(m_spectrumWidget);
 
 	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SIGNAL(onSetWorkMode(int,bool)));
+	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SLOT(slotSetWorkMode(int,bool)));
 
 	insertSpectrumWidget(m_spectrumWidgetController);
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
 	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
-    m_pmRoundYellow = new QPixmap(":/images/bullet_yellow.png");
+	m_pmRoundYellow = new QPixmap(":/images/bullet_yellow.png");
 
 	m_indicatorLabel = new QLabel(this);
 	m_indicatorLabel->setFixedSize(16, 16);
@@ -31,6 +32,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
 
 	connect(m_spectrumWidgetController, SIGNAL(doubleClickedSignal(int)), this, SIGNAL(spectrumDoubleClickedSignal(int)));
+
+	ui->AlanysisGroupWidget->setVisible(false);
 }
 
 TabSpectrumWidget::~TabSpectrumWidget()
@@ -41,9 +44,13 @@ TabSpectrumWidget::~TabSpectrumWidget()
 
 void TabSpectrumWidget::activate()
 {
-    log_debug(("Activate tab"));
+	log_debug(("Activate tab"));
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
+	}
+
+	for(int i = 0; i < m_analysisWidgetsList.count(); i++){
+		ui->AlanysisGroupWidget->insertAnalysisWidget(m_analysisWidgetsList.at(i));
 	}
 
 	foreach (ISpectrumWidget* spectrumWidget, m_spectrumWidgetsList) {
@@ -57,6 +64,7 @@ void TabSpectrumWidget::deactivate()
 {
 	log_debug("Deactivate tab");
 	ui->correlationsGroupWidget->clearWidgetContainer();
+	ui->AlanysisGroupWidget->clearWidgetContainer();
 
 	foreach (ISpectrumWidget* spectrumWidget , m_spectrumWidgetsList) {
 		ui->spectumWidgetsContainer->removeWidget(spectrumWidget->getWidget());
@@ -117,6 +125,17 @@ void TabSpectrumWidget::insertCorrelationWidget(ICorrelationWidget *correlationW
 	ui->correlationsGroupWidget->insertCorrelationWidget(correlationWidget);
 }
 
+void TabSpectrumWidget::insertAnalysisWidget(IAnalysisWidget *analysisWidget)
+{
+	if (NULL == analysisWidget) {
+		return;
+	}
+
+	m_analysisWidgetsList.append(analysisWidget);
+
+	ui->AlanysisGroupWidget->insertAnalysisWidget(analysisWidget);
+}
+
 void TabSpectrumWidget::setRpcPrmClient(RpcPrmClient* client)
 {
 	m_rpcPrmClient = client;
@@ -158,6 +177,17 @@ void TabSpectrumWidget::setIndicatorStateSlot(int state)
 		default:
 			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
-    }
+	}
+}
+
+void TabSpectrumWidget::slotSetWorkMode(int mode, bool isOn)
+{
+	if(mode == 2) {
+		ui->AlanysisGroupWidget->setVisible(true);
+		ui->correlationsGroupWidget->setVisible(false);
+	} else {
+		ui->AlanysisGroupWidget->setVisible(false);
+		ui->correlationsGroupWidget->setVisible(true);
+	}
 }
 

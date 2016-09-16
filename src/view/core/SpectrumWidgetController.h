@@ -10,6 +10,8 @@
 #include <QList>
 #include <QVector>
 
+#include <qwt_plot.h>
+
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
 #include "Interfaces/ICorrelationListener.h"
@@ -71,9 +73,12 @@ private:
 	int		m_rett;
 
 	Q_MG_SpectrumInterface* m_graphicsWidget;
-    QColorCustomPlot      *m_sonogramWidget;
+	QwtPlot      *m_sonogramWidget;
 //    QMap<double, ColorGraph*> m_mapGraph;
-    ColorGraph* m_mapGraph;
+
+	QMap<int, ColorGraph*> m_mapGraph;
+	int icc;
+
     int m_timming;
     int m_timmingGlobal;
     int m_timmingCount;

@@ -10,7 +10,7 @@ public:
 	virtual ~ICorrelationControllersContainer(){}
 	virtual int init(int count)									= 0;
 	virtual ICorrelationWidget *get(int id)						= 0;
-	virtual int count()									= 0;
+	virtual int count()											= 0;
 };
 
 #endif // ICORRELATIONCONTROLLERSCONTAINER_H

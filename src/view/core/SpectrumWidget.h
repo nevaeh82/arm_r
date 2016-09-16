@@ -11,6 +11,8 @@
 #include "Prm300ControlWidget.h"
 #include "Common/Charts/QColorCustomPlot.h"
 
+#include <qwt_plot.h>
+
 namespace Ui {
 class SpectrumWidget;
 }
@@ -23,6 +25,8 @@ private:
 
 	SpectrumWidgetController* m_controller;
 
+	QwtPlot* m_qwtSonogram;
+
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~SpectrumWidget();
@@ -34,11 +38,13 @@ public:
 	QString getSpectrumName() const;    
 
 	Q_MG_SpectrumInterface* getGraphicsWidget();
-    QColorCustomPlot*       getSonogramWidget();
+	QwtPlot*       getSonogramWidget();
 
 	void setControlPrmState(bool state);
 
 	Prm300ControlWidget* getPrm300Widget();
+
+	void sonogramUpdate();
 
 public slots:
 	void slotSetEnableSpactrum(bool state);

@@ -3,13 +3,12 @@ project(${PROJECT_NAME_GLOBAL}ViewCore)
 list(APPEND deps
 	${PROJECT_NAME_GLOBAL}CISCommonLib
 	${PROJECT_NAME_GLOBAL}Common
-	QXT
-	PROTOBUF
 	GraphicsIpp
 	IPP
 	TBB
 	QtSingleApplication
 	Solver
+	QWT
 )
 
 string(REPLACE Core "" PROJECT_NAME_COV ${PROJECT_NAME})

@@ -17,6 +17,10 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowPeaksSignal(bool)));
 	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowControlPRM(bool)));
 
+	ui->sonogramWidget->setVisible(false);
+
+	m_qwtSonogram = new QwtPlot(0);
+	ui->sonogramQwtLayout->addWidget( m_qwtSonogram );
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -48,9 +52,9 @@ Q_MG_SpectrumInterface *SpectrumWidget::getGraphicsWidget()
     return ui->graphicsWidget;
 }
 
-QColorCustomPlot *SpectrumWidget::getSonogramWidget()
+QwtPlot *SpectrumWidget::getSonogramWidget()
 {
-    return ui->sonogramWidget;
+	return m_qwtSonogram;
 }
 
 void SpectrumWidget::setControlPrmState(bool state)
@@ -61,6 +65,13 @@ void SpectrumWidget::setControlPrmState(bool state)
 Prm300ControlWidget *SpectrumWidget::getPrm300Widget()
 {
 	return ui->PrmControlWidget;
+}
+
+void SpectrumWidget::sonogramUpdate()
+{
+	if(ui->sonogramWidget->isVisible()) {
+		ui->sonogramWidget->replot();
+	}
 }
 
 void SpectrumWidget::slotSetEnableSpactrum(bool state)

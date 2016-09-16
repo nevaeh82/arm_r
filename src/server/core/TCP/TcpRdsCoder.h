@@ -73,8 +73,12 @@ private:
 	QMap<int, QDateTime> m_mapSendSpectrumTime;
     QMap<quint64, QDateTime> m_mapSendConvolutionTime;
     QMap<int, QDateTime> m_mapSendDetectorTime;
+	QMap<int, QDateTime> m_mapSendAnalysisTime;
 
     int m_upTime;
+
+	int m_analysisIndex;
+	int m_analysisCfreq;
 
 public:
     explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent = NULL);
