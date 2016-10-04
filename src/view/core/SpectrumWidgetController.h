@@ -9,8 +9,16 @@
 #include <QFile>
 #include <QList>
 #include <QVector>
+#include <QtConcurrentRun>
+#include <QFuture>
+#include <QFutureWatcher>
 
 #include <qwt_plot.h>
+#include <qwt_point_3d.h>
+#include <qwt_color_map.h>
+#include <qwt_plot_spectrocurve.h>
+#include <qwt_plot_rasteritem.h>
+#include <qwt_plot_svgitem.h>
 
 #include "Interfaces/IController.h"
 #include "Interfaces/ISpectrumWidget.h"
@@ -35,6 +43,11 @@
 
 #include "ControlPanel/ControlPanelController.h"
 
+#include "Common/Charts/QwtColorMap.h"
+#include "Tabs/LocationSetupWidgetController.h"
+
+#include "RDSExchange.h"
+
 #define TO_MHZ	1000000.0
 #define TO_MHZ2	1000.0
 
@@ -52,6 +65,10 @@ private:
 	double	m_current_frequency;
 
 	quint32	m_id;
+	quint32 m_platformId;
+	quint32 m_channelId;
+
+	quint32 m_analysisChannel;
 
 	ITabSpectrum*	m_tab;
 
@@ -72,12 +89,17 @@ private:
 	double	m_threshold;
 	int		m_rett;
 
+	QVector<QPointF> m_pointVector;
+
 	Q_MG_SpectrumInterface* m_graphicsWidget;
+
+	//Qwt graph, its line and data
 	QwtPlot      *m_sonogramWidget;
-//    QMap<double, ColorGraph*> m_mapGraph;
+	QVector<QwtPoint3D> *m_qwtVector;
+	QwtPlotSpectroCurve *m_qwtCurve;
+	ColorMap* m_qwtColorMap;
 
 	QMap<int, ColorGraph*> m_mapGraph;
-	int icc;
 
     int m_timming;
     int m_timmingGlobal;
@@ -109,6 +131,15 @@ private:
 	SignalDetectedDialog* m_sigDialog;
 	QString m_name;
 
+	QFutureWatcher<void> m_sonogramWatcher;
+	bool m_sonogramReady;
+	QTime m_sonogramTime;
+
+	QPixmap m_sonogramPixmap;
+	QMutex m_sonogramMutex;
+
+	LocationSetupWidgetController* m_setupController;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -117,6 +148,9 @@ public:
 
 	void setTab(ITabSpectrum*);
 	void setId(const int);
+	void setPlatformId(const int);
+	void setChannelId(const int);
+
 	void setSpectrumName(const QString&);
 
 	void setFFTSetup(float* spectrum, float* spectrum_peak_hold);
@@ -125,7 +159,11 @@ public:
 	QWidget *getWidget() const;
 
 	bool isGraphicVisible();
+
 	quint32 getId();
+	quint32 getPlatformId();
+	quint32 getChannelId();
+
 	void setZeroFrequency(double val);
 	void setVisible(const bool isVisible);
 
@@ -144,13 +182,17 @@ public:
 	void onDataArrived(const QString& method, const QVariant& arg);
 
 	void setRpcPrmClient(RpcPrmClient* rpcClient);
-    void setRpcFlakonClient(RpcFlakonClientWrapper* rpcClient);
+	void setRpcFlakonClient(RpcFlakonClientWrapper* rpcClient);
 
 	void onCorrelationStateChanged(const bool isEnabled);
 
 	void updateDBAreas();
 
-    double getCenterSelection();
+	double getCenterSelection();
+
+	Prm300ControlWidgetController *getPrmController();
+
+	void setLocationSetupWidgetController(LocationSetupWidgetController* controller);
 
 private:
 	void init();
@@ -165,7 +207,8 @@ private:
 	void setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list);
 
 
-    void initGraph(double timming);
+	void initGraph();
+	void setSonogramSetup(QList<QList<float>> data);
 
 signals:
 	void doubleClickedSignal(int);
@@ -192,7 +235,7 @@ private slots:
 	void addToBlackList();
 	void recognizeSignal();
 	void toggleCorrelation();
-    void toggleOffCorrelation();
+	void toggleOffCorrelation();
 	void clearLabels();
 
 	void slotSelectionCleared();
@@ -210,6 +253,11 @@ private slots:
 	void onVisible(const bool b);
 
 	void onCorrelationStateChangedSlot(const bool isEnabled);
+
+	void onSonogramDataReady();
+
+	void slotSetAnalysisChannel(int id);
+	void setDetectedAreasUpdateOnPlot();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

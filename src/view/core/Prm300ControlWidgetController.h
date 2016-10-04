@@ -27,6 +27,7 @@ private:
 	QString m_stationName;
     uint m_stationId;
     uint m_platformId; // TODO receive it!!!!
+	uint m_channelId;
 
 public:
 	explicit Prm300ControlWidgetController(const QString& name, QObject *parent = 0);
@@ -43,6 +44,10 @@ public:
 
 	void setName(const QString& name);
     void setId(const uint id);
+	void setChannel(const uint id);
+	void setPlatform( const uint id );
+
+	void setChannelState(bool);
 
 private:
 	void init();

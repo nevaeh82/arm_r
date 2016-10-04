@@ -48,6 +48,11 @@ void ControlPanelController::init()
 	}
 }
 
+int ControlPanelController::getCurrentWorkMode() const
+{
+	return m_view->onGetMode();
+}
+
 void ControlPanelController::appendView(ControlPanelWidget *view)
 {
 	m_view = view;
@@ -407,7 +412,12 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
     }
 }
 
-void ControlPanelController::onSetSystem(int modeId, bool isOn)
+void ControlPanelController::onSetSystem(int modeId)
 {
-    m_view->onSetMode( modeId, isOn );
+	m_view->onSetMode( modeId );
+}
+
+void ControlPanelController::onSetSystemStatus(bool isOn)
+{
+	m_view->onSetModeStatus( isOn );
 }

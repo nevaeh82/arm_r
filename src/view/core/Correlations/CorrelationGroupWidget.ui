@@ -13,12 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetNoConstraint</enum>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="correlationWidgetsContainer"/>
+    <layout class="QGridLayout" name="correlationWidgetsContainer"/>
    </item>
   </layout>
  </widget>

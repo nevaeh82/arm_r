@@ -2,19 +2,22 @@
 #include <TcpDevicesDefines.h>
 #include <Rpc/RpcDefines.h>
 #include <Rpc/RpcMessageStruct.h>
+#include <QTime>
+#include <QThread>
 
 #include "Tabs/RPC/RpcFlakonClient.h"
 #include "Info/StationConfiguration.h"
+#include "RDSExchange.h"
 
 RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 	RpcRoutedClient( RPC_METHOD_REGISTER_CLIENT, RPC_METHOD_DEREGISTER_CLIENT, parent )
 {
 
-    connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
+	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
 
-    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
-    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_RDS_ANSWER, this, SLOT(receivedLocSystem(QByteArray)));
-    m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
+	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
+	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_RDS_ANSWER, this, SLOT(receivedLocSystem(QByteArray)));
+	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
 
 	//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
 
@@ -118,7 +121,7 @@ void RpcFlakonClient::requestFlakonStatus()
 
 void RpcFlakonClient::pointsReceived(QByteArray data)
 {
-//    log_debug(QString("Receive Points >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+	//    log_debug(QString("Receive Points >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_POINTS, data );
 	}
@@ -149,12 +152,12 @@ void RpcFlakonClient::clearReceiversList()
 
 void RpcFlakonClient::flakonStatusReceived(QByteArray data)
 {
-//	QDataStream dataStream(&data, QIODevice::ReadOnly);
+	//	QDataStream dataStream(&data, QIODevice::ReadOnly);
 
-//	QList<DevState> stateList;
+	//	QList<DevState> stateList;
 
-//	dataStream >> stateList;
-    log_debug(QString("flakonStatusReceived >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+	//	dataStream >> stateList;
+	log_debug(QString("flakonStatusReceived >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 
 
 	foreach( IRpcListener *listener, m_receiversList ) {
@@ -208,38 +211,45 @@ void RpcFlakonClient::slotEnableCorrelation(int id, float frequency, bool state)
 void RpcFlakonClient::receivedStationListSlot(QByteArray data)
 {
 
-    log_debug(QString("receivedStationListSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+	//log_debug(QString("receivedStationListSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 
-    foreach (IRpcListener* listener, m_receiversList) {
-        listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
-    }
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, data);
+	}
 }
 
 void RpcFlakonClient::receivedLocSystem(QByteArray data)
 {
-    log_debug(QString("receivedLocSystem >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+	//log_debug(QString("receivedLocSystem >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+//	QByteArray aData = data;
+//	RdsProtobuf::Packet pkt;
+//	pkt.ParseFromArray(aData.data(), aData.size());
 
-    foreach (IRpcListener* listener, m_receiversList) {
-        listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
-    }
+//	if( isAnalysisSpectrogram(pkt) ) {
+//		log_debug(QString("Received sonogram ---- %1 id-%2").arg(QTime::currentTime().msec()).arg((int)this->thread()->currentThreadId()));
+//	}
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+	}
 }
 
 void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)
 {
-    log_debug(QString("receivedDbConfigurationSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
+	//log_debug(QString("receivedDbConfigurationSlot >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
 
-    foreach (IRpcListener* listener, m_receiversList) {
-        listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
-    }
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, data);
+	}
 }
 
 void RpcFlakonClient::requestGetStationList(const QString& filename)
 {
-    m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, filename);
+	m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, filename);
 }
 
 void RpcFlakonClient::requestGetDbConfiguration(const QString& filename)
 {
-    m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, filename);
+	m_clientPeer->call(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, filename);
 }
 

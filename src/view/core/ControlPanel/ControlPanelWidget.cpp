@@ -111,10 +111,19 @@ void ControlPanelWidget::changeQualityStatus(const int status)
     }
 }
 
-void ControlPanelWidget::onSetMode(int modeId, bool isOn)
+void ControlPanelWidget::onSetMode(int modeId)
 {
     ui->workMode->setCurrentIndex( modeId );
-    ui->workModeOn->setChecked( isOn );
+}
+
+void ControlPanelWidget::onSetModeStatus(bool isOn)
+{
+	ui->workModeOn->setChecked( isOn );
+}
+
+int ControlPanelWidget::onGetMode() const
+{
+	return ui->workMode->currentIndex();
 }
 
 void ControlPanelWidget::slotChangeCommonFreq(int value)

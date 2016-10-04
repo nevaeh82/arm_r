@@ -18,6 +18,8 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SIGNAL(onSetWorkMode(int,bool)));
 	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SLOT(slotSetWorkMode(int,bool)));
+	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), m_spectrumWidget, SLOT(slotSetWorkMode(int,bool)));
+	connect(this, SIGNAL(onChangeAnalysisChannel(int)), m_spectrumWidgetController, SLOT(slotSetAnalysisChannel(int)));
 
 	insertSpectrumWidget(m_spectrumWidgetController);
 
@@ -40,6 +42,11 @@ TabSpectrumWidget::~TabSpectrumWidget()
 {
 	log_debug("~() <<<<<<<<<<<");
 	log_debug("~() >>>>>>>>>>>");
+}
+
+SpectrumWidgetController *TabSpectrumWidget::getSpectrumController()
+{
+	return m_spectrumWidgetController;
 }
 
 void TabSpectrumWidget::activate()

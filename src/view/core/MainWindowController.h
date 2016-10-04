@@ -81,6 +81,8 @@ private slots:
 
     void addedNewConnectionSlot(int id, QString Ip, quint16 port);
     void removeConnectionSlot(int id);
+
+	void slotLocationSetup(int id);
 private:
 
 	void init();

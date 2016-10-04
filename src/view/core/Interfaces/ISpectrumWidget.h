@@ -18,6 +18,8 @@ public:
 
 	virtual void setTab(ITabSpectrum*) = 0;
 	virtual void setId(const int) = 0;
+	virtual void setChannelId(const int) = 0;
+	virtual void setPlatformId(const int) = 0;
 	virtual void setSpectrumName(const QString&) = 0;
 	virtual void setControlPrmState(bool) = 0;
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QByteArray>
 
 #include "RdsPacket.pb.h"
@@ -14,6 +16,28 @@ inline void createGetLocationStatus(RdsProtobuf::Packet& msg)
 	oMsg->mutable_filter()->set_range(0);
 	oMsg->mutable_filter()->set_shift(0);
 }
+
+inline void createGetAnalysisStatus(RdsProtobuf::Packet& msg)
+{
+	RdsProtobuf::Analysis_AnalysisOptions* oMsg = msg.mutable_from_client()->mutable_get()->mutable_analysis()->mutable_options();
+	oMsg->set_detector_index(0);
+	oMsg->set_duration(0);
+	oMsg->set_central_frequency(0);
+	oMsg->set_analysis(true);
+
+	RdsProtobuf::TimeFreqArea* selected = oMsg->mutable_selected_area();
+	selected->set_time_start( 10 );
+	selected->set_time_end( 20 );
+	selected->set_freq_start( 10 );
+	selected->set_freq_end( 20 );
+
+	RdsProtobuf::TimeFreqArea* zoomed = oMsg->mutable_zoomed_area();
+	zoomed->set_time_start( 10 );
+	zoomed->set_time_end( 20 );
+	zoomed->set_freq_start( 10 );
+	zoomed->set_freq_end( 20 );
+}
+
 
 inline void createSetLocationStatus(RdsProtobuf::Packet& msg, RdsProtobuf::Location& loc)
 {
@@ -38,6 +62,16 @@ inline void createGetCorrectionOptions(RdsProtobuf::Packet& msg, RdsProtobuf::Co
 inline void createSetCorrectionOptions(RdsProtobuf::Packet& msg, RdsProtobuf::Correction& cor)
 {
 	msg.mutable_from_client()->mutable_set()->mutable_correction()->CopyFrom(cor);
+}
+
+inline void createGetAnalysisOptions(RdsProtobuf::Packet& msg, RdsProtobuf::Analysis& pkt)
+{
+	msg.mutable_from_client()->mutable_get()->mutable_analysis()->CopyFrom(pkt);
+}
+
+inline void createSetAnalysisOptions(RdsProtobuf::Packet& msg, RdsProtobuf::Analysis& pkt)
+{
+	msg.mutable_from_client()->mutable_set()->mutable_analysis()->CopyFrom(pkt);
 }
 
 inline void createSetEnablePlatform(RdsProtobuf::Packet &msg, uint platform,
@@ -69,6 +103,36 @@ inline bool isAnalysisAbsPhaseFreq(RdsProtobuf::Packet &msg)
 {
 	if( msg.has_from_server() && msg.from_server().has_data() &&
 		msg.from_server().data().has_analysis_abs_phase_freq() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline bool isAnalysisDetected(RdsProtobuf::Packet &msg)
+{
+	if( msg.has_from_server() && msg.from_server().has_data() &&
+		msg.from_server().data().has_analysis_detected() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline bool isAnalysisSpectrogram(RdsProtobuf::Packet &msg)
+{
+	if( msg.has_from_server() && msg.from_server().has_data() &&
+		msg.from_server().data().has_analysis_spectrogram() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline bool isSystemReceiver(RdsProtobuf::Packet &msg)
+{
+	if( msg.has_from_server() && msg.from_server().has_current() &&
+		msg.from_server().current().has_system() && msg.from_server().current().system().has_receiver() ) {
 		return true;
 	}
 

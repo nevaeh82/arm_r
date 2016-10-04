@@ -74,6 +74,8 @@ private:
     QMap<quint64, QDateTime> m_mapSendConvolutionTime;
     QMap<int, QDateTime> m_mapSendDetectorTime;
 	QMap<int, QDateTime> m_mapSendAnalysisTime;
+	QMap<int, QDateTime> m_mapSendAnalysisSonogramTime;
+	QMap<int, QDateTime> m_mapSendAnalysisAbsTime;
 
     int m_upTime;
 

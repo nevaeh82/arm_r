@@ -80,6 +80,9 @@ private:
 	QList<ITabWidget*> m_tabWidgetList;
 
 	int m_tabId;
+	int m_tabCount;
+
+	QMap<int, QWidget*> m_tabWidgetContainer;
 
 private:
 	// IRpcListener interface
@@ -133,7 +136,6 @@ private slots:
 	void changeTabSlot(int index);
 	void slotUpdateDBStationsLists();
 	void slotSendSolverSetupCommand(QByteArray);
-	void slotShowLocationSetup();
 	void slotSendRdsData(QByteArray data);
 	void rpcConnectionEstablished();
 	void rpcConnectionEstablishedFlakon();
@@ -142,6 +144,11 @@ private slots:
 
 	void slotMethodCalled(const QString& method, const QVariant& argument);
 
+	void slotOnChangeWorkMode(int mode, bool isOn);
+	void slotOnChangeAnalysisTab(int channel);
+
+public slots:
+	void slotShowLocationSetup();
 
 signals:
 	void readyToStart(int);

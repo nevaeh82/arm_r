@@ -61,6 +61,16 @@ void Station::setAdcPort(const quint16 port)
 	m_adcPort = port;
 }
 
+void Station::setPlatformId(const quint32 id)
+{
+	m_platformId = id;
+}
+
+void Station::setChannelId(const quint32 id)
+{
+	m_channelId = id;
+}
+
 void Station::setSelectedArea(const SpectrumSelection& selection)
 {
 	/// To HZ
@@ -74,6 +84,10 @@ void Station::setSelectedArea(const SpectrumSelection& selection)
 	m_dbManager->updatePropertyValue( getName(), DB_CENTER_PROPERTY, QString::number(center, 'f', 3));
 	m_dbManager->updatePropertyValue( getName(), DB_START_PROPERTY, QString::number(x1, 'f', 3));
 	m_dbManager->updatePropertyValue( getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
+
+	if( x1 != 0 && x2 != 0 ) {
+		m_locationSetupController->setSpectrumSelection(getBandwidth(), getShift(), x1, x2);
+	}
 }
 
 void Station::recognize()
@@ -119,6 +133,16 @@ QString Station::getAdcIp() const
 quint16 Station::getAdcPort() const
 {
 	return m_adcPort;
+}
+
+quint32 Station::getPlatformId() const
+{
+	return m_platformId;
+}
+
+quint32 Station::getChannelId() const
+{
+	return m_channelId;
 }
 
 float Station::getBandwidth() const
@@ -172,6 +196,11 @@ float Station::getCenter() const
 	}
 
 	return center;
+}
+
+void Station::setLocationSetupController(LocationSetupWidgetController *controller)
+{
+	m_locationSetupController = controller;
 }
 
 int Station::getCenterVal() const

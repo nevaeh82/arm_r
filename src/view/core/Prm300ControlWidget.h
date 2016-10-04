@@ -23,6 +23,8 @@ public:
 
 	Prm getPrmParams();
 
+	void setState(bool state);
+
 private:
 	Ui::Prm300ControlWidget *ui;
 

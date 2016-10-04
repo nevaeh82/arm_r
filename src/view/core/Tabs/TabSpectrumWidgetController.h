@@ -156,6 +156,8 @@ signals:
 	void signalUpdateDBStationsLists();
 	void signalUpdateDBAreas();
 
+	void analysisChannelChanged(int);
+
 private slots:
 	void slotGetPointsFromRpc(QByteArray points);
 	void slotShowControlPrm(bool state);

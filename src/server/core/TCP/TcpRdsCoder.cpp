@@ -31,9 +31,9 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 
 	m_inputData = spectrum;
 
-    QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    m_upTime = settings.value("SpectrumUpTime/time", TIME_DEL).toInt();
+	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
+	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+	m_upTime = settings.value("SpectrumUpTime/time", TIME_DEL).toInt();
 
 }
 
@@ -121,7 +121,9 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
 	} else if(messageType == TCP_RDS_GET_LOC_STATUS) {
 		createGetLocationStatus(msg);
-	} else if( messageType == TCP_RDS_GET_PRM_STATUS ) {
+	} else if(messageType == TCP_RDS_GET_ANALYSIS_STATUS) {
+		createGetAnalysisStatus(msg);
+	}else if( messageType == TCP_RDS_GET_PRM_STATUS ) {
 		RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_device();
 
 		dMsg->set_device_index(0);
@@ -277,10 +279,10 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	}
 	else if( message->type() == TCP_RDS_SEND_PROTO ) {
 
-        RdsProtobuf::Packet pkt;
-        pkt.ParseFromArray( msgData.data(), msgData.size() );
+//        RdsProtobuf::Packet pkt;
+//        pkt.ParseFromArray( msgData.data(), msgData.size() );
 
-        isSetEnableReceiver(pkt);
+//        isSetEnableReceiver(pkt);
 
 		return msgData;
 	}
@@ -334,13 +336,13 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				status = val;
 			}
 		}
-		if( sMsg.data().has_location_spectrum() ) {        //Spectrum			
+		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
 			int ind = sMsg.data().location_spectrum().detector_index();
 
-            QDateTime tmp = QDateTime::currentDateTime();
+			QDateTime tmp = QDateTime::currentDateTime();
 			m_specTime = m_mapSendSpectrumTime.value(ind, tmp);
 
-            if( m_specTime.msecsTo(tmp) < m_upTime ) {
+			if( m_specTime.msecsTo(tmp) < m_upTime ) {
 
 				if(!m_mapSendSpectrumTime.contains(ind)) {
 					m_mapSendSpectrumTime.insert(ind, tmp);
@@ -483,8 +485,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 //            pointsList.append(point);
             // =========
 			emit onDetectSignal(ind, pointsList);
-		}
-		else if( sMsg.data().has_analysis_spectrum() ) {
+		} else if( sMsg.data().has_analysis_spectrum() ) {
 
 			QDateTime tmp = QDateTime::currentDateTime();
 			m_specTime = m_mapSendAnalysisTime.value(m_analysisIndex, tmp);
@@ -518,30 +519,56 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 			int k = 0;
 		}
 		else if( sMsg.data().has_analysis_spectrogram() ) {
-			int k = 0;
+			QDateTime tmp = QDateTime::currentDateTime();
+			m_specTime = m_mapSendAnalysisSonogramTime.value(m_analysisIndex, tmp);
+
+			if( m_specTime.msecsTo(tmp) < m_upTime ) {
+
+				if(!m_mapSendAnalysisSonogramTime.contains(m_analysisIndex)) {
+					m_mapSendAnalysisSonogramTime.insert(m_analysisIndex, tmp);
+				}
+
+				return message;
+			}
+			m_mapSendAnalysisSonogramTime.insert(m_analysisIndex, tmp);
+
+			message = configureLoc(data);
 		}
 		else if( sMsg.data().has_analysis_detected() ) {
-			int k = 0;
+			message = configureLoc(data);
 		}
 		else if( sMsg.data().has_analysis_abs_phase_freq() ) {
+			QDateTime tmp = QDateTime::currentDateTime();
+			m_specTime = m_mapSendAnalysisAbsTime.value(m_analysisIndex, tmp);
+
+			if( m_specTime.msecsTo(tmp) < m_upTime ) {
+
+				if(!m_mapSendAnalysisAbsTime.contains(m_analysisIndex)) {
+					m_mapSendAnalysisAbsTime.insert(m_analysisIndex, tmp);
+				}
+
+				return message;
+			}
+			m_mapSendAnalysisAbsTime.insert(m_analysisIndex, tmp);
+
 			message = configureLoc(data);
 		}
 	} else if( sMsg.has_answer() ) {
 		QString answer;
 		if( sMsg.answer().has_error() ) {
 			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
-            message = configureLoc(data);
+			message = configureLoc(data);
 		} else if( sMsg.answer().has_confirmation() ) {
 			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
-            message = configureLoc(data);
+			message = configureLoc(data);
 		}
 	} else if( sMsg.has_current() ) {
 		if( sMsg.current().has_mode() ) {
-            int mode = sMsg.current().mode().index();
+			int mode = sMsg.current().mode().index();
 //			bool stat = sMsg.current().mode().status();
 //			int i = 0;
 //			i = i+1;
-            message = configureLoc(data);
+			message = configureLoc(data);
 		} else if( sMsg.current().has_system() ) {
 			if( sMsg.current().system().has_options() ) {
 				QList<StationConfiguration> resultList;
@@ -549,6 +576,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				RdsProtobuf::System_SystemOptions sysMsg = sMsg.current().system().options();
 				QString str = QString::fromStdString(sysMsg.title());
 				int devNums = sysMsg.devices_size();
+				int chCnt = 0;
 
 				for(int d = 0; d < sysMsg.devices().size(); d++) {
 					RdsProtobuf::DeviceOptions optMsg = sysMsg.devices(d);
@@ -585,12 +613,17 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 						m_mapPrmSettings.insert(i, settings);
 
 						//configVal.id			= chNum;
-						configVal.id			= i;
-						configVal.name			= chStr;
+						configVal.platform		= d;
+						configVal.channel		= i;
+						configVal.id			= chCnt;
+						configVal.platformCNT	= devNums;
+						configVal.name			= optStr;
 						configVal.nameChannel	= chStr;
 						configVal.namePrm		= chStr; //recStr;
 
 						m_mapPrm.insert(i, chStr);
+
+						chCnt++;
 
 						if(chMsg.has_coordinates()) {
 							configVal.latitude		= chMsg.coordinates().latitude(); //to be done in proto
@@ -616,12 +649,14 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				RdsProtobuf::System_Device dMsg = sMsg.current().system().device();
 				m_mapDevState.insert(-1, dMsg.status());
 				emit onChangeDevState(m_mapDevState);
+				message = configureLoc(data);
 			} else if( sMsg.current().system().has_receiver()) {
 				RdsProtobuf::System_Receiver rMsg = sMsg.current().system().receiver();
 				if(rMsg.has_status()) {
 					m_mapDevState.insert( rMsg.channel_index(), rMsg.status() );
 					emit onChangeDevState(m_mapDevState);
 				}
+				message = configureLoc(data);
 			}
 		} else if( sMsg.current().has_location() ) {
 			RdsProtobuf::Location_LocationOptions locMsg= sMsg.current().location().options();

@@ -81,9 +81,13 @@ public:
 
 	virtual void onMethodCalled(const QString &method, const QVariant &argument);
 
-    void onSetSystem(int modeId, bool isOn);
+	void onSetSystem(int modeId);
+	void onSetSystemStatus(bool isOn);
 
-    void changeFrequency(int value);
+	void changeFrequency(int value);
+
+	int getCurrentWorkMode() const;
+
 signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);

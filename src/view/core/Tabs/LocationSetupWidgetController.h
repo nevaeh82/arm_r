@@ -25,9 +25,18 @@ public:
 	void setLocationSetup(const RdsProtobuf::Location& data);
 	void setDetectorSetup(const RdsProtobuf::Detector& data);
 	void setCorrectionSetup(const RdsProtobuf::Correction &data);
+	void setAnalysisSetup(const RdsProtobuf::Analysis &data);
+
+	int getAnalysisWorkChannel() const;
+	void setAnalysisChannelCount(int count);
+	void setPlatformList(const QStringList& platformList);
+
+	void setDeviceEnableState(int dev, bool state);
+	void setSpectrumSelection(float bandwidth, float shift, double start, double end);
 
 private:
 	LocationSetupWidget* m_view;
+	int m_workMode;
 
 public:
 	void appendView(LocationSetupWidget* view);
@@ -44,6 +53,8 @@ signals:
 	void sendRdsData(QByteArray);
 	void onSignalUpdate();
 
+	void analysisChannelChanged(int);
+
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
 	void slotSendSettings();
@@ -57,6 +68,12 @@ private slots:
 	void slotOnUpdateCor();
 	void slotOnSetCor();
 
-    void slotOnSetCommonFreq(int freq);
+	void slotOnUpdateAnalysis();
+	void slotOnSetAnalysis();
+
+	void slotOnSetCommonFreq(int freq);
+	void slotOnDeviceEnable(int, bool enable);
+
+	void slotOnChangeWorkMode(int mode, bool);
 };
 

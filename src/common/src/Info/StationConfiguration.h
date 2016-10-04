@@ -128,6 +128,9 @@ struct StationConfiguration
 	StationConfiguration()
 	{
 		id			= 0;
+		platform	= 0;
+		channel		= 0;
+		platformCNT = 0;
 		name		= "Unknown";
 		latitude	= 0.0;
 		longitude	= 0.0;
@@ -144,6 +147,9 @@ struct StationConfiguration
 	StationConfiguration(const StationConfiguration& object)
 	{
 		id			= object.id;
+		platform	= object.platform;
+		channel		= object.channel;
+		platformCNT = object.platformCNT;
 		name		= object.name;
 		latitude	= object.latitude;
 		longitude	= object.longitude;
@@ -157,6 +163,9 @@ struct StationConfiguration
 	}
 
 	quint32		id;
+	quint32		platform;
+	quint32		channel;
+	quint32		platformCNT;
 	QString		name;
 	QString		namePrm;
 	QString		nameChannel;
@@ -174,7 +183,10 @@ struct StationConfiguration
 inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& object)
 {
 	return out << object.id
+			   << object.platform
+			   << object.channel
 			   << object.name
+			   << object.platformCNT
 			   << object.latitude
 			   << object.longitude
 			   << object.altitude
@@ -190,7 +202,10 @@ inline QDataStream& operator<<(QDataStream& out, const StationConfiguration& obj
 inline QDataStream& operator>>(QDataStream& in, StationConfiguration& object)
 {
 	in >> object.id
+	   >> object.platform
+	   >> object.channel
 	   >> object.name
+	   >> object.platformCNT
 	   >> object.latitude
 	   >> object.longitude
 	   >> object.altitude

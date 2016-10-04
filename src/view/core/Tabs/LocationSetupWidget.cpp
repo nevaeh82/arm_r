@@ -31,6 +31,9 @@ LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
 	connect(ui->pbUpdateCor, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdateCor()));
 	connect(ui->pbSetCor, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSetCor()));
 
+	connect(ui->pbSetAnalysis, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSetAnalysis()));
+	connect(ui->pbUpdateAnalysis, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdateAnalysis()));
+
 	//List widgets
 	connect(ui->pbAddRangeDet, SIGNAL(clicked(bool)), this, SLOT(onAddRangeDet()));
 	connect(ui->pbRemoveRangeDet, SIGNAL(clicked(bool)), this, SLOT(onRemoveRangeDet()));
@@ -38,7 +41,9 @@ LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
 	connect(ui->pbAddRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onAddRangeCor()));
 	connect(ui->pbRemoveRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onRemoveRangeCor()));
 
-    ui->toolBox->setCurrentIndex(0);
+	ui->toolBox->setCurrentIndex(0);
+
+	connect(&m_devSignalMap, SIGNAL(mapped(int)), this, SLOT(onDeviceEnable(int)));
 }
 
 LocationSetupWidget::~LocationSetupWidget()
@@ -169,6 +174,120 @@ RdsProtobuf::Correction LocationSetupWidget::getCorrectionData() const
 	return correction;
 }
 
+void LocationSetupWidget::setAnalysisData(const RdsProtobuf::Analysis &data)
+{
+	RdsProtobuf::Analysis_AnalysisOptions opt = data.options();
+
+	ui->sbAnalysisDetector->setValue( opt.detector_index() );
+	ui->sbAnalysisDuration->setValue( opt.duration() );
+	ui->sbAnalysisCentralFreq->setValue( opt.central_frequency() );
+
+	ui->sbAnalysisSelectStartMs->setValue( opt.selected_area().time_start() );
+	ui->sbAnalysisSelectEndMs->setValue( opt.selected_area().time_end() );
+	ui->sbAnalysisSelectStartMhz->setValue( opt.selected_area().freq_start() );
+	ui->sbAnalysisSelectEndMhz->setValue( opt.selected_area().freq_end() );
+
+	ui->sbAnalysisZoomStartMs->setValue( opt.zoomed_area().time_start() );
+	ui->sbAnalysisZoomEndMs->setValue( opt.zoomed_area().time_end() );
+	ui->sbAnalysisZoomStartMhz->setValue( opt.zoomed_area().freq_start() );
+	ui->sbAnalysisZoomEndMhz->setValue( opt.zoomed_area().freq_end() );
+
+	ui->cbAnalysisEnable->setChecked( opt.analysis() );
+}
+
+RdsProtobuf::Analysis LocationSetupWidget::getAnalysisData() const
+{
+	RdsProtobuf::Analysis analysis;
+	RdsProtobuf::Analysis_AnalysisOptions* opt = analysis.mutable_options();
+
+	opt->set_detector_index( ui->sbAnalysisDetector->value() );
+	opt->set_duration( ui->sbAnalysisDuration->value() );
+	opt->set_central_frequency( ui->sbAnalysisCentralFreq->value() );
+
+	RdsProtobuf::TimeFreqArea* selected = opt->mutable_selected_area();
+	selected->set_time_start( ui->sbAnalysisSelectStartMs->value() );
+	selected->set_time_end( ui->sbAnalysisSelectEndMs->value() );
+	selected->set_freq_start( ui->sbAnalysisSelectStartMhz->value() );
+	selected->set_freq_end( ui->sbAnalysisSelectEndMhz->value() );
+
+	RdsProtobuf::TimeFreqArea* zoomed = opt->mutable_zoomed_area();
+	zoomed->set_time_start( ui->sbAnalysisZoomStartMs->value() );
+	zoomed->set_time_end( ui->sbAnalysisZoomEndMs->value() );
+	zoomed->set_freq_start( ui->sbAnalysisZoomStartMhz->value() );
+	zoomed->set_freq_end( ui->sbAnalysisZoomEndMhz->value() );
+
+	opt->set_analysis( ui->cbAnalysisEnable->isChecked() );
+
+	return analysis;
+}
+
+int LocationSetupWidget::getAnalysisChannel() const
+{
+	return ui->sbAnalysisDetector->value();
+}
+
+void LocationSetupWidget::setAnalysisChannelCount(int cnt)
+{
+	ui->sbAnalysisDetector->setMinimum(0);
+	ui->sbAnalysisDetector->setMaximum(cnt-1);
+}
+
+void LocationSetupWidget::setPlatformList(const QStringList& list)
+{
+	quint32 platformIndex = 0;
+
+	foreach (QString platformTtile, list) {
+		if(!m_cbDevMap.contains(platformIndex)) {
+			addDeviceEnableControl(platformTtile, platformIndex);
+		} else {
+			m_cbDevMapTitle.value(platformIndex)->setText(platformTtile);
+		}
+
+		platformIndex++;
+	}
+}
+
+void LocationSetupWidget::setDeviceEnableState(int dev, bool state)
+{
+	if(!m_cbDevMap.contains(dev)) {
+		addDeviceEnableControl(QString("Platform_%1").arg(dev), dev);
+	}
+
+	m_cbDevMap.value(dev)->setChecked(state);
+}
+
+void LocationSetupWidget::setWorkMode(int mode)
+{
+	ui->toolBox->setCurrentIndex(mode);
+}
+
+void LocationSetupWidget::onSpectrumLocationSelection(float bandwidth, float shift)
+{
+	//In khz
+	ui->sbRange->setValue( bandwidth );
+	ui->sbShift->setValue(shift);
+}
+
+void LocationSetupWidget::onSpectrumAnalysisSelection(double start, double end)
+{
+	ui->sbAnalysisSelectStartMhz->setValue(start);
+	ui->sbAnalysisSelectEndMhz->setValue(end);
+}
+
+void LocationSetupWidget::addDeviceEnableControl(QString platformTtile, int device) {
+	int platformIndex = device;
+	QString title = QString("%1_%2").arg(platformIndex).arg(platformTtile);
+	QLabel* lbl = new QLabel(title, this);
+	ui->gridLayoutPlatforms->addWidget( lbl, platformIndex, 0, 1, 1);
+	QCheckBox* cb = new QCheckBox(tr("Enable"));
+	ui->gridLayoutPlatforms->addWidget( cb, platformIndex, 1, 1, 1);
+
+	m_devSignalMap.setMapping(cb, platformIndex);
+	connect(cb, SIGNAL(clicked(bool)), &m_devSignalMap, SLOT(map()));
+
+	m_cbDevMap.insert( platformIndex, cb );
+	m_cbDevMapTitle.insert( platformIndex, lbl );
+}
 
 // List widgets
 void LocationSetupWidget::onAddRangeDet()
@@ -206,4 +325,18 @@ void LocationSetupWidget::onRemoveRangeCor()
 	if( ui->listRangesCor->selectedItems().size() ) {
 		delete ui->listRangesCor->takeItem( ui->listRangesCor->currentRow() );
 	}
+}
+
+void LocationSetupWidget::onDeviceEnable(int dev)
+{
+	int k = 0;
+
+	QCheckBox* cb = m_cbDevMap.value( dev, NULL );
+	if( !cb ) {
+		return;
+	}
+
+	emit onSignalDeviceEnable(dev, cb->isChecked());
+
+	Q_UNUSED(k)
 }

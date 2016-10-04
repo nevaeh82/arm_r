@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector>
 #include <QPointF>
+#include <QMutex>
 
 #include "Interfaces/IRpcListener.h"
 #include "IGraphicWidget.h"
@@ -12,6 +13,8 @@
 #include "Interfaces/ITabManager.h"
 #include "Db/DbManager.h"
 #include "Tabs/Controls/PanoramaFreqControl.h"
+
+#include "RDSExchange.h"
 
 class SpectrumWidgetDataSourceTest;
 
@@ -60,6 +63,9 @@ private:
 	IDbManager* m_dbmanager;
 
 	PanoramaFreqControl* m_panoramaFreqControl;
+	QTime m_sonogramTime;
+
+	QMutex m_timeMutex;
 
 
 public:

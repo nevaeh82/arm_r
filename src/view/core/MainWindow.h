@@ -24,15 +24,18 @@ public:
 	QTabWidget* getWorkTabsWidget() const;
 	QStackedWidget* getStackedWidget() const;
 
+	QAction *appendLocationSetupAction(int id);
+	void removeSetupAction(int id);
 
 private:
 	Ui::MainWindow* ui;
+	QMap<int, QAction*> m_actionMap;
 
 private:
 	void init();
 private slots:
-    void showError(QString);
-    void showConfirm(QString);
+	void showError(QString);
+	void showConfirm(QString);
 
 signals:
 	void signalShowLists();
@@ -42,7 +45,7 @@ signals:
 	void signalResetSerevr();
     void signalServerConnections();
 
-	void signalShowLocationSetup();
+	void signalShowLocationSetup(int id);
 };
 
 

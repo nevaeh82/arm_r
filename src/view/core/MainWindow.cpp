@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->showMaximized();
 
 	init();
+
+	log_debug(QString("id-%1").arg((int)this->thread()->currentThreadId()));
 }
 
 MainWindow::~MainWindow()
@@ -39,6 +41,22 @@ QStackedWidget* MainWindow::getStackedWidget() const
 	return ui->stackedWidget;
 }
 
+QAction* MainWindow::appendLocationSetupAction(int id)
+{
+	if( !ui->actionLocationSetup->menu() ) {
+		ui->actionLocationSetup->setMenu( new QMenu(this) );
+	}
+	QAction* action = ui->actionLocationSetup->menu()->addAction(QString("Location settings %1").arg(id));
+	m_actionMap.insert(id, action);
+
+	return action;
+}
+
+void MainWindow::removeSetupAction(int id)
+{
+	ui->actionLocationSetup->menu()->removeAction( m_actionMap.take(id) );
+}
+
 void MainWindow::init()
 {
 	connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
@@ -49,11 +67,11 @@ void MainWindow::init()
 	connect(ui->actionSolverErrors, SIGNAL(triggered()), this, SIGNAL(signalShowSolverErrors()));
 	connect(ui->actionSolverSetup, SIGNAL(triggered()), this, SIGNAL(signalShowSolverSetup()));
 
-	connect(ui->actionLocationSetup, SIGNAL(triggered()), this, SIGNAL(signalShowLocationSetup()));
+	//connect(ui->actionLocationSetup, SIGNAL(triggered()), this, SIGNAL(signalShowLocationSetup()));
 
-    connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
+	connect(ui->actionRestartServer, SIGNAL(triggered()), this, SIGNAL(signalResetSerevr()));
 
-    connect(ui->actionConnections, SIGNAL(triggered()), this, SIGNAL(signalServerConnections()));
+	connect(ui->actionConnections, SIGNAL(triggered()), this, SIGNAL(signalServerConnections()));
 
 }
 

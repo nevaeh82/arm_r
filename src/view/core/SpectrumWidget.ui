@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>971</width>
-    <height>653</height>
+    <width>641</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,9 +47,22 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="vboxLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
      <item>
-      <layout class="QVBoxLayout" name="sonogramQwtLayout"/>
+      <layout class="QGridLayout" name="sonogramQwtLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+      </layout>
      </item>
      <item>
       <spacer name="verticalSpacer_2">
@@ -84,6 +97,29 @@
      <property name="spacing">
       <number>2</number>
      </property>
+     <item>
+      <widget class="QLabel" name="labelDetect">
+       <property name="text">
+        <string>Detected signals:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTextEdit" name="textEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">

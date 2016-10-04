@@ -3,6 +3,8 @@
 #include "CorrelationGroupWidget.h"
 #include "ui_CorrelationGroupWidget.h"
 
+#define MAX_ROW_COUNT 6
+
 CorrelationGroupWidget::CorrelationGroupWidget(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::CorrelationGroupWidget)
@@ -23,8 +25,10 @@ void CorrelationGroupWidget::insertCorrelationWidget(ICorrelationWidget *widget)
 
 	m_widgetList.append(widget);
 
-	ui->correlationWidgetsContainer->insertWidget(ui->correlationWidgetsContainer->count(), widget->getWidget());
-	//log_debug(QString::number(ui->correlationWidgetsContainer->count()));
+	int column = ui->correlationWidgetsContainer->count() / MAX_ROW_COUNT;
+	int row = ui->correlationWidgetsContainer->count()%MAX_ROW_COUNT;
+
+	ui->correlationWidgetsContainer->addWidget(widget->getWidget(), row, column, 1, 1);
 }
 
 void CorrelationGroupWidget::clearWidgetContainer()

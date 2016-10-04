@@ -16,6 +16,9 @@ public:
 	virtual ~IStation(){}
 
 	virtual int  getId() const = 0;
+	virtual quint32  getPlatformId() const = 0;
+	virtual quint32  getChannelId() const = 0;
+
 	virtual QString getName() const = 0;
 	virtual double getLatitude() const = 0;
 	virtual double getLongitude() const = 0;

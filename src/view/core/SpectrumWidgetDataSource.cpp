@@ -25,6 +25,8 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 {
 	m_spectrumWidget = spectrumWidget;
 
+	m_sonogramTime = QTime::currentTime();
+
 	m_bandwidth = 0;
 	m_pointCount = 0;
 	m_bandwidthSingleSample = 0;
@@ -34,7 +36,7 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget* spectrumWidge
 	m_spectrum = new float[1];
 	m_spectrumPeakHold = new float[1];
 
-	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
+	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)), Qt::QueuedConnection);
 	connect(&m_timerChangeFreqPanorama, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	connect(&m_timerRepeatSetFreq, SIGNAL(timeout()), this, SLOT(slotRepeatSetFrequency()));
 }
@@ -48,6 +50,14 @@ SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
 Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
+//	QByteArray aData = data.toByteArray();
+//	RdsProtobuf::Packet pkt;
+//	pkt.ParseFromArray(aData.data(), aData.size());
+
+//	if( isAnalysisSpectrogram(pkt) ) {
+//		log_debug(QString("Datasource sonogram:::: %1 id-%2").arg(m_sonogramTime.msecsTo(QTime::currentTime())).arg((int)this->thread()->currentThreadId()));
+//		m_sonogramTime = QTime::currentTime();
+//	}
 	emit onMethodCalledSignal(method, data);
 }
 
@@ -395,6 +405,20 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 			m_spectrumCounter++;
 			m_timerRepeatSetFreq.stop();
 		}
+	}
+
+	//Receiving rds raw protobuf
+	if( method == RPC_METHOD_CONFIG_RDS_ANSWER ) {
+
+//		RdsProtobuf::Packet pkt;
+//		QByteArray bData = data.toByteArray();
+//		pkt.ParseFromArray( bData.data(), bData.size() );
+
+//		if( !isAnalysisDetected(pkt) ) {
+//			return;
+//		}
+
+		onDataReceived(RPC_METHOD_CONFIG_RDS_ANSWER, data);
 	}
 }
 

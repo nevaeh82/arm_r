@@ -48,6 +48,8 @@ public:
 	TabSpectrumWidget(QWidget* parent = NULL);
 	virtual ~TabSpectrumWidget();
 
+	SpectrumWidgetController *getSpectrumController();
+
 public:
 	void activate();
 	void deactivate();
@@ -77,6 +79,8 @@ signals:
 	void spectrumDoubleClickedSignal(int);
 
 	void onSetWorkMode(int,bool);
+
+	void onChangeAnalysisChannel(int);
 
 private slots:
 	void setIndicatorStateSlot(int state);

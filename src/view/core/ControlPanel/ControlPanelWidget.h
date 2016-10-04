@@ -35,7 +35,11 @@ public:
 
 	void changeQualityStatus(const int status);
 
-    void onSetMode(int modeId, bool isOn);
+	void onSetMode(int modeId);
+	void onSetModeStatus(bool isOn);
+
+	int onGetMode() const;
+
 signals:
 	void commonFreqChangedSignal(int value);
 	void bandwidthChangedSignal(int start, int end);

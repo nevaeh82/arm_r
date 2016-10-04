@@ -9,6 +9,8 @@
 
 #include "Tabs/Rpc/RpcFlakonClientWrapper.h"
 
+#include "Tabs/LocationSetupWidgetController.h"
+
 #define INVALID_STATION_ID -1
 
 class Station: public QObject, public IStation
@@ -17,6 +19,8 @@ class Station: public QObject, public IStation
 
 private:
 	int m_stationId;
+	quint32 m_platformId;
+	quint32 m_channelId;
 
 	int m_center;
 
@@ -32,6 +36,7 @@ private:
 	IDbManager *m_dbManager;
 
 	RpcFlakonClientWrapper *m_rpcFlakonClient;
+	LocationSetupWidgetController* m_locationSetupController;
 
 public:
 	float getBandwidth() const;
@@ -39,11 +44,16 @@ public:
 	float getCenter() const;
 	float getCenterSelection() const;
 
+	void setLocationSetupController(LocationSetupWidgetController* controller);
+
 public:
 	Station(IDbManager *dbManager, RpcFlakonClientWrapper *client, QObject* parent = NULL);
 	virtual ~Station();
 
 	int getId() const;
+	quint32 getPlatformId() const;
+	quint32 getChannelId() const;
+
 	QString getName() const;
 	double getLatitude() const;
 	double getLongitude() const;
@@ -58,6 +68,9 @@ public:
 	void setPrm300Ip(const QString& ip);
 	void setAdcIp(const QString& ip);
 	void setAdcPort(const quint16 port);
+
+	void setPlatformId(const quint32 id);
+	void setChannelId(const quint32 id);
 
 	void setCenter(const int val);
 	int getCenterVal() const;

@@ -54,6 +54,7 @@
 #define TCP_RDS_TURN_STATUS								"tcpRDSTurnStatus"
 
 #define TCP_RDS_GET_LOC_STATUS							"tcpRDSLocStatus"
+#define TCP_RDS_GET_ANALYSIS_STATUS						"tcpRDSAnalysisStatus"
 #define TCP_RDS_GET_PRM_STATUS							"tcpRDSPrmStatus"
 #define TCP_RDS_SET_PRM_STATUS							"tcpRDSSetPrmStatus"
 #define TCP_RDS_GET_DEVICE_STATUS							"tcpRDSPrmStatus"

@@ -70,6 +70,8 @@ void MainWindowController::appendView(MainWindow *view)
 	m_listForm = new ListsDialog(m_view);
 
 	connectToServers();
+
+	//connect(m_view, SIGNAL())
 }
 
 void MainWindowController::connectToServers()
@@ -247,7 +249,9 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 
 	connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
 	connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));
-	connect(m_view, SIGNAL(signalShowLocationSetup()), tabManager, SLOT(slotShowLocationSetup()));
+
+	QAction* settingsAction = m_view->appendLocationSetupAction(id);
+	connect(settingsAction, SIGNAL(triggered(bool)), tabManager, SLOT(slotShowLocationSetup()));
 
 	//tabManager->setFlakonRpc(ip, port);
 	tabManager->setRpcConfig(port, Ip);
@@ -276,7 +280,20 @@ void MainWindowController::removeConnectionSlot(int id)
 		}
 	}
 
+	m_view->removeSetupAction(id);
+
 	delete tabManager;
+}
+
+void MainWindowController::slotLocationSetup(int id)
+{
+	TabManager* val = m_mapTabManager.value(id, NULL);
+
+	if(!val) {
+		return;
+	}
+
+	val->slotShowLocationSetup();
 }
 
 void MainWindowController::startTabManger(int id)

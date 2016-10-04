@@ -51,6 +51,11 @@ Prm Prm300ControlWidget::getPrmParams()
 	return m_params;
 }
 
+void Prm300ControlWidget::setState(bool state)
+{
+	ui->cbEnable->setChecked(state);
+}
+
 void Prm300ControlWidget::setPrmParams()
 {
 	if(ui->lcdAtt1->value()) {

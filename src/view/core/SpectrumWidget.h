@@ -2,6 +2,7 @@
 #define GRAPHICWIDGET_H
 
 #include <QApplication>
+#include <Common/Charts/qcustomplot.h>
 
 #include <QWidget>
 
@@ -12,6 +13,7 @@
 #include "Common/Charts/QColorCustomPlot.h"
 
 #include <qwt_plot.h>
+#include <qwt_plot_glcanvas.h>
 
 namespace Ui {
 class SpectrumWidget;
@@ -26,6 +28,11 @@ private:
 	SpectrumWidgetController* m_controller;
 
 	QwtPlot* m_qwtSonogram;
+	QwtPlotGLCanvas* m_qwtSonogramGL;
+	QBrush *m_texture;
+
+	QCustomPlot* m_plot;
+	QCPItemPixmap* m_plotPixmap;
 
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
@@ -44,13 +51,17 @@ public:
 
 	Prm300ControlWidget* getPrm300Widget();
 
-	void sonogramUpdate();
+	void sonogramUpdate(const QPixmap& px);
+	void setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected &msg);
 
 public slots:
 	void slotSetEnableSpactrum(bool state);
-
-public slots:
 	void slotEnableKM(bool state);
+
+private slots:
+	void slotSetWorkMode(int mode, bool isOn);
+	void onSlotChangedViewPort(double start_hz, double start_Y, double end_hz, double end_Y);
+	void onZoomSonogram(double start_hz, double end_hz, bool replot = false);
 
 signals:
 	void signalEnableKM(bool state);

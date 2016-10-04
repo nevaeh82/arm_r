@@ -5,7 +5,8 @@
 
 
 LocationSetupWidgetController::LocationSetupWidgetController(QObject* parent):
-	QObject(parent)
+	QObject(parent),
+	m_workMode(0)
 {
 	m_view = NULL;
 
@@ -16,6 +17,7 @@ LocationSetupWidgetController::~LocationSetupWidgetController()
 {
 	if(m_view != NULL)
 	{
+		m_view->close();
 		delete m_view;
 	}
 }
@@ -35,6 +37,43 @@ void LocationSetupWidgetController::setCorrectionSetup(const RdsProtobuf::Correc
 	m_view->setCorrectionData( data );
 }
 
+void LocationSetupWidgetController::setAnalysisSetup(const RdsProtobuf::Analysis &data)
+{
+	m_view->setAnalysisData( data );
+	emit analysisChannelChanged( m_view->getAnalysisChannel() );
+}
+
+int LocationSetupWidgetController::getAnalysisWorkChannel() const
+{
+	return m_view->getAnalysisChannel();
+}
+
+void LocationSetupWidgetController::setAnalysisChannelCount(int count)
+{
+	m_view->setAnalysisChannelCount( count );
+}
+
+void LocationSetupWidgetController::setPlatformList(const QStringList &platformList)
+{
+	m_view->setPlatformList( platformList );
+}
+
+void LocationSetupWidgetController::setDeviceEnableState(int dev, bool state)
+{
+	m_view->setDeviceEnableState(dev, state);
+}
+
+void LocationSetupWidgetController::setSpectrumSelection(float bandwidth, float shift, double start, double end)
+{
+	if(m_workMode == 1) { // Location
+		m_view->onSpectrumLocationSelection(bandwidth, shift);
+		slotOnSet();
+	} else if(m_workMode == 2) { //Analysis
+		m_view->onSpectrumAnalysisSelection(start, end);
+		slotOnSetAnalysis();
+	}
+}
+
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
 {
 	m_view = view;
@@ -49,6 +88,12 @@ void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
 
 	connect(m_view, SIGNAL(onSignalUpdateCor()), this, SLOT(slotOnUpdateCor()));
 	connect(m_view, SIGNAL(onSignalSetCor()), this, SLOT(slotOnSetCor()));
+
+	connect(m_view, SIGNAL(onSignalUpdateAnalysis()), this, SLOT(slotOnUpdateAnalysis()));
+	connect(m_view, SIGNAL(onSignalSetAnalysis()), this, SLOT(slotOnSetAnalysis()));
+
+	connect(m_view, SIGNAL(analysisChannelChanged(int)), this, SIGNAL(analysisChannelChanged(int)));
+	connect(m_view, SIGNAL(onSignalDeviceEnable(int, bool)), this, SLOT(slotOnDeviceEnable(int, bool)));
 }
 
 void LocationSetupWidgetController::onMethodCalled(const QString &method, const QVariant &argument)
@@ -145,6 +190,39 @@ void LocationSetupWidgetController::slotOnSetCor()
 	createSetCorrectionOptions( pkt, m_view->getCorrectionData() );
 
 	emit sendRdsData( pack(pkt) );
+}
+
+void LocationSetupWidgetController::slotOnUpdateAnalysis()
+{
+	RdsProtobuf::Packet pkt;
+	createGetAnalysisOptions( pkt, m_view->getAnalysisData() );
+
+
+	emit sendRdsData( pack(pkt) );
+}
+
+void LocationSetupWidgetController::slotOnSetAnalysis()
+{
+	RdsProtobuf::Packet pkt;
+	createSetAnalysisOptions( pkt, m_view->getAnalysisData() );
+
+	emit sendRdsData( pack(pkt) );
+
+	emit analysisChannelChanged( m_view->getAnalysisChannel() );
+}
+
+void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
+	RdsProtobuf::Packet pkt;
+
+	createSetEnablePlatform( pkt, id, enable );
+
+	emit sendRdsData( pack(pkt) );
+}
+
+void LocationSetupWidgetController::slotOnChangeWorkMode(int mode, bool)
+{
+	m_workMode = mode;
+	m_view->setWorkMode(mode);
 }
 
 //void LocationSetupWidgetController::slotGetVersion()

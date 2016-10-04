@@ -211,6 +211,9 @@ void TabSpectrumWidgetController::createView()
 
 	m_spectrumWidget->setTab(this);
 	m_spectrumWidget->setId(m_station->getId());
+	m_spectrumWidget->setPlatformId(m_station->getPlatformId());
+	m_spectrumWidget->setChannelId(m_station->getChannelId());
+
 	m_spectrumWidget->setSpectrumName(m_station->getName());
 	m_spectrumWidget->setDbManager(m_dbManager);
 	m_spectrumWidget->setDbStationController(m_dbStationController);
@@ -615,6 +618,30 @@ void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QV
 
 		//setIndicator( argument.toInt() );
 		//setIndicatorState(argument.toInt());
+	}
+
+	else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
+		QByteArray data = argument.toByteArray();
+
+		RdsProtobuf::Packet pkt;
+		pkt.ParseFromArray( data.data(), data.size() );
+
+		if( !pkt.has_from_server() ) {
+			return;
+		}
+
+		if( isSystemReceiver(pkt) ) {
+			RdsProtobuf::System_Receiver rPkt = pkt.from_server().current().system().receiver();
+
+			if( m_view->getSpectrumController() &&
+				rPkt.device_index() == m_view->getSpectrumController()->getPlatformId() &&
+				rPkt.channel_index() == m_view->getSpectrumController()->getChannelId() ) {
+
+				if( m_view->getSpectrumController()->getPrmController() && rPkt.has_status() ) {
+					m_view->getSpectrumController()->getPrmController()->setChannelState( rPkt.status() );
+				}
+			}
+		}
 	}
 }
 
