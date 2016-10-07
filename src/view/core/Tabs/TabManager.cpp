@@ -368,6 +368,8 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		tabSpectrumWidget->getSpectrumController()->setLocationSetupWidgetController( m_locationSetupController );
 
 		connect(tabController, SIGNAL(signalUpdateDBStationsLists()), this, SLOT(slotUpdateDBStationsLists()));
+
+        connect(tabController, SIGNAL(signalTreeFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabController, SIGNAL(analysisChannelChanged(int)));
 		connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabSpectrumWidget, SIGNAL(onChangeAnalysisChannel(int)));
 
@@ -587,12 +589,9 @@ void TabManager::readProto(const QByteArray& data)
 		}
 
 		if(pkt.from_server().current().has_mode()) {
-			m_panelController->onSetSystem( pkt.from_server().current().mode().index() );
-		}
-
-		if(pkt.from_server().current().has_mode()) {
 			if(pkt.from_server().current().mode().has_index()) {
 				m_panelController->onSetSystem( pkt.from_server().current().mode().index());
+                m_locationSetupController->slotOnChangeWorkMode(pkt.from_server().current().mode().index(), true);
 			}
 
 			if(pkt.from_server().current().mode().has_status()) {
@@ -713,7 +712,10 @@ void TabManager::slotOnChangeWorkMode(int mode, bool isOn)
 			if(i!=tabId) {
 				m_tabWidget->setTabEnabled(i, false);
 			}
+
 		}
+
+        m_tabWidget->setCurrentIndex(tabId);
 
 //		for(int i = tabId+1; i<m_tabWidget->count(); i++) {
 //				m_tabWidget->removeTab(i);

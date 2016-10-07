@@ -55,6 +55,9 @@ private:
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
 
+    QList<StationsFrequencyAndBandwith> m_listOfFreqsBlack;
+    QList<StationsFrequencyAndBandwith>::Iterator m_itScanMode;
+
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
 	QMap<int, Station *> m_stationsMap;
 

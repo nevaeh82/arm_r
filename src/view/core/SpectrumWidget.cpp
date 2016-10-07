@@ -83,8 +83,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plotPixmap->bottomRight->setCoords(20, 0);
 
 	ui->textEdit->setVisible(false);
-
-	m_texture = new QBrush();
+    ui->labelDetect->setVisible(false);
+    m_plot->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()

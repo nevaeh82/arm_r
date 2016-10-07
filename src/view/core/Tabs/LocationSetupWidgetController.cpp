@@ -145,15 +145,27 @@ void LocationSetupWidgetController::slotOnSet()
 
 void LocationSetupWidgetController::slotOnSetCommonFreq(int freq)
 {
-	RdsProtobuf::Packet pkt;
-	RdsProtobuf::Location loc = m_view->getLocationData();
-	loc.mutable_options()->set_central_frequency(freq);
+    if(m_workMode == 1) {
+        RdsProtobuf::Packet pkt;
+        RdsProtobuf::Location loc = m_view->getLocationData();
+        loc.mutable_options()->set_central_frequency(freq);
 
-	m_view->setLocationData( loc );
+        m_view->setLocationData( loc );
 
-	createSetLocationStatus( pkt, loc );
+        createSetLocationStatus( pkt, loc );
 
-	emit sendRdsData( pack(pkt) );
+        emit sendRdsData( pack(pkt) );
+    } else if(m_workMode == 2) { //Analysis
+        RdsProtobuf::Packet pkt;
+        RdsProtobuf::Analysis aPkt = m_view->getAnalysisData();
+        aPkt.mutable_options()->set_central_frequency(freq);
+
+        m_view->setAnalysisData( aPkt );
+
+        createSetAnalysisOptions( pkt, aPkt );
+
+        emit sendRdsData( pack(pkt) );
+    }
 }
 
 void LocationSetupWidgetController::slotOnUpdateDet()

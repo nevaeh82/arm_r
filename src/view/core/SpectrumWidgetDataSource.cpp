@@ -171,10 +171,18 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 		delete[] m_spectrum;
 		m_spectrum = new float[m_pointCountWhole] ();
 
-		delete[] m_spectrumPeakHold;
-		m_spectrumPeakHold = new float[m_pointCountWhole] ();
-		m_needSetupSpectrum = true;
+        delete[] m_spectrumPeakHold;
+        m_spectrumPeakHold = new float[m_pointCountWhole] ();
+        m_needSetupSpectrum = true;
+        clearPeak();
 	}
+}
+
+void SpectrumWidgetDataSource::clearPeak()
+{
+    for(int i = 0; i<m_pointCountWhole; i++) {
+        m_spectrumPeakHold[i] = 0;
+    }
 }
 
 void SpectrumWidgetDataSource::setBandwidth1(int size)
@@ -305,13 +313,15 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 
 		cf = (int)cf;
 
-		m_responseFreq = cf;
-
 		if(!m_isPanoramaStart)
 		{
 			m_spectrumWidget->setZeroFrequency(cf);
+            if(m_responseFreq != cf) {
+                clearPeak();
+            }
 		}
 
+        m_responseFreq = cf;
 		stream >> vecFFT;
 		if (!vecFFT.size()) return;
 

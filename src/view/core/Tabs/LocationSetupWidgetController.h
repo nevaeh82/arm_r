@@ -45,6 +45,7 @@ public:
 
 public slots:
 	void slotShowWidget();
+    void slotOnChangeWorkMode(int mode, bool);
 
 
 signals:
@@ -73,7 +74,5 @@ private slots:
 
 	void slotOnSetCommonFreq(int freq);
 	void slotOnDeviceEnable(int, bool enable);
-
-	void slotOnChangeWorkMode(int mode, bool);
 };
 

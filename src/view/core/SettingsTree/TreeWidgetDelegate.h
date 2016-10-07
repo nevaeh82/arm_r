@@ -51,9 +51,13 @@ private:
 	QString getRealPropNameFromTranslate(const QString& propName) const;
 	QString getTranslatePropNameFromReal(const QString& propName) const;
 
+    void test();
+
 signals:
 	void connectToDeviceSignal(const QString& deviceName);
 	void disconnectFromDeviceSignal(const QString& deviceName);
+
+    void signalTreeFreqChanged(int);
 
 private slots:
 	void commitSBEditorSlot();

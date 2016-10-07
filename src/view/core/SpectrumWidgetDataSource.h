@@ -105,6 +105,7 @@ private:
 	bool startPanorama(bool start);
 
 
+    void clearPeak();
 };
 
 #endif // SPECTRUMWIDGETDATASOURCE_H

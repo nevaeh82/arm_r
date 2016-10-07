@@ -563,7 +563,18 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	//m_sonogramWidget->replot();
 
-	//m_graphicsWidget->ZoomOutFull();
+    double startHz = 0;
+    double endHz = 0;
+    double y1;
+    double y2;
+    m_graphicsWidget->GetCurrentViewport(startHz, y1, endHz, y2);
+
+    double dHz = fabs(startHz - endHz);
+
+    //zoom Hack
+    if(dHz >= 19900000) {
+        m_graphicsWidget->ZoomOutFull();
+    }
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)

@@ -158,6 +158,8 @@ signals:
 
 	void analysisChannelChanged(int);
 
+    void signalTreeFreqChanged(int);
+
 private slots:
 	void slotGetPointsFromRpc(QByteArray points);
 	void slotShowControlPrm(bool state);

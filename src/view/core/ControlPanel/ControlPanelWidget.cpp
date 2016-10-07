@@ -76,7 +76,9 @@ void ControlPanelWidget::slotChangeMode(int index)
 void ControlPanelWidget::slotOnWorkMode()
 {
     int mode = ui->workMode->currentIndex();
+    ui->workModeOn->blockSignals(true);
     ui->workModeOn->setChecked(true);
+    ui->workModeOn->blockSignals(false);
     emit signalWorkMode(mode, true);
 }
 
@@ -113,12 +115,16 @@ void ControlPanelWidget::changeQualityStatus(const int status)
 
 void ControlPanelWidget::onSetMode(int modeId)
 {
+    ui->workMode->blockSignals(true);
     ui->workMode->setCurrentIndex( modeId );
+    ui->workMode->blockSignals(false);
 }
 
 void ControlPanelWidget::onSetModeStatus(bool isOn)
 {
+    ui->workModeOn->blockSignals(true);
 	ui->workModeOn->setChecked( isOn );
+    ui->workModeOn->blockSignals(false);
 }
 
 int ControlPanelWidget::onGetMode() const

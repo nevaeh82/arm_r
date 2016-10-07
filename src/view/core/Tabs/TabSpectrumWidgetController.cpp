@@ -38,7 +38,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
 	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
 
-	m_timerStatus.start(2000);
+    connect(m_treeDelegate, SIGNAL(signalTreeFreqChanged(int)), this, SIGNAL(signalTreeFreqChanged(int)));
 }
 
 TabSpectrumWidgetController::~TabSpectrumWidgetController()
@@ -545,6 +545,9 @@ void TabSpectrumWidgetController::onPropertyChanged(const Property & property)
 	TypeCommand commandType = TypeUnknownCommand;
 
 	if(DB_FREQUENCY_PROPERTY == inProperty.name) {
+
+        bool b;
+        Q_UNUSED(b)
 
 		//if(m_isPanoramaEnabled && m_controlPanelController) {
 			//m_controlPanelController->changeFreq(m_station->getCenter());
