@@ -154,6 +154,8 @@ void TabSpectrumWidgetController::setDbManager(IDbManager* dbManager)
 	headers << tr("Name") << tr("Property");
 	m_treeModel = new TreeModel(m_dbManager, headers, this);
 	m_dbManager->registerReceiver(m_treeModel);
+
+    connect(m_treeModel, SIGNAL(signalFreqChanged(int)), this, SIGNAL(signalFreqChanged(int)));
 }
 
 void TabSpectrumWidgetController::setPanoramaFreqControl(PanoramaFreqControl* control)

@@ -85,6 +85,7 @@ private:
 
 signals:
 	void setIndicatorStateSignal(int state);
+    void signalFreqChanged(int);
 
 private slots:
 	void setIndicatorStateSlot(int state);
