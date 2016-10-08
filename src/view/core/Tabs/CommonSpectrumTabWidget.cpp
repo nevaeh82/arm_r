@@ -28,7 +28,8 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 
 	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
 
-	m_timerStatus.start(2000);
+    //dont need to ask
+    m_timerStatus.start(2000);
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()

@@ -111,4 +111,6 @@ private:
 signals:
 	void onChangeDevState(QMap<int, bool>);
 	void onDetectSignal(int, QVector<QPointF>);
+
+    void onSendConfigureLoc(QByteArray data);
 };

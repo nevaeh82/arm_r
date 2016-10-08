@@ -39,8 +39,8 @@ void ControlPanelController::init()
 
 	foreach (QString key, childKeys) {
 		if(key == TIMERINTERVAL_KEY) {
-			timerSettings.beginGroup(childKeys.first());
-			m_timerInterval = timerSettings.value("timerCheck", TIMER_INTERVAL).toInt();
+            timerSettings.beginGroup(/*childKeys.first()*/key);
+            m_timerInterval = timerSettings.value("timerInterval", TIMER_INTERVAL).toInt();
 			m_timerCheckInterval = timerSettings.value("timerCheckInterval", TIMERCHECK_INTERVAL).toInt();
 			timerSettings.endGroup();
 			break;
@@ -77,6 +77,8 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
 
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SIGNAL(onSignalWorkMode(int,bool)));
+    connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
+            this, SIGNAL(onSignalWorkModeToGui(int,bool)));
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
 
     connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));

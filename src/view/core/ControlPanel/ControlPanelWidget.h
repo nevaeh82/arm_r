@@ -61,6 +61,7 @@ signals:
 	void signalSetMode(int);
 
 	void signalWorkMode(int, bool);
+    void signalWorkModeToGui(int, bool);
 
 private slots:
 	void onSetCommonFrequencySlot();

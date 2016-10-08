@@ -59,6 +59,7 @@ private slots:
 
 	void onGetStations();
 
+    void slotSendConfigureLoc(QByteArray data);
 signals:
 	void outStationsList(QList<StationConfiguration> list);
 };

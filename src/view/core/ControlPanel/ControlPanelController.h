@@ -98,6 +98,8 @@ signals:
 	void signalSetMode(int mode);
 
 	void onSignalWorkMode(int, bool);
+    void onSignalWorkModeToGui(int, bool);
+
 
 public slots:
 

@@ -57,7 +57,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plot->yAxis->setBasePen(QPen(Qt::white));
 	m_plot->yAxis->setTickLabelColor(Qt::white);
 
-	//m_plot->setInteractions(QCP::iRangeZoom);
+    m_plot->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+
 
 	QVector<double> tick;
 	for(int i = 0; i<20; i++) {
@@ -182,6 +183,10 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected
 			txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).signal().info()) ) );
 		}
 	}
+    if(!txtDetected.isEmpty()) {
+        ui->textEdit->clear();
+        ui->textEdit->append(txtDetected);
+    }
 }
 
 void SpectrumWidget::slotSetEnableSpactrum(bool state)

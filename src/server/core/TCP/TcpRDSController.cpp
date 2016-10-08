@@ -50,6 +50,7 @@ void TcpRDSController::createTcpDeviceCoder()
     coder->setCoordinatesCounter(m_coordinateCounter);
 
 	connect(coder, SIGNAL(onChangeDevState(QMap<int, bool>)), this, SLOT(slotTcpConnectionStatus(QMap<int, bool>)) );
+    connect(coder, SIGNAL(onSendConfigureLoc(QByteArray)), this, SLOT(slotSendConfigureLoc(QByteArray)));
 	connect(coder, SIGNAL(onDetectSignal(int, QVector<QPointF>)), this, SLOT(slotDetectSignal(int,QVector<QPointF>)) );
 }
 
@@ -209,6 +210,15 @@ void TcpRDSController::slotDetectSignal(int index, QVector<QPointF> vec)
 	foreach (ITcpListener* receiver, m_receiversList) {
 		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
 	}
+}
+
+void TcpRDSController::slotSendConfigureLoc(QByteArray data)
+{
+    MessageSP message(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
+
+    foreach (ITcpListener* receiver, m_receiversList) {
+        receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
+    }
 }
 
 void TcpRDSController::onGetStations()

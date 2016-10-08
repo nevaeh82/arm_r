@@ -647,6 +647,39 @@ void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QV
 				}
 			}
 		}
+        if( isSystemCommonSettings(pkt) ) {
+            RdsProtobuf::System_SystemOptions sysMsg = pkt.from_server().current().system().options();
+
+            QString str = QString::fromStdString(sysMsg.title());
+            int devNums = sysMsg.devices_size();
+            int chCnt = 0;
+
+            for(int d = 0; d < devNums; d++) {
+                RdsProtobuf::DeviceOptions optMsg = sysMsg.devices(d);
+
+                for(int i = 0; i < optMsg.channels_size(); i++) {
+
+                    if( m_view->getSpectrumController() &&
+                        d == m_view->getSpectrumController()->getPlatformId() &&
+                        chCnt == m_view->getSpectrumController()->getChannelId() ) {
+
+                        RdsProtobuf::ChannelOptions chMsg = optMsg.channels(i);
+                        RdsProtobuf::ReceiverOptions recMsg = chMsg.receiver();
+
+                        bool stat = recMsg.status();
+
+                        if( m_view->getSpectrumController()->getPrmController() ) {
+                            m_view->getSpectrumController()->getPrmController()->
+                                    setChannelState( stat );
+                            setIndicator(stat);
+                            return;
+                        }
+                    }
+
+                    chCnt++;
+                }
+            }
+        }
 	}
 }
 

@@ -118,6 +118,7 @@ void ControlPanelWidget::onSetMode(int modeId)
     ui->workMode->blockSignals(true);
     ui->workMode->setCurrentIndex( modeId );
     ui->workMode->blockSignals(false);
+    emit signalWorkModeToGui(modeId, true);
 }
 
 void ControlPanelWidget::onSetModeStatus(bool isOn)

@@ -645,6 +645,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				}
 				message = configure(resultList);
 				emit onChangeDevState(m_mapDevState);
+                emit onSendConfigureLoc(data);
 			} else if( sMsg.current().system().has_device()) {
 				RdsProtobuf::System_Device dMsg = sMsg.current().system().device();
 				m_mapDevState.insert(-1, dMsg.status());
@@ -657,7 +658,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 					emit onChangeDevState(m_mapDevState);
 				}
 				message = configureLoc(data);
-			}
+            }
 		} else if( sMsg.current().has_location() ) {
 			RdsProtobuf::Location_LocationOptions locMsg= sMsg.current().location().options();
 			m_locConf.duration = locMsg.duration();

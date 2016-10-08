@@ -216,7 +216,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 		QByteArray bData = arg.toByteArray();
 		pkt.ParseFromArray( bData.data(), bData.size() );
 
-		if( isAnalysisDetected(pkt) && m_sonogramReady ) {
+        if( isAnalysisDetected(pkt) ) {
 			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
 			m_view->setAnalysisDetectedData(msg);
 		}
@@ -231,6 +231,11 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 			QList<QList<float>> sonogramData;
 
 			int colNum = msg.columns();
+
+            if(colNum == 0) {
+                return;
+            }
+
 			int timeNum = msg.data_size()/colNum;
 			int dataSize = msg.data_size();
 			int cnt = 0;
@@ -775,6 +780,8 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 	connect(m_controlPanelController, SIGNAL(signalSetMode(int)), this, SLOT(slotControlPanelMode(int)));
 
 	connect(m_controlPanelController, SIGNAL(onSignalWorkMode(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
+
+    connect(m_controlPanelController, SIGNAL(onSignalWorkModeToGui(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
 }
 
 void SpectrumWidgetController::init()

@@ -139,6 +139,16 @@ inline bool isSystemReceiver(RdsProtobuf::Packet &msg)
 	return false;
 }
 
+inline bool isSystemCommonSettings(RdsProtobuf::Packet &msg)
+{
+    if( msg.has_from_server() && msg.from_server().has_current() &&
+        msg.from_server().current().has_system() && msg.from_server().current().system().has_options() ) {
+        return true;
+    }
+
+    return false;
+}
+
 inline QByteArray pack(RdsProtobuf::Packet pkt)
 {
 	QByteArray data;

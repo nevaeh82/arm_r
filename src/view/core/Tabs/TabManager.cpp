@@ -161,6 +161,9 @@ void TabManager::setupController()
 	connect(m_panelController, SIGNAL(onSignalWorkMode(int,bool)),
 			this, SLOT(slotOnChangeWorkMode(int,bool)));
 
+    connect(m_panelController, SIGNAL(onSignalWorkModeToGui(int,bool)),
+            this, SLOT(slotOnChangeWorkMode(int,bool)));
+
 	connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), this, SLOT(slotOnChangeAnalysisTab(int)));
 	connect(m_panelController, SIGNAL(onSignalWorkMode(int,bool)),
 			m_locationSetupController, SLOT(slotOnChangeWorkMode(int,bool)));
@@ -706,42 +709,28 @@ void TabManager::slotMethodCalled(const QString &method, const QVariant &argumen
 
 void TabManager::slotOnChangeWorkMode(int mode, bool isOn)
 {
-	if(mode == 2) {
-		int tabId = m_locationSetupController->getAnalysisWorkChannel();
-		int total = m_tabWidget->count();
+    if(mode == 2) {
+        int tabId = m_locationSetupController->getAnalysisWorkChannel();
+        int total = m_tabWidget->count();
 
 
-		for(int i = 0; i<total; i++) {
-			if(i!=tabId) {
-				m_tabWidget->setTabEnabled(i, false);
-			}
+        for(int i = 0; i<total; i++) {
+            if(i!=tabId) {
+                m_tabWidget->setTabEnabled(i, false);
+            }
 
-		}
+        }
 
         m_tabWidget->setCurrentIndex(tabId);
 
-//		for(int i = tabId+1; i<m_tabWidget->count(); i++) {
-//				m_tabWidget->removeTab(i);
-//		}
 
-//		for(int i = 0; i<tabId; i++) {
-//			m_tabWidget->removeTab(0);
-//		}
+    } else {
 
-	} else {
-//			for(int i = 0; i<m_tabWidget->count(); i++) {
-//					m_tabWidget->removeTab(i);
-//			}
-
-//			for(int i = 0; i<m_tabWidgetContainer.size(); i++) {
-//				m_tabWidget->insertTab(i, m_tabWidgetContainer.value(i), QString::number(i));
-//			}
-
-			int total = m_tabWidget->count();
-			for(int i = 0; i<total; i++) {
-					m_tabWidget->setTabEnabled(i, true);
-			}
-	}
+        int total = m_tabWidget->count();
+        for(int i = 0; i<total; i++) {
+            m_tabWidget->setTabEnabled(i, true);
+        }
+    }
 }
 
 void TabManager::slotOnChangeAnalysisTab(int channel)
