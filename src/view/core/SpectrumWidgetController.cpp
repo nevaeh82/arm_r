@@ -508,8 +508,6 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	if((m_threshold != -1000) && (m_rett == -100))
 	{
 		QList<StationsFrequencyAndBandwith> list;
-        QList<StationsFrequencyAndBandwith> listBlack;
-        bool retBlack = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", listBlack);
 
 		if(m_controlPanelMode == 2)
 		{
@@ -580,6 +578,36 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
             }
 		}
 	}
+
+
+    QList<StationsFrequencyAndBandwith> listBlack;
+    bool retBlack = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", listBlack);
+
+    QList<OverthresholdBand> newList;
+    QList<OverthresholdBand>::iterator i = listOverthreshold.begin();
+    while (i != listOverthreshold.end())
+    {
+        OverthresholdBand cur = *i;
+        bool j = false;
+        foreach (StationsFrequencyAndBandwith st, listBlack)
+        {
+            double lower = st.frequency - st.bandwidth/2;
+            double upper = st.frequency + st.bandwidth/2;
+            if( cur.startFreq > lower && cur.finishFreq < upper)
+            {
+                j = true;
+                i = listOverthreshold.erase(i);
+                if(i == listOverthreshold.end())
+                {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+        }
+        if(j != true)
+            ++i;
+    }
 
     if(!listOverthreshold.isEmpty())
     {

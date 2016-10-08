@@ -37,7 +37,15 @@ typedef struct OverthresholdBand
 {
     double startFreq;
     double finishFreq;
+    bool operator==(OverthresholdBand &val)
+    {
+        if(finishFreq == val.finishFreq && startFreq == val.finishFreq)
+            return true;
+        return false;
+    }
 }OverthresholdBand;
+
+
 
 ///info for report
 typedef struct AllStationsReport
