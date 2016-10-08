@@ -32,6 +32,13 @@ typedef struct StationsFrequencyAndBandwith
 	double bandwidth;
 }StationsFrequencyAndBandwith;
 
+/// bandwidth of overthreshold in station
+typedef struct OverthresholdBand
+{
+    double startFreq;
+    double finishFreq;
+}OverthresholdBand;
+
 ///info for report
 typedef struct AllStationsReport
 {
