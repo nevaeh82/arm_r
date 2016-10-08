@@ -603,7 +603,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 						int att1 = prmMsg.attenuator1();
 						int att2 = prmMsg.attenuator2();
 
-						m_mapDevState.insert(i, stat);
+                        m_mapDevState.insert(chCnt, stat);
 
 						PrmSettings settings;
 						settings.att1 = att1;

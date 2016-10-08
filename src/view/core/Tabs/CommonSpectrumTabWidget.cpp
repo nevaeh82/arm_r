@@ -49,6 +49,7 @@ void CommonSpectrumTabWidget::setDbManager(IDbManager* dbManager)
 
 	m_dbManager->registerReceiver(m_treeModel);
 	connect(m_treeModel, SIGNAL(onItemAddedSignal()), ui->settingsTreeView , SLOT(expandAll()));
+    connect(m_treeModel, SIGNAL(signalFreqChanged(int)), this, SIGNAL(signalFreqChanged(int)));
 }
 
 void CommonSpectrumTabWidget::resetDbManager()

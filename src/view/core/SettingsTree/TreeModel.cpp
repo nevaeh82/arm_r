@@ -113,6 +113,10 @@ bool TreeModel::updateModelData(TreeItem *item)
 		return m_dbManager->updatePropertyForAllObjects(DB_AVERAGING_PROPERTY, item->data().value);
 	}
 
+    if(item->data().name == DB_FREQUENCY_PROPERTY) {
+        emit signalFreqChanged(item->data().value.toInt());
+    }
+
 	return m_dbManager->updateProperty(Property(item->data()));
 }
 

@@ -32,6 +32,9 @@ protected:
 	QString getTranslateItemNameFromReal(const QString& itemName) const;
 	bool updateModelData(TreeItem *item);
 
+signals:
+    void signalFreqChanged(int);
+
 };
 
 #endif // TreeModel_H

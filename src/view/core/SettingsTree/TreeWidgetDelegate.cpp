@@ -110,8 +110,6 @@ void TreeWidgetDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
 			QSpinBox * spControl = static_cast<QSpinBox*>(editor);
 			model->setData(index, spControl->value(), Qt::EditRole);
             int val = spControl->value();
-            //test();
-            emit signalTreeFreqChanged(val);
 			break;
 		}
 		case LeadingOPMode: {
@@ -209,11 +207,6 @@ QString TreeWidgetDelegate::getTranslatePropNameFromReal(const QString& propName
 	}
 
     return propName;
-}
-
-void TreeWidgetDelegate::test()
-{
-
 }
 
 void TreeWidgetDelegate::commitSBEditorSlot()

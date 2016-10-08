@@ -325,6 +325,9 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
 	m_rpcFlakonClient->registerReceiver( m_locationSetupController );
 
+    connect(commonTabSpectrumWidget, SIGNAL(signalFreqChanged(int)),
+            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
 	foreach (Station* station, m_stationsMap) {
@@ -369,7 +372,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 
 		connect(tabController, SIGNAL(signalUpdateDBStationsLists()), this, SLOT(slotUpdateDBStationsLists()));
 
-        connect(tabController, SIGNAL(signalTreeFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+        connect(tabController, SIGNAL(signalFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabController, SIGNAL(analysisChannelChanged(int)));
 		connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabSpectrumWidget, SIGNAL(onChangeAnalysisChannel(int)));
 
