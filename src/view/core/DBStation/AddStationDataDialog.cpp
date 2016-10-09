@@ -69,6 +69,7 @@ void AddStationDataDialog::accept()
 	data.port = ui->sbPort->value();
 	data.category = ui->cbCategory->itemData( ui->cbCategory->currentIndex() ).toString();
 	data.signalType = ui->cbSignalType->currentText();
+    data.checked = 0;
 
 	emit accepted( data );
 }

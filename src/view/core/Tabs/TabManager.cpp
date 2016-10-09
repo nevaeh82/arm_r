@@ -292,6 +292,7 @@ void TabManager::setStationsConfiguration(const QList<StationConfiguration>& sta
 		station->setLocationSetupController(m_locationSetupController);
 
 		m_stationsMap.insert(station->getId(), station);
+        m_dbStationController->addStation(stationConf.nameChannel, stationConf.hostPrm300);
 		cnt++;
 	}
 

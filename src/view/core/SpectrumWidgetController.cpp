@@ -984,6 +984,8 @@ void SpectrumWidgetController::addToWhiteList()
 	data.signalType = "Unknown";
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
+    data.checked = 0;
+
 
 	StationData dataExist = m_dbStationController->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );
@@ -1015,6 +1017,7 @@ void SpectrumWidgetController::addToBlackList()
 	data.signalType = "Unknown";
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
+    data.checked = 0;
 
 	StationData dataExist = m_dbStationController->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );

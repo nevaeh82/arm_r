@@ -162,7 +162,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.prepare("INSERT INTO stationData VALUES(NULL, " \
 				  "(SELECT id FROM stationDevices WHERE stationID=(SELECT id from station WHERE name=:station) AND port=:port), " \
 				  "(SELECT id FROM category WHERE name=:category), :frequency, :bandwidth, " \
-				  "(SELECT id FROM signalType WHERE name=:objectSignalType), :dateTime);");
+                  "(SELECT id FROM signalType WHERE name=:objectSignalType), :dateTime, :checked);");
 
 	VALIDATE_QUERY( query );
 
@@ -173,6 +173,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.bindValue( ":bandwidth", data.bandwidth );
 	query.bindValue( ":signalType", data.signalType );
 	query.bindValue( ":dateTime", QDateTime::currentDateTime() );
+    query.bindValue( ":checked", 0);
 	query.exec();
 
 	VALIDATE_QUERY( query );
@@ -181,6 +182,7 @@ int DBStationController::addStationData(const StationData& data)
 		listener->onStationDataInserted( data );
 	}
 
+    log_debug(query.lastError().text());
 	return query.lastInsertId().toUInt();
 }
 

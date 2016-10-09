@@ -13,6 +13,7 @@ typedef struct StationData
 	double frequency;
 	double bandwidth;
 	QString signalType;
+    unsigned short checked;
 } StationData;
 
 /// full log_info
