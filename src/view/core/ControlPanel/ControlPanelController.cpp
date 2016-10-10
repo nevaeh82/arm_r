@@ -80,6 +80,8 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
     connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
             this, SIGNAL(onSignalWorkModeToGui(int,bool)));
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
+    connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
+            this, SLOT(onSlotWorkModeGui(int,bool)));
 
     connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
@@ -146,6 +148,12 @@ void ControlPanelController::changeFrequency(int value)
 
 void ControlPanelController::onEnableCurMode(bool enable)
 {
+    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
+}
+
+void ControlPanelController::onEnableMode(int mode, bool enable)
+{
+    m_mode = mode;
     m_rpcFlakonClient->sendWorkMode(m_mode, enable);
 }
 
@@ -407,7 +415,13 @@ void ControlPanelController::slotSetMode(int mode)
 
 void ControlPanelController::onSlotWorkMode(int mode, bool isOn)
 {
-	m_rpcFlakonClient->sendWorkMode(mode, isOn);
+    m_mode = mode;
+    m_rpcFlakonClient->sendWorkMode(mode, isOn);
+}
+
+void ControlPanelController::onSlotWorkModeGui(int mode, bool isOn)
+{
+    m_mode = mode;
 }
 
 void ControlPanelController::onMethodCalled(const QString &method, const QVariant &argument)

@@ -103,6 +103,7 @@ public slots:
 
     void changeFrequency(int value);
     void onEnableCurMode(bool enable);
+    void onEnableMode(int mode, bool enable);
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled);
@@ -132,6 +133,7 @@ private slots:
 	void slotSetMode(int mode);
 
 	void onSlotWorkMode(int mode, bool isOn);
+    void onSlotWorkModeGui(int mode, bool isOn);
 };
 
 #endif // CONTROLPANELCONTROLLER_H

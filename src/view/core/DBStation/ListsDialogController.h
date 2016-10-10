@@ -43,11 +43,14 @@ private:
 	void adjustTableSize();
 	void throwWordNfError();
 
+public slots:
+    void showAddDialog();
+    void showAddDialog(QString station, double center, double bandwidth);
+
 private slots:
 	void update();
 	void filter(int type);
 
-	void showAddDialog();
 	void deleteSelectedRecords();
 	void slotReport(int type);
 };

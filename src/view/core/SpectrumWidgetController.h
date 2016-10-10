@@ -224,6 +224,7 @@ signals:
 	void onCorrelationStateChangedSignal(const bool isEnabled);
 
 	void onSignalSetWorkMode(int, bool);
+    void signalAddToList(QString name, double start, double bandwidth);
 
 public slots:
 
@@ -260,6 +261,10 @@ private slots:
 
 	void slotSetAnalysisChannel(int id);
 	void setDetectedAreasUpdateOnPlot();
+
+    void slotAddToList(double start, double end);
+
+     void slotContinueAnalysis(bool);
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

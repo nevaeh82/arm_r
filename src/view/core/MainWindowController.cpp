@@ -246,6 +246,7 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	tabManager->setupController();
 	tabManager->setRpcFlakon(port, Ip);
 
+    tabManager->setListDialog(m_listForm);
 
 	connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
 	connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));

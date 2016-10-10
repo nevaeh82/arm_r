@@ -41,6 +41,9 @@
 #include "LocationSetupWidgetController.h"
 #include "Controls/PanoramaFreqControl.h"
 
+#include "DBStation/ListsDialogController.h"
+
+
 class TabManager: public QObject, public ITabManager, public IControlPanelListener, public IRpcListener
 {
 	Q_OBJECT
@@ -83,6 +86,8 @@ private:
 	int m_tabCount;
 
 	QMap<int, QWidget*> m_tabWidgetContainer;
+
+    ListsDialog* m_listForm;
 
 private:
 	// IRpcListener interface
@@ -149,6 +154,7 @@ private slots:
 
 public slots:
 	void slotShowLocationSetup();
+    void setListDialog(ListsDialog* dlg);
 
 signals:
 	void readyToStart(int);
@@ -163,7 +169,9 @@ public:
 
 	QTabWidget *getTabWidgetZone();
 
-	int getTabId();
+    int getTabId();
+protected slots:
+    void slotShowLists(QString station, double freq, double bandwidth);
 };
 
 #endif // TABMANAGER_H

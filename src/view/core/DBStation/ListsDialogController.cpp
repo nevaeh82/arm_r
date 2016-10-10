@@ -108,7 +108,20 @@ void ListsDialogController::showAddDialog()
 	connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
 	connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
 
-	listAdd->show();
+    listAdd->show();
+}
+
+void ListsDialogController::showAddDialog(QString station, double center, double bandwidth)
+{
+    AddStationDataDialog* listAdd = new AddStationDataDialog(station, center, bandwidth, m_view);
+    AddStationDataDialogController* listAddController = new AddStationDataDialogController(m_stationDb, this);
+
+    listAddController->appendView(listAdd);
+
+    connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
+    connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
+
+    listAdd->show();
 }
 
 void ListsDialogController::deleteSelectedRecords()

@@ -90,10 +90,13 @@ void SpectrumWidgetController::appendView(SpectrumWidget* view)
 	m_sigDialog = new SignalDetectedDialog(m_view);
 
     m_analysisResult = m_view->getAnalysisResultWidget();
+    connect(m_analysisResult, SIGNAL(onAddToList(double,double)),
+            this, SLOT(slotAddToList(double,double)));
+
+    connect(m_analysisResult, SIGNAL(signalContinue(bool)),
+            this, SLOT(slotContinueAnalysis(bool)));
 
 	//m_sigDialog->hide();
-
-
 	init();
 }
 
@@ -221,7 +224,7 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
         if( isAnalysisDetected(pkt) ) {
 			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
 			m_view->setAnalysisDetectedData(msg);
-
+            m_view->recognize();
             m_controlPanelController->onEnableCurMode(false);
 		}
 
@@ -745,7 +748,19 @@ void SpectrumWidgetController::setDetectedAreasUpdateOnPlot()
 	QVector<QPointF>::iterator it;
 	for(it = m_pointVector.begin(); it != m_pointVector.end(); ++it){
 		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ /*+ m_current_frequency*/, 0, (*it).y()*TO_MHZ /*+ m_current_frequency*/, 0, false);
-	}
+    }
+}
+
+void SpectrumWidgetController::slotAddToList(double start, double end)
+{
+    double center = start + fabs(start-end);
+
+    emit signalAddToList(m_name, center, fabs(start-end));
+}
+
+void SpectrumWidgetController::slotContinueAnalysis(bool)
+{
+    m_controlPanelController->onEnableMode(2, true);
 }
 
 void SpectrumWidgetController::setSpectrumShow(bool state)
@@ -1056,8 +1071,10 @@ void SpectrumWidgetController::addToBlackList()
 /// signal for flakon to recognize signal
 void SpectrumWidgetController::recognizeSignal()
 {
-	m_tab->recognize();
-    m_view->recognize();
+    //m_tab->recognize();
+    //m_view->recognize();
+    //enabling analysis
+    m_controlPanelController->onEnableMode(2, true);
 }
 
 /// signal for flakon to recognize signal

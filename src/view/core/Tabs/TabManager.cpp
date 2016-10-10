@@ -47,7 +47,8 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	, m_tabWidget(NULL)
 	, m_id(id)
 	, m_tabId(-1)
-	, m_tabCount(0)
+    , m_tabCount(0)
+    , m_listForm(NULL)
 {
 	m_tabWidget = new QTabWidget(tabWidget);
 
@@ -380,6 +381,9 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabController, SIGNAL(analysisChannelChanged(int)));
 		connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabSpectrumWidget, SIGNAL(onChangeAnalysisChannel(int)));
 
+        connect(tabSpectrumWidget->getSpectrumController(), SIGNAL(signalAddToList(QString,double,double)),
+                this, SLOT(slotShowLists(QString,double,double)));
+
 		m_tabWidgetsMap.insert(station->getName(), tabController);
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
 	}
@@ -493,7 +497,12 @@ void TabManager::setResponseCommonFreq(quint32 freq)
 		return;
 	}
 
-	m_panelController->setResponseFreq(freq);
+    m_panelController->setResponseFreq(freq);
+}
+
+void TabManager::setListDialog(ListsDialog *dlg)
+{
+    m_listForm = dlg;
 }
 
 int TabManager::getTabId()
@@ -751,4 +760,24 @@ void TabManager::slotOnChangeAnalysisTab(int channel)
 			}
 		}
 	}
+}
+
+void TabManager::slotShowLists(QString station, double freq, double bandwidth)
+{
+    ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
+    bool isOpen = m_dbStationController->getDataBase().isOpen();
+
+    m_dbStationController->registerReceiver( listController );
+
+    if(!isOpen) {
+        QMessageBox msgBox;
+        msgBox.setText(tr("DataBase is not opened!"));
+        msgBox.exec();
+        return;
+    }
+
+    listController->appendView(m_listForm);
+    m_listForm->show();
+
+    listController->showAddDialog(station, freq, bandwidth);
 }

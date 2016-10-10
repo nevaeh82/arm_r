@@ -137,8 +137,11 @@ void AnalysisResultWidget::addSignal()
 
     int i = ui->tableWidget->selectedRanges().first().topRow();
 
-//    double start = (QDoubleSpinBox*)(ui->tableWidget->cellWidget(i, 0))->value();
-//    double end = (QDoubleSpinBox*)(ui->tableWidget->cellWidget(i, 1))->value();
+    QDoubleSpinBox* sb = (QDoubleSpinBox*)(ui->tableWidget->cellWidget(i, 0));
+    double start = sb->value();
 
-//    emit onAddToList(start, end);
+    sb = (QDoubleSpinBox*)(ui->tableWidget->cellWidget(i, 1));
+    double end = sb->value();
+
+    emit onAddToList(start, end);
 }

@@ -21,6 +21,8 @@ class AddStationDataDialog : public QDialog
 
 public:
 	explicit AddStationDataDialog(QWidget *parent = 0);
+    explicit AddStationDataDialog(QString station, double freq, double bandwidth,
+                                  QWidget *parent = 0);
 	~AddStationDataDialog();
 
 	void fillStation(const QStringList& list);
@@ -29,6 +31,8 @@ public:
 
 private:
 	Ui::AddStationDataDialog *ui;
+
+    QString m_inStationName;
 
 private slots:
 	virtual void accept();
