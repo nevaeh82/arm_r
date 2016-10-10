@@ -106,7 +106,12 @@ void AddStationDataDialog::accept()
 	data.port = ui->sbPort->value();
 	data.category = ui->cbCategory->itemData( ui->cbCategory->currentIndex() ).toString();
 	data.signalType = ui->cbSignalType->currentText();
-    data.checked = 0;
+    unsigned short set = 0;
+    if(ui->cbSet->isChecked())
+    {
+        set = 1;
+    }
+    data.checked = set;
 
 	emit accepted( data );
 }
@@ -119,5 +124,6 @@ void AddStationDataDialog::clear()
 	ui->dsbFrequency->setValue(DEFAULT_FREQUENCY);
 	ui->dsbBandwidth->setValue(DEFAULT_BANDWIDTH);
 	ui->cbSignalType->setCurrentIndex(DEFAULT_INDEX);
+    ui->cbSet->setChecked(false);
 
 }

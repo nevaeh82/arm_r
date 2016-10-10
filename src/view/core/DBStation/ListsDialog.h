@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableView>
+#include <Logger/Logger.h>
 
 namespace Ui {
 class ListsDialog;
@@ -32,6 +33,8 @@ public slots:
 	void slotShow();
     void slotReportType();
 //	void slotClose();
+private slots:
+    void on_tvLists_doubleClicked(const QModelIndex &index);
 };
 
 #endif // LISTSDIALOG_H
