@@ -89,6 +89,8 @@ private:
 
     ListsDialog* m_listForm;
 
+    ControlPanelWidget* m_cpView;
+
 private:
 	// IRpcListener interface
 	void readProto(const QByteArray &data);

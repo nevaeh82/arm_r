@@ -74,6 +74,8 @@ private:
 
 	PanoramaFreqControl* m_panoramaFreqControl;
 
+    ControlPanelWidget* m_cpView;
+
 public:
 	explicit TabSpectrumWidgetController(
 			IStation*, ICorrelationControllersContainer*, QMap<int, IAnalysisWidget*> analysisContainer, ITabManager*, TabSpectrumWidget*,
@@ -99,6 +101,8 @@ public:
 	virtual void setDbStationController(DBStationController* controller);
 	virtual void setStationNamesList(const QStringList &stationsList);
 	virtual void setRpcFlakonClient(RpcFlakonClientWrapper *client);
+
+    void setControlPanelWidget(ControlPanelWidget* wgt);
 
 	virtual void setIndicator(int state);
 

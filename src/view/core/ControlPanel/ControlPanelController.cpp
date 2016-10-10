@@ -22,7 +22,6 @@ ControlPanelController::ControlPanelController(QObject *parent)
 	m_rpcFlakonClient = NULL;
 	m_mainStation = NULL;
 	m_mode = 0;
-
 	init();
 }
 

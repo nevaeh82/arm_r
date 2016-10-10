@@ -10,6 +10,7 @@ class ISpectrumWidget;
 class IDbManager;
 
 #include "DBStation/DBStationController.h"
+#include "ControlPanel/ControlPanelWidget.h"
 
 typedef enum TypeTabWidgetEnum
 {
@@ -37,6 +38,8 @@ public:
 
 	virtual void setDbManager(IDbManager*) = 0;
 	virtual void resetDbManager() = 0;
+
+    virtual void setControlPanelWidget(ControlPanelWidget* wgt) = 0;
 
     virtual void setDbStationController(DBStationController* controller) = 0;
 	virtual void setStationNamesList(const QStringList& stationsList) = 0;

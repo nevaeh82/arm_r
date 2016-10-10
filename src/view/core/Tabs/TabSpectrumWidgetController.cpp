@@ -723,5 +723,12 @@ void TabSpectrumWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *cli
 		if( old != NULL ) {
 			old->deregisterReceiver( ds );
 		}
-	}
+    }
+}
+
+void TabSpectrumWidgetController::setControlPanelWidget(ControlPanelWidget *wgt)
+{
+    m_cpView = wgt;
+
+    m_view->setControlPanelWidget( wgt );
 }

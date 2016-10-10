@@ -98,29 +98,6 @@
       <number>2</number>
      </property>
      <item>
-      <widget class="QLabel" name="labelDetect">
-       <property name="text">
-        <string>Detected signals:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="textEdit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

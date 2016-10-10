@@ -47,12 +47,20 @@ TabSpectrumWidget::~TabSpectrumWidget()
 
 SpectrumWidgetController *TabSpectrumWidget::getSpectrumController()
 {
-	return m_spectrumWidgetController;
+    return m_spectrumWidgetController;
+}
+
+void TabSpectrumWidget::setControlPanelWidget(ControlPanelWidget *widget)
+{
+    m_cpView = widget;
 }
 
 void TabSpectrumWidget::activate()
 {
 	log_debug(("Activate tab"));
+
+    ui->cpLayout->addWidget( m_cpView );
+
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
 	}

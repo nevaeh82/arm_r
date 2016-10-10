@@ -1075,6 +1075,7 @@ void SpectrumWidgetController::recognizeSignal()
     //m_view->recognize();
     //enabling analysis
     m_controlPanelController->onEnableMode(2, true);
+    //m_setupController->setAnalysisSetup();
 }
 
 /// signal for flakon to recognize signal

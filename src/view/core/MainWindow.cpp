@@ -26,11 +26,6 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-ControlPanelWidget *MainWindow::getControlPanelWidget() const
-{
-	return ui->controlWidget;
-}
-
 QTabWidget *MainWindow::getWorkTabsWidget() const
 {
 	return ui->worlTabsWidget;

@@ -240,7 +240,6 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	TabManager* tabManager = new TabManager(id, m_view->getWorkTabsWidget(), this);
 	tabManager->setDbStationController(m_dbStationController);
 	tabManager->setDbManager(m_dbManager);
-	tabManager->addControlPanelWidget(m_view->getControlPanelWidget());
 
 	tabManager->initRpcConfig();
 	tabManager->setupController();

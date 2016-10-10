@@ -142,16 +142,16 @@ void TabManager::setRpcConfig(const quint16& port, const QString& host)
 
 void TabManager::setupController()
 {
-	if( !m_panelController ) {
+    m_cpView = new ControlPanelWidget();
+
 		ControlPanelController* controlPanelController = new ControlPanelController(this);
-		controlPanelController->appendView(m_cpWidget);
 		controlPanelController->setDbStationController(m_dbStationController);
 		controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
+        controlPanelController->appendView(m_cpView);
 		controlPanelController->registerReceiver(this);
 		controlPanelController->setDbManager(m_dbManager);
 		this->setControlPanelController((ICorrelationListener* )controlPanelController);
 		setControlPanelController(controlPanelController);
-	}
 
 	connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
 			m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
@@ -323,7 +323,8 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	commonTabSpectrumWidget->setDbManager(m_dbManager);
 	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
-	commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
+    commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
+    commonTabSpectrumWidget->setControlPanelWidget(m_cpView);
 
 	m_tabWidgetList.append(commonTabSpectrumWidget);
 
@@ -345,6 +346,8 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		TabSpectrumWidgetController* tabController = new TabSpectrumWidgetController(
 					station, m_correlationControllers, m_analysisControllertMap, this, tabSpectrumWidget,
 					m_rpcHost, m_rpcPort, this);
+
+        tabController->setControlPanelWidget(m_cpView);
 
 		tabController->setDbManager(m_dbManager);
 		tabController->setDbStationController(m_dbStationController);

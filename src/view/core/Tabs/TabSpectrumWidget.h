@@ -44,11 +44,14 @@ private:
 	RpcPrmClient*	m_rpcPrmClient;
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
+    ControlPanelWidget* m_cpView;
+
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
 	virtual ~TabSpectrumWidget();
 
 	SpectrumWidgetController *getSpectrumController();
+    void setControlPanelWidget(ControlPanelWidget* widget);
 
 public:
 	void activate();

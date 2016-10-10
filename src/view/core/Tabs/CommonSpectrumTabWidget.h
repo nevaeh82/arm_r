@@ -41,6 +41,8 @@ private:
 	QTimer	m_timerStatus;
 
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
+
+    ControlPanelWidget* m_cpView;
 	
 public:
 	explicit CommonSpectrumTabWidget(QWidget *parent = 0);
@@ -66,6 +68,8 @@ public:
 
     virtual void setDbStationController(DBStationController*);
 	virtual void setStationNamesList(const QStringList &stationsList);
+
+    void setControlPanelWidget(ControlPanelWidget* wgt);
 
 	QLabel* getIndicator();
 

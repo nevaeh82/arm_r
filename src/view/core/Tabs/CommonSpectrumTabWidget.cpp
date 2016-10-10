@@ -99,6 +99,9 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersCon
 void CommonSpectrumTabWidget::activate()
 {
 	log_debug("Activate common tab");
+
+    ui->cpLayout->addWidget( m_cpView );
+
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
@@ -194,7 +197,12 @@ TypeTabWidgetEnum CommonSpectrumTabWidget::getWidgetType() const
 
 void CommonSpectrumTabWidget::setStationNamesList(const QStringList &stationsList)
 {
-	m_treeDelegate->setStationNamesList(stationsList);
+    m_treeDelegate->setStationNamesList(stationsList);
+}
+
+void CommonSpectrumTabWidget::setControlPanelWidget(ControlPanelWidget *wgt)
+{
+    m_cpView = wgt;
 }
 
 void CommonSpectrumTabWidget::setIndicatorState(int state)

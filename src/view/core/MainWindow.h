@@ -20,7 +20,6 @@ public:
 	explicit MainWindow(QWidget* parent = 0);
 	virtual ~MainWindow();
 
-	ControlPanelWidget* getControlPanelWidget() const;
 	QTabWidget* getWorkTabsWidget() const;
 	QStackedWidget* getStackedWidget() const;
 

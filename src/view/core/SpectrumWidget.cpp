@@ -86,8 +86,6 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plotPixmap->topLeft->setCoords(0, 10);
 	m_plotPixmap->bottomRight->setCoords(20, 0);
 
-	ui->textEdit->setVisible(false);
-    ui->labelDetect->setVisible(false);
     m_plot->setVisible(false);
 }
 
@@ -167,8 +165,6 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected
 {
     m_analysisResultWidget->setAnalysisData(msg);
 
-	ui->textEdit->clear();
-
 	QString txtDetected;
 	int tst = msg.signal_size();
 	Q_UNUSED(tst);
@@ -188,10 +184,6 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected
 			txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).signal().info()) ) );
 		}
 	}
-    if(!txtDetected.isEmpty()) {
-        ui->textEdit->clear();
-        ui->textEdit->append(txtDetected);
-    }
 }
 
 AnalysisResultWidget *SpectrumWidget::getAnalysisResultWidget()
@@ -220,13 +212,9 @@ void SpectrumWidget::recognize()
 void SpectrumWidget::slotSetWorkMode(int mode, bool isOn)
 {
 	if(mode == 2) {
-		ui->textEdit->setVisible(true);
-		m_plot->setVisible(true);
-		ui->labelDetect->setVisible(true);
+        m_plot->setVisible(true);
 	} else {
-		ui->textEdit->setVisible(false);
 		m_plot->setVisible(false);
-		ui->labelDetect->setVisible(false);
 	}
 }
 

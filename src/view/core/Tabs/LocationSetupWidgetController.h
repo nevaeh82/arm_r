@@ -26,6 +26,7 @@ public:
 	void setDetectorSetup(const RdsProtobuf::Detector& data);
 	void setCorrectionSetup(const RdsProtobuf::Correction &data);
 	void setAnalysisSetup(const RdsProtobuf::Analysis &data);
+    void setAnalysisBandwidth(double center, double width);
 
 	int getAnalysisWorkChannel() const;
 	void setAnalysisChannelCount(int count);
