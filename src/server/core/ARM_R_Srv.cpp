@@ -19,7 +19,7 @@ ARM_R_Srv::ARM_R_Srv(int serverId, QObject* parent) :
 
 	QString host = rpcSettingsManager->getRpcHost();
     quint16 port = rpcSettingsManager->getRpcPort().toUShort() + m_serverId-1;
-	m_rpcServer->start(port, QHostAddress(host));
+    m_rpcServer->start(port, /*QHostAddress(host)*/QHostAddress::Any);
 
 	m_tcpServer = new TcpServerController(this);
 	m_tcpServer->createTcpServer();

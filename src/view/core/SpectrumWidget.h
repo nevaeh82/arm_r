@@ -12,6 +12,8 @@
 #include "Prm300ControlWidget.h"
 #include "Common/Charts/QColorCustomPlot.h"
 
+#include "Analysis/AnalysisResultWidget.h"
+
 #include <qwt_plot.h>
 #include <qwt_plot_glcanvas.h>
 
@@ -34,6 +36,8 @@ private:
 	QCustomPlot* m_plot;
 	QCPItemPixmap* m_plotPixmap;
 
+    AnalysisResultWidget* m_analysisResultWidget;
+
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~SpectrumWidget();
@@ -54,9 +58,12 @@ public:
 	void sonogramUpdate(const QPixmap& px);
 	void setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected &msg);
 
+    AnalysisResultWidget* getAnalysisResultWidget();
+
 public slots:
 	void slotSetEnableSpactrum(bool state);
 	void slotEnableKM(bool state);
+    void recognize();
 
 private slots:
 	void slotSetWorkMode(int mode, bool isOn);

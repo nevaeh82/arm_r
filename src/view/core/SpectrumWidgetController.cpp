@@ -89,6 +89,8 @@ void SpectrumWidgetController::appendView(SpectrumWidget* view)
 	m_view = view;
 	m_sigDialog = new SignalDetectedDialog(m_view);
 
+    m_analysisResult = m_view->getAnalysisResultWidget();
+
 	//m_sigDialog->hide();
 
 
@@ -219,6 +221,8 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
         if( isAnalysisDetected(pkt) ) {
 			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
 			m_view->setAnalysisDetectedData(msg);
+
+            m_controlPanelController->onEnableCurMode(false);
 		}
 
 		if( isAnalysisSpectrogram(pkt) && m_sonogramReady && m_sonogramTime.msecsTo(QTime::currentTime()) > 1000 && m_id == m_analysisChannel ) {
@@ -390,7 +394,7 @@ void SpectrumWidgetController::setSonogramSetup(QList<QList<float> > data)
 	}
 
 	QGLPixelBuffer px(width, data.size()/10);
-	QImage img(width, data.size()/10, QImage::Format_ARGB32);
+    QImage img(width, data.size(), QImage::Format_ARGB32);
 	QPainter* painter;
 	img.fill(Qt::transparent);
 
@@ -440,7 +444,7 @@ void SpectrumWidgetController::setSonogramSetup(QList<QList<float> > data)
 	m_sonogramMutex.lock();
 	//m_sonogramWidget->render(painter);
 	m_sonogramPixmap = QPixmap::fromImage(/*px.toImage()*/img);
-	//m_sonogramPixmap.save("C:\\a\\aimg.png");
+    m_sonogramPixmap.save("C:\\a\\aimg.png");
 	m_sonogramMutex.unlock();
 
 	log_debug(QString("Appending time %1").arg(timeO.msecsTo(QTime::currentTime())));
@@ -782,6 +786,9 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 	connect(m_controlPanelController, SIGNAL(onSignalWorkMode(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
 
     connect(m_controlPanelController, SIGNAL(onSignalWorkModeToGui(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
+
+    connect(m_analysisResult, SIGNAL(signalContinue(bool)),
+            m_controlPanelController, SLOT(onEnableCurMode(bool)));
 }
 
 void SpectrumWidgetController::init()
@@ -948,6 +955,7 @@ void SpectrumWidgetController::addToBlackList()
 void SpectrumWidgetController::recognizeSignal()
 {
 	m_tab->recognize();
+    m_view->recognize();
 }
 
 /// signal for flakon to recognize signal

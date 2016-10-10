@@ -87,8 +87,6 @@ public:
 	void onSetSystem(int modeId);
 	void onSetSystemStatus(bool isOn);
 
-	void changeFrequency(int value);
-
 	int getCurrentWorkMode() const;
 
 signals:
@@ -102,6 +100,9 @@ signals:
 
 
 public slots:
+
+    void changeFrequency(int value);
+    void onEnableCurMode(bool enable);
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled);
@@ -131,9 +132,6 @@ private slots:
 	void slotSetMode(int mode);
 
 	void onSlotWorkMode(int mode, bool isOn);
-
-
-
 };
 
 #endif // CONTROLPANELCONTROLLER_H

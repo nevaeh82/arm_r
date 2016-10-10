@@ -308,6 +308,8 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 		return;
 	}
 
+   // sender = NULL;
+
 	switch(deviceType) {
 		case RDS_TCP_DEVICE:
 			if (messageType == TCP_FLAKON_ANSWER_FFT) {

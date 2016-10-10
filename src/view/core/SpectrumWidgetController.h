@@ -40,6 +40,7 @@
 #include "DBStation/DBStationController.h"
 
 #include "SignalDetectedDialog.h"
+#include "Analysis/AnalysisResultWidget.h"
 
 #include "ControlPanel/ControlPanelController.h"
 
@@ -60,6 +61,7 @@ class SpectrumWidgetController : public QObject, public ISpectrumWidget, public 
 	Q_OBJECT
 private:
 	SpectrumWidget* m_view;
+    AnalysisResultWidget* m_analysisResult;
 
 	bool	m_autoSearch;
 	double	m_current_frequency;

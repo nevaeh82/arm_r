@@ -21,6 +21,9 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect( ui->graphicsWidget, SIGNAL(viewPortChanged(double, double, double, double)),
 			 this, SLOT(onSlotChangedViewPort(double, double, double, double)) );
 
+    m_analysisResultWidget = new AnalysisResultWidget();
+    m_analysisResultWidget->close();
+
 //	m_qwtSonogram = new QwtPlot(0);
 //	m_qwtSonogramGL = new QwtPlotGLCanvas(m_qwtSonogram);
 //	m_qwtSonogram->setCanvas(m_qwtSonogramGL);
@@ -43,7 +46,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plot->axisRect()->setMargins( QMargins(49, 0, 0, 0) );
 
 	m_plot->setMinimumHeight(50);
-	m_plot->setMaximumHeight(200);
+    m_plot->setMaximumHeight(500);
 	m_plot->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 	m_plot->xAxis->setRange(0, 20);
 	m_plot->yAxis->setRange(0, 10);
@@ -57,7 +60,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plot->yAxis->setBasePen(QPen(Qt::white));
 	m_plot->yAxis->setTickLabelColor(Qt::white);
 
-    m_plot->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
+   // m_plot->setInteractions(QCP::iRangeZoom | QCP::iRangeDrag);
 
 
 	QVector<double> tick;
@@ -162,6 +165,8 @@ void SpectrumWidget::sonogramUpdate(const QPixmap &px)
 
 void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected &msg)
 {
+    m_analysisResultWidget->setAnalysisData(msg);
+
 	ui->textEdit->clear();
 
 	QString txtDetected;
@@ -189,6 +194,11 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected
     }
 }
 
+AnalysisResultWidget *SpectrumWidget::getAnalysisResultWidget()
+{
+    return m_analysisResultWidget;
+}
+
 void SpectrumWidget::slotSetEnableSpactrum(bool state)
 {
 	ui->getSpectrumCB->setChecked(state);
@@ -199,7 +209,12 @@ void SpectrumWidget::slotEnableKM(bool state)
 	/// not yet realazed signal
 	emit signalEnableKM(state);
 
-	ui->thresholdCB->setChecked(state);
+    ui->thresholdCB->setChecked(state);
+}
+
+void SpectrumWidget::recognize()
+{
+    m_analysisResultWidget->show();
 }
 
 void SpectrumWidget::slotSetWorkMode(int mode, bool isOn)

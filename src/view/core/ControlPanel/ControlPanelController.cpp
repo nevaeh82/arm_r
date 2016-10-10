@@ -144,6 +144,11 @@ void ControlPanelController::changeFrequency(int value)
     emit signalSetComonFreq(m_currentFreq);
 }
 
+void ControlPanelController::onEnableCurMode(bool enable)
+{
+    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
+}
+
 void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 {
 	if (NULL == m_dbManager) {
