@@ -173,7 +173,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.bindValue( ":bandwidth", data.bandwidth );
 	query.bindValue( ":signalType", data.signalType );
 	query.bindValue( ":dateTime", QDateTime::currentDateTime() );
-    query.bindValue( ":checked", 0);
+    query.bindValue( ":checked", data.checked);
 	query.exec();
 
 	VALIDATE_QUERY( query );
@@ -473,6 +473,7 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 		data.stationShortInfo.bandwidth = query.value(6).toDouble();
 		data.stationShortInfo.signalType = query.value(7).toString();
 		data.date = query.value(8).toDateTime();
+        data.stationShortInfo.checked = query.value(9).toBool();
 		stationRecords.append(data);
 	}
 

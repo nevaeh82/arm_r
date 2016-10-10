@@ -45,6 +45,7 @@ private:
 
 private slots:
 	void update();
+    void refreshTable();
 	void filter(int type);
 
 	void showAddDialog();

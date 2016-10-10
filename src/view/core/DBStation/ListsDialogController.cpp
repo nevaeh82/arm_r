@@ -18,8 +18,9 @@ ListsDialogController::ListsDialogController(IDBStation* stationDb, QObject* par
 	m_model->setHeaderData(5,Qt::Horizontal, tr("Frequency"));
 	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
 	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
-	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
+    m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
     m_model->setHeaderData(9,Qt::Horizontal, tr("Checked"));
+
 
 	m_proxyModel = new ListsProxyModel( this );
 	m_proxyModel->setSourceModel( m_model );
@@ -31,12 +32,16 @@ ListsDialogController::~ListsDialogController()
 }
 
 void ListsDialogController::appendView(ListsDialog *widget)
-{
+{    
 	m_view = widget->getTableView();
 	m_view->setModel(m_proxyModel);
 	m_view->setSortingEnabled(true);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	m_view->hideColumn( 0 );
+    m_view->hideColumn( 0 );
+    m_view->setSelectionMode(QAbstractItemView::NoSelection);
+
+
+//    m_view->setEditTriggers(QAbstractItemView::DoubleClicked);
 
 	adjustTableSize();
 
@@ -45,6 +50,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	connect(widget, SIGNAL(signalDelete()), this, SLOT(deleteSelectedRecords()));
 	connect(widget, SIGNAL(finished(int)), this, SLOT(deleteLater()));
 	connect(widget, SIGNAL(signalReport(int)), this, SLOT(slotReport(int)));
+    connect(m_model, SIGNAL(updateSignal()), this, SLOT(update()));
 }
 
 void ListsDialogController::adjustTableSize()
@@ -60,8 +66,6 @@ void ListsDialogController::adjustTableSize()
 	for( int row = 0; row < m_view->model()->rowCount(); row++ ) {
 		if( m_view->model()->itemData( m_view->model()->index(row, 4) ).value(0) ==
 				StationHelper::translateCategory( "Black" ) ) {
-
-//			m_view->setItemDelegateForRow(row, );
 			for( int column = 0; column < m_view->model()->columnCount(); column++ ) {
 				m_view->model()->setData( m_view->model()->index(row, column), QColor(0, 0, 255), Qt::BackgroundColorRole);
 			}
@@ -79,8 +83,17 @@ void ListsDialogController::throwWordNfError()
 }
 
 void ListsDialogController::update()
+{    
+    m_model->update();
+    m_proxyModel->clear();
+    m_proxyModel->setSourceModel(m_model);
+    refreshTable();
+}
+
+void ListsDialogController::refreshTable()
 {
-	m_model->update();
+    m_view->hideColumn( 0 );
+    adjustTableSize();
 }
 
 void ListsDialogController::filter(int type)

@@ -42,3 +42,17 @@ void ListsDialog::slotReportType()
 {
     emit signalReport(ui->cbLists->currentIndex());
 }
+
+void ListsDialog::on_tvLists_doubleClicked(const QModelIndex &index)
+{
+//    if(index.column() == 9)
+//    {
+//        bool state = index.model()->data(index, Qt::DisplayRole).toBool();
+//        log_debug(QString::number(index.column()));
+//    }
+//    int row = index.row();
+//    QString name = index.sibling(row, 0).data().toString();
+//    QString surname = index.sibling(row, 1).data().toString();
+//    int age = index.sibling(row, 2).data().toInt();
+//    QString username = index.sibling(row, 3).data().toString();
+}
