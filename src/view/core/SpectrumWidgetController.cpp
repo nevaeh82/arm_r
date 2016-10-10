@@ -223,9 +223,12 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
         if( isAnalysisDetected(pkt) ) {
 			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
-			m_view->setAnalysisDetectedData(msg);
-            m_view->recognize();
-            m_controlPanelController->onEnableCurMode(false);
+            if(msg.signal_size() > 0) {
+                if( m_channelId == msg.signal(0).detector_index() ) {
+                    m_view->setAnalysisDetectedData(msg);
+                    m_controlPanelController->onEnableCurMode(false);
+                }
+            }
 		}
 
 		if( isAnalysisSpectrogram(pkt) && m_sonogramReady && m_sonogramTime.msecsTo(QTime::currentTime()) > 1000 && m_id == m_analysisChannel ) {
@@ -901,8 +904,8 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 
     connect(m_controlPanelController, SIGNAL(onSignalWorkModeToGui(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
 
-    connect(m_analysisResult, SIGNAL(signalContinue(bool)),
-            m_controlPanelController, SLOT(onEnableCurMode(bool)));
+//    connect(m_analysisResult, SIGNAL(signalContinue(bool)),
+//            m_controlPanelController, SLOT(onEnableCurMode(bool)));
 }
 
 void SpectrumWidgetController::init()

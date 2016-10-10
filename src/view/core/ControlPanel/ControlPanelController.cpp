@@ -152,8 +152,9 @@ void ControlPanelController::onEnableCurMode(bool enable)
 
 void ControlPanelController::onEnableMode(int mode, bool enable)
 {
-    m_mode = mode;
-    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
+//    m_mode = mode;
+//    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
+      onSlotWorkMode(mode, enable);
 }
 
 void ControlPanelController::onCommonFrequencyChangedSlot(int value)

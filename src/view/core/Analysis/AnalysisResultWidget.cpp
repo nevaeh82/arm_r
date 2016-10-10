@@ -13,6 +13,7 @@ AnalysisResultWidget::AnalysisResultWidget(QWidget *parent):
 	ui->setupUi(this);
 
     connect(ui->pbContinue, SIGNAL(clicked(bool)), this, SIGNAL(signalContinue(bool)));
+    connect(ui->pbContinue, SIGNAL(clicked(bool)), this, SLOT(slotContinue(bool)));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(addSignal()));
 }
 
@@ -67,6 +68,8 @@ void AnalysisResultWidget::setAnalysisData(RdsProtobuf::AnalysisDetected msg)
                       typeStr,
                       infoStr);
     }
+
+    this->show();
 }
 
 
@@ -144,4 +147,9 @@ void AnalysisResultWidget::addSignal()
     double end = sb->value();
 
     emit onAddToList(start, end);
+}
+
+void AnalysisResultWidget::slotContinue(bool)
+{
+    ui->tableWidget->clear();
 }

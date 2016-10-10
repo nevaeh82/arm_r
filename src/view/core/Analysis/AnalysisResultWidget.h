@@ -29,6 +29,7 @@ private:
 private slots:
     void addSignal();
 
+    void slotContinue(bool);
 public:
     AnalysisResultWidget(QWidget *parent = 0);
     virtual ~AnalysisResultWidget();
