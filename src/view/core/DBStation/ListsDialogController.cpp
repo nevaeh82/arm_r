@@ -19,6 +19,7 @@ ListsDialogController::ListsDialogController(IDBStation* stationDb, QObject* par
 	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
 	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
 	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
+    m_model->setHeaderData(9,Qt::Horizontal, tr("Checked"));
 
 	m_proxyModel = new ListsProxyModel( this );
 	m_proxyModel->setSourceModel( m_model );

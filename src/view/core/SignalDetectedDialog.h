@@ -9,6 +9,7 @@
 #include <phonon/mediaobject.h>
 #include <phonon/volumeslider.h>
 #include <phonon/backendcapabilities.h>
+#include "DBStation/DBFillTables.h"
 
 namespace Ui {
 class SignalDetectedDialog;
@@ -23,6 +24,7 @@ public:
 	~SignalDetectedDialog();
 
 	void setFrequency(QString name, QList<double> freqs);
+    void setNewFreq(QString name, QList<OverthresholdBand> list);
 private:
 	Ui::SignalDetectedDialog *ui;
 

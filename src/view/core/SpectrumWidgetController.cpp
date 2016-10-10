@@ -512,6 +512,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		return;
 	}
 
+    QList<OverthresholdBand> listOverthreshold;
 
 	if((m_threshold != -1000) && (m_rett == -100))
 	{
@@ -522,26 +523,124 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 			bool ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
 		}
 
+
+        double start = 0;
+        double finish = 0;
+        bool state = true;
+        int count = 0;
 		for(int i = 0; i < m_pointCount; i++)
 		{
 			double overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
 
+
+            //listOverthreshold.append(overthreshold);
+
 			if((spectrum[i] > m_threshold) && (m_rett != -99))
-			{
-				if(m_controlPanelMode == 2)
-				{
-					foreach (StationsFrequencyAndBandwith st, list) {
-						if((overthreshold > (st.frequency - st.bandwidth/2)) && (overthreshold < (st.frequency + st.bandwidth/2))){
-							m_overthreshold.append(overthreshold);
-						}
-					}
-				}else {
-					m_overthreshold.append(overthreshold);
-				}
-				m_rett = 0;
+            {
+                if(state == true)
+                {
+                    start = overthreshold;
+                    state = false;
+                }
+
+//				if(m_controlPanelMode == 2)
+//				{
+//					foreach (StationsFrequencyAndBandwith st, list) {
+//						if((overthreshold > (st.frequency - st.bandwidth/2)) && (overthreshold < (st.frequency + st.bandwidth/2))){
+//							m_overthreshold.append(overthreshold);
+//						}
+//					}
+//				}else {
+//                    foreach (StationsFrequencyAndBandwith st, listBlack) {
+//                        double lower = st.frequency - st.bandwidth/2;
+//                        double upper = st.frequency + st.bandwidth/2;
+//                        if(lower < ((m_current_frequency / TO_MHZ) -10) || upper > ((m_current_frequency / TO_MHZ) +10))
+//                        {
+//                            continue;
+//                        }
+//                        if((overthreshold > lower) && (overthreshold < upper)){
+//                            //m_overthreshold.append(overthreshold);
+//                            log_debug("hhh");
+//                        }
+//                        else
+//                        {
+//                            m_overthreshold.append(overthreshold);
+//                        }
+//                    }
+//                    if(listBlack.isEmpty())
+//                    {
+//                        m_overthreshold.append(overthreshold);
+//                    }
+//				}
+                m_rett = 0;
+                finish = overthreshold;
 			}
+            else {
+                if(state == false)
+                {
+                    OverthresholdBand over;
+                    over.startFreq = start;
+                    over.finishFreq = overthreshold;
+                    listOverthreshold.append(over);
+                    state = true;
+                }
+            }
 		}
 	}
+
+
+    QList<StationsFrequencyAndBandwith> listBlack;
+    bool retBlack = m_dbStationController->getFrequencyAndBandwidthByCategory("Black", listBlack);
+
+    QList<OverthresholdBand> newList;
+    QList<OverthresholdBand>::iterator i = listOverthreshold.begin();
+    while (i != listOverthreshold.end())
+    {
+        OverthresholdBand cur = *i;
+        bool j = false;
+        foreach (StationsFrequencyAndBandwith st, listBlack)
+        {
+            double lower = st.frequency - st.bandwidth/2;
+            double upper = st.frequency + st.bandwidth/2;
+            if( cur.startFreq > lower && cur.finishFreq < upper)
+            {
+                j = true;
+                i = listOverthreshold.erase(i);
+                if(i == listOverthreshold.end())
+                {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+        }
+        if(j != true)
+            ++i;
+    }
+
+    if(!listOverthreshold.isEmpty())
+    {
+        setSpectrumShow(false);
+        m_stopFlag = false;
+
+        m_sigDialog->setNewFreq(m_name, listOverthreshold);
+
+        int result = m_sigDialog->exec();
+
+        listOverthreshold.clear();
+        m_rett = -100;
+
+        if(result == QDialog::Accepted){
+            setSpectrumShow(true);
+            m_stopFlag = true;
+
+        }
+        else {
+            setSpectrumShow(false);
+            m_stopFlag = false;
+            return;
+        }
+    }
 
 	//TODO: Write signals values over m_threshold. Task 6186
 	if(!m_overthreshold.isEmpty()) {
@@ -899,6 +998,8 @@ void SpectrumWidgetController::addToWhiteList()
 	data.signalType = "Unknown";
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
+    data.checked = 0;
+
 
 	StationData dataExist = m_dbStationController->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );
@@ -930,6 +1031,7 @@ void SpectrumWidgetController::addToBlackList()
 	data.signalType = "Unknown";
 	data.frequency = m_centerFreqSelTemp;
 	data.bandwidth= m_bandwidhtTemp;
+    data.checked = 0;
 
 	StationData dataExist = m_dbStationController->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );

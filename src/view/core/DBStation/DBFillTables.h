@@ -13,6 +13,7 @@ typedef struct StationData
 	double frequency;
 	double bandwidth;
 	QString signalType;
+    unsigned short checked;
 } StationData;
 
 /// full log_info
@@ -31,6 +32,21 @@ typedef struct StationsFrequencyAndBandwith
 	double frequency;
 	double bandwidth;
 }StationsFrequencyAndBandwith;
+
+/// bandwidth of overthreshold in station
+typedef struct OverthresholdBand
+{
+    double startFreq;
+    double finishFreq;
+    bool operator==(OverthresholdBand &val)
+    {
+        if(finishFreq == val.finishFreq && startFreq == val.finishFreq)
+            return true;
+        return false;
+    }
+}OverthresholdBand;
+
+
 
 ///info for report
 typedef struct AllStationsReport
