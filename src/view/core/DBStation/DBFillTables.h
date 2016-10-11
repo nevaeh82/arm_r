@@ -31,6 +31,7 @@ typedef struct StationsFrequencyAndBandwith
 	QString stationName;
 	double frequency;
 	double bandwidth;
+    bool isChecked;
 }StationsFrequencyAndBandwith;
 
 /// bandwidth of overthreshold in station

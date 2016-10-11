@@ -199,8 +199,11 @@ void ControlPanelController::slotScanMode(int start, int finish)
 
 void ControlPanelController::slotCheckMode()
 {	
-	if(m_timer.isActive())
+    if(m_timer.isActive()) {
 		m_timer.stop();
+    }
+
+    m_listOfFreqs.clear();
 
 	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
 	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
@@ -257,6 +260,29 @@ void ControlPanelController::slotChangeFreq()
     changeFrequency(m_currentFreq);
 }
 
+bool ControlPanelController::slotIncCheckMode()
+{
+    for(int i = 0; i<m_listOfFreqs.size() + 1; i++) {
+        m_itCheckMode++;
+
+        if(m_itCheckMode == m_listOfFreqs.end())
+        {
+            m_itCheckMode = m_listOfFreqs.begin();
+        }
+
+        bool state = (*m_itCheckMode).isChecked;
+
+        if(!state)
+        {
+            continue;
+        } else {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void ControlPanelController::slotCheckModeSetFreq()
 {
 	m_mainStation = NULL;
@@ -265,10 +291,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 		return;
 	}
 
-	if(m_itCheckMode == m_listOfFreqs.end())
-	{
-		m_itCheckMode = m_listOfFreqs.begin();
-	}
+    if( !slotIncCheckMode() ) {
+        //No checked signals
+        return;
+    }
 
 	double freq = (*m_itCheckMode).frequency;
 	double band = (*m_itCheckMode).bandwidth;
@@ -304,7 +330,7 @@ void ControlPanelController::slotCheckModeSetFreq()
         //m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
 //	}
 
-	m_itCheckMode++;
+    //m_itCheckMode++;
 }
 
 void ControlPanelController::slotDown1MHz()

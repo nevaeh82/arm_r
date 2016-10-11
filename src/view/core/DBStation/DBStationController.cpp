@@ -173,7 +173,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.bindValue( ":bandwidth", data.bandwidth );
 	query.bindValue( ":signalType", data.signalType );
 	query.bindValue( ":dateTime", QDateTime::currentDateTime() );
-    query.bindValue( ":checked", data.checked);
+    query.bindValue( ":checked", 1);
 	query.exec();
 
 	VALIDATE_QUERY( query );
@@ -204,7 +204,7 @@ int DBStationController::updateStationData(const StationData& data)
 
 	QSqlQuery query( m_db );
 	query.prepare( "UPDATE stationData " \
-				   "SET bandwidth = :bandwidth, signalTypeID = :signalType, datetime = :datetime " \
+                   "SET bandwidth = :bandwidth, signalTypeID = :signalType, datetime = :datetime, checked = :checked " \
 				   "WHERE deviceID = :device AND categoryID = :category AND frequency = :frequency" );
 
 	VALIDATE_QUERY( query );
@@ -215,6 +215,7 @@ int DBStationController::updateStationData(const StationData& data)
 	query.bindValue( ":device", deviceID );
 	query.bindValue( ":category", categoryID );
 	query.bindValue( ":frequency", data.frequency );
+    query.bindValue( ":checked", data.checked);
 	query.exec();
 
 	VALIDATE_QUERY( query );
@@ -487,7 +488,7 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 	}
 
 	QSqlQuery query( m_db );
-	query.prepare( "SELECT s.name, st.frequency, st.bandwidth " \
+    query.prepare( "SELECT s.name, st.frequency, st.bandwidth, st.checked " \
 					"FROM stationData AS st " \
 					"INNER JOIN stationDevices as sdi on st.deviceID=sdi.id " \
 					"INNER JOIN station as s on s.id=sdi.stationID " \
@@ -506,6 +507,7 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 		data.stationName = query.value(0).toString();
 		data.frequency = query.value(1).toDouble();
 		data.bandwidth = query.value(2).toDouble();
+        data.isChecked = query.value(3).toBool();
 		list.append(data);
 	}
 

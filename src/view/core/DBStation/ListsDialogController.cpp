@@ -38,7 +38,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	m_view->setSortingEnabled(true);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_view->hideColumn( 0 );
-    m_view->setSelectionMode(QAbstractItemView::NoSelection);
+//    m_view->setSelectionMode(QAbstractItemView::NoSelection);
 
 
 //    m_view->setEditTriggers(QAbstractItemView::DoubleClicked);

@@ -65,6 +65,7 @@ private:
 
 	void init();
 
+    bool slotIncCheckMode();
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
