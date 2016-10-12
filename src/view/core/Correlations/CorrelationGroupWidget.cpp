@@ -39,5 +39,10 @@ void CorrelationGroupWidget::clearWidgetContainer()
 	}
 
 	m_widgetList.clear();
-	//log_debug(QString::number(ui->correlationWidgetsContainer->count()));
+    //log_debug(QString::number(ui->correlationWidgetsContainer->count()));
+}
+
+QGridLayout *CorrelationGroupWidget::getContainer()
+{
+    return ui->correlationWidgetsContainer;
 }

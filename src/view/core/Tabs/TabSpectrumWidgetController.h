@@ -43,6 +43,7 @@ private:
 	IStation*		    m_station;
 
 	ICorrelationControllersContainer*  m_correlationControllers;
+    ICorrelationControllersContainer*  m_extCorrelationControllers;
 	QMap<int, IAnalysisWidget*> m_analysisControllers;
 
 	IDbManager*         m_dbManager;
@@ -140,6 +141,8 @@ public:
 	void setControlPanelControllerTrue(ControlPanelController* controller);
 
 	void setPanoramaFreqControl(PanoramaFreqControl *control);
+
+    void setExtCorrelController(ICorrelationControllersContainer* container);
 private:
 	void init();
 

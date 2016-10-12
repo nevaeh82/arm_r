@@ -11,6 +11,9 @@
 #include <QMutex>
 #include <QList>
 
+#include "Correlations/CorrelationGroupWidget.h"
+#include "Correlations/CorrelationGroupColumnWidget.h"
+
 #include "Correlations/CorrelationControllersContainer.h"
 
 #include "../ControlPanel/ControlPanelController.h"
@@ -54,7 +57,6 @@ private:
 
 	QMap<int, Station *>   m_stationsMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	ICorrelationControllersContainer* m_correlationControllers;
 	QMap<int, IAnalysisWidget*> m_analysisControllertMap;
 
 	IDbManager* m_dbManager;
@@ -64,6 +66,9 @@ private:
 	uint m_rpcPort;
 
 	RpcFlakonClientWrapper *m_rpcFlakonClient;
+
+    ICorrelationControllersContainer* m_correlationControllers;
+    ICorrelationControllersContainer* m_externalCorrelationControllers;
 
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
 
@@ -77,6 +82,7 @@ private:
 
 	LocationSetupWidgetController* m_locationSetupController;
 	PanoramaFreqControl* m_panoramaFreqControl;
+    SolverSetupWidgetController* m_solverSetup;
 
 	RpcConfigClient* m_rpcConfigClient;
 
@@ -90,6 +96,8 @@ private:
     ListsDialog* m_listForm;
 
     ControlPanelWidget* m_cpView;
+
+    CorrelationGroupWidget* m_externalCorrelationWidget;
 
 private:
 	// IRpcListener interface

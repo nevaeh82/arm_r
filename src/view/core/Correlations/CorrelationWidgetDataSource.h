@@ -17,7 +17,6 @@ class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 	Q_OBJECT
 
 private:
-	IGraphicWidget* m_correlationWidget;
 
 	//ICorrelationControllersContainer*	m_commonCorrelations;
 	ITabManager*	m_tabManager;
@@ -35,7 +34,7 @@ private:
 	QList<ICorrelationListener*> m_correlationListeners;
 
 public:
-	explicit CorrelationWidgetDataSource(IGraphicWidget*, ITabManager *tabManager, int id1, int id2, QObject *parent);
+    explicit CorrelationWidgetDataSource(ITabManager *tabManager, int id1, int id2, QObject *parent);
 
 	void onMethodCalled(const QString&, const QVariant&);
 	void sendCommand(int);
@@ -45,7 +44,7 @@ public:
 	void deregisterCorrelationReceiver(ICorrelationListener* obj);
 
 private:
-	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool);
+    void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity);
 
 signals:
 	void onMethodCalledSignal(QString, QVariant);

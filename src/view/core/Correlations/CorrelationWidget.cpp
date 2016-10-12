@@ -3,7 +3,7 @@
 #include "ui_CorrelationWidget.h"
 
 CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
-	QWidget(parent, flags), ui(new Ui::CorrelationWidget)
+    BaseCorrelationWidget(parent, flags), ui(new Ui::CorrelationWidget)
 {
 	ui->setupUi(this);
 
@@ -11,13 +11,49 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
 	ui->spectrumWidget->SetAlign(2);
 
 	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
+
+       ui->spectrumWidget->SetLabel(0, "sddsfew");
+
+       ui->spectrumWidget->SetShowOptionsForStarndartLabels("", true);
 }
 
 CorrelationWidget::~CorrelationWidget()
 {
 }
 
-Q_MG_SpectrumInterface *CorrelationWidget::getGraphicsWidget()
+void CorrelationWidget::reset()
 {
-	return ui->spectrumWidget;
+
+}
+
+void CorrelationWidget::setDataSetup(double bandwidth, int m_pointCount, float *spectrum, float *spectrum_peak_hold, float sko)
+{
+    Q_UNUSED(sko);
+
+    float maxv = 2.0;
+    float minv = 0.0;
+
+    ui->spectrumWidget->SetAutoscaleY(false);
+    ui->spectrumWidget->SetAlign(3);
+    ui->spectrumWidget->SetHorizontalLabel(tr("m"));
+    ui->spectrumWidget->Setup(true,bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
+    ui->spectrumWidget->SetSpectrumVisible(1, true);
+
+     ui->spectrumWidget->ZoomOutFull();
+}
+
+void CorrelationWidget::permanentSetup(float *spectrum, float *spectrum_peak_hold, float sko)
+{
+    Q_UNUSED(sko);
+    ui->spectrumWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, 0.0, 2.0);
+    //ui->spectrumWidget->SetLabel(30, "sddsfew", "iii");
+
+    ui->spectrumWidget->ZoomOutFull();
+}
+
+void CorrelationWidget::setLabel(const QString &label)
+{
+    ui->spectrumWidget->ClearAllLabels();
+    //ui->spectrumWidget->SetLabel(30, "sddsfew", "iii");
+    ui->spectrumWidget->SetUserTextToInfo("OLOLOLOLLOOLLOLOOLL", false);
 }

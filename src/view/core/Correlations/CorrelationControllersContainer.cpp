@@ -10,11 +10,16 @@ CorrelationControllersContainer::~CorrelationControllersContainer()
 {
 }
 
-int CorrelationControllersContainer::init(int count)
+int CorrelationControllersContainer::init(int count, int type)
 {
-	for(int i = 0; i < count; i++)
+    for(int i = 0; i < count; i++)
 	{
-		CorrelationWidget* cor = new CorrelationWidget();
+        BaseCorrelationWidget* cor;
+        if(type == 0) {
+            cor = new CorrelationWidget();
+        } else {
+            cor = new CorrelationIndicatorWidget();
+        }
 		CorrelationWidgetController* controller = new CorrelationWidgetController(this);
 		controller->appendView(cor);
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>668</height>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item row="1" column="1">
-    <widget class="CorrelationGroupWidget" name="correlationsGroupWidget" native="true">
+    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
      <property name="minimumSize">
       <size>
        <width>200</width>
@@ -84,15 +84,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CorrelationGroupWidget</class>
-   <extends>QWidget</extends>
-   <header>Correlations/CorrelationGroupWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>AnalysisGroupWidget</class>
    <extends>QWidget</extends>
    <header>Analysis/AnalysisGroupWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CorrelationGroupColumnWidget</class>
+   <extends>QWidget</extends>
+   <header>Correlations/CorrelationGroupColumnWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

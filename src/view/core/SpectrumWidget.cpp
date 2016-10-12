@@ -87,6 +87,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	m_plotPixmap->bottomRight->setCoords(20, 0);
 
     m_plot->setVisible(false);
+
+    ui->graphicsWidget->SetLabel(0, "weewfewg");
 }
 
 SpectrumWidget::~SpectrumWidget()

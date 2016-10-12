@@ -6,12 +6,10 @@
 
 #define TIME_WAIT_CORRELATION 5000
 
-CorrelationWidgetDataSource::CorrelationWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id1, int id2, QObject *parent)
+CorrelationWidgetDataSource::CorrelationWidgetDataSource(ITabManager* tabManager, int id1, int id2, QObject *parent)
 	: BaseDataSource(parent)
 	, m_needSetup(false)
 {
-	m_correlationWidget = correlationWidget;
-
 	m_id1 = id1;
 	m_id2 = id2;
 
@@ -35,7 +33,7 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 }
 
 Q_DECLARE_METATYPE(float*)
-void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, bool /*isComplex*/)
+void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity)
 {
 	//log_debug( QString("Points size: %1").arg(points.size() ) );
 
@@ -106,6 +104,8 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	list.append(labelBase);
 	list.append(labelSecond);
 
+    list.append(QVariant(veracity));
+
 	QVariant data(list);
 	onDataReceived(RPC_SLOT_SERVER_SEND_CORRELATION, data);
 }
@@ -144,9 +144,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 		stream >> points;
 
-		m_correlationWidget->setVisible(true);
-
-		setCorData( point1, point2, points, true );
+        setCorData( point1, point2, points, veracity );
 
 		onCorrelationStateChanged(true);
 	}

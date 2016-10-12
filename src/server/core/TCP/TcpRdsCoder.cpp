@@ -408,6 +408,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 
 			float timediff = sMsg.data().location_convolution().convolution().delay();
+            veracity = sMsg.data().location_convolution().convolution().delay_accuracy();
 
 			QVector<QPointF> vp;
 			for(int i = 0; i < sMsg.data().location_convolution().plot().data_size(); i++) {

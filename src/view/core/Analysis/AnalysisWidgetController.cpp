@@ -125,6 +125,7 @@ void AnalysisWidgetController::setLabelName(QString base, QString second)
 	{
 		m_labelName = name;
 		m_graphicsWidget->ClearAllLabels();
+
 		m_graphicsWidget->SetLabel(0, m_labelName);
 	}
 }

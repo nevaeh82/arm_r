@@ -25,6 +25,8 @@ public:
 	void insertCorrelationWidget(ICorrelationWidget *widget);
 	void clearWidgetContainer();
 
+    QGridLayout* getContainer();
+
 
 };
 

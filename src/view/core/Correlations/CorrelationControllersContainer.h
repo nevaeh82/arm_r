@@ -8,6 +8,7 @@
 #include "Interfaces/ICorrelationControllersContainer.h"
 
 #include "Correlations/CorrelationWidget.h"
+#include "Correlations/CorrelationIndicatorWidget.h"
 #include "Correlations/CorrelationWidgetController.h"
 #include "IGraphicWidget.h"
 
@@ -20,7 +21,7 @@ public:
 	virtual ~CorrelationControllersContainer();
 
 public:
-	virtual int init(int count);
+    virtual int init(int count, int type = 0);
 	virtual ICorrelationWidget* get(int id);
 	virtual int count();
 

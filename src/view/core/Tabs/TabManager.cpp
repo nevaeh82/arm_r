@@ -35,6 +35,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	//    , m_tabWidget(tabWidget)
 	, m_tabWidgetZone( tabWidget )
 	, m_correlationControllers( NULL )
+    , m_externalCorrelationControllers(NULL)
 	, m_currentTabWidget( NULL )
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
@@ -49,6 +50,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	, m_tabId(-1)
     , m_tabCount(0)
     , m_listForm(NULL)
+    , m_solverSetup(NULL)
 {
 	m_tabWidget = new QTabWidget(tabWidget);
 
@@ -60,6 +62,9 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	m_locationSetupController->appendView(locationSetupWgt);
 
 	m_panoramaFreqControl = new PanoramaFreqControl(this);
+
+    m_externalCorrelationWidget = new CorrelationGroupWidget(0);
+    m_externalCorrelationWidget->show();
 
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
@@ -95,6 +100,9 @@ TabManager::~TabManager()
 	{
 		delete m_tabWidget;
 	}
+
+    m_externalCorrelationWidget->close();
+    delete m_externalCorrelationWidget;
 }
 
 void TabManager::slotSendRdsData(QByteArray data)
@@ -119,6 +127,8 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 	m_rpcFlakonClient->registerReceiver(setupSolver);
 
 	connect( setupSolver, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
+
+    m_solverSetup = setupSolver;
 }
 
 void TabManager::setRpcFlakon(const quint16& port, const QString& host)
@@ -310,8 +320,16 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	m_tabId = m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone) + " - " + QString::number(typeRds));
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
+    m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
 
-	m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()) );
+    m_externalCorrelationControllers = new CorrelationControllersContainer(this);
+    m_externalCorrelationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 0 ); //0 - is Spect type
+
+    for(int i = 0; i < m_externalCorrelationControllers->count(); i++) {
+        ICorrelationWidget* correlationWidget = m_externalCorrelationControllers->get(i);
+        m_externalCorrelationWidget->insertCorrelationWidget(correlationWidget);
+    }
+
 	m_panoramaFreqControl->initChannelCount( m_stationsMap.count() );
 
 	m_locationSetupController->setAnalysisChannelCount( m_stationsMap.count() );
@@ -357,6 +375,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		tabController->setPanoramaFreqControl(m_panoramaFreqControl);
 		tabSpectrumWidget->setRpcFlakonClient(m_rpcFlakonClient);
 
+        tabController->setExtCorrelController(m_externalCorrelationControllers);
 		tabController->appendView(tabSpectrumWidget);
 		tabController->setControlPanelController(m_controlPanelController);
 		tabController->setControlPanelControllerTrue(m_panelController);

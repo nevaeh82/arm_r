@@ -33,6 +33,7 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 	, m_controlPanelControllerTrue( NULL)
 	, m_panoramaFreqControl( NULL )
 	, m_analysisControllers(analysisContainer)
+    , m_extCorrelationControllers(NULL)
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
@@ -160,7 +161,12 @@ void TabSpectrumWidgetController::setDbManager(IDbManager* dbManager)
 
 void TabSpectrumWidgetController::setPanoramaFreqControl(PanoramaFreqControl* control)
 {
-	m_panoramaFreqControl = control;
+    m_panoramaFreqControl = control;
+}
+
+void TabSpectrumWidgetController::setExtCorrelController(ICorrelationControllersContainer *container)
+{
+    m_extCorrelationControllers = container;
 }
 
 void TabSpectrumWidgetController::resetDbManager()
@@ -270,10 +276,21 @@ void TabSpectrumWidgetController::initCorrelationsView()
 		id1 = ids.at( inc-1 );
 		id2 = ids.at( listPos+1 );
 
+        correlationWidget->setLabels( m_tabManager->getStationName(id1),
+                                      m_tabManager->getStationName(id2) );
+        if( m_extCorrelationControllers && m_extCorrelationControllers->get(i) ) {
+            m_extCorrelationControllers->get(i)->setLabels(m_tabManager->getStationName(id1),
+                                                           m_tabManager->getStationName(id2));
+        }
+
 		listPos++;
 
-		CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(correlationWidget, m_tabManager, id1, id2, 0);
+        CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(m_tabManager, id1, id2, 0);
 		correlationDataSource->registerReceiver(correlationWidget);
+
+        if( m_extCorrelationControllers && m_extCorrelationControllers->get(i) ) {
+            correlationDataSource->registerReceiver(m_extCorrelationControllers->get(i));
+        }
 
 
 		//Maybe it will better perfomance

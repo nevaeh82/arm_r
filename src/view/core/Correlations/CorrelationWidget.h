@@ -3,13 +3,14 @@
 
 #include <QWidget>
 
+#include "BaseCorrelationWidget.h"
 #include "CorrelationWidgetController.h"
 
 namespace Ui {
 class CorrelationWidget;
 }
 
-class CorrelationWidget : public QWidget
+class CorrelationWidget : public BaseCorrelationWidget
 {
 	Q_OBJECT
 
@@ -18,9 +19,17 @@ private:
 
 public:
 	CorrelationWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
-	virtual ~CorrelationWidget();
+    virtual ~CorrelationWidget();
 
-	Q_MG_SpectrumInterface* getGraphicsWidget();
+    virtual void reset();
+    virtual void setDataSetup(double bandwidth, int m_pointCount,
+                              float *spectrum, float *spectrum_peak_hold,
+                              float sko);
+
+    virtual void permanentSetup(float *spectrum, float *spectrum_peak_hold,
+                                float sko);
+
+    virtual void setLabel(const QString& label);
 };
 
 #endif // CORRELATIONWIDGET_H

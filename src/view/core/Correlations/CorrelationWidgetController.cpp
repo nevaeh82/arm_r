@@ -7,7 +7,6 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent)
 	, m_bandwidth(0)
 	, m_pointCount(0)
 	, m_isComplex(0)
-	, m_graphicsWidget(0)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
@@ -15,12 +14,17 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent)
 
 QWidget *CorrelationWidgetController::getWidget() const
 {
-	return m_view;
+        return m_view;
 }
 
 void CorrelationWidgetController::setVisible(const bool isVisible)
 {
-	emit signalOnVisible(isVisible);
+    emit signalOnVisible(isVisible);
+}
+
+void CorrelationWidgetController::setLabels(QString l1, QString l2)
+{
+    setLabelName(l1, l2);
 }
 
 void CorrelationWidgetController::onVisible(const bool b)
@@ -42,10 +46,9 @@ void CorrelationWidgetController::setZeroFrequency(double)
 {
 }
 
-void CorrelationWidgetController::appendView(CorrelationWidget *view)
+void CorrelationWidgetController::appendView(BaseCorrelationWidget *view)
 {
 	m_view = view;
-	m_graphicsWidget = m_view->getGraphicsWidget();
 }
 
 Q_DECLARE_METATYPE(float*)
@@ -62,53 +65,43 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
 	float* spectrum = list.at(0).value<float*>();
 	float* spectrumPeakHold = (float*)list.at(1).value<float*>();
 
-	if (list.count() == 4){
-		setData(spectrum, spectrumPeakHold);
+    float skoQuality = list.at(list.size() - 1).toFloat();
+
+    if (list.count() == 5){
+        setData(spectrum, spectrumPeakHold, skoQuality);
 	} else {
 		int pointCount = list.at(2).toInt();
 		double bandwidth = list.at(3).toDouble();
 		bool isComplex = list.at(4).toBool();
-		setDataSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
+        setDataSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex, skoQuality);
 	}
 
-	QString base = list.at(list.size() - 2).toString();
-	QString second = list.at(list.size() - 1).toString();
+    QString base = list.at(list.size() - 3).toString();
+    QString second = list.at(list.size() - 2).toString();
 
 	setLabelName(base, second);
-
-	bool t = m_graphicsWidget->isVisible();
-
-	m_graphicsWidget->ZoomOutFull();
 }
-
 
 void CorrelationWidgetController::clear()
 {
-	m_graphicsWidget->Reset();
+    m_view->reset();
 }
 
-void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
+void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko)
 {
 	//_mux.lock();
 	m_bandwidth = bandwidth;
 	m_pointCount = PointCount;
 	m_isComplex = isComplex;
 
-	float maxv = 1.0;
-	float minv = 0.0;
-
-	m_graphicsWidget->SetAutoscaleY(false);
-	//  spectrumWidget->SetZeroFrequencyHz(-bandwidth/2);
-	m_graphicsWidget->SetAlign(3);
-	m_graphicsWidget->SetHorizontalLabel(tr("m"));
-	m_graphicsWidget->Setup(true,m_bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
-	m_graphicsWidget->SetSpectrumVisible(1, true);
+    m_view->setDataSetup(bandwidth, m_pointCount, spectrum, spectrum_peak_hold,
+                         sko);
 	//_mux.unlock();
 }
 
-void CorrelationWidgetController::setData(float *spectrum, float *spectrum_peak_hold)
+void CorrelationWidgetController::setData(float *spectrum, float *spectrum_peak_hold, float sko)
 {
-	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, 0.0, 1.0);
+    m_view->permanentSetup(spectrum, spectrum_peak_hold, sko);
 }
 
 void CorrelationWidgetController::setLabelName(QString base, QString second)
@@ -117,7 +110,6 @@ void CorrelationWidgetController::setLabelName(QString base, QString second)
 	if(m_labelName != name)
 	{
 		m_labelName = name;
-		m_graphicsWidget->ClearAllLabels();
-		m_graphicsWidget->SetLabel(0, m_labelName);
+        m_view->setLabel(m_labelName);
 	}
 }

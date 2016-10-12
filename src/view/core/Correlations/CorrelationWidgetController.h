@@ -9,19 +9,19 @@
 #include "modules/gui/multi_graphics/components_relation.h"
 #include "modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h"
 
+#include "BaseCorrelationWidget.h"
+
 class CorrelationWidget;
 
-class CorrelationWidgetController : public QObject, public ICorrelationWidget, public IController<CorrelationWidget>
+class CorrelationWidgetController : public QObject, public ICorrelationWidget
 {
 	Q_OBJECT
 private:
-	CorrelationWidget* m_view;
+    BaseCorrelationWidget* m_view;
 
 	double	m_bandwidth;
 	int	m_pointCount;
 	bool	m_isComplex;
-
-	Q_MG_SpectrumInterface* m_graphicsWidget;
 
 	QString	m_labelName;
 
@@ -32,7 +32,7 @@ public:
 	quint32 getId();
 	void setZeroFrequency(double val);
 
-	void appendView(CorrelationWidget *view);
+    void appendView(BaseCorrelationWidget *view);
 
 	void onDataArrived(const QString& method, const QVariant& arg);
 
@@ -40,13 +40,15 @@ public:
 	QWidget* getWidget() const;
 	void setVisible(const bool isVisible);
 
+    virtual void setLabels(QString l1, QString l2);
+
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);
 
 private:
-	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
-	void setData(float *spectrum, float *spectrum_peak_hold);
+    void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko);
+    void setData(float *spectrum, float *spectrum_peak_hold, float sko);
 	void setLabelName(QString base, QString second);
 
 signals:

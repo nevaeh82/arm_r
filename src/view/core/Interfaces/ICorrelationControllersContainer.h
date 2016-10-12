@@ -8,7 +8,7 @@ class ICorrelationControllersContainer
 {
 public:
 	virtual ~ICorrelationControllersContainer(){}
-	virtual int init(int count)									= 0;
+    virtual int init(int count, int type = 0)					= 0;
 	virtual ICorrelationWidget *get(int id)						= 0;
 	virtual int count()											= 0;
 };
