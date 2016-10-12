@@ -234,6 +234,7 @@ void TcpRDSController::onGetStations()
 	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
     sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
     sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
+    sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS1, data)));
 	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_ANALYSIS_STATUS, data ) ) );
 }

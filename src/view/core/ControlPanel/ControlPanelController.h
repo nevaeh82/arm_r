@@ -66,6 +66,8 @@ private:
 	void init();
 
     bool slotIncCheckMode();
+
+    LocationSetupWidgetController* m_setupController;
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
@@ -89,6 +91,8 @@ public:
 	void onSetSystemStatus(bool isOn);
 
 	int getCurrentWorkMode() const;
+
+    void setLocationSetupController(LocationSetupWidgetController* controller);
 
 signals:
 	void signalSetComonFreq(int value);

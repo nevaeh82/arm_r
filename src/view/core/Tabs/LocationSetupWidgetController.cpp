@@ -71,7 +71,48 @@ void LocationSetupWidgetController::setSpectrumSelection(float bandwidth, float 
 	} else if(m_workMode == 2) { //Analysis
 		m_view->onSpectrumAnalysisSelection(start, end);
 		slotOnSetAnalysis();
-	}
+    }
+}
+
+void LocationSetupWidgetController::changeLocationFreqParams(float freq, float bandwidth, float shift)
+{
+
+
+    if(m_workMode != 1) {
+        RdsProtobuf::Packet pkt;
+        createChangeMode( pkt, 1 ); // Location
+
+        emit sendRdsData( pack(pkt) );
+
+        pkt.Clear();
+        createEnableMode( pkt, true ); // Location
+
+        emit sendRdsData( pack(pkt) );
+
+        pkt.Clear();
+        createGetMode( pkt ); // Location
+
+        emit sendRdsData( pack(pkt) );
+
+        pkt.Clear();
+        createGetModeState( pkt ); // Location
+
+        emit sendRdsData( pack(pkt) );
+    }
+
+    RdsProtobuf::Packet pkt;
+    RdsProtobuf::Location loc = m_view->getLocationData();
+    loc.mutable_options()->set_central_frequency((int)freq);
+    loc.mutable_options()->mutable_filter()->set_range(bandwidth);
+    loc.mutable_options()->mutable_filter()->set_shift(0);
+    createSetLocationStatus( pkt,  loc);
+
+    if( isSetLocationStatus(pkt) ) {
+        bool b = 0;
+        b = !b;
+    }
+
+    emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)

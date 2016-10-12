@@ -35,6 +35,8 @@ public:
 	void setDeviceEnableState(int dev, bool state);
 	void setSpectrumSelection(float bandwidth, float shift, double start, double end);
 
+    void changeLocationFreqParams(float freq, float bandwidth, float shift);
+
 private:
 	LocationSetupWidget* m_view;
 	int m_workMode;

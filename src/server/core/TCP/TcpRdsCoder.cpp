@@ -119,7 +119,9 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	}
 	else if(messageType == TCP_RDS_GET_STATUS) {
 		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
-	} else if(messageType == TCP_RDS_GET_LOC_STATUS) {
+    } else if(messageType == TCP_RDS_GET_STATUS1) {
+        msg.mutable_from_client()->mutable_get()->mutable_mode()->set_status(true);
+    } else if(messageType == TCP_RDS_GET_LOC_STATUS) {
 		createGetLocationStatus(msg);
 	} else if(messageType == TCP_RDS_GET_ANALYSIS_STATUS) {
 		createGetAnalysisStatus(msg);
@@ -174,6 +176,10 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 		float shift;
 		stream >> shift;
 		m_locConf.shift = shift;
+
+        if(m_coordCounter) {
+            m_coordCounter->setShift( m_locConf.shift );
+        }
 		return QByteArray();
 	}
 	else if(messageType == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
@@ -278,13 +284,20 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
 	}
 	else if( message->type() == TCP_RDS_SEND_PROTO ) {
+        RdsProtobuf::Packet pkt = unpack(msgData);
 
-//        RdsProtobuf::Packet pkt;
-//        pkt.ParseFromArray( msgData.data(), msgData.size() );
+        if( isSetLocationStatus(pkt) ) {
+            m_locConf.shift = pkt.from_client().set().location().options().filter().shift();
+            m_locConf.range = pkt.from_client().set().location().options().filter().shift();
+            m_locConf.centralFreq = pkt.from_client().set().location().options().central_frequency();
 
-//        isSetEnableReceiver(pkt);
+            if(m_coordCounter) {
+                m_coordCounter->setShift( m_locConf.shift );
+                m_coordCounter->setCenterFrequency( m_locConf.centralFreq );
+            }
+        }
 
-		return msgData;
+        return msgData;
 	}
 	else {
 		return QByteArray();

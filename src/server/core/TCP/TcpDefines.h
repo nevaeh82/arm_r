@@ -46,6 +46,7 @@
 
 /// RDS custom msgs
 #define TCP_RDS_GET_STATUS								"tcpRDSGetStatus"
+#define TCP_RDS_GET_STATUS1								"tcpRDSGetStatus1"
 #define TCP_RDS_GET_SYSTEM								"tcpRDSGetSystem"
 #define TCP_RDS_ANSWER_SYSTEM								"tcpRDSAnswerSystem"
 #define TCP_RDS_ANSWER_LOCSYSTEM				"tcpRDSAnswerLocSystem"

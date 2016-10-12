@@ -152,6 +152,7 @@ void TabManager::setupController()
 		controlPanelController->setDbManager(m_dbManager);
 		this->setControlPanelController((ICorrelationListener* )controlPanelController);
 		setControlPanelController(controlPanelController);
+        controlPanelController->setLocationSetupController(m_locationSetupController);
 
 	connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
 			m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));

@@ -49,7 +49,12 @@ void ControlPanelController::init()
 
 int ControlPanelController::getCurrentWorkMode() const
 {
-	return m_view->onGetMode();
+    return m_view->onGetMode();
+}
+
+void ControlPanelController::setLocationSetupController(LocationSetupWidgetController *controller)
+{
+    m_setupController = controller;
 }
 
 void ControlPanelController::appendView(ControlPanelWidget *view)
@@ -301,12 +306,15 @@ void ControlPanelController::slotCheckModeSetFreq()
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, (*m_itCheckMode).frequency);
 	m_dbManager->updatePropertyForAllObjects(DB_SELECTED_PROPERTY, (*m_itCheckMode).bandwidth);
 
-    changeFrequency(freq);
+
 
 //	foreach(Station* st, m_stationsMap)
 //	{
-        m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
-        m_rpcFlakonClient->sendShift(0, 0);
+    //m_setupController->setAnalysisBandwidth();
+    m_setupController->changeLocationFreqParams(freq, (*m_itCheckMode).bandwidth*1000, 0);
+        //changeFrequency(freq);
+        //m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
+        //m_rpcFlakonClient->sendShift(0, 0);
 //	}
 
 	/// set main station fo correlations

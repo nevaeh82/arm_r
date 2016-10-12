@@ -89,6 +89,41 @@ inline void createSetEnableReceiver(RdsProtobuf::Packet &msg, uint platform,
 	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_status(enable);
 }
 
+inline void createChangeMode(RdsProtobuf::Packet &msg, uint mode)
+{
+    msg.mutable_from_client()->mutable_set()->mutable_mode()->set_index(mode);
+}
+
+inline void createEnableMode(RdsProtobuf::Packet &msg, bool mode)
+{
+    msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(mode);
+}
+
+inline void createGetModeState(RdsProtobuf::Packet &msg)
+{
+    msg.mutable_from_client()->mutable_get()->mutable_mode()->set_status(true);
+}
+
+inline void createGetMode(RdsProtobuf::Packet &msg)
+{
+    msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(0);
+}
+
+inline bool isSetLocationStatus(RdsProtobuf::Packet& msg)
+{
+
+
+    if(msg.has_from_client()) {
+        if(msg.from_client().has_set()) {
+            if(msg.from_client().set().has_location()) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 inline bool isSetEnableReceiver(RdsProtobuf::Packet &msg)
 {
 	if(msg.has_from_client() && msg.from_client().has_set() && msg.from_client().set().has_system()
@@ -162,4 +197,15 @@ inline QByteArray pack(RdsProtobuf::Packet pkt)
 	data.prepend("RdsPacket");
 
 	return data;
+}
+
+inline RdsProtobuf::Packet unpack(const QByteArray& data)
+{
+    RdsProtobuf::Packet pkt;
+    QByteArray inData = data;
+    inData = inData.right( inData.size() - 13 ); //13 is RdsPacket+int
+
+    pkt.ParseFromArray( inData.data(), inData.size() );
+
+    return pkt;
 }
