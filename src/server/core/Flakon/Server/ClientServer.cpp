@@ -1,5 +1,7 @@
 #include "ClientServer.h"
 
+//Now goto use for NIIPP server
+
 ClientTcpServer::ClientTcpServer(QObject* parent) :
 	BaseTcpServer(parent)
 {

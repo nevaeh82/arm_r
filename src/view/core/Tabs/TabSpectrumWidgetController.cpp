@@ -286,31 +286,31 @@ void TabSpectrumWidgetController::initCorrelationsView()
 		listPos++;
 
         CorrelationWidgetDataSource* correlationDataSource = new CorrelationWidgetDataSource(m_tabManager, id1, id2, 0);
-		correlationDataSource->registerReceiver(correlationWidget);
+        correlationDataSource->registerReceiver(correlationWidget);
 
         if( m_extCorrelationControllers && m_extCorrelationControllers->get(i) ) {
             correlationDataSource->registerReceiver(m_extCorrelationControllers->get(i));
         }
 
 
-		//Maybe it will better perfomance
-		QThread* thread = new QThread;
-		connect(correlationDataSource, SIGNAL(destroyed()), thread, SLOT(terminate()));
-		connect(thread, SIGNAL(finished()), correlationDataSource, SLOT(deleteLater()), Qt::DirectConnection);
-		connect(thread, SIGNAL(destroyed()), correlationDataSource, SLOT(deleteLater()));
+        //Maybe it will better perfomance
+        QThread* thread = new QThread;
+        connect(correlationDataSource, SIGNAL(destroyed()), thread, SLOT(terminate()));
+        connect(thread, SIGNAL(finished()), correlationDataSource, SLOT(deleteLater()), Qt::DirectConnection);
+        connect(thread, SIGNAL(destroyed()), correlationDataSource, SLOT(deleteLater()));
 
-		correlationDataSource->moveToThread(thread);
-		thread->start();
+        correlationDataSource->moveToThread(thread);
+        thread->start();
 
-		m_threadSrcList.append(thread);
+        m_threadSrcList.append(thread);
 
-		//---------------------------------------
+        //---------------------------------------
 
-		if( m_rpcFlakonClient != NULL ) {
-			m_rpcFlakonClient->registerReceiver( correlationDataSource );
-		}
+        if( m_rpcFlakonClient != NULL ) {
+            m_rpcFlakonClient->registerReceiver( correlationDataSource );
+        }
 
-		m_correlationDataSourcesList.append(correlationDataSource);
+        m_correlationDataSourcesList.append(correlationDataSource);
 	}
 }
 
@@ -651,6 +651,17 @@ void TabSpectrumWidgetController::onMethodCalled(const QString& method, const QV
 		if( !pkt.has_from_server() ) {
 			return;
 		}
+
+        if( pkt.from_server().has_data() ) {
+            if( pkt.from_server().data().has_data_status() ) {
+                int id = m_view->getSpectrumController()->getId();
+                int size = pkt.from_server().data().data_status().status_size();
+                if( id < size ) {
+                    m_view->getSpectrumController()->setSignalStatus(pkt.from_server().data().data_status().status(id));
+                }
+
+            }
+        }
 
 		if( isSystemReceiver(pkt) ) {
 			RdsProtobuf::System_Receiver rPkt = pkt.from_server().current().system().receiver();

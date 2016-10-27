@@ -107,9 +107,9 @@ void CorrelationWidgetController::setData(float *spectrum, float *spectrum_peak_
 void CorrelationWidgetController::setLabelName(QString base, QString second)
 {
     QString name = base + " - " + second;
-	if(m_labelName != name)
-	{
+    //if(m_labelName != name)
+    //{
 		m_labelName = name;
         m_view->setLabel(m_labelName);
-	}
+    //}
 }

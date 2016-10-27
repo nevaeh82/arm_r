@@ -162,6 +162,8 @@ private slots:
 	void slotOnChangeWorkMode(int mode, bool isOn);
 	void slotOnChangeAnalysisTab(int channel);
 
+    void slotExpandCorrelations();
+
 public slots:
 	void slotShowLocationSetup();
     void setListDialog(ListsDialog* dlg);

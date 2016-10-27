@@ -24,36 +24,73 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="cpLayout"/>
+   </item>
    <item row="1" column="0">
-    <layout class="QVBoxLayout" name="spectumWidgetsContainer"/>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>511</width>
+        <height>614</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <layout class="QVBoxLayout" name="spectumWidgetsContainer">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+      </layout>
+     </widget>
+    </widget>
    </item>
    <item row="1" column="1">
-    <widget class="CorrelationGroupWidget" name="correlationsGroupWidget" native="true">
+    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
      <property name="minimumSize">
       <size>
-       <width>20</width>
+       <width>200</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>200</width>
+       <width>250</width>
        <height>16777215</height>
       </size>
      </property>
      <layout class="QVBoxLayout" name="correlationWidgetsContainer"/>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3">
-    <layout class="QHBoxLayout" name="cpLayout"/>
-   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CorrelationGroupWidget</class>
+   <class>CorrelationGroupColumnWidget</class>
    <extends>QWidget</extends>
-   <header>Correlations/CorrelationGroupWidget.h</header>
+   <header>Correlations/CorrelationGroupColumnWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -19,6 +19,8 @@ int CorrelationControllersContainer::init(int count, int type)
             cor = new CorrelationWidget();
         } else {
             cor = new CorrelationIndicatorWidget();
+            connect((CorrelationIndicatorWidget*)cor, SIGNAL(signalExpand()),
+                    this, SIGNAL(signalExpand()));
         }
 		CorrelationWidgetController* controller = new CorrelationWidgetController(this);
 		controller->appendView(cor);

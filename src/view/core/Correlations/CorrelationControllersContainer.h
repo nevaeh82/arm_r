@@ -28,6 +28,9 @@ public:
 private:
 	QMap<int, ICorrelationWidget* > m_mapWidgets;
 	QMutex	m_mux;
+
+signals:
+    void signalExpand();
 };
 
 #endif // CORRELATIONCONTROLLERSCONTAINER_H

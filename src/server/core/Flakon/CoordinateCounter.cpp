@@ -162,7 +162,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 	m_aData.numOfReferenceDetector_ = m_main_point;
 	m_aData.time_ = lMsg.date_time();
 
-	sendDataToClientTcpServer();
+    //sendDataToClientTcpServer();
 	sendDataToClientTcpServer1(solverPkt);
 
 	m_aData.ranges_.clear();
@@ -494,6 +494,12 @@ void CoordinateCounter::slotSolverBlaData( QByteArray data ) {
          MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
          foreach (ITcpListener* receiver, m_receiversList) {
              receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
+         }
+
+         //To NIIPP
+         MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, data));
+         foreach (ITcpListener* receiver, m_receiversList) {
+             receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
          }
 }
 

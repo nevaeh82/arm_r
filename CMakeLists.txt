@@ -7,7 +7,7 @@ else()
 endif()
 
 if(NOT VERSION)
-	set(VERSION "4.0.0")
+	set(VERSION "3.0.2")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -178,7 +178,7 @@ if(WIN32)
 	set(CPACK_GENERATOR NSIS)
 
 	set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-	set(CPACK_PACKAGE_VENDOR "STC")
+	set(CPACK_PACKAGE_VENDOR "nppntt")
 	set(CPACK_PACKAGE_VERSION ${VERSION})
 
 	# GUI output title

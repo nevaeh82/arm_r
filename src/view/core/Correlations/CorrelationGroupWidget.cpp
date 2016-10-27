@@ -10,6 +10,7 @@ CorrelationGroupWidget::CorrelationGroupWidget(QWidget *parent) :
 	ui(new Ui::CorrelationGroupWidget)
 {
 	ui->setupUi(this);
+    this->setWindowTitle(tr("Correlations"));
 }
 
 CorrelationGroupWidget::~CorrelationGroupWidget()

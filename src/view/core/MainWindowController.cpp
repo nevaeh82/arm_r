@@ -76,7 +76,6 @@ void MainWindowController::appendView(MainWindow *view)
 
 void MainWindowController::connectToServers()
 {
-
 	QString settingsFile = QCoreApplication::applicationDirPath();
 	settingsFile.append("/TCP/servers.ini");
 	QSettings settings(settingsFile, QSettings::IniFormat, this);

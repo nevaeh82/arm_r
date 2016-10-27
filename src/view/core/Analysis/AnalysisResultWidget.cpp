@@ -30,37 +30,37 @@ void AnalysisResultWidget::setAnalysisData(RdsProtobuf::AnalysisDetected msg)
 
     for(int i = 0; i < msg.signal_size(); i++) {
         txtDetected.append( QString("Detected signal #%1 : \r\n").arg(i) );
-        txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).signal().range().start() ).
-                                                                      arg( msg.signal(i).signal().range().end() ) );
+        txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).range().start() ).
+                                                                      arg( msg.signal(i).range().end() ) );
 
         QString systemStr;
         QString moduleStr;
         QString typeStr;
         QString infoStr;
 
-        if( msg.signal(i).signal().has_parameters() ) {
-            RdsProtobuf::Signal_SignalParameters param = msg.signal(i).signal().parameters();
-            txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
+//        if( msg.signal(i).has_parameters() ) {
+//            RdsProtobuf::Signal_SignalParameters param = msg.signal(i).signal().parameters();
+//            txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
 
-            systemStr = QString::fromStdString(param.system());
+//            systemStr = QString::fromStdString(param.system());
 
-            txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
+//            txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
 
-            moduleStr = QString::fromStdString(param.modulation());
+//            moduleStr = QString::fromStdString(param.modulation());
 
-            txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
+//            txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
 
-            typeStr = QString::fromStdString(param.type());
+//            typeStr = QString::fromStdString(param.type());
+//        }
+
+        if( msg.signal(i).has_more_info() ) {
+            txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).more_info()) ) );
+
+            infoStr = QString::fromStdString(msg.signal(i).more_info());
         }
 
-        if( msg.signal(i).signal().has_info() ) {
-            txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).signal().info()) ) );
-
-            infoStr = QString::fromStdString(msg.signal(i).signal().info());
-        }
-
-        addRange(i, msg.signal(i).signal().range().start(),
-                 msg.signal(i).signal().range().end());
+        addRange(i, msg.signal(i).range().start(),
+                 msg.signal(i).range().end());
 
         addSignalInfo(i,
                       systemStr,

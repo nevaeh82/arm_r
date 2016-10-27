@@ -142,6 +142,8 @@ private:
 
 	LocationSetupWidgetController* m_setupController;
 
+    bool m_specStatus;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -196,6 +198,8 @@ public:
 
 	void setLocationSetupWidgetController(LocationSetupWidgetController* controller);
 
+    void setSignalStatus(bool stat);
+
 private:
 	void init();
 
@@ -225,6 +229,8 @@ signals:
 
 	void onSignalSetWorkMode(int, bool);
     void signalAddToList(QString name, double start, double bandwidth);
+
+    void signalStatus(bool);
 
 public slots:
 
@@ -264,7 +270,8 @@ private slots:
 
     void slotAddToList(double start, double end);
 
-     void slotContinueAnalysis(bool);
+    void slotContinueAnalysis(bool);
+    void slotSetStatus(bool stat);
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

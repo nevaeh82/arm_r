@@ -42,7 +42,8 @@ message DeviceOptions {
 	required bool status = 2;// Вкл. или выкл.
 	required string ip = 3;// IP
 	required int32 sync = 4;// Тип синхронизации (0 = межплатная, 1 = GPS, 2 = GPS + delay, 3 = none). Чтобы различать платформы разного типа.
-	repeated ChannelOptions channels = 5;// Параметры каналов. Сколько их столько и каналов
+	optional bool enabled = 5;
+	repeated ChannelOptions channels = 6;// Параметры каналов. Сколько их столько и каналов
 }
 
 //#################################################################################################
@@ -103,6 +104,16 @@ message DetectedSignal {
 	optional int32 detector_index = 2;// Индекс датчика который обнаружил
 	required Signal signal = 3;
 	repeated Convolution convolution = 4;// Массив со свертками
+}
+
+//####  Сигналы распознанные библиотекой г-на Кислицина
+message AnalysisOutput {
+	required double central_frequency = 1;// Центральная частота сигнала
+	required Range range = 2;// Полоса сигнала
+	optional string system = 3;// Система связи
+	optional string modulation = 4;// Вид модуляции
+	optional int32 estimation_probability = 5;// Корректность анализа в %				
+	optional string more_info = 6;// Тут страна, оператор, ячейка и т.д.  
 }
 
 //#################################################################################################
@@ -333,7 +344,9 @@ message AnalysisAbsPhaseFreq {
 
 //#### Обнаруженные библиотекой тех. анализа Кислицина сигналы 
 message AnalysisDetected {
-	repeated DetectedSignal signal = 1;// Обнаруженные сигналы (тут в info сист. связи, модуляция и т.д., потом будет в SignalParameters, когда будет ясно что нужно)
+	required bool success = 1;// Статус операции
+	required string error = 2;// Описание ошибки 
+	repeated AnalysisOutput signal = 3;// Обнаруженные сигналы 
 }
 
 //#### Частотные сдвиги
@@ -362,6 +375,12 @@ message ClientMessage {
 
 	// Задать
 	message SetMessage {
+
+		message SetDeviceParam {
+			repeated int32 sync_mode = 1;// Тип синхронизации
+			repeated bool enabled = 2;// 
+		}
+
 		oneof Message { 
 			Mode mode = 1;
 			System system = 2;
@@ -369,12 +388,14 @@ message ClientMessage {
 			Detector detector = 4;
 			Analysis analysis = 5;
 			Correction correction = 6;
+			SetDeviceParam device_param = 7;
 		}
 	}
 
+
 	oneof MessageType { 
 		GetMessage get = 1;
-		SetMessage set = 2;		
+		SetMessage set = 2;
 	}
 }
 
@@ -397,7 +418,7 @@ message ServerMessage{
 	}
 
 	// Данные от режимов
-	message DataMessage{
+	message DataMessage {
 		oneof RequestType { 
 			DataStatus data_status = 1;
 			LocationSpectrum location_spectrum = 2;
@@ -414,7 +435,7 @@ message ServerMessage{
 	}
 	
 	// Ответ
-	message AnswerMessage {
+	message AnswerMessage{
 		// Сообщение об ошибке
 		message Error {
 			required string str = 1;
@@ -429,6 +450,8 @@ message ServerMessage{
 			Confirmation confirmation = 2;
 		}
 	}
+
+
 
 	oneof MessageType { 
 		CurrentMessage current = 1;

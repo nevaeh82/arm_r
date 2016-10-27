@@ -9,6 +9,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 {
 	ui->setupUi(this);
 
+    ui->labelNo->setVisible(false);
+
 	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SIGNAL(setPanoramaSignal(bool)));
 
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(setAutoSearchSignal(bool)));
@@ -173,17 +175,17 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected
 
 	for(int i = 0; i < msg.signal_size(); i++) {
 		txtDetected.append( QString("Detected signal #%1 : \r\n").arg(i) );
-		txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).signal().range().start() ).
-																	  arg( msg.signal(i).signal().range().end() ) );
-		if( msg.signal(i).signal().has_parameters() ) {
-			RdsProtobuf::Signal_SignalParameters param = msg.signal(i).signal().parameters();
-			txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
-			txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
-			txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
-		}
+        txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).range().start() ).
+                                                                      arg( msg.signal(i).range().end() ) );
+//		if( msg.signal(i).signal().has_parameters() ) {
+//            RdsProtobuf::Signal_SignalParameters param = msg.signal(i).parameters();
+//			txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
+//			txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
+//			txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
+//		}
 
-		if( msg.signal(i).signal().has_info() ) {
-			txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).signal().info()) ) );
+        if( msg.signal(i).has_more_info() ) {
+            txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).more_info()) ) );
 		}
 	}
 }
@@ -257,7 +259,18 @@ void SpectrumWidget::onZoomSonogram(double start_hz, double end_hz, bool replot)
 
 	if(replot) {
 		m_plot->replot();
-	}
+    }
+}
+
+void SpectrumWidget::setNoSignal(bool b)
+{
+       if( b ) {
+           ui->graphicsWidget->setVisible(true);
+           ui->labelNo->setVisible(false);
+       }  else {
+           ui->graphicsWidget->setVisible(false);
+           ui->labelNo->setVisible(true);
+       }
 }
 
 /// getting FFT

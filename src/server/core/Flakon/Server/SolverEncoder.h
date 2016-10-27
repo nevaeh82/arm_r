@@ -13,7 +13,7 @@
 
 #include "ISolverEncoder.h"
 
-#include "SolverPacket.pb.h"
+#include "SolverPacket1.pb.h"
 #include "Tcp/TcpDefines.h"
 
 class SolverEncoder : public QObject, public ITcpReceiver, public ISolverEncoder, public BaseSubject<ISolverListener>
@@ -34,8 +34,8 @@ private:
 	uint m_residueLength;
 
 	void readProtobuf(const QByteArray& inputData );
-	void toProtobufSolverData(SolverClient::Packet::ArgumentVariant::SolverInput* arg, QByteArray& data);
-	void addPreambula(QByteArray& data);
+    void addPreambula(QByteArray& data);
+    quint8 crc(const QByteArray &data);
 };
 
 #endif; //SOLVERENCODER_H

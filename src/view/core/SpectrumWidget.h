@@ -64,6 +64,7 @@ public slots:
 	void slotSetEnableSpactrum(bool state);
 	void slotEnableKM(bool state);
     void recognize();
+    void setNoSignal(bool);
 
 private slots:
 	void slotSetWorkMode(int mode, bool isOn);

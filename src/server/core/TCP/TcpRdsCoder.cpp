@@ -345,9 +345,19 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 	if( sMsg.has_data() ) {
 		if( sMsg.data().has_data_status() ) {
 			bool status;
+            int i = 0;
 			foreach (bool val, sMsg.data().data_status().status()) {
 				status = val;
+//                if(!status) {
+//                    QVector<QPointF> vec;
+//                    vec.append( QPointF(5*TO_KHZ, val) );
+//                    vec.append( QPointF(10*TO_KHZ, val) );
+//                    vec.append( QPointF(15*TO_KHZ, val) );
+//                    message = pointers(i, 10, vec);
+//                }
+                i++;
 			}
+            emit onSendConfigureLoc(data);
 		}
 		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
 			int ind = sMsg.data().location_spectrum().detector_index();
@@ -378,7 +388,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 				freq += stepFreq;
 			}
 
-				message = pointers(ind, startFreq+10, vec);
+                message = pointers(ind, startFreq+10, vec);
 
                 if(m_coordCounter) {
                     m_coordCounter->setCenterFrequency(startFreq+10);

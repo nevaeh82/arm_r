@@ -30,9 +30,14 @@ public:
 
     virtual void setLabel(const QString& label);
 
+    void mouseDoubleClickEvent(QMouseEvent * event );
+
 private:
     QPixmap* m_red;
     QPixmap* m_green;
 
     uint m_limit;
+
+signals:
+    void signalExpand();
 };

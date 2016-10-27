@@ -64,7 +64,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	m_panoramaFreqControl = new PanoramaFreqControl(this);
 
     m_externalCorrelationWidget = new CorrelationGroupWidget(0);
-    m_externalCorrelationWidget->show();
+    //m_externalCorrelationWidget->show();
 
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
@@ -87,6 +87,9 @@ TabManager::~TabManager()
 		delete st;
 	}
 
+    m_externalCorrelationWidget->close();
+    delete m_externalCorrelationWidget;
+
 	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	m_rpcClientThread->exit();
 	m_rpcClientThread->deleteLater();
@@ -100,9 +103,6 @@ TabManager::~TabManager()
 	{
 		delete m_tabWidget;
 	}
-
-    m_externalCorrelationWidget->close();
-    delete m_externalCorrelationWidget;
 }
 
 void TabManager::slotSendRdsData(QByteArray data)
@@ -321,6 +321,8 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
     m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
+    connect((CorrelationControllersContainer*)m_correlationControllers, SIGNAL(signalExpand()),
+            this, SLOT(slotExpandCorrelations()));
 
     m_externalCorrelationControllers = new CorrelationControllersContainer(this);
     m_externalCorrelationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 0 ); //0 - is Spect type
@@ -782,7 +784,12 @@ void TabManager::slotOnChangeAnalysisTab(int channel)
 				m_tabWidget->setTabEnabled(i, true);
 			}
 		}
-	}
+    }
+}
+
+void TabManager::slotExpandCorrelations()
+{
+    m_externalCorrelationWidget->show();
 }
 
 void TabManager::slotShowLists(QString station, double freq, double bandwidth)

@@ -32,6 +32,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_current_frequency = 0;
 	m_autoSearch = false;
 
+    m_specStatus = true;
+
 	m_rett = -100;
 	m_threshold = -1000;
 
@@ -64,6 +66,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	connect(this, SIGNAL(signalVisible(bool)), this, SLOT(onVisible(bool)));
 
 	connect(this, SIGNAL(onCorrelationStateChangedSignal(bool)), this, SLOT(onCorrelationStateChangedSlot(bool)));
+
+    connect(this, SIGNAL(signalStatus(bool)), this, SLOT(slotSetStatus(bool)));
 
 	connect(&m_sonogramWatcher, SIGNAL(finished()), this, SLOT(onSonogramDataReady()));
 
@@ -211,6 +215,9 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
+
+        m_view->setNoSignal(true);
+
 		//m_graphicsWidget->ZoomOutFull();
 
 		return;
@@ -223,11 +230,15 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 
         if( isAnalysisDetected(pkt) ) {
 			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
-            if(msg.signal_size() > 0) {
-                if( m_channelId == msg.signal(0).detector_index() ) {
-                    m_view->setAnalysisDetectedData(msg);
-                    m_controlPanelController->onEnableCurMode(false);
+
+            if( m_channelId == m_setupController->getAnalysisWorkChannel() ) {
+            if(msg.success()) {
+                if(msg.signal_size() > 0) {
+                       m_view->setAnalysisDetectedData(msg);
                 }
+            } else {
+                QMessageBox::warning(0, "Analysis", QString("Analysis Error %1").arg(QString::fromStdString(msg.error())), QMessageBox::Yes);
+            }
             }
 		}
 
@@ -346,7 +357,18 @@ Prm300ControlWidgetController *SpectrumWidgetController::getPrmController()
 
 void SpectrumWidgetController::setLocationSetupWidgetController(LocationSetupWidgetController *controller)
 {
-	m_setupController = controller;
+    m_setupController = controller;
+}
+
+void SpectrumWidgetController::setSignalStatus(bool stat)
+{
+    emit signalStatus(stat);
+}
+
+void SpectrumWidgetController::slotSetStatus(bool stat)
+{
+    m_specStatus = stat;
+    m_view->setNoSignal(m_specStatus);
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -1115,17 +1137,17 @@ void SpectrumWidgetController::clearLabels()
 
 void SpectrumWidgetController::slotSelectionCleared()
 {
-	double coordinateZero = (double)0;
-	SpectrumSelection selection;
-	selection.start = QPointF(coordinateZero, coordinateZero);
-	selection.end = QPointF(coordinateZero, coordinateZero);
+//	double coordinateZero = (double)0;
+//	SpectrumSelection selection;
+//	selection.start = QPointF(coordinateZero, coordinateZero);
+//	selection.end = QPointF(coordinateZero, coordinateZero);
 
-	//Setting null selection
-	m_graphicsWidget->SetSelection(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
-	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+//	//Setting null selection
+//	m_graphicsWidget->SetSelection(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
+//	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
 
-	m_tab->setSelectedArea(selection);
-	m_threshold = -1000;
+//	m_tab->setSelectedArea(selection);
+//	m_threshold = -1000;
 }
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)

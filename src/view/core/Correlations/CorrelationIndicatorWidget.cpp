@@ -16,6 +16,8 @@ CorrelationIndicatorWidget::CorrelationIndicatorWidget(QWidget *parent, Qt::WFla
     ui->labelIndicator->setPixmap(m_red->scaled(16,16,Qt::KeepAspectRatio));
 
     //this->setFixedSize(50, 50);
+
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SIGNAL(signalExpand()));
 }
 
 CorrelationIndicatorWidget::~CorrelationIndicatorWidget()
@@ -47,5 +49,10 @@ void CorrelationIndicatorWidget::permanentSetup(float *spectrum, float *spectrum
 void CorrelationIndicatorWidget::setLabel(const QString &label)
 {
     ui->labelTitle->setText(label);
+}
+
+void CorrelationIndicatorWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit signalExpand();
 }
 

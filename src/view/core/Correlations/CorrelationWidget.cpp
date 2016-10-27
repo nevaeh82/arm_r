@@ -39,7 +39,7 @@ void CorrelationWidget::setDataSetup(double bandwidth, int m_pointCount, float *
     ui->spectrumWidget->Setup(true,bandwidth,tr("Level"), spectrum, m_pointCount, spectrum_peak_hold, m_pointCount,false, false, minv, maxv);
     ui->spectrumWidget->SetSpectrumVisible(1, true);
 
-     ui->spectrumWidget->ZoomOutFull();
+    // ui->spectrumWidget->ZoomOutFull();
 }
 
 void CorrelationWidget::permanentSetup(float *spectrum, float *spectrum_peak_hold, float sko)
@@ -48,12 +48,11 @@ void CorrelationWidget::permanentSetup(float *spectrum, float *spectrum_peak_hol
     ui->spectrumWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, 0.0, 2.0);
     //ui->spectrumWidget->SetLabel(30, "sddsfew", "iii");
 
-    ui->spectrumWidget->ZoomOutFull();
+    //ui->spectrumWidget->ZoomOutFull();
 }
 
 void CorrelationWidget::setLabel(const QString &label)
 {
     ui->spectrumWidget->ClearAllLabels();
-    //ui->spectrumWidget->SetLabel(30, "sddsfew", "iii");
-    ui->spectrumWidget->SetUserTextToInfo("OLOLOLOLLOOLLOLOOLL", false);
+    ui->spectrumWidget->SetLabel(0, label, "hh", true );
 }
