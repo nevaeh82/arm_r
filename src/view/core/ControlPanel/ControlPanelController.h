@@ -50,7 +50,6 @@ private:
 
 	int m_timerInterval;
 	int m_timerCheckInterval;
-	int m_mode;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
@@ -87,12 +86,7 @@ public:
 
 	virtual void onMethodCalled(const QString &method, const QVariant &argument);
 
-	void onSetSystem(int modeId);
-	void onSetSystemStatus(bool isOn);
-
-	int getCurrentWorkMode() const;
-
-    void setLocationSetupController(LocationSetupWidgetController* controller);
+	void setLocationSetupController(LocationSetupWidgetController* controller);
 
 signals:
 	void signalSetComonFreq(int value);
@@ -100,20 +94,15 @@ signals:
 	void setCorrelationStatusActive(bool isActive);
 	void signalSetMode(int mode);
 
-	void onSignalWorkMode(int, bool);
-    void onSignalWorkModeToGui(int, bool);
-
 
 public slots:
 
-    void changeFrequency(int value);
-    void onEnableCurMode(bool enable);
-    void onEnableMode(int mode, bool enable);
+	void changeFrequency(int value);
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled);
 	void onAutoSearchStateChangedSlot(bool isEnabled);
-    void onCommonFrequencyChangedSlot(int value);
+	void onCommonFrequencyChangedSlot(int value);
 
 	void onBandWidthChangedSlot(int start, int end);
 
@@ -134,11 +123,6 @@ private slots:
 
 	void changeCorrelationStatus(QString correlationStatus);
 	void changeCorrelationStatusActive(bool isActive);
-
-	void slotSetMode(int mode);
-
-	void onSlotWorkMode(int mode, bool isOn);
-    void onSlotWorkModeGui(int mode, bool isOn);
 };
 
 #endif // CONTROLPANELCONTROLLER_H

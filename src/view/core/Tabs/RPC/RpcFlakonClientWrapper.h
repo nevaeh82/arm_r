@@ -38,11 +38,13 @@ public:
 
 	void requestFlakonStatus();
 
-    void clearAllReceiversList();
+	void clearAllReceiversList();
+
+	RpcFlakonClient *getClient();
 
 signals:
 	void initSignal();
-    void stopSignal();
+	void stopSignal();
 
 	void sendMainStationCorrelationSignal(int id, QString value);
 	void sendBandwidthSignal(int id, float bandwidth);
@@ -61,8 +63,11 @@ signals:
 
 	void requestFlakonStatusSignal();
 
-    void initFinishedSignal();
-    void connectionEstablishedSignal();
+	void initFinishedSignal();
+	void connectionEstablishedSignal();
+
+	void signalConnect();
+	void signalDisconnect();
 
 private slots:
 	void initSlot();
@@ -82,7 +87,7 @@ private slots:
 
 	void sendWorkModeSlot(int mode, bool isOn);
 
-    void requestFlakonStatusSlot();
+	void requestFlakonStatusSlot();
 	
 };
 

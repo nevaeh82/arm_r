@@ -85,6 +85,11 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 SpectrumWidgetController::~SpectrumWidgetController()
 {
+	//log_debug("<<<<<<<<<<<<<<");
+	delete m_qwtVector;
+	delete m_qwtCurve;
+	delete m_qwtColorMap;
+
 	m_sonogramWatcher.waitForFinished();
 }
 
@@ -228,58 +233,58 @@ void SpectrumWidgetController::onDataArrived(const QString &method, const QVaria
 		QByteArray bData = arg.toByteArray();
 		pkt.ParseFromArray( bData.data(), bData.size() );
 
-        if( isAnalysisDetected(pkt) ) {
-			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
+//        if( isAnalysisDetected(pkt) ) {
+//			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
 
-            if( m_channelId == m_setupController->getAnalysisWorkChannel() ) {
-            if(msg.success()) {
-                if(msg.signal_size() > 0) {
-                       m_view->setAnalysisDetectedData(msg);
-                }
-            } else {
-                QMessageBox::warning(0, "Analysis", QString("Analysis Error %1").arg(QString::fromStdString(msg.error())), QMessageBox::Yes);
-            }
-            }
-		}
+//            if( m_channelId == m_setupController->getAnalysisWorkChannel() ) {
+//            if(msg.success()) {
+//                if(msg.signal_size() > 0) {
+//                       m_view->setAnalysisDetectedData(msg);
+//                }
+//            } else {
+//                QMessageBox::warning(0, "Analysis", QString("Analysis Error %1").arg(QString::fromStdString(msg.error())), QMessageBox::Yes);
+//            }
+//            }
+//		}
 
 		if( isAnalysisSpectrogram(pkt) && m_sonogramReady && m_sonogramTime.msecsTo(QTime::currentTime()) > 1000 && m_id == m_analysisChannel ) {
 
-			log_debug(QString("<<<<<< on sonogram! %1 %2").arg(QTime::currentTime().msec()).arg(m_sonogramTime.msecsTo(QTime::currentTime())));
+//			log_debug(QString("<<<<<< on sonogram! %1 %2").arg(QTime::currentTime().msec()).arg(m_sonogramTime.msecsTo(QTime::currentTime())));
 
-			m_sonogramTime = QTime::currentTime();
-			m_sonogramReady = false;
-			RdsProtobuf::AnalysisSpectrogram msg = pkt.from_server().data().analysis_spectrogram();
-			QList<QList<float>> sonogramData;
+//			m_sonogramTime = QTime::currentTime();
+//			m_sonogramReady = false;
+//			RdsProtobuf::AnalysisSpectrogram msg = pkt.from_server().data().analysis_spectrogram();
+//			QList<QList<float>> sonogramData;
 
-			int colNum = msg.columns();
+//			int colNum = msg.columns();
 
-            if(colNum == 0) {
-                return;
-            }
+//            if(colNum == 0) {
+//                return;
+//            }
 
-			int timeNum = msg.data_size()/colNum;
-			int dataSize = msg.data_size();
-			int cnt = 0;
+//			int timeNum = msg.data_size()/colNum;
+//			int dataSize = msg.data_size();
+//			int cnt = 0;
 
-			Q_UNUSED(dataSize)
+//			Q_UNUSED(dataSize)
 
-			for(int timeDot = 0; timeDot < timeNum; timeDot++) {
-				QList<float> sonogramRow;
-				if(cnt >= msg.data_size()) {
-					break;
-				}
-				for(int i = cnt; i<colNum*(timeDot+1); i++) {
-					sonogramRow.append( msg.data(i) );
-					cnt++;
-					if(cnt >= msg.data_size()) {
-						break;
-					}
-				}
-				sonogramData.append(sonogramRow);
-			}
+//			for(int timeDot = 0; timeDot < timeNum; timeDot++) {
+//				QList<float> sonogramRow;
+//				if(cnt >= msg.data_size()) {
+//					break;
+//				}
+//				for(int i = cnt; i<colNum*(timeDot+1); i++) {
+//					sonogramRow.append( msg.data(i) );
+//					cnt++;
+//					if(cnt >= msg.data_size()) {
+//						break;
+//					}
+//				}
+//				sonogramData.append(sonogramRow);
+//			}
 
-			QFuture<void> f = QtConcurrent::run(this, &SpectrumWidgetController::setSonogramSetup, sonogramData);
-			m_sonogramWatcher.setFuture( f );
+//			QFuture<void> f = QtConcurrent::run(this, &SpectrumWidgetController::setSonogramSetup, sonogramData);
+//			m_sonogramWatcher.setFuture( f );
 		}
 	}
 }
@@ -785,7 +790,7 @@ void SpectrumWidgetController::slotAddToList(double start, double end)
 
 void SpectrumWidgetController::slotContinueAnalysis(bool)
 {
-    m_controlPanelController->onEnableMode(2, true);
+  //  m_controlPanelController->onEnableMode(2, true);
 }
 
 void SpectrumWidgetController::setSpectrumShow(bool state)
@@ -921,13 +926,6 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 {
 	m_controlPanelController = controller;
 	connect(m_controlPanelController, SIGNAL(signalSetMode(int)), this, SLOT(slotControlPanelMode(int)));
-
-	connect(m_controlPanelController, SIGNAL(onSignalWorkMode(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
-
-    connect(m_controlPanelController, SIGNAL(onSignalWorkModeToGui(int,bool)), this, SIGNAL(onSignalSetWorkMode(int,bool)));
-
-//    connect(m_analysisResult, SIGNAL(signalContinue(bool)),
-//            m_controlPanelController, SLOT(onEnableCurMode(bool)));
 }
 
 void SpectrumWidgetController::init()
@@ -1099,7 +1097,7 @@ void SpectrumWidgetController::recognizeSignal()
     //m_tab->recognize();
     //m_view->recognize();
     //enabling analysis
-    m_controlPanelController->onEnableMode(2, true);
+	//m_controlPanelController->onEnableMode(2, true);
     //m_setupController->setAnalysisSetup();
 }
 
@@ -1234,9 +1232,4 @@ void SpectrumWidgetController::slotShowControlPRM(bool state)
 		m_view->getPrm300Widget()->hide();
 		break;
 	}
-}
-
-void SpectrumWidgetController::slotControlPanelMode(int mode)
-{
-	m_controlPanelMode = mode;
 }

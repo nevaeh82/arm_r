@@ -27,6 +27,11 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(ITabManager* tabManager
 
 }
 
+CorrelationWidgetDataSource::~CorrelationWidgetDataSource()
+{
+	//log_debug("<<<<<<<<<<<<");
+}
+
 void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
 	emit onMethodCalledSignal(method, data);

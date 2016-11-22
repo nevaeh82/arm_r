@@ -4,6 +4,8 @@
 
 #include "Interfaces/IAnalysisWidget.h"
 
+#include "Logger/Logger.h"
+
 #define TO_KHZ 1000
 
 AnalysisWidgetDataSource::AnalysisWidgetDataSource(IGraphicWidget* correlationWidget, ITabManager* tabManager, int id, QObject *parent)
@@ -21,6 +23,11 @@ AnalysisWidgetDataSource::AnalysisWidgetDataSource(IGraphicWidget* correlationWi
 
 	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
 
+}
+
+AnalysisWidgetDataSource::~AnalysisWidgetDataSource()
+{
+	//log_debug("<<<<<<<<<<<<<<");
 }
 
 void AnalysisWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
@@ -98,73 +105,73 @@ void AnalysisWidgetDataSource::setCorData(int type, const QVector<QPointF>& poin
 
 void AnalysisWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
-	if( method == RPC_METHOD_CONFIG_RDS_ANSWER ) {
+//	if( method == RPC_METHOD_CONFIG_RDS_ANSWER ) {
 
-		RdsProtobuf::Packet pkt;
-		QByteArray bData = data.toByteArray();
-		pkt.ParseFromArray( bData.data(), bData.size() );
+//		RdsProtobuf::Packet pkt;
+//		QByteArray bData = data.toByteArray();
+//		pkt.ParseFromArray( bData.data(), bData.size() );
 
-		if( !isAnalysisAbsPhaseFreq(pkt) ) {
-			return;
-		}
+//		if( !isAnalysisAbsPhaseFreq(pkt) ) {
+//			return;
+//		}
 
-		RdsProtobuf::AnalysisAbsPhaseFreq msg = pkt.from_server().data().analysis_abs_phase_freq();
+//		RdsProtobuf::AnalysisAbsPhaseFreq msg = pkt.from_server().data().analysis_abs_phase_freq();
 
-		double startFreq = 0;
-		double stepFreq = 0;
-		double freq = 0;
-		QVector<QPointF> vec;
+//		double startFreq = 0;
+//		double stepFreq = 0;
+//		double freq = 0;
+//		QVector<QPointF> vec;
 
-		//abs plot, 0 type
-		if(m_type == 0) {
-			startFreq = msg.plot_abs().axis_x_start();
-			stepFreq = msg.plot_abs().axis_x_step();
+//		//abs plot, 0 type
+//		if(m_type == 0) {
+//			startFreq = msg.plot_abs().axis_x_start();
+//			stepFreq = msg.plot_abs().axis_x_step();
 
-			freq = startFreq;
+//			freq = startFreq;
 
-			for(int i = 0; i < msg.plot_abs().data().size(); i++) {
-				double val = msg.plot_abs().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
+//			for(int i = 0; i < msg.plot_abs().data().size(); i++) {
+//				double val = msg.plot_abs().data(i);
+//				vec.append( QPointF(freq*TO_KHZ, val) );
+//				freq += stepFreq;
+//			}
 
-			setCorData(0, vec);
-		}
+//			setCorData(0, vec);
+//		}
 
-		//phase plot
-		if( m_type == 1 ) {
-			startFreq = msg.plot_phase().axis_x_start();
-			stepFreq = msg.plot_phase().axis_x_step();
+//		//phase plot
+//		if( m_type == 1 ) {
+//			startFreq = msg.plot_phase().axis_x_start();
+//			stepFreq = msg.plot_phase().axis_x_step();
 
-			vec.clear();
-			freq = startFreq;
+//			vec.clear();
+//			freq = startFreq;
 
-			for(int i = 0; i < msg.plot_phase().data().size(); i++) {
-				double val = msg.plot_phase().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
+//			for(int i = 0; i < msg.plot_phase().data().size(); i++) {
+//				double val = msg.plot_phase().data(i);
+//				vec.append( QPointF(freq*TO_KHZ, val) );
+//				freq += stepFreq;
+//			}
 
-			setCorData(1, vec);
-		}
+//			setCorData(1, vec);
+//		}
 
-		//freq plot
-		if( m_type == 2 ) {
-			startFreq = msg.plot_freq().axis_x_start();
-			stepFreq = msg.plot_freq().axis_x_step();
+//		//freq plot
+//		if( m_type == 2 ) {
+//			startFreq = msg.plot_freq().axis_x_start();
+//			stepFreq = msg.plot_freq().axis_x_step();
 
-			vec.clear();
-			freq = startFreq;
+//			vec.clear();
+//			freq = startFreq;
 
-			for(int i = 0; i < msg.plot_freq().data().size(); i++) {
-				double val = msg.plot_freq().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
+//			for(int i = 0; i < msg.plot_freq().data().size(); i++) {
+//				double val = msg.plot_freq().data(i);
+//				vec.append( QPointF(freq*TO_KHZ, val) );
+//				freq += stepFreq;
+//			}
 
-			setCorData(2, vec);
-		}
-	}
+//			setCorData(2, vec);
+//		}
+//	}
 }
 
 void AnalysisWidgetDataSource::sendCommand(int)

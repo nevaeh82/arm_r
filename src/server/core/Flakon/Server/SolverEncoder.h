@@ -27,7 +27,9 @@ public:
 	void onDataReceived( const QVariant& argument );
 
 	QByteArray encode( const QByteArray& data );
-	QByteArray decode(const MessageSP message);
+	QByteArray decode( const MessageSP message );
+
+	QByteArray decodeRegister();
 
 private:
 	QByteArray m_dataFromTcpSocket;

@@ -25,17 +25,17 @@ public:
 	explicit LocationSetupWidget(QWidget *parent = 0);
 	~LocationSetupWidget();
 
-	void setLocationData(const RdsProtobuf::Location& data);
-	RdsProtobuf::Location getLocationData() const;
+	void setLocationData(const RdsProtobuf::ClientMessage_OneShot_Location& data);
+	RdsProtobuf::ClientMessage_OneShot_Location getLocationData() const;
 
-	void setDetectorData(const RdsProtobuf::Detector &data);
-	RdsProtobuf::Detector getDetectorData() const;
+//	void setDetectorData(const RdsProtobuf::Detector &data);
+//	RdsProtobuf::Detector getDetectorData() const;
 
-	void setCorrectionData(const RdsProtobuf::Correction &data);
-	RdsProtobuf::Correction getCorrectionData() const;
+//	void setCorrectionData(const RdsProtobuf::Correction &data);
+//	RdsProtobuf::Correction getCorrectionData() const;
 
-	void setAnalysisData(const RdsProtobuf::Analysis &data);
-	RdsProtobuf::Analysis getAnalysisData() const;
+//	void setAnalysisData(const RdsProtobuf::Analysis &data);
+//	RdsProtobuf::Analysis getAnalysisData() const;
 
 	int getAnalysisChannel() const;
 	void setAnalysisChannelCount(int cnt);

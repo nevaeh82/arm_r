@@ -27,6 +27,7 @@ private:
 
 public:
 	explicit CorrelationWidgetController(QObject *parent = 0);
+	virtual ~CorrelationWidgetController();
 
 	bool isGraphicVisible();
 	quint32 getId();

@@ -2,6 +2,8 @@
 
 #include "ui_CorrelationWidget.h"
 
+#include "Logger/Logger.h"
+
 CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
     BaseCorrelationWidget(parent, flags), ui(new Ui::CorrelationWidget)
 {
@@ -19,6 +21,7 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
 
 CorrelationWidget::~CorrelationWidget()
 {
+	//log_debug("<<<<<<");
 }
 
 void CorrelationWidget::reset()

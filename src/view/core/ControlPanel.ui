@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1136</width>
-    <height>63</height>
+    <height>89</height>
    </rect>
   </property>
   <property name="palette">
@@ -158,6 +158,16 @@
       <widget class="QCheckBox" name="panoramaCB">
        <property name="text">
         <string>Panorama</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbSpectrums">
+       <property name="text">
+        <string>Spectrums</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -364,46 +374,6 @@
       <string>Set common frequency</string>
      </property>
     </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QComboBox" name="workMode">
-       <item>
-        <property name="text">
-         <string>Off</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Location</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Analysis</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Correction</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Detector</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="workModeOn">
-       <property name="text">
-        <string>Enable</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

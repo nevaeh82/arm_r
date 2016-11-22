@@ -25,6 +25,7 @@ class SpectrumWidgetDataSource : public BaseDataSource, public IRpcListener
 	friend class SpectrumWidgetDataSourceTest;
 
 private:
+	//IGraphicWidget* m_spectrumWidget;
 	IGraphicWidget* m_spectrumWidget;
 
 	QString m_name;
@@ -69,7 +70,7 @@ private:
 
 
 public:
-	explicit SpectrumWidgetDataSource(IGraphicWidget*, QObject *parent = 0);
+	explicit SpectrumWidgetDataSource(IGraphicWidget* widget, QObject *parent = 0);
 	virtual ~SpectrumWidgetDataSource();
 
 	void onMethodCalled(const QString&, const QVariant&);
@@ -105,7 +106,8 @@ private:
 	bool startPanorama(bool start);
 
 
-    void clearPeak();
+	void clearPeak();
+	void setupPoints(const RdsProtobuf::ServerMessage_OneShotData_LocationData &data);
 };
 
 #endif // SPECTRUMWIDGETDATASOURCE_H

@@ -35,11 +35,6 @@ public:
 
 	void changeQualityStatus(const int status);
 
-	void onSetMode(int modeId);
-	void onSetModeStatus(bool isOn);
-
-	int onGetMode() const;
-
 signals:
 	void commonFreqChangedSignal(int value);
 	void bandwidthChangedSignal(int start, int end);
@@ -47,10 +42,10 @@ signals:
 	void panoramaCheckedSignal(bool isChecked);
 	void autoSearchCheckedSignal(bool isChecked);
 
-    void signalManualMode();
-    void signalScanMode(int start, int finish);
-    void signalCheckMode();
-    void signalViewMode();
+	void signalManualMode();
+	void signalScanMode(int start, int finish);
+	void signalCheckMode();
+	void signalViewMode();
 
 	void signalDown1Mhz();
 	void signalDown10Mhz();
@@ -58,17 +53,13 @@ signals:
 	void signalUp1Mhz();
 	void signalUp10Mhz();
 	void signalUp100Mhz();
-	void signalSetMode(int);
 
-	void signalWorkMode(int, bool);
-    void signalWorkModeToGui(int, bool);
+	void signalReceiveSpectrums(bool);
 
 private slots:
 	void onSetCommonFrequencySlot();
 	void onSetBandWidthSlot();
 	void slotChangeMode(int index);
-	void slotOnWorkMode();
-    void slotTurnWorkMode(bool val);
 
 public slots:
 	void slotChangeCommonFreq(int value);

@@ -1,6 +1,8 @@
 #include "AnalysisWidgetController.h"
 #include "AnalysisWidget.h"
 
+#include "Logger/Logger.h"
+
 AnalysisWidgetController::AnalysisWidgetController(int type, QObject *parent)
 	: QObject(parent)
 	, m_view(0)
@@ -12,6 +14,11 @@ AnalysisWidgetController::AnalysisWidgetController(int type, QObject *parent)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
+}
+
+AnalysisWidgetController::~AnalysisWidgetController()
+{
+	//log_debug("<<<<<<<<<<");
 }
 
 QWidget *AnalysisWidgetController::getWidget() const

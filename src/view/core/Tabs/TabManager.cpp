@@ -35,7 +35,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	//    , m_tabWidget(tabWidget)
 	, m_tabWidgetZone( tabWidget )
 	, m_correlationControllers( NULL )
-    , m_externalCorrelationControllers(NULL)
+	, m_externalCorrelationControllers(NULL)
 	, m_currentTabWidget( NULL )
 	, m_dbManager( NULL )
 	, m_dbStationController( NULL )
@@ -48,9 +48,11 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	, m_tabWidget(NULL)
 	, m_id(id)
 	, m_tabId(-1)
-    , m_tabCount(0)
-    , m_listForm(NULL)
-    , m_solverSetup(NULL)
+	, m_tabCount(0)
+	, m_listForm(NULL)
+	, m_solverSetup(NULL)
+	, m_externalCorrelationWidget(NULL)
+	, m_dsController(NULL)
 {
 	m_tabWidget = new QTabWidget(tabWidget);
 
@@ -62,9 +64,6 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	m_locationSetupController->appendView(locationSetupWgt);
 
 	m_panoramaFreqControl = new PanoramaFreqControl(this);
-
-    m_externalCorrelationWidget = new CorrelationGroupWidget(0);
-    //m_externalCorrelationWidget->show();
 
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
@@ -87,8 +86,11 @@ TabManager::~TabManager()
 		delete st;
 	}
 
-    m_externalCorrelationWidget->close();
-    delete m_externalCorrelationWidget;
+	if(m_externalCorrelationWidget) {
+		m_externalCorrelationWidget->close();
+		delete m_externalCorrelationWidget;
+		m_externalCorrelationWidget = NULL;
+	}
 
 	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	m_rpcClientThread->exit();
@@ -98,6 +100,8 @@ TabManager::~TabManager()
 	m_rpcClientConfigThread->deleteLater();
 
 	m_locationSetupController->deleteLater();
+
+	m_rpcFlakonClient->deregisterReceiver( dynamic_cast<IRpcListener*>(m_controlPanelController ));
 
 	if(m_tabWidget != NULL)
 	{
@@ -128,7 +132,7 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 
 	connect( setupSolver, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
 
-    m_solverSetup = setupSolver;
+	m_solverSetup = setupSolver;
 }
 
 void TabManager::setRpcFlakon(const quint16& port, const QString& host)
@@ -152,29 +156,25 @@ void TabManager::setRpcConfig(const quint16& port, const QString& host)
 
 void TabManager::setupController()
 {
-    m_cpView = new ControlPanelWidget();
+	m_cpView = new ControlPanelWidget();
 
-		ControlPanelController* controlPanelController = new ControlPanelController(this);
-		controlPanelController->setDbStationController(m_dbStationController);
-		controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
-        controlPanelController->appendView(m_cpView);
-		controlPanelController->registerReceiver(this);
-		controlPanelController->setDbManager(m_dbManager);
-		this->setControlPanelController((ICorrelationListener* )controlPanelController);
-		setControlPanelController(controlPanelController);
-        controlPanelController->setLocationSetupController(m_locationSetupController);
+	ControlPanelController* controlPanelController = new ControlPanelController(this);
+	controlPanelController->setDbStationController(m_dbStationController);
+	controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
+	controlPanelController->appendView(m_cpView);
+	controlPanelController->registerReceiver(this);
+	controlPanelController->setDbManager(m_dbManager);
+	this->setControlPanelController((ICorrelationListener* )controlPanelController);
+	setControlPanelController(controlPanelController);
+	controlPanelController->setLocationSetupController(m_locationSetupController);
+
+	m_dsController = new DataSourceController(this, m_dbManager, m_rpcFlakonClient->getClient(), m_panoramaFreqControl, this );
 
 	connect(m_panelController, SIGNAL(signalSetComonFreq(int)),
 			m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	connect(m_panoramaFreqControl, SIGNAL(setCommonFreq(int)),
 			m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
-
-	connect(m_panelController, SIGNAL(onSignalWorkMode(int,bool)),
-			this, SLOT(slotOnChangeWorkMode(int,bool)));
-
-    connect(m_panelController, SIGNAL(onSignalWorkModeToGui(int,bool)),
-            this, SLOT(slotOnChangeWorkMode(int,bool)));
 
 	connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), this, SLOT(slotOnChangeAnalysisTab(int)));
 	connect(m_panelController, SIGNAL(onSignalWorkMode(int,bool)),
@@ -281,62 +281,68 @@ void TabManager::slotSendSolverSetupCommand(QByteArray data)
 	m_rpcFlakonClient->sendSolverSetupSettings( data );
 }
 
-void TabManager::setStationsConfiguration(const QList<StationConfiguration>& stationList)
+void TabManager::setStationsConfiguration(RdsProtobuf::System_SystemOptions msg)
 {
 	int cnt = 0;
 	QStringList platformList;
 
-	foreach (StationConfiguration stationConf, stationList) {
-		Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
+	//const QList<StationConfiguration>& stationList
 
-		if( platformList.size() <= stationConf.platform ) {
-			platformList.append( stationConf.name );
+	//foreach (StationConfiguration stationConf, stationList) {
+	for(int i = 0; i<msg.devices_size(); i++) {
+
+		msg.devices(i);
+		for( int j = 0; j<msg.devices(i).channels_size(); j++ ) {
+
+			Station *station = new Station( m_dbManager, m_rpcFlakonClient, this );
+			RdsProtobuf::ChannelOptions chOpt = msg.devices(i).channels(j);
+
+			station->setId(cnt);
+			station->setPlatformId( i );
+			station->setChannelId( j );
+
+			station->setName( QString::fromStdString(chOpt.title()) );
+			station->setLatitude(chOpt.coordinates().latitude());
+			station->setLongitude(chOpt.coordinates().longitude());
+			station->setPrm300Ip( QString::fromStdString(chOpt.receiver().ip()) );
+			station->setAdcIp( QString::fromStdString(msg.devices(i).ip()) );
+
+			station->setLocationSetupController(m_locationSetupController);
+
+			m_stationsMap.insert(station->getId(), station);
+			m_dbStationController->addStation( station->getName(), station->getPrm300Ip() );
+			cnt++;
 		}
-
-		station->setId(cnt);
-		station->setPlatformId( stationConf.platform );
-		station->setChannelId( stationConf.channel );
-
-		station->setName(stationConf.nameChannel);
-		station->setLatitude(stationConf.latitude);
-		station->setLongitude(stationConf.longitude);
-		station->setPrm300Ip(stationConf.hostPrm300);
-		station->setAdcIp(stationConf.hostADC);
-		station->setCenter( stationConf.freqPrm );
-
-		station->setLocationSetupController(m_locationSetupController);
-
-		m_stationsMap.insert(station->getId(), station);
-        m_dbStationController->addStation(stationConf.nameChannel, stationConf.hostPrm300);
-		cnt++;
 	}
 
-	m_locationSetupController->setPlatformList( platformList );
+	//m_locationSetupController->setPlatformList( platformList );
 }
 
-void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
+void TabManager::addStationTabs(QString platformName)
 {
 
-	m_tabId = m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone) + " - " + QString::number(typeRds));
+	m_tabId = m_tabWidgetZone->addTab(m_tabWidget, platformName);
+
+	m_externalCorrelationWidget = new CorrelationGroupWidget(0);
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
-    m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
-    connect((CorrelationControllersContainer*)m_correlationControllers, SIGNAL(signalExpand()),
-            this, SLOT(slotExpandCorrelations()));
+	m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
+	connect((CorrelationControllersContainer*)m_correlationControllers, SIGNAL(signalExpand()),
+			this, SLOT(slotExpandCorrelations()));
 
-    m_externalCorrelationControllers = new CorrelationControllersContainer(this);
-    m_externalCorrelationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 0 ); //0 - is Spect type
+	m_externalCorrelationControllers = new CorrelationControllersContainer(this);
+	m_externalCorrelationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 0 ); //0 - is Spect type
 
-    for(int i = 0; i < m_externalCorrelationControllers->count(); i++) {
-        ICorrelationWidget* correlationWidget = m_externalCorrelationControllers->get(i);
-        m_externalCorrelationWidget->insertCorrelationWidget(correlationWidget);
-    }
+	for(int i = 0; i < m_externalCorrelationControllers->count(); i++) {
+		ICorrelationWidget* correlationWidget = m_externalCorrelationControllers->get(i);
+		m_externalCorrelationWidget->insertCorrelationWidget(correlationWidget);
+	}
 
 	m_panoramaFreqControl->initChannelCount( m_stationsMap.count() );
 
 	m_locationSetupController->setAnalysisChannelCount( m_stationsMap.count() );
 
-	initAnalysisControllers(3);
+	initAnalysisControllers(1);
 
 	QStringList stationNamesList = createStationNamesList();
 
@@ -344,16 +350,16 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	commonTabSpectrumWidget->setDbManager(m_dbManager);
 	commonTabSpectrumWidget->setStationNamesList(stationNamesList);
 	commonTabSpectrumWidget->setCorrelationComponent(m_correlationControllers);
-    commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
-    commonTabSpectrumWidget->setControlPanelWidget(m_cpView);
+	commonTabSpectrumWidget->setFlakonRpcClient(m_rpcFlakonClient);
+	commonTabSpectrumWidget->setControlPanelWidget(m_cpView);
 
 	m_tabWidgetList.append(commonTabSpectrumWidget);
 
 	m_rpcFlakonClient->registerReceiver(commonTabSpectrumWidget);
 	m_rpcFlakonClient->registerReceiver( m_locationSetupController );
 
-    connect(commonTabSpectrumWidget, SIGNAL(signalFreqChanged(int)),
-            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+	connect(commonTabSpectrumWidget, SIGNAL(signalFreqChanged(int)),
+			m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	QTabBar* tabBar = m_tabWidget->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
 
@@ -368,7 +374,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 					station, m_correlationControllers, m_analysisControllertMap, this, tabSpectrumWidget,
 					m_rpcHost, m_rpcPort, this);
 
-        tabController->setControlPanelWidget(m_cpView);
+		tabController->setControlPanelWidget(m_cpView);
 
 		tabController->setDbManager(m_dbManager);
 		tabController->setDbStationController(m_dbStationController);
@@ -377,7 +383,7 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 		tabController->setPanoramaFreqControl(m_panoramaFreqControl);
 		tabSpectrumWidget->setRpcFlakonClient(m_rpcFlakonClient);
 
-        tabController->setExtCorrelController(m_externalCorrelationControllers);
+		tabController->setExtCorrelController(m_externalCorrelationControllers);
 		tabController->appendView(tabSpectrumWidget);
 		tabController->setControlPanelController(m_controlPanelController);
 		tabController->setControlPanelControllerTrue(m_panelController);
@@ -402,12 +408,12 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 
 		connect(tabController, SIGNAL(signalUpdateDBStationsLists()), this, SLOT(slotUpdateDBStationsLists()));
 
-        connect(tabController, SIGNAL(signalFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+		connect(tabController, SIGNAL(signalFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabController, SIGNAL(analysisChannelChanged(int)));
 		connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabSpectrumWidget, SIGNAL(onChangeAnalysisChannel(int)));
 
-        connect(tabSpectrumWidget->getSpectrumController(), SIGNAL(signalAddToList(QString,double,double)),
-                this, SLOT(slotShowLists(QString,double,double)));
+		connect(tabSpectrumWidget->getSpectrumController(), SIGNAL(signalAddToList(QString,double,double)),
+				this, SLOT(slotShowLists(QString,double,double)));
 
 		m_tabWidgetsMap.insert(station->getName(), tabController);
 		commonTabSpectrumWidget->insertSpectrumWidget(tabController->getSpectrumWidget());
@@ -417,6 +423,15 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 	int index = m_tabWidget->addTab(commonTabSpectrumWidget, tr("Common"));
 	m_tabWidgetContainer.insert(index, commonTabSpectrumWidget);
 
+
+
+	m_dsController->initSpectrumDataSource( m_tabWidgetsMap );
+	m_dsController->initCorrelationDataSource( m_correlationControllers, m_externalCorrelationControllers );
+	m_dsController->initAnalysisDataSource( m_analysisControllertMap );
+
+//	foreach (TabSpectrumWidgetController* tabController, m_tabWidgetsMap.values()) {
+
+//	}
 
 	if (tabBar != NULL) {
 		tabBar->setTabButton(index, QTabBar::LeftSide, commonTabSpectrumWidget->getIndicator());
@@ -431,12 +446,6 @@ void TabManager::addStationTabs(unsigned int zone, unsigned int typeRds)
 void TabManager::addZoneType(unsigned int zone, unsigned int typeRds)
 {
 	m_tabWidgetZone->addTab(m_tabWidget, QString(QString::number(zone) + " - " + QString::number(typeRds)));
-	//    int index = m_tabWidgetZone->addTab(m_tabWidget, QString::number(zone));
-	//    QTabBar* tabBar = m_tabWidgetZone->findChild<QTabBar *>(QLatin1String("qt_tabwidget_tabbar"));
-	//    if (tabBar != NULL) {
-	//        tabBar->setTabButton(index, QTabBar::LeftSide, new QLabel(QString::number(zone) + " - " + QString::number(typeRds)));
-	//    }
-
 }
 
 int TabManager::getChannelCount()
@@ -446,14 +455,29 @@ int TabManager::getChannelCount()
 
 void TabManager::clearAllInformation()
 {
-	m_rpcFlakonClient->clearAllReceiversList();
+	//m_rpcFlakonClient->clearAllReceiversList();
+	m_tabWidgetZone->removeTab(m_tabId);
+	m_tabId = -1;
 
 	m_currentTabWidget = NULL;
 	//	m_tabWidget->setEnabled(false);
 
+
+	foreach (ITabWidget* wgt, m_tabWidgetList) {
+		IRpcListener* listner = dynamic_cast<IRpcListener*>(wgt);
+		if(listner) {
+			m_rpcFlakonClient->deregisterReceiver( listner );
+		}
+	}
+	m_rpcFlakonClient->deregisterReceiver(m_locationSetupController);
+
+
 	QString tabName = tr("Common");
 	CommonSpectrumTabWidget* commonTabSpectrumWidget = dynamic_cast<CommonSpectrumTabWidget*>(m_tabWidgetsMap.take(tabName));
 	if (commonTabSpectrumWidget != NULL) {
+
+		m_tabWidgetContainer.remove( m_tabWidgetContainer.key(commonTabSpectrumWidget) );
+
 		commonTabSpectrumWidget->clearSpectrumWidgetsContainer();
 		commonTabSpectrumWidget->deleteLater();
 		commonTabSpectrumWidget = NULL;
@@ -462,6 +486,12 @@ void TabManager::clearAllInformation()
 	foreach (Station* station, m_stationsMap) {
 		TabSpectrumWidgetController* tabController = dynamic_cast<TabSpectrumWidgetController*>(m_tabWidgetsMap.take(station->getName()));
 		if (tabController != NULL){
+
+			ITabWidget* iwgt = dynamic_cast<ITabWidget*>(tabController);
+			if(iwgt) {
+				m_tabWidgetList.removeAll( iwgt );
+			}
+
 			if (m_dbManager != NULL) {
 				m_dbManager->deregisterReceiver(tabController);
 			}
@@ -472,9 +502,15 @@ void TabManager::clearAllInformation()
 
 	for (qint32 index = 0; index < m_tabWidget->count(); ++index) {
 		QWidget* tabWidget = m_tabWidget->widget(index);
-		if (tabWidget != NULL){
+
+		m_tabWidgetContainer.remove( m_tabWidgetContainer.key(tabWidget) );
+
+		ITabWidget* iwgt = dynamic_cast<ITabWidget*>(tabWidget);
+		if(iwgt) {
+			m_tabWidgetList.removeAll( iwgt );
+		}
+		if (tabWidget != NULL) {
 			delete tabWidget;
-			tabWidget = NULL;
 		}
 		m_tabWidget->removeTab(index);
 	}
@@ -484,6 +520,11 @@ void TabManager::clearAllInformation()
 		m_correlationControllers = NULL;
 	}
 
+	if (m_externalCorrelationControllers != NULL) {
+		delete m_externalCorrelationControllers;
+		m_externalCorrelationControllers = NULL;
+	}
+
 	foreach (Station* station, m_stationsMap) {
 		if (station != NULL) {
 			delete station;
@@ -491,13 +532,33 @@ void TabManager::clearAllInformation()
 		}
 	}
 
+	for (int i=0; i<m_tabWidgetList.size(); i++) {
+		delete (m_tabWidgetList.takeAt(0));
+	}
+
+	foreach (QWidget* wgt, m_tabWidgetContainer.values()) {
+		delete wgt;
+	}
+
+	m_tabWidgetList.clear();
 	m_tabWidgetsMap.clear();
+	m_tabWidgetContainer.clear();
 	m_tabWidget->clear();
 	m_stationsMap.clear();
 
-	if (m_rpcFlakonClient != NULL) {
-		m_rpcFlakonClient->stop();
+	if(m_externalCorrelationWidget) {
+		m_externalCorrelationWidget->close();
+		delete m_externalCorrelationWidget;
+		m_externalCorrelationWidget = NULL;
 	}
+
+	foreach (IAnalysisWidget* wgt, m_analysisControllertMap) {
+		delete wgt;
+	}
+
+//	if (m_rpcFlakonClient != NULL) {
+//		m_rpcFlakonClient->stop();
+//	}
 }
 
 void TabManager::onClose()
@@ -522,12 +583,12 @@ void TabManager::setResponseCommonFreq(quint32 freq)
 		return;
 	}
 
-    m_panelController->setResponseFreq(freq);
+	m_panelController->setResponseFreq(freq);
 }
 
 void TabManager::setListDialog(ListsDialog *dlg)
 {
-    m_listForm = dlg;
+	m_listForm = dlg;
 }
 
 int TabManager::getTabId()
@@ -550,10 +611,8 @@ void TabManager::initRpcConfig()
 	connect(m_rpcClientConfigThread, SIGNAL(finished()), m_rpcConfigClient, SLOT(deleteLater()), Qt::DirectConnection);
 	connect(m_rpcClientConfigThread, SIGNAL(destroyed()), m_rpcConfigClient, SLOT(deleteLater()));
 
-	m_rpcConfigClient->moveToThread(m_rpcClientConfigThread);
-	m_rpcClientConfigThread->start();
-
-	connect(m_rpcConfigClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablished()));
+//	m_rpcConfigClient->moveToThread(m_rpcClientConfigThread);
+//	m_rpcClientConfigThread->start();
 
 	m_rpcFlakonClient = new RpcFlakonClientWrapper;
 	m_rpcFlakonClient->registerReceiver(this);
@@ -562,10 +621,14 @@ void TabManager::initRpcConfig()
 	connect(m_rpcClientThread, SIGNAL(finished()), m_rpcFlakonClient, SLOT(deleteLater()), Qt::DirectConnection);
 	connect(m_rpcClientThread, SIGNAL(destroyed()), m_rpcFlakonClient, SLOT(deleteLater()));
 
+	connect(m_rpcConfigClient, SIGNAL(onBaseConnected()), this, SLOT(rpcConnectionEstablished()));
+	connect(m_rpcConfigClient, SIGNAL(onBaseDisconnected()), this, SLOT(rpcConnectionDropped()));
+
 	m_rpcFlakonClient->moveToThread(m_rpcClientThread);
 	m_rpcClientThread->start();
 
 	connect(m_rpcFlakonClient, SIGNAL(connectionEstablishedSignal()), this, SLOT(rpcConnectionEstablishedFlakon()));
+	connect(m_rpcFlakonClient, SIGNAL(), this, SLOT(rpcConnectionEstablishedFlakon()));
 }
 
 void TabManager::onGlobalAutoSearchEnabled(const bool isEnabled)
@@ -609,71 +672,106 @@ void TabManager::readProto(const QByteArray& data)
 		return;
 	}
 
-	if( pkt.from_server().has_current() ) {
-		if( pkt.from_server().current().has_location() ) {
-			m_locationSetupController->setLocationSetup( pkt.from_server().current().location() );
-			m_panelController->setResponseFreq(
-						pkt.from_server().current().location().options().central_frequency()
-						);
-		}
+	RdsProtobuf::ServerMessage sPkt = pkt.from_server();
 
-		if( pkt.from_server().current().has_detector() ) {
-			m_locationSetupController->setDetectorSetup( pkt.from_server().current().detector() );
-		}
+	if( isSystemSystemOptions(sPkt) ) {
+		RdsProtobuf::System_SystemOptions sOptMsg = getSystemSystemOptions(sPkt);
+		m_locationSetupController->setDevicesState( sOptMsg );
+		m_mainTitle = QString::fromStdString(sOptMsg.title());
 
-		if( pkt.from_server().current().has_correction() ) {
-			m_locationSetupController->setCorrectionSetup( pkt.from_server().current().correction() );
-		}
-
-		if( pkt.from_server().current().has_analysis() ) {
-			m_locationSetupController->setAnalysisSetup( pkt.from_server().current().analysis() );
-		}
-
-		if(pkt.from_server().current().has_mode()) {
-			if(pkt.from_server().current().mode().has_index()) {
-				m_panelController->onSetSystem( pkt.from_server().current().mode().index());
-                m_locationSetupController->slotOnChangeWorkMode(pkt.from_server().current().mode().index(), true);
-			}
-
-			if(pkt.from_server().current().mode().has_status()) {
-				m_panelController->onSetSystemStatus( pkt.from_server().current().mode().status());
-			}
-		}
-
-		if(pkt.from_server().current().has_system()) {
-			if(pkt.from_server().current().system().has_device()) {
-				m_locationSetupController->setDeviceEnableState(pkt.from_server().current().system().device().device_index(),
-																pkt.from_server().current().system().device().status());
-			}
-
-			if(pkt.from_server().current().system().has_receiver()) {
-
-			}
-		}
+		setStationsConfiguration(sOptMsg);
+		addStationTabs(m_mainTitle);
+		m_panelController->setMapStations(getStations());
 	}
 
-	if(pkt.from_server().has_answer()) {
-		if(pkt.from_server().answer().has_confirmation()) {
-			emit signalMessageConfirm(
-						QString::fromStdString(pkt.from_server().answer().confirmation().str()));
-		}
-		if(pkt.from_server().answer().has_error()) {
-			emit signalMessageError(
-						QString::fromStdString(pkt.from_server().answer().error().str()));
-		}
+	if( isSystemDeviceOptions(sPkt) ) {
+		RdsProtobuf::System_Device sDevPkt = getSystemDeviceOptions(sPkt);
+		m_locationSetupController->setDeviceEnableState( sDevPkt.device_index(), sDevPkt.status() );
 	}
+
+	if( isSystemReceiverOptions(sPkt) ) {
+		RdsProtobuf::System_Receiver sRecPkt = getSystemReceiver(sPkt);
+		//params
+	}
+
+	if( isSystemReceiverStatus(sPkt) ) {
+		RdsProtobuf::System_Receiver sRecPkt = getSystemReceiver(sPkt);
+		//Indicators on tabs
+	}
+
+	//	if(pkt.from_server().current().has_system()) {
+	//		if(pkt.from_server().current().system().has_device()) {
+	//			m_locationSetupController->setDeviceEnableState(pkt.from_server().current().system().device().device_index(),
+	//															pkt.from_server().current().system().device().status());
+	//		}
+
+	//	if( pkt.from_server().has_current() ) {
+	//		if( pkt.from_server().current().has_location() ) {
+	//			m_locationSetupController->setLocationSetup( pkt.from_server().current().location() );
+	//			m_panelController->setResponseFreq(
+	//						pkt.from_server().current().location().options().central_frequency()
+	//						);
+	//		}
+
+	//		if( pkt.from_server().current().has_detector() ) {
+	//			m_locationSetupController->setDetectorSetup( pkt.from_server().current().detector() );
+	//		}
+
+	//		if( pkt.from_server().current().has_correction() ) {
+	//			m_locationSetupController->setCorrectionSetup( pkt.from_server().current().correction() );
+	//		}
+
+	//		if( pkt.from_server().current().has_analysis() ) {
+	//			m_locationSetupController->setAnalysisSetup( pkt.from_server().current().analysis() );
+	//		}
+
+	//		if(pkt.from_server().current().has_mode()) {
+	//			if(pkt.from_server().current().mode().has_index()) {
+	//				m_panelController->onSetSystem( pkt.from_server().current().mode().index());
+	//                m_locationSetupController->slotOnChangeWorkMode(pkt.from_server().current().mode().index(), true);
+	//			}
+
+	//			if(pkt.from_server().current().mode().has_status()) {
+	//				m_panelController->onSetSystemStatus( pkt.from_server().current().mode().status());
+	//			}
+	//		}
+
+	//		if(pkt.from_server().current().has_system()) {
+	//			if(pkt.from_server().current().system().has_device()) {
+	//				m_locationSetupController->setDeviceEnableState(pkt.from_server().current().system().device().device_index(),
+	//																pkt.from_server().current().system().device().status());
+	//			}
+
+	//			if(pkt.from_server().current().system().has_receiver()) {
+
+	//			}
+	//		}
+	//	}
+
+	//Parse Error Messages
+	//	if(pkt.from_server().has_answer()) {
+	//		if(pkt.from_server().answer().has_confirmation()) {
+	//			emit signalMessageConfirm(
+	//						QString::fromStdString(pkt.from_server().answer().confirmation().str()));
+	//		}
+	//		if(pkt.from_server().answer().has_error()) {
+	//			emit signalMessageError(
+	//						QString::fromStdString(pkt.from_server().answer().error().str()));
+	//		}
+	//	}
+	//}
 }
 
 void TabManager::initAnalysisControllers(int count)
 {
-	for(int i = 0; i<count; i++) {
+	//for(int i = 0; i<count; i++) {
 
-		AnalysisWidget* wgt = new AnalysisWidget(i);
-		AnalysisWidgetController* controller = new AnalysisWidgetController(i, this);
+		AnalysisWidget* wgt = new AnalysisWidget(0);
+		AnalysisWidgetController* controller = new AnalysisWidgetController(0, this);
 		controller->appendView(wgt);
 
-		m_analysisControllertMap.insert(i, controller);
-	}
+		m_analysisControllertMap.insert(0, controller);
+	//}
 }
 
 void TabManager::rpcConnectionEstablished()
@@ -687,10 +785,21 @@ void TabManager::rpcConnectionEstablished()
 	}
 }
 
+void TabManager::rpcConnectionDropped()
+{
+	clearAllInformation();
+}
+
 void TabManager::rpcConnectionEstablishedFlakon()
 {
-	int y  = 0;
-	y = 10;
+	//Set Indicator
+
+
+	//ask all RDS params
+	RdsProtobuf::Packet pkt;
+
+	createGetSystemSystemOptions( pkt );
+	m_rpcFlakonClient->sendRdsProto( pack(pkt) );
 }
 
 void TabManager::slotShowError(QString msg)
@@ -706,30 +815,7 @@ void TabManager::slotShowConfirm(QString msg)
 void TabManager::slotMethodCalled(const QString &method, const QVariant &argument)
 {
 	QByteArray data = argument.toByteArray();
-	if (method == RPC_METHOD_CONFIG_ANSWER_STATION_LIST) {
-
-		//TODO reinit, now it is failing when server restart
-		if(!m_stationsMap.isEmpty()) {
-			return;
-		}
-
-		QDataStream dataStream(&data, QIODevice::ReadOnly);
-		QList<StationConfiguration> stationList;
-		unsigned int zone;
-		unsigned int typeRds;
-		dataStream >> zone;
-		dataStream >> typeRds;
-		dataStream >> stationList;
-
-		// m_tabManager->addZoneType(zone, typeRds);
-
-		//TODO понять как очистить конкретный таб
-		//clearAllInformation();
-		setStationsConfiguration(stationList);
-		addStationTabs(zone, typeRds);
-		m_panelController->setMapStations(getStations());
-
-	} else if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
+	if(method == RPC_METHOD_CONFIG_RDS_ANSWER) {
 		//data
 		readProto( data );
 	} else if (method == RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION) {
@@ -742,72 +828,27 @@ void TabManager::slotMethodCalled(const QString &method, const QVariant &argumen
 	}
 }
 
-void TabManager::slotOnChangeWorkMode(int mode, bool isOn)
-{
-    if(mode == 2) {
-        int tabId = m_locationSetupController->getAnalysisWorkChannel();
-        int total = m_tabWidget->count();
-
-
-        for(int i = 0; i<total; i++) {
-            if(i!=tabId) {
-                m_tabWidget->setTabEnabled(i, false);
-            }
-
-        }
-
-        m_tabWidget->setCurrentIndex(tabId);
-
-
-    } else {
-
-        int total = m_tabWidget->count();
-        for(int i = 0; i<total; i++) {
-            m_tabWidget->setTabEnabled(i, true);
-        }
-    }
-}
-
-void TabManager::slotOnChangeAnalysisTab(int channel)
-{
-	int mode = m_panelController->getCurrentWorkMode();
-	Q_UNUSED(mode)
-	if(m_panelController->getCurrentWorkMode() == 2) {
-		int tabId = m_locationSetupController->getAnalysisWorkChannel();
-		int total = m_tabWidget->count();
-
-
-		for(int i = 0; i<total; i++) {
-			if(i!=tabId) {
-				m_tabWidget->setTabEnabled(i, false);
-			} else {
-				m_tabWidget->setTabEnabled(i, true);
-			}
-		}
-    }
-}
-
 void TabManager::slotExpandCorrelations()
 {
-    m_externalCorrelationWidget->show();
+	m_externalCorrelationWidget->show();
 }
 
 void TabManager::slotShowLists(QString station, double freq, double bandwidth)
 {
-    ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
-    bool isOpen = m_dbStationController->getDataBase().isOpen();
+	ListsDialogController* listController = new ListsDialogController(m_dbStationController, this);
+	bool isOpen = m_dbStationController->getDataBase().isOpen();
 
-    m_dbStationController->registerReceiver( listController );
+	m_dbStationController->registerReceiver( listController );
 
-    if(!isOpen) {
-        QMessageBox msgBox;
-        msgBox.setText(tr("DataBase is not opened!"));
-        msgBox.exec();
-        return;
-    }
+	if(!isOpen) {
+		QMessageBox msgBox;
+		msgBox.setText(tr("DataBase is not opened!"));
+		msgBox.exec();
+		return;
+	}
 
-    listController->appendView(m_listForm);
-    m_listForm->show();
+	listController->appendView(m_listForm);
+	m_listForm->show();
 
-    listController->showAddDialog(station, freq, bandwidth);
+	listController->showAddDialog(station, freq, bandwidth);
 }

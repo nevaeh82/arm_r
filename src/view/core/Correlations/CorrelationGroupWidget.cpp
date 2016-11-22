@@ -15,6 +15,7 @@ CorrelationGroupWidget::CorrelationGroupWidget(QWidget *parent) :
 
 CorrelationGroupWidget::~CorrelationGroupWidget()
 {
+	//log_debug("<<<<<<<<<<<<");
 	delete ui;
 }
 

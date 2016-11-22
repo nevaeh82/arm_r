@@ -11,6 +11,18 @@ LocationSetupWidgetController::LocationSetupWidgetController(QObject* parent):
 	m_view = NULL;
 
 	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
+
+	//To do read settings
+	m_locationMessage.set_duration(10);
+	m_locationMessage.set_central_frequency(20);
+	RdsProtobuf::Range* range = m_locationMessage.mutable_range();
+	range->set_start(10);
+	range->set_end(30);
+	m_locationMessage.set_convolution(true);
+	m_locationMessage.set_doppler(false);
+	m_locationMessage.set_convolution_plot(true);
+	m_locationMessage.set_averaging_frequency_band(50);
+
 }
 
 LocationSetupWidgetController::~LocationSetupWidgetController()
@@ -22,26 +34,26 @@ LocationSetupWidgetController::~LocationSetupWidgetController()
 	}
 }
 
-void LocationSetupWidgetController::setLocationSetup(const RdsProtobuf::Location &data)
+void LocationSetupWidgetController::setLocationSetup(const RdsProtobuf::ClientMessage_OneShot_Location &data)
 {
 	m_view->setLocationData( data );
 }
 
-void LocationSetupWidgetController::setDetectorSetup(const RdsProtobuf::Detector &data)
-{
-	m_view->setDetectorData( data );
-}
+//void LocationSetupWidgetController::setDetectorSetup(const RdsProtobuf::Detector &data)
+//{
+//	m_view->setDetectorData( data );
+//}
 
-void LocationSetupWidgetController::setCorrectionSetup(const RdsProtobuf::Correction &data)
-{
-	m_view->setCorrectionData( data );
-}
+//void LocationSetupWidgetController::setCorrectionSetup(const RdsProtobuf::Correction &data)
+//{
+//	m_view->setCorrectionData( data );
+//}
 
-void LocationSetupWidgetController::setAnalysisSetup(const RdsProtobuf::Analysis &data)
-{
-	m_view->setAnalysisData( data );
-	emit analysisChannelChanged( m_view->getAnalysisChannel() );
-}
+//void LocationSetupWidgetController::setAnalysisSetup(const RdsProtobuf::Analysis &data)
+//{
+//	m_view->setAnalysisData( data );
+//	emit analysisChannelChanged( m_view->getAnalysisChannel() );
+//}
 
 int LocationSetupWidgetController::getAnalysisWorkChannel() const
 {
@@ -71,48 +83,29 @@ void LocationSetupWidgetController::setSpectrumSelection(float bandwidth, float 
 	} else if(m_workMode == 2) { //Analysis
 		m_view->onSpectrumAnalysisSelection(start, end);
 		slotOnSetAnalysis();
-    }
+	}
 }
 
 void LocationSetupWidgetController::changeLocationFreqParams(float freq, float bandwidth, float shift)
 {
 
+}
 
-    if(m_workMode != 1) {
-        RdsProtobuf::Packet pkt;
-        createChangeMode( pkt, 1 ); // Location
+void LocationSetupWidgetController::setDevicesState(RdsProtobuf::System_SystemOptions opt)
+{
 
-        emit sendRdsData( pack(pkt) );
+}
 
-        pkt.Clear();
-        createEnableMode( pkt, true ); // Location
+void LocationSetupWidgetController::slotSetReceiveSpectrums(bool receive)
+{
+	m_receiveSpectrum = receive;
 
-        emit sendRdsData( pack(pkt) );
+	requestLocation();
+}
 
-        pkt.Clear();
-        createGetMode( pkt ); // Location
-
-        emit sendRdsData( pack(pkt) );
-
-        pkt.Clear();
-        createGetModeState( pkt ); // Location
-
-        emit sendRdsData( pack(pkt) );
-    }
-
-    RdsProtobuf::Packet pkt;
-    RdsProtobuf::Location loc = m_view->getLocationData();
-    loc.mutable_options()->set_central_frequency((int)freq);
-    loc.mutable_options()->mutable_filter()->set_range(bandwidth);
-    loc.mutable_options()->mutable_filter()->set_shift(0);
-    createSetLocationStatus( pkt,  loc);
-
-    if( isSetLocationStatus(pkt) ) {
-        bool b = 0;
-        b = !b;
-    }
-
-    emit sendRdsData( pack(pkt) );
+bool LocationSetupWidgetController::getReceiveSpectrums() const
+{
+	return m_receiveSpectrum;
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
@@ -147,6 +140,20 @@ LocationSetupWidget *LocationSetupWidgetController::getView()
 	return m_view;
 }
 
+void LocationSetupWidgetController::requestLocation()
+{
+	//ask all RDS params
+//	RdsProtobuf::Packet pkt;
+
+//	createGetSystemSystemOptions( pkt );
+//	m_rpcFlakonClient->sendRdsProto( pack(pkt) );
+
+	RdsProtobuf::Packet pkt;
+	createGetLocationStatus( pkt, m_locationMessage );
+
+	emit sendRdsData( pack(pkt) );
+}
+
 void LocationSetupWidgetController::slotShowWidget()
 {
 	if(m_view != NULL)
@@ -169,7 +176,7 @@ void LocationSetupWidgetController::slotSendSettings()
 void LocationSetupWidgetController::slotOnUpdate()
 {
 	RdsProtobuf::Packet pkt;
-	createGetLocationStatus(pkt);
+	//createGetLocationStatus(pkt);
 
 
 	emit sendRdsData( pack(pkt) );
@@ -177,91 +184,91 @@ void LocationSetupWidgetController::slotOnUpdate()
 
 void LocationSetupWidgetController::slotOnSet()
 {
-	RdsProtobuf::Packet pkt;
+//	RdsProtobuf::Packet pkt;
 
-	createSetLocationStatus( pkt, m_view->getLocationData() );
+//	createSetLocationStatus( pkt, m_view->getLocationData() );
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnSetCommonFreq(int freq)
 {
-    if(m_workMode == 1) {
-        RdsProtobuf::Packet pkt;
-        RdsProtobuf::Location loc = m_view->getLocationData();
-        loc.mutable_options()->set_central_frequency(freq);
+//    if(m_workMode == 1) {
+//        RdsProtobuf::Packet pkt;
+//        RdsProtobuf::Location loc = m_view->getLocationData();
+//        loc.mutable_options()->set_central_frequency(freq);
 
-        m_view->setLocationData( loc );
+//        m_view->setLocationData( loc );
 
-        createSetLocationStatus( pkt, loc );
+//        createSetLocationStatus( pkt, loc );
 
-        emit sendRdsData( pack(pkt) );
-    } else if(m_workMode == 2) { //Analysis
-        RdsProtobuf::Packet pkt;
-        RdsProtobuf::Analysis aPkt = m_view->getAnalysisData();
-        aPkt.mutable_options()->set_central_frequency(freq);
+//        emit sendRdsData( pack(pkt) );
+//    } else if(m_workMode == 2) { //Analysis
+//        RdsProtobuf::Packet pkt;
+//        RdsProtobuf::Analysis aPkt = m_view->getAnalysisData();
+//        aPkt.mutable_options()->set_central_frequency(freq);
 
-        m_view->setAnalysisData( aPkt );
+//        m_view->setAnalysisData( aPkt );
 
-        createSetAnalysisOptions( pkt, aPkt );
+//        createSetAnalysisOptions( pkt, aPkt );
 
-        emit sendRdsData( pack(pkt) );
-    }
+//        emit sendRdsData( pack(pkt) );
+//    }
 }
 
 void LocationSetupWidgetController::slotOnUpdateDet()
 {
-	RdsProtobuf::Packet pkt;
-	createGetDetectorOptions( pkt, m_view->getDetectorData() );
+//	RdsProtobuf::Packet pkt;
+//	createGetDetectorOptions( pkt, m_view->getDetectorData() );
 
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnSetDet()
 {
-	RdsProtobuf::Packet pkt;
+//	RdsProtobuf::Packet pkt;
 
-	createSetDetectorOptions( pkt, m_view->getDetectorData() );
+//	createSetDetectorOptions( pkt, m_view->getDetectorData() );
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnUpdateCor()
 {
-	RdsProtobuf::Packet pkt;
-	createGetCorrectionOptions( pkt, m_view->getCorrectionData() );
+//	RdsProtobuf::Packet pkt;
+//	createGetCorrectionOptions( pkt, m_view->getCorrectionData() );
 
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnSetCor()
 {
-	RdsProtobuf::Packet pkt;
+//	RdsProtobuf::Packet pkt;
 
-	createSetCorrectionOptions( pkt, m_view->getCorrectionData() );
+//	createSetCorrectionOptions( pkt, m_view->getCorrectionData() );
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnUpdateAnalysis()
 {
-	RdsProtobuf::Packet pkt;
-	createGetAnalysisOptions( pkt, m_view->getAnalysisData() );
+//	RdsProtobuf::Packet pkt;
+//	createGetAnalysisOptions( pkt, m_view->getAnalysisData() );
 
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnSetAnalysis()
 {
-	RdsProtobuf::Packet pkt;
-	createSetAnalysisOptions( pkt, m_view->getAnalysisData() );
+//	RdsProtobuf::Packet pkt;
+//	createSetAnalysisOptions( pkt, m_view->getAnalysisData() );
 
-	emit sendRdsData( pack(pkt) );
+//	emit sendRdsData( pack(pkt) );
 
-	emit analysisChannelChanged( m_view->getAnalysisChannel() );
+//	emit analysisChannelChanged( m_view->getAnalysisChannel() );
 }
 
 void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {

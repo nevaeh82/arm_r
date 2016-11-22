@@ -11,6 +11,7 @@
 #include <QMutex>
 #include <QList>
 
+#include "DataSourceController.h"
 #include "Correlations/CorrelationGroupWidget.h"
 #include "Correlations/CorrelationGroupColumnWidget.h"
 
@@ -62,15 +63,15 @@ private:
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;
 
+	QString m_mainTitle;
+
 	QString m_rpcHost;
 	uint m_rpcPort;
 
 	RpcFlakonClientWrapper *m_rpcFlakonClient;
 
-    ICorrelationControllersContainer* m_correlationControllers;
-    ICorrelationControllersContainer* m_externalCorrelationControllers;
-
-	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
+	ICorrelationControllersContainer* m_correlationControllers;
+	ICorrelationControllersContainer* m_externalCorrelationControllers;
 
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
@@ -82,7 +83,7 @@ private:
 
 	LocationSetupWidgetController* m_locationSetupController;
 	PanoramaFreqControl* m_panoramaFreqControl;
-    SolverSetupWidgetController* m_solverSetup;
+	SolverSetupWidgetController* m_solverSetup;
 
 	RpcConfigClient* m_rpcConfigClient;
 
@@ -93,11 +94,13 @@ private:
 
 	QMap<int, QWidget*> m_tabWidgetContainer;
 
-    ListsDialog* m_listForm;
+	ListsDialog* m_listForm;
 
-    ControlPanelWidget* m_cpView;
+	ControlPanelWidget* m_cpView;
 
-    CorrelationGroupWidget* m_externalCorrelationWidget;
+	CorrelationGroupWidget* m_externalCorrelationWidget;
+
+	DataSourceController* m_dsController;
 
 private:
 	// IRpcListener interface
@@ -130,11 +133,11 @@ public:
 
 	QStringList createStationNamesList();
 
-	void setStationsConfiguration(const QList<StationConfiguration>& stationList);
+	void setStationsConfiguration(RdsProtobuf::System_SystemOptions msg);
 
 	QMap<int, Station *>& getStations();
 
-	void addStationTabs(unsigned int zone, unsigned int typeRds);
+	void addStationTabs(QString platformName);
 	void addZoneType(unsigned int zone, unsigned int typeRds);
 
 	void clearAllInformation();
@@ -153,20 +156,18 @@ private slots:
 	void slotSendSolverSetupCommand(QByteArray);
 	void slotSendRdsData(QByteArray data);
 	void rpcConnectionEstablished();
+	void rpcConnectionDropped();
 	void rpcConnectionEstablishedFlakon();
 	void slotShowError(QString);
 	void slotShowConfirm(QString);
 
 	void slotMethodCalled(const QString& method, const QVariant& argument);
 
-	void slotOnChangeWorkMode(int mode, bool isOn);
-	void slotOnChangeAnalysisTab(int channel);
-
-    void slotExpandCorrelations();
+	void slotExpandCorrelations();
 
 public slots:
 	void slotShowLocationSetup();
-    void setListDialog(ListsDialog* dlg);
+	void setListDialog(ListsDialog* dlg);
 
 signals:
 	void readyToStart(int);
@@ -181,9 +182,9 @@ public:
 
 	QTabWidget *getTabWidgetZone();
 
-    int getTabId();
+	int getTabId();
 protected slots:
-    void slotShowLists(QString station, double freq, double bandwidth);
+	void slotShowLists(QString station, double freq, double bandwidth);
 };
 
 #endif // TABMANAGER_H

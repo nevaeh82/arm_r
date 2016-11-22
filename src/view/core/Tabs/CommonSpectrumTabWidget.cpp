@@ -34,7 +34,14 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
 {
+	//log_debug("<<<<<<");
+	delete m_pmRoundRed;
+	delete m_pmRoundGreen;
 	resetDbManager();
+
+	ui->cpLayout->removeWidget(m_cpView);
+	m_cpView->setParent(NULL);
+
 	delete ui;
 }
 

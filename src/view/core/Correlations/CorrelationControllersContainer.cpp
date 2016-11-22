@@ -1,5 +1,6 @@
 #include "CorrelationControllersContainer.h"
 #include <QDebug>
+#include "Logger/Logger.h"
 
 CorrelationControllersContainer::CorrelationControllersContainer(QObject *parent):
 	QObject(parent)
@@ -8,6 +9,8 @@ CorrelationControllersContainer::CorrelationControllersContainer(QObject *parent
 
 CorrelationControllersContainer::~CorrelationControllersContainer()
 {
+	//log_debug(">>>>>> ");
+	//log_debug("<<<<<<");
 }
 
 int CorrelationControllersContainer::init(int count, int type)

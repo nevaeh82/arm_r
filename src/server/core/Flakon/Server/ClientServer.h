@@ -44,6 +44,9 @@ public slots:
 	void startServer();
 	void stopServer();
 
+private slots:
+	void onRegisterNewConnection(uint n, ITcpServerClient*client);
+
 private:
 	int getClientTcpPortValue();
 	SolverEncoder* m_encoder;

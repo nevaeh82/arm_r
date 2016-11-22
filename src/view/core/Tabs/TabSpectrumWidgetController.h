@@ -36,15 +36,17 @@ class TabSpectrumWidgetController : public QObject, public IController<TabSpectr
 private:
 	TabSpectrumWidget* m_view;
 	ISpectrumWidget* m_spectrumWidget;
-	SpectrumWidgetDataSource* m_spectrumDataSource;
-	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
-	QList<AnalysisWidgetDataSource*> m_analysisDataSourcesList;
+//	SpectrumWidgetDataSource* m_spectrumDataSource;
+//	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
+//	QList<AnalysisWidgetDataSource*> m_analysisDataSourcesList;
 
 	IStation*		    m_station;
 
 	ICorrelationControllersContainer*  m_correlationControllers;
-    ICorrelationControllersContainer*  m_extCorrelationControllers;
+	ICorrelationControllersContainer*  m_extCorrelationControllers;
 	QMap<int, IAnalysisWidget*> m_analysisControllers;
+
+	SpectrumWidgetDataSource* m_spectrumDataSource;
 
 	IDbManager*         m_dbManager;
 	ITabManager*        m_tabManager;
@@ -52,7 +54,7 @@ private:
 	TreeModel*          m_treeModel;
 	TreeWidgetDelegate* m_treeDelegate;
 
-	RpcPrmClient*		m_rpcPrmClient;
+	//RpcPrmClient*		m_rpcPrmClient;
 	RpcFlakonClientWrapper*	m_rpcFlakonClient;
 
 	QLabel*             m_indicatorLabel;
@@ -71,7 +73,7 @@ private:
 	ControlPanelController* m_controlPanelControllerTrue;
 	bool m_isPanoramaEnabled;
 
-	QList<QThread*> m_threadSrcList;
+	//QList<QThread*> m_threadSrcList;
 
 	PanoramaFreqControl* m_panoramaFreqControl;
 
@@ -142,7 +144,8 @@ public:
 
 	void setPanoramaFreqControl(PanoramaFreqControl *control);
 
-    void setExtCorrelController(ICorrelationControllersContainer* container);
+	void setExtCorrelController(ICorrelationControllersContainer* container);
+
 private:
 	void init();
 

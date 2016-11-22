@@ -5,24 +5,24 @@
 #include "TcpRDSController.h"
 
 TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
-    TcpDeviceController(parent),
-    m_stationShift(0),
-    m_serverId(serverId)
+	TcpDeviceController(parent),
+	m_stationShift(0),
+	m_serverId(serverId)
 {
 	m_tcpDeviceName = RDS_TCP_DEVICE;
-    log_debug(QString("Created %1").arg(m_tcpDeviceName));
+	log_debug(QString("Created %1").arg(m_tcpDeviceName));
 
 	m_coordinateCounter = 0;
 
-    init();
+	init();
 }
 
 TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, QObject* parent) :
-    TcpDeviceController(tcpDeviceName, parent),
-    m_stationShift(0),
-    m_serverId(serverId)
+	TcpDeviceController(tcpDeviceName, parent),
+	m_stationShift(0),
+	m_serverId(serverId)
 {
-    m_coordinateCounter = 0;
+	m_coordinateCounter = 0;
 	init();
 }
 
@@ -38,19 +38,19 @@ QMap<QString, BaseTcpDeviceController*>& TcpRDSController::stations()
 void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 {
 	m_coordinateCounter = obj;
-    m_coordinateCounter->setStationsShift(m_stationShift);
+	m_coordinateCounter->setStationsShift(m_stationShift);
 }
 
 void TcpRDSController::createTcpDeviceCoder()
 {
 	log_debug("Creating TcpRDSCoder...");
-    TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, this);
+	TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, this);
 	m_tcpDeviceCoder = coder;
 
-    coder->setCoordinatesCounter(m_coordinateCounter);
+	coder->setCoordinatesCounter(m_coordinateCounter);
 
 	connect(coder, SIGNAL(onChangeDevState(QMap<int, bool>)), this, SLOT(slotTcpConnectionStatus(QMap<int, bool>)) );
-    connect(coder, SIGNAL(onSendConfigureLoc(QByteArray)), this, SLOT(slotSendConfigureLoc(QByteArray)));
+	connect(coder, SIGNAL(onSendConfigureLoc(QByteArray)), this, SLOT(slotSendConfigureLoc(QByteArray)));
 	connect(coder, SIGNAL(onDetectSignal(int, QVector<QPointF>)), this, SLOT(slotDetectSignal(int,QVector<QPointF>)) );
 }
 
@@ -70,40 +70,40 @@ bool TcpRDSController::init()
 {
 	QSettings settings("./TCP/coders.ini", QSettings::IniFormat, this);
 
-    QStringList childKeys = settings.childGroups();
+	QStringList childKeys = settings.childGroups();
 
-    foreach (const QString &childKey, childKeys)
+	foreach (const QString &childKey, childKeys)
 	{
-        QString n = m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId);
-        if(childKey == m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId))
-        {
-            settings.beginGroup(childKey);
-            QString name = settings.value("name", "Unknown").toString();
-          //  int serverId = settings.value("id", 0).toInt();
-          //  QString n = m_tcpDeviceName + "-" + QString::number(m_serverId);
-            //if(name == m_tcpDeviceName + "-" + QString::number(m_serverId))
+		QString n = m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId);
+		if(childKey == m_tcpDeviceName.toUpper() + "-" + QString::number(m_serverId))
+		{
+			settings.beginGroup(childKey);
+			QString name = settings.value("name", "Unknown").toString();
+			//  int serverId = settings.value("id", 0).toInt();
+			//  QString n = m_tcpDeviceName + "-" + QString::number(m_serverId);
+			//if(name == m_tcpDeviceName + "-" + QString::number(m_serverId))
 
-                m_flakonSettingStruct.zone = settings.value("zone", 0).toInt();
-                m_flakonSettingStruct.typeRds = settings.value("typeRds", 0).toInt();
-                m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
-                m_flakonSettingStruct.port = settings.value("Port", 1111).toInt();
-                m_flakonSettingStruct.name = settings.value("name", "RDS").toString();
-                m_flakonSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
+			m_flakonSettingStruct.zone = settings.value("zone", 0).toInt();
+			m_flakonSettingStruct.typeRds = settings.value("typeRds", 0).toInt();
+			m_flakonSettingStruct.host = settings.value("ip", "127.0.0.1").toString();
+			m_flakonSettingStruct.port = settings.value("Port", 1111).toInt();
+			m_flakonSettingStruct.name = settings.value("name", "RDS").toString();
+			m_flakonSettingStruct.reconnectInterval = settings.value("reconnectInterval", 1000).toInt();
 
-                m_host = m_flakonSettingStruct.host;
-                m_port = m_flakonSettingStruct.port;
-                m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
+			m_host = m_flakonSettingStruct.host;
+			m_port = m_flakonSettingStruct.port;
+			m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
 
-                m_stationShift = settings.value( "shift", 0 ).toUInt();
+			m_stationShift = settings.value( "shift", 0 ).toUInt();
 
-                QByteArray baseInfo;
-                QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
-                dsBaseInfo << m_flakonSettingStruct;
+			QByteArray baseInfo;
+			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);
+			dsBaseInfo << m_flakonSettingStruct;
 
 
-                settings.endGroup();
-                return true;
-            }
+			settings.endGroup();
+			return true;
+		}
 	}
 	return false;
 }
@@ -153,10 +153,10 @@ void TcpRDSController::requestTest()
 	QByteArray data;
 
 	//sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
-//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
-//	QDataStream st(&data, QIODevice::ReadWrite);
-//	st << true;
-//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+	//	QDataStream st(&data, QIODevice::ReadWrite);
+	//	st << true;
+	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 
 
 }
@@ -178,15 +178,15 @@ void TcpRDSController::slotTcpConnectionStatus(QMap<int, bool> map)
 		state.state = map.value(key);
 		stateList.append(state);
 
-        //Auto enable receiver todo. Now in bugs.
-//		if(!state.state) {
-//			QByteArray data;
-//			QDataStream stream(&data, QIODevice::ReadWrite);
+		//Auto enable receiver todo. Now in bugs.
+		//		if(!state.state) {
+		//			QByteArray data;
+		//			QDataStream stream(&data, QIODevice::ReadWrite);
 
-//			stream << state.id;
+		//			stream << state.id;
 
-//			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
-//		}
+		//			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
+		//		}
 
 	}
 	dataStream << stateList;
@@ -214,27 +214,27 @@ void TcpRDSController::slotDetectSignal(int index, QVector<QPointF> vec)
 
 void TcpRDSController::slotSendConfigureLoc(QByteArray data)
 {
-    MessageSP message(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
+	MessageSP message(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
 
-    foreach (ITcpListener* receiver, m_receiversList) {
-        receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
-    }
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
+	}
 }
 
 void TcpRDSController::onGetStations()
 {
 	QByteArray data;
 
-//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
+	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_SET_STATUS, data)));
 
-//	QDataStream st(&data, QIODevice::ReadWrite);
-//	st << true;
-//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+	//	QDataStream st(&data, QIODevice::ReadWrite);
+	//	st << true;
+	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 
 	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
-    sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
-    sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
-    sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS1, data)));
+	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
+	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
+	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS1, data)));
 	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_ANALYSIS_STATUS, data ) ) );
 }
@@ -262,9 +262,9 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 		///WTF?? OMG.... FACEPALM.TIFF
 		bool result = false;
 		const double frequency = argument.toDouble(&result);
-//		if(result) {
-//			m_coordinateCounter->setCenterFrequency(frequency);
-//		}
+		//		if(result) {
+		//			m_coordinateCounter->setCenterFrequency(frequency);
+		//		}
 
 		//m_coordinateCounter->setCenterFrequency(frequency);
 	}
@@ -300,10 +300,10 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 		return;
 	}
 	else if (method == RPC_METHOD_FLAKON_REQUEST_STATUS) {
-//		bool state = isConnected();
-//		requestTest();
+		//		bool state = isConnected();
+		//		requestTest();
 		//		log_info( QString( "Connection state for %1 = %2" ).arg( m_tcpDeviceName ).arg( state ) );
-//		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
+		//		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
 		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_PRM_STATUS, data ) ) );
 	}
 	else if(method == RPC_METHOD_SEND_RDS_PROTO) {

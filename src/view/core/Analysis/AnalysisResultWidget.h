@@ -34,7 +34,7 @@ public:
     AnalysisResultWidget(QWidget *parent = 0);
     virtual ~AnalysisResultWidget();
 
-    void setAnalysisData(RdsProtobuf::AnalysisDetected msg);
+	void setAnalysisData(RdsProtobuf::ServerMessage_OneShotData_AnalysisData_AnalysisOutput msg);
 
 signals:
     void signalContinue(bool);

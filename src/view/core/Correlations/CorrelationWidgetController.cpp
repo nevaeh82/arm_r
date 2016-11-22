@@ -1,6 +1,8 @@
 #include "CorrelationWidgetController.h"
 #include "CorrelationWidget.h"
 
+#include "Logger/Logger.h"
+
 CorrelationWidgetController::CorrelationWidgetController(QObject *parent) 
 	: QObject(parent)
 	, m_view(0)
@@ -12,9 +14,14 @@ CorrelationWidgetController::CorrelationWidgetController(QObject *parent)
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
 }
 
+CorrelationWidgetController::~CorrelationWidgetController()
+{
+	//log_debug("<<<<<<<<");
+}
+
 QWidget *CorrelationWidgetController::getWidget() const
 {
-        return m_view;
+	return m_view;
 }
 
 void CorrelationWidgetController::setVisible(const bool isVisible)

@@ -9,7 +9,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 {
 	ui->setupUi(this);
 
-    ui->labelNo->setVisible(false);
+	ui->labelNo->setVisible(false);
 
 	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SIGNAL(setPanoramaSignal(bool)));
 
@@ -95,6 +95,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 
 SpectrumWidget::~SpectrumWidget()
 {
+	//log_debug("<<<<<<<<<<<<<");
+	delete m_analysisResultWidget;
 }
 
 void SpectrumWidget::setAutoSearch(bool checked)
@@ -165,29 +167,29 @@ void SpectrumWidget::sonogramUpdate(const QPixmap &px)
 	//m_plot->replot();
 }
 
-void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected &msg)
+void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg)
 {
-    m_analysisResultWidget->setAnalysisData(msg);
+//    m_analysisResultWidget->setAnalysisData(msg);
 
-	QString txtDetected;
-	int tst = msg.signal_size();
-	Q_UNUSED(tst);
+//	QString txtDetected;
+//	int tst = msg.signal_size();
+//	Q_UNUSED(tst);
 
-	for(int i = 0; i < msg.signal_size(); i++) {
-		txtDetected.append( QString("Detected signal #%1 : \r\n").arg(i) );
-        txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).range().start() ).
-                                                                      arg( msg.signal(i).range().end() ) );
-//		if( msg.signal(i).signal().has_parameters() ) {
-//            RdsProtobuf::Signal_SignalParameters param = msg.signal(i).parameters();
-//			txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
-//			txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
-//			txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
+//	for(int i = 0; i < msg.signal_size(); i++) {
+//		txtDetected.append( QString("Detected signal #%1 : \r\n").arg(i) );
+//        txtDetected.append( QString("	Range start %1  end %2 \r\n").arg( msg.signal(i).range().start() ).
+//                                                                      arg( msg.signal(i).range().end() ) );
+////		if( msg.signal(i).signal().has_parameters() ) {
+////            RdsProtobuf::Signal_SignalParameters param = msg.signal(i).parameters();
+////			txtDetected.append( QString("	Signal System %1 \r\n").arg( QString::fromStdString(param.system()) ) );
+////			txtDetected.append( QString("	Signal Modulation %1 \r\n").arg( QString::fromStdString(param.modulation()) ) );
+////			txtDetected.append(  QString("	Signal Type %1\r\n").arg( QString::fromStdString(param.type()) ) );
+////		}
+
+//        if( msg.signal(i).has_more_info() ) {
+//            txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).more_info()) ) );
 //		}
-
-        if( msg.signal(i).has_more_info() ) {
-            txtDetected.append( QString("	Signal Info %1\r\n").arg( QString::fromStdString(msg.signal(i).more_info()) ) );
-		}
-	}
+//	}
 }
 
 AnalysisResultWidget *SpectrumWidget::getAnalysisResultWidget()

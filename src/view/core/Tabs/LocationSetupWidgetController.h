@@ -22,11 +22,11 @@ public:
 	explicit LocationSetupWidgetController(QObject *parent = 0);
 	virtual ~LocationSetupWidgetController();
 
-	void setLocationSetup(const RdsProtobuf::Location& data);
-	void setDetectorSetup(const RdsProtobuf::Detector& data);
-	void setCorrectionSetup(const RdsProtobuf::Correction &data);
-	void setAnalysisSetup(const RdsProtobuf::Analysis &data);
-    void setAnalysisBandwidth(double center, double width);
+	void setLocationSetup(const RdsProtobuf::ClientMessage_OneShot_Location &data);
+//	void setDetectorSetup(const RdsProtobuf::Detector& data);
+//	void setCorrectionSetup(const RdsProtobuf::Correction &data);
+//	void setAnalysisSetup(const RdsProtobuf::Analysis &data);
+	void setAnalysisBandwidth(double center, double width);
 
 	int getAnalysisWorkChannel() const;
 	void setAnalysisChannelCount(int count);
@@ -35,20 +35,34 @@ public:
 	void setDeviceEnableState(int dev, bool state);
 	void setSpectrumSelection(float bandwidth, float shift, double start, double end);
 
-    void changeLocationFreqParams(float freq, float bandwidth, float shift);
+	void changeLocationFreqParams(float freq, float bandwidth, float shift);
+
+	void setDevicesState(RdsProtobuf::System_SystemOptions opt);
+
+	bool getReceiveSpectrums() const;
 
 private:
 	LocationSetupWidget* m_view;
+
+	RdsProtobuf::ClientMessage_OneShot_Location m_locationMessage;
+	RdsProtobuf::ClientMessage_OneShot_Analysis m_analysisMessage;
+	RdsProtobuf::ClientMessage_OneShot_Record m_recordMessage;
+
 	int m_workMode;
+
+	bool m_receiveSpectrum;
 
 public:
 	void appendView(LocationSetupWidget* view);
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 	LocationSetupWidget *getView();
 
+	void requestLocation();
+
 public slots:
 	void slotShowWidget();
-    void slotOnChangeWorkMode(int mode, bool);
+	void slotOnChangeWorkMode(int mode, bool);
+	void slotSetReceiveSpectrums(bool receive);
 
 
 signals:

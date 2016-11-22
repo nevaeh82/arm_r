@@ -21,12 +21,12 @@ ControlPanelController::ControlPanelController(QObject *parent)
 	m_dbStation = NULL;
 	m_rpcFlakonClient = NULL;
 	m_mainStation = NULL;
-	m_mode = 0;
 	init();
 }
 
 ControlPanelController::~ControlPanelController()
 {
+
 }
 
 void ControlPanelController::init()
@@ -38,8 +38,8 @@ void ControlPanelController::init()
 
 	foreach (QString key, childKeys) {
 		if(key == TIMERINTERVAL_KEY) {
-            timerSettings.beginGroup(/*childKeys.first()*/key);
-            m_timerInterval = timerSettings.value("timerInterval", TIMER_INTERVAL).toInt();
+			timerSettings.beginGroup(/*childKeys.first()*/key);
+			m_timerInterval = timerSettings.value("timerInterval", TIMER_INTERVAL).toInt();
 			m_timerCheckInterval = timerSettings.value("timerCheckInterval", TIMERCHECK_INTERVAL).toInt();
 			timerSettings.endGroup();
 			break;
@@ -47,14 +47,12 @@ void ControlPanelController::init()
 	}
 }
 
-int ControlPanelController::getCurrentWorkMode() const
-{
-    return m_view->onGetMode();
-}
 
 void ControlPanelController::setLocationSetupController(LocationSetupWidgetController *controller)
 {
-    m_setupController = controller;
+	m_setupController = controller;
+
+	connect(m_view, SIGNAL(signalReceiveSpectrums(bool)), m_setupController, SLOT(slotSetReceiveSpectrums(bool)));
 }
 
 void ControlPanelController::appendView(ControlPanelWidget *view)
@@ -81,17 +79,15 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
 
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SIGNAL(onSignalWorkMode(int,bool)));
-    connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
-            this, SIGNAL(onSignalWorkModeToGui(int,bool)));
+	connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
+			this, SIGNAL(onSignalWorkModeToGui(int,bool)));
 	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
-    connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
-            this, SLOT(onSlotWorkModeGui(int,bool)));
+	connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
+			this, SLOT(onSlotWorkModeGui(int,bool)));
 
-    connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
+	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
 	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
-
-	connect(m_view, SIGNAL(signalSetMode(int)), this, SLOT(slotSetMode(int)));
 }
 
 void ControlPanelController::setDbManager(IDbManager *dbManager)
@@ -127,7 +123,7 @@ void ControlPanelController::setCorrelationFrequencyValue(double value)
 
 void ControlPanelController::setResponseFreq(quint32 freq)
 {
-    m_currentFreq = freq;
+	m_currentFreq = freq;
 	m_view->slotChangeCommonFreq(freq);
 }
 void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
@@ -146,20 +142,8 @@ void ControlPanelController::onAutoSearchStateChangedSlot(bool isEnabled)
 
 void ControlPanelController::changeFrequency(int value)
 {
-    m_currentFreq = value;
-    emit signalSetComonFreq(m_currentFreq);
-}
-
-void ControlPanelController::onEnableCurMode(bool enable)
-{
-    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
-}
-
-void ControlPanelController::onEnableMode(int mode, bool enable)
-{
-//    m_mode = mode;
-//    m_rpcFlakonClient->sendWorkMode(m_mode, enable);
-      onSlotWorkMode(mode, enable);
+	m_currentFreq = value;
+	emit signalSetComonFreq(m_currentFreq);
 }
 
 void ControlPanelController::onCommonFrequencyChangedSlot(int value)
@@ -172,13 +156,13 @@ void ControlPanelController::onCommonFrequencyChangedSlot(int value)
 
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 
-    emit signalSetComonFreq(m_currentFreq);
+	emit signalSetComonFreq(m_currentFreq);
 }
 
 void ControlPanelController::onBandWidthChangedSlot(int start, int end)
 {
 	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_START_PROPERTY, start);
-    m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_END_PROPERTY, end);
+	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_END_PROPERTY, end);
 }
 
 void ControlPanelController::slotManualMode()
@@ -194,7 +178,7 @@ void ControlPanelController::slotScanMode(int start, int finish)
 	if(m_timerCheck.isActive())
 		m_timerCheck.stop();
 
-    bool err = m_dbStation->getFrequencyAndBandwidthByCategory("Black", m_listOfFreqsBlack);
+	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("Black", m_listOfFreqsBlack);
 
 	m_startFreq = start;
 	m_currentFreq = start;
@@ -204,11 +188,11 @@ void ControlPanelController::slotScanMode(int start, int finish)
 
 void ControlPanelController::slotCheckMode()
 {	
-    if(m_timer.isActive()) {
+	if(m_timer.isActive()) {
 		m_timer.stop();
-    }
+	}
 
-    m_listOfFreqs.clear();
+	m_listOfFreqs.clear();
 
 	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
 	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
@@ -230,62 +214,62 @@ void ControlPanelController::slotViewMode()
 	slotCheckModeSetFreq();
 	m_timerCheck.start(m_timerCheckInterval);
 
-    QString ControlPanelSettingsPath = QCoreApplication::applicationDirPath();
-    ControlPanelSettingsPath.append("./Scan/CheckTimer.ini");
-    QSettings ControlPanelSettings( ControlPanelSettingsPath, QSettings::IniFormat );
+	QString ControlPanelSettingsPath = QCoreApplication::applicationDirPath();
+	ControlPanelSettingsPath.append("./Scan/CheckTimer.ini");
+	QSettings ControlPanelSettings( ControlPanelSettingsPath, QSettings::IniFormat );
 
-    int interval = ControlPanelSettings.value("timer", 3000).toInt();
-    m_timerCheck.start(interval);
+	int interval = ControlPanelSettings.value("timer", 3000).toInt();
+	m_timerCheck.start(interval);
 	/// TODo in next release
-//	ListWhiteDialog* listView = new ListWhiteDialog(m_view);
-//	ListWhiteDialogController* listController = new ListWhiteDialogController(m_dbStation->getDataBase(), this);
-//	bool isOpen = m_dbStation->getDataBase().isOpen();
-//	if(!isOpen)
-//	{
-//		QMessageBox msgBox;
-//		msgBox.setText(tr("DataBase is not opened!"));
-//		msgBox.exec();
-//		return;
-//	}
+	//	ListWhiteDialog* listView = new ListWhiteDialog(m_view);
+	//	ListWhiteDialogController* listController = new ListWhiteDialogController(m_dbStation->getDataBase(), this);
+	//	bool isOpen = m_dbStation->getDataBase().isOpen();
+	//	if(!isOpen)
+	//	{
+	//		QMessageBox msgBox;
+	//		msgBox.setText(tr("DataBase is not opened!"));
+	//		msgBox.exec();
+	//		return;
+	//	}
 
-//	listController->appendView(listView);
-//	listView->show();
+	//	listController->appendView(listView);
+	//	listView->show();
 }
 
 void ControlPanelController::slotChangeFreq()
 {
-    if(m_currentFreq >= m_finishFreq)
-    {
-        m_currentFreq = m_startFreq;
-    } else {
-        m_currentFreq += INTERVAL;
-    }
-    //m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
+	if(m_currentFreq >= m_finishFreq)
+	{
+		m_currentFreq = m_startFreq;
+	} else {
+		m_currentFreq += INTERVAL;
+	}
+	//m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 
-    changeFrequency(m_currentFreq);
+	changeFrequency(m_currentFreq);
 }
 
 bool ControlPanelController::slotIncCheckMode()
 {
-    for(int i = 0; i<m_listOfFreqs.size() + 1; i++) {
-        m_itCheckMode++;
+	for(int i = 0; i<m_listOfFreqs.size() + 1; i++) {
+		m_itCheckMode++;
 
-        if(m_itCheckMode == m_listOfFreqs.end())
-        {
-            m_itCheckMode = m_listOfFreqs.begin();
-        }
+		if(m_itCheckMode == m_listOfFreqs.end())
+		{
+			m_itCheckMode = m_listOfFreqs.begin();
+		}
 
-        bool state = (*m_itCheckMode).isChecked;
+		bool state = (*m_itCheckMode).isChecked;
 
-        if(!state)
-        {
-            continue;
-        } else {
-            return true;
-        }
-    }
+		if(!state)
+		{
+			continue;
+		} else {
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 void ControlPanelController::slotCheckModeSetFreq()
@@ -296,10 +280,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 		return;
 	}
 
-    if( !slotIncCheckMode() ) {
-        //No checked signals
-        return;
-    }
+	if( !slotIncCheckMode() ) {
+		//No checked signals
+		return;
+	}
 
 	double freq = (*m_itCheckMode).frequency;
 	double band = (*m_itCheckMode).bandwidth;
@@ -308,37 +292,37 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 
 
-//	foreach(Station* st, m_stationsMap)
-//	{
-    //m_setupController->setAnalysisBandwidth();
-    m_setupController->changeLocationFreqParams(freq, (*m_itCheckMode).bandwidth*1000, 0);
-        //changeFrequency(freq);
-        //m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
-        //m_rpcFlakonClient->sendShift(0, 0);
-//	}
+	//	foreach(Station* st, m_stationsMap)
+	//	{
+	//m_setupController->setAnalysisBandwidth();
+	m_setupController->changeLocationFreqParams(freq, (*m_itCheckMode).bandwidth*1000, 0);
+	//changeFrequency(freq);
+	//m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
+	//m_rpcFlakonClient->sendShift(0, 0);
+	//	}
 
 	/// set main station fo correlations
-//	QString leadStation;
-//	if(m_mainStation)
-//	{
-//		leadStation = (*m_itCheckMode).stationName;
-//	}
-//	else
-//	{
-//		m_mainStation = m_stationsMap.value(0);
-//		leadStation = tr("Auto");
-//	}
+	//	QString leadStation;
+	//	if(m_mainStation)
+	//	{
+	//		leadStation = (*m_itCheckMode).stationName;
+	//	}
+	//	else
+	//	{
+	//		m_mainStation = m_stationsMap.value(0);
+	//		leadStation = tr("Auto");
+	//	}
 
-//	if(m_mode == 3)
-//	{
-//		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
+	//	if(m_mode == 3)
+	//	{
+	//		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
 
-//		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
+	//		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
 
-        //m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
-//	}
+	//m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
+	//	}
 
-    //m_itCheckMode++;
+	//m_itCheckMode++;
 }
 
 void ControlPanelController::slotDown1MHz()
@@ -441,23 +425,6 @@ void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 	m_view->changeCorrelationStatusActive(isActive);
 }
 
-void ControlPanelController::slotSetMode(int mode)
-{
-	m_mode = mode;
-	emit signalSetMode(mode);
-}
-
-void ControlPanelController::onSlotWorkMode(int mode, bool isOn)
-{
-    m_mode = mode;
-    m_rpcFlakonClient->sendWorkMode(mode, isOn);
-}
-
-void ControlPanelController::onSlotWorkModeGui(int mode, bool isOn)
-{
-    m_mode = mode;
-}
-
 void ControlPanelController::onMethodCalled(const QString &method, const QVariant &argument)
 {
 	if (method == RPC_SLOT_SERVER_SEND_QUALITY_STATUS) {
@@ -467,15 +434,6 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 		stream >> status;
 
 		m_view->changeQualityStatus(status);
-    }
+	}
 }
 
-void ControlPanelController::onSetSystem(int modeId)
-{
-	m_view->onSetMode( modeId );
-}
-
-void ControlPanelController::onSetSystemStatus(bool isOn)
-{
-	m_view->onSetModeStatus( isOn );
-}

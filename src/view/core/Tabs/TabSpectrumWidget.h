@@ -81,15 +81,10 @@ signals:
 	void setIndicatorStateSignal(int state);
 	void spectrumDoubleClickedSignal(int);
 
-	void onSetWorkMode(int,bool);
-
 	void onChangeAnalysisChannel(int);
 
 private slots:
 	void setIndicatorStateSlot(int state);
-	void slotSetWorkMode(int mode, bool isOn);
-
-
 };
 
 #endif // TABSPECTRUM_H

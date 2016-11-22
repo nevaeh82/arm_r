@@ -1,42 +1,42 @@
 [submodule "redist/QXT"]
 	path = redist/QXT
-	url = git@192.168.137.67:externals/qxt_bin.git
+	url = git@git.okocenter.ru:externals/qxt_bin.git
 [submodule "redist/tbb"]
 	path = redist/tbb
-	url = git@192.168.137.67:externals/tbb.git
+	url = git@git.okocenter.ru:externals/tbb.git
 [submodule "redist/plugins"]
 	path = redist/plugins
-	url = git@192.168.137.67:externals/qt_plugins_bin.git
+	url = git@git.okocenter.ru:externals/qt_plugins_bin.git
 [submodule "redist/GraphicsIpp"]
 	path = redist/GraphicsIpp
-	url = git@192.168.137.67:externals/graphics_ipp.git
+	url = git@git.okocenter.ru:externals/graphics_ipp.git
 [submodule "redist/ipp"]
 	path = redist/ipp
-	url = git@192.168.137.67:externals/ipp.git
+	url = git@git.okocenter.ru:externals/ipp.git
 [submodule "redist/qtsingleapplication"]
 	path = redist/qtsingleapplication
-	url = git@192.168.137.67:externals/qtsingleapplication.git
+	url = git@git.okocenter.ru:externals/qtsingleapplication.git
 [submodule "cmake"]
 	path = cmake
-	url = git@192.168.137.67:externals/cmake.git
+	url = git@git.okocenter.ru:externals/cmake.git
 [submodule "src/CISCommonLib"]
 	path = src/CISCommonLib
-	url = git@192.168.137.67:externals/ciscommonlib.git
+	url = git@git.okocenter.ru:externals/ciscommonlib.git
 [submodule "redist/protobuf"]
 	path = redist/protobuf
-	url = git@192.168.137.67:externals/protobuf_bin.git
+	url = git@git.okocenter.ru:externals/protobuf_bin.git
 [submodule "tools/cxxmock"]
 	path = tools/cxxmock
-	url = git@192.168.137.67:externals/cxxmock.git
+	url = git@git.okocenter.ru:externals/cxxmock.git
 [submodule "tools/cxxtest"]
 	path = tools/cxxtest
-	url = git@192.168.137.67:externals/cxxtest.git
+	url = git@git.okocenter.ru:externals/cxxtest.git
 [submodule "src/server/core/protobuf"]
 	path = src/server/core/protobuf
-	url = git@192.168.137.67:zaviruha/protobuf.git
+	url = git@git.okocenter.ru:zaviruha/protobuf.git
 [submodule "redist/libmysql"]
 	path = redist/libmysql
-	url = git@192.168.137.67:externals/libmysql.git
+	url = git@git.okocenter.ru:externals/libmysql.git
 [submodule "redist/qwt"]
 	path = redist/qwt
-	url = git@192.168.137.67:pyarovoy/qwt-6-1-3.git
+	url = git@git.okocenter.ru:pyarovoy/qwt-6-1-3.git

@@ -18,6 +18,7 @@ Station::Station(IDbManager* dbManager, RpcFlakonClientWrapper *client, QObject 
 
 Station::~Station()
 {
+	//log_debug("<<<<<<");
 }
 
 void Station::setId(int id)

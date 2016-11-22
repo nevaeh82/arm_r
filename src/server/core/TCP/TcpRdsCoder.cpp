@@ -14,18 +14,14 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
-	m_indexSpect(-1),
-	m_analysisIndex(0),
-	m_analysisCfreq(0)
+	m_indexSpect(-1)
 {
 
-    m_header.zone = zone;
-    m_header.typeRds = typeRDS;
+	m_header.zone = zone;
+	m_header.typeRds = typeRDS;
 
 	m_residueLength = 0;
 	cnt = 0;
-
-	m_locConf.duration = 3;
 
 	m_specTime = QDateTime::currentDateTime();
 
@@ -34,7 +30,6 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 	m_upTime = settings.value("SpectrumUpTime/time", TIME_DEL).toInt();
-
 }
 
 TcpRdsCoder::~TcpRdsCoder()
@@ -90,6 +85,7 @@ QByteArray TcpRdsCoder::getMessage(const QByteArray& input)
 	return dataToSend;
 }
 
+//Decode to send Message to RDS
 QByteArray TcpRdsCoder::decode(const MessageSP message)
 {
 	QString messageType = message->type();
@@ -103,201 +99,10 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 
 	RdsProtobuf::Packet msg;
 
-	if (messageType == TCP_RDS_SET_STATUS) {
-		int ind;
-		stream >> ind;
-		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_index(ind);
-	} else if(messageType == TCP_RDS_TURN_STATUS) {
-		bool b;
-		stream >> b;
-		msg.mutable_from_client()->mutable_set()->mutable_mode()->set_status(b);
-	}
-	else if(messageType == TCP_RDS_WORK_MODE) {
-        RdsProtobuf::Mode* sMsg = msg.mutable_from_client()->mutable_get()->mutable_mode();
-        //sMsg->set_index(0);
-        sMsg->set_status(true);
-	}
-	else if(messageType == TCP_RDS_GET_STATUS) {
-		msg.mutable_from_client()->mutable_get()->mutable_mode()->set_index(1);
-    } else if(messageType == TCP_RDS_GET_STATUS1) {
-        msg.mutable_from_client()->mutable_get()->mutable_mode()->set_status(true);
-    } else if(messageType == TCP_RDS_GET_LOC_STATUS) {
-		createGetLocationStatus(msg);
-	} else if(messageType == TCP_RDS_GET_ANALYSIS_STATUS) {
-		createGetAnalysisStatus(msg);
-	}else if( messageType == TCP_RDS_GET_PRM_STATUS ) {
-		RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_device();
+	if( message->type() == TCP_RDS_SEND_PROTO ) {
+		RdsProtobuf::Packet pkt = unpack(msgData);
 
-		dMsg->set_device_index(0);
-		dMsg->set_status(true);
-	} else if( messageType == TCP_RDS_SET_PRM_STATUS ) {
-        int ind;
-        stream >> ind;
-
-        RdsProtobuf::System_Device* dMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_device();
-
-        if(ind < 0) {
-            dMsg->set_device_index(0);
-            dMsg->set_status(true);
-        } else {
-            dMsg->set_device_index(ind);
-            dMsg->set_status(true);
-        }
-	}
-	 else if( messageType == TCP_RDS_GET_SYSTEM ) {
-		RdsProtobuf::System_SystemOptions* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system()->mutable_options();
-		sMsg->set_title("111", 3);
-	} else if (message->type() == TCP_PRM300_REQUEST_SET_FREQUENCY) {
-		QString name;
-		unsigned short avalue;
-		stream >> name;
-		stream >> avalue;
-
-		m_locConf.centralFreq = avalue;
-
-		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-		lMsg->set_duration(m_locConf.duration);
-		lMsg->set_central_frequency(m_locConf.centralFreq);
-		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_doppler(m_locConf.doppler);
-		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
-		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
-
-		lMsg->mutable_filter()->set_range(m_locConf.range);
-		lMsg->mutable_filter()->set_shift(m_locConf.shift);
-	}
-	else if (messageType == TCP_FLAKON_REQUEST_SET_BANDWIDTH) {
-		float bandwidth;
-		stream >> bandwidth;
-		m_locConf.range = bandwidth;
-		return QByteArray();
-	}
-	else if (messageType == TCP_FLAKON_REQUEST_SET_SHIFT) {
-		float shift;
-		stream >> shift;
-		m_locConf.shift = shift;
-
-        if(m_coordCounter) {
-            m_coordCounter->setShift( m_locConf.shift );
-        }
-		return QByteArray();
-	}
-	else if(messageType == TCP_FLAKON_REQUEST_MAIN_STATION_CORRELATION) {
-		QString mainSt;
-		stream >> mainSt;
-		m_locConf.baseIndex = m_mapPrm.key(mainSt, 0);
-
-		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-
-		lMsg->set_duration(3);
-		lMsg->set_central_frequency(m_locConf.centralFreq);
-		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_doppler(m_locConf.doppler);
-		lMsg->set_averaging_frequency_band(m_locConf.freqBand);
-		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
-
-		lMsg->mutable_filter()->set_range(m_locConf.range);
-		lMsg->mutable_filter()->set_shift(m_locConf.shift);
-
-        if(m_coordCounter) {
-            m_coordCounter->setShift( m_locConf.shift );
-        }
-	}
-	else if (messageType == TCP_FLAKON_REQUEST_SS_CORRELATION) {
-		//NOT usable more
-		float frequency;
-		bool enable;
-		int id;
-		stream >> id;
-		stream >> frequency;
-		stream >> enable;
-
-		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-		lMsg->set_duration(m_locConf.duration);
-        m_locConf.centralFreq = frequency;
-		lMsg->set_central_frequency(m_locConf.centralFreq);
-		m_locConf.convolution = enable;
-		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_doppler(m_locConf.doppler);
-		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
-		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
-
-		lMsg->mutable_filter()->set_range(m_locConf.range);
-		lMsg->mutable_filter()->set_shift(m_locConf.shift);
-
-        if(m_coordCounter) {
-            m_coordCounter->setShift( m_locConf.shift );
-        }
-	}
-	else if( message->type() == TCP_FLAKON_REQUEST_AVERAGE_SPECTRUM ) {
-		int val;
-
-		stream >> val;
-
-		if(m_locConf.freqBand == val) {
-			return QByteArray();
-		}
-		m_locConf.freqBand = val;
-
-		RdsProtobuf::Location_LocationOptions* lMsg = msg.mutable_from_client()->mutable_set()->mutable_location()->mutable_options();
-		lMsg->set_duration(m_locConf.duration);
-		lMsg->set_central_frequency(m_locConf.centralFreq);
-		lMsg->set_convolution(m_locConf.convolution);
-		lMsg->set_doppler(m_locConf.doppler);
-		lMsg->set_averaging_frequency_band( m_locConf.freqBand );
-		lMsg->set_frequency_tuning_mode(m_locConf.tuningMode);
-
-		lMsg->mutable_filter()->set_range(m_locConf.range);
-		lMsg->mutable_filter()->set_shift(m_locConf.shift);
-	}
-	else if( message->type() == TCP_FLAKON_REQUEST_ENABLE_RECEIVER ) {
-		int id;
-		bool val;
-
-		stream >> id;
-		stream >> val;
-
-		RdsProtobuf::System_Receiver* rMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver();
-
-		rMsg->set_device_index(0);
-		rMsg->set_channel_index( id );
-
-		rMsg->set_status( val );
-	}
-	else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_ONE) {
-		stream >> name;
-		stream >> val;
-
-		RdsProtobuf::System_Receiver* rMsg = msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver();
-
-		rMsg->set_device_index(0);
-		rMsg->set_channel_index(m_mapPrm.key(name));
-
-		rMsg->mutable_settings()->set_frequency(m_locConf.centralFreq);
-		rMsg->mutable_settings()->set_attenuator1(val.att1);
-		rMsg->mutable_settings()->set_attenuator2(val.att2);
-
-		//dataToSend = prmSetAttenuerOne(int_value);
-	}
-	else if (message->type() == TCP_PRM300_REQUEST_SET_ATTENUER_TWO) {
-	}
-	else if (message->type() == TCP_PRM300_REQUEST_SET_FILTER) {
-	}
-	else if( message->type() == TCP_RDS_SEND_PROTO ) {
-        RdsProtobuf::Packet pkt = unpack(msgData);
-
-        if( isSetLocationStatus(pkt) ) {
-            m_locConf.shift = pkt.from_client().set().location().options().filter().shift();
-            m_locConf.range = pkt.from_client().set().location().options().filter().shift();
-            m_locConf.centralFreq = pkt.from_client().set().location().options().central_frequency();
-
-            if(m_coordCounter) {
-                m_coordCounter->setShift( m_locConf.shift );
-                m_coordCounter->setCenterFrequency( m_locConf.centralFreq );
-            }
-        }
-
-        return msgData;
+		return msgData;
 	}
 	else {
 		return QByteArray();
@@ -321,14 +126,15 @@ void TcpRdsCoder::addPreambula(QByteArray& data)
 
 QObject* TcpRdsCoder::asQObject()
 {
-    return this;
+	return this;
 }
 
 void TcpRdsCoder::setCoordinatesCounter(CoordinateCounter *obj)
 {
-    m_coordCounter = obj;
+	m_coordCounter = obj;
 }
 
+//Read message from RDS
 MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 {
 	MessageSP message;
@@ -342,383 +148,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 	RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
-	if( sMsg.has_data() ) {
-		if( sMsg.data().has_data_status() ) {
-			bool status;
-            int i = 0;
-			foreach (bool val, sMsg.data().data_status().status()) {
-				status = val;
-//                if(!status) {
-//                    QVector<QPointF> vec;
-//                    vec.append( QPointF(5*TO_KHZ, val) );
-//                    vec.append( QPointF(10*TO_KHZ, val) );
-//                    vec.append( QPointF(15*TO_KHZ, val) );
-//                    message = pointers(i, 10, vec);
-//                }
-                i++;
-			}
-            emit onSendConfigureLoc(data);
-		}
-		if( sMsg.data().has_location_spectrum() ) {        //Spectrum
-			int ind = sMsg.data().location_spectrum().detector_index();
-
-			QDateTime tmp = QDateTime::currentDateTime();
-			m_specTime = m_mapSendSpectrumTime.value(ind, tmp);
-
-			if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-				if(!m_mapSendSpectrumTime.contains(ind)) {
-					m_mapSendSpectrumTime.insert(ind, tmp);
-				}
-
-				return message;
-			}
-
-			m_mapSendSpectrumTime.insert(ind, tmp);
-
-			double startFreq = sMsg.data().location_spectrum().plot().axis_x_start();
-			double stepFreq = sMsg.data().location_spectrum().plot().axis_x_step();
-
-			QVector<QPointF> vec;
-			double freq = startFreq;
-
-			for(int i = 0; i < sMsg.data().location_spectrum().plot().data().size(); i++) {
-				double val = sMsg.data().location_spectrum().plot().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
-
-                message = pointers(ind, startFreq+10, vec);
-
-                if(m_coordCounter) {
-                    m_coordCounter->setCenterFrequency(startFreq+10);
-                    m_coordCounter->setShift( m_locConf.shift );
-                }
-
-			m_indexSpect = ind;
-		} else if( sMsg.data().has_location_convolution() ) {   //Single convolution
-			float veracity = 0;
-			int index1 =  sMsg.data().location_convolution().convolution().first_detector_index();
-			int index2 =  sMsg.data().location_convolution().convolution().second_detector_index();
-
-            QDateTime tmp = QDateTime::currentDateTime();
-            int ind = (index1<<8)+index2;
-            m_specTime = m_mapSendConvolutionTime.value(ind, tmp);
-
-            if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-                if(!m_mapSendConvolutionTime.contains(ind)) {
-                    m_mapSendConvolutionTime.insert(ind, tmp);
-                }
-
-                return message;
-            }
-
-            m_mapSendConvolutionTime.insert(ind, tmp);
-
-
-			float timediff = sMsg.data().location_convolution().convolution().delay();
-            veracity = sMsg.data().location_convolution().convolution().delay_accuracy();
-
-			QVector<QPointF> vp;
-			for(int i = 0; i < sMsg.data().location_convolution().plot().data_size(); i++) {
-				double p = sMsg.data().location_convolution().plot().data(i);
-				double x = sMsg.data().location_convolution().plot().axis_x_start() +
-						   sMsg.data().location_convolution().plot().axis_x_step()*i;
-
-				QPointF point( x, p );
-				vp.append(point);
-			}
-
-			if(index1 != m_indexConv1 || index2 != m_indexConv2) {
-				message = correlation(index1, index2, timediff, veracity, vp);
-			}
-
-			m_indexConv1 = index1;
-			m_indexConv2 = index2;
-
-		}
-		else if( sMsg.data().has_location_data() ) {
-			RdsProtobuf::LocationData lMsg = sMsg.data().location_data();
-
-			qint64 dateTime =  lMsg.date_time();
-			RdsProtobuf::Signal sigMsg = lMsg.signal();
-			int csz = lMsg.convolution_size();
-
-			double start = sigMsg.range().start();
-			double end = sigMsg.range().end();
-			QString info = QString::fromStdString( sigMsg.info() );
-
-			foreach (RdsProtobuf::Convolution cnvMsg, lMsg.convolution()) {
-				int firstInd = cnvMsg.first_detector_index();
-				int secInd = cnvMsg.second_detector_index();
-
-				bool stat = cnvMsg.has_delay();
-				double delay = cnvMsg.delay();
-				double delay_acc = cnvMsg.delay_accuracy();
-			}
-
-			message = correlationAll(data);
-		}
-		else if( sMsg.data().has_detector_spectrum() ) {
-			int ind = sMsg.data().detector_spectrum().detector_index();
-
-            QDateTime tmp = QDateTime::currentDateTime();
-            m_specTime = m_mapSendDetectorTime.value(ind, tmp);
-
-            if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-                if(!m_mapSendDetectorTime.contains(ind)) {
-                    m_mapSendDetectorTime.insert(ind, tmp);
-                }
-
-                return message;
-            }
-
-            m_mapSendDetectorTime.insert(ind, tmp);
-
-			int cFreq = sMsg.data().detector_spectrum().central_frequency();
-
-			QVector<QPointF> vec;
-			double startFreq = sMsg.data().detector_spectrum().plot().axis_x_start();
-			double stepFreq = sMsg.data().detector_spectrum().plot().axis_x_step();
-
-			double freq = startFreq;
-
-			for( int i = 0; i < sMsg.data().detector_spectrum().plot().data_size(); i++ ) {
-				double val = sMsg.data().detector_spectrum(). plot().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
-
-			message = pointers(ind, cFreq, vec);
-
-			QVector<QPointF> pointsList;
-			int sz = sMsg.data().detector_spectrum().first_index_size();
-
-			for(int i=0; i < sz; i++ ) {
-				int start = sMsg.data().detector_spectrum().first_index(i);
-				int end = sMsg.data().detector_spectrum().last_index(i);
-				QPointF point( startFreq+stepFreq*start, startFreq+stepFreq*end );
-
-				pointsList.append(point);
-			}
-
-            //Test
-//            QPointF point( startFreq+stepFreq*10, startFreq+stepFreq*10000 );
-//            pointsList.append(point);
-            // =========
-			emit onDetectSignal(ind, pointsList);
-		} else if( sMsg.data().has_analysis_spectrum() ) {
-
-			QDateTime tmp = QDateTime::currentDateTime();
-			m_specTime = m_mapSendAnalysisTime.value(m_analysisIndex, tmp);
-
-			if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-				if(!m_mapSendAnalysisTime.contains(m_analysisIndex)) {
-					m_mapSendAnalysisTime.insert(m_analysisIndex, tmp);
-				}
-
-				return message;
-			}
-
-			m_mapSendAnalysisTime.insert(m_analysisIndex, tmp);
-
-			QVector<QPointF> vec;
-			double startFreq = sMsg.data().analysis_spectrum().plot().axis_x_start();
-			double stepFreq = sMsg.data().analysis_spectrum().plot().axis_x_step();
-
-			double freq = startFreq;
-
-			for( int i = 0; i < sMsg.data().analysis_spectrum().plot().data_size(); i++ ) {
-				double val = sMsg.data().analysis_spectrum(). plot().data(i);
-				vec.append( QPointF(freq*TO_KHZ, val) );
-				freq += stepFreq;
-			}
-
-			message = pointers(m_analysisIndex, m_analysisCfreq, vec);
-		}
-		else if( sMsg.data().has_detector_detected() ) {
-			int k = 0;
-		}
-		else if( sMsg.data().has_analysis_spectrogram() ) {
-			QDateTime tmp = QDateTime::currentDateTime();
-			m_specTime = m_mapSendAnalysisSonogramTime.value(m_analysisIndex, tmp);
-
-			if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-				if(!m_mapSendAnalysisSonogramTime.contains(m_analysisIndex)) {
-					m_mapSendAnalysisSonogramTime.insert(m_analysisIndex, tmp);
-				}
-
-				return message;
-			}
-			m_mapSendAnalysisSonogramTime.insert(m_analysisIndex, tmp);
-
-			message = configureLoc(data);
-		}
-		else if( sMsg.data().has_analysis_detected() ) {
-			message = configureLoc(data);
-		}
-		else if( sMsg.data().has_analysis_abs_phase_freq() ) {
-			QDateTime tmp = QDateTime::currentDateTime();
-			m_specTime = m_mapSendAnalysisAbsTime.value(m_analysisIndex, tmp);
-
-			if( m_specTime.msecsTo(tmp) < m_upTime ) {
-
-				if(!m_mapSendAnalysisAbsTime.contains(m_analysisIndex)) {
-					m_mapSendAnalysisAbsTime.insert(m_analysisIndex, tmp);
-				}
-
-				return message;
-			}
-			m_mapSendAnalysisAbsTime.insert(m_analysisIndex, tmp);
-
-			message = configureLoc(data);
-		}
-	} else if( sMsg.has_answer() ) {
-		QString answer;
-		if( sMsg.answer().has_error() ) {
-			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
-			message = configureLoc(data);
-		} else if( sMsg.answer().has_confirmation() ) {
-			answer = QString::fromStdString( sMsg.answer().confirmation().str() );
-			message = configureLoc(data);
-		}
-	} else if( sMsg.has_current() ) {
-		if( sMsg.current().has_mode() ) {
-			int mode = sMsg.current().mode().index();
-//			bool stat = sMsg.current().mode().status();
-//			int i = 0;
-//			i = i+1;
-			message = configureLoc(data);
-		} else if( sMsg.current().has_system() ) {
-			if( sMsg.current().system().has_options() ) {
-				QList<StationConfiguration> resultList;
-
-				RdsProtobuf::System_SystemOptions sysMsg = sMsg.current().system().options();
-				QString str = QString::fromStdString(sysMsg.title());
-				int devNums = sysMsg.devices_size();
-				int chCnt = 0;
-
-				for(int d = 0; d < sysMsg.devices().size(); d++) {
-					RdsProtobuf::DeviceOptions optMsg = sysMsg.devices(d);
-					QString optStr = QString::fromStdString(optMsg.title());
-					bool statDev = optMsg.status();
-					QString ipDev = QString::fromStdString(optMsg.ip());
-
-					m_mapDevState.insert(-1, statDev);
-
-					for(int i = 0; i < optMsg.channels_size(); i++) {
-						StationConfiguration configVal;
-						RdsProtobuf::ChannelOptions chMsg = optMsg.channels(i);
-
-						QString chStr = QString::fromStdString(chMsg.title());
-
-						RdsProtobuf::ReceiverOptions recMsg = chMsg.receiver();
-						QString recStr = QString::fromStdString(recMsg.title());
-
-						bool stat = recMsg.status();
-						QString ip = QString::fromStdString(recMsg.ip());
-
-						RdsProtobuf::ReceiverSettings prmMsg = recMsg.settings();
-						int freq = prmMsg.frequency();
-						int att1 = prmMsg.attenuator1();
-						int att2 = prmMsg.attenuator2();
-
-                        m_mapDevState.insert(chCnt, stat);
-
-						PrmSettings settings;
-						settings.att1 = att1;
-						settings.att2 = att2;
-						settings.ip = ip;
-
-						m_mapPrmSettings.insert(i, settings);
-
-						//configVal.id			= chNum;
-						configVal.platform		= d;
-						configVal.channel		= i;
-						configVal.id			= chCnt;
-						configVal.platformCNT	= devNums;
-						configVal.name			= optStr;
-						configVal.nameChannel	= chStr;
-						configVal.namePrm		= chStr; //recStr;
-
-						m_mapPrm.insert(i, chStr);
-
-						chCnt++;
-
-						if(chMsg.has_coordinates()) {
-							configVal.latitude		= chMsg.coordinates().latitude(); //to be done in proto
-							configVal.longitude		= chMsg.coordinates().longitude();
-							configVal.altitude		= chMsg.coordinates().altitude();
-						} else {
-							configVal.latitude		= 0; //to be done in proto
-							configVal.longitude		= 0;
-							configVal.altitude		= 0;
-						}
-						configVal.hostPrm300	= ip;
-						configVal.statusPrm		= stat;
-						configVal.freqPrm		= freq;
-						configVal.statusAdc		= statDev;
-						configVal.hostADC		= ipDev;
-
-						resultList.append(configVal);
-					}
-				}
-				message = configure(resultList);
-				emit onChangeDevState(m_mapDevState);
-                emit onSendConfigureLoc(data);
-			} else if( sMsg.current().system().has_device()) {
-				RdsProtobuf::System_Device dMsg = sMsg.current().system().device();
-				m_mapDevState.insert(-1, dMsg.status());
-				emit onChangeDevState(m_mapDevState);
-				message = configureLoc(data);
-			} else if( sMsg.current().system().has_receiver()) {
-				RdsProtobuf::System_Receiver rMsg = sMsg.current().system().receiver();
-				if(rMsg.has_status()) {
-					m_mapDevState.insert( rMsg.channel_index(), rMsg.status() );
-					emit onChangeDevState(m_mapDevState);
-				}
-				message = configureLoc(data);
-            }
-		} else if( sMsg.current().has_location() ) {
-			RdsProtobuf::Location_LocationOptions locMsg= sMsg.current().location().options();
-			m_locConf.duration = locMsg.duration();
-			m_locConf.centralFreq = locMsg.central_frequency();
-			m_locConf.convolution = locMsg.convolution();
-			m_locConf.doppler = locMsg.doppler();
-			m_locConf.freqBand = locMsg.averaging_frequency_band();
-			m_locConf.tuningMode = locMsg.frequency_tuning_mode();
-
-			m_locConf.chanNum = m_mapPrmSettings.size();
-
-			m_locConf.range = locMsg.filter().range();
-			m_locConf.shift = locMsg.filter().shift();
-
-            if(m_coordCounter) {
-                m_coordCounter->setShift( m_locConf.shift );
-            }
-			message = configureLoc(data);
-		}
-		else if( sMsg.current().has_detector() ) {
-			message = configureLoc(data);
-		}
-		else if( sMsg.current().has_correction() ) {
-			message = configureLoc(data);
-		}
-		else if( sMsg.current().has_analysis() ) {
-			if( sMsg.current().analysis().has_options() ) {
-				m_analysisIndex = sMsg.current().analysis().options().detector_index();
-				m_analysisCfreq = sMsg.current().analysis().options().central_frequency();
-			}
-
-			message = configureLoc(data);
-		}
-	}
-
-	//message = pointers(vec);
+	message = configureLoc( data );
 
 	return message;
 }
@@ -728,7 +158,7 @@ MessageSP TcpRdsCoder::pointers(int index, float cf, QVector<QPointF> vec)
 	// We should send m_header.id to rpcclient
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-    dataStream << m_header.zone << m_header.typeRds << index << cf << vec;
+	dataStream << m_header.zone << m_header.typeRds << index << cf << vec;
 
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
@@ -741,8 +171,8 @@ MessageSP TcpRdsCoder::configure(const QList<StationConfiguration>& lst)
 
 	QByteArray ba;
 	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-    dataStream << m_header.zone;
-    dataStream << m_header.typeRds;
+	dataStream << m_header.zone;
+	dataStream << m_header.typeRds;
 	dataStream << lst;
 
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, ba));

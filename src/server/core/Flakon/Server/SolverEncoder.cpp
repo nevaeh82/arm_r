@@ -13,9 +13,9 @@ SolverEncoder::~SolverEncoder()
 
 void SolverEncoder::onDataReceived(const QVariant& argument)
 {
-    QByteArray inData = argument.toByteArray();
+	QByteArray inData = argument.toByteArray();
 
-    Q_UNUSED(inData);
+	Q_UNUSED(inData);
 }
 
 QByteArray SolverEncoder::encode(const QByteArray &data)
@@ -53,77 +53,94 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 
 	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
 
-        QByteArray data = message->data();
+		QByteArray data = message->data();
 
-        SolverProtocol::Packet solutionPacket;
+		SolverProtocol::Packet solutionPacket;
 
-        if( !solutionPacket.ParseFromArray(data.data(), data.size()) ) {
-            return QByteArray();
-        }
+		if( !solutionPacket.ParseFromArray(data.data(), data.size()) ) {
+			return QByteArray();
+		}
 
-        SolverProtocol::Packet_DataFromSolver_SolverSolution dPkt;
-        if(solutionPacket.datafromsolver().has_solution_automatic_altitude()) {
-            dPkt = solutionPacket.datafromsolver().solution_automatic_altitude();
-        } else if(solutionPacket.datafromsolver().has_solution_manual_altitude()) {
-            dPkt = solutionPacket.datafromsolver().solution_manual_altitude();
-        } else {
-            return QByteArray();
-        }
-
-
-         QString all;
-        for(int i = 0; i<dPkt.trajectory_size(); i++) {
-
-             QString message;
-
-            SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory tPkt =  dPkt.trajectory( i );
-
-            SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mPkt =
-                    tPkt.motionestimate(tPkt.motionestimate_size()-1);
-
-            QStringList niippLst;
-            niippLst.append("BPLA");
-            niippLst.append(QString::fromStdString(tPkt.targetid()));
-
-            quint64 t = mPkt.datetime();
-            QDateTime dt = QDateTime::fromMSecsSinceEpoch(t);
-
-            niippLst.append( dt.date().toString("ddMMyy") );
-            niippLst.append( dt.time().toString("hhmmss") );
-
-            niippLst.append( QString::number(mPkt.coordinates().alt()) );
-            niippLst.append( QString::number(mPkt.targetspeed()) );
-            niippLst.append( QString::number(mPkt.relativebearing()) );
-            niippLst.append( QString("+") + QString::number(mPkt.coordinates().lat()) );
-            niippLst.append( QString("+") + QString::number(mPkt.coordinates().lon()) );
-
-            double acc = sqrt( mPkt.coordinates_acc().lon_acc()*mPkt.coordinates_acc().lon_acc() +
-                               mPkt.coordinates_acc().lat_acc()*mPkt.coordinates_acc().lat_acc() );
-
-            niippLst.append( QString::number(acc) );
+		SolverProtocol::Packet_DataFromSolver_SolverSolution dPkt;
+		if(solutionPacket.datafromsolver().has_solution_automatic_altitude()) {
+			dPkt = solutionPacket.datafromsolver().solution_automatic_altitude();
+		} else if(solutionPacket.datafromsolver().has_solution_manual_altitude()) {
+			dPkt = solutionPacket.datafromsolver().solution_manual_altitude();
+		} else {
+			return QByteArray();
+		}
 
 
-            message = niippLst.join(",");
+		QString all;
+		for(int i = 0; i<dPkt.trajectory_size(); i++) {
 
-            quint8 n =  crc( message.toLocal8Bit() );
+			QString message;
 
-            message.append( "*" );
-            message.append(QString::number(n));
+			SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory tPkt =  dPkt.trajectory( i );
 
-            message.append("\\r\\n");
-            all.append(message);
-        }
+			SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mPkt =
+					tPkt.motionestimate(tPkt.motionestimate_size()-1);
 
-        return all.toLocal8Bit();
+			QStringList niippLst;
+			niippLst.append("BPLA");
+			niippLst.append(QString::fromStdString(tPkt.targetid()));
+
+			quint64 t = mPkt.datetime();
+			QDateTime dt = QDateTime::fromMSecsSinceEpoch(t);
+
+			niippLst.append( dt.date().toString("ddMMyy") );
+			niippLst.append( dt.time().toString("hhmmss") );
+
+			niippLst.append( QString::number(mPkt.coordinates().alt()) );
+			niippLst.append( QString::number(mPkt.targetspeed()) );
+			niippLst.append( QString::number(mPkt.relativebearing()) );
+			niippLst.append( QString("+") + QString::number(mPkt.coordinates().lat()) );
+			niippLst.append( QString("+") + QString::number(mPkt.coordinates().lon()) );
+
+			double acc = sqrt( mPkt.coordinates_acc().lon_acc()*mPkt.coordinates_acc().lon_acc() +
+							   mPkt.coordinates_acc().lat_acc()*mPkt.coordinates_acc().lat_acc() );
+
+			niippLst.append( QString::number(acc) );
+
+
+			message = niippLst.join(",");
+
+			quint8 n =  crc( message.toLocal8Bit() );
+
+			message.append( "*" );
+			message.append(QString::number(n));
+
+			message.append("\\r\\n");
+			all.append(message);
+		}
+
+		return all.toLocal8Bit();
 
 	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
-        return QByteArray();
+		return QByteArray();
 	} else {
 		return QByteArray();
 	}
 
 
 	return dataToSend;
+}
+
+QByteArray SolverEncoder::decodeRegister()
+{
+	QString message;
+
+	message.append("OD");
+	message.append("REQ");
+
+	quint8 n =  crc( message.toLocal8Bit() );
+
+	message.append( "*" );
+	message.append(QString::number(n));
+
+	message.append("\\r\\n");
+
+	return message.toLocal8Bit();
 }
 
 void SolverEncoder::addPreambula(QByteArray& data)
@@ -135,9 +152,9 @@ void SolverEncoder::addPreambula(QByteArray& data)
 
 quint8 SolverEncoder::crc(const QByteArray& data)
 {
-    quint8 crc = 0;
-    for (int i = 0; i < data.length(); i++) {
-        crc ^= data.at(i);
-    }
-    return crc;
+	quint8 crc = 0;
+	for (int i = 0; i < data.length(); i++) {
+		crc ^= data.at(i);
+	}
+	return crc;
 }

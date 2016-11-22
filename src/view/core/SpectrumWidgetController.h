@@ -227,7 +227,6 @@ signals:
 
 	void onCorrelationStateChangedSignal(const bool isEnabled);
 
-	void onSignalSetWorkMode(int, bool);
     void signalAddToList(QString name, double start, double bandwidth);
 
     void signalStatus(bool);
@@ -257,7 +256,6 @@ private slots:
 	void slotShowPeaks(bool);
 	void slotShowControlPRM(bool);
 
-	void slotControlPanelMode(int mode);
 
 	void onVisible(const bool b);
 

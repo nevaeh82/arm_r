@@ -28,6 +28,7 @@ private:
 
 public:
 	explicit AnalysisWidgetController(int type, QObject *parent = 0);
+	virtual ~AnalysisWidgetController();
 
 	bool isGraphicVisible();
 	void setZeroFrequency(double val);

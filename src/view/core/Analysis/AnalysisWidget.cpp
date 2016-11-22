@@ -2,7 +2,7 @@
 
 #include "ui_AnalysisWidget.h"
 
-#include <QLabel>
+#include <Logger/Logger.h>
 
 AnalysisWidget::AnalysisWidget(int type, QWidget *parent, Qt::WFlags flags):
 	QWidget(parent, flags),
@@ -21,6 +21,7 @@ AnalysisWidget::AnalysisWidget(int type, QWidget *parent, Qt::WFlags flags):
 
 AnalysisWidget::~AnalysisWidget()
 {
+	//log_debug("<<<<<<<<");
 }
 
 Q_MG_SpectrumInterface *AnalysisWidget::getGraphicsWidget()

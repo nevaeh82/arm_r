@@ -25,7 +25,7 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
 
 	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
-    connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
+	connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
 }
 
 RpcFlakonClientWrapper::~RpcFlakonClientWrapper()
@@ -79,8 +79,11 @@ void RpcFlakonClientWrapper::initSlot()
 	m_rpcClient = new RpcFlakonClient(this);
 	m_rpcClient->start(m_port, m_address);
 
-    emit initFinishedSignal();
-    emit connectionEstablishedSignal();
+	emit initFinishedSignal();
+	emit connectionEstablishedSignal();
+
+	connect(m_rpcClient, SIGNAL(onBaseConnected()), this, SIGNAL(signalConnect()));
+	connect(m_rpcClient, SIGNAL(onBaseDisconnected()), this, SIGNAL(signalDisconnect()));
 }
 
 void RpcFlakonClientWrapper::stopSlot()
@@ -264,6 +267,11 @@ void RpcFlakonClientWrapper::requestFlakonStatus()
 void RpcFlakonClientWrapper::clearAllReceiversList()
 {
 	if(m_rpcClient) {
-        m_rpcClient->clearReceiversList();
-    }
+		m_rpcClient->clearReceiversList();
+	}
+}
+
+RpcFlakonClient *RpcFlakonClientWrapper::getClient()
+{
+	return m_rpcClient;
 }

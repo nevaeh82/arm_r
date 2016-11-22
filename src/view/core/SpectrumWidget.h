@@ -56,7 +56,7 @@ public:
 	Prm300ControlWidget* getPrm300Widget();
 
 	void sonogramUpdate(const QPixmap& px);
-	void setAnalysisDetectedData(const RdsProtobuf::AnalysisDetected &msg);
+	void setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg);
 
     AnalysisResultWidget* getAnalysisResultWidget();
 

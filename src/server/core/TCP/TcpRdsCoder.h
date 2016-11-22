@@ -9,7 +9,7 @@
 
 #include <QDateTime>
 
-#include "RdsPacket.pb.h"
+#include "RDSExchange.h"
 
 #include "Info/StationConfiguration.h"
 #include "TcpDefines.h"
@@ -48,18 +48,12 @@ private:
 	QDateTime m_specTime;
 	InputDataType m_inputData;
 
-    CoordinateCounter* m_coordCounter;
+	CoordinateCounter* m_coordCounter;
 
-//	int m_chanNum;
-//	int m_mode;
-//	int m_baseIndex;
-//	bool conv;
-//	int spectMean;
-//	int tunMode;
-//	int duration;
-//	int cfreq;
-
-	LocSystemConfiguration m_locConf;
+	//LocSystemConfiguration m_locConf;
+	RdsProtobuf::ClientMessage_OneShot_Location m_locationMessage;
+	RdsProtobuf::ClientMessage_OneShot_Analysis m_analysisMessage;
+	RdsProtobuf::ClientMessage_OneShot_Record m_recordMessage;
 
 	QMap<int, QString> m_mapPrm;
 
@@ -71,19 +65,16 @@ private:
 	int m_indexSpect;
 
 	QMap<int, QDateTime> m_mapSendSpectrumTime;
-    QMap<quint64, QDateTime> m_mapSendConvolutionTime;
-    QMap<int, QDateTime> m_mapSendDetectorTime;
+	QMap<quint64, QDateTime> m_mapSendConvolutionTime;
+	QMap<int, QDateTime> m_mapSendDetectorTime;
 	QMap<int, QDateTime> m_mapSendAnalysisTime;
 	QMap<int, QDateTime> m_mapSendAnalysisSonogramTime;
 	QMap<int, QDateTime> m_mapSendAnalysisAbsTime;
 
-    int m_upTime;
-
-	int m_analysisIndex;
-	int m_analysisCfreq;
+	int m_upTime;
 
 public:
-    explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent = NULL);
+	explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent = NULL);
 	virtual ~TcpRdsCoder();
 
 	// ITcpDeviceCoder interface
@@ -92,7 +83,7 @@ public:
 	virtual QByteArray decode(const MessageSP message);
 	virtual QObject* asQObject();
 
-    void setCoordinatesCounter(CoordinateCounter* obj);
+	void setCoordinatesCounter(CoordinateCounter* obj);
 
 private:
 	MessageSP messageFromPreparedData(const QByteArray& data);
@@ -112,5 +103,5 @@ signals:
 	void onChangeDevState(QMap<int, bool>);
 	void onDetectSignal(int, QVector<QPointF>);
 
-    void onSendConfigureLoc(QByteArray data);
+	void onSendConfigureLoc(QByteArray data);
 };

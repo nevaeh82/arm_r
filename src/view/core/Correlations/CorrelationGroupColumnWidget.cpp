@@ -11,6 +11,7 @@ CorrelationGroupColumnWidget::CorrelationGroupColumnWidget(QWidget *parent) :
 
 CorrelationGroupColumnWidget::~CorrelationGroupColumnWidget()
 {
+	//log_debug("<<<<<<<<");
 }
 
 void CorrelationGroupColumnWidget::insertCorrelationWidget(ICorrelationWidget *widget)
@@ -23,5 +24,5 @@ void CorrelationGroupColumnWidget::insertCorrelationWidget(ICorrelationWidget *w
 
     int row = getContainer()->count();
 
-    getContainer()->addWidget(widget->getWidget(), row, 0, 1, 1);
+	getContainer()->addWidget(widget->getWidget(), row, 0, 1, 1);
 }

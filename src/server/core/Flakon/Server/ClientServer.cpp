@@ -8,6 +8,8 @@ ClientTcpServer::ClientTcpServer(QObject* parent) :
 	m_encoder = new SolverEncoder(this);
 
 	this->registerReceiver(m_encoder);
+
+	connect(this, SIGNAL(newClientSignal(uint,ITcpServerClient*)), this, SLOT(onRegisterNewConnection(uint,ITcpServerClient*)));
 }
 
 ClientTcpServer::~ClientTcpServer()
@@ -23,6 +25,15 @@ void ClientTcpServer::startServer()
 void ClientTcpServer::stopServer()
 {
 	stop();
+}
+
+void ClientTcpServer::onRegisterNewConnection(uint n, ITcpServerClient * client)
+{
+	Q_UNUSED(n)
+
+	QByteArray dataToSend = m_encoder->decodeRegister();
+
+	client->writeData(dataToSend);
 }
 
 void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)

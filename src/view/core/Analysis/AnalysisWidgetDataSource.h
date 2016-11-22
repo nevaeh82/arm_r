@@ -33,6 +33,7 @@ private:
 
 public:
 	explicit AnalysisWidgetDataSource(IGraphicWidget*, ITabManager *tabManager, int id, QObject *parent);
+	virtual ~AnalysisWidgetDataSource();
 
 	void onMethodCalled(const QString&, const QVariant&);
 	void sendCommand(int);

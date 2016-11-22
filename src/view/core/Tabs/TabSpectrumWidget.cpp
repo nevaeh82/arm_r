@@ -5,7 +5,8 @@
 
 TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	QWidget(parent),
-	ui(new Ui::TabSpectrumWidget)
+	ui(new Ui::TabSpectrumWidget),
+	m_cpView(NULL)
 {
 	ui->setupUi(this);
 
@@ -15,10 +16,6 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 	m_spectrumWidgetController = new SpectrumWidgetController(m_spectrumWidget);
 	m_spectrumWidgetController->appendView(m_spectrumWidget);
-
-	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SIGNAL(onSetWorkMode(int,bool)));
-	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), this, SLOT(slotSetWorkMode(int,bool)));
-	connect(m_spectrumWidgetController, SIGNAL(onSignalSetWorkMode(int,bool)), m_spectrumWidget, SLOT(slotSetWorkMode(int,bool)));
 
 	connect(this, SIGNAL(onChangeAnalysisChannel(int)), m_spectrumWidgetController, SLOT(slotSetAnalysisChannel(int)));
 
@@ -41,8 +38,12 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 
 TabSpectrumWidget::~TabSpectrumWidget()
 {
-	log_debug("~() <<<<<<<<<<<");
-	log_debug("~() >>>>>>>>>>>");
+	delete m_pmRoundRed;
+	delete m_pmRoundGreen;
+	delete m_pmRoundYellow;
+
+	ui->cpLayout->removeWidget( m_cpView );
+	m_cpView->setParent(NULL);
 }
 
 SpectrumWidgetController *TabSpectrumWidget::getSpectrumController()
@@ -193,17 +194,6 @@ void TabSpectrumWidget::setIndicatorStateSlot(int state)
 		default:
 			m_indicatorLabel->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 			break;
-	}
-}
-
-void TabSpectrumWidget::slotSetWorkMode(int mode, bool isOn)
-{
-	if(mode == 2) {
-		ui->AlanysisGroupWidget->setVisible(true);
-		ui->correlationsGroupWidget->setVisible(false);
-	} else {
-		ui->AlanysisGroupWidget->setVisible(false);
-		ui->correlationsGroupWidget->setVisible(true);
 	}
 }
 

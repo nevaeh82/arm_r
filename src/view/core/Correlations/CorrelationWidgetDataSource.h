@@ -35,6 +35,7 @@ private:
 
 public:
     explicit CorrelationWidgetDataSource(ITabManager *tabManager, int id1, int id2, QObject *parent);
+	virtual ~CorrelationWidgetDataSource();
 
 	void onMethodCalled(const QString&, const QVariant&);
 	void sendCommand(int);
