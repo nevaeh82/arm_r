@@ -15,28 +15,15 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="title">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Q_MG_SpectrumInterface" name="spectrumWidget" native="true"/>
+    <widget class="AnalysisResultWidget" name="widget" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Q_MG_SpectrumInterface</class>
+   <class>AnalysisResultWidget</class>
    <extends>QWidget</extends>
-   <header>modules/gui/multi_graphics_spectrum_interface/mg_spectrum_interface.h</header>
+   <header>AnalysisResultWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

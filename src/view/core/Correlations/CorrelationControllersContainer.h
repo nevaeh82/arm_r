@@ -25,9 +25,12 @@ public:
 	virtual ICorrelationWidget* get(int id);
 	virtual int count();
 
+	void setLocationController(LocationSetupWidgetController* controller);
+
 private:
 	QMap<int, ICorrelationWidget* > m_mapWidgets;
 	QMutex	m_mux;
+	LocationSetupWidgetController* m_locationController;
 
 signals:
     void signalExpand();

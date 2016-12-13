@@ -14,20 +14,27 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="2">
-    <widget class="QTableWidget" name="tableWidget"/>
-   </item>
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QPushButton" name="pbContinue">
      <property name="text">
       <string>Continue</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="2" column="0" colspan="2">
+    <widget class="QTableWidget" name="tableWidget"/>
+   </item>
+   <item row="1" column="1">
     <widget class="QPushButton" name="pushButton">
      <property name="text">
       <string>Add</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="errorLbl">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

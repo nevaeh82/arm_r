@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QDoubleSpinBox>
+#include <QTableWidgetItem>
 
 #include "AnalysisResultSection.h"
 #include "AnalysisWidgetController.h"
@@ -17,26 +18,37 @@ class AnalysisResultWidget : public QWidget
 	Q_OBJECT
 
 private:
-    Ui::AnalysisResultWidget*	ui;
+	Ui::AnalysisResultWidget*	ui;
 
-    QMap<int, AnalysisResultSection*> m_sectionMap;
+	QMap<int, AnalysisResultSection*> m_sectionMap;
 
-    void createSections(int count);
+	int m_currentIndex;
 
-    void addRange(int i, double start, double end);
-    void addSignalInfo(const int i, const QString &system, const QString &modulation, const QString &type, const QString &info);
+	void createSections(int count);
+
+	void addRange(int i, double start, double end);
+	void addSignalInfo(const int i, const QString &system, const QString &modulation, const QString &type, const QString &info);
 
 private slots:
-    void addSignal();
+	void addSignal();
+	void slotContinue(bool);
 
-    void slotContinue(bool);
+	void onCellClicked(int row, int col);
+	void onItemClicked(QTableWidgetItem*);
+	void onItemActivated(QModelIndex);
+
 public:
-    AnalysisResultWidget(QWidget *parent = 0);
-    virtual ~AnalysisResultWidget();
+	AnalysisResultWidget(QWidget *parent = 0);
+	virtual ~AnalysisResultWidget();
 
-	void setAnalysisData(RdsProtobuf::ServerMessage_OneShotData_AnalysisData_AnalysisOutput msg);
+	void setAnalysisData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData& adata);
+
+	void onHide();
+	int getCurrentIndex() const {return m_currentIndex;}
 
 signals:
-    void signalContinue(bool);
-    void onAddToList(double, double);
+	void signalContinue(int, bool);
+	void onAddToList(double, double);
+	void analysisSelection(int, double, double);
+	void analysisReady(int);
 };

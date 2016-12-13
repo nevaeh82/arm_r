@@ -34,12 +34,12 @@ public:
 	void changeCorrelationStatusActive(const bool isActive);
 
 	void changeQualityStatus(const int status);
+	void setReceiveSpectrums(bool);
 
 signals:
 	void commonFreqChangedSignal(int value);
-	void bandwidthChangedSignal(int start, int end);
+	void onPanoramaEnable(bool, int, int);
 
-	void panoramaCheckedSignal(bool isChecked);
 	void autoSearchCheckedSignal(bool isChecked);
 
 	void signalManualMode();
@@ -58,9 +58,9 @@ signals:
 
 private slots:
 	void onSetCommonFrequencySlot();
-	void onSetBandWidthSlot();
 	void slotChangeMode(int index);
 
+	void onSetPanorama(bool on);
 public slots:
 	void slotChangeCommonFreq(int value);
 

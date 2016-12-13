@@ -25,7 +25,6 @@ class SpectrumWidgetDataSource : public BaseDataSource, public IRpcListener
 	friend class SpectrumWidgetDataSourceTest;
 
 private:
-	//IGraphicWidget* m_spectrumWidget;
 	IGraphicWidget* m_spectrumWidget;
 
 	QString m_name;
@@ -53,10 +52,7 @@ private:
 	double m_startFreq;
 	double m_endFreq;
 	double m_responseFreq;
-	QTimer m_timerChangeFreqPanorama;
-	QTimer m_timerRepeatSetFreq;
 
-	//	RpcPrmClient*		m_rpcPrmClient;
 	ITabManager*		m_tabManager;
 
 	int m_spectrumCounter;
@@ -79,7 +75,6 @@ public:
 	void setPanorama(bool enabled, double start = 0.0f, double end = 0.0f);
 	bool isPanoramaEnabled();
 
-	//	void setPrmRpcClient(RpcPrmClient *rpcClient);
 	void setTabManager(ITabManager* manager);
 	void setDBManager(IDbManager* manager);
 	void setName(QString name);

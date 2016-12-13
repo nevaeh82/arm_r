@@ -41,6 +41,10 @@ void CorrelationGroupWidget::clearWidgetContainer()
 	}
 
 	m_widgetList.clear();
+
+//	for( int i = 0; i < ui->correlationWidgetsContainer->count(); i++ ) {
+//		ui->correlationWidgetsContainer->itemAt(i)
+//	}
     //log_debug(QString::number(ui->correlationWidgetsContainer->count()));
 }
 

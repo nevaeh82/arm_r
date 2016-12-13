@@ -11,13 +11,15 @@
 
 #include "BaseCorrelationWidget.h"
 
+#include "Tabs/LocationSetupWidgetController.h"
+
 class CorrelationWidget;
 
 class CorrelationWidgetController : public QObject, public ICorrelationWidget
 {
 	Q_OBJECT
 private:
-    BaseCorrelationWidget* m_view;
+	BaseCorrelationWidget* m_view;
 
 	double	m_bandwidth;
 	int	m_pointCount;
@@ -25,15 +27,18 @@ private:
 
 	QString	m_labelName;
 
+	LocationSetupWidgetController* m_locationController;
+	int m_type;
+
 public:
-	explicit CorrelationWidgetController(QObject *parent = 0);
+	explicit CorrelationWidgetController(int corType, QObject *parent = 0);
 	virtual ~CorrelationWidgetController();
 
 	bool isGraphicVisible();
 	quint32 getId();
 	void setZeroFrequency(double val);
 
-    void appendView(BaseCorrelationWidget *view);
+	void appendView(BaseCorrelationWidget *view);
 
 	void onDataArrived(const QString& method, const QVariant& arg);
 
@@ -41,20 +46,26 @@ public:
 	QWidget* getWidget() const;
 	void setVisible(const bool isVisible);
 
-    virtual void setLabels(QString l1, QString l2);
+	virtual void setLabels(QString l1, QString l2);
+
+	void setLocationController(LocationSetupWidgetController* controller);
+
+	void setAlarm(bool);
 
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);
 
 private:
-    void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko);
-    void setData(float *spectrum, float *spectrum_peak_hold, float sko);
+	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko);
+	void setData(float *spectrum, float *spectrum_peak_hold, float sko);
 	void setLabelName(QString base, QString second);
 
 signals:
 	void signalonDataArrivedLS(const QString& method, const QVariant& arg);
 	void signalOnVisible(const bool);
+
+	void onGraphReady();
 
 };
 

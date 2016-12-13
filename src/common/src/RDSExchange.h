@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QByteArray>
+#include <QString>
+#include <QObject>
 
 #include "RdsPacket.pb.h"
 
@@ -13,44 +15,58 @@ inline void createGetSystemSystemOptions(RdsProtobuf::Packet& msg)
 	//sMsg->mutable_options()->mutable_devices();
 }
 
+inline void createSetSystemSystemOptions(RdsProtobuf::Packet& msg, const RdsProtobuf::System_SystemOptions& sysOptions)
+{
+	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_options()->CopyFrom(sysOptions);
+}
+
 inline void createGetLocationStatus(RdsProtobuf::Packet& msg, RdsProtobuf::ClientMessage_OneShot_Location& data)
 {
 	RdsProtobuf::ClientMessage_OneShot_Location* oMsg = msg.mutable_from_client()->mutable_one_shot()->mutable_location();
-//	oMsg->CopyFrom( data );
-//	oMsg->mutable_range()->CopyFrom( data.range() );
-
-
-	oMsg->set_duration(10);
-	oMsg->set_central_frequency(20);
-	RdsProtobuf::Range* range = oMsg->mutable_range();
-	range->set_start(10);
-	range->set_end(30);
-	oMsg->set_convolution(true);
-	oMsg->set_doppler(false);
-	oMsg->set_convolution_plot(true);
-	oMsg->set_hump(false);
-	oMsg->set_averaging_frequency_band(50);
+	oMsg->CopyFrom( data );
+	oMsg->mutable_range()->CopyFrom( data.range() );
 }
 
-inline void createGetAnalysisStatus(RdsProtobuf::Packet& msg)
+inline void createGetAnalysisStatus(RdsProtobuf::Packet& msg, RdsProtobuf::ClientMessage_OneShot_Analysis& data)
 {
-//	RdsProtobuf::Analysis_AnalysisOptions* oMsg = msg.mutable_from_client()->mutable_get()->mutable_analysis()->mutable_options();
-//	oMsg->set_detector_index(0);
-//	oMsg->set_duration(0);
-//	oMsg->set_central_frequency(0);
-//	oMsg->set_analysis(true);
+	RdsProtobuf::ClientMessage_OneShot_Analysis* aMsg = msg.mutable_from_client()->mutable_one_shot()->mutable_analysis();
+	aMsg->CopyFrom( data );
+}
 
-//	RdsProtobuf::TimeFreqArea* selected = oMsg->mutable_selected_area();
-//	selected->set_time_start( 10 );
-//	selected->set_time_end( 20 );
-//	selected->set_freq_start( 10 );
-//	selected->set_freq_end( 20 );
+inline void createTmpChannelOptions(RdsProtobuf::ChannelOptions* opt)
+{
+	opt->set_title(QString(QObject::tr("Channel")).toStdString());
 
-//	RdsProtobuf::TimeFreqArea* zoomed = oMsg->mutable_zoomed_area();
-//	zoomed->set_time_start( 10 );
-//	zoomed->set_time_end( 20 );
-//	zoomed->set_freq_start( 10 );
-//	zoomed->set_freq_end( 20 );
+	RdsProtobuf::ReceiverOptions* rec = opt->mutable_receiver();
+	{
+		rec->set_title(QString(QObject::tr("Receiver")).toStdString());
+		rec->set_status(true);
+		rec->set_ip(QString("127.0.0.1").toStdString());
+		RdsProtobuf::ReceiverSettings* set = rec->mutable_settings();
+		{
+			set->set_frequency(20);
+			set->set_attenuator1(0);
+			set->set_attenuator2(0);
+			set->set_filter(0);
+		}
+	}
+
+	opt->set_inversion(false);
+	RdsProtobuf::ChannelOptions_Coordinates* coord = opt->mutable_coordinates();
+	coord->set_altitude(50);
+	coord->set_latitude(60);
+	coord->set_longitude(30);
+}
+
+inline void createTmpDeviceOptions(RdsProtobuf::DeviceOptions* opt)
+{
+	opt->set_title(QString(QObject::tr("Device")).toStdString());
+	opt->set_status(true);
+	opt->set_ip(QString("127.0.0.1").toStdString());
+	opt->set_sync(0);
+	opt->set_enabled(true);
+	RdsProtobuf::ChannelOptions* channel = opt->add_channels();
+	createTmpChannelOptions(channel);
 }
 
 inline void createSetEnablePlatform(RdsProtobuf::Packet &msg, uint platform,
@@ -221,14 +237,41 @@ inline RdsProtobuf::ServerMessage_OneShotData_LocationData getServerLocationShot
 	return msg.one_shot_data().location_data();
 }
 
+// Server - Server Analysis
+inline bool isServerAnalysisShot( const RdsProtobuf::ServerMessage& msg )
+{
+	if( msg.has_one_shot_data() && msg.one_shot_data().has_analysis_data() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline RdsProtobuf::ServerMessage_OneShotData_AnalysisData getServerAnalysisShot( const RdsProtobuf::ServerMessage& msg )
+{
+	return msg.one_shot_data().analysis_data();
+}
+
 // --------------------------------------------------------------------------------
 
 // =====================================================================================
 
+inline bool parseServerMessage(const QByteArray& bData, RdsProtobuf::ServerMessage& sMsg)
+{
+	RdsProtobuf::Packet pkt;
+	pkt.ParseFromArray( bData.data(), bData.size() );
+
+	if(!pkt.has_from_server()) {
+		return false;
+	}
+
+	sMsg = pkt.from_server();
+	return true;
+}
+
 inline QByteArray pack(RdsProtobuf::Packet pkt)
 {
 	QByteArray data;
-	int t = pkt.ByteSize();
 	data.resize( pkt.ByteSize() );
 	uint size = data.size();
 

@@ -88,20 +88,18 @@ public:
 private:
 	MessageSP messageFromPreparedData(const QByteArray& data);
 	MessageSP pointers(int index, float cf, QVector<QPointF> vec);
-	MessageSP configure(const QList<StationConfiguration>& lst);
 
 	MessageSP correlation(quint32 point1, quint32 point2, float timediff, float veracity, QVector<QPointF> points);
 	MessageSP correlationAll(const QByteArray &data);
 
-	MessageSP detectedBandwidth(int index, QVector<QPointF> vec);
-
 	void addPreambula(QByteArray& data);
 	QByteArray getMessage(const QByteArray& input);
+
 	MessageSP configureLoc(const QByteArray &data);
+	MessageSP configureSys(const QByteArray &data);
 
 signals:
 	void onChangeDevState(QMap<int, bool>);
 	void onDetectSignal(int, QVector<QPointF>);
 
-	void onSendConfigureLoc(QByteArray data);
 };

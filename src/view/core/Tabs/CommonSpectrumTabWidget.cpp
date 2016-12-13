@@ -26,10 +26,7 @@ CommonSpectrumTabWidget::CommonSpectrumTabWidget(QWidget *parent) :
 
 	connect(this, SIGNAL(setIndicatorStateSignal(int)), this, SLOT(setIndicatorStateSlot(int)));
 
-	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
-
-    //dont need to ask
-    m_timerStatus.start(2000);
+	ui->settingsTreeView->setVisible(false);
 }
 
 CommonSpectrumTabWidget::~CommonSpectrumTabWidget()
@@ -97,37 +94,47 @@ void CommonSpectrumTabWidget::setCorrelationComponent(ICorrelationControllersCon
 {
 	m_correlationControllers = correlationControllers;
 
-	for(int i = 0; i < m_correlationControllers->count(); i++){
-		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
-	}
+//	for(int i = 0; i < m_correlationControllers->count(); i++){
+//		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
+//	}
+}
+
+void CommonSpectrumTabWidget::setAnalysisComponent(IAnalysisWidget *analysis)
+{
+//	m_analysis = analysis;
+//	ui->analysisGroupWidget->insertAnalysisWidget(analysis);
 }
 
 
 void CommonSpectrumTabWidget::activate()
 {
-	log_debug("Activate common tab");
+	ui->cpLayout->addWidget( m_cpView );
 
-    ui->cpLayout->addWidget( m_cpView );
+	foreach (ISpectrumWidget* widget , m_widgetList) {
+		QVariant value = m_dbManager->getPropertyValue(widget->getSpectrumName(), DB_FREQUENCY_PROPERTY);
+		widget->setZeroFrequency(value.toDouble());
+		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
+	}
 
+	ui->correlationsGroupWidget->clearWidgetContainer();
 	for(int i = 0; i < m_correlationControllers->count(); i++){
 		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
 	}
 
-	foreach (ISpectrumWidget* widget , m_widgetList) {
-		QVariant value = m_dbManager->getPropertyValue(widget->getSpectrumName(), DB_FREQUENCY_PROPERTY);
-        widget->setZeroFrequency(value.toDouble());
-		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
-	}
+	ui->correlationsGroupWidget->adjustSize();
+
+	//ui->analysisGroupWidget->insertAnalysisWidget(m_analysis);
 }
 
 void CommonSpectrumTabWidget::deactivate()
 {
-	log_debug("Deactivate common tab");
 	ui->correlationsGroupWidget->clearWidgetContainer();
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
 		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
 	}
+
+	//ui->analysisGroupWidget->clearWidgetContainer();
 }
 
 void CommonSpectrumTabWidget::updateListsSelections()
@@ -249,34 +256,11 @@ void CommonSpectrumTabWidget::onMethodCalled(const QString &method, const QVaria
 				setIndicatorState(state.state);
 			}
 		}
-
-		//setIndicator( argument.toInt() );
-		//setIndicatorState(argument.toInt());
 	}
 }
 
 void CommonSpectrumTabWidget::setIndicator(int state)
 {
 	setIndicatorState(state);
-	if(state < 1)
-	{
-		if(!m_timerStatus.isActive())
-		{
-			m_timerStatus.start(2000);
-		}
-	}
-	else
-	{
-		if(m_timerStatus.isActive())
-		{
-			m_timerStatus.stop();
-		}
-	}
 }
 
-void CommonSpectrumTabWidget::slotCheckStatus()
-{
-	if (NULL != m_rpcFlakonClient ) {
-		m_rpcFlakonClient->requestFlakonStatus();
-	}
-}

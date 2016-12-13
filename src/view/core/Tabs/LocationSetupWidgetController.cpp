@@ -2,15 +2,19 @@
 #include "LocationSetupWidgetController.h"
 
 #include "RDSExchange.h"
+#include "Logger/Logger.h"
 
 
 LocationSetupWidgetController::LocationSetupWidgetController(QObject* parent):
 	QObject(parent),
-	m_workMode(0)
+	m_plotCounter(0),
+	m_incomePlotCounter(0),
+	m_isStartLocation(false)
 {
 	m_view = NULL;
 
-	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
+	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant))/*, Qt::DirectConnection*/);
+	connect(this, SIGNAL(signalPlotComplete()), this, SLOT(slotPlotDrawCompleteInternal()));
 
 	//To do read settings
 	m_locationMessage.set_duration(10);
@@ -22,7 +26,11 @@ LocationSetupWidgetController::LocationSetupWidgetController(QObject* parent):
 	m_locationMessage.set_doppler(false);
 	m_locationMessage.set_convolution_plot(true);
 	m_locationMessage.set_averaging_frequency_band(50);
+	m_locationMessage.set_hump(true);
 
+	m_locationTimer.setInterval(5000);
+
+	connect(&m_locationTimer, SIGNAL(timeout()), this, SLOT(requestLocation()));
 }
 
 LocationSetupWidgetController::~LocationSetupWidgetController()
@@ -39,32 +47,6 @@ void LocationSetupWidgetController::setLocationSetup(const RdsProtobuf::ClientMe
 	m_view->setLocationData( data );
 }
 
-//void LocationSetupWidgetController::setDetectorSetup(const RdsProtobuf::Detector &data)
-//{
-//	m_view->setDetectorData( data );
-//}
-
-//void LocationSetupWidgetController::setCorrectionSetup(const RdsProtobuf::Correction &data)
-//{
-//	m_view->setCorrectionData( data );
-//}
-
-//void LocationSetupWidgetController::setAnalysisSetup(const RdsProtobuf::Analysis &data)
-//{
-//	m_view->setAnalysisData( data );
-//	emit analysisChannelChanged( m_view->getAnalysisChannel() );
-//}
-
-int LocationSetupWidgetController::getAnalysisWorkChannel() const
-{
-	return m_view->getAnalysisChannel();
-}
-
-void LocationSetupWidgetController::setAnalysisChannelCount(int count)
-{
-	m_view->setAnalysisChannelCount( count );
-}
-
 void LocationSetupWidgetController::setPlatformList(const QStringList &platformList)
 {
 	m_view->setPlatformList( platformList );
@@ -75,59 +57,72 @@ void LocationSetupWidgetController::setDeviceEnableState(int dev, bool state)
 	m_view->setDeviceEnableState(dev, state);
 }
 
-void LocationSetupWidgetController::setSpectrumSelection(float bandwidth, float shift, double start, double end)
+void LocationSetupWidgetController::setSpectrumSelection(double start, double end)
 {
-	if(m_workMode == 1) { // Location
-		m_view->onSpectrumLocationSelection(bandwidth, shift);
-		slotOnSet();
-	} else if(m_workMode == 2) { //Analysis
-		m_view->onSpectrumAnalysisSelection(start, end);
-		slotOnSetAnalysis();
-	}
-}
+	RdsProtobuf::Range* range = m_locationMessage.mutable_range();
+	range->set_start(start);
+	range->set_end(end);
 
-void LocationSetupWidgetController::changeLocationFreqParams(float freq, float bandwidth, float shift)
-{
+	m_view->setLocationData(m_locationMessage);
 
+	emit signalSelectionUpdate();
 }
 
 void LocationSetupWidgetController::setDevicesState(RdsProtobuf::System_SystemOptions opt)
 {
+	m_view->setDeviceCommonState(opt);
+}
 
+RdsProtobuf::ClientMessage_OneShot_Location LocationSetupWidgetController::getCurrentLocation() const
+{
+	return m_locationMessage;
 }
 
 void LocationSetupWidgetController::slotSetReceiveSpectrums(bool receive)
 {
-	m_receiveSpectrum = receive;
+	setLocationState(receive);
+}
 
-	requestLocation();
+void LocationSetupWidgetController::setLocationState(bool state)
+{
+	m_isStartLocation = state;
+
+	if( state ) {
+		m_plotCounter = m_incomePlotCounter;
+		requestLocation();
+		m_locationTimer.start();
+	} else {
+		m_plotCounter = m_incomePlotCounter;
+		m_locationTimer.stop();
+	}
 }
 
 bool LocationSetupWidgetController::getReceiveSpectrums() const
 {
-	return m_receiveSpectrum;
+	return m_isStartLocation;
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
 {
 	m_view = view;
 
-	connect(m_view, SIGNAL(onSendSignal()), this, SLOT(slotSendSettings()));
+	//connect(m_view, SIGNAL(onSendSignal()), this, SLOT(slotSendSettings()));
+	//connect(m_view, SIGNAL(onSignalUpdate()), this, SLOT(slotOnUpdate()));
+//	connect(m_view, SIGNAL(onSignalSet()), this, SLOT(slotOnSet()));
 
-	connect(m_view, SIGNAL(onSignalUpdate()), this, SLOT(slotOnUpdate()));
-	connect(m_view, SIGNAL(onSignalSet()), this, SLOT(slotOnSet()));
+//	connect(m_view, SIGNAL(onSignalUpdateDet()), this, SLOT(slotOnUpdateDet()));
+//	connect(m_view, SIGNAL(onSignalSetDet()), this, SLOT(slotOnSetDet()));
 
-	connect(m_view, SIGNAL(onSignalUpdateDet()), this, SLOT(slotOnUpdateDet()));
-	connect(m_view, SIGNAL(onSignalSetDet()), this, SLOT(slotOnSetDet()));
+//	connect(m_view, SIGNAL(onSignalUpdateCor()), this, SLOT(slotOnUpdateCor()));
+//	connect(m_view, SIGNAL(onSignalSetCor()), this, SLOT(slotOnSetCor()));
 
-	connect(m_view, SIGNAL(onSignalUpdateCor()), this, SLOT(slotOnUpdateCor()));
-	connect(m_view, SIGNAL(onSignalSetCor()), this, SLOT(slotOnSetCor()));
-
-	connect(m_view, SIGNAL(onSignalUpdateAnalysis()), this, SLOT(slotOnUpdateAnalysis()));
-	connect(m_view, SIGNAL(onSignalSetAnalysis()), this, SLOT(slotOnSetAnalysis()));
+//	connect(m_view, SIGNAL(onSignalUpdateAnalysis()), this, SLOT(slotOnUpdateAnalysis()));
+//	connect(m_view, SIGNAL(onSignalSetAnalysis()), this, SLOT(slotOnSetAnalysis()));
 
 	connect(m_view, SIGNAL(analysisChannelChanged(int)), this, SIGNAL(analysisChannelChanged(int)));
 	connect(m_view, SIGNAL(onSignalDeviceEnable(int, bool)), this, SLOT(slotOnDeviceEnable(int, bool)));
+
+	connect(m_view, SIGNAL(sendRdsData(QByteArray)), this, SIGNAL(sendRdsData(QByteArray)));
 }
 
 void LocationSetupWidgetController::onMethodCalled(const QString &method, const QVariant &argument)
@@ -142,16 +137,39 @@ LocationSetupWidget *LocationSetupWidgetController::getView()
 
 void LocationSetupWidgetController::requestLocation()
 {
-	//ask all RDS params
-//	RdsProtobuf::Packet pkt;
-
-//	createGetSystemSystemOptions( pkt );
-//	m_rpcFlakonClient->sendRdsProto( pack(pkt) );
-
 	RdsProtobuf::Packet pkt;
 	createGetLocationStatus( pkt, m_locationMessage );
+	m_plotCounter = m_incomePlotCounter;
 
 	emit sendRdsData( pack(pkt) );
+}
+
+void LocationSetupWidgetController::requestAnalysis(int channel)
+{
+	//Request Analysis Data
+	RdsProtobuf::Packet pkt1;
+	RdsProtobuf::ClientMessage_OneShot_Analysis aMsg;
+	aMsg.set_duration( m_view->getAnalysisDuration() );
+	aMsg.set_central_frequency( m_locationMessage.central_frequency() );
+	aMsg.set_detector_index( channel );
+	aMsg.mutable_range()->set_start( m_locationMessage.range().start() );
+	aMsg.mutable_range()->set_end( m_locationMessage.range().end() );
+
+	createGetAnalysisStatus(pkt1, aMsg);
+
+	emit sendRdsData( pack(pkt1) );
+
+	//Request any plot
+	RdsProtobuf::Packet pkt;
+	createGetLocationStatus( pkt, m_locationMessage );
+	m_plotCounter = m_incomePlotCounter;
+
+	emit sendRdsData( pack(pkt) );
+}
+
+void LocationSetupWidgetController::requestLocationTimer()
+{
+	requestLocation();
 }
 
 void LocationSetupWidgetController::slotShowWidget()
@@ -162,113 +180,56 @@ void LocationSetupWidgetController::slotShowWidget()
 	}
 }
 
-void LocationSetupWidgetController::onMethodCalledSlot(QString method, QVariant argument)
+void LocationSetupWidgetController::onMethodCalledSlot(QString method, QVariant data)
 {
-	if( method == RPC_SLOT_SERVER_SEND_RDS_DATA ) {
+	//Receiving rds raw protobuf
+	if( method == RPC_METHOD_CONFIG_RDS_ANSWER) {
+
+		RdsProtobuf::ServerMessage sMsg;
+		if( !parseServerMessage(data.toByteArray(), sMsg) ) {
+			return;
+		}
+
+		if( isServerLocationShot(sMsg) ) {
+			RdsProtobuf::ServerMessage_OneShotData_LocationData data = getServerLocationShot( sMsg );
+
+			bool one = data.success();
+			QString error = QString::fromStdString(data.error());
+
+			uint detErrorCounter = 0;
+			for( int i = 0; i<data.detector_status_size(); i++ ) {
+				if( !data.detector_status(i) ) {
+					detErrorCounter++;
+				}
+			}
+
+			int t1 = data.spectrum_plot_size();
+			int t2 = data.convolution_plot_size();
+			int t3 = detErrorCounter;
+
+			uint plotCounter = (data.detector_status_size() + data.convolution_plot_size()) - detErrorCounter;
+			if(m_incomePlotCounter != plotCounter && one) {
+				m_incomePlotCounter = plotCounter;
+				m_plotCounter = plotCounter;
+			}
+
+			if(m_isStartLocation) {
+				m_locationTimer.start();
+			}
+		}
+
 	}
-}
-
-void LocationSetupWidgetController::slotSendSettings()
-{
-	emit sendRdsData( QByteArray() );
-}
-
-void LocationSetupWidgetController::slotOnUpdate()
-{
-	RdsProtobuf::Packet pkt;
-	//createGetLocationStatus(pkt);
-
-
-	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnSet()
-{
-//	RdsProtobuf::Packet pkt;
-
-//	createSetLocationStatus( pkt, m_view->getLocationData() );
-
-//	emit sendRdsData( pack(pkt) );
 }
 
 void LocationSetupWidgetController::slotOnSetCommonFreq(int freq)
 {
-//    if(m_workMode == 1) {
-//        RdsProtobuf::Packet pkt;
-//        RdsProtobuf::Location loc = m_view->getLocationData();
-//        loc.mutable_options()->set_central_frequency(freq);
+	int df = freq - m_locationMessage.central_frequency();
 
-//        m_view->setLocationData( loc );
+	m_locationMessage.set_central_frequency( freq );
+	m_locationMessage.mutable_range()->set_start( m_locationMessage.range().start() + df );
+	m_locationMessage.mutable_range()->set_end( m_locationMessage.range().end() + df );
 
-//        createSetLocationStatus( pkt, loc );
-
-//        emit sendRdsData( pack(pkt) );
-//    } else if(m_workMode == 2) { //Analysis
-//        RdsProtobuf::Packet pkt;
-//        RdsProtobuf::Analysis aPkt = m_view->getAnalysisData();
-//        aPkt.mutable_options()->set_central_frequency(freq);
-
-//        m_view->setAnalysisData( aPkt );
-
-//        createSetAnalysisOptions( pkt, aPkt );
-
-//        emit sendRdsData( pack(pkt) );
-//    }
-}
-
-void LocationSetupWidgetController::slotOnUpdateDet()
-{
-//	RdsProtobuf::Packet pkt;
-//	createGetDetectorOptions( pkt, m_view->getDetectorData() );
-
-
-//	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnSetDet()
-{
-//	RdsProtobuf::Packet pkt;
-
-//	createSetDetectorOptions( pkt, m_view->getDetectorData() );
-
-//	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnUpdateCor()
-{
-//	RdsProtobuf::Packet pkt;
-//	createGetCorrectionOptions( pkt, m_view->getCorrectionData() );
-
-
-//	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnSetCor()
-{
-//	RdsProtobuf::Packet pkt;
-
-//	createSetCorrectionOptions( pkt, m_view->getCorrectionData() );
-
-//	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnUpdateAnalysis()
-{
-//	RdsProtobuf::Packet pkt;
-//	createGetAnalysisOptions( pkt, m_view->getAnalysisData() );
-
-
-//	emit sendRdsData( pack(pkt) );
-}
-
-void LocationSetupWidgetController::slotOnSetAnalysis()
-{
-//	RdsProtobuf::Packet pkt;
-//	createSetAnalysisOptions( pkt, m_view->getAnalysisData() );
-
-//	emit sendRdsData( pack(pkt) );
-
-//	emit analysisChannelChanged( m_view->getAnalysisChannel() );
+	m_view->setLocationData(m_locationMessage);
 }
 
 void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
@@ -279,22 +240,27 @@ void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
 	emit sendRdsData( pack(pkt) );
 }
 
-void LocationSetupWidgetController::slotOnChangeWorkMode(int mode, bool)
+void LocationSetupWidgetController::slotPlotDrawComplete()
 {
-	m_workMode = mode;
-	m_view->setWorkMode(mode);
+	emit signalPlotComplete();
 }
 
-//void LocationSetupWidgetController::slotGetVersion()
-//{
-//	SolverProtocol::Packet pkt;
-//	pkt.mutable_datafromclient()->add_getrequest( SolverProtocol::Packet_DataFromClient_GetRequest_getSolverVersion );
+void LocationSetupWidgetController::slotPlotDrawCompleteInternal()
+{
+	m_plotCounter--;
 
-//	QByteArray data;
-//	data.resize( pkt.ByteSize() );
-//	pkt.SerializeToArray(data.data(), data.size());
+	log_debug(QString("Plot ready : %1").arg(m_plotCounter));
 
-//	addPreambula( data );
+	if(m_isStartLocation) {
+		m_locationTimer.start();
+	}
 
-//	emit onSendSolverCommandSettings( data );
-//}
+	if(m_plotCounter <= 0) {
+		m_plotCounter = m_incomePlotCounter;
+
+		if(m_isStartLocation) {
+			requestLocation();
+			m_locationTimer.start();
+		}
+	}
+}

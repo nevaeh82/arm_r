@@ -14,9 +14,9 @@ CorrelationWidget::CorrelationWidget(QWidget *parent, Qt::WFlags flags):
 
 	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
 
-       ui->spectrumWidget->SetLabel(0, "sddsfew");
+	ui->spectrumWidget->SetLabel(0, "sddsfew");
 
-       ui->spectrumWidget->SetShowOptionsForStarndartLabels("", true);
+	ui->spectrumWidget->SetShowOptionsForStarndartLabels("", true);
 }
 
 CorrelationWidget::~CorrelationWidget()

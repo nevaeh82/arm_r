@@ -54,7 +54,7 @@ void MainWindow::removeSetupAction(int id)
 
 void MainWindow::init()
 {
-	connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
+	//connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
 	connect(ui->actionLists, SIGNAL(triggered()), this, SIGNAL(signalShowLists()));

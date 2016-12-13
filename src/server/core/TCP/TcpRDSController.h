@@ -48,18 +48,17 @@ private:
     int m_serverId;
 	FlakonSettings m_flakonSettingStruct;
 	CoordinateCounter* m_coordinateCounter;
+	TcpRdsCoder* m_coder;
 
 	void requestStationCorellation(QString stationName);
 
 	void requestTest();
 
 private slots:
-	void slotTcpConnectionStatus(QMap<int, bool>);
-	void slotDetectSignal(int index, QVector<QPointF> vec);
+	void slotTcpConnectionStatus(int status);
 
 	void onGetStations();
 
-    void slotSendConfigureLoc(QByteArray data);
 signals:
 	void outStationsList(QList<StationConfiguration> list);
 };

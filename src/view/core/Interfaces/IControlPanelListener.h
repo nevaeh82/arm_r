@@ -7,7 +7,7 @@ public:
 	virtual ~IControlPanelListener(){}
 
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled) = 0;
-	virtual void onGlobalPanoramaEnabled(const bool isEnabled) = 0;
+	virtual void onGlobalPanoramaEnabled(const bool isEnabled, int, int) = 0;
 };
 
 #endif // ICONTROLPANELLISTENER_H

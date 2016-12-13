@@ -336,11 +336,16 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			//				IRpcListener *sender1 = NULL;
 			//				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
 			//					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
-		} else if (messageType == TCP_FLAKON_STATUS) {
+		}
+		else if( messageType == TCP_RDS_WORK_MODE ) {
+			m_rpcServer->call(RPC_METHOD_WORK_MODE, data);
+			//				IRpcListener *sender1 = NULL;
+			//				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
+			//					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
+		}
+		else if (messageType == TCP_FLAKON_STATUS) {
 			m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
 			m_rpcServer->call( RPC_SLOT_FLAKON_DEV_STATE, data, sender );
-		} else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
-			m_rpcServer->call( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data, sender );
 		}
 		else if( messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1 ) {
 			//FROM COORDINATES COUNTER
@@ -382,13 +387,6 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 		}
 		else if (messageType == TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH) {
 			m_rpcServer->call( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, data, sender );
-		}
-		else if (messageType == TCP_FLAKON_ANSWER_CORRELATION) {
-			/// send data to FlakonCoordinatesCounter
-			m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender );
-			m_rpcServer->call( RPC_SLOT_SERVER_SEND_CORRELATION, data, sender );
-
-			//log_debug("to RPC FLAKON_COORDINATE_COUNTER and RPC_SLOT_SERVER_SEND_CORRELATION");
 		}
 		else if (messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA) {
 			//FROM COORDINATES COUNTER

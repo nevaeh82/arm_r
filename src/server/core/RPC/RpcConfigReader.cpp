@@ -65,9 +65,9 @@ void RpcConfigReader::readStationListInternalSlot(const QString& fileName)
 		dataStream << stationList;
 
 		m_rpcServer->call(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, QVariant(dataToSend));
-	} else {
+	}/* else {
 		emit getStationList();
-	}
+	}*/
 }
 
 void RpcConfigReader::readDbConfigurationInternalSlot(const QString& filename)

@@ -88,19 +88,20 @@ public:
 
 	void setLocationSetupController(LocationSetupWidgetController* controller);
 
+	void requestAnalysis();
+	void setSpectrumReveive(bool);
+
 signals:
 	void signalSetComonFreq(int value);
 	void setCorrelationStatus(QString correlationStatus);
 	void setCorrelationStatusActive(bool isActive);
-	void signalSetMode(int mode);
-
 
 public slots:
 
 	void changeFrequency(int value);
 
 private slots:
-	void onPanoramaStateChangedSlot(bool isEnabled);
+	void onPanoramaStateChangedSlot(bool isEnabled, int, int);
 	void onAutoSearchStateChangedSlot(bool isEnabled);
 	void onCommonFrequencyChangedSlot(int value);
 

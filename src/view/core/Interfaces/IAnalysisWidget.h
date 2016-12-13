@@ -15,4 +15,5 @@ class IAnalysisWidget: public IGraphicWidget, public IDataSourceListener
 		virtual QWidget *getWidget() const = 0;
 
 		virtual int getType() const = 0;
+		virtual int getAnalysisWorkId() const = 0;
 };

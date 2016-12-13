@@ -75,8 +75,8 @@ void Station::setChannelId(const quint32 id)
 void Station::setSelectedArea(const SpectrumSelection& selection)
 {
 	/// To HZ
-	double x1 = selection.start.x() / 1000;
-	double x2 = selection.end.x() / 1000;
+	double x1 = selection.start.x();
+	double x2 = selection.end.x();
 
 	double dx = qAbs(x1 - x2);
 	double center = (x1 + x2)/ 2;
@@ -87,7 +87,7 @@ void Station::setSelectedArea(const SpectrumSelection& selection)
 	m_dbManager->updatePropertyValue( getName(), DB_STOP_PROPERTY, QString::number(x2, 'f', 3));
 
 	if( x1 != 0 && x2 != 0 ) {
-		m_locationSetupController->setSpectrumSelection(getBandwidth(), getShift(), x1, x2);
+		m_locationSetupController->setSpectrumSelection(x1, x2);
 	}
 }
 

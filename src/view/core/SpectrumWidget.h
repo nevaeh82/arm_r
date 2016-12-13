@@ -36,8 +36,6 @@ private:
 	QCustomPlot* m_plot;
 	QCPItemPixmap* m_plotPixmap;
 
-    AnalysisResultWidget* m_analysisResultWidget;
-
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~SpectrumWidget();
@@ -46,7 +44,7 @@ public:
 	void setPanorama(bool);
 
 	void setSpectrumName(const QString& name);
-	QString getSpectrumName() const;    
+	QString getSpectrumName() const;
 
 	Q_MG_SpectrumInterface* getGraphicsWidget();
 	QwtPlot*       getSonogramWidget();
@@ -58,13 +56,10 @@ public:
 	void sonogramUpdate(const QPixmap& px);
 	void setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg);
 
-    AnalysisResultWidget* getAnalysisResultWidget();
-
 public slots:
 	void slotSetEnableSpactrum(bool state);
 	void slotEnableKM(bool state);
-    void recognize();
-    void setNoSignal(bool);
+	void setNoSignal(bool);
 
 private slots:
 	void slotSetWorkMode(int mode, bool isOn);

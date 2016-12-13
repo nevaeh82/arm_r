@@ -105,7 +105,7 @@ public:
 	virtual void setStationNamesList(const QStringList &stationsList);
 	virtual void setRpcFlakonClient(RpcFlakonClientWrapper *client);
 
-    void setControlPanelWidget(ControlPanelWidget* wgt);
+	void setControlPanelWidget(ControlPanelWidget* wgt);
 
 	virtual void setIndicator(int state);
 

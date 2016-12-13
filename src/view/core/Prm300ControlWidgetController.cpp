@@ -6,7 +6,6 @@ Prm300ControlWidgetController::Prm300ControlWidgetController(const QString& name
 	: QObject( parent )
 	, m_dbManager( 0 )
 	, m_view( NULL )
-	, m_rpcPrmClient( NULL )
 	, m_rpcFlakonClient( NULL )
 	, m_stationName( name )
 	, m_stationId( 0 )
@@ -39,14 +38,6 @@ void Prm300ControlWidgetController::appendView(Prm300ControlWidget *view)
 {
 	m_view = view;
 	init();
-}
-
-void Prm300ControlWidgetController::setRpcPrmClient(RpcPrmClient *client)
-{
-	if(!client) {
-		return;
-	}
-	m_rpcPrmClient = client;
 }
 
 void Prm300ControlWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *client)
@@ -100,8 +91,6 @@ void Prm300ControlWidgetController::init()
 
 void Prm300ControlWidgetController::slotSetAtt1()
 {
-	if(!m_rpcPrmClient)
-		return;
 
 	QByteArray data;
 	QDataStream stream(&data, QIODevice::ReadWrite);
@@ -109,22 +98,19 @@ void Prm300ControlWidgetController::slotSetAtt1()
 		   << m_view->getPrmParams();
 
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT1, QVariant::fromValue(data));
-	m_rpcPrmClient->setCommand(msg);
+	//m_rpcPrmClient->setCommand(msg);
 }
 
 void Prm300ControlWidgetController::slotSetAtt2(int value)
 {
-	if(!m_rpcPrmClient)
-		return;
-
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_ATT2, QVariant::fromValue(value));
-	m_rpcPrmClient->setCommand(msg);
+	//m_rpcPrmClient->setCommand(msg);
 }
 
 void Prm300ControlWidgetController::slotSetFilter(int index)
 {
 	CommandMessage *msg = new CommandMessage(COMMAND_PRM_SET_FILTER, QVariant::fromValue(index));
-	m_rpcPrmClient->setCommand(msg);
+	//m_rpcPrmClient->setCommand(msg);
 }
 
 void Prm300ControlWidgetController::slotEnableReceiver(bool val)

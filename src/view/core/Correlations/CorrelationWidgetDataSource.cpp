@@ -9,6 +9,7 @@
 CorrelationWidgetDataSource::CorrelationWidgetDataSource(ITabManager* tabManager, int id1, int id2, QObject *parent)
 	: BaseDataSource(parent)
 	, m_needSetup(false)
+	, m_corrGraphWgt(nullptr)
 {
 	m_id1 = id1;
 	m_id2 = id2;
@@ -40,7 +41,10 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 Q_DECLARE_METATYPE(float*)
 void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity)
 {
-	//log_debug( QString("Points size: %1").arg(points.size() ) );
+	if(m_corrGraphWgt && !m_corrGraphWgt->isGraphicVisible()) {
+		emit onDrawComplete();
+		return;
+	}
 
 	QString base = m_tabManager->getStationName(point1);//m_id);
 	QString second = m_tabManager->getStationName(point2);
@@ -109,7 +113,7 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	list.append(labelBase);
 	list.append(labelSecond);
 
-    list.append(QVariant(veracity));
+	list.append(QVariant(veracity));
 
 	QVariant data(list);
 	onDataReceived(RPC_SLOT_SERVER_SEND_CORRELATION, data);
@@ -122,36 +126,40 @@ void CorrelationWidgetDataSource::correlationTimerOff()
 
 void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
-	/// TODO this is hack for visible and unvisible widget. Need to refactor architechture
-	if (RPC_SLOT_SERVER_SEND_CORRELATION == method) {
+	if( RPC_METHOD_CONFIG_RDS_ANSWER ) {
 
-		QDataStream stream( data.toByteArray() );
-
-		QVector<QPointF> points;
-		quint32 point1, point2;
-
-		stream >> point1 >> point2;
-
-//		if( point1 == m_id ) {
-//			m_correlationWidget->setVisible(false);
-//			return;
-//		}
-
-        if( point2 != m_id2 || point1 != m_id1 ) {
+		RdsProtobuf::ServerMessage sMsg;
+		if( !parseServerMessage(data.toByteArray(), sMsg) ) {
 			return;
 		}
 
-		float trds;
-		float veracity;
+		if( isServerLocationShot(sMsg) ) {
+			RdsProtobuf::ServerMessage_OneShotData_LocationData lMsg = getServerLocationShot( sMsg );
 
-		stream >> trds;
-		stream >> veracity;
+			RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot correlationPlot;
+			RdsProtobuf::Convolution convolution;
 
-		stream >> points;
+			int plotCount = lMsg.detector_status_size();
 
-        setCorData( point1, point2, points, veracity );
+			if( !findPlot(plotCount, lMsg.convolution_plot(), correlationPlot) ) {
+				return;
+			}
 
-		onCorrelationStateChanged(true);
+			if( !findConvolution(lMsg.convolution(), convolution) ) {
+				return;
+			}
+
+			QVector<QPointF> points;
+
+			float veracity = convolution.delay_accuracy();
+			for( int k = 0; k<correlationPlot.data_size(); k++ ) {
+				points.append( QPointF( correlationPlot.axis_x_start() + (correlationPlot.axis_x_step()*k),
+										correlationPlot.data(k) ) );
+			}
+
+			setCorData( m_id1, m_id2, points, veracity );
+			onCorrelationStateChanged(true);
+		}
 	}
 }
 
@@ -176,5 +184,77 @@ void CorrelationWidgetDataSource::registerCorrelationReceiver(ICorrelationListen
 void CorrelationWidgetDataSource::deregisterCorrelationReceiver(ICorrelationListener* obj)
 {
 	m_correlationListeners.removeAll(obj);
+}
+
+void CorrelationWidgetDataSource::setCorrGraphWidget(ICorrelationWidget *wgt)
+{
+	m_corrGraphWgt = wgt;
+}
+
+bool CorrelationWidgetDataSource::findPlot(const int channelCount,
+										   const ::google::protobuf::RepeatedPtrField< ::RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot >& plots,
+										   RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot& outPlot)
+{
+	for(int i = 0; i < plots.size(); i++) {
+		int id1=0;
+		int id2=0;
+
+		RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot plot = plots.Get(i);
+
+		getIds(plot.index(), channelCount, id1, id2);
+
+		if( id2 != m_id2 || id1 != m_id1 ) {
+			continue;
+		} else {
+			outPlot = plot;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CorrelationWidgetDataSource::findConvolution(const ::google::protobuf::RepeatedPtrField< ::RdsProtobuf::Convolution >& convList,
+												  RdsProtobuf::Convolution& convolution)
+{
+	for(int i = 0; i < convList.size(); i++)  {
+		if( m_id1 != convList.Get(i).first_detector_index() &&
+			m_id2 != convList.Get(i).second_detector_index() ) {
+			continue;
+		} else {
+			convolution = convList.Get(i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void CorrelationWidgetDataSource::getIds(const int pos, const int chCnt, int& id1, int& id2)
+{
+	id1 = 0;
+	id2 = 0;
+	int listPos = 0;
+	int inc = 1;
+	int position = pos+1;
+
+	QList<int> ids;
+	for(int k = 0; k < chCnt; k++) {
+		ids.append( k );
+	}
+
+	for(int i = 0; i < position; i++) {
+		if((listPos+1) > (chCnt-1)) {
+			listPos=inc;
+			inc+=1;
+		}
+
+		id1 = ids.at( inc-1 );
+		id2 = ids.at( listPos+1 );
+
+		listPos++;
+	}
+
+	return;
 }
 

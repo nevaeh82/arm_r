@@ -2,6 +2,7 @@
 #define RPCFLAKONCLIENT_H
 
 #include <Rpc/RpcRoutedClient.h>
+#include <QMutex>
 
 #include "Interfaces/IStation.h"
 #include "Interfaces/IRpcConfigClient.h"
@@ -29,8 +30,11 @@ public:
 
 	void clearReceiversList();
 	QByteArray testData;
-	void sendWorkMode(const int mode, const bool isOn);
+	//void sendWorkMode(const int mode, const bool isOn);
 	void sendRdsProto(const QByteArray &data);
+	QMutex m_receiverMutex;
+
+
 protected slots:
 	void registerRoute();
 	void pointsReceived(QByteArray data);
@@ -43,26 +47,27 @@ protected slots:
 
 signals:
 	void signalEnableCorrelation(int, float, bool);
-    void connectionEstablishedSignal();
+	void connectionEstablishedSignal();
 
 private slots:
 	void slotEnableCorrelation(int, float, bool);
 	void solverQualityStatusReceived(QByteArray data);
-	void solverErrorsReceived(QByteArray data);	
+	void solverErrorsReceived(QByteArray data);
 	void sloverAnswerReceived1(QByteArray data);
 
 public:
-    virtual void requestGetStationList(const QString& filename);
-    virtual void requestGetDbConfiguration(const QString& filename);
+	virtual void requestGetStationList(const QString& filename);
+	virtual void requestGetDbConfiguration(const QString& filename);
 
 signals:
-    void getStationListSignal(QString);
-//    void connectionEstablishedSignal();
+	void getStationListSignal(QString);
+	//    void connectionEstablishedSignal();
 
 private slots:
-    void receivedStationListSlot(QByteArray data);
-    void receivedDbConfigurationSlot(QByteArray data);
-    void receivedLocSystem(QByteArray data);
+	void receivedStationListSlot(QByteArray data);
+	void receivedDbConfigurationSlot(QByteArray data);
+	void receivedLocSystem(QByteArray data);
+	void receivedWorkMode(QByteArray data);
 
 };
 

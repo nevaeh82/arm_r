@@ -8,11 +8,10 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	ui->setupUi(this);
 
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(autoSearchCheckedSignal(bool)));
-	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SIGNAL(panoramaCheckedSignal(bool)));
+	connect(ui->panoramaCB, SIGNAL(toggled(bool)), this, SLOT(onSetPanorama(bool)));
 	connect(ui->commonFrequencyPB, SIGNAL(clicked()), this, SLOT(onSetCommonFrequencySlot()));
-	connect(ui->panoramaPB, SIGNAL(clicked()), this, SLOT(onSetBandWidthSlot()));
-    connect(ui->cbMode, SIGNAL(activated(int)), this, SLOT(slotChangeMode(int)));
-	connect(ui->cbMode, SIGNAL(activated(int)), this, SIGNAL(signalSetMode(int)));
+	connect(ui->cbMode, SIGNAL(activated(int)), this, SLOT(slotChangeMode(int)));
+	//connect(ui->cbMode, SIGNAL(activated(int)), this, SIGNAL(signalSetMode(int)));
 	connect(ui->pbDown1MHz, SIGNAL(clicked()), this, SIGNAL(signalDown1Mhz()));
 	connect(ui->pbDown10MHz, SIGNAL(clicked()), this, SIGNAL(signalDown10Mhz()));
 	connect(ui->pbDown100MHz, SIGNAL(clicked()), this, SIGNAL(signalDown100Mhz()));
@@ -43,33 +42,30 @@ void ControlPanelWidget::onSetCommonFrequencySlot()
 	emit commonFreqChangedSignal(ui->commonFreqSB->value());
 }
 
-void ControlPanelWidget::onSetBandWidthSlot()
+void ControlPanelWidget::onSetPanorama(bool on)
 {
-    ui->panoramaCB->setChecked(false);
-    emit panoramaCheckedSignal(false);
-    qApp->processEvents();
-    emit bandwidthChangedSignal(ui->startFreqSB->value(), ui->endFreqSB->value());
+	emit onPanoramaEnable(on, ui->startFreqSB->value(), ui->endFreqSB->value());
 }
 
 void ControlPanelWidget::slotChangeMode(int index)
 {
-    switch(index)
-    {
-    case 0:
-        emit signalManualMode();
-        break;
-    case 1:
-        emit signalScanMode(ui->startFreqSB->value(), ui->endFreqSB->value());
-        break;
-    case 2:
-        emit signalCheckMode();
-        break;
-    case 3:
-        emit signalViewMode();
-        break;
-    default:
-        break;
-    }
+	switch(index)
+	{
+	case 0:
+		emit signalManualMode();
+		break;
+	case 1:
+		emit signalScanMode(ui->startFreqSB->value(), ui->endFreqSB->value());
+		break;
+	case 2:
+		emit signalCheckMode();
+		break;
+	case 3:
+		emit signalViewMode();
+		break;
+	default:
+		break;
+	}
 
 }
 
@@ -95,10 +91,16 @@ void ControlPanelWidget::changeQualityStatus(const int status)
 	}
 	else {
 		ui->correlationStatusLabelActive->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
-    }
+	}
+}
+
+void ControlPanelWidget::setReceiveSpectrums(bool val)
+{
+	ui->pbSpectrums->setChecked(val);
+	emit signalReceiveSpectrums(false);
 }
 
 void ControlPanelWidget::slotChangeCommonFreq(int value)
 {
-	ui->commonFreqSB->setValue(value);        
+	ui->commonFreqSB->setValue(value);
 }

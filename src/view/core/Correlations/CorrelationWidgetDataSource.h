@@ -12,6 +12,8 @@
 #include "Common/BaseDataSource.h"
 #include "Tabs/RPC/RpcPrmClient.h"
 
+#include "RDSExchange.h"
+
 class CorrelationWidgetDataSource : public BaseDataSource, public IRpcListener
 {
 	Q_OBJECT
@@ -33,8 +35,10 @@ private:
 	QTimer*	correlationStateTimer;
 	QList<ICorrelationListener*> m_correlationListeners;
 
+	ICorrelationWidget *m_corrGraphWgt;
+
 public:
-    explicit CorrelationWidgetDataSource(ITabManager *tabManager, int id1, int id2, QObject *parent);
+	explicit CorrelationWidgetDataSource(ITabManager *tabManager, int id1, int id2, QObject *parent);
 	virtual ~CorrelationWidgetDataSource();
 
 	void onMethodCalled(const QString&, const QVariant&);
@@ -43,10 +47,14 @@ public:
 
 	void registerCorrelationReceiver(ICorrelationListener* obj);
 	void deregisterCorrelationReceiver(ICorrelationListener* obj);
+	void setCorrGraphWidget(ICorrelationWidget* wgt);
 
 private:
-    void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity);
+	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity);
 
+	void getIds(const int pos, const int chCnt, int &id1, int &id2);
+	bool findPlot(const int channelCount, const::google::protobuf::RepeatedPtrField<::RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot> &plots, RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot &outPlot);
+	bool findConvolution(const::google::protobuf::RepeatedPtrField<RdsProtobuf::Convolution> &convList, RdsProtobuf::Convolution &convolution);
 signals:
 	void onMethodCalledSignal(QString, QVariant);
 

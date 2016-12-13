@@ -1,6 +1,6 @@
 #include "PanoramaFreqControl.h"
 
-#define TIMEOUT 5
+#define TIMEOUT 1
 
 PanoramaFreqControl::PanoramaFreqControl(QObject *parent) :
 	QObject(parent),
@@ -33,10 +33,14 @@ void PanoramaFreqControl::setChannelReady(int channel)
 
 	int tmp = m_time.secsTo( QTime::currentTime() );
 
-	if( !m_spectrumReadyMap.values().contains(false) ) {
-		changeFreq();
-	} else if( m_spectrumReadyMap.values().contains(true) &&
-			   m_time.secsTo( QTime::currentTime() ) > TIMEOUT ) {
+//	if( !m_spectrumReadyMap.values().contains(false) ) {
+//		changeFreq();
+//	} else if( m_spectrumReadyMap.values().contains(true) &&
+//			   m_time.secsTo( QTime::currentTime() ) > TIMEOUT ) {
+//		changeFreq();
+//	}
+
+	if( m_current == channel ) {
 		changeFreq();
 	}
 }

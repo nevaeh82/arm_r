@@ -47,11 +47,9 @@ void TcpRDSController::createTcpDeviceCoder()
 	TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, this);
 	m_tcpDeviceCoder = coder;
 
-	coder->setCoordinatesCounter(m_coordinateCounter);
+	m_coder = coder;
 
-	connect(coder, SIGNAL(onChangeDevState(QMap<int, bool>)), this, SLOT(slotTcpConnectionStatus(QMap<int, bool>)) );
-	connect(coder, SIGNAL(onSendConfigureLoc(QByteArray)), this, SLOT(slotSendConfigureLoc(QByteArray)));
-	connect(coder, SIGNAL(onDetectSignal(int, QVector<QPointF>)), this, SLOT(slotDetectSignal(int,QVector<QPointF>)) );
+	coder->setCoordinatesCounter(m_coordinateCounter);
 }
 
 void TcpRDSController::createTcpClient()
@@ -157,68 +155,29 @@ void TcpRDSController::requestTest()
 	//	QDataStream st(&data, QIODevice::ReadWrite);
 	//	st << true;
 	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
+}
+
+void TcpRDSController::slotTcpConnectionStatus(int status)
+{
+	if(status == (int)TCP::Connected) {
+		//ask all RDS params
+		RdsProtobuf::Packet pkt;
+		createGetSystemSystemOptions( pkt );
+		m_tcpClient->write( pack(pkt) );
+	}
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::WriteOnly);
+	stream << status;
 
 
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
+	}
 }
 
 RpcRoutedServer::RouteId TcpRDSController::getRouteId() const
 {
 	return RDS_ROUTE_ID;
-}
-
-void TcpRDSController::slotTcpConnectionStatus(QMap<int, bool> map)
-{
-	QByteArray byteArray;
-	QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
-
-	QList<DevState> stateList;
-	foreach (int key, map.keys()) {
-		DevState state;
-		state.id = key;
-		state.state = map.value(key);
-		stateList.append(state);
-
-		//Auto enable receiver todo. Now in bugs.
-		//		if(!state.state) {
-		//			QByteArray data;
-		//			QDataStream stream(&data, QIODevice::ReadWrite);
-
-		//			stream << state.id;
-
-		//			sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SET_PRM_STATUS, data ) ) );
-		//		}
-
-	}
-	dataStream << stateList;
-
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_STATUS, byteArray));
-
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
-	}
-}
-
-void TcpRDSController::slotDetectSignal(int index, QVector<QPointF> vec)
-{
-	// We should send m_header.id to rpcclient
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << index << vec;
-
-	MessageSP message(new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba));
-
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
-	}
-}
-
-void TcpRDSController::slotSendConfigureLoc(QByteArray data)
-{
-	MessageSP message(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
-
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(m_deviceType, m_tcpDeviceName, message);
-	}
 }
 
 void TcpRDSController::onGetStations()
@@ -231,12 +190,12 @@ void TcpRDSController::onGetStations()
 	//	st << true;
 	//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_TURN_STATUS, data)));
 
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
-	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS1, data)));
-	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
-	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_ANALYSIS_STATUS, data ) ) );
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_SYSTEM, data)));
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_WORK_MODE, data)));
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS, data)));
+//	sendData(MessageSP(new Message<QByteArray>(TCP_RDS_GET_STATUS1, data)));
+//	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_LOC_STATUS, data ) ) );
+//	sendData( MessageSP( new Message<QByteArray>( TCP_RDS_GET_ANALYSIS_STATUS, data ) ) );
 }
 
 void TcpRDSController::onMethodCalled(const QString& method, const QVariant& argument)

@@ -3,12 +3,13 @@
 
 #include "Logger/Logger.h"
 
-CorrelationWidgetController::CorrelationWidgetController(QObject *parent) 
+CorrelationWidgetController::CorrelationWidgetController(int corType, QObject *parent)
 	: QObject(parent)
 	, m_view(0)
 	, m_bandwidth(0)
 	, m_pointCount(0)
 	, m_isComplex(0)
+	, m_type(corType)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
@@ -31,7 +32,21 @@ void CorrelationWidgetController::setVisible(const bool isVisible)
 
 void CorrelationWidgetController::setLabels(QString l1, QString l2)
 {
-    setLabelName(l1, l2);
+	setLabelName(l1, l2);
+}
+
+void CorrelationWidgetController::setLocationController(LocationSetupWidgetController *controller)
+{
+	m_locationController = controller;
+
+	if(m_type != 1) {
+		connect(this, SIGNAL(onGraphReady()), m_locationController, SLOT(slotPlotDrawComplete()));
+	}
+}
+
+void CorrelationWidgetController::setAlarm(bool)
+{
+
 }
 
 void CorrelationWidgetController::onVisible(const bool b)
@@ -75,16 +90,18 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
     float skoQuality = list.at(list.size() - 1).toFloat();
 
     if (list.count() == 5){
-        setData(spectrum, spectrumPeakHold, skoQuality);
+		setData(spectrum, spectrumPeakHold, skoQuality);
 	} else {
 		int pointCount = list.at(2).toInt();
 		double bandwidth = list.at(3).toDouble();
 		bool isComplex = list.at(4).toBool();
-        setDataSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex, skoQuality);
+		setDataSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex, skoQuality);
 	}
 
-    QString base = list.at(list.size() - 3).toString();
-    QString second = list.at(list.size() - 2).toString();
+	emit onGraphReady();
+
+	QString base = list.at(list.size() - 3).toString();
+	QString second = list.at(list.size() - 2).toString();
 
 	setLabelName(base, second);
 }

@@ -27,26 +27,16 @@ public:
 
 	void setLocationData(const RdsProtobuf::ClientMessage_OneShot_Location& data);
 	RdsProtobuf::ClientMessage_OneShot_Location getLocationData() const;
-
-//	void setDetectorData(const RdsProtobuf::Detector &data);
-//	RdsProtobuf::Detector getDetectorData() const;
-
-//	void setCorrectionData(const RdsProtobuf::Correction &data);
-//	RdsProtobuf::Correction getCorrectionData() const;
-
-//	void setAnalysisData(const RdsProtobuf::Analysis &data);
-//	RdsProtobuf::Analysis getAnalysisData() const;
-
-	int getAnalysisChannel() const;
-	void setAnalysisChannelCount(int cnt);
+	int getAnalysisDuration() const;
 
 	void setPlatformList(const QStringList &list);
 
 	void setDeviceEnableState(int dev, bool state);
-	void setWorkMode(int mode);
 
 	void onSpectrumLocationSelection(float bandwidth, float shift);
 	void onSpectrumAnalysisSelection(double start, double end);
+
+	void setDeviceCommonState(const RdsProtobuf::System_SystemOptions& opt);
 
 private:
 	Ui::LocationSetupWidget *ui;
@@ -86,4 +76,5 @@ signals:
 	void analysisChannelChanged(int);
 
 	void onSignalDeviceEnable(int, bool);
+	void sendRdsData(QByteArray);
 };

@@ -61,3 +61,8 @@ void CorrelationIndicatorWidget::mouseDoubleClickEvent(QMouseEvent *event)
 	emit signalExpand();
 }
 
+bool CorrelationIndicatorWidget::isVisible() const
+{
+	return true;
+}
+

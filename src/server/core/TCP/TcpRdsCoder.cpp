@@ -101,6 +101,16 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 
 	if( message->type() == TCP_RDS_SEND_PROTO ) {
 		RdsProtobuf::Packet pkt = unpack(msgData);
+		if( pkt.has_from_client() &&
+			pkt.from_client().has_one_shot() &&
+			pkt.from_client().one_shot().has_location() ) {
+
+			RdsProtobuf::ClientMessage_OneShot_Location loc = pkt.from_client().one_shot().location();
+			double rm = loc.range().start();
+			double rmm = loc.range().end();
+
+			double x = loc.central_frequency();
+		}
 
 		return msgData;
 	}
@@ -148,7 +158,11 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 	RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
-	message = configureLoc( data );
+	if(sMsg.has_current()) {
+		message = configureSys( data );
+	} else {
+		message = configureLoc( data );
+	}
 
 	return message;
 }
@@ -163,24 +177,14 @@ MessageSP TcpRdsCoder::pointers(int index, float cf, QVector<QPointF> vec)
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
 
-MessageSP TcpRdsCoder::configure(const QList<StationConfiguration>& lst)
-{
-	if(lst.isEmpty()) {
-		return MessageSP();
-	}
-
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << m_header.zone;
-	dataStream << m_header.typeRds;
-	dataStream << lst;
-
-	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, ba));
-}
-
 MessageSP TcpRdsCoder::configureLoc(const QByteArray& data)
 {
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
+}
+
+MessageSP TcpRdsCoder::configureSys(const QByteArray &data)
+{
+	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, data));
 }
 
 MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, float timediff, float veracity, QVector<QPointF> points)
@@ -195,14 +199,4 @@ MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, float timedif
 MessageSP TcpRdsCoder::correlationAll(const QByteArray& data)
 {
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_CORRELATION_ALL, data));
-}
-
-MessageSP TcpRdsCoder::detectedBandwidth(int index, QVector<QPointF> vec)
-{
-	// We should send m_header.id to rpcclient
-	QByteArray ba;
-	QDataStream dataStream(&ba, QIODevice::WriteOnly);
-	dataStream << index << vec;
-
-	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_DETECTED_BANDWIDTH, ba));
 }

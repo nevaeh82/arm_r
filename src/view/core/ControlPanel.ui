@@ -139,13 +139,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="panoramaPB">
-     <property name="text">
-      <string>Set panorama</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QCheckBox" name="autosearchCB">
@@ -158,16 +151,6 @@
       <widget class="QCheckBox" name="panoramaCB">
        <property name="text">
         <string>Panorama</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbSpectrums">
-       <property name="text">
-        <string>Spectrums</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -195,6 +178,16 @@
        <string>Escorting</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pbSpectrums">
+     <property name="text">
+      <string>Spectrums</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>

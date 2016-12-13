@@ -9,3 +9,13 @@ BaseCorrelationWidget::~BaseCorrelationWidget()
 {
 }
 
+void BaseCorrelationWidget::setLocationSetupWidget(LocationSetupWidgetController *controller)
+{
+	m_controller = controller;
+}
+
+bool BaseCorrelationWidget::isVisible() const
+{
+	return QWidget::isVisible();
+}
+

@@ -1,6 +1,6 @@
 #include <Logger/Logger.h>
 
-#include "RdsPacket.pb.h"
+#include "RDSExchange.h"
 
 #include "CoordinateCounter.h"
 #include "Info/StationConfiguration.h"
@@ -77,89 +77,51 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 {
 	Q_UNUSED( device );
 
-//	if (deviceType != FLAKON_TCP_DEVICE && deviceType != RDS_TCP_DEVICE) {
-//		return;
-//	}
+	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
+		QByteArray protoData = argument->data();
 
-//	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
+		RdsProtobuf::Packet msg;
+		msg.ParseFromArray(protoData.data(), protoData.size());
 
-//		LocSystemConfiguration conf;
-//		QByteArray inData;
-//		inData = argument->data();
-//		QDataStream stream(&inData, QIODevice::ReadWrite);
-//		stream >> conf;
+		if( !msg.has_from_server()) {
+			return;
+		}
 
-//		countChanNum = conf.chanNum;
+		RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
-//		if(m_main_point != conf.baseIndex || !isInit) {
-//			m_aData.ranges_.clear();
-//			m_rangesMap.clear();
-//		}
+		if(!isServerLocationShot(sMsg)) {
+			return;
+		}
 
-//		m_main_point = conf.baseIndex;
+		RdsProtobuf::ServerMessage_OneShotData_LocationData location = getServerLocationShot(sMsg);
 
-//		isInit = true;
 
-//		return;
-//	}
+		SolverProtocol::Packet solverPkt;
 
-//	if ( argument->type() != TCP_FLAKON_ANSWER_CORRELATION_ALL || !isInit) {
-//		return;
-//	}
+		SolverProtocol::MeasurementsData* solverData =
+				solverPkt.mutable_datafromclient()->mutable_measurementsdata(); ;
 
-//	QByteArray protoData = argument->data();
+		foreach (RdsProtobuf::Convolution cnvMsg, location.convolution()) {
+			int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
+			int secInd = cnvMsg.second_detector_index() + m_stationsShift;
 
-//	RdsProtobuf::Packet msg;
-//	msg.ParseFromArray(protoData.data(), protoData.size());
+			SolverProtocol::MeasurementsData_DataPacket* data = solverData->add_data_packet();
+			data->set_first_detector_index( firstInd );
+			data->set_second_detector_index( secInd );
+			data->set_time_delay( cnvMsg.delay() );
+			data->set_time_delay_sdv( cnvMsg.delay_accuracy() );
 
-//	if( !msg.has_from_server() || !msg.from_server().has_data() ||
-//		!msg.from_server().data().has_location_data() ) {
-//		return;
-//	}
+			if( cnvMsg.has_doppler() && cnvMsg.has_doppler_accuracy() ) {
+				data->set_dopler( cnvMsg.doppler() );
+				data->set_dopler_sdv( cnvMsg.doppler_accuracy() );
+			}
+		}
 
-//	RdsProtobuf::ServerMessage sMsg = msg.from_server();
-//	RdsProtobuf::LocationData lMsg = sMsg.data().location_data();
+		solverData->set_central_frequency( (location.range().start() + location.range().end())/2 );
+		solverData->set_datetime( location.date_time() );
 
-//	qint64 dateTime =  lMsg.date_time();
-//	int csz = lMsg.convolution_size();
-
-//	for( int i = 0; i < lMsg.convolution_size(); i++ ) {
-//		m_aData.ranges_.append( 0 );
-//	}
-
-//	SolverProtocol::Packet solverPkt;
-
-//	SolverProtocol::MeasurementsData* solverData =
-//			solverPkt.mutable_datafromclient()->mutable_measurementsdata(); ;
-
-//	foreach (RdsProtobuf::Convolution cnvMsg, lMsg.convolution()) {
-//		int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
-//		int secInd = cnvMsg.second_detector_index() + m_stationsShift;
-
-//		double delay = cnvMsg.delay();
-
-//		SolverProtocol::MeasurementsData_DataPacket* data = solverData->add_data_packet();
-//		data->set_first_detector_index( firstInd );
-//		data->set_second_detector_index( secInd );
-//		data->set_time_delay( delay );
-//		data->set_time_delay_sdv( cnvMsg.delay_accuracy() );
-
-//		if( cnvMsg.has_doppler() && cnvMsg.has_doppler_accuracy() ) {
-//			data->set_dopler( cnvMsg.doppler() );
-//			data->set_dopler_sdv( cnvMsg.doppler_accuracy() );
-//		}
-//	}
-
-//	double cf = m_centerFrequency + ( m_shift / 1000 );
-//	solverData->set_central_frequency( cf );
-//	solverData->set_datetime( dateTime );
-
-//	m_aData.numOfReferenceDetector_ = m_main_point;
-//	m_aData.time_ = lMsg.date_time();
-
-//	sendDataToClientTcpServer1(solverPkt);
-
-//	m_aData.ranges_.clear();
+		sendDataToClientTcpServer1(solverPkt);
+	}
 }
 
 void CoordinateCounter::onSendDataFromRadioLocation(const SolveResult &result, const DataFromRadioLocation &allData)

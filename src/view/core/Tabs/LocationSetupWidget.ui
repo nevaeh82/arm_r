@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_5">
       <property name="geometry">
@@ -32,7 +32,7 @@
        <string>System Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
-       <item row="1" column="0" colspan="2">
+       <item row="2" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -53,6 +53,9 @@
          <layout class="QGridLayout" name="gridLayoutPlatforms"/>
         </widget>
        </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="SystemSettingsWidget" name="systemSettingsWgt" native="true"/>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page">
@@ -60,8 +63,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>398</width>
-        <height>403</height>
+        <width>301</width>
+        <height>288</height>
        </rect>
       </property>
       <attribute name="label">
@@ -287,6 +290,9 @@
             <property name="maximum">
              <number>1000</number>
             </property>
+            <property name="value">
+             <number>10</number>
+            </property>
            </widget>
           </item>
           <item row="2" column="1" colspan="2">
@@ -507,8 +513,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>398</width>
-        <height>403</height>
+        <width>277</width>
+        <height>281</height>
        </rect>
       </property>
       <attribute name="label">
@@ -639,8 +645,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>398</width>
-        <height>403</height>
+        <width>295</width>
+        <height>377</height>
        </rect>
       </property>
       <attribute name="label">
@@ -841,6 +847,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SystemSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>SystemSettings/SystemSettingsWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

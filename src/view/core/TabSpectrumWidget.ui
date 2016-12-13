@@ -26,40 +26,8 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="1">
-    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>250</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="AnalysisGroupWidget" name="AlanysisGroupWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>200</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>16777215</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <layout class="QVBoxLayout" name="spectumWidgetsContainer"/>
+   <item row="0" column="0" colspan="4">
+    <layout class="QHBoxLayout" name="cpLayout"/>
    </item>
    <item row="1" column="3">
     <widget class="QTreeView" name="settingsTreeView">
@@ -77,8 +45,40 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="4">
-    <layout class="QHBoxLayout" name="cpLayout"/>
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="spectumWidgetsContainer"/>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>250</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="AnalysisGroupWidget" name="AlanysisGroupWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

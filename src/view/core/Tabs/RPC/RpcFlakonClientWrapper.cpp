@@ -22,7 +22,6 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 
 	connect(this, SIGNAL(requestFlakonStatusSignal()), this, SLOT(requestFlakonStatusSlot()));
 
-	connect(this, SIGNAL(sendWorkModeSignal(int, bool)), this, SLOT(sendWorkModeSlot(int, bool)));
 
 	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
 	connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
@@ -61,7 +60,9 @@ void RpcFlakonClientWrapper::registerReceiver(IRpcListener *listener)
 		return;
 	}
 
+	m_rpcClient->m_receiverMutex.lock();
 	m_rpcClient->registerReceiver(listener);
+	m_rpcClient->m_receiverMutex.unlock();
 }
 
 void RpcFlakonClientWrapper::deregisterReceiver(IRpcListener *listener)
@@ -70,12 +71,20 @@ void RpcFlakonClientWrapper::deregisterReceiver(IRpcListener *listener)
 		return;
 	}
 
+	m_rpcClient->m_receiverMutex.lock();
 	m_rpcClient->deregisterReceiver(listener);
+	m_rpcClient->m_receiverMutex.unlock();
 }
 
 
 void RpcFlakonClientWrapper::initSlot()
 {
+	if(m_rpcClient) {
+		m_rpcClient->clearReceiversList();
+		m_rpcClient->stop();
+		delete m_rpcClient;
+	}
+
 	m_rpcClient = new RpcFlakonClient(this);
 	m_rpcClient->start(m_port, m_address);
 
@@ -185,15 +194,6 @@ void RpcFlakonClientWrapper::sendRdsProtoSlot(QByteArray data)
 	m_rpcClient->sendRdsProto( data );
 }
 
-void RpcFlakonClientWrapper::sendWorkModeSlot(int mode, bool isOn)
-{
-	if(NULL == m_rpcClient) {
-		return;
-	}
-
-	m_rpcClient->sendWorkMode(mode, isOn);
-}
-
 void RpcFlakonClientWrapper::requestFlakonStatusSlot()
 {
 	if(NULL == m_rpcClient) {
@@ -244,11 +244,6 @@ void RpcFlakonClientWrapper::sendEnableReceiver(const int id, const bool val)
 	emit sendEnableReceiverSignal(id, val);
 }
 
-void RpcFlakonClientWrapper::sendWorkMode(const int mode, const bool isOn)
-{
-	emit sendWorkModeSignal(mode, isOn);
-}
-
 void RpcFlakonClientWrapper::sendSolverSetupSettings(const QByteArray &data)
 {
 	emit sendSolverSetupSettingsSignal( data );
@@ -257,11 +252,6 @@ void RpcFlakonClientWrapper::sendSolverSetupSettings(const QByteArray &data)
 void RpcFlakonClientWrapper::sendRdsProto(const QByteArray &data)
 {
 	emit sendRdsProtoSignal( data );
-}
-
-void RpcFlakonClientWrapper::requestFlakonStatus()
-{
-	emit requestFlakonStatusSignal();
 }
 
 void RpcFlakonClientWrapper::clearAllReceiversList()

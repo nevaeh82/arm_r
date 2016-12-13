@@ -19,7 +19,6 @@ class Prm300ControlWidgetController :
 private:
 	Prm300ControlWidget* m_view;
 
-	RpcPrmClient* m_rpcPrmClient;
     RpcFlakonClientWrapper* m_rpcFlakonClient;
 
 	IDbManager* m_dbManager;
@@ -37,7 +36,6 @@ public:
 
 	void appendView(Prm300ControlWidget *view);
 
-	void setRpcPrmClient(RpcPrmClient* client);
     void setRpcFlakonClient(RpcFlakonClientWrapper* client);
 
 	virtual void setDbManager(IDbManager*);

@@ -15,9 +15,10 @@ RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 
 	connect(m_clientPeer, SIGNAL(connectedToServer()), this, SIGNAL(connectionEstablishedSignal()));
 
-	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
+	//m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_RDS_ANSWER, this, SLOT(receivedLocSystem(QByteArray)));
-	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
+	m_clientPeer->attachSlot(RPC_METHOD_WORK_MODE, this, SLOT(receivedWorkMode(QByteArray)));
+	//m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
 
 	//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
 
@@ -109,10 +110,10 @@ void RpcFlakonClient::sendRdsProto(const QByteArray &data)
 	m_clientPeer->call( RPC_METHOD_SEND_RDS_PROTO, data );
 }
 
-void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
-{
-	m_clientPeer->call( RPC_METHOD_WORK_MODE, mode, isOn );
-}
+//void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
+//{
+//	m_clientPeer->call( RPC_METHOD_WORK_MODE, mode, isOn );
+//}
 
 void RpcFlakonClient::requestFlakonStatus()
 {
@@ -220,18 +221,20 @@ void RpcFlakonClient::receivedStationListSlot(QByteArray data)
 
 void RpcFlakonClient::receivedLocSystem(QByteArray data)
 {
-	//log_debug(QString("receivedLocSystem >>>>>  %1 >>>> %2").arg(data.size()).arg(m_receiversList.size()));
-//	QByteArray aData = data;
-//	RdsProtobuf::Packet pkt;
-//	pkt.ParseFromArray(aData.data(), aData.size());
-
-//	if( isAnalysisSpectrogram(pkt) ) {
-//		log_debug(QString("Received sonogram ---- %1 id-%2").arg(QTime::currentTime().msec()).arg((int)this->thread()->currentThreadId()));
-//	}
+	m_receiverMutex.lock();
 
 	foreach (IRpcListener* listener, m_receiversList) {
 		listener->onMethodCalled(RPC_METHOD_CONFIG_RDS_ANSWER, data);
 	}
+	m_receiverMutex.unlock();
+}
+
+void RpcFlakonClient::receivedWorkMode(QByteArray data)
+{
+	QDataStream ds(&data, QIODevice::ReadOnly);
+	int val;
+	ds >> val;
+	return;
 }
 
 void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)

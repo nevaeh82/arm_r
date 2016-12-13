@@ -27,6 +27,7 @@ private:
 	QList<ISpectrumWidget*> m_widgetList;
 
 	ICorrelationControllersContainer* m_correlationControllers;
+	IAnalysisWidget* m_analysis;
 
 	TreeModel*          m_treeModel;
 	TreeWidgetDelegate* m_treeDelegate;
@@ -36,9 +37,6 @@ private:
 	QPixmap* m_pmRoundRed;
 	QPixmap* m_pmRoundGreen;
 	QLabel* m_indicatorLabel;
-
-	/// connection status
-	QTimer	m_timerStatus;
 
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
@@ -51,6 +49,7 @@ public:
 	void clearSpectrumWidgetsContainer();
 
 	void setCorrelationComponent(ICorrelationControllersContainer* correlationControllers);
+	void setAnalysisComponent(IAnalysisWidget *analysis);
 
 	virtual void activate();
 	virtual void deactivate();
@@ -93,7 +92,6 @@ signals:
 
 private slots:
 	void setIndicatorStateSlot(int state);
-	void slotCheckStatus();
 };
 
 #endif // COMMONSPECTRUMTABWIDGET_H

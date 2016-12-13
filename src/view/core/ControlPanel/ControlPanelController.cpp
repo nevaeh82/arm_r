@@ -60,9 +60,11 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	m_view = view;
 
 	connect(m_view, SIGNAL(autoSearchCheckedSignal(bool)), this, SLOT(onAutoSearchStateChangedSlot(bool)));
-	connect(m_view, SIGNAL(panoramaCheckedSignal(bool)), this, SLOT(onPanoramaStateChangedSlot(bool)));
+
+	connect(m_view, SIGNAL(onPanoramaEnable(bool,int,int)), this, SLOT(onPanoramaStateChangedSlot(bool, int, int)));
+
 	connect(m_view, SIGNAL(commonFreqChangedSignal(int)), this, SLOT(onCommonFrequencyChangedSlot(int)));
-	connect(m_view, SIGNAL(bandwidthChangedSignal(int,int)), this, SLOT(onBandWidthChangedSlot(int,int)));
+	//connect(m_view, SIGNAL(bandwidthChangedSignal(int,int)), this, SLOT(onBandWidthChangedSlot(int,int)));
 	connect(m_view, SIGNAL(signalManualMode()), this, SLOT(slotManualMode()));
 	connect(m_view, SIGNAL(signalScanMode(int,int)), this, SLOT(slotScanMode(int,int)));
 	connect(m_view, SIGNAL(signalCheckMode()), this, SLOT(slotCheckMode()));
@@ -77,15 +79,8 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalUp1Mhz()), this, SLOT(slotUp1MHz()));
 	connect(m_view, SIGNAL(signalUp10Mhz()), this, SLOT(slotUp10MHz()));
 	connect(m_view, SIGNAL(signalUp100Mhz()), this, SLOT(slotUp100MHz()));
-
-	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SIGNAL(onSignalWorkMode(int,bool)));
-	connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
-			this, SIGNAL(onSignalWorkModeToGui(int,bool)));
-	connect(m_view, SIGNAL(signalWorkMode(int,bool)), this, SLOT(onSlotWorkMode(int,bool)));
-	connect(m_view, SIGNAL(signalWorkModeToGui(int,bool)),
-			this, SLOT(onSlotWorkModeGui(int,bool)));
-
 	connect(this, SIGNAL(signalSetComonFreq(int)), m_view, SLOT(slotChangeCommonFreq(int)));
+
 	connect(this, SIGNAL(setCorrelationStatus(QString)), this, SLOT(changeCorrelationStatus(QString)));
 	connect(this, SIGNAL(setCorrelationStatusActive(bool)), this, SLOT(changeCorrelationStatusActive(bool)));
 }
@@ -126,10 +121,10 @@ void ControlPanelController::setResponseFreq(quint32 freq)
 	m_currentFreq = freq;
 	m_view->slotChangeCommonFreq(freq);
 }
-void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled)
+void ControlPanelController::onPanoramaStateChangedSlot(bool isEnabled, int start, int end)
 {
 	foreach (IControlPanelListener* receiver, m_receiversList) {
-		receiver->onGlobalPanoramaEnabled(isEnabled);
+		receiver->onGlobalPanoramaEnabled(isEnabled, start, end);
 	}
 }
 
@@ -289,40 +284,6 @@ void ControlPanelController::slotCheckModeSetFreq()
 	double band = (*m_itCheckMode).bandwidth;
 	m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, (*m_itCheckMode).frequency);
 	m_dbManager->updatePropertyForAllObjects(DB_SELECTED_PROPERTY, (*m_itCheckMode).bandwidth);
-
-
-
-	//	foreach(Station* st, m_stationsMap)
-	//	{
-	//m_setupController->setAnalysisBandwidth();
-	m_setupController->changeLocationFreqParams(freq, (*m_itCheckMode).bandwidth*1000, 0);
-	//changeFrequency(freq);
-	//m_rpcFlakonClient->sendBandwidth(0,  (*m_itCheckMode).bandwidth*1000);
-	//m_rpcFlakonClient->sendShift(0, 0);
-	//	}
-
-	/// set main station fo correlations
-	//	QString leadStation;
-	//	if(m_mainStation)
-	//	{
-	//		leadStation = (*m_itCheckMode).stationName;
-	//	}
-	//	else
-	//	{
-	//		m_mainStation = m_stationsMap.value(0);
-	//		leadStation = tr("Auto");
-	//	}
-
-	//	if(m_mode == 3)
-	//	{
-	//		m_rpcFlakonClient->sendMainStationCorrelation(m_mainStation->getId(), leadStation);
-
-	//		m_dbManager->updatePropertyForAllObjects(DB_LEADING_OP_PROPERTY, leadStation);
-
-	//m_rpcFlakonClient->sendCorrelation(m_mainStation->getId(), (*m_itCheckMode).frequency, true);
-	//	}
-
-	//m_itCheckMode++;
 }
 
 void ControlPanelController::slotDown1MHz()
@@ -437,3 +398,13 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 	}
 }
 
+void ControlPanelController::requestAnalysis()
+{
+	m_view->setReceiveSpectrums(false);
+	setSpectrumReveive(false);
+}
+
+void ControlPanelController::setSpectrumReveive(bool val)
+{
+	m_view->setReceiveSpectrums(val);
+}

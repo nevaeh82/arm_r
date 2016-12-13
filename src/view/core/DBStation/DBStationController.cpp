@@ -3,9 +3,10 @@
 
 #include "DBStationController.h"
 
+//log_error( QString( "SQL is wrong! Error = %1").arg( query.lastError().text() ) );
+
 #define __VALIDATE_QUERY( query, result ) \
 	if( query.lastError().type() != QSqlError::NoError ) { \
-		log_error( QString( "SQL is wrong! Error = %1").arg( query.lastError().text() ) ); \
 		return result; \
 	}
 

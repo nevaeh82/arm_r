@@ -58,7 +58,7 @@ private:
 
 	QMap<int, Station *>   m_stationsMap;
 	QMap<QString, ITabWidget* >    m_tabWidgetsMap;
-	QMap<int, IAnalysisWidget*> m_analysisControllertMap;
+	QMap<int, IAnalysisWidget*> m_analysisControllerMap;
 
 	IDbManager* m_dbManager;
 	ITabWidget* m_currentTabWidget;
@@ -129,7 +129,7 @@ public:
 	virtual void setActiveTab(const int id);
 
 	virtual void onGlobalAutoSearchEnabled(const bool isEnabled);
-	virtual void onGlobalPanoramaEnabled(const bool isEnabled);
+	virtual void onGlobalPanoramaEnabled(const bool isEnabled, int start, int end);
 
 	QStringList createStationNamesList();
 
@@ -164,6 +164,11 @@ private slots:
 	void slotMethodCalled(const QString& method, const QVariant& argument);
 
 	void slotExpandCorrelations();
+
+	void slotAnalysisAddToList(double, double);
+	void slotAnalysisContinue(int id, bool);
+	void slotAnalysisSelection(int ind, double start, double end);
+	void slotAnalysisReady(int);
 
 public slots:
 	void slotShowLocationSetup();

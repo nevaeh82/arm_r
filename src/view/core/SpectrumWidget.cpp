@@ -23,9 +23,6 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect( ui->graphicsWidget, SIGNAL(viewPortChanged(double, double, double, double)),
 			 this, SLOT(onSlotChangedViewPort(double, double, double, double)) );
 
-    m_analysisResultWidget = new AnalysisResultWidget();
-    m_analysisResultWidget->close();
-
 //	m_qwtSonogram = new QwtPlot(0);
 //	m_qwtSonogramGL = new QwtPlotGLCanvas(m_qwtSonogram);
 //	m_qwtSonogram->setCanvas(m_qwtSonogramGL);
@@ -95,8 +92,6 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 
 SpectrumWidget::~SpectrumWidget()
 {
-	//log_debug("<<<<<<<<<<<<<");
-	delete m_analysisResultWidget;
 }
 
 void SpectrumWidget::setAutoSearch(bool checked)
@@ -106,7 +101,7 @@ void SpectrumWidget::setAutoSearch(bool checked)
 
 void SpectrumWidget::setPanorama(bool checked)
 {
-	ui->panoramaCB->setChecked(checked);
+	//ui->panoramaCB->setChecked(checked);
 }
 
 void SpectrumWidget::setSpectrumName(const QString &name)
@@ -192,11 +187,6 @@ void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::ServerMessage_On
 //	}
 }
 
-AnalysisResultWidget *SpectrumWidget::getAnalysisResultWidget()
-{
-    return m_analysisResultWidget;
-}
-
 void SpectrumWidget::slotSetEnableSpactrum(bool state)
 {
 	ui->getSpectrumCB->setChecked(state);
@@ -207,18 +197,13 @@ void SpectrumWidget::slotEnableKM(bool state)
 	/// not yet realazed signal
 	emit signalEnableKM(state);
 
-    ui->thresholdCB->setChecked(state);
-}
-
-void SpectrumWidget::recognize()
-{
-    m_analysisResultWidget->show();
+	ui->thresholdCB->setChecked(state);
 }
 
 void SpectrumWidget::slotSetWorkMode(int mode, bool isOn)
 {
 	if(mode == 2) {
-        m_plot->setVisible(true);
+		m_plot->setVisible(true);
 	} else {
 		m_plot->setVisible(false);
 	}

@@ -14,7 +14,6 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObje
 	, m_currentFreq(0)
 	, m_endFreq(0)
 	, m_responseFreq(0)
-	//	, m_rpcPrmClient(NULL)
 	, m_startx(0)
 	, m_tabManager(NULL)
 	, m_spectrumCounter(0)
@@ -37,8 +36,8 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObje
 	m_spectrumPeakHold = new float[1];
 
 	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)), Qt::QueuedConnection);
-	connect(&m_timerChangeFreqPanorama, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
-	connect(&m_timerRepeatSetFreq, SIGNAL(timeout()), this, SLOT(slotRepeatSetFrequency()));
+	//connect(&m_timerChangeFreqPanorama, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
+	//connect(&m_timerRepeatSetFreq, SIGNAL(timeout()), this, SLOT(slotRepeatSetFrequency()));
 }
 
 SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
@@ -50,14 +49,6 @@ SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
 Q_DECLARE_METATYPE(float*)
 void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVariant& data)
 {
-//	QByteArray aData = data.toByteArray();
-//	RdsProtobuf::Packet pkt;
-//	pkt.ParseFromArray(aData.data(), aData.size());
-
-//	if( isAnalysisSpectrogram(pkt) ) {
-//		log_debug(QString("Datasource sonogram:::: %1 id-%2").arg(m_sonogramTime.msecsTo(QTime::currentTime())).arg((int)this->thread()->currentThreadId()));
-//		m_sonogramTime = QTime::currentTime();
-//	}
 	emit onMethodCalledSignal(method, data);
 }
 
@@ -77,15 +68,9 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 
 	if(m_bandwidthSingleSample != bandwidth && m_isPanoramaStart == false)
 	{
-		setBandwidth(bandwidth); // Old Flakon
-		//setBandwidth1(vecFFT.size()); //new Protobuf
+		setBandwidth(bandwidth);
 		m_bandwidthSingleSample = bandwidth;
 		m_needSetup = true;
-		//		if(m_spectrumWidget)
-		//		{
-		//			qDebug() << "ZERO FREQ = " << vecFFT_0.x();
-		//			m_spectrumWidget->setZeroFrequency((vecFFT_0.x())*TO_KHZ);
-		//		}
 	}
 
 	int index;
@@ -99,11 +84,6 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 		index = 0;
 	}
 
-	//log_debug( QString("Data process : %1  : %2 index: %3").arg(index*vecFFT.size()).arg(m_pointCountWhole).arg(index) );
-
-	int t1 = index*vecFFT.size();
-	int t2 = m_pointCountWhole;
-
 	if( index < 0 ) {
 		return;
 	}
@@ -111,10 +91,6 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 	for(int i = 0; i < vecFFT.size(); i++)
 	{
 		m_spectrum[index*vecFFT.size() + i] = vecFFT.at(i).y();
-		//		if((m_startx != m_responseFreq) || (m_spectrum[i] > m_spectrumPeakHold[i]) || (m_spectrumPeakHold[i] == 0))
-		//		{
-		//			m_spectrumPeakHold[i] = m_spectrum[i];
-		//		}
 
 		if((m_startx != m_responseFreq) || (m_spectrum[index*vecFFT.size()+i] >
 											m_spectrumPeakHold[index*vecFFT.size()+i]) ||
@@ -142,15 +118,12 @@ bool SpectrumWidgetDataSource::startPanorama(bool start)
 
 		log_info(QString("Current frequency is %1").arg(m_currentFreq));
 		if(m_dbmanager != NULL) {
-			m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+			//m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
 		}
-
-		m_timerRepeatSetFreq.start(7000);
 
 		return true;
 	}
 
-	m_timerRepeatSetFreq.stop();
 	return false;
 	/// start timer for loop panorama frequency
 }
@@ -161,6 +134,8 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 
 	if(m_bandwidth != bandwidth)
 	{
+		m_spectrumWidget->setAlarm(true);
+
 		m_bandwidth = bandwidth;
 		int div = m_bandwidth / BANDWIDTH_SINGLE;
 		if( !div ) {
@@ -175,6 +150,7 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
         m_spectrumPeakHold = new float[m_pointCountWhole] ();
         m_needSetupSpectrum = true;
         clearPeak();
+
 	}
 }
 
@@ -243,11 +219,6 @@ bool SpectrumWidgetDataSource::isPanoramaEnabled()
 	return m_isPanoramaStart;
 }
 
-//void SpectrumWidgetDataSource::setPrmRpcClient(RpcPrmClient *rpcClient)
-//{
-//	m_rpcPrmClient = rpcClient;
-//}
-
 void SpectrumWidgetDataSource::setTabManager(ITabManager *manager)
 {
 	m_tabManager = manager;
@@ -277,34 +248,15 @@ void SpectrumWidgetDataSource::setPanoramaFreqControl(PanoramaFreqControl* contr
 void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneShotData_LocationData& data)
 {
 	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
+		emit onDrawComplete();
 		return;
 	}
 
-	//		if(m_isPanoramaStart && m_spectrumCounter == 0)
-	//		{
-	//			return;
-	//		}
-
-
 	bool isComplex = true;
-
-//	QByteArray vecFFTBA = data.toByteArray();
-
-//
-//	QDataStream stream(vecFFTBA);
-
-//	unsigned int id; // m_header.id;
-
-//	unsigned int zone;
-//	stream >> zone;
-//	unsigned int typeRds;
-//	stream >> typeRds;
-
-//	stream >> id;
-
 	int id = -1;
 	float cf = 0;
 	QVector<QPointF> vecFFT;
+	QList<QVariant> list;
 
 	for(int i=0; i<data.spectrum_plot_size(); i++) {
 		if( data.spectrum_plot(i).index() == m_spectrumWidget->getId() ) {
@@ -312,10 +264,12 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		}
 	}
 
-	if(id < 0) {
+	if( id < 0 ) {
 		return;
 	}
 
+
+	// =================================== Creating Spectrum vector Points ========================================
 	cf = data.central_frequency();
 
 	double freq = data.spectrum_plot(id).axis_x_start();
@@ -323,9 +277,13 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 	for(int i = 0; i < data.spectrum_plot(id).data().size(); i++) {
 		double val = data.spectrum_plot(id).data(i);
+//		if(i == 0) {
+//			val = 150;
+//		}
 		vecFFT.append( QPointF(freq*TO_KHZ, val) );
 		freq += stepFreq;
 	}
+
 
 	if(!m_isPanoramaStart)
 	{
@@ -333,6 +291,8 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		if(m_responseFreq != cf) {
 			clearPeak();
 		}
+	} else {
+		m_spectrumWidget->setZeroFrequency(m_startFreq);
 	}
 
 	m_responseFreq = cf;
@@ -340,8 +300,6 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	if (!vecFFT.size()) return;
 
 	dataProccess(vecFFT, isComplex);
-
-	QList<QVariant> list;
 
 	QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
 	QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
@@ -362,34 +320,43 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	}
 
 	QVariant dataOut(list);
+
+	m_spectrumWidget->setAlarm(false);
+
 	onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, dataOut);
 
+	// ====================================== Creating Spectrum DetectorHumps ===========================================
+	QList<QPointF> detectHumpsList;
+	for(int i = 0; i < data.hump_size(); i++) {
+		detectHumpsList.append( QPointF(data.hump(i).range().start(), data.hump(i).range().end()) );
+	}
 
-	// if(m_workFreq != cf) {
+	QByteArray humpData;
+	QDataStream humpStream( &humpData, QIODevice::WriteOnly );
+	humpStream << detectHumpsList;
+
+	if( !detectHumpsList.isEmpty() ) {
+		onDataReceived( RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH, QVariant(humpData) );
+	}
+
+	// ======================================= Some Panorama actions ====================================================
+
 	if(m_isPanoramaStart)
 	{
 		m_responseFreq = cf;
 		m_spectrumCounter++;
-		m_timerRepeatSetFreq.stop();
-		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, cf);
+		//m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, cf);
 	}
-	//  }
 	m_workFreq = cf;
 
 
 	if(m_isPanoramaStart)
 	{
-		//			if(m_responseFreq != m_currentFreq)
-		//			{
-		//				m_spectrumCounter = 0;
-		//				return;
-		//			}
-		if(m_spectrumCounter > 3 /*&& m_responseFreq != m_currentFreq*/)
+		if(m_spectrumCounter > 1)
 		{
 			m_currentFreq = m_responseFreq;
-			m_panoramaFreqControl->setChannelReady(m_id);
+			m_panoramaFreqControl->setChannelReady(m_currentFreq);
 			m_spectrumCounter = 0;
-			//slotChangeFreq();
 		}
 		m_spectrumCounter++;
 	}
@@ -398,99 +365,31 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 {
-//    log_debug("SpectrumWidgetDataSource");
-	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
-
-	}
-
-	if(RPC_SLOT_SERVER_SEND_RESPONSE_MODULATION == method) {
-		onDataReceived(method, data);
-		return;
-	}
-
-	if(RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH == method) {
-		onDataReceived(method, data);
-		return;
-	}
-
-	if(RPC_SLOT_SERVER_PRM_STATUS == method)
-	{
-		QList<QVariant> list = data.toList();
-		quint16 freq = list.at(0).toUInt();
-		m_responseFreq = freq;
-		////		quint32 filter = list.at(1).toUInt();
-		////		quint32 att1 = list.at(2).toUInt();
-		////		quint32 att2 = list.at(3).toUInt();
-
-		//        if(m_isPanoramaStart)
-		//        {
-		//            m_timerRepeatSetFreq.stop();
-		//        }
-
-	}
-	if(method == RPC_PRM_FREQUENCY_CHANGED)
-	{
-		m_responseFreq = m_currentFreq;
-		if(m_isPanoramaStart)
-		{
-			m_spectrumCounter++;
-			m_timerRepeatSetFreq.stop();
-		}
-	}
-
 	//Receiving rds raw protobuf
 	if( method == RPC_METHOD_CONFIG_RDS_ANSWER ) {
 
-		RdsProtobuf::Packet pkt;
-		QByteArray bData = data.toByteArray();
-		pkt.ParseFromArray( bData.data(), bData.size() );\
-
-		if(!pkt.has_from_server()) {
+		RdsProtobuf::ServerMessage sMsg;
+		if( !parseServerMessage(data.toByteArray(), sMsg) ) {
 			return;
 		}
-
-		RdsProtobuf::ServerMessage sMsg = pkt.from_server();
-
 
 		if( isServerLocationShot(sMsg) ) {
 			setupPoints( getServerLocationShot( sMsg ) );
 		}
 
-		//onDataReceived(RPC_METHOD_CONFIG_RDS_ANSWER, data);
 	}
 }
 
 void SpectrumWidgetDataSource::slotChangeFreq()
 {
-//	//	if(m_rpcPrmClient == NULL)
-//	//	{
-//	//		return;
-//	//	}
-//	if(m_currentFreq == m_responseFreq)
-//	{
-//		if(m_currentFreq >= m_endFreq)
-//		{
-//			m_currentFreq = m_startFreq;
-//		}
-//		else
-//		{
-//			m_currentFreq += freqStep;
-//		}
-//	}
-
-//	log_info(QString("Current frequency is %1").arg(m_currentFreq));
-//	if(m_dbmanager != NULL) {
-//		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
-//	}
-
-//	m_timerRepeatSetFreq.start(7000);
 
 }
 
 void SpectrumWidgetDataSource::slotRepeatSetFrequency()
 {
-	if(m_dbmanager != NULL)
-		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+	if(m_dbmanager != NULL) {
+//		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+	}
 }
 
 void SpectrumWidgetDataSource::sendCommand(int)

@@ -10,10 +10,14 @@
 #include "SpectrumWidget.h"
 #include "Controls/PanoramaFreqControl.h"
 
+#include "LocationSetupWidgetController.h"
+
 class TabManager;
 
 class DataSourceController : public QObject
 {
+
+	Q_OBJECT
 
 	struct SpectrumDsView
 	{
@@ -22,7 +26,7 @@ class DataSourceController : public QObject
 	};
 
 public:
-	DataSourceController(TabManager *tabManager, IDbManager *dbManager, RpcFlakonClient *rpcClient, PanoramaFreqControl *panoramaFreqControl, QObject* parent);
+	DataSourceController(TabManager *tabManager, IDbManager *dbManager, RpcFlakonClientWrapper *rpcClient, PanoramaFreqControl *panoramaFreqControl, QObject* parent);
 	~DataSourceController();
 
 	void initSpectrumDataSource(QMap<QString, ITabWidget *> tabWidgetsMap);
@@ -32,6 +36,8 @@ public:
 
 	void deregisterAll();
 
+	void setLocationController(LocationSetupWidgetController* controller);
+
 private:
 	QList<SpectrumDsView> m_spectrumDataSourceList;
 	QList<CorrelationWidgetDataSource*> m_correlationDataSourcesList;
@@ -40,8 +46,13 @@ private:
 
 	TabManager* m_tabManager;
 	IDbManager* m_dbManager;
-	RpcFlakonClient* m_rpcFlakonClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 	PanoramaFreqControl* m_panoramaFreqControl;
 
 	QList<QThread*> m_threadSrcList;
+
+	LocationSetupWidgetController* m_locationController;
+
+public slots:
+	void enablePanorama(bool on, int start, int end);
 };

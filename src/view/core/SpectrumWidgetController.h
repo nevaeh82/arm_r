@@ -1,4 +1,4 @@
-#ifndef SPECTRUMWIDGETCONTROLLER_H
+﻿#ifndef SPECTRUMWIDGETCONTROLLER_H
 #define SPECTRUMWIDGETCONTROLLER_H
 
 #include <QObject>
@@ -61,7 +61,6 @@ class SpectrumWidgetController : public QObject, public ISpectrumWidget, public 
 	Q_OBJECT
 private:
 	SpectrumWidget* m_view;
-    AnalysisResultWidget* m_analysisResult;
 
 	bool	m_autoSearch;
 	double	m_current_frequency;
@@ -103,20 +102,20 @@ private:
 
 	QMap<int, ColorGraph*> m_mapGraph;
 
-    int m_timming;
-    int m_timmingGlobal;
-    int m_timmingCount;
-    double m_timmingCurPos;
+	int m_timming;
+	int m_timmingGlobal;
+	int m_timmingCount;
+	double m_timmingCurPos;
 
 	Prm300ControlWidgetController* m_prm300WidgetController;
 
-	RpcPrmClient* m_rpcClient;
-    RpcFlakonClientWrapper* m_rpcFlakonClient;
+	//RpcPrmClient* m_rpcClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
 	IDbManager* m_dbManager;
 	DBStationController* m_dbStationController;
 	ControlPanelController* m_controlPanelController;
-    QCPLinearColorMap       m_mapColor;
+	QCPLinearColorMap       m_mapColor;
 
 	bool nextClearState;
 	SpectrumSelection tmpSelection;
@@ -142,7 +141,13 @@ private:
 
 	LocationSetupWidgetController* m_setupController;
 
-    bool m_specStatus;
+	bool m_specStatus;
+
+	QTimer* delTimer;
+	bool m_alarm;
+	QMutex m_alarmMutex;
+
+	bool m_initGraph;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -175,6 +180,9 @@ public:
 	void setPanorama(bool);
 
 	void setSelection(double start, double end);
+	void updateSelection();
+
+	void setAnalysisSelection(double start, double end);
 
 	virtual void setDbManager(IDbManager* dbManager);
 	virtual void setDbStationController(DBStationController* controller);
@@ -185,7 +193,6 @@ public:
 
 	void onDataArrived(const QString& method, const QVariant& arg);
 
-	void setRpcPrmClient(RpcPrmClient* rpcClient);
 	void setRpcFlakonClient(RpcFlakonClientWrapper* rpcClient);
 
 	void onCorrelationStateChanged(const bool isEnabled);
@@ -198,7 +205,9 @@ public:
 
 	void setLocationSetupWidgetController(LocationSetupWidgetController* controller);
 
-    void setSignalStatus(bool stat);
+	void setSignalStatus(bool stat);
+
+	void setAlarm(bool val);
 
 private:
 	void init();
@@ -213,7 +222,6 @@ private:
 	void setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list);
 
 
-	void initGraph();
 	void setSonogramSetup(QList<QList<float>> data);
 
 signals:
@@ -227,9 +235,13 @@ signals:
 
 	void onCorrelationStateChangedSignal(const bool isEnabled);
 
-    void signalAddToList(QString name, double start, double bandwidth);
+	void signalAddToList(QString name, double start, double bandwidth);
 
-    void signalStatus(bool);
+	void signalStatus(bool);
+	void onSetZeroFreq(double);
+
+	void onDrawComplete();
+	void signalDataArrived(QString, QVariant);
 
 public slots:
 
@@ -266,10 +278,16 @@ private slots:
 	void slotSetAnalysisChannel(int id);
 	void setDetectedAreasUpdateOnPlot();
 
-    void slotAddToList(double start, double end);
+	void slotAddToList(double start, double end);
 
-    void slotContinueAnalysis(bool);
-    void slotSetStatus(bool stat);
+	void slotContinueAnalysis(bool);
+	void slotSetStatus(bool stat);
+
+	void slotUpdateSelection();
+	void setZeroFrequencyInternal(double val);
+	void onDataArrivedInternal(const QString &method, const QVariant &arg);
+
+	void onPlotReady();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

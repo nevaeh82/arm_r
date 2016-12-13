@@ -41,10 +41,10 @@ private:
 	QPixmap* m_pmRoundYellow;
 	QLabel* m_indicatorLabel;
 
-	RpcPrmClient*	m_rpcPrmClient;
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
-    ControlPanelWidget* m_cpView;
+	ControlPanelWidget* m_cpView;
+	int m_id;
 
 public:
 	TabSpectrumWidget(QWidget* parent = NULL);
@@ -52,6 +52,8 @@ public:
 
 	SpectrumWidgetController *getSpectrumController();
     void setControlPanelWidget(ControlPanelWidget* widget);
+
+	void setId(int id) {m_id = id;}
 
 public:
 	void activate();
@@ -70,9 +72,6 @@ public:
 
 	void insertCorrelationWidget(ICorrelationWidget *correlationWidget);
 	void insertAnalysisWidget(IAnalysisWidget *analysisWidget);
-
-	void setRpcPrmClient(RpcPrmClient* client);
-	RpcPrmClient* getRpcClient();
 
 	void setRpcFlakonClient(RpcFlakonClientWrapper* client);
 	RpcFlakonClientWrapper* getRpcFlakonClient();

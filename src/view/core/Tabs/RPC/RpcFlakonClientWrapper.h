@@ -31,12 +31,8 @@ public:
 	void sendAvarageSpectrum(const int id, const int avarage);
 	void sendEnableReceiver(const int id, const bool val);
 
-	void sendWorkMode(const int mode, const bool isOn);
-
 	void sendSolverSetupSettings(const QByteArray& data);
 	void sendRdsProto(const QByteArray& data);
-
-	void requestFlakonStatus();
 
 	void clearAllReceiversList();
 
@@ -55,8 +51,6 @@ signals:
 	void sendAvarageSpectrumSignal(int id, int avarage);
 
 	void sendEnableReceiverSignal(int id, bool val);
-
-	void sendWorkModeSignal(int mode, bool isOn);
 
 	void sendSolverSetupSettingsSignal(QByteArray data);
 	void sendRdsProtoSignal(QByteArray data);
@@ -84,8 +78,6 @@ private slots:
 
 	void sendSolverSetupSettingsSlot(QByteArray data);
 	void sendRdsProtoSlot(QByteArray data);
-
-	void sendWorkModeSlot(int mode, bool isOn);
 
 	void requestFlakonStatusSlot();
 	

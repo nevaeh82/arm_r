@@ -39,7 +39,7 @@ public:
 	void sendCommand(int);
 
 private:
-	void setCorData(int type, const QVector<QPointF>& points);
+
 
 signals:
 	void onMethodCalledSignal(QString, QVariant);

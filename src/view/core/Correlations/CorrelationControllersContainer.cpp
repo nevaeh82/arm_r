@@ -15,18 +15,19 @@ CorrelationControllersContainer::~CorrelationControllersContainer()
 
 int CorrelationControllersContainer::init(int count, int type)
 {
-    for(int i = 0; i < count; i++)
+	for(int i = 0; i < count; i++)
 	{
-        BaseCorrelationWidget* cor;
-        if(type == 0) {
-            cor = new CorrelationWidget();
-        } else {
-            cor = new CorrelationIndicatorWidget();
-            connect((CorrelationIndicatorWidget*)cor, SIGNAL(signalExpand()),
-                    this, SIGNAL(signalExpand()));
-        }
-		CorrelationWidgetController* controller = new CorrelationWidgetController(this);
+		BaseCorrelationWidget* cor;
+		if(type == 0) {
+			cor = new CorrelationWidget();
+		} else {
+			cor = new CorrelationIndicatorWidget();
+			connect((CorrelationIndicatorWidget*)cor, SIGNAL(signalExpand()),
+					this, SIGNAL(signalExpand()));
+		}
+		CorrelationWidgetController* controller = new CorrelationWidgetController(type, this);
 		controller->appendView(cor);
+		controller->setLocationController(m_locationController);
 
 		m_mapWidgets.insert(i, controller);
 	}
@@ -49,4 +50,9 @@ ICorrelationWidget* CorrelationControllersContainer::get(int id)
 int CorrelationControllersContainer::count()
 {
 	return m_mapWidgets.count();
+}
+
+void CorrelationControllersContainer::setLocationController(LocationSetupWidgetController *controller)
+{
+	m_locationController = controller;
 }

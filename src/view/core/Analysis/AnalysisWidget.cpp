@@ -11,20 +11,23 @@ AnalysisWidget::AnalysisWidget(int type, QWidget *parent, Qt::WFlags flags):
 {
 	ui->setupUi(this);
 
-	ui->spectrumWidget->SetZoomOutMaxOnDataSet(true);
-	ui->spectrumWidget->SetAlign(2);
-
-	ui->spectrumWidget->SetHorizontalLabel(tr("m"));
-
-	ui->title->setText(QString("Title %1").arg(type));
+	connect(ui->widget, SIGNAL(analysisReady(int)), this, SIGNAL(analysisReady(int)));
+	connect(ui->widget, SIGNAL(analysisSelection(int,double,double)), this, SIGNAL(signalAnalysisSelection(int, double, double)));
+	connect(ui->widget, SIGNAL(onAddToList(double,double)), this, SIGNAL(signalAddToList(double, double)));
+	connect(ui->widget, SIGNAL(signalContinue(int, bool)), this, SIGNAL(signalAnalysisContinue(int, bool)));
 }
 
 AnalysisWidget::~AnalysisWidget()
 {
-	//log_debug("<<<<<<<<");
 }
 
-Q_MG_SpectrumInterface *AnalysisWidget::getGraphicsWidget()
+void AnalysisWidget::setAnalysisData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &adata)
 {
-	return ui->spectrumWidget;
+	this->setVisible(true);
+	ui->widget->setAnalysisData( adata );
+}
+
+int AnalysisWidget::getId()
+{
+	return ui->widget->getCurrentIndex();
 }

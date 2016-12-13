@@ -39,12 +39,12 @@ public:
 	virtual void setDbManager(IDbManager*) = 0;
 	virtual void resetDbManager() = 0;
 
-    virtual void setControlPanelWidget(ControlPanelWidget* wgt) = 0;
+	virtual void setControlPanelWidget(ControlPanelWidget* wgt) = 0;
 
-    virtual void setDbStationController(DBStationController* controller) = 0;
+	virtual void setDbStationController(DBStationController* controller) = 0;
 	virtual void setStationNamesList(const QStringList& stationsList) = 0;
 
-    virtual void updateListsSelections() = 0;
+	virtual void updateListsSelections() = 0;
 };
 
 #endif // ISUBMODULE_H
