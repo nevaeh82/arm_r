@@ -12,6 +12,7 @@
 #include <QtConcurrentRun>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QQueue>
 
 #include <qwt_plot.h>
 #include <qwt_point_3d.h>
@@ -69,8 +70,6 @@ private:
 	quint32 m_platformId;
 	quint32 m_channelId;
 
-	quint32 m_analysisChannel;
-
 	ITabSpectrum*	m_tab;
 
 	double	m_bandwidth;
@@ -95,7 +94,6 @@ private:
 	Q_MG_SpectrumInterface* m_graphicsWidget;
 
 	//Qwt graph, its line and data
-	QwtPlot      *m_sonogramWidget;
 	QVector<QwtPoint3D> *m_qwtVector;
 	QwtPlotSpectroCurve *m_qwtCurve;
 	ColorMap* m_qwtColorMap;
@@ -135,6 +133,8 @@ private:
 	QFutureWatcher<void> m_sonogramWatcher;
 	bool m_sonogramReady;
 	QTime m_sonogramTime;
+	QQueue<QList<double> > m_sonogramData;
+	int m_sonogramLimit;
 
 	QPixmap m_sonogramPixmap;
 	QMutex m_sonogramMutex;
@@ -148,6 +148,10 @@ private:
 	QMutex m_alarmMutex;
 
 	bool m_initGraph;
+
+	bool m_selectionUpFlag;
+
+	float m_lastSpectrumVal;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -205,15 +209,18 @@ public:
 
 	void setLocationSetupWidgetController(LocationSetupWidgetController* controller);
 
-	void setSignalStatus(bool stat);
-
 	void setAlarm(bool val);
+
+	void setReceiverStatus(bool state);
+	void setReceiverSettings(const RdsProtobuf::ReceiverSettings &settings);
+
+	void clearSonogram();
 
 private:
 	void init();
 
 	void setSignalSetup(float* spectrum, float* spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex);
-	void setSignal(float* spectrum, float* spectrum_peak_hold);
+	void setSignal(float* spectrum, float* spectrum_peak_hold, int index);
 	void setDefModulation(QString modulation);
 	void setLabelName(QString base, QString second);
 	void setDetectedAreasUpdate(const QByteArray& vec);
@@ -222,7 +229,7 @@ private:
 	void setDetectedAreas(int mode, const QList<StationsFrequencyAndBandwith>& list);
 
 
-	void setSonogramSetup(QList<QList<float>> data);
+	void setSonogramSetup(const QQueue<QList<double> >& sonogramData);
 
 signals:
 	void doubleClickedSignal(int);
@@ -237,11 +244,12 @@ signals:
 
 	void signalAddToList(QString name, double start, double bandwidth);
 
-	void signalStatus(bool);
 	void onSetZeroFreq(double);
 
 	void onDrawComplete();
 	void signalDataArrived(QString, QVariant);
+
+	void signalClearSonogram();
 
 public slots:
 
@@ -253,10 +261,9 @@ private slots:
 
 	void addToWhiteList();
 	void addToBlackList();
+
 	void recognizeSignal();
-	void toggleCorrelation();
-	void toggleOffCorrelation();
-	void clearLabels();
+	void recordSignal();
 
 	void slotSelectionCleared();
 	void slotSelectionFinished(double x1, double y1, double x2, double y2);
@@ -275,7 +282,6 @@ private slots:
 
 	void onSonogramDataReady();
 
-	void slotSetAnalysisChannel(int id);
 	void setDetectedAreasUpdateOnPlot();
 
 	void slotAddToList(double start, double end);
@@ -288,6 +294,10 @@ private slots:
 	void onDataArrivedInternal(const QString &method, const QVariant &arg);
 
 	void onPlotReady();
+
+	void clearSonogramInternal();
+	void slotRecognizeSignal();
+	void slotRecordSignal();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "RDSExchange.h"
+
 #include "Common/CommandMessage.h"
 #include "Info/StationConfiguration.h"
 
@@ -21,14 +23,18 @@ public:
 
 	void setData(quint16 freq, quint8 filter, quint8 att1, quint8 att2);
 
-	Prm getPrmParams();
+	RdsProtobuf::ReceiverSettings getPrmParams();
 
 	void setState(bool state);
+	void setSettings(const RdsProtobuf::ReceiverSettings& settings);
 
 private:
 	Ui::Prm300ControlWidget *ui;
 
 	Prm m_params;
+	RdsProtobuf::ReceiverSettings m_protoSettings;
+
+	int m_freq;
 
 private slots:
 	void slotAtt1Up();
@@ -41,7 +47,7 @@ private slots:
 signals:
 	void signalOnSetParams();
 
-    void signalOnEnableReceiver(bool);
+	void signalOnEnableReceiver(bool);
 };
 
 #endif // PRM300CONTROLWIDGET_H

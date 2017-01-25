@@ -65,9 +65,6 @@ private:
 	QString m_rpcHost;
 	quint16 m_rpcPort;
 
-	/// connection status
-	QTimer	m_timerStatus;
-
 	DBStationController* m_dbStationController;
 	ICorrelationListener* m_controlPanelController;
 	ControlPanelController* m_controlPanelControllerTrue;
@@ -120,7 +117,6 @@ public:
 	virtual void enableCorrelation(bool enable = true);
 
 	virtual void setThreshold(double y);
-	virtual void checkStatus();
 	virtual void recognize();
 	virtual void setPanorama(bool state);
 	virtual double getCurrentFrequency();
@@ -176,8 +172,6 @@ private slots:
 	void spectrumDoubleClickedSlot(int id);
 
 	void enablePanoramaSlot(bool isEnabled);
-
-	void slotCheckStatus();
 
 	void slotOnSetWorkMode(int mode, bool isOn);
 

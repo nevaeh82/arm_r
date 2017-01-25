@@ -51,7 +51,7 @@ public:
 	virtual ~TabSpectrumWidget();
 
 	SpectrumWidgetController *getSpectrumController();
-    void setControlPanelWidget(ControlPanelWidget* widget);
+	void setControlPanelWidget(ControlPanelWidget* widget);
 
 	void setId(int id) {m_id = id;}
 
@@ -79,8 +79,6 @@ public:
 signals:
 	void setIndicatorStateSignal(int state);
 	void spectrumDoubleClickedSignal(int);
-
-	void onChangeAnalysisChannel(int);
 
 private slots:
 	void setIndicatorStateSlot(int state);

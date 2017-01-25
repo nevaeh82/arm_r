@@ -17,5 +17,7 @@
         <file>images/bullet_yellow.png</file>
         <file>images/ActionsListAdd.png</file>
         <file>images/minus.png</file>
+		<file>images/swOn.png</file>
+		<file>images/swOff.png</file>
     </qresource>
 </RCC>

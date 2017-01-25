@@ -110,6 +110,8 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 			double rmm = loc.range().end();
 
 			double x = loc.central_frequency();
+
+			//log_debug("request");
 		}
 
 		return msgData;
@@ -161,6 +163,7 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 	if(sMsg.has_current()) {
 		message = configureSys( data );
 	} else {
+		//log_debug(" incoming >>> ");
 		message = configureLoc( data );
 	}
 

@@ -35,6 +35,7 @@ RpcServer::RpcServer(QObject* parent) :
 
 	m_serverPeer->attachSlot(RPC_METHOD_SET_DATA_TO_SOLVER, this, SLOT(setDataToSolver(quint64,QByteArray)));
 	m_serverPeer->attachSlot(RPC_METHOD_SET_CLEAR_TO_SOLVER, this, SLOT(setClearToSolver(quint64,QByteArray)));
+	m_serverPeer->attachSlot(RPC_SLOT_SET_KTR_TO_ARMT, this, SLOT(setKtrData(quint64,QByteArray)));
 
 	m_serverPeer->attachSlot(RPC_METHOD_REQUEST_STATUS, this, SLOT(requestStatus(quint64, QString)));
 	m_serverPeer->attachSlot(RPC_METHOD_FLAKON_REQUEST_STATUS, this, SLOT(requestFlakonStatus(quint64)));
@@ -267,6 +268,14 @@ void RpcServer::setClearToSolver(quint64 client, QByteArray data)
 	byteArray.append(data);
 
 	dispatch( RPC_METHOD_SET_CLEAR_TO_SOLVER, QVariant(byteArray), client );
+}
+
+void RpcServer::setKtrData(quint64 client, QByteArray data)
+{
+	QByteArray byteArray;
+	byteArray.append(data);
+
+	dispatch( RPC_SLOT_SET_KTR_TO_ARMT, QVariant(byteArray), client );
 }
 
 void RpcServer::sendResponseModulation(quint64 client, QString modulation)

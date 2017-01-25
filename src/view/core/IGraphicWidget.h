@@ -13,6 +13,8 @@ class IGraphicWidget
 		virtual void setZeroFrequency(double val) = 0;
 		virtual void setVisible(const bool isVisible) = 0;
 		virtual void setAlarm(bool) = 0;
+
+		virtual void clearSonogram() = 0;
 };
 
 #endif // IGRAPHICWIDGET_H

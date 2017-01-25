@@ -98,6 +98,10 @@ void ListsDialogController::refreshTable()
 
 void ListsDialogController::filter(int type)
 {
+	if(type >= 3) {
+		return;
+	}
+
 	if( type == 0 ) {
 		m_proxyModel->setFilterKeyColumn( -1 );
 		m_proxyModel->setFilterFixedString( "" );

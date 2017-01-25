@@ -31,9 +31,9 @@ void ClientTcpServer::onRegisterNewConnection(uint n, ITcpServerClient * client)
 {
 	Q_UNUSED(n)
 
-	QByteArray dataToSend = m_encoder->decodeRegister();
+//	QByteArray dataToSend = m_encoder->decodeRegister();
 
-	client->writeData(dataToSend);
+//	client->writeData(dataToSend);
 }
 
 void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
@@ -47,6 +47,10 @@ void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString&
 	case CLIENT_TCP_SERVER:
 	{
 		if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA) {
+			QByteArray dataToSend = m_encoder->decode(argument);
+			bool res = sendData( dataToSend );
+			emit onDataSended(res);
+		} else if(messageType == CLIENT_TCP_SERVER_KTR_DATA) {
 			QByteArray dataToSend = m_encoder->decode(argument);
 			bool res = sendData( dataToSend );
 			emit onDataSended(res);

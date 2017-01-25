@@ -4,12 +4,19 @@
 
 #include "Interfaces/ICorrelationWidget.h"
 
+#include "math.h"
+
 #define TIME_WAIT_CORRELATION 5000
+#define SLEEP_MODE_TIMEOUT 5000
 
 CorrelationWidgetDataSource::CorrelationWidgetDataSource(ITabManager* tabManager, int id1, int id2, QObject *parent)
 	: BaseDataSource(parent)
 	, m_needSetup(false)
 	, m_corrGraphWgt(nullptr)
+	, m_cf(0)
+	, m_start(0)
+	, m_end(0)
+	, m_sleepModeProcess(true)
 {
 	m_id1 = id1;
 	m_id2 = id2;
@@ -20,9 +27,14 @@ CorrelationWidgetDataSource::CorrelationWidgetDataSource(ITabManager* tabManager
 	m_mapSpectrumCorelation = new float[1];
 	m_mapBandwidthCorelation = 0;
 
-	correlationStateTimer = new QTimer(this);
-	correlationStateTimer->setInterval(TIME_WAIT_CORRELATION);
-	connect(correlationStateTimer, SIGNAL(timeout()), this, SLOT(correlationTimerOff()));
+//	correlationStateTimer = new QTimer(this);
+//	correlationStateTimer->setInterval(TIME_WAIT_CORRELATION);
+//	connect(correlationStateTimer, SIGNAL(timeout()), this, SLOT(correlationTimerOff()));
+
+	m_sleepModeTimer = new QTimer(this);
+	m_sleepModeTimer->setInterval(SLEEP_MODE_TIMEOUT);
+	m_sleepModeTimer->setSingleShot(true);
+	connect(m_sleepModeTimer, SIGNAL(timeout()), SLOT(onSleepModeSlot()));
 
 	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)));
 
@@ -39,7 +51,7 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 }
 
 Q_DECLARE_METATYPE(float*)
-void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity)
+void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity, double doppler)
 {
 	if(m_corrGraphWgt && !m_corrGraphWgt->isGraphicVisible()) {
 		emit onDrawComplete();
@@ -57,6 +69,17 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	qreal startx = points.at(0).x();
 	qreal endx = points.at(points.size() - 1).x();
 	double bandwidth = endx - startx;
+
+
+	if( m_panelController->sleepMode() && !m_sleepModeProcess )
+	{
+		emit onDrawComplete();
+		if(!m_sleepModeTimer->isActive()) {
+			m_sleepModeTimer->start();
+		}
+		return;
+	}
+
 
 	if(bCor != bandwidth)
 	{
@@ -114,9 +137,12 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	list.append(labelSecond);
 
 	list.append(QVariant(veracity));
+	list.append(QVariant(doppler));
 
 	QVariant data(list);
 	onDataReceived(RPC_SLOT_SERVER_SEND_CORRELATION, data);
+
+	m_sleepModeProcess = false;
 }
 
 void CorrelationWidgetDataSource::correlationTimerOff()
@@ -141,6 +167,11 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 			int plotCount = lMsg.detector_status_size();
 
+			if(!lMsg.convolution_size() && m_panelController) {
+				m_panelController->onCorrelationStateChanged(false);
+				return;
+			}
+
 			if( !findPlot(plotCount, lMsg.convolution_plot(), correlationPlot) ) {
 				return;
 			}
@@ -151,16 +182,44 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 			QVector<QPointF> points;
 
+			if( (m_cf != lMsg.central_frequency()) ||
+				(m_start != lMsg.range().start()) ||
+				(m_end != lMsg.range().end()) ) {
+				m_corrGraphWgt->clearDopler();
+			}
+
+			m_cf = lMsg.central_frequency();
+			m_start = lMsg.range().start();
+			m_end = lMsg.range().end();
+
+			if(m_panelController) {
+				m_panelController->setCorrelationFrequencyValue((m_start+m_end)/2);
+			}
+
 			float veracity = convolution.delay_accuracy();
+			double doppler;
+
+			if( convolution.has_doppler() ) {
+				doppler = convolution.doppler();
+			} else {
+				doppler = std::numeric_limits<double>::quiet_NaN();
+				log_debug("NO DOPPLER VALUE - IM SET NAN");
+			}
+
 			for( int k = 0; k<correlationPlot.data_size(); k++ ) {
 				points.append( QPointF( correlationPlot.axis_x_start() + (correlationPlot.axis_x_step()*k),
 										correlationPlot.data(k) ) );
 			}
 
-			setCorData( m_id1, m_id2, points, veracity );
+			setCorData( m_id1, m_id2, points, veracity, doppler );
 			onCorrelationStateChanged(true);
 		}
 	}
+}
+
+void CorrelationWidgetDataSource::onSleepModeSlot()
+{
+	m_sleepModeProcess = true;
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)
@@ -173,7 +232,9 @@ void CorrelationWidgetDataSource::onCorrelationStateChanged( bool isEnabled )
 		listner->onCorrelationStateChanged(isEnabled);
 	}
 
-	correlationStateTimer->start();
+	if(m_panelController) {
+		m_panelController->onCorrelationStateChanged(true);
+	}
 }
 
 void CorrelationWidgetDataSource::registerCorrelationReceiver(ICorrelationListener* obj)
@@ -218,7 +279,11 @@ bool CorrelationWidgetDataSource::findConvolution(const ::google::protobuf::Repe
 												  RdsProtobuf::Convolution& convolution)
 {
 	for(int i = 0; i < convList.size(); i++)  {
-		if( m_id1 != convList.Get(i).first_detector_index() &&
+
+		int tmp1 = convList.Get(i).first_detector_index();
+		int tmp2 = convList.Get(i).second_detector_index();
+
+		if( m_id1 != convList.Get(i).first_detector_index() ||
 			m_id2 != convList.Get(i).second_detector_index() ) {
 			continue;
 		} else {

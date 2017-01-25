@@ -7,6 +7,8 @@
 #define TO_HZ				1000000
 #define BANDWIDTH_SINGLE	20000000
 
+#define SLEEP_MODE_TIMEOUT 10000
+
 SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObject *parent)
 	: BaseDataSource(parent)
 	, m_pointCountWhole(0)
@@ -21,6 +23,7 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObje
 	, m_workFreq(0)
 	, m_panoramaFreqControl(NULL)
 	, m_id(-1)
+	, m_sleepModeProcess(true)
 {
 	m_spectrumWidget = widget;
 
@@ -38,6 +41,11 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObje
 	connect(this, SIGNAL(onMethodCalledSignal(QString,QVariant)), this, SLOT(onMethodCalledSlot(QString,QVariant)), Qt::QueuedConnection);
 	//connect(&m_timerChangeFreqPanorama, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	//connect(&m_timerRepeatSetFreq, SIGNAL(timeout()), this, SLOT(slotRepeatSetFrequency()));
+
+	m_sleepModeTimer = new QTimer(this);
+	m_sleepModeTimer->setInterval(SLEEP_MODE_TIMEOUT);
+	m_sleepModeTimer->setSingleShot(true);
+	connect(m_sleepModeTimer, SIGNAL(timeout()), SLOT(onSleepModeSlot()));
 }
 
 SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
@@ -52,7 +60,7 @@ void SpectrumWidgetDataSource::onMethodCalled(const QString& method, const QVari
 	emit onMethodCalledSignal(method, data);
 }
 
-void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
+int SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 {
 	m_pointCount = vecFFT.size();
 	QPointF vecFFT_0 = vecFFT.at(0);
@@ -85,7 +93,7 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 	}
 
 	if( index < 0 ) {
-		return;
+		return -1;
 	}
 
 	for(int i = 0; i < vecFFT.size(); i++)
@@ -100,6 +108,8 @@ void SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 					m_spectrum[index*vecFFT.size()+i];
 		}
 	}
+
+	return index;
 }
 
 int SpectrumWidgetDataSource::findIndex(qreal startx)
@@ -120,7 +130,6 @@ bool SpectrumWidgetDataSource::startPanorama(bool start)
 		if(m_dbmanager != NULL) {
 			//m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
 		}
-
 		return true;
 	}
 
@@ -130,7 +139,7 @@ bool SpectrumWidgetDataSource::startPanorama(bool start)
 
 void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 {
-	log_debug( QString("BANDWIDTH %1 :::::::").arg(bandwidth) );
+	//log_debug( QString("BANDWIDTH %1 :::::::").arg(bandwidth) );
 
 	if(m_bandwidth != bandwidth)
 	{
@@ -254,33 +263,71 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 	bool isComplex = true;
 	int id = -1;
+	int protoId = 0;
 	float cf = 0;
 	QVector<QPointF> vecFFT;
 	QList<QVariant> list;
 
+	cf = data.central_frequency();
+	m_workFreq = cf;
+
+	m_panelController->setCentralFreqValue(cf);
+
+	if(cf != m_workFreq) {
+		m_sleepModeProcess = true;
+		m_sleepModeTimer->stop();
+	}
+
+	if( m_panelController->sleepMode() && !m_sleepModeProcess )
+	{
+		emit onDrawComplete();
+		if(!m_sleepModeTimer->isActive()) {
+			m_sleepModeTimer->start();
+		}
+		return;
+	}
+
+
+	if( data.detector_status_size() > m_spectrumWidget->getId() )
+	{
+		if( !data.detector_status(m_spectrumWidget->getId()) ) { //So it is no signal :)
+			QVariant dataOut(list);
+			m_spectrumWidget->setAlarm(false);
+			onDataReceived(RPC_SLOT_SERVER_SEND_POINTS, dataOut);
+			return;
+		}
+	}
+
 	for(int i=0; i<data.spectrum_plot_size(); i++) {
 		if( data.spectrum_plot(i).index() == m_spectrumWidget->getId() ) {
 			id = m_spectrumWidget->getId();
+			protoId = i;
+			break;
 		}
 	}
 
 	if( id < 0 ) {
+		//emit onDrawComplete();
 		return;
 	}
 
 
 	// =================================== Creating Spectrum vector Points ========================================
-	cf = data.central_frequency();
 
-	double freq = data.spectrum_plot(id).axis_x_start();
-	double stepFreq = data.spectrum_plot(id).axis_x_step();
+	double freq = data.spectrum_plot(protoId).axis_x_start();
+	double stepFreq = data.spectrum_plot(protoId).axis_x_step();
 
-	for(int i = 0; i < data.spectrum_plot(id).data().size(); i++) {
-		double val = data.spectrum_plot(id).data(i);
-//		if(i == 0) {
-//			val = 150;
+	int val1 = -(qrand()%100);
+	for(int i = 0; i < data.spectrum_plot(protoId).data().size(); i++) {
+		double val = data.spectrum_plot(protoId).data(i);
+
+		//Just Test
+//		if(m_id == 1 && i > 1000 && i < 2000) {
+//			val = val1;
 //		}
+
 		vecFFT.append( QPointF(freq*TO_KHZ, val) );
+
 		freq += stepFreq;
 	}
 
@@ -295,17 +342,27 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		m_spectrumWidget->setZeroFrequency(m_startFreq);
 	}
 
+	if(m_responseFreq != cf) {
+		m_spectrumWidget->clearSonogram();
+	}
+
 	m_responseFreq = cf;
 
 	if (!vecFFT.size()) return;
 
-	dataProccess(vecFFT, isComplex);
+	int index = dataProccess(vecFFT, isComplex);
+
+	if(index < 0) {
+		emit onDrawComplete();
+		return;
+	}
 
 	QVariant spectrumVariant = QVariant::fromValue(m_spectrum);
 	QVariant peaksSpectrumVariant = QVariant::fromValue(m_spectrumPeakHold);
 
 	list.append(spectrumVariant);
 	list.append(peaksSpectrumVariant);
+	list.append(index);
 
 	if(m_needSetupSpectrum)
 	{
@@ -319,6 +376,8 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		m_needSetupSpectrum = false;
 	}
 
+	m_sleepModeProcess = false;
+
 	QVariant dataOut(list);
 
 	m_spectrumWidget->setAlarm(false);
@@ -328,7 +387,9 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	// ====================================== Creating Spectrum DetectorHumps ===========================================
 	QList<QPointF> detectHumpsList;
 	for(int i = 0; i < data.hump_size(); i++) {
-		detectHumpsList.append( QPointF(data.hump(i).range().start(), data.hump(i).range().end()) );
+		if(m_id == data.hump(i).detector_index()) {
+			detectHumpsList.append( QPointF(data.hump(i).range().start(), data.hump(i).range().end()) );
+		}
 	}
 
 	QByteArray humpData;
@@ -383,6 +444,11 @@ void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
 void SpectrumWidgetDataSource::slotChangeFreq()
 {
 
+}
+
+void SpectrumWidgetDataSource::onSleepModeSlot()
+{
+	m_sleepModeProcess = true;
 }
 
 void SpectrumWidgetDataSource::slotRepeatSetFrequency()

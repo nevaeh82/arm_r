@@ -41,7 +41,8 @@ QAction* MainWindow::appendLocationSetupAction(int id)
 	if( !ui->actionLocationSetup->menu() ) {
 		ui->actionLocationSetup->setMenu( new QMenu(this) );
 	}
-	QAction* action = ui->actionLocationSetup->menu()->addAction(QString("Location settings %1").arg(id));
+
+	QAction* action = ui->actionLocationSetup->menu()->addAction(tr("Location settings System #%1").arg(id));
 	m_actionMap.insert(id, action);
 
 	return action;
@@ -70,12 +71,20 @@ void MainWindow::init()
 
 }
 
-void MainWindow::showError(QString msg)
+void MainWindow::updateLocationSetupAction(int id, QString text)
 {
-   // QMessageBox::critical(this, "Error", msg, QMessageBox::Ok);
+	if( !ui->actionLocationSetup->menu() ) {
+		return;
+	}
+
+	QAction* act = m_actionMap.value(id, NULL);
+
+	if(act) {
+		act->setText( tr("Location settings System #%1 %2").arg(id).arg(text) );
+	}
 }
 
-void MainWindow::showConfirm(QString msg)
+void MainWindow::closeEvent(QCloseEvent *)
 {
-    //QMessageBox::information(this, "Confirm", msg, QMessageBox::Ok);
+	emit onCloseSignal();
 }

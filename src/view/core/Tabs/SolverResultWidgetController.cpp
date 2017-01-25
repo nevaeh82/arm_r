@@ -85,8 +85,10 @@ void SolverResultWidgetController::addResultToLog1(const QByteArray& inData)
 
 	QDataStream ds(&data, QIODevice::ReadOnly);
 	int sourceType;
+	QByteArray solverData;
 
 	ds >> sourceType;
+	ds >> solverData;
 
 	SolverProtocol::EstimateQuality quality = SolverProtocol::EstimateQuality(sourceType);
 
@@ -108,6 +110,7 @@ void SolverResultWidgetController::addResultToLog1(const QByteArray& inData)
 
 	m_view->appendSolverResult(QDateTime::currentDateTime().toString() + tr(" Found solve ") + log);
 
+	emit solverResult(solverData);
 }
 
 void SolverResultWidgetController::onMethodCalledSlot(QString method, QVariant argument)

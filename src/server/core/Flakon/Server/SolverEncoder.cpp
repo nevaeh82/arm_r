@@ -1,6 +1,8 @@
 #include "Logger/Logger.h"
 #include "SolverEncoder.h"
 
+#include "zavCommon/UAVDefines.h"
+
 #include "ProtoTypes1.pb.h"
 
 SolverEncoder::SolverEncoder(QObject* parent)
@@ -83,7 +85,7 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 
 			QStringList niippLst;
 			niippLst.append("BPLA");
-			niippLst.append(QString::fromStdString(tPkt.targetid()));
+			niippLst.append(QString::number( tPkt.central_frequency() ));
 
 			quint64 t = mPkt.datetime();
 			QDateTime dt = QDateTime::fromMSecsSinceEpoch(t);
@@ -108,7 +110,7 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 			quint8 n =  crc( message.toLocal8Bit() );
 
 			message.append( "*" );
-			message.append(QString::number(n));
+			message.append(QString::number(n, 16));
 
 			message.append("\\r\\n");
 			all.append(message);
@@ -118,6 +120,50 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 
 	} else if( message->type() == CLIENT_TCP_SERVER_BPLA_DATA ) {
 		return QByteArray();
+	} else if(message->type() == CLIENT_TCP_SERVER_KTR_DATA) {
+		QByteArray msg = message->data();
+
+		QVector<UAVPositionData> blaDataVector;
+
+		QDataStream ds(&msg, QIODevice::ReadOnly);
+
+		ds >> blaDataVector;
+
+		QString all;
+		for(int i = 0; i<blaDataVector.size(); i++) {
+
+			QString message;
+			UAVPositionData uavData = blaDataVector.at(i);
+
+			QStringList niippLst;
+			niippLst.append("BLA");
+			niippLst.append(QString::number(uavData.boardID));
+
+			QDateTime dt = uavData.dateTime;
+
+			niippLst.append( dt.date().toString("ddMMyy") );
+			niippLst.append( dt.time().toString("hhmmss") );
+
+			niippLst.append( QString::number(uavData.altitude) );
+			niippLst.append( QString::number(uavData.speed) );
+			niippLst.append( QString::number(uavData.course) );
+			niippLst.append( QString("+") + QString::number(uavData.latitude) );
+			niippLst.append( QString("+") + QString::number(uavData.longitude) );
+
+
+			message = niippLst.join(",");
+
+			quint8 n =  crc( message.toLocal8Bit() );
+
+			message.append( "*" );
+			message.append(QString::number(n, 16).toUpper());
+
+			message.append("\\r\\n");
+			all.append(message);
+		}
+
+		return all.toLocal8Bit();
+
 	} else {
 		return QByteArray();
 	}

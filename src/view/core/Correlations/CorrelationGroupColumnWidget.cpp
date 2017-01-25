@@ -14,7 +14,7 @@ CorrelationGroupColumnWidget::~CorrelationGroupColumnWidget()
 	//log_debug("<<<<<<<<");
 }
 
-void CorrelationGroupColumnWidget::insertCorrelationWidget(ICorrelationWidget *widget)
+void CorrelationGroupColumnWidget::insertCorrelationWidget(int row, ICorrelationWidget *widget)
 {
 	if (NULL == widget) {
 		return;
@@ -22,7 +22,7 @@ void CorrelationGroupColumnWidget::insertCorrelationWidget(ICorrelationWidget *w
 
 	m_widgetList.append(widget);
 
-	int row = getContainer()->count();
+	//int row = getContainer()->count();
 
 	getContainer()->addWidget(widget->getWidget(), row, 0);
 }

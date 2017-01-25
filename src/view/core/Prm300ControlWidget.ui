@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>101</width>
-    <height>160</height>
+    <height>189</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -207,6 +207,13 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblFreq">
+     <property name="text">
+      <string/>
+     </property>
     </widget>
    </item>
    <item>

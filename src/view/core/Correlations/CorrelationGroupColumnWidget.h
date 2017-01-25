@@ -19,7 +19,7 @@ public:
     explicit CorrelationGroupColumnWidget(QWidget *parent = 0);
     ~CorrelationGroupColumnWidget();
 
-	void insertCorrelationWidget(ICorrelationWidget *widget);
+	void insertCorrelationWidget(int row, ICorrelationWidget *widget);
 
 
 };

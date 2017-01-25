@@ -9,7 +9,8 @@ DataSourceController::DataSourceController(TabManager *tabManager, IDbManager* d
 	m_tabManager(tabManager),
 	m_dbManager(dbManager),
 	m_rpcFlakonClient(rpcClient),
-	m_panoramaFreqControl(panoramaFreqControl)
+	m_panoramaFreqControl(panoramaFreqControl),
+	m_controlPanelController(NULL)
 {
 
 }
@@ -49,6 +50,11 @@ void DataSourceController::setLocationController(LocationSetupWidgetController *
 	m_locationController = controller;
 }
 
+void DataSourceController::setControlPanelController(ControlPanelController *controller)
+{
+	m_controlPanelController = controller;
+}
+
 void DataSourceController::enablePanorama(bool on, int start, int end)
 {
 	foreach (SpectrumDsView ds, m_spectrumDataSourceList) {
@@ -71,6 +77,7 @@ void DataSourceController::initSpectrumDataSource(QMap<QString, ITabWidget* > ta
 
 		spectrumDataSource->setTabManager((ITabManager*)m_tabManager);
 		spectrumDataSource->setLocationController(m_locationController);
+		spectrumDataSource->setControlPanelController(m_controlPanelController);
 
 
 		//Maybe it will better perfomance
@@ -130,11 +137,14 @@ void DataSourceController::initCorrelationDataSource( 	ICorrelationControllersCo
 
 		correlationDataSource->registerReceiver(correlationControllers->get(i));
 		correlationDataSource->setLocationController(m_locationController);
+		correlationDataSource->setControlPanelController(m_controlPanelController);
+
 		correlationDataSource->setCorrGraphWidget(correlationControllers->get(i));
 
 		if( extCorrelationControllers && extCorrelationControllers->get(i) ) {
 			correlationDataSourceExt->registerReceiver(extCorrelationControllers->get(i));
 			correlationDataSourceExt->setLocationController(m_locationController);
+			correlationDataSourceExt->setControlPanelController(NULL);
 			correlationDataSourceExt->setCorrGraphWidget(extCorrelationControllers->get(i));
 		}
 
@@ -181,6 +191,7 @@ void DataSourceController::initAnalysisDataSource(QMap<int, IAnalysisWidget*> an
 		AnalysisWidgetDataSource* analysisDataSource = new AnalysisWidgetDataSource(analysisWidget, m_tabManager, analysisWidget->getType(), 0);
 		analysisDataSource->registerReceiver(analysisWidget);
 		analysisDataSource->setLocationController(m_locationController);
+		analysisDataSource->setControlPanelController(NULL);
 
 		//Maybe it will improve perfomance
 		QThread* thread = new QThread;

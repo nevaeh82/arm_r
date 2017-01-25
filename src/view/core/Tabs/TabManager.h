@@ -102,10 +102,13 @@ private:
 
 	DataSourceController* m_dsController;
 
-private:
+	QMap<int, int> m_devChannelMap;
+
 	// IRpcListener interface
 	void readProto(const QByteArray &data);
 	void initAnalysisControllers(int count);
+
+	Station* getStationByDevChannel(int dev, int channel);
 
 public:
 	TabManager(int id, QTabWidget* tabWidget, QObject *parent = 0);
@@ -150,6 +153,10 @@ public:
 	int readStationSettings(const QString &settingsFile);
 	void readRpcSettings();
 
+	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+
+	QTabWidget *getTabWidgetZone();
+
 private slots:
 	void changeTabSlot(int index);
 	void slotUpdateDBStationsLists();
@@ -165,11 +172,16 @@ private slots:
 
 	void slotExpandCorrelations();
 
-	void slotAnalysisAddToList(double, double);
+	void slotAnalysisAddToList(double start, double end);
 	void slotAnalysisContinue(int id, bool);
 	void slotAnalysisSelection(int ind, double start, double end);
 	void slotAnalysisReady(int);
 
+	void slotAnalysisClose();
+
+	void onSystemMerge(bool);
+
+	void changeCommonTabSlot(int index);
 public slots:
 	void slotShowLocationSetup();
 	void setListDialog(ListsDialog* dlg);
@@ -181,15 +193,21 @@ signals:
 
 	void signalMethodCalled(const QString& method, const QVariant& argument);
 
+	void signalLocationError(QString);
+	void signalLocationChanged();
 
-public:
-	virtual void onMethodCalled(const QString& method, const QVariant& argument);
+	void onTitleUp(int, QString);
 
-	QTabWidget *getTabWidgetZone();
-
-	int getTabId();
 protected slots:
 	void slotShowLists(QString station, double freq, double bandwidth);
+
+public:
+	int getTabId();
+	void setCurrentOptions(const RdsProtobuf::ClientMessage_OneShot_Location& msg,
+						   const bool isPanorama,
+						   const double& start, const double& end);
+
+	RdsProtobuf::ClientMessage_OneShot_Location getCurrentOptions(bool &isPanorama, double &start, double &end);
 };
 
 #endif // TABMANAGER_H

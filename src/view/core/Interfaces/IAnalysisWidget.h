@@ -16,4 +16,6 @@ class IAnalysisWidget: public IGraphicWidget, public IDataSourceListener
 
 		virtual int getType() const = 0;
 		virtual int getAnalysisWorkId() const = 0;
+
+		void clearSonogram() {}
 };

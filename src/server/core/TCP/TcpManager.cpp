@@ -14,6 +14,8 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 	, m_isCorrelAfterPoints(false)
 	, m_rpcConfigReader(NULL)
 	, m_serverId(serverId)
+	, m_clientTcpServer(NULL)
+	, m_solverConnectionState(false)
 {
 	m_coordinatesCounter = new CoordinateCounter("RDS");
 	m_coordinatesCounter->registerReceiver(this);
@@ -165,6 +167,8 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 		m_clientSolver = (SolverClient1*)controller;
 		m_coordinatesCounter->registerReceiver(m_clientSolver);
 
+		connect(m_clientSolver, SIGNAL(signalTcpDeviceConnectedToHost(int)), this, SLOT(slotSolverConnectionStatus(int)));
+
 		//m_clientSolver->getSolverEncoder()->registerReceiver(this);
 
 		//			connect(clientSolverThread, SIGNAL(started()), m_clientSolver, SLOT(connectToSolverServer()));
@@ -204,19 +208,27 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 	m_controllersMap.insert(deviceName, controller);
 
 	controller->registerReceiver(this);
+
+	// register controller as listener for RPC server
+	RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
+
 	if(type == RDS_TCP_DEVICE) {
 		m_rdsController->registerReceiver(m_coordinatesCounter);
+
+		if (routedServer != NULL) {
+			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotRpcClientConnected()));
+		}
+
 	} else if(type == SOLVER_CLIENT_DEVICE) {
 		m_clientSolver->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
-		m_clientSolver->registerReceiver(this);
+		//m_clientSolver->registerReceiver(this);
 	} else if (type == FLAKON_TCP_DEVICE) {
 		controller->registerReceiver(m_coordinatesCounter);
 	}
 
 	controller->connectToHost();
 
-	// register controller as listener for RPC server
-	RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
+
 	if (routedServer != NULL) {
 		routedServer->registerReceiver( (IRpcListener*) controller, controller->getRouteId() );
 	}
@@ -320,7 +332,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 		else if(messageType == TCP_RDS_ANSWER_SYSTEM) {
 			if(m_rpcConfigReader) {
 				m_rpcConfigReader->inStationsList(data);
-				log_debug("SEND RDS CONFIGURATION!");
+				//log_debug("SEND RDS CONFIGURATION!");
 			}
 		} else if (messageType == TCP_FLAKON_ANSWER_CORRELATION) {
 			/// send data to FlakonCoordinatesCounter
@@ -522,6 +534,27 @@ void TcpManager::emulateBplaPoint(IRpcListener *sender)
 	m_rpcServer->call(RPC_SLOT_SERVER_SEND_BPLA_DEF, QVariant(data), sender);
 }
 
+void TcpManager::slotSolverConnectionStatus(int status)
+{
+	if(status > 0) {
+		m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, QVariant(true));
+		m_solverConnectionState = true;
+	} else {
+		m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, QVariant(false));
+		m_solverConnectionState = false;
+	}
+}
+
+void TcpManager::slotRpcClientConnected()
+{
+	m_sendTimer.singleShot(5000, this, SLOT(slotSendSolverStatus()));
+}
+
+void TcpManager::slotSendSolverStatus()
+{
+	m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, m_solverConnectionState);
+}
+
 void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)
 {
 	emit onMethodCalledInternalSignal(method, argument);
@@ -560,5 +593,16 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		}
 
 		m_coordinatesCounter->sendData(MessageSP(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_REQUEST_SET_SOLVER_CLEAR, argument.toByteArray())));
+	}
+	else if( method == RPC_SLOT_SET_KTR_TO_ARMT ) {
+		int k = 0;
+		k++;
+
+		if(!m_clientTcpServer) {
+			return;
+		}
+
+		MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_KTR_DATA, argument.toByteArray()));
+		m_clientTcpServer->onMessageReceived(CLIENT_TCP_SERVER, "", message );
 	}
 }

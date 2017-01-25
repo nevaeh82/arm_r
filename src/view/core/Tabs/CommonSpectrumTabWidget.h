@@ -54,7 +54,7 @@ public:
 	virtual void activate();
 	virtual void deactivate();
 
-    virtual void updateListsSelections();
+	virtual void updateListsSelections();
 
 	QWidget* getWidget();
 	ISpectrumWidget* getSpectrumWidget();
@@ -72,7 +72,7 @@ public:
 
 	QLabel* getIndicator();
 
-	void setIndicatorState(int state);
+	void setIndicatorState(int id, int state);
 
 	virtual void onMethodCalled(const QString &method, const QVariant &argument);
 
@@ -83,12 +83,9 @@ public:
 
 	void setFlakonRpcClient(RpcFlakonClientWrapper *rpcClient);
 
-private:
-	void setIndicator(int state);
-
 signals:
 	void setIndicatorStateSignal(int state);
-    void signalFreqChanged(int);
+	void signalFreqChanged(int);
 
 private slots:
 	void setIndicatorStateSlot(int state);

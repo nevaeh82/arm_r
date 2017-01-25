@@ -13,15 +13,23 @@
 #include <qwt_plot_item.h>
 
 #define SONOGRAMM_THINNING 1000
+#define SONOGRAM_LINES 60
+
+#define THINNING_TIMEOUT 5000
 
 SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(parent)
 {
+	m_sonogramLimit = SONOGRAM_LINES;
 	m_timming = 0;
 	m_timmingGlobal = 50;
 	m_timmingCount = 0;
 	m_timmingCurPos = 0;
 	m_sonogramReady = true;
 	m_sonogramTime = QTime::currentTime();
+
+	m_lastSpectrumVal = 0;
+
+	m_selectionUpFlag = false;
 
 	m_alarm = false;
 	m_initGraph = false;
@@ -48,11 +56,9 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	m_id = 0;
 	m_tab = NULL;
-	m_analysisChannel = 0;
 
 	m_graphicsWidget = NULL;
 	m_graphicsContextMenu = NULL;
-	m_sonogramWidget = NULL;
 
 	m_controlPanelController = NULL;
 	nextClearState = false;
@@ -69,14 +75,13 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	connect(this, SIGNAL(onCorrelationStateChangedSignal(bool)), this, SLOT(onCorrelationStateChangedSlot(bool)));
 
-	connect(this, SIGNAL(signalStatus(bool)), this, SLOT(slotSetStatus(bool)));
-
 	connect(&m_sonogramWatcher, SIGNAL(finished()), this, SLOT(onSonogramDataReady()));
 
 	delTimer = new QTimer(this);
 
 	connect(this, SIGNAL(onSetZeroFreq(double)), this, SLOT(setZeroFrequencyInternal(double)), Qt::QueuedConnection);
 	connect(this, SIGNAL(signalDataArrived(QString,QVariant)), this, SLOT(onDataArrivedInternal(QString,QVariant)), Qt::QueuedConnection);
+	connect(this, SIGNAL(signalClearSonogram()), this, SLOT(clearSonogramInternal()));
 
 	m_qwtVector = new QVector<QwtPoint3D>;
 	m_qwtCurve = new QwtPlotSpectroCurve;
@@ -91,11 +96,13 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 SpectrumWidgetController::~SpectrumWidgetController()
 {
 	//log_debug("<<<<<<<<<<<<<<");
+
+	m_sonogramWatcher.cancel();
+	m_sonogramWatcher.waitForFinished();
+
 	delete m_qwtVector;
 	delete m_qwtCurve;
 	delete m_qwtColorMap;
-
-	m_sonogramWatcher.waitForFinished();
 }
 
 void SpectrumWidgetController::appendView(SpectrumWidget* view)
@@ -103,14 +110,6 @@ void SpectrumWidgetController::appendView(SpectrumWidget* view)
 	m_view = view;
 	m_sigDialog = new SignalDetectedDialog(m_view);
 
-//	m_analysisResult = m_view->getAnalysisResultWidget();
-//	connect(m_analysisResult, SIGNAL(onAddToList(double,double)),
-//			this, SLOT(slotAddToList(double,double)));
-
-//	connect(m_analysisResult, SIGNAL(signalContinue(bool)),
-//			this, SLOT(slotContinueAnalysis(bool)));
-
-	//m_sigDialog->hide();
 	init();
 }
 
@@ -202,95 +201,66 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 		m_alarm = false;
 		m_alarmMutex.unlock();
 
+		if(list.isEmpty()) {
+			//It is no signal)
+			slotSetStatus(false);
+			return;
+		}
+
 		float* spectrum = list.at(0).value<float*>();
 		float* spectrumPeakHold = (float*)list.at(1).value<float*>();
+		int index = list.at(2).toInt();
 
 		QTime cur = QTime::currentTime();
-		if (list.count() == 2){
+		if (list.count() == 3){
 			m_initGraph = false;
-			setSignal(spectrum, spectrumPeakHold);
+			setSignal(spectrum, spectrumPeakHold, index);
 		} else {
-			int pointCount = list.at(2).toInt();
-			double bandwidth = list.at(3).toDouble();
-			bool isComplex = list.at(4).toBool();
+			int pointCount = list.at(3).toInt();
+			double bandwidth = list.at(4).toDouble();
+			bool isComplex = list.at(5).toBool();
 
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
 		QTime cur1 = QTime::currentTime();
 
-		log_debug(QString("Draw time ::::::::::::: %1").arg( cur.msecsTo(cur1) ));
+		QRegion reg = m_view->visibleRegion();
+		if(reg.isEmpty()) {
+			emit onDrawComplete();
+		}
 
-		m_view->setNoSignal(true);
-
+		slotSetStatus(true);
 		//m_graphicsWidget->ZoomOutFull();
+		updateDBAreas();
 
 		return;
 	}
 
-	if( method == RPC_METHOD_CONFIG_RDS_ANSWER ) {
-		RdsProtobuf::Packet pkt;
-		QByteArray bData = arg.toByteArray();
-		pkt.ParseFromArray( bData.data(), bData.size() );
-
-		//        if( isAnalysisDetected(pkt) ) {
-		//			RdsProtobuf::AnalysisDetected msg = pkt.from_server().data().analysis_detected();
-
-		//            if( m_channelId == m_setupController->getAnalysisWorkChannel() ) {
-		//            if(msg.success()) {
-		//                if(msg.signal_size() > 0) {
-		//                       m_view->setAnalysisDetectedData(msg);
-		//                }
-		//            } else {
-		//                QMessageBox::warning(0, "Analysis", QString("Analysis Error %1").arg(QString::fromStdString(msg.error())), QMessageBox::Yes);
-		//            }
-		//            }
-		//		}
-
-		if( isAnalysisSpectrogram(pkt) ) {
-
-			//			log_debug(QString("<<<<<< on sonogram! %1 %2").arg(QTime::currentTime().msec()).arg(m_sonogramTime.msecsTo(QTime::currentTime())));
-
-			//			m_sonogramTime = QTime::currentTime();
-			//			m_sonogramReady = false;
-			//			RdsProtobuf::AnalysisSpectrogram msg = pkt.from_server().data().analysis_spectrogram();
-			//			QList<QList<float>> sonogramData;
-
-			//			int colNum = msg.columns();
-
-			//            if(colNum == 0) {
-			//                return;
-			//            }
-
-			//			int timeNum = msg.data_size()/colNum;
-			//			int dataSize = msg.data_size();
-			//			int cnt = 0;
-
-			//			Q_UNUSED(dataSize)
-
-			//			for(int timeDot = 0; timeDot < timeNum; timeDot++) {
-			//				QList<float> sonogramRow;
-			//				if(cnt >= msg.data_size()) {
-			//					break;
-			//				}
-			//				for(int i = cnt; i<colNum*(timeDot+1); i++) {
-			//					sonogramRow.append( msg.data(i) );
-			//					cnt++;
-			//					if(cnt >= msg.data_size()) {
-			//						break;
-			//					}
-			//				}
-			//				sonogramData.append(sonogramRow);
-			//			}
-
-			//			QFuture<void> f = QtConcurrent::run(this, &SpectrumWidgetController::setSonogramSetup, sonogramData);
-			//			m_sonogramWatcher.setFuture( f );
-		}
+	if( method == RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH ) {
+		setDetectedAreasUpdate(arg.toByteArray());
+		updateDBAreas();
 	}
+
 }
 
 void SpectrumWidgetController::onPlotReady()
 {
 	emit onDrawComplete();
+
+	if(m_selectionUpFlag) {
+		updateSelection();
+		m_selectionUpFlag = false;
+	}
+}
+
+void SpectrumWidgetController::clearSonogram()
+{
+	emit signalClearSonogram();
+}
+
+void SpectrumWidgetController::clearSonogramInternal()
+{
+	m_sonogramData.clear();
 }
 
 void SpectrumWidgetController::setRpcFlakonClient(RpcFlakonClientWrapper *rpcClient)
@@ -319,11 +289,6 @@ void SpectrumWidgetController::onSonogramDataReady()
 	m_view->sonogramUpdate( out );
 
 	m_sonogramReady = true;
-}
-
-void SpectrumWidgetController::slotSetAnalysisChannel(int id)
-{
-	m_analysisChannel = id;
 }
 
 void SpectrumWidgetController::updateDBAreas()
@@ -358,11 +323,6 @@ void SpectrumWidgetController::setLocationSetupWidgetController(LocationSetupWid
 	connect(m_setupController, SIGNAL(signalSelectionUpdate()), this, SLOT(slotUpdateSelection()));
 }
 
-void SpectrumWidgetController::setSignalStatus(bool stat)
-{
-	emit signalStatus(stat);
-}
-
 void SpectrumWidgetController::setAlarm(bool val)
 {
 	m_alarmMutex.lock();
@@ -370,10 +330,22 @@ void SpectrumWidgetController::setAlarm(bool val)
 	m_alarmMutex.unlock();
 }
 
+void SpectrumWidgetController::setReceiverStatus(bool state)
+{
+	m_prm300WidgetController->setChannelState(state);
+}
+
+void SpectrumWidgetController::setReceiverSettings(const RdsProtobuf::ReceiverSettings& settings)
+{
+	m_prm300WidgetController->setSettings(settings);
+}
+
 void SpectrumWidgetController::slotSetStatus(bool stat)
 {
 	m_specStatus = stat;
 	m_view->setNoSignal(m_specStatus);
+
+	//m_sonogramData.clear();
 }
 
 void SpectrumWidgetController::slotUpdateSelection()
@@ -384,6 +356,12 @@ void SpectrumWidgetController::slotUpdateSelection()
 	if( !m_graphicsWidget->isActivated() && !m_initGraph ) {
 		return;
 	}
+
+	if(fabs(tmpSelection.start.x()-m_current_frequency/TO_MHZ) > 10 ||
+	   fabs(tmpSelection.end.x()-m_current_frequency/TO_MHZ) > 10) {
+		return;
+	}
+
 	m_graphicsWidget->SetSelection(tmpSelection.start.x()*TO_MHZ, 0, tmpSelection.end.x()*TO_MHZ, 0);
 }
 
@@ -394,14 +372,15 @@ void SpectrumWidgetController::updateSelection()
 
 void SpectrumWidgetController::setAnalysisSelection(double start, double end)
 {
-	m_graphicsWidget->ClearAllDetectedAreas();
+	//m_graphicsWidget->ClearAllDetectedAreas();
+	updateDBAreas();
 
 	if( start == 0 && end == 0) {
 		return;
 	}
 
 	m_graphicsWidget->SetDetectedAreas(5, start*TO_MHZ, 0, end*TO_MHZ, 0, false);
-	m_graphicsWidget->ZoomOutFull();
+//	/m_graphicsWidget->ZoomOutFull();
 }
 
 QString SpectrumWidgetController::getSpectrumName() const
@@ -418,6 +397,7 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 {
 	if(m_stopFlag == false)
 	{
+		emit onDrawComplete();
 		return;
 	}
 
@@ -427,21 +407,18 @@ void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_p
 	m_isComplex = isComplex;
 	m_mux.unlock();
 
+	m_sonogramData.clear();
+
 	setFFTSetup(spectrum, spectrum_peak_hold);
 }
 
-void SpectrumWidgetController::setSonogramSetup(QList<QList<float> > data)
+void SpectrumWidgetController::setSonogramSetup(const QQueue<QList<double> >& sonogramData)
 {
-	//m_qwtVector->clear();
-
 	QTime timeO = QTime::currentTime();
-	int width = 100;
-	if(data.size() > 0) {
-		width = data.at(0).size();
-	}
+	int width = m_pointCount;
 
-	QGLPixelBuffer px(width, data.size()/10);
-	QImage img(width, data.size(), QImage::Format_ARGB32);
+	//QGLPixelBuffer px(width, data.size()/10);
+	QImage img(width, sonogramData.size(), QImage::Format_ARGB32);
 	QPainter* painter;
 	img.fill(Qt::transparent);
 
@@ -459,38 +436,22 @@ void SpectrumWidgetController::setSonogramSetup(QList<QList<float> > data)
 		return;
 	}
 
-	//	bool t1 = glpaint.isActive();
-	//	bool t2 = imgpaint.isActive();
-
-
 	QwtInterval interval(-100, 0);
 
-	//log_debug( QString("My pixmap %1").arg( !px.isNull() ) );
-	//paint.begin(&px);
-
-	//paint.fillRect(0, 0, width, 100, QColor(255,255,255,0));
-
 	double time = 0;
+	double ts = sonogramData.size();
 
-	//log_debug(QString("Line count: %1").arg(data.size()));
-	for(double i = 0; i < data.size(); i++) {
-		for(double j = 0; j < data.at(i).size(); j++) {
-			//log_debug(QString("Line dots: %1").arg(data.at(i).size()));
-			//m_qwtVector->append(QwtPoint3D(j, time, data.at(i).at(j)));
-
-			painter->setPen( m_qwtColorMap->color(interval, data.at(i).at(j)) );
+	for(double i = 0; i < sonogramData.size(); i++) {
+		for(double j = 0; j < sonogramData.at(i).size(); j++) {
+			painter->setPen( m_qwtColorMap->color(interval, sonogramData.at(i).at(j)) );
+			//painter->drawLine( QPointF((j), time*10), QPointF((j), (time+1)*10) );
 			painter->drawPoint( j, time );
 		}
 		time+=1;
 	}
 
-	//m_qwtCurve->setSamples(*m_qwtVector);
-
-	//	px.save("C:\\a\\aimg.png");
-	//QPixmap::fromImage(px.toImage()).save("C:\\a\\aimg.png");
 	m_sonogramMutex.lock();
-	//m_sonogramWidget->render(painter);
-	m_sonogramPixmap = QPixmap::fromImage(/*px.toImage()*/img);
+	m_sonogramPixmap = QPixmap::fromImage(img);
 	m_sonogramPixmap.save("C:\\a\\aimg.png");
 	m_sonogramMutex.unlock();
 
@@ -506,6 +467,10 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 		return;
 	}
 
+	if(m_graphicsWidget->HasSelection()) {
+		m_selectionUpFlag = true;
+	}
+
 	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 
 	float maxv = 0.0;
@@ -516,13 +481,14 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	m_graphicsWidget->SetAlign(0);
 
 	m_isComplex = false;
+
 	m_graphicsWidget->Setup(m_isComplex, m_bandwidth, tr("Level"),
 							spectrum, m_pointCount, spectrum_peak_hold, m_pointCount, false, false, minv, maxv);
 
 	QVariant value = m_dbManager->getPropertyValue(getSpectrumName(), DB_FREQUENCY_PROPERTY);
 	setZeroFrequency(value.toDouble());
 
-	m_graphicsWidget->ZoomOutFull();
+	//m_graphicsWidget->ZoomOutFull();
 
 	QVector<double> vecy;
 	QVector<double> vecx;
@@ -536,7 +502,7 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 	m_mux.unlock();
 }
 
-void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_hold)
+void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_hold, int index)
 {
 	if(!m_spectrumShow)
 		return;
@@ -549,10 +515,38 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	m_graphicsWidget->SetAlign(0);
 	m_mux.unlock();
 
+	QList<double> m_sonogramLine;
+
+	if( m_view->isSonogram() ) {
+		for(int i = 0; i < m_pointCount; i++) {
+			m_sonogramLine.append( spectrum[i] );
+		}
+
+		if(index != 0) {
+			if( m_sonogramData.size() > 0 ) {
+				m_sonogramData.takeLast();
+			}
+		}
+
+		if(m_sonogramData.size() > m_sonogramLimit) {
+			m_sonogramData.enqueue( m_sonogramLine );
+			m_sonogramData.dequeue();
+		} else {
+			m_sonogramData.enqueue( m_sonogramLine );
+		}
+
+		if(!m_sonogramWatcher.isRunning()) {
+			QFuture<void> f = QtConcurrent::run(this, &SpectrumWidgetController::setSonogramSetup, m_sonogramData);
+			m_sonogramWatcher.setFuture( f );
+		}
+	} else {
+		m_sonogramData.clear();
+	}
+
 	if(m_controlPanelMode == 3)
 	{
 		m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
-		m_graphicsWidget->ZoomOutFull();
+		//m_graphicsWidget->ZoomOutFull();
 		return;
 	}
 
@@ -694,10 +688,11 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	double dHz = fabs(startHz - endHz);
 
-	//zoom Hack
+//	//zoom Hack
 	if(dHz >= 19900000) {
 		m_graphicsWidget->ZoomOutFull();
 	}
+
 }
 
 void SpectrumWidgetController::setDefModulation(QString modulation)
@@ -741,15 +736,14 @@ void SpectrumWidgetController::setDetectedAreasUpdate(const QByteArray &vecBA)
 	m_pointVector.clear();
 	stream >> m_pointVector;
 
-	m_graphicsWidget->ClearAllDetectedAreas();
-
-	setDetectedAreasUpdateOnPlot();
+	//m_graphicsWidget->ClearAllDetectedAreas();
+	//setDetectedAreasUpdateOnPlot();
 }
 
 void SpectrumWidgetController::setDetectedAreasUpdateOnPlot()
 {
 	QVector<QPointF>::iterator it;
-	for(it = m_pointVector.begin(); it != m_pointVector.end(); ++it){
+	for(it = m_pointVector.begin(); it != m_pointVector.end(); ++it) {
 		m_graphicsWidget->SetDetectedAreas(3, (*it).x()*TO_MHZ, 0, (*it).y()*TO_MHZ, 0, false);
 	}
 }
@@ -846,6 +840,10 @@ void SpectrumWidgetController::onVisible(const bool b) {
 void SpectrumWidgetController::setAutoSearch(bool enabled)
 {
 	m_view->setAutoSearch(enabled);
+
+	if(!enabled) {
+		m_pointVector.clear();
+	}
 }
 
 void SpectrumWidgetController::setPanorama(bool enabled)
@@ -881,7 +879,6 @@ void SpectrumWidgetController::setControlPanelController(ControlPanelController 
 void SpectrumWidgetController::init()
 {
 	m_graphicsWidget = m_view->getGraphicsWidget();
-	m_sonogramWidget = m_view->getSonogramWidget();
 
 	//	QwtPlotSvgItem* itm;
 	//	itm->attach(m_sonogramWidget);
@@ -894,23 +891,24 @@ void SpectrumWidgetController::init()
 	m_graphicsWidget->SetZoomOutMaxOnDataSet(true);
 	m_graphicsWidget->SetAlign(2);
 
-	m_graphicsWidget->ZoomOutFull();
+	//m_graphicsWidget->ZoomOutFull();
 	m_graphicsWidget->SetHorizontalLabel(tr("Hz"));
 
 	m_graphicsContextMenu = new QMenu(m_graphicsWidget);
 	m_graphicsContextMenu->addAction(new QAction(tr("Add to white list"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Add to black list"),this) );
 	m_graphicsContextMenu->addAction(new QAction(tr("Determine signal"),this) );
-	m_graphicsContextMenu->addAction(new QAction(tr("Enable correlation"),this) );
-	m_graphicsContextMenu->addAction(new QAction(tr("Disable correlation"),this) );
-	m_graphicsContextMenu->addAction(new QAction(tr("Cleanup text fields"),this) );
+	m_graphicsContextMenu->addAction(new QAction(tr("Record signal"),this) );
+//	m_graphicsContextMenu->addAction(new QAction(tr("Enable correlation"),this) );
+//	m_graphicsContextMenu->addAction(new QAction(tr("Disable correlation"),this) );
+//	m_graphicsContextMenu->addAction(new QAction(tr("Cleanup text fields"),this) );
 
 	connect(m_graphicsContextMenu->actions().at(0),SIGNAL(triggered()),SLOT(addToWhiteList()));
 	connect(m_graphicsContextMenu->actions().at(1),SIGNAL(triggered()),SLOT(addToBlackList()));
 	connect(m_graphicsContextMenu->actions().at(2),SIGNAL(triggered()),SLOT(recognizeSignal()));
-	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(toggleCorrelation()));
-	connect(m_graphicsContextMenu->actions().at(4),SIGNAL(triggered()),SLOT(toggleOffCorrelation()));
-	connect(m_graphicsContextMenu->actions().at(5),SIGNAL(triggered()),SLOT(clearLabels()));
+	connect(m_graphicsContextMenu->actions().at(3),SIGNAL(triggered()),SLOT(recordSignal()));
+
+	//connect(m_graphicsContextMenu->actions().at(5),SIGNAL(triggered()),SLOT(clearLabels()));
 	connect(m_graphicsContextMenu, SIGNAL(aboutToShow()), this, SLOT(slotIsShowContextMenu()));
 
 	m_graphicsWidget->setContextMenu(m_graphicsContextMenu);
@@ -985,8 +983,8 @@ void SpectrumWidgetController::addToWhiteList()
 	data.port = 155;
 	data.category = "White";
 	data.signalType = "Unknown";
-	data.frequency = m_centerFreqSelTemp;
-	data.bandwidth= m_bandwidhtTemp;
+	data.frequency = (tmpSelection.end.x() + tmpSelection.start.x()) / 2;
+	data.bandwidth= (tmpSelection.end.x() - tmpSelection.start.x());
 	data.checked = 0;
 
 
@@ -1018,8 +1016,8 @@ void SpectrumWidgetController::addToBlackList()
 	data.port = 155;
 	data.category = "Black";
 	data.signalType = "Unknown";
-	data.frequency = m_centerFreqSelTemp;
-	data.bandwidth= m_bandwidhtTemp;
+	data.frequency = (tmpSelection.end.x() + tmpSelection.start.x()) / 2;
+	data.bandwidth= (tmpSelection.end.x() - tmpSelection.start.x());
 	data.checked = 0;
 
 	StationData dataExist = m_dbStationController->
@@ -1045,55 +1043,28 @@ void SpectrumWidgetController::addToBlackList()
 /// signal for flakon to recognize signal
 void SpectrumWidgetController::recognizeSignal()
 {
-	m_controlPanelController->requestAnalysis();
+	m_controlPanelController->stopLocationRequest();
+	delTimer->singleShot(500, this, SLOT(slotRecognizeSignal()));
+}
+
+void SpectrumWidgetController::slotRecognizeSignal()
+{
 	m_setupController->requestAnalysis(m_id);
 }
 
-/// signal for flakon to recognize signal
-void SpectrumWidgetController::toggleCorrelation()
+void SpectrumWidgetController::recordSignal()
 {
-	/// TODO: recheck new Message to memory leak
-	//	m_enableCorrelation = !m_enableCorrelation;
-	m_tab->enableCorrelation( true );
-
-
-	//	if(m_enableCorrelation)
-	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-	//	else
-	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
+	m_controlPanelController->stopLocationRequest();
+	delTimer->singleShot(500, this, SLOT(slotRecordSignal()));
 }
 
-void SpectrumWidgetController::toggleOffCorrelation()
+void SpectrumWidgetController::slotRecordSignal()
 {
-	/// TODO: recheck new Message to memory leak
-	//	m_enableCorrelation = !m_enableCorrelation;
-	m_tab->enableCorrelation( false );
-
-
-	//	if(m_enableCorrelation)
-	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Disable correlation"));
-	//	else
-	//		m_graphicsContextMenu->actions().at(3)->setText(tr("Enable correlation"));
-}
-
-void SpectrumWidgetController::clearLabels()
-{
-	m_graphicsWidget->ClearAllLabels();
+	m_setupController->requestRecord(m_id);
 }
 
 void SpectrumWidgetController::slotSelectionCleared()
 {
-	//	double coordinateZero = (double)0;
-	//	SpectrumSelection selection;
-	//	selection.start = QPointF(coordinateZero, coordinateZero);
-	//	selection.end = QPointF(coordinateZero, coordinateZero);
-
-	//	//Setting null selection
-	//	m_graphicsWidget->SetSelection(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
-	//	slotSelectionFinished(selection.start.x(), selection.start.y(), selection.end.x(), selection.end.y());
-
-	//	m_tab->setSelectedArea(selection);
-	//	m_threshold = -1000;
 }
 
 void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, double x2, double y2)
@@ -1157,6 +1128,15 @@ void SpectrumWidgetController::slotDoubleClicked(double a, double b)
 {
 	tmpSelection.start.setX( m_setupController->getCurrentLocation().range().start() );
 	tmpSelection.end.setX( m_setupController->getCurrentLocation().range().end() );
+
+	//Fix fail
+	if( ( (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ) > tmpSelection.start.x() &&
+		  (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ) > tmpSelection.end.x() ) ||
+		 ( (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ) < tmpSelection.start.x() &&
+		  (m_graphicsWidget->ZeroFrequencyHz()/TO_MHZ) < tmpSelection.end.x() )
+		) {
+		return;
+	}
 
 	//Create selection back when doubleClicked
 	m_graphicsWidget->SetSelection(tmpSelection.start.x()*TO_MHZ, 0, tmpSelection.end.x()*TO_MHZ, 0);

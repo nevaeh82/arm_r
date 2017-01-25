@@ -34,6 +34,8 @@ public:
 
 	void readProtobuf(const QByteArray& inputData );
 
+	QString m_tmp;
+
 private:
 	QByteArray m_dataFromTcpSocket;
 	uint m_residueLength;

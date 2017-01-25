@@ -37,7 +37,6 @@ TabSpectrumWidgetController::TabSpectrumWidgetController(IStation* station,
 {
 	connect(this, SIGNAL(signalGetPointsFromRPCFlakon(QByteArray)), this, SLOT(slotGetPointsFromRpc(QByteArray)));
 	connect(this, SIGNAL(signalPanoramaState(bool)), this, SLOT(enablePanoramaSlot(bool)));
-	connect(&m_timerStatus, SIGNAL(timeout()), this, SLOT(slotCheckStatus()));
 
 	//connect(m_treeDelegate, SIGNAL(signalTreeFreqChanged(int)), this, SIGNAL(signalTreeFreqChanged(int)));
 }
@@ -66,27 +65,27 @@ void TabSpectrumWidgetController::activate()
 {
 	m_view->activate();
 
-	double start = 0;
-	double end = 0;
+//	double start = 0;
+//	double end = 0;
 
-	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_FREQUENCY_PROPERTY);
-	m_view->getSpectrumWidget()->setZeroFrequency(value.toDouble());
+//	QVariant value = m_dbManager->getPropertyValue(m_station->getName(), DB_FREQUENCY_PROPERTY);
+//	m_view->getSpectrumWidget()->setZeroFrequency(value.toDouble());
 
-	value = m_dbManager->getPropertyValue(m_station->getName(), DB_START_PROPERTY);
+//	value = m_dbManager->getPropertyValue(m_station->getName(), DB_START_PROPERTY);
 
-	if (value.isValid()) {
-		start = value.toDouble();
-	}
+//	if (value.isValid()) {
+//		start = value.toDouble();
+//	}
 
-	value = m_dbManager->getPropertyValue(m_station->getName(), DB_STOP_PROPERTY);
+//	value = m_dbManager->getPropertyValue(m_station->getName(), DB_STOP_PROPERTY);
 
-	if (value.isValid()) {
-		end = value.toDouble();
-	}
+//	if (value.isValid()) {
+//		end = value.toDouble();
+//	}
 
-	if(start || end) {
-		m_view->getSpectrumWidget()->updateSelection();
-	}
+	//if(start || end) {
+		//m_view->getSpectrumWidget()->updateSelection();
+	//}
 }
 
 void TabSpectrumWidgetController::deactivate()
@@ -260,23 +259,6 @@ void TabSpectrumWidgetController::setIndicator(int state)
 	/// 2 - change frequency
 	/// 3 - changed frequency
 	m_view->setIndicatorState(state);
-	if(state < 1)
-	{
-		if(!m_timerStatus.isActive())
-		{
-			m_timerStatus.start(2000);
-		}
-	}
-	else
-	{
-		if(state < 2)
-		{
-			if(m_timerStatus.isActive())
-			{
-				m_timerStatus.stop();
-			}
-		}
-	}
 }
 
 double TabSpectrumWidgetController::getCurrentFrequency()
@@ -330,24 +312,6 @@ void TabSpectrumWidgetController::sendCommand(TypeCommand type, IMessage *msg)
 
 void TabSpectrumWidgetController::enableCorrelation(bool enable)
 {
-	if (m_rpcFlakonClient == NULL) return;
-
-	log_debug(QString("set Range: %1").arg(m_station->getBandwidth()));
-	log_debug(QString("set Shift: %1").arg(m_station->getShift()));
-
-	float range = m_station->getBandwidth();
-	float shift = m_station->getShift();
-
-	double cfreq = m_view->getSpectrumWidget()->getCenterSelection();
-
-	m_rpcFlakonClient->sendBandwidth(m_station->getId(), m_station->getBandwidth());
-	m_rpcFlakonClient->sendShift(m_station->getId(), m_station->getShift());
-	m_rpcFlakonClient->sendCenter(m_station->getId(), cfreq/*m_station->getCenter()*/);
-
-	m_rpcFlakonClient->sendCorrelation( m_station->getId(), m_station->getCenter(), enable );
-
-	m_currentCorrelation = m_station->getCenter();
-	dynamic_cast<ControlPanelController*>(m_controlPanelController)->setCorrelationFrequencyValue(m_currentCorrelation);
 }
 
 ///getting points from rpc (flakon)
@@ -364,12 +328,6 @@ void TabSpectrumWidgetController::setPointsRpc(QVector<QPointF> points)
 void TabSpectrumWidgetController::setThreshold(double y)
 {
 	m_threshold = y;
-}
-
-void TabSpectrumWidgetController::checkStatus()
-{
-	CommandMessage* msg = new CommandMessage(COMMAND_REQUEST_STATUS, QVariant());
-	sendCommand(TypeGraphicCommand, msg);
 }
 
 void TabSpectrumWidgetController::recognize()
@@ -392,7 +350,6 @@ void TabSpectrumWidgetController::slotGetPointsFromRpc(QByteArray points)
 void TabSpectrumWidgetController::slotShowControlPrm(bool state)
 {
 	m_view->getSpectrumWidget()->setControlPrmState(state);
-	checkStatus();
 }
 
 void TabSpectrumWidgetController::spectrumDoubleClickedSlot(int id)
@@ -413,11 +370,6 @@ void TabSpectrumWidgetController::enablePanoramaSlot(bool isEnabled)
 //	}
 
 //	m_spectrumDataSource->setPanorama(isEnabled, panoramaStartValue, panoramaEndValue);
-}
-
-void TabSpectrumWidgetController::slotCheckStatus()
-{
-	checkStatus();
 }
 
 void TabSpectrumWidgetController::slotOnSetWorkMode(int mode, bool isOn)

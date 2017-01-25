@@ -30,11 +30,15 @@ public:
 	virtual void permanentSetup(float *spectrum, float *spectrum_peak_hold,
 								float sko);
 
+	virtual void setupDoppler(const QQueue<double> &data);
+
 	virtual void setLabel(const QString& label);
 
 	void mouseDoubleClickEvent(QMouseEvent * event );
 
 	bool isVisible() const;
+
+	void setDopplerVisible(bool) {}
 
 private:
 	QPixmap* m_red;

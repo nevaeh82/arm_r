@@ -13,6 +13,7 @@
 #include "Logger/Logger.h"
 
 #include "Tabs/LocationSetupWidgetController.h"
+#include "ControlPanel/ControlPanelController.h"
 
 
 class BaseDataSource : public QObject, public IDataSource
@@ -24,10 +25,12 @@ public:
 
 	void sendCommand(int) = 0;
 	void setLocationController(LocationSetupWidgetController* controller);
+	void setControlPanelController(ControlPanelController* controller);
 
 protected:
 	void onDataReceived(const QString& method, const QVariant& arg);
 	LocationSetupWidgetController* m_locationController;
+	ControlPanelController* m_panelController;
 
 signals:
 	void onDrawComplete();

@@ -40,6 +40,9 @@ public:
 	virtual void setDbStationController(DBStationController* controller) = 0;
 	virtual void setControlPanelController(ControlPanelController* controller) = 0;
 
+	virtual void setReceiverStatus(bool state) = 0;
+	virtual void setReceiverSettings(const RdsProtobuf::ReceiverSettings& settings) = 0;
+
 };
 
 #endif // ISPECTRUMWIDGET_H

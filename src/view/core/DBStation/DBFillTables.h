@@ -31,7 +31,20 @@ typedef struct StationsFrequencyAndBandwith
 	QString stationName;
 	double frequency;
 	double bandwidth;
-    bool isChecked;
+	bool isChecked;
+
+	bool StationsFrequencyAndBandwith::operator==(const StationsFrequencyAndBandwith& y)
+	{
+		if( stationName == y.stationName &&
+			frequency == y.frequency &&
+			bandwidth == y.bandwidth &&
+			isChecked == y.isChecked ) {
+			return true;
+		}
+
+		return false;
+	}
+
 }StationsFrequencyAndBandwith;
 
 /// bandwidth of overthreshold in station

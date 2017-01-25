@@ -1,7 +1,9 @@
 #include "BaseDataSource.h"
 
 BaseDataSource::BaseDataSource(QObject *parent) :
-	QObject(parent)
+	QObject(parent),
+	m_locationController(NULL),
+	m_panelController(NULL)
 {
 }
 
@@ -15,6 +17,11 @@ void BaseDataSource::setLocationController(LocationSetupWidgetController *contro
 	m_locationController = controller;
 
 	connect(this, SIGNAL(onDrawComplete()), m_locationController, SLOT(slotPlotDrawComplete()));
+}
+
+void BaseDataSource::setControlPanelController(ControlPanelController *controller)
+{
+	m_panelController = controller;
 }
 
 void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)

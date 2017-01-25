@@ -37,6 +37,7 @@ public:
 	void deregisterAll();
 
 	void setLocationController(LocationSetupWidgetController* controller);
+	void setControlPanelController(ControlPanelController* controller);
 
 private:
 	QList<SpectrumDsView> m_spectrumDataSourceList;
@@ -52,6 +53,7 @@ private:
 	QList<QThread*> m_threadSrcList;
 
 	LocationSetupWidgetController* m_locationController;
+	ControlPanelController* m_controlPanelController;
 
 public slots:
 	void enablePanorama(bool on, int start, int end);

@@ -20,7 +20,7 @@
 
 #include "ListWhiteDialog.h"
 #include "ListWhiteDialogController.h"
-
+#include "DBStation/ListsDialog.h"
 
 #include <QSettings>
 #include <QCoreApplication>
@@ -35,6 +35,29 @@ class ControlPanelController : public QObject, public IControlPanelController, p
 {
 	Q_OBJECT
 
+	struct solverResult
+	{
+		qint64 dateTime;
+		int quality;
+		int state;
+		double freq;
+
+		void clear(){
+			dateTime = -1;
+			quality = -1;
+			state = -1;
+			freq = 0;
+		}
+
+		solverResult::solverResult()
+		{
+			dateTime = -1;
+			quality = -1;
+			state = -1;
+			freq = 0;
+		}
+	};
+
 private:
 	ControlPanelWidget* m_view;
 
@@ -46,16 +69,27 @@ private:
 
 	int m_startFreq;
 	int m_finishFreq;
-	int m_currentFreq;
+	double m_currentFreq;
+	double m_currentFreqFromPlot;
 
 	int m_timerInterval;
 	int m_timerCheckInterval;
+	int m_timerCheckIntervalDetected;
+
+	bool m_isFollowMode;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
 
-    QList<StationsFrequencyAndBandwith> m_listOfFreqsBlack;
-    QList<StationsFrequencyAndBandwith>::Iterator m_itScanMode;
+	QList<StationsFrequencyAndBandwith> m_listOfFreqsBlack;
+	QList<StationsFrequencyAndBandwith>::Iterator m_itScanMode;
+
+	QList<int> m_IdDetetcted;
+	QList<int>::Iterator m_itDetected;
+	bool m_workCheckList;
+
+	//solverResult m_solverResult;
+	QList<solverResult> m_solverResultList;
 
 	RpcFlakonClientWrapper* m_rpcFlakonClient;
 	QMap<int, Station *> m_stationsMap;
@@ -64,9 +98,16 @@ private:
 
 	void init();
 
-    bool slotIncCheckMode();
+	bool slotIncCheckMode();
+	void checkSolverResult();
 
-    LocationSetupWidgetController* m_setupController;
+	LocationSetupWidgetController* m_setupController;
+
+	ListsDialog* m_listsDialog;
+
+	bool checkSolverResult(int freq);
+	int findResultInList(solverResult res);
+
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
@@ -83,27 +124,46 @@ public:
 	void onCorrelationStateChanged(const bool isEnabled);
 
 	void setCorrelationFrequencyValue(double value);
+	void setCentralFreqValue(double freq);
 
 	virtual void onMethodCalled(const QString &method, const QVariant &argument);
 
 	void setLocationSetupController(LocationSetupWidgetController* controller);
 
-	void requestAnalysis();
+	void stopLocationRequest();
 	void setSpectrumReveive(bool);
 
+	bool isPanorama(double& start, double& end);
+
+	void setListDialog(ListsDialog* dlg);
+
+	bool sleepMode() const;
+	void setSleepMode(bool);
+
 signals:
-	void signalSetComonFreq(int value);
+	void signalSetComonFreq(double value);
 	void setCorrelationStatus(QString correlationStatus);
 	void setCorrelationStatusActive(bool isActive);
 
+	void signalSetCentralFreq(double freq);
+
+	void onStateChanged();
+
+	void signalSystemMerge(bool);
+
 public slots:
 
-	void changeFrequency(int value);
+	void changeFrequency(double value);
+	void updatePanorama(const bool enable, const double& start, const double& end);
+
+	void setSolverConnectState(bool);
+	void onSetSleepMode(bool);
+
 
 private slots:
 	void onPanoramaStateChangedSlot(bool isEnabled, int, int);
 	void onAutoSearchStateChangedSlot(bool isEnabled);
-	void onCommonFrequencyChangedSlot(int value);
+	void onCommonFrequencyChangedSlot(double value);
 
 	void onBandWidthChangedSlot(int start, int end);
 
@@ -124,6 +184,11 @@ private slots:
 
 	void changeCorrelationStatus(QString correlationStatus);
 	void changeCorrelationStatusActive(bool isActive);
+
+	void setLocationSettings();
+	void setCentralFreqValueInternal(double freq);
+
+	void slotSolverResult(QByteArray data);
 };
 
 #endif // CONTROLPANELCONTROLLER_H

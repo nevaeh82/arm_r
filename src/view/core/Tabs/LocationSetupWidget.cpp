@@ -3,9 +3,13 @@
 
 #include "Logger/Logger.h"
 
-LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
+#include <QTextBrowser>
+#include <QDateTime>
+
+LocationSetupWidget::LocationSetupWidget(int id, QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::LocationSetupWidget)
+	ui(new Ui::LocationSetupWidget),
+	m_id(id)
 {
 	ui->setupUi(this);
 
@@ -16,36 +20,31 @@ LocationSetupWidget::LocationSetupWidget(QWidget *parent) :
 
 	setWindowFlags(flags);
 
-	this->setWindowTitle(tr("Mode settings"));
+	this->setWindowTitle(tr("Mode settings System #%1").arg(id));
 	setWindowIcon(QIcon(":/images/icons/ARM_R.png"));
 
 	this->hide();
-
-	//connect( ui->pushButton, SIGNAL(clicked(bool)), this, SIGNAL(onSendSignal()) );
-	connect(ui->pbUpdate, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdate()));
-	connect(ui->pbSet, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSet()));
-
-	connect(ui->pbUpdateDet, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdateDet()));
-	connect(ui->pbSetDet, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSetDet()));
-
-	connect(ui->pbUpdateCor, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdateCor()));
-	connect(ui->pbSetCor, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSetCor()));
-
-	connect(ui->pbSetAnalysis, SIGNAL(clicked(bool)), this, SIGNAL(onSignalSetAnalysis()));
-	connect(ui->pbUpdateAnalysis, SIGNAL(clicked(bool)), this, SIGNAL(onSignalUpdateAnalysis()));
-
-	//List widgets
-	connect(ui->pbAddRangeDet, SIGNAL(clicked(bool)), this, SLOT(onAddRangeDet()));
-	connect(ui->pbRemoveRangeDet, SIGNAL(clicked(bool)), this, SLOT(onRemoveRangeDet()));
-
-	connect(ui->pbAddRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onAddRangeCor()));
-	connect(ui->pbRemoveRangeCorr, SIGNAL(clicked(bool)), this, SLOT(onRemoveRangeCor()));
 
 	ui->toolBox->setCurrentIndex(0);
 
 	connect(&m_devSignalMap, SIGNAL(mapped(int)), this, SLOT(onDeviceEnable(int)));
 
 	connect(ui->systemSettingsWgt, SIGNAL(sendRdsData(QByteArray)), this, SIGNAL(sendRdsData(QByteArray)));
+
+	connect(ui->sbCentralFrequency, SIGNAL(valueChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->sbDuration, SIGNAL(valueChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->cbConvolution, SIGNAL(stateChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->cbHumps, SIGNAL(stateChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->cbDoppler, SIGNAL(stateChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->sbAverageFreq, SIGNAL(valueChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->cbConvolution, SIGNAL(stateChanged(int)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->sbSelStart, SIGNAL(valueChanged(double)), this, SIGNAL(signalSettingsChanged()));
+	connect(ui->sbSelEnd, SIGNAL(valueChanged(double)), this, SIGNAL(signalSettingsChanged()));
+
+	connect(ui->pbRestartRds, SIGNAL(clicked(bool)), this, SIGNAL(signalRestartRds()));
+	connect(ui->pbGetSystem, SIGNAL(clicked(bool)), this, SIGNAL(signalGetSystem()));
+
+	ui->textEdit->setTextBackgroundColor( Qt::darkGray );
 }
 
 LocationSetupWidget::~LocationSetupWidget()
@@ -55,15 +54,17 @@ LocationSetupWidget::~LocationSetupWidget()
 
 void LocationSetupWidget::setLocationData(const RdsProtobuf::ClientMessage_OneShot_Location& data)
 {
+	blockSignals(true);
 	ui->sbDuration->setValue( data.duration() );
 	ui->sbCentralFrequency->setValue( data.central_frequency() );
 	ui->cbConvolution->setChecked( data.convolution() );
 	ui->cbDoppler->setChecked( data.doppler() );
+	ui->cbHumps->setChecked( data.hump() );
 	ui->sbAverageFreq->setValue( data.averaging_frequency_band() );
-	ui->cbConvolution->setChecked( data.convolution_plot() );
 
-	ui->sbRange->setValue( data.range().start() );
-	ui->sbShift->setValue( data.range().end() );
+	ui->sbSelStart->setValue( data.range().start() );
+	ui->sbSelEnd->setValue( data.range().end() );
+	blockSignals(false);
 }
 
 RdsProtobuf::ClientMessage_OneShot_Location LocationSetupWidget::getLocationData() const
@@ -72,14 +73,16 @@ RdsProtobuf::ClientMessage_OneShot_Location LocationSetupWidget::getLocationData
 
 	location.set_duration(ui->sbDuration->value());
 	location.set_central_frequency( ui->sbCentralFrequency->value() );
+
+	RdsProtobuf::Range* range = location.mutable_range();
+	range->set_start( ui->sbSelStart->value() );
+	range->set_end( ui->sbSelEnd->value() );
+
 	location.set_convolution( ui->cbConvolution->isChecked() );
 	location.set_doppler( ui->cbDoppler->isChecked() );
 	location.set_convolution_plot( ui->cbGetConvolution->isChecked() );
+	location.set_hump( ui->cbHumps->isChecked() );
 	location.set_averaging_frequency_band( ui->sbAverageFreq->value() );
-
-	RdsProtobuf::Range* range = location.mutable_range();
-	range->set_start( ui->sbRange->value() );
-	range->set_end( ui->sbShift->value() );
 
 	return location;
 }
@@ -87,6 +90,11 @@ RdsProtobuf::ClientMessage_OneShot_Location LocationSetupWidget::getLocationData
 int LocationSetupWidget::getAnalysisDuration() const
 {
 	return ui->sbAnalysisDuration->value();
+}
+
+int LocationSetupWidget::getRecordDuration() const
+{
+	return ui->sbRecordDuration->value();
 }
 
 void LocationSetupWidget::setPlatformList(const QStringList& list)
@@ -113,22 +121,19 @@ void LocationSetupWidget::setDeviceEnableState(int dev, bool state)
 	m_cbDevMap.value(dev)->setChecked(state);
 }
 
-void LocationSetupWidget::onSpectrumLocationSelection(float bandwidth, float shift)
+void LocationSetupWidget::setChannelEnableState(int dev, int channel, bool state)
 {
-	//In khz
-	ui->sbRange->setValue( bandwidth );
-	ui->sbShift->setValue(shift);
-}
 
-void LocationSetupWidget::onSpectrumAnalysisSelection(double start, double end)
-{
-	ui->sbAnalysisSelectStartMhz->setValue(start);
-	ui->sbAnalysisSelectEndMhz->setValue(end);
 }
 
 void LocationSetupWidget::setDeviceCommonState(const RdsProtobuf::System_SystemOptions& opt)
 {
 	ui->systemSettingsWgt->setSettings( opt );
+}
+
+void LocationSetupWidget::setTitle(const QString &title)
+{
+	this->setWindowTitle( tr("Mode settings System #%1 %2").arg(m_id).arg(title) );
 }
 
 void LocationSetupWidget::addDeviceEnableControl(QString platformTtile, int device) {
@@ -146,44 +151,6 @@ void LocationSetupWidget::addDeviceEnableControl(QString platformTtile, int devi
 	m_cbDevMapTitle.insert( platformIndex, lbl );
 }
 
-// List widgets
-void LocationSetupWidget::onAddRangeDet()
-{
-	int min = ui->sbMinRangeDet->value();
-	int max = ui->sbMaxRangeDet->value();
-	QString range = QString("%1-%2").arg(min).arg(max);
-
-	if( (min < max) && !ui->listRangesDet->findItems(range, Qt::MatchExactly).size() ) {
-		ui->listRangesDet->addItem( range );
-	}
-}
-
-void LocationSetupWidget::onRemoveRangeDet()
-{
-	if( ui->listRangesDet->selectedItems().size() ) {
-		delete ui->listRangesDet->takeItem( ui->listRangesDet->currentRow() );
-	}
-}
-
-void LocationSetupWidget::onAddRangeCor()
-{
-	int min = ui->sbMinRangeCorr->value();
-	int max = ui->sbMaxRangeCorr->value();
-	QString range = QString("%1-%2").arg(min).arg(max);
-
-	if( (min < max) && !ui->listRangesDet->findItems(range, Qt::MatchExactly).size()) {
-		ui->listRangesCor->addItem( range );
-	}
-
-}
-
-void LocationSetupWidget::onRemoveRangeCor()
-{
-	if( ui->listRangesCor->selectedItems().size() ) {
-		delete ui->listRangesCor->takeItem( ui->listRangesCor->currentRow() );
-	}
-}
-
 void LocationSetupWidget::onDeviceEnable(int dev)
 {
 	int k = 0;
@@ -197,3 +164,28 @@ void LocationSetupWidget::onDeviceEnable(int dev)
 
 	Q_UNUSED(k)
 }
+
+void LocationSetupWidget::showError(QString str)
+{
+	ui->textEdit->append( QString("<font color=red>%1 %2</font>").arg(QDateTime::currentDateTime().toString())
+																 .arg(str) );
+}
+
+void LocationSetupWidget::showConfirm(QString str)
+{
+//	ui->textEdit->append( QString("<font color=gray>%1 %2</font>").arg(QDateTime::currentDateTime().toString())
+//																 .arg(str) );
+	if(ui->textEdit->toPlainText().size() > 100000 ) {
+		ui->textEdit->clear();
+	}
+}
+
+void LocationSetupWidget::showLocationError(QString str)
+{
+	if(str.isEmpty()) {
+		return;
+	}
+	ui->textEdit->append( QString("<font color=yellow>%1 %2</font>").arg(QDateTime::currentDateTime().toString())
+																 .arg(str) );
+}
+

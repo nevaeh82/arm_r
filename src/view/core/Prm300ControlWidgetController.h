@@ -11,6 +11,8 @@
 #include "Tabs/RPC/RpcPrmClient.h"
 #include "Tabs/RPC/RpcFlakonClientWrapper.h"
 
+#include "RDSExchange.h"
+
 class Prm300ControlWidgetController :
 		public QObject, public IController<Prm300ControlWidget>, public IRpcListener
 {
@@ -19,13 +21,13 @@ class Prm300ControlWidgetController :
 private:
 	Prm300ControlWidget* m_view;
 
-    RpcFlakonClientWrapper* m_rpcFlakonClient;
+	RpcFlakonClientWrapper* m_rpcFlakonClient;
 
 	IDbManager* m_dbManager;
 
 	QString m_stationName;
-    uint m_stationId;
-    uint m_platformId; // TODO receive it!!!!
+	uint m_stationId;
+	uint m_platformId; // TODO receive it!!!!
 	uint m_channelId;
 
 public:
@@ -36,16 +38,17 @@ public:
 
 	void appendView(Prm300ControlWidget *view);
 
-    void setRpcFlakonClient(RpcFlakonClientWrapper* client);
+	void setRpcFlakonClient(RpcFlakonClientWrapper* client);
 
 	virtual void setDbManager(IDbManager*);
 
 	void setName(const QString& name);
-    void setId(const uint id);
+	void setId(const uint id);
 	void setChannel(const uint id);
 	void setPlatform( const uint id );
 
 	void setChannelState(bool);
+	void setSettings(const RdsProtobuf::ReceiverSettings& settings);
 
 private:
 	void init();
@@ -53,11 +56,8 @@ private:
 signals:
 
 private slots:
-	void slotSetAtt1();
-	void slotSetAtt2(int value);
-	void slotSetFilter(int index);
-
-    void slotEnableReceiver(bool);
+	void slotSet();
+	void slotEnableReceiver(bool);
 };
 
 #endif // PRM300CONTROLWIDGETCONTROLLER_H

@@ -157,13 +157,13 @@ void CoordinateCounter::onSolver1ProtoData(const int &result, const QByteArray &
 void CoordinateCounter::onSolverBlaData(const QByteArray &data)
 {
 
-    if( m_resTime.elapsed() > DELAY ) {
-        SolverProtocol::Packet pkt;
-        pkt.ParseFromArray(data.data(), data.size());
+	//if( m_resTime.elapsed() > DELAY ) {
+//        SolverProtocol::Packet pkt;
+//        pkt.ParseFromArray(data.data(), data.size());
 
         emit signal1BlaData( data );
-        m_resTime.restart();
-    }
+		//m_resTime.restart();
+	//}
 }
 
 void CoordinateCounter::onSolverWorkData(const QByteArray &data)
@@ -426,6 +426,7 @@ void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)
 	QDataStream dataResultStream(&dataResult, QIODevice::WriteOnly);
 
 	dataResultStream << result;
+	dataResultStream << data;
 
 	MessageSP messageResult(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_RESULT_1, dataResult));
 

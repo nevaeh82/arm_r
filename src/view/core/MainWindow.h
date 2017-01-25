@@ -32,9 +32,9 @@ private:
 
 private:
 	void init();
+
 private slots:
-	void showError(QString);
-	void showConfirm(QString);
+	void updateLocationSetupAction(int id, QString text);
 
 signals:
 	void signalShowLists();
@@ -42,9 +42,13 @@ signals:
 	void signalShowSolverSetup();
 	void signalShowSolverErrors();
 	void signalResetSerevr();
-    void signalServerConnections();
+	void signalServerConnections();
 
 	void signalShowLocationSetup(int id);
+
+	void onCloseSignal();
+protected:
+	void closeEvent(QCloseEvent *);
 };
 
 

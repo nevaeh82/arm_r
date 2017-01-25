@@ -23,14 +23,18 @@ public:
 	explicit LocationSetupWidgetController(QObject *parent = 0);
 	virtual ~LocationSetupWidgetController();
 
-	void setLocationSetup(const RdsProtobuf::ClientMessage_OneShot_Location &data);
 	void setPlatformList(const QStringList& platformList);
 	void setDeviceEnableState(int dev, bool state);
+	void setChannelEnableState(int dev, int channel, bool state);
 	void setSpectrumSelection(double start, double end);
 	void setDevicesState(RdsProtobuf::System_SystemOptions opt);
 
 	RdsProtobuf::ClientMessage_OneShot_Location getCurrentLocation() const;
+
 	bool getReceiveSpectrums() const;
+	bool getReceiveDopler() const;
+
+	void setSleepMode(bool);
 
 private:
 	LocationSetupWidget* m_view;
@@ -43,6 +47,11 @@ private:
 	int m_plotCounter;
 	int m_incomePlotCounter;
 	bool m_isStartLocation;
+
+	int m_locationTimerInterval;
+
+	bool m_requestReady;
+	bool m_sleepMode;
 
 public:
 	void appendView(LocationSetupWidget* view);
@@ -60,6 +69,13 @@ public slots:
 
 	void setLocationState(bool state);
 
+	void requestRecord(int channel);
+
+	void slotOnSetCommonFreq(double freq);
+	void slotOnSetCommonFreq(double freq, double bandwidth);
+
+	void updateLocation(RdsProtobuf::ClientMessage_OneShot_Location msg);
+
 signals:
 	void onMethodCalledSignal(QString, QVariant);
 
@@ -70,14 +86,27 @@ signals:
 	void signalPlotComplete();
 
 	void signalSelectionUpdate();
+	void signalSettingsChanged();
+
+	void onStateChanged();
+
+	void solverConnectionState(bool);
 
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
 
-	void slotOnSetCommonFreq(int freq);
 	void slotOnDeviceEnable(int, bool enable);
 
 	void slotPlotDrawComplete();
 	void slotPlotDrawCompleteInternal();
+
+	void slotSetConvolution(bool);
+	void slotSetDoppler(bool);
+	void slotSetHumps(bool);
+	void slotWigdetSettingsChanged();
+
+
+	void onGetSystem();
+	void onRestartRds();
 };
 

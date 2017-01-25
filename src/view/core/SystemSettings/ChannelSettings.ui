@@ -154,7 +154,11 @@
      <item>
       <widget class="QPushButton" name="pbClose">
        <property name="text">
-        <string>rm</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../app/rc.qrc">
+         <normaloff>:/images/minus.png</normaloff>:/images/minus.png</iconset>
        </property>
       </widget>
      </item>
@@ -183,6 +187,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../app/rc.qrc"/>
+ </resources>
  <connections/>
 </ui>

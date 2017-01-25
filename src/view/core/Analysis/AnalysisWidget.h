@@ -31,4 +31,6 @@ signals:
 	void signalAddToList(double, double);
 	void signalAnalysisContinue(int, bool);
 	void analysisReady(int);
+
+	void signalAnalysisClose();
 };

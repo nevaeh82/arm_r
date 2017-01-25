@@ -25,7 +25,6 @@ public:
 	virtual void setPanorama(bool state) = 0;
 	virtual void enableCorrelation(bool enable = true) = 0;
 
-	virtual void checkStatus() = 0;
 	virtual void recognize() = 0;
 
 	virtual double getCurrentFrequency() = 0;

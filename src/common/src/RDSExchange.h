@@ -6,6 +6,11 @@
 
 #include "RdsPacket.pb.h"
 
+inline void createRestartRds(RdsProtobuf::Packet& msg)
+{
+   msg.mutable_from_client()->set_command( RdsProtobuf::ClientMessage_CommandType_restart );
+}
+
 inline void createGetSystemSystemOptions(RdsProtobuf::Packet& msg)
 {
 	RdsProtobuf::System* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system();
@@ -13,6 +18,37 @@ inline void createGetSystemSystemOptions(RdsProtobuf::Packet& msg)
 	sMsg->mutable_options()->set_title("");
 
 	//sMsg->mutable_options()->mutable_devices();
+}
+
+inline void createGetSystemDeviceStates(int dev, RdsProtobuf::Packet& msg)
+{
+	RdsProtobuf::System* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system();
+
+	sMsg->mutable_device()->set_device_index(dev);
+	sMsg->mutable_device()->set_status(true);
+}
+
+inline void createGetSystemReceiverOptions(int dev, int index, RdsProtobuf::Packet& msg)
+{
+	RdsProtobuf::System* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system();
+
+	sMsg->mutable_receiver()->set_device_index(dev);
+	sMsg->mutable_receiver()->set_channel_index(index);
+	RdsProtobuf::ReceiverSettings* set = sMsg->mutable_receiver()->mutable_settings();
+
+	set->set_attenuator1(0);
+	set->set_attenuator2(0);
+	set->set_filter(0);
+	set->set_frequency(100);
+}
+
+inline void createGetSystemReceiverStatus(int dev, int index, RdsProtobuf::Packet& msg)
+{
+	RdsProtobuf::System* sMsg = msg.mutable_from_client()->mutable_get()->mutable_system();
+
+	sMsg->mutable_receiver()->set_device_index(dev);
+	sMsg->mutable_receiver()->set_channel_index(index);
+	sMsg->mutable_receiver()->set_status(true);
 }
 
 inline void createSetSystemSystemOptions(RdsProtobuf::Packet& msg, const RdsProtobuf::System_SystemOptions& sysOptions)
@@ -30,6 +66,12 @@ inline void createGetLocationStatus(RdsProtobuf::Packet& msg, RdsProtobuf::Clien
 inline void createGetAnalysisStatus(RdsProtobuf::Packet& msg, RdsProtobuf::ClientMessage_OneShot_Analysis& data)
 {
 	RdsProtobuf::ClientMessage_OneShot_Analysis* aMsg = msg.mutable_from_client()->mutable_one_shot()->mutable_analysis();
+	aMsg->CopyFrom( data );
+}
+
+inline void createRecordSignal(RdsProtobuf::Packet& msg, RdsProtobuf::ClientMessage_OneShot_Record& data)
+{
+	RdsProtobuf::ClientMessage_OneShot_Record* aMsg = msg.mutable_from_client()->mutable_one_shot()->mutable_record();
 	aMsg->CopyFrom( data );
 }
 
@@ -82,6 +124,17 @@ inline void createSetEnableReceiver(RdsProtobuf::Packet &msg, uint platform,
 	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_device_index(platform);
 	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_channel_index(receiver);
 	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_status(enable);
+}
+
+inline void createSetConfigureReceiver(RdsProtobuf::Packet &msg, uint platform,
+									uint receiver, const RdsProtobuf::ReceiverSettings& recSettings)
+{
+	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_device_index(platform);
+	msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->set_channel_index(receiver);
+	RdsProtobuf::ReceiverSettings* settings =
+			msg.mutable_from_client()->mutable_set()->mutable_system()->mutable_receiver()->mutable_settings();
+
+	settings->CopyFrom( recSettings );
 }
 
 inline void createChangeMode(RdsProtobuf::Packet &msg, uint mode)
@@ -254,6 +307,52 @@ inline RdsProtobuf::ServerMessage_OneShotData_AnalysisData getServerAnalysisShot
 
 // --------------------------------------------------------------------------------
 
+
+// Server - Server Messages
+inline bool isServerMessageError( const RdsProtobuf::ServerMessage& msg )
+{
+	if( msg.has_answer() && msg.answer().has_error() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline QString getServerMessageError( const RdsProtobuf::ServerMessage& msg )
+{
+	return QString::fromStdString(msg.answer().error().str());
+}
+
+// --------------------------------------------------------------------------------
+
+inline bool isServerMessageConfirm( const RdsProtobuf::ServerMessage& msg )
+{
+	if( msg.has_answer() && msg.answer().has_confirmation() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline QString getServerMessageConfirm( const RdsProtobuf::ServerMessage& msg )
+{
+	return QString::fromStdString(msg.answer().confirmation().str());
+}
+
+// --------------------------------------------------------------------------------
+inline bool isServerMessageRecordAnswer( const RdsProtobuf::ServerMessage& msg )
+{
+	if( msg.has_one_shot_data() && msg.one_shot_data().has_record_data() ) {
+		return true;
+	}
+
+	return false;
+}
+
+inline RdsProtobuf::ServerMessage_OneShotData_RecordData getServerMessageRecordAnswer( const RdsProtobuf::ServerMessage& msg )
+{
+	return msg.one_shot_data().record_data();
+}
 // =====================================================================================
 
 inline bool parseServerMessage(const QByteArray& bData, RdsProtobuf::ServerMessage& sMsg)

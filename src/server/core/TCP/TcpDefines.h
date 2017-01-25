@@ -14,6 +14,7 @@
 
 #define TCP_ARMR_SEND_SOLVER_DATA		"tcpArmrSendSolverData"
 #define TCP_ARMR_SEND_SOLVER_CLEAR		"tcpArmrSendSolverClear"
+#define TCP_ARMR_SEND_KTR_DATA			"tcpArmrSendKTRdata"
 
 /// COORDINATES
 #define ARM_R_SERVER_BPLA_COORDS        5001
@@ -84,6 +85,8 @@
 
 /// CLIENT_TCP_SERVER commands
 #define CLIENT_TCP_SERVER_SOLVER_DATA	"tcpClientSolverData"
+#define CLIENT_TCP_SERVER_KTR_DATA	"tcpClientKTRData"
+
 #define CLIENT_TCP_SERVER_BPLA_DATA		"tcpClientBPLAData"
 
 #define CLIENT_TCP_SERVER_SOLVER_DATA_1	"tcpClientSolverData1" //Version 1

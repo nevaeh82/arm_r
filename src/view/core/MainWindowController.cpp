@@ -2,7 +2,7 @@
 
 #include "RdsPacket.pb.h"
 
-#define SERVER_NAME "ARM_R_Server"
+#define SERVER_NAME "ZaviruhaRServer"
 
 #define DEFAULT_RPC_PORT		24500
 
@@ -13,7 +13,6 @@ MainWindowController::MainWindowController(QObject *parent)
 	, m_dbStationController(0)
 	//	, m_rpcPort(24500)
 	//	, m_rpcHost("127.0.0.1")
-	, m_serverHandler(0)
 {
 	m_view = NULL;
 	//	m_tabManager = NULL;
@@ -22,7 +21,6 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_solverWidgetController = NULL;
 	m_solverSetupWidgetController = NULL;
 	m_solverErrorsWidgetController = NULL;
-
 
 }
 
@@ -57,6 +55,8 @@ MainWindowController::~MainWindowController()
 
 		tab->onClose();
 		tab->clearAllInformation();
+
+		delete tab;
 	}
 	m_mapTabManager.clear();
 }
@@ -71,7 +71,8 @@ void MainWindowController::appendView(MainWindow *view)
 
 	connectToServers();
 
-	//connect(m_view, SIGNAL())
+	connect(m_view, SIGNAL(onCloseSignal()), qApp, SLOT(quit()));
+
 }
 
 void MainWindowController::connectToServers()
@@ -81,6 +82,9 @@ void MainWindowController::connectToServers()
 	QSettings settings(settingsFile, QSettings::IniFormat, this);
 
 	QStringList childKeys = settings.childGroups();
+
+	resetServer();
+	QString serverName = "./" + QString(SERVER_NAME);
 
 	foreach (const QString &childKey, childKeys)
 	{
@@ -93,6 +97,17 @@ void MainWindowController::connectToServers()
 		emit signalAddedNewConnectionFromFile(id, ip, port);
 
 		settings.endGroup();
+
+		{
+			SkyHobbit::Common::ServiceControl::ServiceHandler* serverHandler;
+			QStringList args;
+			args << QString::number(id + 1);
+			serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, args, NULL, this);
+			serverHandler->start(true);
+			m_serverHandlerList.append(serverHandler);
+		}
+
+
 	}
 	m_serverConnectionController->init();
 }
@@ -255,6 +270,9 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	//tabManager->setFlakonRpc(ip, port);
 	tabManager->setRpcConfig(port, Ip);
 	m_mapTabManager.insert(id, tabManager);
+
+	connect( tabManager, SIGNAL(signalLocationChanged()), this, SLOT(onSetupLocationSettings()) );
+	connect( tabManager, SIGNAL(onTitleUp(int, QString)), m_view, SLOT(updateLocationSetupAction(int, QString)) );
 }
 
 void MainWindowController::removeConnectionSlot(int id)
@@ -274,7 +292,6 @@ void MainWindowController::removeConnectionSlot(int id)
 
 		if(count < 1)
 		{
-			//        m_view->getWorkTabsWidget()->close();
 			m_view->getStackedWidget()->setCurrentIndex(1);
 		}
 	}
@@ -293,6 +310,33 @@ void MainWindowController::slotLocationSetup(int id)
 	}
 
 	val->slotShowLocationSetup();
+}
+
+void MainWindowController::onSetupLocationSettings()
+{
+	QObject* obj = sender();
+	TabManager* managerObj = dynamic_cast<TabManager*>(obj);
+
+	if(!managerObj) {
+		return;
+	}
+
+	bool isPanorama = false;
+	double panoramaStart;
+	double panoramaEnd;
+	RdsProtobuf::ClientMessage_OneShot_Location msg = managerObj->getCurrentOptions(isPanorama, panoramaStart, panoramaEnd);
+	if ( !msg.IsInitialized() || !msg.has_central_frequency() ) {
+		return;
+	}
+
+	foreach(TabManager* manager, m_mapTabManager.values())
+	{
+		if(manager == managerObj) {
+			continue;
+		}
+
+		manager->setCurrentOptions(msg, isPanorama, panoramaStart, panoramaEnd);
+	}
 }
 
 void MainWindowController::startTabManger(int id)

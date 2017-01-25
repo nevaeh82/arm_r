@@ -34,5 +34,5 @@ private:
 	void setFreqCommand(int);
 
 signals:
-	void setCommonFreq(int);
+	void setCommonFreq(double);
 };

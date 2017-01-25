@@ -27,6 +27,8 @@ void SolverClient1::onMessageReceived(const quint32 deviceType, const QString& d
 	{
 		if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA_1) {
 			//QByteArray dataToSend = m_encoder1->decode(argument);
+			//log_debug("Send to solver >>> ");
+
 			sendData( argument );
 			break;
 		}

@@ -56,6 +56,7 @@ private slots:
 	/// solver
 	void setDataToSolver(quint64 client, QByteArray data);
 	void setClearToSolver(quint64 client, QByteArray data);
+	void setKtrData(quint64 client, QByteArray data);
 
 	void requestStatus(quint64 client, QString name);
 	void requestFlakonStatus(quint64 client);

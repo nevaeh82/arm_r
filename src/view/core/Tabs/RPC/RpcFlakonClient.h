@@ -55,6 +55,8 @@ private slots:
 	void solverErrorsReceived(QByteArray data);
 	void sloverAnswerReceived1(QByteArray data);
 
+	void sloverConnectState(bool state);
+
 public:
 	virtual void requestGetStationList(const QString& filename);
 	virtual void requestGetDbConfiguration(const QString& filename);

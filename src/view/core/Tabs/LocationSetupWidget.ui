@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>416</width>
-    <height>556</height>
+    <width>870</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,22 +17,29 @@
    <item row="0" column="0">
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_5">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>398</width>
-        <height>403</height>
+        <width>852</width>
+        <height>312</height>
        </rect>
       </property>
       <attribute name="label">
        <string>System Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
-       <item row="2" column="0" colspan="2">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pbRestartRds">
+         <property name="text">
+          <string>Restart RDS</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -45,7 +52,7 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0" colspan="2">
+       <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Working Platforms</string>
@@ -53,8 +60,22 @@
          <layout class="QGridLayout" name="gridLayoutPlatforms"/>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="SystemSettingsWidget" name="systemSettingsWgt" native="true"/>
+       <item row="3" column="0" colspan="2">
+        <widget class="SystemSettingsWidget" name="systemSettingsWgt" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pbGetSystem">
+         <property name="text">
+          <string>Get system Settings</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -63,28 +84,38 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>301</width>
-        <height>288</height>
+        <width>835</width>
+        <height>429</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Location Options</string>
+       <string>Mode Settings</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Location Options</string>
+          <string/>
          </property>
          <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Location</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>Duration</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QSpinBox" name="sbDuration">
             <property name="suffix">
              <string comment="ms"> ms</string>
@@ -100,14 +131,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Central frequency</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="sbCentralFrequency">
             <property name="suffix">
              <string> mhz</string>
@@ -120,28 +151,28 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>Convolution</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QCheckBox" name="cbConvolution">
             <property name="text">
              <string/>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Doppler</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
+          <item row="4" column="1">
            <widget class="QCheckBox" name="cbDoppler">
             <property name="text">
              <string/>
@@ -149,13 +180,27 @@
            </widget>
           </item>
           <item row="5" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Reveive Convolution</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QCheckBox" name="cbGetConvolution">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Average frequency</string>
             </property>
            </widget>
           </item>
-          <item row="5" column="1">
+          <item row="9" column="1">
            <widget class="QSpinBox" name="sbAverageFreq">
             <property name="suffix">
              <string> khz</string>
@@ -168,470 +213,163 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="0" colspan="2">
+          <item row="10" column="0" colspan="2">
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0" colspan="2">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Filter Options</string>
+             <string>Selection</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
-          <item row="7" column="0">
+          <item row="12" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>Range</string>
+             <string>Start</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
-           <widget class="QSpinBox" name="sbRange">
-            <property name="suffix">
-             <string> khz</string>
-            </property>
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Shift</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1">
-           <widget class="QSpinBox" name="sbShift">
-            <property name="suffix">
-             <string> khz</string>
+          <item row="12" column="1">
+           <widget class="QDoubleSpinBox" name="sbSelStart">
+            <property name="decimals">
+             <number>1</number>
             </property>
             <property name="minimum">
-             <number>-10000</number>
+             <double>5.000000000000000</double>
             </property>
             <property name="maximum">
-             <number>10000</number>
+             <double>10000.000000000000000</double>
             </property>
-           </widget>
-          </item>
-          <item row="10" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QPushButton" name="pbUpdate">
-              <property name="text">
-               <string>update</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pbSet">
-              <property name="text">
-               <string>set</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Reveive Convolution</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="cbGetConvolution">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_4">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>398</width>
-        <height>403</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Analysis options</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_4">
-         <property name="title">
-          <string>Analysis options</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Central freq:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_20">
-            <property name="text">
-             <string>Detector index:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QSpinBox" name="sbAnalysisDuration">
-            <property name="maximum">
-             <number>1000</number>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
             </property>
             <property name="value">
-             <number>10</number>
+             <double>20.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="2" column="1" colspan="2">
-           <widget class="QSpinBox" name="sbAnalysisCentralFreq">
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_23">
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Selected area:</string>
+             <string>End</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Duration</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QSpinBox" name="sbAnalysisDetector">
-            <property name="maximum">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>Zoomed Area</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="sbAnalysisSelectStartMhz">
-            <property name="prefix">
-             <string>start </string>
-            </property>
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QDoubleSpinBox" name="sbAnalysisSelectEndMhz">
-            <property name="prefix">
-             <string>end </string>
-            </property>
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QDoubleSpinBox" name="sbAnalysisSelectEndMs">
-            <property name="prefix">
-             <string>end </string>
-            </property>
-            <property name="suffix">
-             <string> ms</string>
-            </property>
+          <item row="14" column="1">
+           <widget class="QDoubleSpinBox" name="sbSelEnd">
             <property name="decimals">
              <number>1</number>
             </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QDoubleSpinBox" name="sbAnalysisZoomStartMhz">
-            <property name="prefix">
-             <string>start </string>
-            </property>
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="decimals">
-             <number>2</number>
+            <property name="minimum">
+             <double>5.000000000000000</double>
             </property>
             <property name="maximum">
-             <double>10000.000000000000000</double>
+             <double>100000.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>20.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="5" column="2">
-           <widget class="QDoubleSpinBox" name="sbAnalysisZoomEndMs">
-            <property name="prefix">
-             <string>end </string>
-            </property>
-            <property name="suffix">
-             <string> ms</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QDoubleSpinBox" name="sbAnalysisZoomEndMhz">
-            <property name="prefix">
-             <string>end </string>
-            </property>
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <double>10000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="sbAnalysisSelectStartMs">
-            <property name="prefix">
-             <string>start </string>
-            </property>
-            <property name="suffix">
-             <string> ms</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="sbAnalysisZoomStartMs">
-            <property name="prefix">
-             <string>start </string>
-            </property>
-            <property name="suffix">
-             <string> ms</string>
-            </property>
-            <property name="decimals">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <double>1000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="1" colspan="2">
-           <widget class="QCheckBox" name="cbAnalysisEnable">
-            <property name="text">
-             <string>Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="8" column="0">
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Analysis:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QPushButton" name="pbUpdateAnalysis">
-              <property name="text">
-               <string>Update</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pbSetAnalysis">
-              <property name="text">
-               <string>Set</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="10" column="1">
-           <spacer name="verticalSpacer">
+          <item row="16" column="0" colspan="2">
+           <widget class="Line" name="line_3">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>277</width>
-        <height>281</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Correction options</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Correction Options</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="6" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QPushButton" name="pbUpdateCor">
-              <property name="text">
-               <string>update</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pbSetCor">
-              <property name="text">
-               <string>set</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
+          <item row="17" column="0" colspan="2">
            <widget class="QLabel" name="label_12">
             <property name="text">
+             <string>Analysis</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
              <string>Duration</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Add ranges</string>
+          <item row="18" column="1">
+           <widget class="QSpinBox" name="sbAnalysisDuration">
+            <property name="suffix">
+             <string> ms</string>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>5000</number>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="sbDurationCor">
+          <item row="20" column="0" colspan="2">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="0" colspan="2">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Record Signal</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="23" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Diration</string>
+            </property>
+           </widget>
+          </item>
+          <item row="23" column="1">
+           <widget class="QSpinBox" name="sbRecordDuration">
             <property name="suffix">
              <string> ms</string>
             </property>
             <property name="prefix">
              <string/>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="sbLoopsCor">
-            <property name="suffix">
-             <string> loops</string>
-            </property>
             <property name="minimum">
-             <number>1</number>
+             <number>10</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>5000</number>
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
-           <widget class="QListWidget" name="listRangesCor"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QSpinBox" name="sbMinRangeCorr">
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="prefix">
+          <item row="6" column="1">
+           <widget class="QCheckBox" name="cbHumps">
+            <property name="text">
              <string/>
             </property>
-            <property name="minimum">
-             <number>30</number>
-            </property>
-            <property name="maximum">
-             <number>7000</number>
-            </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QPushButton" name="pbRemoveRangeCorr">
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>remove</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSpinBox" name="sbMaxRangeCorr">
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="minimum">
-             <number>30</number>
-            </property>
-            <property name="maximum">
-             <number>7000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>loops num</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QPushButton" name="pbAddRangeCorr">
-            <property name="text">
-             <string>add</string>
+             <string>Humps</string>
             </property>
            </widget>
           </item>
@@ -645,201 +383,16 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>295</width>
-        <height>377</height>
+        <width>852</width>
+        <height>312</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Detector options</string>
+       <string>Rds error log</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
+      <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string>Detector options</string>
-         </property>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Duration</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="sbDurationDet">
-            <property name="suffix">
-             <string> ms</string>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Convolution</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="cbConvolutionDet">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Doppler</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QCheckBox" name="cbDopplerDet">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>loops num</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSpinBox" name="sbLoopsDet">
-            <property name="suffix">
-             <string> loops</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Threshold</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_19">
-            <property name="text">
-             <string>Average frequency</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QSpinBox" name="sbAverageFreqDet">
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>7000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>Add ranges</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QSpinBox" name="sbMinRangeDet">
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>30</number>
-            </property>
-            <property name="maximum">
-             <number>7000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="1">
-           <widget class="QSpinBox" name="sbMaxRangeDet">
-            <property name="suffix">
-             <string> mhz</string>
-            </property>
-            <property name="minimum">
-             <number>30</number>
-            </property>
-            <property name="maximum">
-             <number>7000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="0">
-           <widget class="QPushButton" name="pbAddRangeDet">
-            <property name="text">
-             <string>add</string>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QPushButton" name="pbRemoveRangeDet">
-            <property name="text">
-             <string>remove</string>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="0" colspan="2">
-           <widget class="QListWidget" name="listRangesDet"/>
-          </item>
-          <item row="11" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QPushButton" name="pbUpdateDet">
-              <property name="text">
-               <string>update</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pbSetDet">
-              <property name="text">
-               <string>set</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="1">
-           <widget class="QSpinBox" name="sbThresholdDet">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="suffix">
-             <string> khz</string>
-            </property>
-            <property name="minimum">
-             <number>100</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <widget class="QTextEdit" name="textEdit"/>
        </item>
       </layout>
      </widget>

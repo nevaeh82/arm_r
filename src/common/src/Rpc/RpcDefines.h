@@ -49,6 +49,8 @@
 #define RPC_SLOT_SERVER_SEND_QUALITY_STATUS			"rpc_slot_server_send_quality_status"
 #define RPC_SLOT_SERVER_SEND_SOLVER_ERRORS			"rpc_slot_server_send_solver_errors"
 
+#define RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE	"rpc_slot_server_send_solver_connect_state"
+
 #define RPC_SLOT_SERVER_SEND_RDS_DATA				"rpc_slot_server_send_rds_data"
 
 ///PRM to RPC client
@@ -72,6 +74,8 @@
 /// to solver
 #define RPC_METHOD_SET_DATA_TO_SOLVER               "rpc_slot_set_data_to_solver"
 #define RPC_METHOD_SET_CLEAR_TO_SOLVER              "rpc_slot_set_clear_to_solver"
+
+#define RPC_SLOT_SET_KTR_TO_ARMT					"rpc_slot_set_ktr_to_armr"
 
 #include <QString>
 

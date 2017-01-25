@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QQueue>
 #include "Interfaces/IController.h"
 #include "Interfaces/ICorrelationWidget.h"
 
@@ -30,6 +31,10 @@ private:
 	LocationSetupWidgetController* m_locationController;
 	int m_type;
 
+	QQueue<double> m_dopplerList;
+	int m_doplerLim;
+
+
 public:
 	explicit CorrelationWidgetController(int corType, QObject *parent = 0);
 	virtual ~CorrelationWidgetController();
@@ -52,10 +57,13 @@ public:
 
 	void setAlarm(bool);
 
+	void clearDopler();
+
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);
 
+	void clearDoplerInternal();
 private:
 	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko);
 	void setData(float *spectrum, float *spectrum_peak_hold, float sko);
@@ -66,6 +74,7 @@ signals:
 	void signalOnVisible(const bool);
 
 	void onGraphReady();
+	void signalClearDopler();
 
 };
 

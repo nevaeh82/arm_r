@@ -111,19 +111,15 @@ void CommonSpectrumTabWidget::activate()
 	ui->cpLayout->addWidget( m_cpView );
 
 	foreach (ISpectrumWidget* widget , m_widgetList) {
-		QVariant value = m_dbManager->getPropertyValue(widget->getSpectrumName(), DB_FREQUENCY_PROPERTY);
-		widget->setZeroFrequency(value.toDouble());
-		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget());
+		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), widget->getWidget(), 1);
+
+		widget->updateSelection();
 	}
 
 	ui->correlationsGroupWidget->clearWidgetContainer();
 	for(int i = 0; i < m_correlationControllers->count(); i++){
-		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationControllers->get(i));
+		ui->correlationsGroupWidget->insertCorrelationWidget(i, m_correlationControllers->get(i));
 	}
-
-	ui->correlationsGroupWidget->adjustSize();
-
-	//ui->analysisGroupWidget->insertAnalysisWidget(m_analysis);
 }
 
 void CommonSpectrumTabWidget::deactivate()
@@ -133,8 +129,6 @@ void CommonSpectrumTabWidget::deactivate()
 	foreach (ISpectrumWidget* widget , m_widgetList) {
 		ui->spectumWidgetsContainer->removeWidget(widget->getWidget());
 	}
-
-	//ui->analysisGroupWidget->clearWidgetContainer();
 }
 
 void CommonSpectrumTabWidget::updateListsSelections()
@@ -219,7 +213,7 @@ void CommonSpectrumTabWidget::setControlPanelWidget(ControlPanelWidget *wgt)
     m_cpView = wgt;
 }
 
-void CommonSpectrumTabWidget::setIndicatorState(int state)
+void CommonSpectrumTabWidget::setIndicatorState(int id, int state)
 {
 	emit setIndicatorStateSignal(state);
 }
@@ -243,24 +237,5 @@ void CommonSpectrumTabWidget::setIndicatorStateSlot(int state)
 
 void CommonSpectrumTabWidget::onMethodCalled(const QString &method, const QVariant &argument)
 {
-	if (RPC_SLOT_FLAKON_STATUS == method) {
-
-		QByteArray inData = argument.toByteArray();
-		QDataStream dataStream(&inData, QIODevice::ReadOnly);
-		QList<DevState> stateList;
-		dataStream >> stateList;
-
-		foreach (DevState state, stateList) {
-			if(state.id == -1) {
-				setIndicator(1);
-				setIndicatorState(state.state);
-			}
-		}
-	}
-}
-
-void CommonSpectrumTabWidget::setIndicator(int state)
-{
-	setIndicatorState(state);
 }
 

@@ -5,12 +5,13 @@
 #include <Common/Charts/qcustomplot.h>
 
 #include <QWidget>
+#include <QList>
 
 #include "Common/CommandMessage.h"
 #include "SpectrumWidgetController.h"
 
 #include "Prm300ControlWidget.h"
-#include "Common/Charts/QColorCustomPlot.h"
+#include "Common/Charts/qcustomplot.h"
 
 #include "Analysis/AnalysisResultWidget.h"
 
@@ -29,13 +30,10 @@ private:
 
 	SpectrumWidgetController* m_controller;
 
-	QwtPlot* m_qwtSonogram;
-	QwtPlotGLCanvas* m_qwtSonogramGL;
-	QBrush *m_texture;
-
 	QCustomPlot* m_plot;
 	QCPItemPixmap* m_plotPixmap;
 
+	void initCustomPlot(QCustomPlot *plot);
 public:
 	SpectrumWidget(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~SpectrumWidget();
@@ -47,7 +45,6 @@ public:
 	QString getSpectrumName() const;
 
 	Q_MG_SpectrumInterface* getGraphicsWidget();
-	QwtPlot*       getSonogramWidget();
 
 	void setControlPrmState(bool state);
 
@@ -55,6 +52,8 @@ public:
 
 	void sonogramUpdate(const QPixmap& px);
 	void setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg);
+
+	bool isSonogram();
 
 public slots:
 	void slotSetEnableSpactrum(bool state);
@@ -76,6 +75,8 @@ signals:
 
 	void setShowPeaksSignal(bool);
 	void setShowControlPRM(bool);
+protected:
+	void paintEvent(QPaintEvent *);
 };
 
 #endif // GRAPHICWIDGET_H

@@ -206,6 +206,9 @@
    <property name="text">
     <string>SolverSetup</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionLocationSetup">
    <property name="text">

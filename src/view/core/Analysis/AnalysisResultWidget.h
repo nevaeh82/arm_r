@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QDoubleSpinBox>
 #include <QTableWidgetItem>
+#include <QPushButton>
 
 #include "AnalysisResultSection.h"
 #include "AnalysisWidgetController.h"
@@ -37,6 +38,7 @@ private slots:
 	void onItemClicked(QTableWidgetItem*);
 	void onItemActivated(QModelIndex);
 
+	void slotClose(bool);
 public:
 	AnalysisResultWidget(QWidget *parent = 0);
 	virtual ~AnalysisResultWidget();
@@ -51,4 +53,6 @@ signals:
 	void onAddToList(double, double);
 	void analysisSelection(int, double, double);
 	void analysisReady(int);
+
+	void signalClose();
 };

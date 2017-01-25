@@ -38,6 +38,8 @@ public slots:
 signals:
 	void onMethodCalledSignal(QString, QVariant);
 
+	void solverResult(QByteArray);
+
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
 

@@ -3,7 +3,8 @@
 
 Prm300ControlWidget::Prm300ControlWidget(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::Prm300ControlWidget)
+	ui(new Ui::Prm300ControlWidget),
+	m_freq(20)
 {
 	ui->setupUi(this);
 	connect(ui->pbAtt1Up, SIGNAL(clicked()), this, SLOT(slotAtt1Up()));
@@ -12,7 +13,7 @@ Prm300ControlWidget::Prm300ControlWidget(QWidget *parent) :
 	connect(ui->pbAtt2Down, SIGNAL(clicked()), this, SLOT(slotAtt2Down()));
 	connect(ui->cbFilter, SIGNAL(activated(int)), this, SLOT(setPrmParams()));
 
-    connect(ui->cbEnable, SIGNAL(toggled(bool)), this, SIGNAL(signalOnEnableReceiver(bool)));
+	connect(ui->cbEnable, SIGNAL(toggled(bool)), this, SIGNAL(signalOnEnableReceiver(bool)));
 }
 
 Prm300ControlWidget::~Prm300ControlWidget()
@@ -46,14 +47,22 @@ void Prm300ControlWidget::setData(quint16 freq, quint8 filter, quint8 att1, quin
 	m_params.filter = filter;
 }
 
-Prm Prm300ControlWidget::getPrmParams()
+RdsProtobuf::ReceiverSettings Prm300ControlWidget::getPrmParams()
 {
-	return m_params;
+	return m_protoSettings;
 }
 
 void Prm300ControlWidget::setState(bool state)
 {
 	ui->cbEnable->setChecked(state);
+}
+
+void Prm300ControlWidget::setSettings(const RdsProtobuf::ReceiverSettings &settings)
+{
+	ui->lblFreq->setText( QString("Freq: %1 mhz").arg(settings.frequency()) );
+	m_freq = settings.frequency();
+
+	setData(settings.frequency(), settings.filter(), settings.attenuator1(), settings.attenuator2());
 }
 
 void Prm300ControlWidget::setPrmParams()
@@ -66,6 +75,11 @@ void Prm300ControlWidget::setPrmParams()
 
 	m_params.att2 = ui->lcdAtt2->value();
 	m_params.filter = ui->cbFilter->currentIndex();
+
+	m_protoSettings.set_attenuator1( m_params.att1 );
+	m_protoSettings.set_attenuator2( ui->lcdAtt2->value() );
+	m_protoSettings.set_filter( ui->cbFilter->currentIndex() );
+	m_protoSettings.set_frequency(m_freq);
 
 	emit signalOnSetParams();
 }

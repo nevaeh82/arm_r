@@ -3,6 +3,8 @@
 
 #include "Logger/Logger.h"
 
+#define DOPPLER_LIMIT 60
+
 CorrelationWidgetController::CorrelationWidgetController(int corType, QObject *parent)
 	: QObject(parent)
 	, m_view(0)
@@ -10,9 +12,13 @@ CorrelationWidgetController::CorrelationWidgetController(int corType, QObject *p
 	, m_pointCount(0)
 	, m_isComplex(0)
 	, m_type(corType)
+	, m_locationController(NULL)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
+	connect(this, SIGNAL(signalClearDopler()), this, SLOT(clearDoplerInternal()));
+
+	m_doplerLim = DOPPLER_LIMIT;
 }
 
 CorrelationWidgetController::~CorrelationWidgetController()
@@ -47,6 +53,16 @@ void CorrelationWidgetController::setLocationController(LocationSetupWidgetContr
 void CorrelationWidgetController::setAlarm(bool)
 {
 
+}
+
+void CorrelationWidgetController::clearDopler()
+{
+	emit signalClearDopler();
+}
+
+void CorrelationWidgetController::clearDoplerInternal()
+{
+	m_dopplerList.clear();
 }
 
 void CorrelationWidgetController::onVisible(const bool b)
@@ -87,28 +103,47 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
 	float* spectrum = list.at(0).value<float*>();
 	float* spectrumPeakHold = (float*)list.at(1).value<float*>();
 
-    float skoQuality = list.at(list.size() - 1).toFloat();
+	float skoQuality = list.at(list.size() - 2).toFloat();
+	double doppler = list.at(list.size() - 1).toDouble();
 
-    if (list.count() == 5){
+	if (list.count() == 6){
 		setData(spectrum, spectrumPeakHold, skoQuality);
 	} else {
 		int pointCount = list.at(2).toInt();
 		double bandwidth = list.at(3).toDouble();
 		bool isComplex = list.at(4).toBool();
 		setDataSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex, skoQuality);
+		m_dopplerList.clear();
 	}
+
+	if(m_locationController && m_locationController->getReceiveDopler() ) {
+		m_view->setDopplerVisible(true);
+	} else {
+		m_view->setDopplerVisible(false);
+		m_dopplerList.clear();
+	}
+
+	if(m_dopplerList.size() > m_doplerLim) {
+		m_dopplerList.enqueue(doppler);
+		m_dopplerList.dequeue();
+	} else {
+		m_dopplerList.enqueue(doppler);
+	}
+
+
+	m_view->setupDoppler(m_dopplerList);
 
 	emit onGraphReady();
 
-	QString base = list.at(list.size() - 3).toString();
-	QString second = list.at(list.size() - 2).toString();
+	QString base = list.at(list.size() - 4).toString();
+	QString second = list.at(list.size() - 3).toString();
 
 	setLabelName(base, second);
 }
 
 void CorrelationWidgetController::clear()
 {
-    m_view->reset();
+	m_view->reset();
 }
 
 void CorrelationWidgetController::setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko)

@@ -36,10 +36,10 @@ class MainWindowController : public QObject, public IController<MainWindow>//, p
 private:
 	MainWindow* m_view;
 
-	SkyHobbit::Common::ServiceControl::ServiceHandler* m_serverHandler;
-    //TabManager*				m_tabManager;
+	QList<SkyHobbit::Common::ServiceControl::ServiceHandler*> m_serverHandlerList;
+	//TabManager*				m_tabManager;
 	IDbManager*				m_dbManager;
-    //ControlPanelController* m_controlPanelController;
+	//ControlPanelController* m_controlPanelController;
 	DBStationController*	m_dbStationController;
 
 	SolverResultWidgetController* m_solverWidgetController;
@@ -47,12 +47,15 @@ private:
 	SolverSetupWidgetController* m_solverSetupWidgetController;
 
 
-    ServerConnectionWidgetController* m_serverConnectionController;
+	ServerConnectionWidgetController* m_serverConnectionController;
 
-    //QThread *m_rpcClientThread;
+	//QThread *m_rpcClientThread;
 
-    QMap<int, TabManager*> m_mapTabManager;
-    ListsDialog* m_listForm;
+	QMap<int, TabManager*> m_mapTabManager;
+	ListsDialog* m_listForm;
+
+	void init();
+	void connectToServers();
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -61,9 +64,9 @@ public:
 	void appendView(MainWindow *view);
 
 signals:
-    void signalMessageConfirm(QString mesage);
-    void signalMessageError(QString message);
-    void signalAddedNewConnectionFromFile(int id, QString Ip, quint16 port);
+	void signalMessageConfirm(QString mesage);
+	void signalMessageError(QString message);
+	void signalAddedNewConnectionFromFile(int id, QString Ip, quint16 port);
 
 private slots:
 	void serverFailedToStartSlot();
@@ -71,27 +74,21 @@ private slots:
 	void slotShowLists();
 	void slotShowSolverLog();
 	void slotShowSolverSetup();
-    void slotServerConnections();
+	void slotServerConnections();
 
-//	void rpcConnectionEstablished();
-    void startTabManger(int id);
+	//	void rpcConnectionEstablished();
+	void startTabManger(int id);
 	void resetServer();
 
 	void slotShowSolverErrors();
 
-    void addedNewConnectionSlot(int id, QString Ip, quint16 port);
-    void removeConnectionSlot(int id);
+	void addedNewConnectionSlot(int id, QString Ip, quint16 port);
+	void removeConnectionSlot(int id);
 
 	void slotLocationSetup(int id);
-private:
 
-	void init();
+	void onSetupLocationSettings();
 
-
-    void connectToServers();
-
-public:
-    //virtual void onMethodCalled(const QString& method, const QVariant& argument);
 };
 
 #endif // MAINWINDOWCONTROLLER_H

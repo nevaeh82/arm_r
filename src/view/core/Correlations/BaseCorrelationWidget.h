@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QQueue>
 #include "Tabs/LocationSetupWidgetController.h"
 
 class BaseCorrelationWidget : public QWidget
@@ -19,10 +20,14 @@ public:
 	virtual void permanentSetup(float *spectrum, float *spectrum_peak_hold,
 								float sko) = 0;
 
+	virtual void setupDoppler(const QQueue<double>& data) = 0;
+
 	virtual void setLabel(const QString& label) = 0;
 
 	void setLocationSetupWidget(LocationSetupWidgetController* controller);
 	virtual bool isVisible() const;
+
+	virtual void setDopplerVisible(bool) = 0;
 
 protected:
 	LocationSetupWidgetController* m_controller;

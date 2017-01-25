@@ -53,6 +53,8 @@ private:
 	double m_endFreq;
 	double m_responseFreq;
 
+	bool m_sleepModeProcess;
+
 	ITabManager*		m_tabManager;
 
 	int m_spectrumCounter;
@@ -64,6 +66,7 @@ private:
 
 	QMutex m_timeMutex;
 
+	QTimer* m_sleepModeTimer;
 
 public:
 	explicit SpectrumWidgetDataSource(IGraphicWidget* widget, QObject *parent = 0);
@@ -89,9 +92,11 @@ private slots:
 
 	void slotRepeatSetFrequency();
 	void slotChangeFreq();
+	void onSleepModeSlot();
+
 
 private:
-	void dataProccess(QVector<QPointF>& vecFFT, bool);
+	int dataProccess(QVector<QPointF>& vecFFT, bool);
 
 	void setBandwidth(double bandwidth);
 	void setBandwidth1(int size);

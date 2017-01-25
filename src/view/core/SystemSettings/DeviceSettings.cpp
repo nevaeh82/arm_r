@@ -9,7 +9,7 @@ DeviceSettings::DeviceSettings(RdsProtobuf::DeviceOptions device, QWidget *paren
 	ui->setupUi(this);
 	setupWidget();
 
-	//connect(ui->pbClose, SIGNAL(clicked(bool)), this, SLOT(onClose()));
+	connect(ui->pbClose, SIGNAL(clicked(bool)), this, SIGNAL(onClose()));
 	connect(ui->pbAddChannel, SIGNAL(clicked(bool)), this, SLOT(onAddChannel()));
 }
 

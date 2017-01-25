@@ -28,14 +28,22 @@ private:
 	qreal	m_startxCor;
 	bool	m_needSetup;
 
+	int m_cf;
+	double m_start;
+	double m_end;
+
+
 	float*	m_mapPeaksCorrelation;
 	float*	m_mapSpectrumCorelation;
 	double	m_mapBandwidthCorelation;
 
-	QTimer*	correlationStateTimer;
 	QList<ICorrelationListener*> m_correlationListeners;
 
 	ICorrelationWidget *m_corrGraphWgt;
+
+	bool m_sleepModeProcess;
+	QTimer* m_sleepModeTimer;
+
 
 public:
 	explicit CorrelationWidgetDataSource(ITabManager *tabManager, int id1, int id2, QObject *parent);
@@ -50,7 +58,7 @@ public:
 	void setCorrGraphWidget(ICorrelationWidget* wgt);
 
 private:
-	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity);
+	void setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity, double doppler);
 
 	void getIds(const int pos, const int chCnt, int &id1, int &id2);
 	bool findPlot(const int channelCount, const::google::protobuf::RepeatedPtrField<::RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot> &plots, RdsProtobuf::ServerMessage_OneShotData_LocationData_Plot &outPlot);
@@ -62,6 +70,7 @@ private slots:
 	void correlationTimerOff();
 
 	void onMethodCalledSlot(QString, QVariant);
+	void onSleepModeSlot();
 };
 
 #endif // CORRELATIONWIDGETDATASOURCE_H

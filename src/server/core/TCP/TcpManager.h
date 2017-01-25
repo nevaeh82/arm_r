@@ -49,6 +49,10 @@ private:
 	QTime m_timePoints;
 	bool m_isCorrelAfterPoints;
 
+	bool m_solverConnectionState;
+
+	QTimer m_sendTimer;
+
 
 	/**
 	 * key = deviceType
@@ -99,6 +103,10 @@ signals:
 private slots:
 	void onMethodCalledInternalSlot(const QString &method, const QVariant &argument);
 	void emulateBplaPoint(IRpcListener* sender = NULL);
+
+	void slotSolverConnectionStatus(int status);
+	void slotRpcClientConnected();
+	void slotSendSolverStatus();
 
 };
 

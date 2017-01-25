@@ -5,6 +5,8 @@
 #include <QTableView>
 #include <Logger/Logger.h>
 
+#include "DBStation/DBFillTables.h"
+
 namespace Ui {
 class ListsDialog;
 }
@@ -19,6 +21,16 @@ public:
 
 	QTableView* getTableView();
 
+	void addDetectFreq(double num, int index);
+	void rmDetectFreq(double num);
+	void clearDetectFreq();
+
+	void setWorkList(QList<StationsFrequencyAndBandwith> list);
+	void clearWorkList();
+
+	void setCheckPointer(int ind);
+	void setDetectPointer(int ind);
+
 private:
 	Ui::ListsDialog *ui;
 
@@ -32,6 +44,8 @@ signals:
 public slots:
 	void slotShow();
     void slotReportType();
+	void slotTypeList(int ind);
+
 //	void slotClose();
 private slots:
     void on_tvLists_doubleClicked(const QModelIndex &index);

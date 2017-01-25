@@ -27,7 +27,11 @@
    <item row="1" column="1">
     <widget class="QPushButton" name="pbAddDev">
      <property name="text">
-      <string>Add device</string>
+      <string> Device</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
      </property>
     </widget>
    </item>
@@ -56,6 +60,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../app/rc.qrc"/>
+ </resources>
  <connections/>
 </ui>

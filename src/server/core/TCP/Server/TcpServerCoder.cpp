@@ -1,4 +1,5 @@
 #include "TcpServerCoder.h"
+#include "ZVPacket.pb.h"
 
 TcpServerCoder::TcpServerCoder(QObject *parent) :
 	BaseTcpDeviceCoder(parent)
@@ -94,6 +95,9 @@ MessageSP TcpServerCoder::fromProtoBuf(const QByteArray& data)
 		case Zaviruha::sendSolverData:
 			method = TCP_ARMR_SEND_SOLVER_DATA;
 			break;
+		case Zaviruha::sendKtrAction:
+			method = TCP_ARMR_SEND_KTR_DATA;
+		break;
 		default:
 			break;
 	}

@@ -16,8 +16,6 @@ TabSpectrumWidget::TabSpectrumWidget(QWidget* parent) :
 	m_spectrumWidgetController = new SpectrumWidgetController(m_spectrumWidget);
 	m_spectrumWidgetController->appendView(m_spectrumWidget);
 
-	connect(this, SIGNAL(onChangeAnalysisChannel(int)), m_spectrumWidgetController, SLOT(slotSetAnalysisChannel(int)));
-
 	insertSpectrumWidget(m_spectrumWidgetController);
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
@@ -62,7 +60,7 @@ void TabSpectrumWidget::activate()
 	ui->cpLayout->addWidget( m_cpView );
 
 	for(int i = 0; i < m_correlationWidgetsList.count(); i++){
-		ui->correlationsGroupWidget->insertCorrelationWidget(m_correlationWidgetsList.at(i));
+		ui->correlationsGroupWidget->insertCorrelationWidget(i, m_correlationWidgetsList.at(i));
 	}
 
 	for(int i = 0; i < m_analysisWidgetsList.count(); i++){
@@ -75,6 +73,8 @@ void TabSpectrumWidget::activate()
 	foreach (ISpectrumWidget* spectrumWidget, m_spectrumWidgetsList) {
 		ui->spectumWidgetsContainer->insertWidget(ui->spectumWidgetsContainer->count(), spectrumWidget->getWidget());
 	}
+
+	getSpectrumWidget()->updateSelection();
 }
 
 void TabSpectrumWidget::deactivate()

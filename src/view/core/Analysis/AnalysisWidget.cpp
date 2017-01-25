@@ -15,6 +15,7 @@ AnalysisWidget::AnalysisWidget(int type, QWidget *parent, Qt::WFlags flags):
 	connect(ui->widget, SIGNAL(analysisSelection(int,double,double)), this, SIGNAL(signalAnalysisSelection(int, double, double)));
 	connect(ui->widget, SIGNAL(onAddToList(double,double)), this, SIGNAL(signalAddToList(double, double)));
 	connect(ui->widget, SIGNAL(signalContinue(int, bool)), this, SIGNAL(signalAnalysisContinue(int, bool)));
+	connect(ui->widget, SIGNAL(signalClose()), this, SIGNAL(signalAnalysisClose()));
 }
 
 AnalysisWidget::~AnalysisWidget()

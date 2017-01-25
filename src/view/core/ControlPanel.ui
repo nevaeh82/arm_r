@@ -6,68 +6,95 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1136</width>
-    <height>89</height>
+    <width>1239</width>
+    <height>65</height>
    </rect>
   </property>
   <property name="palette">
    <palette>
     <active>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
+       </color>
+      </brush>
+     </colorrole>
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>160</red>
-        <green>160</green>
-        <blue>164</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
     </active>
     <inactive>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
+       </color>
+      </brush>
+     </colorrole>
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>160</red>
-        <green>160</green>
-        <blue>164</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
     </inactive>
     <disabled>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
+       </color>
+      </brush>
+     </colorrole>
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>160</red>
-        <green>160</green>
-        <blue>164</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
      <colorrole role="Window">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>160</red>
-        <green>160</green>
-        <blue>164</blue>
+        <red>230</red>
+        <green>230</green>
+        <blue>230</blue>
        </color>
       </brush>
      </colorrole>
@@ -77,296 +104,748 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMaximumSize</enum>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QSpinBox" name="startFreqSB">
-     <property name="minimumSize">
-      <size>
-       <width>70</width>
-       <height>0</height>
-      </size>
+    <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0">
+     <property name="leftMargin">
+      <number>6</number>
      </property>
-     <property name="specialValueText">
-      <string/>
+     <property name="topMargin">
+      <number>6</number>
      </property>
-     <property name="suffix">
-      <string> MHz</string>
+     <property name="rightMargin">
+      <number>6</number>
      </property>
-     <property name="minimum">
-      <number>20</number>
+     <property name="bottomMargin">
+      <number>6</number>
      </property>
-     <property name="maximum">
-      <number>7000</number>
-     </property>
-     <property name="value">
-      <number>300</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="toLabel">
-     <property name="text">
-      <string>-</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSpinBox" name="endFreqSB">
-     <property name="minimumSize">
-      <size>
-       <width>70</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="specialValueText">
-      <string/>
-     </property>
-     <property name="suffix">
-      <string> MHz</string>
-     </property>
-     <property name="prefix">
-      <string/>
-     </property>
-     <property name="minimum">
-      <number>20</number>
-     </property>
-     <property name="maximum">
-      <number>7000</number>
-     </property>
-     <property name="value">
-      <number>340</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QCheckBox" name="autosearchCB">
-       <property name="text">
-        <string>Autosearch</string>
+     <item row="2" column="0">
+      <widget class="QSpinBox" name="startFreqSB">
+       <property name="minimumSize">
+        <size>
+         <width>70</width>
+         <height>0</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="panoramaCB">
-       <property name="text">
-        <string>Panorama</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QComboBox" name="cbMode">
-     <item>
-      <property name="text">
-       <string>Manual</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Scanning</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Checking</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Escorting</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbSpectrums">
-     <property name="text">
-      <string>Spectrums</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="2">
-      <widget class="QLabel" name="correlationStatusLabelActive">
-       <property name="text">
+       <property name="specialValueText">
         <string/>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="correlationStatusLabelValue">
-       <property name="text">
-        <string>---</string>
+       <property name="suffix">
+        <string> MHz</string>
+       </property>
+       <property name="minimum">
+        <number>20</number>
+       </property>
+       <property name="maximum">
+        <number>7000</number>
+       </property>
+       <property name="value">
+        <number>300</number>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="correlationStatusLabel">
+     <item row="2" column="18">
+      <widget class="QPushButton" name="pbDown1MHz">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="text">
-        <string>Correlation on frequency </string>
+        <string>&lt;</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="solverQualityNameLB">
-       <property name="text">
-        <string>Solver quality</string>
+     <item row="2" column="2">
+      <widget class="QSpinBox" name="endFreqSB">
+       <property name="minimumSize">
+        <size>
+         <width>70</width>
+         <height>0</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="solverQualityLB">
-       <property name="text">
+       <property name="specialValueText">
         <string/>
        </property>
+       <property name="suffix">
+        <string> MHz</string>
+       </property>
+       <property name="prefix">
+        <string/>
+       </property>
+       <property name="minimum">
+        <number>20</number>
+       </property>
+       <property name="maximum">
+        <number>7000</number>
+       </property>
+       <property name="value">
+        <number>340</number>
+       </property>
       </widget>
      </item>
+     <item row="2" column="10">
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <item row="2" column="0">
+        <widget class="QLabel" name="solverQualityNameLB">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Solver:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="correlationStatusLabelValue">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>---</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="correlationStatusLabelActive">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="lblCurFreq">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>---</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLabel" name="solverQualityLB">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Quality:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="lblSolverState">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="correlationStatusLabel">
+         <property name="text">
+          <string>Correlation on frequency </string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Current frequency</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="20">
+      <widget class="QPushButton" name="pbUp1MHz">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="13" colspan="2">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="12">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="15">
+      <widget class="QPushButton" name="pbDown100MHz">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&lt;&lt;&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="23">
+      <widget class="QPushButton" name="pbUp100MHz">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&gt;&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="panoramaCB">
+         <property name="text">
+          <string>Panorama</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="9">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="toLabel">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="16">
+      <widget class="QPushButton" name="pbDown10MHz">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&lt;&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="8">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pbDoppler">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+ QPushButton{
+            color: gray;
+            border-image: url(:/images/swOff.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }
+
+
+ QPushButton:checked{
+            color: gray;
+            border-image: url(:/images/swOn.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pbConvolution">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+ QPushButton{
+            color: gray;
+            border-image: url(:/images/swOff.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }
+
+
+ QPushButton:checked{
+            color: gray;
+            border-image: url(:/images/swOn.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pbHumps">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+ QPushButton{
+            color: gray;
+            border-image: url(:/images/swOff.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }
+
+
+ QPushButton:checked{
+            color: gray;
+            border-image: url(:/images/swOn.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pbSpectrums">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+ QPushButton{
+            color: gray;
+            border-image: url(:/images/swOff.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }
+
+
+ QPushButton:checked{
+            color: gray;
+            border-image: url(:/images/swOn.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Spectrums</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Doppler</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Convolution</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Humps</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="22">
+      <widget class="QPushButton" name="pbUp10MHz">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="19">
+      <widget class="QSpinBox" name="commonFreqSB">
+       <property name="minimumSize">
+        <size>
+         <width>70</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="suffix">
+        <string> MHz</string>
+       </property>
+       <property name="minimum">
+        <number>20</number>
+       </property>
+       <property name="maximum">
+        <number>7000</number>
+       </property>
+       <property name="value">
+        <number>20</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="11">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pbMerge">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+ QPushButton{
+            color: gray;
+            border-image: url(:/images/swOff.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }
+
+
+ QPushButton:checked{
+            color: gray;
+            border-image: url(:/images/swOn.png) 60 0 60 0;
+           border-top: 0px transparent;
+            border-bottom: 0px transparent;
+            border-right: 0px transparent;
+            border-left: 0px transparent;
+        }</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Merge system control</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="4">
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="5">
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="cbMode">
+         <item>
+          <property name="text">
+           <string>Manual</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Scanning</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Checking</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Escorting</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="cbSleepMode">
+         <property name="text">
+          <string>Sleep mode</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbDown100MHz">
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&lt;&lt;&lt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbDown10MHz">
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&lt;&lt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbDown1MHz">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&lt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSpinBox" name="commonFreqSB">
-     <property name="minimumSize">
-      <size>
-       <width>70</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="suffix">
-      <string> MHz</string>
-     </property>
-     <property name="minimum">
-      <number>20</number>
-     </property>
-     <property name="maximum">
-      <number>7000</number>
-     </property>
-     <property name="value">
-      <number>20</number>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbUp1MHz">
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbUp10MHz">
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pbUp100MHz">
-     <property name="maximumSize">
-      <size>
-       <width>30</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;&gt;&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="commonFrequencyPB">
-     <property name="text">
-      <string>Set common frequency</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

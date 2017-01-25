@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>388</height>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,13 +26,10 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0" colspan="4">
-    <layout class="QHBoxLayout" name="cpLayout"/>
-   </item>
-   <item row="1" column="3">
-    <widget class="QTreeView" name="settingsTreeView">
+   <item row="1" column="1" colspan="2">
+    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -43,22 +40,9 @@
        <height>0</height>
       </size>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <layout class="QVBoxLayout" name="spectumWidgetsContainer"/>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="CorrelationGroupColumnWidget" name="correlationsGroupWidget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
      <property name="maximumSize">
       <size>
-       <width>250</width>
+       <width>200</width>
        <height>16777215</height>
       </size>
      </property>
@@ -79,6 +63,41 @@
       </size>
      </property>
     </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QTreeView" name="settingsTreeView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QVBoxLayout" name="spectumWidgetsContainer"/>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <layout class="QHBoxLayout" name="cpLayout">
+     <property name="leftMargin">
+      <number>6</number>
+     </property>
+     <property name="topMargin">
+      <number>6</number>
+     </property>
+     <property name="rightMargin">
+      <number>6</number>
+     </property>
+     <property name="bottomMargin">
+      <number>6</number>
+     </property>
+    </layout>
    </item>
   </layout>
  </widget>

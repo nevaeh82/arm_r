@@ -11,6 +11,9 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPainter>
+
+#include "RDSExchange.h"
 
 namespace Ui {
 class ControlPanelWidget;
@@ -18,13 +21,18 @@ class ControlPanelWidget;
 
 class ControlPanelWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 private:
 	Ui::ControlPanelWidget*     ui;
 
 	QPixmap* m_pmRoundRed;
 	QPixmap* m_pmRoundGreen;
+
+	QString m_borderStyle;
+
+protected:
+	void paintEvent(QPaintEvent *);
 
 public:
 	ControlPanelWidget(QWidget* parent = NULL);
@@ -36,8 +44,21 @@ public:
 	void changeQualityStatus(const int status);
 	void setReceiveSpectrums(bool);
 
+	void setLocationSettings(RdsProtobuf::ClientMessage_OneShot_Location msg);
+
+	void setCentralFreqValue(double freq);
+
+	bool getParoramaState(double& start, double& end);
+
+	void updatePanorama(const bool enable, const double& start, const double& end);
+
+	void setSolverConnectState(bool b);
+
+	bool sleepMode() const;
+	void setSleepMode(bool val);
+
 signals:
-	void commonFreqChangedSignal(int value);
+	void commonFreqChangedSignal(double value);
 	void onPanoramaEnable(bool, int, int);
 
 	void autoSearchCheckedSignal(bool isChecked);
@@ -55,14 +76,27 @@ signals:
 	void signalUp100Mhz();
 
 	void signalReceiveSpectrums(bool);
+	void signalConvolution(bool);
+	void signalDoppler(bool);
+	void signalHumps(bool);
+
+	void signalSystemMerge(bool);
+
+	void onSleepMode(bool);
 
 private slots:
 	void onSetCommonFrequencySlot();
 	void slotChangeMode(int index);
 
 	void onSetPanorama(bool on);
+
+
+	void showError(QString str);
+	void showConfirm(QString);
+	void showLocationError(QString str);
+
 public slots:
-	void slotChangeCommonFreq(int value);
+	void slotChangeCommonFreq(double value);
 
 
 };

@@ -110,42 +110,51 @@
         <translation>Результаты анализа</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.ui" line="23"/>
+        <location filename="Analysis/AnalysisResultWidget.ui" line="20"/>
         <source>Continue</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.ui" line="30"/>
+        <location filename="Analysis/AnalysisResultWidget.ui" line="27"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="84"/>
+        <location filename="Analysis/AnalysisResultWidget.ui" line="46"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="129"/>
         <source>Range start</source>
         <translation>Начало</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="85"/>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="130"/>
         <source>Range end</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="86"/>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="131"/>
         <source>Signal System</source>
         <translation>Система связи</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="87"/>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="132"/>
         <source>Signal Modulation</source>
         <translation>Вид модуляции</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="88"/>
-        <source>Signal Type</source>
-        <translation>Тип излучения</translation>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="133"/>
+        <source>Signal probability</source>
+        <translation>Корректность анализа (%)</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisResultWidget.cpp" line="89"/>
+        <source>Signal Type</source>
+        <translation type="obsolete">Тип излучения</translation>
+    </message>
+    <message>
+        <location filename="Analysis/AnalysisResultWidget.cpp" line="134"/>
         <source>Signal Info</source>
         <translation>Описание</translation>
     </message>
@@ -158,22 +167,19 @@
         <translation>Анализ</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisWidget.cpp" line="17"/>
         <source>m</source>
-        <translation>м</translation>
+        <translation type="obsolete">м</translation>
     </message>
 </context>
 <context>
     <name>AnalysisWidgetController</name>
     <message>
-        <location filename="Analysis/AnalysisWidgetController.cpp" line="110"/>
         <source>m</source>
-        <translation>м</translation>
+        <translation type="obsolete">м</translation>
     </message>
     <message>
-        <location filename="Analysis/AnalysisWidgetController.cpp" line="111"/>
         <source>Level</source>
-        <translation>Уровень</translation>
+        <translation type="obsolete">Уровень</translation>
     </message>
 </context>
 <context>
@@ -208,6 +214,54 @@
     </message>
 </context>
 <context>
+    <name>ChannelSettings</name>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="30"/>
+        <source>Coordinates</source>
+        <translation>Координаты</translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="65"/>
+        <source>Longtitude: </source>
+        <translation>Долгота: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="72"/>
+        <source>Latitude: </source>
+        <translation>Широта: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="79"/>
+        <source>Altitude: </source>
+        <translation>Высота: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="98"/>
+        <source>Status: </source>
+        <translation>Статус: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="105"/>
+        <source>Ip: </source>
+        <translation>Ip: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="126"/>
+        <source>Inversion: </source>
+        <translation>Инверсия: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/ChannelSettings.ui" line="147"/>
+        <source>... Title ...</source>
+        <translation>... Имя ...</translation>
+    </message>
+</context>
+<context>
     <name>CommonSpectrumTabWidget</name>
     <message>
         <location filename="Tabs/CommonSpectrumTabWidget.ui" line="14"/>
@@ -215,12 +269,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="46"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="50"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="46"/>
+        <location filename="Tabs/CommonSpectrumTabWidget.cpp" line="50"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>
@@ -231,146 +285,200 @@
         <source>Auto</source>
         <translation type="obsolete">Авто</translation>
     </message>
+    <message>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="135"/>
+        <source> MHz</source>
+        <translation> МГц</translation>
+    </message>
 </context>
 <context>
     <name>ControlPanelWidget</name>
     <message>
-        <location filename="ControlPanel.ui" line="78"/>
+        <location filename="ControlPanel.ui" line="105"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="93"/>
-        <location filename="ControlPanel.ui" line="125"/>
-        <location filename="ControlPanel.ui" line="309"/>
+        <location filename="ControlPanel.ui" line="255"/>
+        <location filename="ControlPanel.ui" line="525"/>
+        <location filename="ControlPanel.ui" line="699"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="109"/>
+        <location filename="ControlPanel.ui" line="681"/>
+        <source>Current frequency</source>
+        <translation>Текущая частота</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="583"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="144"/>
         <source>Set panorama</source>
-        <translation>Установить панораму</translation>
+        <translation type="obsolete">Установить панораму</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="153"/>
         <source>Autosearch</source>
-        <translation>Автопоиск</translation>
+        <translation type="obsolete">Автопоиск</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="160"/>
+        <location filename="ControlPanel.ui" line="180"/>
         <source>Panorama</source>
         <translation>Панорама</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="170"/>
+        <location filename="ControlPanel.ui" line="190"/>
         <source>Manual</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="175"/>
+        <location filename="ControlPanel.ui" line="476"/>
+        <source>Spectrums</source>
+        <translation>Координатометрия</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="604"/>
+        <source>Solver:</source>
+        <translation>Решатель: </translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="657"/>
+        <source>Quality:</source>
+        <translation>Решение: </translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="815"/>
+        <source>Merge system control</source>
+        <translation>Объединять управление</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="483"/>
+        <source>Doppler</source>
+        <translation>Доплер</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="490"/>
+        <source>Convolution</source>
+        <translation>Свертка</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="497"/>
+        <source>Humps</source>
+        <translation>Автопоиск</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="195"/>
         <source>Scanning</source>
         <translation>Сканирование</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="180"/>
+        <location filename="ControlPanel.ui" line="200"/>
         <source>Checking</source>
         <translation>Проверка</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="185"/>
+        <location filename="ControlPanel.ui" line="205"/>
         <source>Escorting</source>
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="222"/>
+        <location filename="ControlPanel.ui" line="674"/>
         <source>Correlation on frequency </source>
         <translation>Корреляция на частоте</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="374"/>
         <source>Off</source>
-        <translation>Нет</translation>
+        <translation type="obsolete">Нет</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="379"/>
         <source>Location</source>
-        <translation>Координатометрия</translation>
+        <translation type="obsolete">Координатометрия</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="384"/>
         <source>Analysis</source>
-        <translation>Анализ</translation>
+        <translation type="obsolete">Анализ</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="389"/>
         <source>Correction</source>
-        <translation>Коррекция</translation>
+        <translation type="obsolete">Коррекция</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="394"/>
         <source>Detector</source>
-        <translation>Обнаружение</translation>
+        <translation type="obsolete">Обнаружение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="402"/>
         <source>Enable</source>
-        <translation>Включить</translation>
+        <translation type="obsolete">Включить</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="215"/>
+        <location filename="ControlPanel.ui" line="617"/>
+        <location filename="ControlPanel.ui" line="640"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="229"/>
         <source>Solver quality</source>
-        <translation>Качество решения</translation>
+        <translation type="obsolete">Качество решения</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="264"/>
+        <location filename="ControlPanel.ui" line="219"/>
         <source>&lt;&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="277"/>
+        <location filename="ControlPanel.ui" line="576"/>
         <source>&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="296"/>
+        <location filename="ControlPanel.ui" line="730"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="331"/>
+        <location filename="ControlPanel.ui" line="547"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="344"/>
+        <location filename="ControlPanel.ui" line="512"/>
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="357"/>
+        <location filename="ControlPanel.ui" line="232"/>
         <source>&gt;&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="364"/>
         <source>Set common frequency</source>
-        <translation>Установить общую частоту</translation>
+        <translation type="obsolete">Установить общую частоту</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="181"/>
+        <source> mhz</source>
+        <translation> МГц</translation>
     </message>
 </context>
 <context>
     <name>CorrelationGroupWidget</name>
     <message>
-        <location filename="Correlations/CorrelationGroupWidget.ui" line="14"/>
+        <location filename="Correlations/CorrelationGroupWidget.ui" line="20"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="Correlations/CorrelationGroupWidget.cpp" line="13"/>
+        <source>Correlations</source>
+        <translation>Корреляция</translation>
+    </message>
+</context>
+<context>
+    <name>CorrelationIndicatorWidget</name>
+    <message>
+        <location filename="Correlations/CorrelationIndicatorWidget.ui" line="14"/>
         <source>Form</source>
         <translation></translation>
     </message>
@@ -378,27 +486,31 @@
 <context>
     <name>CorrelationWidget</name>
     <message>
-        <location filename="Correlations/CorrelationWidget.ui" line="14"/>
+        <location filename="Correlations/CorrelationWidget.ui" line="20"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Correlations/CorrelationWidget.cpp" line="13"/>
+        <location filename="Correlations/CorrelationWidget.cpp" line="15"/>
+        <location filename="Correlations/CorrelationWidget.cpp" line="92"/>
         <source>m</source>
         <translation>м</translation>
+    </message>
+    <message>
+        <location filename="Correlations/CorrelationWidget.cpp" line="93"/>
+        <source>Level</source>
+        <translation>Уровень</translation>
     </message>
 </context>
 <context>
     <name>CorrelationWidgetController</name>
     <message>
-        <location filename="Correlations/CorrelationWidgetController.cpp" line="103"/>
         <source>m</source>
-        <translation>м</translation>
+        <translation type="obsolete">м</translation>
     </message>
     <message>
-        <location filename="Correlations/CorrelationWidgetController.cpp" line="104"/>
         <source>Level</source>
-        <translation>Уровень</translation>
+        <translation type="obsolete">Уровень</translation>
     </message>
 </context>
 <context>
@@ -432,9 +544,62 @@
         <translation type="obsolete">Категория = %1</translation>
     </message>
     <message>
-        <location filename="DBStation/DBStationController.cpp" line="255"/>
+        <location filename="DBStation/DBStationController.cpp" line="257"/>
         <source>SELECT id FROM %1 ORDER BY id DESC LIMIT 1</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>DeviceSettings</name>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="104"/>
+        <source>... Title ... </source>
+        <translation>... Имя ...</translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="111"/>
+        <source>Sync:</source>
+        <translation>Синхронизация: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="118"/>
+        <source>Status:</source>
+        <translation>Статус: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="125"/>
+        <source>Enabled:</source>
+        <translation>Задействован: </translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="132"/>
+        <source>Ip:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="168"/>
+        <source>Mainboard</source>
+        <translation>Межплатная</translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="173"/>
+        <source>GPS</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="178"/>
+        <source>GPS + delay</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/DeviceSettings.ui" line="183"/>
+        <source>none</source>
+        <translation>Нет</translation>
     </message>
 </context>
 <context>
@@ -578,22 +743,27 @@
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="61"/>
+        <location filename="DBStation/ListsDialog.ui" line="38"/>
+        <source>Detected</source>
+        <translation>Обнаруженные</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="69"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <location filename="DBStation/ListsDialog.ui" line="76"/>
         <source>Report</source>
         <translation>Отчет</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="88"/>
+        <location filename="DBStation/ListsDialog.ui" line="96"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="95"/>
+        <location filename="DBStation/ListsDialog.ui" line="103"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -707,237 +877,246 @@
         <translation>Параметры системы</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="51"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="38"/>
+        <source>Restart RDS</source>
+        <translation>Перезапуск RDS</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="58"/>
         <source>Working Platforms</source>
         <translation>Платформы</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="68"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="74"/>
         <source>Location Options</source>
-        <translation>Настройки координатометрии</translation>
+        <translation type="obsolete">Настройки координатометрии</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="80"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="315"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="551"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="665"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="76"/>
+        <source>Get system Settings</source>
+        <translation>Запрос настроек системы</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="92"/>
+        <source>Mode Settings</source>
+        <translation>Настройки режимов работы</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="104"/>
+        <source>Location</source>
+        <translation>КоординатометрияКоординатометрия</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="114"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="305"/>
         <source>Duration</source>
         <translation>Длительность</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="87"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="121"/>
         <source> ms</source>
         <comment>ms</comment>
         <translation> мс</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="103"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="137"/>
         <source>Central frequency</source>
         <translation>Центральная частота</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="110"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="339"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="355"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="387"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="419"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="591"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="614"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="744"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="764"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="780"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="144"/>
         <source> mhz</source>
         <translation> мГц</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="123"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="688"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="157"/>
         <source>Convolution</source>
         <translation>Свертка</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="137"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="702"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="171"/>
         <source>Doppler</source>
-        <translation>Допплер</translation>
+        <translation>Доплер</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="151"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="737"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="185"/>
+        <source>Reveive Convolution</source>
+        <translation>Получать графики сверток</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="199"/>
         <source>Average frequency</source>
         <translation>Усреднение</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="158"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="208"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="225"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="831"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="206"/>
         <source> khz</source>
         <translation> кГц</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="171"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="226"/>
+        <source>Selection</source>
+        <translation>Выделение</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="236"/>
+        <source>Start</source>
+        <translation>Начало</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="262"/>
+        <source>End</source>
+        <translation>Конец</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="295"/>
+        <source>Analysis</source>
+        <translation>Анализ</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="332"/>
+        <source>Record Signal</source>
+        <translation>Запись сигнала</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="342"/>
+        <source>Diration</source>
+        <translation>Длительность</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="372"/>
+        <source>Humps</source>
+        <translation>Автопоиск</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.ui" line="391"/>
+        <source>Rds error log</source>
+        <translation>Лог сообщений и ошибок RDS сервера</translation>
+    </message>
+    <message>
         <source>Frequency tuning</source>
-        <translation>Режим коррекции частоты</translation>
+        <translation type="obsolete">Режим коррекции частоты</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="191"/>
         <source>Filter Options</source>
-        <translation>Настройки фильтра</translation>
+        <translation type="obsolete">Настройки фильтра</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="201"/>
         <source>Range</source>
-        <translation>Диапазон</translation>
+        <translation type="obsolete">Диапазон</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="218"/>
         <source>Shift</source>
-        <translation>Сдвиг</translation>
+        <translation type="obsolete">Сдвиг</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="240"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="535"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="812"/>
         <source>update</source>
-        <translation>Обновить</translation>
+        <translation type="obsolete">Обновить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="247"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="542"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="819"/>
         <source>set</source>
-        <translation>Установить</translation>
+        <translation type="obsolete">Установить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="268"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="274"/>
         <source>Analysis options</source>
-        <translation>Настройки анализа</translation>
+        <translation type="obsolete">Настройки анализа</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="280"/>
         <source>Central freq:</source>
-        <translation>Центральная частота</translation>
+        <translation type="obsolete">Центральная частота</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="287"/>
         <source>Detector index:</source>
-        <translation>Номер канала</translation>
+        <translation type="obsolete">Номер канала</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="308"/>
         <source>Selected area:</source>
-        <translation>Выделенная область</translation>
+        <translation type="obsolete">Выделенная область</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="329"/>
         <source>Zoomed Area</source>
-        <translation>Область зума</translation>
+        <translation type="obsolete">Область зума</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="336"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="384"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="432"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="448"/>
         <source>start </source>
-        <translation>Начало </translation>
+        <translation type="obsolete">Начало </translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="352"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="368"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="400"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="416"/>
         <source>end </source>
-        <translation>Конец </translation>
+        <translation type="obsolete">Конец </translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="464"/>
-        <location filename="Tabs/LocationSetupWidget.cpp" line="282"/>
+        <location filename="Tabs/LocationSetupWidget.cpp" line="23"/>
+        <source>Mode settings System #%1</source>
+        <oldsource>Mode settings %1</oldsource>
+        <translation>Настройки режимов работы Система №%1</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.cpp" line="136"/>
+        <source>Mode settings System #%1 %2</source>
+        <translation>Настройки режимов работы Система №%1 %2</translation>
+    </message>
+    <message>
+        <location filename="Tabs/LocationSetupWidget.cpp" line="144"/>
         <source>Enable</source>
         <translation>Включить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="471"/>
         <source>Analysis:</source>
-        <translation>Анализ:</translation>
+        <translation type="obsolete">Анализ:</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="480"/>
         <source>Update</source>
-        <translation>Обновить</translation>
+        <translation type="obsolete">Обновить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="487"/>
         <source>Set</source>
-        <translation>Задать</translation>
+        <translation type="obsolete">Задать</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="653"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="659"/>
         <source>Detector options</source>
-        <translation>Настройки распознавания</translation>
+        <translation type="obsolete">Настройки распознавания</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="371"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="403"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="435"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="451"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="565"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="672"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="312"/>
+        <location filename="Tabs/LocationSetupWidget.ui" line="349"/>
         <source> ms</source>
         <translation> мс</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="627"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="716"/>
         <source>loops num</source>
-        <translation>Количество циклов</translation>
+        <translation type="obsolete">Количество циклов</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="575"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="723"/>
         <source> loops</source>
-        <translation> циклов</translation>
+        <translation type="obsolete"> циклов</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="730"/>
         <source>Threshold</source>
-        <translation>Порог</translation>
+        <translation type="obsolete">Порог</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="558"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="757"/>
         <source>Add ranges</source>
-        <translation>Добавить диапазон</translation>
+        <translation type="obsolete">Добавить диапазон</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="634"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="793"/>
         <source>add</source>
-        <translation>добавить</translation>
+        <translation type="obsolete">добавить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="607"/>
-        <location filename="Tabs/LocationSetupWidget.ui" line="800"/>
         <source>remove</source>
-        <translation>удалить</translation>
+        <translation type="obsolete">удалить</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="521"/>
         <source>Correction options</source>
-        <translation>Настройки корректировки</translation>
+        <translation type="obsolete">Настройки корректировки</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.ui" line="527"/>
         <source>Correction Options</source>
-        <translation>Настройки корректировки</translation>
+        <translation type="obsolete">Настройки корректировки</translation>
     </message>
     <message>
-        <location filename="Tabs/LocationSetupWidget.cpp" line="19"/>
         <source>Mode settings</source>
-        <translation>Настройки режимов</translation>
+        <translation type="obsolete">Настройки режимов</translation>
     </message>
 </context>
 <context>
@@ -1008,12 +1187,12 @@
         <translation>Настройки решателя</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="212"/>
+        <location filename="MainWindow.ui" line="215"/>
         <source>LocationSetup</source>
         <translation>Настройки координатометрии</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="217"/>
+        <location filename="MainWindow.ui" line="220"/>
         <source>Connections</source>
         <translation>Подключение серверов</translation>
     </message>
@@ -1022,21 +1201,35 @@
         <source>Zaviruha</source>
         <translation>Завируха АРМ-Р</translation>
     </message>
+    <message>
+        <location filename="MainWindow.cpp" line="45"/>
+        <source>Location settings System #%1</source>
+        <translation>Настройки координатометрии №%1</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="83"/>
+        <source>Location settings System #%1 %2</source>
+        <translation>Настройки координатометрии №%1 %2</translation>
+    </message>
+    <message>
+        <source>Location settings System# %1</source>
+        <translation type="obsolete">Настройки координатометрии Система №%1</translation>
+    </message>
 </context>
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="160"/>
+        <location filename="MainWindowController.cpp" line="162"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="160"/>
+        <location filename="MainWindowController.cpp" line="162"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="193"/>
+        <location filename="MainWindowController.cpp" line="195"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -1073,27 +1266,27 @@
         <translation>Аттенюатор 2</translation>
     </message>
     <message>
-        <location filename="Prm300ControlWidget.ui" line="216"/>
+        <location filename="Prm300ControlWidget.ui" line="223"/>
         <source>140/70 MHz</source>
         <translation>140/70 МГц</translation>
     </message>
     <message>
-        <location filename="Prm300ControlWidget.ui" line="221"/>
+        <location filename="Prm300ControlWidget.ui" line="228"/>
         <source>140/22 MHz</source>
         <translation>140/22 МГц</translation>
     </message>
     <message>
-        <location filename="Prm300ControlWidget.ui" line="226"/>
+        <location filename="Prm300ControlWidget.ui" line="233"/>
         <source>140/20 MHz</source>
         <translation>140/20 МГц</translation>
     </message>
     <message>
-        <location filename="Prm300ControlWidget.ui" line="231"/>
+        <location filename="Prm300ControlWidget.ui" line="238"/>
         <source>150/80 MHz</source>
         <translation>150/80 МГц</translation>
     </message>
     <message>
-        <location filename="Prm300ControlWidget.ui" line="239"/>
+        <location filename="Prm300ControlWidget.ui" line="246"/>
         <source>Enable</source>
         <translation>Включить</translation>
     </message>
@@ -1326,67 +1519,67 @@
         <translation>Гиперболы</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="98"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="100"/>
         <source>Good quality</source>
         <translation>Хорошее качество</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="101"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="103"/>
         <source>Bad quality</source>
         <translation>Плохое качество</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="109"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="111"/>
         <source> Found solve </source>
         <translation>Найдено решение</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="134"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="137"/>
         <source>Successed solved</source>
         <translation>Найдено решение</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="137"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="140"/>
         <source>Some errors during solve</source>
         <translation>В ходе решения возникли ошибки</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="140"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="143"/>
         <source>Not enough data for solve</source>
         <translation>Недостаточно данных для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="143"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="146"/>
         <source>There is no solution</source>
         <translation>Решение не найдено</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="146"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="149"/>
         <source>No solve cause 2 trajectory</source>
         <translation>Решение не найдено из-за наличия 2 траекторий</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="149"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="152"/>
         <source>Not enough distances for solve</source>
         <translation>Недостаточные дистанции для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="152"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="155"/>
         <source>There is not enough accuracy for solve</source>
         <translation>Недостаточная точность для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="155"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="158"/>
         <source>There is not enough input accuracy for solve</source>
         <translation>Низкая точность получаемого решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="158"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="161"/>
         <source>Solves data is out of range of resposible zone</source>
         <translation>Расчинтанные данные не попадают в зону ответственности</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="161"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="164"/>
         <source>Coords is out of catching strobe</source>
         <translation>Расчитанные координаты не попадают в строб захвата</translation>
     </message>
@@ -1487,60 +1680,70 @@
 <context>
     <name>SpectrumWidget</name>
     <message>
-        <location filename="SpectrumWidget.ui" line="14"/>
+        <location filename="SpectrumWidget.ui" line="20"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="116"/>
+        <location filename="SpectrumWidget.ui" line="53"/>
         <source>Autosearch</source>
         <translation>Автопоиск</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="123"/>
+        <location filename="SpectrumWidget.ui" line="60"/>
         <source>Panorama</source>
         <translation>Панорама</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="130"/>
+        <location filename="SpectrumWidget.ui" line="67"/>
         <source>Threshold</source>
         <translation>Порог</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="137"/>
+        <location filename="SpectrumWidget.ui" line="74"/>
         <source>Get spectrum</source>
         <translation>Получить спектры</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="147"/>
+        <location filename="SpectrumWidget.ui" line="84"/>
         <source> Maximums</source>
         <translation>Максимумы</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="154"/>
+        <location filename="SpectrumWidget.ui" line="91"/>
+        <source>Sonogram</source>
+        <translation>Сонограма</translation>
+    </message>
+    <message>
+        <location filename="SpectrumWidget.ui" line="98"/>
         <source>PRM control</source>
         <translation>Управление ПРМ</translation>
     </message>
     <message>
-        <location filename="SpectrumWidget.ui" line="20"/>
+        <location filename="SpectrumWidget.ui" line="107"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
+    </message>
+    <message utf8="true">
+        <location filename="SpectrumWidget.ui" line="199"/>
+        <source>- Нет сигнала -</source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="145"/>
+        <location filename="SpectrumWidgetController.cpp" line="154"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="145"/>
+        <location filename="SpectrumWidgetController.cpp" line="154"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="480"/>
+        <location filename="SpectrumWidgetController.cpp" line="475"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
@@ -1553,29 +1756,33 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="928"/>
+        <location filename="SpectrumWidgetController.cpp" line="889"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="931"/>
+        <location filename="SpectrumWidgetController.cpp" line="892"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="932"/>
+        <location filename="SpectrumWidgetController.cpp" line="893"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="933"/>
+        <location filename="SpectrumWidgetController.cpp" line="894"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="934"/>
+        <location filename="SpectrumWidgetController.cpp" line="895"/>
+        <source>Record signal</source>
+        <translation>Запись сигнала</translation>
+    </message>
+    <message>
         <source>Enable correlation</source>
-        <translation>Включить корреляцию</translation>
+        <translation type="obsolete">Включить корреляцию</translation>
     </message>
     <message>
         <source>Black</source>
@@ -1586,14 +1793,12 @@
         <translation type="obsolete">Белый</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="936"/>
         <source>Cleanup text fields</source>
-        <translation>Очистить текстовые данные</translation>
+        <translation type="obsolete">Очистить текстовые данные</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="935"/>
         <source>Disable correlation</source>
-        <translation>Отключить корреляцию</translation>
+        <translation type="obsolete">Отключить корреляцию</translation>
     </message>
 </context>
 <context>
@@ -1617,20 +1822,66 @@
     </message>
 </context>
 <context>
+    <name>SystemSettingsWidget</name>
+    <message>
+        <location filename="SystemSettings/SystemSettingsWidget.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/SystemSettingsWidget.ui" line="20"/>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="SystemSettings/SystemSettingsWidget.ui" line="30"/>
+        <source> Device</source>
+        <translation>Устройство</translation>
+    </message>
+</context>
+<context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="191"/>
+        <location filename="Tabs/TabManager.cpp" line="222"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="395"/>
-        <location filename="Tabs/TabManager.cpp" line="432"/>
+        <location filename="Tabs/TabManager.cpp" line="450"/>
+        <location filename="Tabs/TabManager.cpp" line="487"/>
+        <location filename="Tabs/TabManager.cpp" line="731"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="777"/>
+        <location filename="Tabs/TabManager.cpp" line="810"/>
+        <source>Status: %1</source>
+        <translation>Статус: %1</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="813"/>
+        <source>Sucess</source>
+        <translation>Успешно</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="815"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="820"/>
+        <source>Record Signal result</source>
+        <translation>Результат записи сигнала</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="820"/>
+        <source>Record Signal result: 
+ %1</source>
+        <translation>Запись сигнала результат: 
+ %1</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="972"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -1650,12 +1901,12 @@
 <context>
     <name>TabSpectrumWidgetController</name>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="154"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="126"/>
         <source>Name</source>
         <translation>Свойство</translation>
     </message>
     <message>
-        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="154"/>
+        <location filename="Tabs/TabSpectrumWidgetController.cpp" line="126"/>
         <source>Property</source>
         <translation>Значение</translation>
     </message>

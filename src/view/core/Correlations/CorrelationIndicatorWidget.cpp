@@ -51,6 +51,11 @@ void CorrelationIndicatorWidget::permanentSetup(float *spectrum, float *spectrum
 	}
 }
 
+void CorrelationIndicatorWidget::setupDoppler(const QQueue<double> &data)
+{
+	return;
+}
+
 void CorrelationIndicatorWidget::setLabel(const QString &label)
 {
 	ui->labelTitle->setText(label);

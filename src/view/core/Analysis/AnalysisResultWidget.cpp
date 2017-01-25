@@ -14,7 +14,9 @@ AnalysisResultWidget::AnalysisResultWidget(QWidget *parent):
 	ui->setupUi(this);
 
 	connect(ui->pbContinue, SIGNAL(clicked(bool)), this, SLOT(slotContinue(bool)));
-	connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(addSignal()));
+	connect(ui->pbClose, SIGNAL(clicked(bool)), this, SLOT(slotClose(bool)));
+
+	connect(ui->pbAdd, SIGNAL(clicked(bool)), this, SLOT(addSignal()));
 
 	connect(ui->tableWidget, SIGNAL(cellClicked(int,int)), this, SLOT(onCellClicked(int,int)));
 	connect(ui->tableWidget, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(onItemClicked(QTableWidgetItem*)));
@@ -39,14 +41,22 @@ void AnalysisResultWidget::setAnalysisData(const RdsProtobuf::ServerMessage_OneS
 
 	if(!adata.success()) {
 		ui->errorLbl->setText( QString::fromStdString(adata.error()) );
-	createSections(5);
-		addRange(0, 100,
-					102);
-		addRange(1, 104,
-					108);
+//	createSections(5);
+//		addRange(0, 100,
+//					102);
+//		addRange(1, 104,
+//					108);
 
-		addRange(2, 98,
-					99);
+//		addRange(2, 98,
+//					99);
+
+		ui->tableWidget->setVisible(false);
+		ui->errorLbl->setVisible(true);
+		ui->pbAdd->setVisible(false);
+	} else {
+		ui->tableWidget->setVisible(true);
+		ui->errorLbl->setVisible(false);
+		ui->pbAdd->setVisible(true);
 	}
 
 	for(int i = 0; i < adata.signal_size(); i++) {
@@ -130,7 +140,7 @@ void AnalysisResultWidget::createSections(int count)
 
 	for(int i = 0; i<ui->tableWidget->columnCount(); i++) {
 		if(i == 5) {
-			ui->tableWidget->setColumnWidth(i, 300);
+			ui->tableWidget->setColumnWidth(i, 900);
 		}
 		if(i == 2 || i == 3 || i == 4) {
 			ui->tableWidget->setColumnWidth(i, 100);
@@ -191,6 +201,14 @@ void AnalysisResultWidget::slotContinue(bool)
 
 	m_currentIndex = -1;
 
+}
+
+void AnalysisResultWidget::slotClose(bool)
+{
+	ui->tableWidget->clear();
+	emit signalClose();
+
+	m_currentIndex = -1;
 }
 
 void AnalysisResultWidget::onCellClicked(int row, int col)

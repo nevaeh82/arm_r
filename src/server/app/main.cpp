@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
 	Logger().setupLogger("logs/ARM_R_server.log");
 
-    if(argc!=2) {
+	if(argc < 2) {
         log_debug(QString("You are not set id of server.\n"));
         exit(1);
       }
