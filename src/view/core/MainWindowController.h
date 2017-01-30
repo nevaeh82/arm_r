@@ -57,6 +57,8 @@ private:
 	void init();
 	void connectToServers();
 
+	ListsDialogController* m_listController;
+
 public:
 	explicit MainWindowController(QObject *parent = 0);
 	virtual ~MainWindowController();

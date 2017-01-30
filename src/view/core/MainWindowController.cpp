@@ -11,6 +11,7 @@ MainWindowController::MainWindowController(QObject *parent)
 	: QObject(parent)
 	, m_dbManager(0)
 	, m_dbStationController(0)
+	, m_listController(NULL)
 	//	, m_rpcPort(24500)
 	//	, m_rpcHost("127.0.0.1")
 {
@@ -21,11 +22,14 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_solverWidgetController = NULL;
 	m_solverSetupWidgetController = NULL;
 	m_solverErrorsWidgetController = NULL;
-
 }
 
 MainWindowController::~MainWindowController()
 {
+	if(m_listController) {
+		m_listController->resetListDialog();
+	}
+
 	SolverResultWidget* resultWidget = m_solverWidgetController->getView();
 	if( resultWidget ) {
 		m_solverWidgetController->appendView(NULL);
@@ -201,6 +205,8 @@ void MainWindowController::slotShowLists()
 	bool isOpen = m_dbStationController->getDataBase().isOpen();
 
 	m_dbStationController->registerReceiver( listController );
+
+	m_listController = listController;
 
 	if(!isOpen) {
 		QMessageBox msgBox;

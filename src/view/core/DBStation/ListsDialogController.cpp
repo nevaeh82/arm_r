@@ -28,7 +28,14 @@ ListsDialogController::ListsDialogController(IDBStation* stationDb, QObject* par
 
 ListsDialogController::~ListsDialogController()
 {
-	m_stationDb->deregisterReceiver( this );
+	if(m_stationDb) {
+		m_stationDb->deregisterReceiver( this );
+	}
+}
+
+void ListsDialogController::resetListDialog()
+{
+	m_stationDb = NULL;
 }
 
 void ListsDialogController::appendView(ListsDialog *widget)

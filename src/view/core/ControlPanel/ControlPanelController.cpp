@@ -159,6 +159,8 @@ void ControlPanelController::setCentralFreqValueInternal(double freq)
 
 void ControlPanelController::slotSolverResult(QByteArray data)
 {
+	int quality = 0;
+
 	if(data.isEmpty()) {
 		m_view->changeQualityStatus( 0 );
 	} else {
@@ -179,6 +181,7 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.freq = solPkt.trajectory(i).central_frequency();
 				res.state = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).state();
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
+				quality |= res.quality;
 
 				m_solverResultList.append( res );
 			}
@@ -194,10 +197,13 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.freq = solPkt.trajectory(i).central_frequency();
 				res.state = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).state();
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
+				quality |= res.quality;
 
 				m_solverResultList.append( res );
 			}
 		}
+
+		m_view->changeQualityStatus( quality );
 //		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mEst;
 //		if( mEst.ParseFromArray(data, data.size()) ) {
 //			int test = mEst.quality();
@@ -647,10 +653,13 @@ void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 	}
 
 	if(!m_solverResultList.isEmpty()) {
-		if(abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime) > 5000) {
-			m_view->changeQualityStatus( 0 );
-			return;
-		}
+
+//		int test = abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime);
+
+//		if(abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime) > 20000) {
+//			m_view->changeQualityStatus( 0 );
+//			return;
+//		}
 	}
 }
 

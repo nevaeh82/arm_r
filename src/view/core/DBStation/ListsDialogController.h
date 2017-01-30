@@ -33,6 +33,7 @@ public:
 	virtual inline void onStationDataInserted(const StationData&) { update(); }
 	virtual inline void onStationDataUpdated(const StationData&) { update(); }
 
+	void resetListDialog();
 private:
 	IDBStation*					m_stationDb;
 	StationsDataTableModel*		m_model;

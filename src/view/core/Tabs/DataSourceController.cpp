@@ -144,7 +144,7 @@ void DataSourceController::initCorrelationDataSource( 	ICorrelationControllersCo
 		if( extCorrelationControllers && extCorrelationControllers->get(i) ) {
 			correlationDataSourceExt->registerReceiver(extCorrelationControllers->get(i));
 			correlationDataSourceExt->setLocationController(m_locationController);
-			correlationDataSourceExt->setControlPanelController(NULL);
+			correlationDataSourceExt->setControlPanelController(m_controlPanelController);
 			correlationDataSourceExt->setCorrGraphWidget(extCorrelationControllers->get(i));
 		}
 
