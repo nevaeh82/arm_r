@@ -38,6 +38,9 @@ private:
 	void readProtobuf(const QByteArray& inputData );
     void addPreambula(QByteArray& data);
     quint8 crc(const QByteArray &data);
+
+signals:
+    void nippDataIncome(bool);
 };
 
 #endif; //SOLVERENCODER_H

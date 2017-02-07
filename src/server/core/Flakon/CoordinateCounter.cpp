@@ -77,6 +77,10 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 {
 	Q_UNUSED( device );
 
+    if(m_stationsShift < 0) {
+        return;
+    }
+
 	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
 		QByteArray protoData = argument->data();
 
@@ -99,7 +103,9 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		SolverProtocol::Packet solverPkt;
 
 		SolverProtocol::MeasurementsData* solverData =
-				solverPkt.mutable_datafromclient()->mutable_measurementsdata(); ;
+                solverPkt.mutable_datafromclient()->mutable_measurementsdata();
+
+        bool b = false;
 
 		foreach (RdsProtobuf::Convolution cnvMsg, location.convolution()) {
 			int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
@@ -115,12 +121,16 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 				data->set_dopler( cnvMsg.doppler() );
 				data->set_dopler_sdv( cnvMsg.doppler_accuracy() );
 			}
+
+            b = true;
 		}
 
 		solverData->set_central_frequency( (location.range().start() + location.range().end())/2 );
 		solverData->set_datetime( location.date_time() );
 
-		sendDataToClientTcpServer1(solverPkt);
+        if(b) {
+            sendDataToClientTcpServer1(solverPkt);
+        }
 	}
 }
 
@@ -202,7 +212,7 @@ void CoordinateCounter::setShift(const double shift)
     emit signalSetShift(shift);
 }
 
-void CoordinateCounter::setStationsShift(const uint val)
+void CoordinateCounter::setStationsShift(const int val)
 {
     m_stationsShift = val;
 }

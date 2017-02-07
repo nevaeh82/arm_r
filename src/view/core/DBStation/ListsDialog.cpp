@@ -84,8 +84,8 @@ void ListsDialog::setCheckPointer(int ind)
 {
 	for(int i = 0; i<ui->workListView->count(); i++) {
 
-		QString tst1 = QString::number(ind);
-		QString tst2 =  ui->workListView->item(i)->text().left(ui->workListView->item(i)->text().indexOf("|"));
+//		QString tst1 = QString::number(ind);
+//		QString tst2 =  ui->workListView->item(i)->text().left(ui->workListView->item(i)->text().indexOf("|"));
 
 		if( ui->workListView->item(i)->text().left(ui->workListView->item(i)->text().indexOf("|")) == QString::number(ind) ) {
 			ui->workListView->item(i)->setBackgroundColor(Qt::green);

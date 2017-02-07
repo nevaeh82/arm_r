@@ -4,6 +4,8 @@
 
 #include <Logger/Logger.h>
 
+#include "SolverPacket1.pb.h"
+
 #include "Rpc/RpcDefines.h"
 
 #define TIMER_INTERVAL 5000
@@ -203,6 +205,13 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 			}
 		}
 
+        if(pkt.datafromsolver().has_solverresponse()) {
+            if( pkt.datafromsolver().solverresponse().has_maxallowablerangessdv() ) {
+                float skoMax = pkt.datafromsolver().solverresponse().maxallowablerangessdv();
+                emit skoChanged(skoMax);
+            }
+        }
+
 		m_view->changeQualityStatus( quality );
 //		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mEst;
 //		if( mEst.ParseFromArray(data, data.size()) ) {
@@ -387,6 +396,10 @@ void ControlPanelController::slotChangeFreq()
 void ControlPanelController::checkSolverResult()
 {
 	//log_debug("Check >>> ");
+    if(!m_isFollowMode) {
+        return;
+    }
+
 	double listFreq = (int)(*m_itCheckMode).frequency;
 
 	if(!m_workCheckList) {
@@ -473,9 +486,9 @@ void ControlPanelController::slotCheckModeSetFreq()
 		return;
 	}
 
-	log_debug(QString("Detected list sz: %1  ").arg(m_IdDetetcted.size()));
+    //log_debug(QString("Detected list sz: %1  ").arg(m_IdDetetcted.size()));
 	for(int i = 0; i<m_IdDetetcted.size(); i++) {
-		log_debug(QString("Detected list ind: %1  ").arg(m_IdDetetcted.at(i)));
+        //log_debug(QString("Detected list ind: %1  ").arg(m_IdDetetcted.at(i)));
 	}
 
 
@@ -486,13 +499,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 			if(m_listOfFreqs.size() >= *m_itDetected ) {
 				freq = m_listOfFreqs.at( *m_itDetected ).frequency;
 				band = m_listOfFreqs.at( *m_itDetected ).bandwidth;
-				m_setupController->slotOnSetCommonFreq(int(freq+0.5), band);
+                m_setupController->slotOnSetCommonFreq((freq), band);
 				m_listsDialog->setDetectPointer(m_IdDetetcted.indexOf(*m_itDetected));
 				m_workCheckList = false;
 				m_timerCheck.start(m_timerCheckIntervalDetected);
-				log_debug(QString("Detected list set id:%1 freq:%2 %3").arg(*m_itDetected)
-																		.arg(int(freq+0.5))
-						  .arg(m_itDetected == m_IdDetetcted.end()));
 			}
 		}
 
@@ -517,15 +527,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 			freq = m_listOfFreqs.at( *m_itDetected ).frequency;
 			band = m_listOfFreqs.at( *m_itDetected ).bandwidth;
-			m_setupController->slotOnSetCommonFreq(int(freq+0.5), band);
+            m_setupController->slotOnSetCommonFreq((freq), band);
 			m_listsDialog->setDetectPointer(m_IdDetetcted.indexOf(*m_itDetected));
 			m_workCheckList = false;
 			m_timerCheck.start(m_timerCheckIntervalDetected);
-
-			log_debug(QString("Detected list set id:%1 freq:%2 %3").arg(*m_itDetected)
-																	.arg(int(freq+0.5))
-					  .arg(2));
-
 			return;
 		} /*else {
 			int test = *m_itDetected;
@@ -538,14 +543,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 	freq = (*m_itCheckMode).frequency;
 	band = (*m_itCheckMode).bandwidth;
 
-	m_setupController->slotOnSetCommonFreq(int(freq+0.5), band);
+    m_setupController->slotOnSetCommonFreq((freq), band);
 	m_timerCheck.start(m_timerCheckInterval);
 	m_workCheckList = true;
 	m_listsDialog->setCheckPointer(m_listOfFreqs.indexOf(*m_itCheckMode));
-
-	log_debug(QString("Check list set id:%1 freq:%2 %3").arg(0)
-															.arg(int(freq+0.5))
-			  .arg(0));
 }
 
 void ControlPanelController::slotDown1MHz()

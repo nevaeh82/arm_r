@@ -10,6 +10,7 @@
 #include "Correlations/CorrelationWidget.h"
 #include "Correlations/CorrelationIndicatorWidget.h"
 #include "Correlations/CorrelationWidgetController.h"
+
 #include "IGraphicWidget.h"
 
 class CorrelationControllersContainer : public QObject, public ICorrelationControllersContainer
@@ -26,11 +27,13 @@ public:
 	virtual int count();
 
 	void setLocationController(LocationSetupWidgetController* controller);
+    void setControlPanelController(ControlPanelController*);
 
 private:
 	QMap<int, ICorrelationWidget* > m_mapWidgets;
 	QMutex	m_mux;
-	LocationSetupWidgetController* m_locationController;
+    LocationSetupWidgetController* m_locationController;
+    ControlPanelController* m_controlPanel;
 
 signals:
     void signalExpand();

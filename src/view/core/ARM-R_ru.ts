@@ -286,7 +286,7 @@
         <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="135"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="141"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
@@ -299,19 +299,19 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="255"/>
-        <location filename="ControlPanel.ui" line="525"/>
-        <location filename="ControlPanel.ui" line="699"/>
+        <location filename="ControlPanel.ui" line="155"/>
+        <location filename="ControlPanel.ui" line="199"/>
+        <location filename="ControlPanel.ui" line="697"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="681"/>
+        <location filename="ControlPanel.ui" line="309"/>
         <source>Current frequency</source>
         <translation>Текущая частота</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="583"/>
+        <location filename="ControlPanel.ui" line="423"/>
         <source>-</source>
         <translation>-</translation>
     </message>
@@ -324,67 +324,72 @@
         <translation type="obsolete">Автопоиск</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="180"/>
+        <location filename="ControlPanel.ui" line="407"/>
         <source>Panorama</source>
         <translation>Панорама</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="190"/>
+        <location filename="ControlPanel.ui" line="819"/>
         <source>Manual</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="476"/>
+        <location filename="ControlPanel.ui" line="648"/>
         <source>Spectrums</source>
         <translation>Координатометрия</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="604"/>
+        <location filename="ControlPanel.ui" line="232"/>
         <source>Solver:</source>
         <translation>Решатель: </translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="657"/>
+        <location filename="ControlPanel.ui" line="285"/>
         <source>Quality:</source>
         <translation>Решение: </translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="815"/>
+        <location filename="ControlPanel.ui" line="791"/>
         <source>Merge system control</source>
         <translation>Объединять управление</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="483"/>
+        <location filename="ControlPanel.ui" line="655"/>
         <source>Doppler</source>
         <translation>Доплер</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="490"/>
+        <location filename="ControlPanel.ui" line="662"/>
         <source>Convolution</source>
         <translation>Свертка</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="497"/>
+        <location filename="ControlPanel.ui" line="669"/>
         <source>Humps</source>
         <translation>Автопоиск</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="195"/>
+        <location filename="ControlPanel.ui" line="824"/>
         <source>Scanning</source>
         <translation>Сканирование</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="200"/>
+        <location filename="ControlPanel.ui" line="829"/>
         <source>Checking</source>
         <translation>Проверка</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="205"/>
+        <location filename="ControlPanel.ui" line="834"/>
         <source>Escorting</source>
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="674"/>
+        <location filename="ControlPanel.ui" line="842"/>
+        <source>Sleep mode</source>
+        <translation>Режим &quot;Сон&quot;</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="302"/>
         <source>Correlation on frequency </source>
         <translation>Корреляция на частоте</translation>
     </message>
@@ -413,8 +418,8 @@
         <translation type="obsolete">Включить</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="617"/>
-        <location filename="ControlPanel.ui" line="640"/>
+        <location filename="ControlPanel.ui" line="245"/>
+        <location filename="ControlPanel.ui" line="268"/>
         <source>---</source>
         <translation>---</translation>
     </message>
@@ -423,32 +428,32 @@
         <translation type="obsolete">Качество решения</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="219"/>
+        <location filename="ControlPanel.ui" line="379"/>
         <source>&lt;&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="576"/>
+        <location filename="ControlPanel.ui" line="436"/>
         <source>&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="730"/>
+        <location filename="ControlPanel.ui" line="183"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="547"/>
+        <location filename="ControlPanel.ui" line="324"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="512"/>
+        <location filename="ControlPanel.ui" line="684"/>
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="232"/>
+        <location filename="ControlPanel.ui" line="392"/>
         <source>&gt;&gt;&gt;</source>
         <translation></translation>
     </message>
@@ -457,7 +462,7 @@
         <translation type="obsolete">Установить общую частоту</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelWidget.cpp" line="181"/>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="183"/>
         <source> mhz</source>
         <translation> МГц</translation>
     </message>
@@ -728,44 +733,54 @@
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="23"/>
+        <location filename="DBStation/ListsDialog.ui" line="42"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="28"/>
+        <location filename="DBStation/ListsDialog.ui" line="47"/>
         <source>White</source>
         <translation>Белый</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="33"/>
+        <location filename="DBStation/ListsDialog.ui" line="52"/>
         <source>Black</source>
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="38"/>
+        <location filename="DBStation/ListsDialog.ui" line="57"/>
         <source>Detected</source>
         <translation>Обнаруженные</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="69"/>
+        <location filename="DBStation/ListsDialog.ui" line="72"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="76"/>
+        <location filename="DBStation/ListsDialog.ui" line="79"/>
         <source>Report</source>
         <translation>Отчет</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="96"/>
+        <location filename="DBStation/ListsDialog.ui" line="99"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="103"/>
+        <location filename="DBStation/ListsDialog.ui" line="106"/>
         <source>Close</source>
         <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.cpp" line="42"/>
+        <source>index: %1  freq %2</source>
+        <translation>индекс: %1 частота %2</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.cpp" line="67"/>
+        <source>%1| Freq: %2  bandwidth: %3</source>
+        <translation>%1| Частота: %2  Ширина: %3</translation>
     </message>
 </context>
 <context>
@@ -821,12 +836,12 @@
         <translation>Отметить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="80"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="87"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialogController.cpp" line="81"/>
+        <location filename="DBStation/ListsDialogController.cpp" line="88"/>
         <source>Ms.Office package is not installed</source>
         <oldsource>Could not attatch to Ms.Word object.
  Ms.Office package is not installed</oldsource>
@@ -1219,17 +1234,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="162"/>
+        <location filename="MainWindowController.cpp" line="178"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="162"/>
+        <location filename="MainWindowController.cpp" line="178"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="195"/>
+        <location filename="MainWindowController.cpp" line="213"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -1733,17 +1748,17 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="154"/>
+        <location filename="SpectrumWidgetController.cpp" line="158"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="154"/>
+        <location filename="SpectrumWidgetController.cpp" line="158"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="475"/>
+        <location filename="SpectrumWidgetController.cpp" line="495"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
@@ -1756,27 +1771,27 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="889"/>
+        <location filename="SpectrumWidgetController.cpp" line="905"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="892"/>
+        <location filename="SpectrumWidgetController.cpp" line="908"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="893"/>
+        <location filename="SpectrumWidgetController.cpp" line="909"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="894"/>
+        <location filename="SpectrumWidgetController.cpp" line="910"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="895"/>
+        <location filename="SpectrumWidgetController.cpp" line="911"/>
         <source>Record signal</source>
         <translation>Запись сигнала</translation>
     </message>
@@ -1847,41 +1862,41 @@
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="450"/>
-        <location filename="Tabs/TabManager.cpp" line="487"/>
-        <location filename="Tabs/TabManager.cpp" line="731"/>
+        <location filename="Tabs/TabManager.cpp" line="451"/>
+        <location filename="Tabs/TabManager.cpp" line="488"/>
+        <location filename="Tabs/TabManager.cpp" line="732"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="810"/>
+        <location filename="Tabs/TabManager.cpp" line="811"/>
         <source>Status: %1</source>
         <translation>Статус: %1</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="813"/>
+        <location filename="Tabs/TabManager.cpp" line="814"/>
         <source>Sucess</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="815"/>
+        <location filename="Tabs/TabManager.cpp" line="816"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="820"/>
+        <location filename="Tabs/TabManager.cpp" line="821"/>
         <source>Record Signal result</source>
         <translation>Результат записи сигнала</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="820"/>
+        <location filename="Tabs/TabManager.cpp" line="821"/>
         <source>Record Signal result: 
  %1</source>
         <translation>Запись сигнала результат: 
  %1</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="972"/>
+        <location filename="Tabs/TabManager.cpp" line="973"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>

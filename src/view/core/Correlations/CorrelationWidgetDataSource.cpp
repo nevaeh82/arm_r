@@ -219,7 +219,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 void CorrelationWidgetDataSource::onSleepModeSlot()
 {
-	m_sleepModeProcess = true;
+    m_sleepModeProcess = true;
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)

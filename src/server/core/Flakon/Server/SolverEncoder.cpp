@@ -16,38 +16,51 @@ SolverEncoder::~SolverEncoder()
 void SolverEncoder::onDataReceived(const QVariant& argument)
 {
 	QByteArray inData = argument.toByteArray();
+    m_dataFromTcpSocket.append(inData);
+
+    if( m_dataFromTcpSocket.indexOf("SPP") < 0 ) {
+        return;
+    } else if( m_dataFromTcpSocket.indexOf("\n") < 0 ) {
+        return;
+    }
+
+    QByteArray test = m_dataFromTcpSocket.mid( m_dataFromTcpSocket.indexOf("SPP"), 25 );
+
+    QList<QByteArray> dataList = test.split(char(","));
+    int devInd = dataList.at(1).toInt();
+    int status = dataList.at(4).toInt();
 
 	Q_UNUSED(inData);
 }
 
 QByteArray SolverEncoder::encode(const QByteArray &data)
 {
-	m_dataFromTcpSocket.append(data);
+//	m_dataFromTcpSocket.append(data);
 
-	if (m_dataFromTcpSocket.size() < TCP_ZAVIRUHA_PREAMBULA_LEN){
-		return QByteArray();
-	}
+//    if (m_dataFromTcpSocket.size() < TCP_ZAVIRUHA_PREAMBULA_LEN) {
+//		return QByteArray();
+//	}
 
-	int preambulaIndex = m_dataFromTcpSocket.indexOf(TCP_ZAVIRUHA_PREAMBULA_SOLVER);
-	m_dataFromTcpSocket = m_dataFromTcpSocket.right( m_dataFromTcpSocket.length() - preambulaIndex );
-	if (preambulaIndex < 0) {
-		return QByteArray();
-	}
+//	int preambulaIndex = m_dataFromTcpSocket.indexOf(TCP_ZAVIRUHA_PREAMBULA_SOLVER);
+//	m_dataFromTcpSocket = m_dataFromTcpSocket.right( m_dataFromTcpSocket.length() - preambulaIndex );
+//	if (preambulaIndex < 0) {
+//		return QByteArray();
+//	}
 
-	memcpy( (char*)&m_residueLength, m_dataFromTcpSocket.data() + 3, sizeof(uint) );
+//	memcpy( (char*)&m_residueLength, m_dataFromTcpSocket.data() + 3, sizeof(uint) );
 
-	QByteArray dataToSend;
-	int packetLen = m_residueLength + TCP_ZAVIRUHA_PREAMBULA_LEN;
+//	QByteArray dataToSend;
+//	int packetLen = m_residueLength + TCP_ZAVIRUHA_PREAMBULA_LEN;
 
-	if (m_dataFromTcpSocket.length() >= packetLen) {
-		QByteArray data = m_dataFromTcpSocket.mid(preambulaIndex + TCP_ZAVIRUHA_PREAMBULA_LEN, m_residueLength);
-		dataToSend = data;
+//	if (m_dataFromTcpSocket.length() >= packetLen) {
+//		QByteArray data = m_dataFromTcpSocket.mid(preambulaIndex + TCP_ZAVIRUHA_PREAMBULA_LEN, m_residueLength);
+//		dataToSend = data;
 
-		m_dataFromTcpSocket = m_dataFromTcpSocket.right(m_dataFromTcpSocket.length() - packetLen);
-		m_residueLength = 0;
-	}
+//		m_dataFromTcpSocket = m_dataFromTcpSocket.right(m_dataFromTcpSocket.length() - packetLen);
+//		m_residueLength = 0;
+//	}
 
-	return dataToSend;
+    return QByteArray();
 }
 
 QByteArray SolverEncoder::decode(const MessageSP message) {
@@ -84,7 +97,19 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 					tPkt.motionestimate(tPkt.motionestimate_size()-1);
 
 			QStringList niippLst;
-			niippLst.append("BPLA");
+            niippLst.append("BPLA");
+
+            QString t_id = QString::number(i+1, 16);
+            int t_id_size = t_id.size();
+
+            if(t_id_size < 4) {
+                for(int i = 0; i<4-t_id_size; i++) {
+                    t_id.prepend("0");
+                }
+            }
+
+            niippLst.append(t_id);
+
 			niippLst.append(QString::number( tPkt.central_frequency() ));
 
 			quint64 t = mPkt.datetime();
@@ -110,9 +135,15 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 			quint8 n =  crc( message.toLocal8Bit() );
 
 			message.append( "*" );
-			message.append(QString::number(n, 16));
+            QString t_src = QString::number(n, 16);
+            if(t_src.length() < 2) {
+                t_src.prepend("0");
+            }
 
-			message.append("\\r\\n");
+            message.append(t_src.toUpper());
+
+            message.append(0x0A);
+            message.append(0x0D);
 			all.append(message);
 		}
 
@@ -137,7 +168,23 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 
 			QStringList niippLst;
 			niippLst.append("BLA");
-			niippLst.append(QString::number(uavData.boardID));
+
+            QString t_id = QString::number(uavData.boardID, 16);
+            int t_id_size = t_id.size();
+
+            if(t_id_size < 4) {
+                for(int i = 0; i<4-t_id_size; i++) {
+                    t_id.prepend("0");
+                }
+            }
+
+            if(t_id.length() < 4) {
+                for(int i = 0; i<4-t_id.length(); i++) {
+                    t_id.prepend("0");
+                }
+            }
+
+            niippLst.append(t_id);
 
 			QDateTime dt = uavData.dateTime;
 
@@ -156,9 +203,16 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 			quint8 n =  crc( message.toLocal8Bit() );
 
 			message.append( "*" );
-			message.append(QString::number(n, 16).toUpper());
 
-			message.append("\\r\\n");
+            QString t_src = QString::number(n, 16);
+            if(t_src.length() < 2) {
+                t_src.prepend("0");
+            }
+
+            message.append(t_src.toUpper());
+
+            message.append(0x0A);
+            message.append(0x0D);
 			all.append(message);
 		}
 

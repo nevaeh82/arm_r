@@ -186,7 +186,7 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 
 	if (!m_isPanoramaStart){
 		startPanorama(enabled);
-		log_debug("panorama stopped");
+        //log_debug("panorama stopped");
 		setBandwidth(m_bandwidthSingleSample);
 		return;
 	}

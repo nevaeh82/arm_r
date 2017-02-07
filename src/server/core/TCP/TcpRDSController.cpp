@@ -92,7 +92,7 @@ bool TcpRDSController::init()
 			m_port = m_flakonSettingStruct.port;
 			m_deviceType = TypeRDS;//m_flakonSettingStruct.type;
 
-			m_stationShift = settings.value( "shift", 0 ).toUInt();
+            m_stationShift = settings.value( "shift", 0 ).toInt();
 
 			QByteArray baseInfo;
 			QDataStream dsBaseInfo(&baseInfo, QIODevice::WriteOnly);

@@ -2,6 +2,7 @@
 #define ICORRELATIONCONTROLLERSCONTAINER_H
 
 #include "Tabs/LocationSetupWidgetController.h"
+#include "ControlPanel/ControlPanelController.h"
 
 class QString;
 class ICorrelationWidget;
@@ -15,6 +16,7 @@ public:
 	virtual int count()													= 0;
 
 	virtual void setLocationController(LocationSetupWidgetController*)	= 0;
+    virtual void setControlPanelController(ControlPanelController*) = 0;
 };
 
 #endif // ICORRELATIONCONTROLLERSCONTAINER_H

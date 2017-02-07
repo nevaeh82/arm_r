@@ -20,10 +20,12 @@ int CorrelationControllersContainer::init(int count, int type)
 		BaseCorrelationWidget* cor;
 		if(type == 0) {
 			cor = new CorrelationWidget();
-		} else {
-			cor = new CorrelationIndicatorWidget();
+        } else {
+            cor = new CorrelationIndicatorWidget();
 			connect((CorrelationIndicatorWidget*)cor, SIGNAL(signalExpand()),
 					this, SIGNAL(signalExpand()));
+
+            connect(m_controlPanel, SIGNAL(skoChanged(float)), cor, SLOT());
 		}
 		CorrelationWidgetController* controller = new CorrelationWidgetController(type, this);
 		controller->appendView(cor);
@@ -54,5 +56,10 @@ int CorrelationControllersContainer::count()
 
 void CorrelationControllersContainer::setLocationController(LocationSetupWidgetController *controller)
 {
-	m_locationController = controller;
+    m_locationController = controller;
+}
+
+void CorrelationControllersContainer::setControlPanelController(ControlPanelController * obj)
+{
+    m_controlPanel = obj;
 }

@@ -360,7 +360,10 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double band
 		bandwidth = 20;
 	}
 
-	m_locationMessage.set_central_frequency( (int)freq );
+    double start = (double)freq - bandwidth/2;
+    double end = (double)freq + bandwidth/2;
+
+    m_locationMessage.set_central_frequency( (int)(freq+0.5) );
 	m_locationMessage.mutable_range()->set_start( (double)freq - bandwidth/2 );
 	m_locationMessage.mutable_range()->set_end( (double)freq + bandwidth/2 );
 

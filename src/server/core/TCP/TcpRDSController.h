@@ -42,7 +42,7 @@ public:
 
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
-    uint m_stationShift;
+    int m_stationShift;
 
 private:
     int m_serverId;

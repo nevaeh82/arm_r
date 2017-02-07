@@ -44,8 +44,6 @@ private:
 	QPixmap* m_red;
 	QPixmap* m_green;
 
-	uint m_limit;
-
 signals:
 	void signalExpand();
 };

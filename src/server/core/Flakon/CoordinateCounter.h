@@ -102,7 +102,7 @@ private:
 
 	double m_centerFrequency;
     double m_shift;
-    uint m_stationsShift;
+    int m_stationsShift;
 
 	QString m_likeADeviceName;
 
@@ -157,7 +157,7 @@ public:
 	virtual void setCenterFrequency(const double &frequency);
     void setShift( const double shift );
 
-    void setStationsShift(const uint val);
+    void setStationsShift(const int val);
 
 private:
 	/// Solver dll

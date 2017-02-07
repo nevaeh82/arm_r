@@ -1,7 +1,8 @@
 #include "BaseCorrelationWidget.h"
 
 BaseCorrelationWidget::BaseCorrelationWidget(QWidget *parent, Qt::WFlags flags):
-    QWidget(parent, flags)
+    QWidget(parent, flags),
+    m_limit(500)
 {
 }
 
@@ -16,6 +17,11 @@ void BaseCorrelationWidget::setLocationSetupWidget(LocationSetupWidgetController
 
 bool BaseCorrelationWidget::isVisible() const
 {
-	return QWidget::isVisible();
+    return QWidget::isVisible();
+}
+
+void BaseCorrelationWidget::setNewSko(float val)
+{
+  m_limit = val;
 }
 

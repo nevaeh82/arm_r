@@ -6,8 +6,7 @@
 
 CorrelationIndicatorWidget::CorrelationIndicatorWidget(QWidget *parent, Qt::WFlags flags):
 	BaseCorrelationWidget(parent, flags),
-	ui(new Ui::CorrelationIndicatorWidget),
-	m_limit(5000)
+    ui(new Ui::CorrelationIndicatorWidget)
 {
 	ui->setupUi(this);
 

@@ -214,6 +214,11 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 		QTime cur = QTime::currentTime();
 		if (list.count() == 3){
 			m_initGraph = false;
+            if(m_graphicsWidget->HasSelection()) {
+                m_selectionUpFlag = true;
+            } else {
+                m_selectionUpFlag = false;
+            }
 			setSignal(spectrum, spectrumPeakHold, index);
 		} else {
 			int pointCount = list.at(3).toInt();
@@ -224,10 +229,14 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 		}
 		QTime cur1 = QTime::currentTime();
 
-		QRegion reg = m_view->visibleRegion();
-		if(reg.isEmpty()) {
+        QRegion reg = m_view->visibleRegion();
+        if(reg.isEmpty() || reg.boundingRect().width() < 30
+                || reg.boundingRect().height() < 30) {
+           // log_debug(QString("EMPTY REGION %1").arg(m_name));
 			emit onDrawComplete();
 		}
+
+       // log_debug(QString("REGION %1 %2 %3").arg(m_name).arg(reg.boundingRect().width()).arg(reg.boundingRect().height()));
 
 		slotSetStatus(true);
 		//m_graphicsWidget->ZoomOutFull();
@@ -247,9 +256,8 @@ void SpectrumWidgetController::onPlotReady()
 {
 	emit onDrawComplete();
 
-	if(m_selectionUpFlag) {
+    if(m_selectionUpFlag ) {
 		updateSelection();
-		m_selectionUpFlag = false;
 	}
 }
 
@@ -319,7 +327,7 @@ void SpectrumWidgetController::setLocationSetupWidgetController(LocationSetupWid
 {
 	m_setupController = controller;
 
-	connect(this, SIGNAL(onDrawComplete()), m_setupController, SLOT(slotPlotDrawComplete()));
+    connect(this, SIGNAL(onDrawComplete()), m_setupController, SLOT(slotPlotDrawComplete()));
 	connect(m_setupController, SIGNAL(signalSelectionUpdate()), this, SLOT(slotUpdateSelection()));
 }
 
@@ -362,7 +370,7 @@ void SpectrumWidgetController::slotUpdateSelection()
 		return;
 	}
 
-	m_graphicsWidget->SetSelection(tmpSelection.start.x()*TO_MHZ, 0, tmpSelection.end.x()*TO_MHZ, 0);
+    m_graphicsWidget->SetSelection(tmpSelection.start.x()*TO_MHZ, 0, tmpSelection.end.x()*TO_MHZ, 0);
 }
 
 void SpectrumWidgetController::updateSelection()
@@ -467,9 +475,11 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 		return;
 	}
 
-	if(m_graphicsWidget->HasSelection()) {
-		m_selectionUpFlag = true;
-	}
+    if(m_graphicsWidget->HasSelection()) {
+        m_selectionUpFlag = true;
+    } else {
+        m_selectionUpFlag = false;
+    }
 
 	m_graphicsWidget->SetSpectrumVisible(2, m_peakVisible);
 

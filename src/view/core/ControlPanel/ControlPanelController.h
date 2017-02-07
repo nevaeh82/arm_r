@@ -151,6 +151,8 @@ signals:
 
 	void signalSystemMerge(bool);
 
+    void skoChanged(float);
+
 public slots:
 
 	void changeFrequency(double value);

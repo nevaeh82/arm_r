@@ -355,6 +355,7 @@ void TabManager::addStationTabs(QString platformName)
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 	m_correlationControllers->setLocationController(m_locationSetupController);
+    m_correlationControllers->setControlPanelController(m_panelController);
 	m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
 	connect((CorrelationControllersContainer*)m_correlationControllers, SIGNAL(signalExpand()),
 			this, SLOT(slotExpandCorrelations()));

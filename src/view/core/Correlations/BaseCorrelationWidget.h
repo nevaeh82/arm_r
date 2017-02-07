@@ -32,5 +32,10 @@ public:
 protected:
 	LocationSetupWidgetController* m_controller;
 
+    float m_limit;
+
+private slots:
+    void setNewSko(float val);
+
 };
 
