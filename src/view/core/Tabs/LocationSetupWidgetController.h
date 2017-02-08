@@ -108,6 +108,14 @@ private slots:
 	void slotSetHumps(bool);
 	void slotWigdetSettingsChanged();
 
+    void slotChangeMode(int);
+    void slotPanorama(bool);
+
+    void slotSetStartFreq(int);
+    void slotSetEndFreq(int);
+
+    void slotSystemMerge(bool);
+
 
 	void onGetSystem();
 	void onRestartRds();

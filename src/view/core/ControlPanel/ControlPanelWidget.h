@@ -65,6 +65,10 @@ signals:
 
 	void autoSearchCheckedSignal(bool isChecked);
 
+    void signalSetStartFreq(int);
+    void signalSetEndFreq(int);
+    void signalChangeMode(int);
+    void signalPanorama(bool);
 	void signalManualMode();
 	void signalScanMode(int start, int finish);
 	void signalCheckMode();

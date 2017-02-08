@@ -21,6 +21,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp1MHz, SIGNAL(clicked()), this, SIGNAL(signalUp1Mhz()));
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
+    connect(ui->startFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetStartFreq(int)));
+    connect(ui->endFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetEndFreq(int)));
 
 	connect(ui->pbSpectrums, SIGNAL(clicked(bool)), this, SIGNAL(signalReceiveSpectrums(bool)));
 	connect(ui->pbConvolution, SIGNAL(clicked(bool)), this, SIGNAL(signalConvolution(bool)));
@@ -68,6 +70,7 @@ void ControlPanelWidget::onSetCommonFrequencySlot()
 
 void ControlPanelWidget::onSetPanorama(bool on)
 {
+    emit signalPanorama(on);
 	emit onPanoramaEnable(on, ui->startFreqSB->value(), ui->endFreqSB->value());
 }
 
@@ -106,6 +109,7 @@ void ControlPanelWidget::showLocationError(QString str)
 
 void ControlPanelWidget::slotChangeMode(int index)
 {
+    emit signalChangeMode(index);
 	switch(index)
 	{
 	case 0:

@@ -107,12 +107,12 @@ void LocationSetupWidgetController::setLocationState(bool state)
 		m_plotCounter = m_incomePlotCounter;
 		m_locationTimer.stop();
 	}
+
     CommonParams::Parameters params;
     params.set_spectrums(state);
     QByteArray outData;
     outData.resize( params.ByteSize() );
     params.SerializeToArray( outData.data(), outData.size() );
-
     emit sendCPPacketData(outData);
 }
 
@@ -129,6 +129,12 @@ bool LocationSetupWidgetController::getReceiveDopler() const
 void LocationSetupWidgetController::setSleepMode(bool val)
 {
 	m_sleepMode = val;
+    CommonParams::Parameters params;
+    params.set_sleep(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
@@ -188,7 +194,57 @@ void LocationSetupWidgetController::slotWigdetSettingsChanged()
 	emit signalSettingsChanged();
 	emit signalSelectionUpdate();
 
-	emit onStateChanged();
+    emit onStateChanged();
+}
+
+void LocationSetupWidgetController::slotChangeMode(int val)
+{
+    CommonParams::Parameters params;
+    params.set_mode(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
+}
+
+void LocationSetupWidgetController::slotPanorama(bool val)
+{
+    CommonParams::Parameters params;
+    params.set_panorama(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
+}
+
+void LocationSetupWidgetController::slotSetStartFreq(int val)
+{
+    CommonParams::Parameters params;
+    params.set_startfreq(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
+}
+
+void LocationSetupWidgetController::slotSetEndFreq(int val)
+{
+    CommonParams::Parameters params;
+    params.set_finishfreq(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
+}
+
+void LocationSetupWidgetController::slotSystemMerge(bool val)
+{
+    CommonParams::Parameters params;
+    params.set_mergesysctrl(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::requestLocation()
@@ -377,6 +433,13 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double band
 	m_view->setLocationData(m_locationMessage);
 
 	emit onStateChanged();
+
+    CommonParams::Parameters params;
+    params.set_frequency(freq);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
@@ -393,6 +456,13 @@ void LocationSetupWidgetController::slotSetConvolution(bool val)
 
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
+
+    CommonParams::Parameters params;
+    params.set_convolution(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetDoppler(bool val)
@@ -400,6 +470,13 @@ void LocationSetupWidgetController::slotSetDoppler(bool val)
 	m_locationMessage.set_doppler(val);
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
+
+    CommonParams::Parameters params;
+    params.set_doppler(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetHumps(bool val)
@@ -407,6 +484,13 @@ void LocationSetupWidgetController::slotSetHumps(bool val)
 	m_locationMessage.set_hump(val);
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
+
+    CommonParams::Parameters params;
+    params.set_humps(val);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::updateLocation(RdsProtobuf::ClientMessage_OneShot_Location msg)

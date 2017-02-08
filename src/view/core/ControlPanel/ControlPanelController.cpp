@@ -65,7 +65,12 @@ void ControlPanelController::setLocationSetupController(LocationSetupWidgetContr
 	m_setupController = controller;
 
 	connect(m_view, SIGNAL(signalReceiveSpectrums(bool)), m_setupController, SLOT(slotSetReceiveSpectrums(bool)));
-	connect(m_view, SIGNAL(signalConvolution(bool)), m_setupController, SLOT(slotSetConvolution(bool)));
+    connect(m_view, SIGNAL(signalChangeMode(int)), m_setupController, SLOT(slotChangeMode(int)));
+    connect(m_view, SIGNAL(signalPanorama(bool)), m_setupController, SLOT(slotPanorama(bool)));
+    connect(m_view, SIGNAL(signalSetStartFreq(int)), m_setupController, SLOT(slotSetStartFreq(int)));
+    connect(m_view, SIGNAL(signalSetEndFreq(int)), m_setupController, SLOT(slotSetEndFreq(int)));
+    connect(m_view, SIGNAL(signalSystemMerge(bool)), m_setupController, SLOT(slotSystemMerge(bool)));
+    connect(m_view, SIGNAL(signalConvolution(bool)), m_setupController, SLOT(slotSetConvolution(bool)));
 	connect(m_view, SIGNAL(signalDoppler(bool)), m_setupController, SLOT(slotSetDoppler(bool)));
 	connect(m_view, SIGNAL(signalHumps(bool)), m_setupController, SLOT(slotSetHumps(bool)));
 	connect(this, SIGNAL(signalSetComonFreq(double)), m_setupController, SLOT(slotOnSetCommonFreq(double)));
