@@ -32,6 +32,7 @@ public:
 	QByteArray testData;
 	//void sendWorkMode(const int mode, const bool isOn);
 	void sendRdsProto(const QByteArray &data);
+    void sendCPPacketProto(const QByteArray &data);
 	QMutex m_receiverMutex;
 
 

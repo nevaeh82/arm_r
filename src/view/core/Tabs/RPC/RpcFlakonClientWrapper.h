@@ -33,6 +33,7 @@ public:
 
 	void sendSolverSetupSettings(const QByteArray& data);
 	void sendRdsProto(const QByteArray& data);
+    void sendCPPacketProto(const QByteArray& data);
 
 	void clearAllReceiversList();
 
@@ -54,6 +55,7 @@ signals:
 
 	void sendSolverSetupSettingsSignal(QByteArray data);
 	void sendRdsProtoSignal(QByteArray data);
+    void sendCPPacketSignal(QByteArray data);
 
 	void requestFlakonStatusSignal();
 
@@ -78,6 +80,7 @@ private slots:
 
 	void sendSolverSetupSettingsSlot(QByteArray data);
 	void sendRdsProtoSlot(QByteArray data);
+    void slotCPPacketSlot(QByteArray data);
 
 	void requestFlakonStatusSlot();
 	

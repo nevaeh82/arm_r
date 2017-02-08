@@ -14,6 +14,8 @@
 
 #include "Info/StationConfiguration.h"
 
+#include "TCP/TcpRdsSettingsController.h"
+
 class TcpRDSController : public TcpDeviceController
 {
 	Q_OBJECT
@@ -28,6 +30,8 @@ public:
 
 	QMap<QString, BaseTcpDeviceController*>& stations();
 	void setCoordinateCounter(CoordinateCounter* obj);
+
+    void setTcpRdsSettingscontroller(TcpRDSSettingsController *controller);
 
 	// ITcpDeviceController interface
 	virtual void createTcpDeviceCoder();
@@ -49,6 +53,7 @@ private:
 	FlakonSettings m_flakonSettingStruct;
 	CoordinateCounter* m_coordinateCounter;
 	TcpRdsCoder* m_coder;
+    TcpRDSSettingsController *m_tcpRdsSettingsController;
 
 	void requestStationCorellation(QString stationName);
 

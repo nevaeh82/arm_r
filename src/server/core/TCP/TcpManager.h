@@ -16,6 +16,7 @@
 #include "Tcp/TcpFlakonController.h"
 #include "Tcp/TcpPRM300Controller.h"
 #include "Tcp/TcpRDSController.h"
+#include "Tcp/TcpRdsSettingsController.h"
 #include "Tcp/Interfaces/ITcpManager.h"
 #include "Tcp/Interfaces/ITcpListener.h"
 #include "Rpc/RpcConfigReader.h"
@@ -40,6 +41,7 @@ private:
 
 	TcpFlakonController *m_flakonController;
 	TcpRDSController *m_rdsController;
+    TcpRDSSettingsController *m_rdsSettingsController;
 
 	RpcConfigReader* m_rpcConfigReader;
 

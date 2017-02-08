@@ -112,6 +112,11 @@ void RpcFlakonClient::sendRdsProto(const QByteArray &data)
 	m_clientPeer->call( RPC_METHOD_SEND_RDS_PROTO, data );
 }
 
+void RpcFlakonClient::sendCPPacketProto(const QByteArray &data)
+{
+    m_clientPeer->call( RPC_METHOD_SEND_CPPACKET_PROTO, data );
+}
+
 //void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
 //{
 //	m_clientPeer->call( RPC_METHOD_WORK_MODE, mode, isOn );

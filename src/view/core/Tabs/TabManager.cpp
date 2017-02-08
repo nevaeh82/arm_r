@@ -66,6 +66,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	m_panoramaFreqControl = new PanoramaFreqControl(this);
 
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
+    connect( m_locationSetupController, SIGNAL(sendCPPacketData(QByteArray)), this, SLOT( slotSendCPPacketData(QByteArray)) );
 
 	connect(this, SIGNAL(signalMethodCalled(QString,QVariant)), this, SLOT(slotMethodCalled(QString,QVariant)));
 }
@@ -96,7 +97,12 @@ TabManager::~TabManager()
 
 void TabManager::slotSendRdsData(QByteArray data)
 {
-	m_rpcFlakonClient->sendRdsProto(data);
+    m_rpcFlakonClient->sendRdsProto(data);
+}
+
+void TabManager::slotSendCPPacketData(QByteArray data)
+{
+    m_rpcFlakonClient->sendCPPacketProto(data);
 }
 
 void TabManager::slotShowLocationSetup()
