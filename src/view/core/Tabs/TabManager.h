@@ -162,6 +162,7 @@ private slots:
 	void slotUpdateDBStationsLists();
 	void slotSendSolverSetupCommand(QByteArray);
 	void slotSendRdsData(QByteArray data);
+    void slotSendCPPacketData(QByteArray data);
 	void rpcConnectionEstablished();
 	void rpcConnectionDropped();
 	void rpcConnectionEstablishedFlakon();

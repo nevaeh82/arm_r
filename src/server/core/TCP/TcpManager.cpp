@@ -71,6 +71,10 @@ TcpManager::~TcpManager()
 	emit threadTerminateSignal();
 	emit threadTerminateSignalForMapSolver();
 	m_mapCoordinateCounter.clear();
+
+    foreach (TcpDeviceController *controller, m_controllersMap) {
+        delete controller;
+    }
 }
 
 void TcpManager::addStationToFlakon(QString name, BaseTcpDeviceController* controller)
@@ -126,6 +130,9 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 	TcpDeviceController* controller = NULL;
 
+    // register controller as listener for RPC server
+    RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
+
 	switch(type)
 	{
 	case RETRRANSLATOR_TCP_DEVICE:
@@ -159,6 +166,15 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 		m_rdsController = (TcpRDSController*) controller;
 
 		m_rdsController->setCoordinateCounter(m_coordinatesCounter);
+
+        m_rdsSettingsController = new TcpRDSSettingsController();
+
+        log_debug(QString("Created TcpRDSSettingsController"));
+        m_rdsController->setTcpRdsSettingscontroller(m_rdsSettingsController);
+        m_rdsSettingsController->registerReceiver(this);
+        if (routedServer != NULL) {
+            routedServer->registerReceiver( (IRpcListener*) m_rdsSettingsController, m_rdsSettingsController->getRouteId() );
+        }
 
 		break;
 	case SOLVER_CLIENT_DEVICE:
@@ -209,8 +225,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 	controller->registerReceiver(this);
 
-	// register controller as listener for RPC server
-	RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
+
 
 	if(type == RDS_TCP_DEVICE) {
 		m_rdsController->registerReceiver(m_coordinatesCounter);

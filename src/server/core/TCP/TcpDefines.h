@@ -59,8 +59,9 @@
 #define TCP_RDS_GET_ANALYSIS_STATUS						"tcpRDSAnalysisStatus"
 #define TCP_RDS_GET_PRM_STATUS							"tcpRDSPrmStatus"
 #define TCP_RDS_SET_PRM_STATUS							"tcpRDSSetPrmStatus"
-#define TCP_RDS_GET_DEVICE_STATUS							"tcpRDSPrmStatus"
+#define TCP_RDS_GET_DEVICE_STATUS						"tcpRDSPrmStatus"
 #define TCP_RDS_SEND_PROTO								"tcpRDSSendProto"
+#define TCP_CCPACKET_SEND_PROTO                         "tcpCPPacketProto"
 
 #define TCP_RDS_WORK_MODE							"tcpRDSWorkMode"
 

@@ -7,7 +7,8 @@
 TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
 	TcpDeviceController(parent),
 	m_stationShift(0),
-	m_serverId(serverId)
+    m_serverId(serverId),
+    m_tcpRdsSettingsController(NULL)
 {
 	m_tcpDeviceName = RDS_TCP_DEVICE;
 	log_debug(QString("Created %1").arg(m_tcpDeviceName));
@@ -20,7 +21,8 @@ TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
 TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, QObject* parent) :
 	TcpDeviceController(tcpDeviceName, parent),
 	m_stationShift(0),
-	m_serverId(serverId)
+    m_serverId(serverId),
+    m_tcpRdsSettingsController(NULL)
 {
 	m_coordinateCounter = 0;
 	init();
@@ -28,6 +30,10 @@ TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, Q
 
 TcpRDSController::~TcpRDSController()
 {
+    if(m_tcpRdsSettingsController)
+    {
+        delete m_tcpRdsSettingsController;
+    }
 }
 
 QMap<QString, BaseTcpDeviceController*>& TcpRDSController::stations()
@@ -38,7 +44,12 @@ QMap<QString, BaseTcpDeviceController*>& TcpRDSController::stations()
 void TcpRDSController::setCoordinateCounter(CoordinateCounter* obj)
 {
 	m_coordinateCounter = obj;
-	m_coordinateCounter->setStationsShift(m_stationShift);
+    m_coordinateCounter->setStationsShift(m_stationShift);
+}
+
+void TcpRDSController::setTcpRdsSettingscontroller(TcpRDSSettingsController *controller)
+{
+    m_tcpRdsSettingsController = controller;
 }
 
 void TcpRDSController::createTcpDeviceCoder()
@@ -50,6 +61,8 @@ void TcpRDSController::createTcpDeviceCoder()
 	m_coder = coder;
 
 	coder->setCoordinatesCounter(m_coordinateCounter);
+
+    m_tcpRdsSettingsController->createTcpDeviceCoder();
 }
 
 void TcpRDSController::createTcpClient()
@@ -268,4 +281,5 @@ void TcpRDSController::onMethodCalled(const QString& method, const QVariant& arg
 	else if(method == RPC_METHOD_SEND_RDS_PROTO) {
 		sendData( MessageSP( new Message<QByteArray>( TCP_RDS_SEND_PROTO, data ) ) );
 	}
+
 }

@@ -107,6 +107,13 @@ void LocationSetupWidgetController::setLocationState(bool state)
 		m_plotCounter = m_incomePlotCounter;
 		m_locationTimer.stop();
 	}
+    CommonParams::Parameters params;
+    params.set_spectrums(state);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+
+    emit sendCPPacketData(outData);
 }
 
 bool LocationSetupWidgetController::getReceiveSpectrums() const

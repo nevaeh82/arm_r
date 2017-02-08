@@ -15,6 +15,8 @@
 #include "RdsPacket.pb.h"
 #include "SolverPacket1.pb.h"
 
+#include "CPPacket.pb.h"
+
 class LocationSetupWidgetController : public QObject, public IController<LocationSetupWidget>,
 									 public IRpcListener
 {
@@ -80,6 +82,7 @@ signals:
 	void onMethodCalledSignal(QString, QVariant);
 
 	void sendRdsData(QByteArray);
+    void sendCPPacketData(QByteArray);
 	void onSignalUpdate();
 
 	void analysisChannelChanged(int);

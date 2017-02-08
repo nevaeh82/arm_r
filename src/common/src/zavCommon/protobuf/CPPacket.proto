@@ -1,0 +1,20 @@
+option optimize_for = LITE_RUNTIME;
+
+package CommonParams;
+
+message Parameters
+{
+	optional int32 frequency = 1;
+	optional bool mergeSysCtrl = 2;
+	optional bool spectrums = 3;
+	optional bool convolution = 4;
+	optional bool doppler = 5;
+	optional bool humps = 6;
+	optional int32 mode = 7;
+	optional bool sleep = 8;
+	optional bool panorama = 9;
+	optional int32 startfreq = 10;
+	optional int32 finishfreq = 11;
+}
+
+	

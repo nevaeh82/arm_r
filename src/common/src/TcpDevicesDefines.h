@@ -15,7 +15,7 @@ enum DeviceTypesEnum
 	ARMR_TCP_SERVER = 4,
 	CLIENT_TCP_SERVER = 5,
 	RDS_TCP_DEVICE = 6,
-	SOLVER_CLIENT_DEVICE = 7
+    SOLVER_CLIENT_DEVICE = 7
 };
 
 #define FLAKON_COORDINATE_COUNTER "flakonCoordinateCounter"
@@ -24,5 +24,6 @@ enum DeviceTypesEnum
 #define FLAKON_ROUTE_ID		201
 #define RDS_ROUTE_ID		203
 #define SOLVER_ROUTE_ID		204
+#define RDS_SETTINGS_ID     205
 
 #endif // TCPDEVICESDEFINES_H
