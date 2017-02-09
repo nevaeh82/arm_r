@@ -27,11 +27,49 @@ QByteArray TcpRdsSettingsCoder::decode(const MessageSP message)
          settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
          msg.ParseFromArray( msgData.data(), msgData.size() );
+         if(msg.has_convolution())
+         {
+             settings.setValue("Convolution", msg.convolution());
+         }
+         if(msg.has_doppler())
+         {
+             settings.setValue("Doppler", msg.doppler());
+         }
+         if(msg.has_humps())
+         {
+             settings.setValue("Humps", msg.humps());
+         }
+         if(msg.has_frequency())
+         {
+             settings.setValue("Frequency", msg.frequency());
+         }
+         if(msg.has_startfreq())
+         {
+             settings.setValue("StartFrequency", msg.startfreq());
+         }
+         if(msg.has_finishfreq())
+         {
+             settings.setValue("FinishFrequency", msg.finishfreq());
+         }
+         if(msg.has_mergesysctrl())
+         {
+             settings.setValue("MergeSysCtrl", msg.mergesysctrl());
+         }
+         if(msg.has_mode())
+         {
+             settings.setValue("Mode", msg.mode());
+         }
+         if(msg.has_panorama())
+         {
+             settings.setValue("Panorama", msg.panorama());
+         }
+         if(msg.has_sleep())
+         {
+             settings.setValue("Sleep", msg.sleep());
+         }
          if(msg.has_spectrums())
          {
-             bool isSpectrums = msg.spectrums();
-             log_debug(QString("Spectrum = %1").arg(isSpectrums));
-             settings.setValue("Spectrum", isSpectrums);
+             settings.setValue("Spectrum", msg.spectrums());
          }
 
          return msgData;

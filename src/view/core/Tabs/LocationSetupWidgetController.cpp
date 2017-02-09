@@ -407,6 +407,12 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq)
 
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
+    CommonParams::Parameters params;
+    params.set_frequency(freq);
+    QByteArray outData;
+    outData.resize( params.ByteSize() );
+    params.SerializeToArray( outData.data(), outData.size() );
+    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double bandwidth)
@@ -433,13 +439,6 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double band
 	m_view->setLocationData(m_locationMessage);
 
 	emit onStateChanged();
-
-    CommonParams::Parameters params;
-    params.set_frequency(freq);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
