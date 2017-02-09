@@ -331,7 +331,7 @@
     <message>
         <location filename="ControlPanel.ui" line="819"/>
         <source>Manual</source>
-        <translation>Ручное</translation>
+        <translation>Ручной</translation>
     </message>
     <message>
         <location filename="ControlPanel.ui" line="648"/>
@@ -385,6 +385,11 @@
     </message>
     <message>
         <location filename="ControlPanel.ui" line="842"/>
+        <source>Work mode: </source>
+        <translation>Режим работы: </translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="849"/>
         <source>Sleep mode</source>
         <translation>Режим &quot;Сон&quot;</translation>
     </message>
@@ -1887,13 +1892,6 @@
         <location filename="Tabs/TabManager.cpp" line="821"/>
         <source>Record Signal result</source>
         <translation>Результат записи сигнала</translation>
-    </message>
-    <message>
-        <location filename="Tabs/TabManager.cpp" line="821"/>
-        <source>Record Signal result: 
- %1</source>
-        <translation>Запись сигнала результат: 
- %1</translation>
     </message>
     <message>
         <location filename="Tabs/TabManager.cpp" line="973"/>

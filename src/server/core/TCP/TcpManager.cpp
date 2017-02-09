@@ -39,8 +39,8 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 	connect(this, SIGNAL(threadTerminateSignal()), pServerThread, SLOT(quit()));
 	connect(this, SIGNAL(threadTerminateSignal()), m_pServer, SLOT(deleteLater()));
 	connect(pServerThread, SIGNAL(finished()), pServerThread, SLOT(deleteLater()));
-	m_pServer->moveToThread(pServerThread);
-	pServerThread->start();
+    m_pServer->moveToThread(pServerThread);
+    pServerThread->start();
 
 	QThread* clientServerThread = new QThread;
 	m_clientTcpServer = new ClientTcpServer;

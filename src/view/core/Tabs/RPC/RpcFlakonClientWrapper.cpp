@@ -24,6 +24,7 @@ RpcFlakonClientWrapper::RpcFlakonClientWrapper(QObject *parent) :
 
 
 	connect(this, SIGNAL(sendSolverSetupSettingsSignal(QByteArray)), this, SLOT(sendSolverSetupSettingsSlot(QByteArray)));
+
 	connect(this, SIGNAL(sendRdsProtoSignal(QByteArray)), this, SLOT(sendRdsProtoSlot(QByteArray)));
 }
 

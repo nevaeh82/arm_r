@@ -57,6 +57,8 @@ public:
 	bool sleepMode() const;
 	void setSleepMode(bool val);
 
+    int getFreqSBValue();
+
 signals:
 	void commonFreqChangedSignal(double value);
 	void onPanoramaEnable(bool, int, int);

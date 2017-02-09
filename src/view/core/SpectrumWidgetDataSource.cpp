@@ -7,6 +7,8 @@
 #define TO_HZ				1000000
 #define BANDWIDTH_SINGLE	20000000
 
+#define GPS_FREQUENCY       1575
+
 #define SLEEP_MODE_TIMEOUT 10000
 
 SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObject *parent)
@@ -352,6 +354,15 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 	int index = dataProccess(vecFFT, isComplex);
 
+    int gpsFreq = data.central_frequency();
+    int gpsLevel = vecFFT.at(vecFFT.size()/2).y();
+
+    if(gpsFreq == GPS_FREQUENCY) {
+        if( gpsLevel > 50 && m_id == 1 ) {
+
+        }
+    }
+
 	if(index < 0) {
 		emit onDrawComplete();
 		return;
@@ -421,7 +432,7 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		}
 		m_spectrumCounter++;
 	}
-	return;
+    return;
 }
 
 void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)

@@ -40,6 +40,7 @@ public:
 
 	void setDopplerVisible(bool) {}
 
+    void paintEvent(QPaintEvent *);
 private:
 	QPixmap* m_red;
 	QPixmap* m_green;

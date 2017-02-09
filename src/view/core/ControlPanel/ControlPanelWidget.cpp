@@ -217,7 +217,12 @@ bool ControlPanelWidget::sleepMode() const
 
 void ControlPanelWidget::setSleepMode(bool val)
 {
-	ui->cbSleepMode->setChecked(val);
+    ui->cbSleepMode->setChecked(val);
+}
+
+int ControlPanelWidget::getFreqSBValue()
+{
+    return ui->commonFreqSB->value();
 }
 
 void ControlPanelWidget::paintEvent(QPaintEvent *) {

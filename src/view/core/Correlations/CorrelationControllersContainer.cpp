@@ -25,7 +25,7 @@ int CorrelationControllersContainer::init(int count, int type)
 			connect((CorrelationIndicatorWidget*)cor, SIGNAL(signalExpand()),
 					this, SIGNAL(signalExpand()));
 
-            connect(m_controlPanel, SIGNAL(skoChanged(float)), cor, SLOT());
+            connect(m_controlPanel, SIGNAL(skoChanged(float)), cor, SLOT(setNewSko(float)));
 		}
 		CorrelationWidgetController* controller = new CorrelationWidgetController(type, this);
 		controller->appendView(cor);

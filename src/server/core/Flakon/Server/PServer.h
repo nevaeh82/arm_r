@@ -55,6 +55,7 @@ public:
 
 signals:
 //    void signalGetData(rpc_flakon_msg nsg);
+    void signalDataInternal(QByteArray);
 
 	void finished();
 
@@ -68,7 +69,7 @@ private slots:
 
 	void slotReadClient();
 
-	void _slotGetData(QByteArray& data);
+    void _slotGetData(QByteArray data);
 
 private:
 	QTcpServer *tcpServer;

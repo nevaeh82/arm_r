@@ -3,6 +3,9 @@
 
 #include <Logger/Logger.h>
 
+#include "RDSExchange.h"
+#include "SolverPacket1.pb.h"
+
 PServer::PServer(int nPort, QObject* parent)
 	: QObject(parent)
 	, tcpServer(0)
@@ -13,18 +16,18 @@ PServer::PServer(int nPort, QObject* parent)
 	_id = -1;
 	_type = 1;
 
+    connect(this, SIGNAL(signalDataInternal(QByteArray)), this, SLOT(_slotGetData(QByteArray)));
 }
 
 void PServer::startServer()
 {
-	int nPort = 10240;
+    int nPort = 10240;
 	tcpServer = new QTcpServer(this);
 	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(slotNewSocket()));
 	if (!tcpServer->listen(QHostAddress::Any, nPort) && server_status==0)
 	{
 		qDebug() <<  QObject::tr("Unable to start the server: %1.").arg(tcpServer->errorString());
-	} else
-	{
+    } else {
 		server_status=1;
 		qDebug() << tcpServer->isListening() << "TCPSocket listen on port";
 	}
@@ -50,7 +53,6 @@ PServer::~PServer()
 		tcpServer->close();
 		server_status=0;
 	}
-//    QCoreApplication::processEvents();
 
 	emit finished();
 }
@@ -75,24 +77,18 @@ int PServer::get_type()
 	return _type;
 }
 
-//void PServer::send_data(QSharedPointer<IMessageOld> msg_ptr)
-//{
-//	emit signalGetData(msg_ptr);
-//}
-
 void PServer::onMessageReceived(const quint32 type, const QString &deviceType, const MessageSP argument)
 {
 	QString messageType = argument->type();
 	QVariant data = QVariant( argument->data() );
 
 	switch(type) {
-		case FLAKON_TCP_DEVICE:
-			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO)
+        case CLIENT_TCP_SERVER:
+            if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA)
 			{
-//				log_info(QString("This thread = 0x%1").arg( (int)QThread::currentThread(), 16 ));
-
 				QByteArray dataSolver = data.toByteArray();
-				_slotGetData(dataSolver);
+
+                emit signalDataInternal(dataSolver);
 			}
 			break;
 		default:
@@ -105,7 +101,6 @@ void PServer::slotNewSocket()
 {
 	if(server_status==1 && (SClients.size()<5))
 	{
-//        qDebug() << QString::fromUtf8("У нас новое соединение!");
 		QTcpSocket* clientSocket=tcpServer->nextPendingConnection();
 		int idusersocs=clientSocket->socketDescriptor();
 		SClients[idusersocs]=clientSocket;
@@ -137,77 +132,88 @@ void PServer::slotReadClient()
 {
 }
 
-void PServer::_slotGetData(QByteArray& data)
+void PServer::_slotGetData(QByteArray data)
 {
-	QList<UAVPositionDataEnemy> list;
-	int sourceType = -1;
+
+    SolverProtocol::Packet solutionPacket;
+
+    if( !solutionPacket.ParseFromArray(data.data(), data.size()) ) {
+        return;
+    }
+
+    SolverProtocol::Packet_DataFromSolver_SolverSolution dPkt;
+    if(solutionPacket.datafromsolver().has_solution_automatic_altitude()) {
+        dPkt = solutionPacket.datafromsolver().solution_automatic_altitude();
+    } else if(solutionPacket.datafromsolver().has_solution_manual_altitude()) {
+        dPkt = solutionPacket.datafromsolver().solution_manual_altitude();
+    } else {
+        return;
+    }
+
+    for(int i = 0; i<dPkt.trajectory_size(); i++) {
+
+        UAVPositionDataEnemy uav;
+        SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory tPkt = dPkt.trajectory(i);
+        SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mPkt =
+                            tPkt.motionestimate(tPkt.motionestimate_size()-1);
+
+        uav.latLon.setY( mPkt.coordinates().lon() );
+        uav.latLon.setX( mPkt.coordinates().lat() );
+
+        uav.latLonStdDev.setY( mPkt.coordinates_acc().lon_acc() );
+        uav.latLonStdDev.setX( mPkt.coordinates_acc().lat_acc() );
 
 
-	QDataStream ds(data);
-	ds >> list;
-	ds >> sourceType;
+        double sko1 = qSqrt(uav.latLonStdDev.x()*uav.latLonStdDev.x() + uav.latLonStdDev.y()*uav.latLonStdDev.y());
 
-	if(list.isEmpty())
-	{
-		return;
-	}
+        EMS::EagleMessage e_msg;
+        QString type = "POSITION_ANSWER_MESSAGE";
+        QDateTime dt(QDateTime::currentDateTime());
+        qint64 d = 0; //datetimer
+        QString name = "ARM_R";
+        QString label = "ARM_R1";
+        e_msg.set_type(type.toStdString().c_str(), type.size());
+        e_msg.set_sendername(name.toStdString().c_str(), name.size());
+        e_msg.set_datetime(d);
+        e_msg.add_label(label.toStdString().c_str(), label.size());
 
-	UAVPositionDataEnemy uav = list.at(list.size() - 1);
+        Storm::PositionAnswerMessage d_msg;
+        d_msg.set_requestid(50);
+        d_msg.set_sourceid(tPkt.central_frequency());
+        d_msg.set_datetime(0);
+        d_msg.set_longitude(uav.latLon.y());
+        d_msg.set_latitude(uav.latLon.x());
+        d_msg.set_quality(sko1);
 
-	if(uav.latLon.isNull())
-	{
-		return;
-	}
+        std::string inner = d_msg.SerializeAsString();
 
-	double sko1 = qSqrt(uav.latLonStdDev.x()*uav.latLonStdDev.x() + uav.latLonStdDev.y()*uav.latLonStdDev.y());
+        e_msg.set_innermessage(inner);
 
-	EMS::EagleMessage e_msg;
-	QString type = "POSITION_ANSWER_MESSAGE";
-	QDateTime dt(QDateTime::currentDateTime());
-	qint64 d = 0; //datetime
-	QString name = "ARM_R";
-	QString label = "ARM_R1";
-	e_msg.set_type(type.toStdString().c_str(), type.size());
-	e_msg.set_sendername(name.toStdString().c_str(), name.size());
-	e_msg.set_datetime(d);
-	e_msg.add_label(label.toStdString().c_str(), label.size());
+        std::string message = e_msg.SerializeAsString();
 
-	Storm::PositionAnswerMessage d_msg;
-	d_msg.set_requestid(50);
-	d_msg.set_sourceid(50);
-	d_msg.set_datetime(0);
-	d_msg.set_longitude(uav.latLon.y());
-	d_msg.set_latitude(uav.latLon.x());
-	d_msg.set_quality(sko1);
+        QByteArray ret;
 
-	std::string inner = d_msg.SerializeAsString();
+        unsigned int size = message.size();
+        ret.append(reinterpret_cast<char *>(&size), sizeof(size));
+        ret.append(message.c_str(), message.size());
 
-	e_msg.set_innermessage(inner);
+        if (!SClients.isEmpty())
+        {
+            QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
+            while (i != SClients.constEnd())
+            {
+                QTcpSocket* clientSocket = i.value();
+                clientSocket->write(ret);
 
-	std::string message = e_msg.SerializeAsString();
-
-	QByteArray ret;
-
-	unsigned int size = message.size();
-	ret.append(reinterpret_cast<char *>(&size), sizeof(size));
-	ret.append(message.c_str(), message.size());
-
-	if (!SClients.isEmpty())
-	{
-		QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
-		while (i != SClients.constEnd())
-		{
-			QTcpSocket* clientSocket = i.value();
-			clientSocket->write(ret);
-
-			if ((clientSocket->bytesToWrite())>(100*1024*1024))
-			{
-				QMap<int,QTcpSocket *>::iterator temp = i;
-				++i;
-				SClients.erase(temp);
-				continue;
-			}
-			++i;
-		}
-	}
+                if ((clientSocket->bytesToWrite())>(100*1024*1024))
+                {
+                    QMap<int,QTcpSocket *>::iterator temp = i;
+                    ++i;
+                    SClients.erase(temp);
+                    continue;
+                }
+                ++i;
+            }
+        }
+    }
 }
