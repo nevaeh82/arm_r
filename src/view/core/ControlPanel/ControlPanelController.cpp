@@ -13,8 +13,9 @@
 #define TIMERCHECK_INTERVAL_DETECTED 2000
 #define TIMERINTERVAL_KEY "ControlPanel"
 
-ControlPanelController::ControlPanelController(QObject *parent)
-	: QObject(parent)
+ControlPanelController::ControlPanelController(int tabId, QObject *parent)
+	: QObject(parent),
+	  m_tabId(tabId)
 {
 	m_view = NULL;
 	m_dbManager = NULL;
@@ -65,15 +66,17 @@ void ControlPanelController::setLocationSetupController(LocationSetupWidgetContr
 	m_setupController = controller;
 
 	connect(m_view, SIGNAL(signalReceiveSpectrums(bool)), m_setupController, SLOT(slotSetReceiveSpectrums(bool)));
-    connect(m_view, SIGNAL(signalChangeMode(int)), m_setupController, SLOT(slotChangeMode(int)));
-    connect(m_view, SIGNAL(signalPanorama(bool)), m_setupController, SLOT(slotPanorama(bool)));
-    connect(m_view, SIGNAL(signalSetStartFreq(int)), m_setupController, SLOT(slotSetStartFreq(int)));
-    connect(m_view, SIGNAL(signalSetEndFreq(int)), m_setupController, SLOT(slotSetEndFreq(int)));
-    connect(m_view, SIGNAL(signalSystemMerge(bool)), m_setupController, SLOT(slotSystemMerge(bool)));
-    connect(m_view, SIGNAL(signalConvolution(bool)), m_setupController, SLOT(slotSetConvolution(bool)));
+	connect(this, SIGNAL(signalReceiveSpectrums(bool)), m_setupController, SLOT(slotSetReceiveSpectrums(bool)));
+	connect(m_view, SIGNAL(signalChangeMode(int)), m_setupController, SLOT(slotChangeMode(int)));
+	connect(m_view, SIGNAL(signalPanorama(bool)), m_setupController, SLOT(slotPanorama(bool)));
+	connect(m_view, SIGNAL(signalSetStartFreq(int)), m_setupController, SLOT(slotSetStartFreq(int)));
+	connect(m_view, SIGNAL(signalSetEndFreq(int)), m_setupController, SLOT(slotSetEndFreq(int)));
+	connect(m_view, SIGNAL(signalSystemMerge(bool)), m_setupController, SLOT(slotSystemMerge(bool)));
+	connect(m_view, SIGNAL(signalConvolution(bool)), m_setupController, SLOT(slotSetConvolution(bool)));
 	connect(m_view, SIGNAL(signalDoppler(bool)), m_setupController, SLOT(slotSetDoppler(bool)));
 	connect(m_view, SIGNAL(signalHumps(bool)), m_setupController, SLOT(slotSetHumps(bool)));
 	connect(this, SIGNAL(signalSetComonFreq(double)), m_setupController, SLOT(slotOnSetCommonFreq(double)));
+
 
 	connect(m_setupController, SIGNAL(signalSettingsChanged()), this, SLOT(setLocationSettings()));
 
@@ -685,7 +688,43 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 		stream >> status;
 
 		m_view->changeQualityStatus(status);
-
+	}
+	if (method == RPC_SLOT_SERVER_SEND_SETTINGS) {
+		CommonParams::Parameters msg;
+		QByteArray data = argument.toByteArray();
+		msg.ParseFromArray( data.data(), data.size() );
+		if(msg.serverid() != m_tabId)
+		{
+			return;
+		}
+		if(msg.has_startfreq())
+		{
+			m_view->setStartFreq(msg.startfreq());
+		}
+		if(msg.has_finishfreq())
+		{
+			m_view->setStartFreq(msg.finishfreq());
+		}
+		if(msg.has_mergesysctrl())
+		{
+			m_view->setSystemMerge(msg.mergesysctrl());
+		}
+		if(msg.has_mode())
+		{
+			m_view->setMode(msg.mode());
+		}
+		if(msg.has_panorama())
+		{
+			m_view->setPanorama(msg.panorama());
+		}
+		if(msg.has_sleep())
+		{
+			m_view->setSleepMode(msg.sleep());
+		}
+		if(msg.has_spectrums())
+		{
+			m_view->setReceiveSpectrums(msg.spectrums());
+		}
 	}
 }
 

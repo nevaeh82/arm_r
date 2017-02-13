@@ -42,11 +42,22 @@ public:
 	void changeCorrelationStatusActive(const bool isActive);
 
 	void changeQualityStatus(const int status);
+
+	void setStartFreq(int val);
+	void setfinishFreq(int val);
+	void setSystemMerge(bool state);
+	void setMode(int val);
+	void setPanorama(bool state);
+
+
+
 	void setReceiveSpectrums(bool);
+	void setCentralFreqValue(double freq);
+	void setSleepMode(bool val);
 
 	void setLocationSettings(RdsProtobuf::ClientMessage_OneShot_Location msg);
 
-	void setCentralFreqValue(double freq);
+
 
 	bool getParoramaState(double& start, double& end);
 
@@ -55,7 +66,7 @@ public:
 	void setSolverConnectState(bool b);
 
 	bool sleepMode() const;
-	void setSleepMode(bool val);
+
 
     int getFreqSBValue();
 

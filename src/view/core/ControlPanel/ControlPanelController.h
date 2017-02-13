@@ -59,6 +59,7 @@ class ControlPanelController : public QObject, public IControlPanelController, p
 	};
 
 private:
+	int m_tabId;
 	ControlPanelWidget* m_view;
 
 	IDbManager* m_dbManager;
@@ -109,7 +110,7 @@ private:
 	int findResultInList(solverResult res);
 
 public:
-	explicit ControlPanelController(QObject *parent = 0);
+	explicit ControlPanelController(int tabId, QObject *parent = 0);
 	virtual ~ControlPanelController();
 
 	void appendView(ControlPanelWidget* view);
@@ -152,6 +153,8 @@ signals:
 	void signalSystemMerge(bool);
 
     void skoChanged(float);
+
+	void signalReceiveSpectrums(bool);
 
 public slots:
 

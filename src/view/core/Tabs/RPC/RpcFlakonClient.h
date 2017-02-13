@@ -33,6 +33,7 @@ public:
 	//void sendWorkMode(const int mode, const bool isOn);
 	void sendRdsProto(const QByteArray &data);
     void sendCPPacketProto(const QByteArray &data);
+	void sendServerRequestSettings(const int &id);
 	QMutex m_receiverMutex;
 
 
@@ -57,6 +58,8 @@ private slots:
 	void sloverAnswerReceived1(QByteArray data);
 
 	void sloverConnectState(bool state);
+
+	void slotSettingsFromServer(QByteArray data);
 
 public:
 	virtual void requestGetStationList(const QString& filename);

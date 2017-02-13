@@ -108,6 +108,7 @@ private slots:
 
 	void slotSolverConnectionStatus(int status);
 	void slotRpcClientConnected();
+	void slotSendRpcClientSettings(int id);
 	void slotSendSolverStatus();
 
 };

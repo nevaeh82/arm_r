@@ -33,6 +33,9 @@ public:
 
     virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
+public:
+	QByteArray getSettings(int id);
+
 private:
     TcpRdsSettingsCoder* m_coder;
 };

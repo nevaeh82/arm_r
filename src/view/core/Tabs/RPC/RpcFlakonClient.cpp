@@ -47,7 +47,7 @@ bool RpcFlakonClient::start(quint16 port, QHostAddress ipAddress)
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_SOLVER_ERRORS, this, SLOT(solverErrorsReceived(QByteArray)));
 
 	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, this, SLOT(sloverConnectState(bool)));
-
+	m_clientPeer->attachSlot(RPC_SLOT_SERVER_SEND_SETTINGS, this, SLOT(slotSettingsFromServer(QByteArray)));
 	m_clientPeer->attachSignal(this, SIGNAL(signalEnableCorrelation(int,float,bool)), RPC_METHOD_SS_CORRELATION);
 
 
@@ -114,7 +114,12 @@ void RpcFlakonClient::sendRdsProto(const QByteArray &data)
 
 void RpcFlakonClient::sendCPPacketProto(const QByteArray &data)
 {
-    m_clientPeer->call( RPC_METHOD_SEND_CPPACKET_PROTO, data );
+	m_clientPeer->call( RPC_METHOD_SEND_CPPACKET_PROTO, data );
+}
+
+void RpcFlakonClient::sendServerRequestSettings(const int &id)
+{
+	m_clientPeer->call( RPC_METHOD_SEND_SERVER_REQUEST_SETTINGS, id );
 }
 
 //void RpcFlakonClient::sendWorkMode(const int mode, const bool isOn )
@@ -198,6 +203,13 @@ void RpcFlakonClient::sloverConnectState(bool state)
 {
 	foreach( IRpcListener* listener, m_receiversList ) {
 		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, state );
+	}
+}
+
+void RpcFlakonClient::slotSettingsFromServer(QByteArray data)
+{
+	foreach( IRpcListener* listener, m_receiversList ) {
+		listener->onMethodCalled( RPC_SLOT_SERVER_SEND_SETTINGS, data );
 	}
 }
 

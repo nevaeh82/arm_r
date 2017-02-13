@@ -22,7 +22,7 @@ class LocationSetupWidgetController : public QObject, public IController<Locatio
 {
 	Q_OBJECT
 public:
-	explicit LocationSetupWidgetController(QObject *parent = 0);
+	explicit LocationSetupWidgetController(int tabId, QObject *parent = 0);
 	virtual ~LocationSetupWidgetController();
 
 	void setPlatformList(const QStringList& platformList);
@@ -54,6 +54,7 @@ private:
 
 	bool m_requestReady;
 	bool m_sleepMode;
+	int m_tabId;
 
 public:
 	void appendView(LocationSetupWidget* view);
@@ -77,6 +78,7 @@ public slots:
 	void slotOnSetCommonFreq(double freq, double bandwidth);
 
 	void updateLocation(RdsProtobuf::ClientMessage_OneShot_Location msg);
+	void updatelocationSettings(QByteArray data);
 
 signals:
 	void onMethodCalledSignal(QString, QVariant);

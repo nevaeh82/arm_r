@@ -4,17 +4,18 @@ package CommonParams;
 
 message Parameters
 {
-	optional int32 frequency = 1;
-	optional bool mergeSysCtrl = 2;
-	optional bool spectrums = 3;
-	optional bool convolution = 4;
-	optional bool doppler = 5;
-	optional bool humps = 6;
-	optional int32 mode = 7;
-	optional bool sleep = 8;
-	optional bool panorama = 9;
-	optional int32 startfreq = 10;
-	optional int32 finishfreq = 11;
+	required uint32 serverId = 1;
+	optional int32 frequency = 2;
+	optional bool mergeSysCtrl = 3;
+	optional bool spectrums = 4;
+	optional bool convolution = 5;
+	optional bool doppler = 6;
+	optional bool humps = 7;
+	optional int32 mode = 8;
+	optional bool sleep = 9;
+	optional bool panorama = 10;
+	optional int32 startfreq = 11;
+	optional int32 finishfreq = 12;
 }
 
 	

@@ -16,6 +16,7 @@
 #define RPC_METHOD_SOLVER_SETTINGS_SETUP        "rpc_slot_solver_settings_setup"
 #define RPC_METHOD_SEND_RDS_PROTO				"rpc_slot_send_rds_proto"
 #define RPC_METHOD_SEND_CPPACKET_PROTO          "rpc_slot_send_cppacket_proto"
+#define RPC_METHOD_SEND_SERVER_REQUEST_SETTINGS	"rpc_slot_send_server_request_settings"
 
 #define RPC_METHOD_WORK_MODE       "rpc_slot_work_mode"
 #define RPC_METHOD_WORK_MODE_M       "rpc_slot_work_mode_m"
@@ -51,6 +52,7 @@
 #define RPC_SLOT_SERVER_SEND_SOLVER_ERRORS			"rpc_slot_server_send_solver_errors"
 
 #define RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE	"rpc_slot_server_send_solver_connect_state"
+#define RPC_SLOT_SERVER_SEND_SETTINGS				"rpc_slot_server_send_settings"
 
 #define RPC_SLOT_SERVER_SEND_RDS_DATA				"rpc_slot_server_send_rds_data"
 
