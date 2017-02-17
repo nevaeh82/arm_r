@@ -68,6 +68,9 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
 
 	connect(this, SIGNAL(signalMethodCalled(QString,QVariant)), this, SLOT(slotMethodCalled(QString,QVariant)));
+
+	connect(m_locationSetupController, SIGNAL(signalNIIPPWorkStatus(QString, bool)),
+			this, SIGNAL(signalNIIPPWorkStatus(QString,bool)));
 }
 
 TabManager::~TabManager()
@@ -635,6 +638,14 @@ int TabManager::getTabId()
 QTabWidget *TabManager::getTabWidgetZone()
 {
 	return m_tabWidgetZone;
+}
+
+void TabManager::setNIIPPAlarmMode()
+{
+	if(m_panelController) {
+		m_panelController->changeFrequency(6000);
+		m_panelController->setManualMode();
+	}
 }
 
 void TabManager::initRpcConfig()

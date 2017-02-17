@@ -12,6 +12,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QPainter>
+#include <QTimer>
 
 #include "RDSExchange.h"
 
@@ -31,6 +32,7 @@ private:
 
 	QString m_borderStyle;
 
+	QTimer* m_alarmTimer;
 protected:
 	void paintEvent(QPaintEvent *);
 
@@ -41,7 +43,7 @@ public:
 	void changeCorrelationStatus(QString correlationValue);
 	void changeCorrelationStatusActive(const bool isActive);
 
-	void changeQualityStatus(const int status);
+	void changeQualityStatus(const int status, bool isMoving = false, float freq = 0);
 	void setReceiveSpectrums(bool);
 
 	void setLocationSettings(RdsProtobuf::ClientMessage_OneShot_Location msg);
@@ -59,6 +61,9 @@ public:
 
     int getFreqSBValue();
 
+	void applyManualMode();
+
+	void alarmAimVisible(bool val);
 signals:
 	void commonFreqChangedSignal(double value);
 	void onPanoramaEnable(bool, int, int);
@@ -96,6 +101,8 @@ private slots:
 	void showError(QString str);
 	void showConfirm(QString);
 	void showLocationError(QString str);
+
+	void slotAlarmTimeout();
 
 public slots:
 	void slotChangeCommonFreq(double value);

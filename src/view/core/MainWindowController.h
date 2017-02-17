@@ -91,6 +91,8 @@ private slots:
 
 	void onSetupLocationSettings();
 
+	void slotNIIPPStatus(QString, bool);
+
 };
 
 #endif // MAINWINDOWCONTROLLER_H

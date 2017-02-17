@@ -7,6 +7,50 @@
 #include "ARM_R_Application.h"
 #include "ARM_R_Srv.h"
 
+
+#include <Windows.h>
+#include <Dbghelp.h>
+#include <stdio.h>
+
+#include <Logger/Logger.h>
+
+typedef QVector<QPointF>         rpc_send_points_vector;
+
+HWND hwnd;
+static char * g_output = NULL;
+static LPTOP_LEVEL_EXCEPTION_FILTER g_prev = NULL;
+
+LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
+{
+	 //SymCleanup(GetCurrentProcess());
+
+//    MessageBoxA(hwnd,
+//                QObject::tr("Error").toStdString().c_str(),
+//                QObject::tr("Error").toStdString().c_str(),
+//                MB_APPLMODAL);
+
+	QProcess p;
+	p.start("a.bat");
+	p.waitForStarted(10000);
+
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+
+static void
+backtrace_register(void)
+{
+	LoadLibraryA("msvcrt.dll");
+
+	DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+	SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
+
+	if (g_output == NULL) {
+		g_output = (char*)malloc(sizeof(long));
+		g_prev = SetUnhandledExceptionFilter(exception_filter);
+	}
+}
+
+
 int main(int argc, char *argv[])
 {
 	Logger().setupLogger("logs/ARM_R_server.log");
@@ -17,6 +61,9 @@ int main(int argc, char *argv[])
       }
     int id = QString(*argv[1]).toInt();
 
+
+	hwnd = ::GetDesktopWindow();
+	backtrace_register();
 
 	ARM_R_Application a(argc, argv);
 //	if( a.isRunning() ) {

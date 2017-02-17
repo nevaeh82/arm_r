@@ -1,6 +1,8 @@
 #include "ControlPanelWidget.h"
 #include "ui_ControlPanel.h"
 
+#include <QSound>
+
 #define BORDER_NORMAL "rgb(49, 49, 49);"
 #define BORDER_ERROR "rgb(255, 0, 0);"
 #define BORDER_WARNING "rgb(255, 255, 0);"
@@ -53,6 +55,11 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 									}" );
 
 	setStyleSheet(m_borderStyle.arg(BORDER_NORMAL));
+
+	alarmAimVisible(false);
+
+	m_alarmTimer = new QTimer(this);
+	connect(m_alarmTimer, SIGNAL(timeout()), this, SLOT(slotAlarmTimeout()));
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -104,6 +111,18 @@ void ControlPanelWidget::showLocationError(QString str)
 	}
 }
 
+void ControlPanelWidget::slotAlarmTimeout()
+{
+	alarmAimVisible(false);
+	m_alarmTimer->stop();
+}
+
+void ControlPanelWidget::applyManualMode()
+{
+	ui->cbMode->setCurrentIndex(0);
+	slotChangeMode(0);
+}
+
 void ControlPanelWidget::slotChangeMode(int index)
 {
 	switch(index)
@@ -141,7 +160,7 @@ void ControlPanelWidget::changeCorrelationStatusActive(const bool isActive)
 	}
 }
 
-void ControlPanelWidget::changeQualityStatus(const int status)
+void ControlPanelWidget::changeQualityStatus(const int status, bool isMoving, float freq)
 {
 	if(status) {
 		ui->solverQualityLB->setPixmap(m_pmRoundGreen->scaled(16,16,Qt::KeepAspectRatio));
@@ -149,6 +168,23 @@ void ControlPanelWidget::changeQualityStatus(const int status)
 	else {
 		ui->solverQualityLB->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 	}
+
+	if(isMoving) {
+		alarmAimVisible(true);
+		ui->labelAlarm->setText(tr("Moving aim founded!!! Freq: %1").arg(freq));
+		if(!ui->sounOffCB->isChecked()) {
+			QSound::play("a.wav");
+		}
+		m_alarmTimer->start(10000);
+	} else {
+		alarmAimVisible(false);
+	}
+}
+
+void ControlPanelWidget::alarmAimVisible(bool val)
+{
+	ui->labelAlarm->setVisible(val);
+	ui->sounOffCB->setVisible(val);
 }
 
 void ControlPanelWidget::setReceiveSpectrums(bool val)

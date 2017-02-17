@@ -18,6 +18,8 @@ RpcFlakonClient::RpcFlakonClient(QObject *parent) :
 	//m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_STATION_LIST, this, SLOT(receivedStationListSlot(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_CONFIG_RDS_ANSWER, this, SLOT(receivedLocSystem(QByteArray)));
 	m_clientPeer->attachSlot(RPC_METHOD_WORK_MODE, this, SLOT(receivedWorkMode(QByteArray)));
+
+	m_clientPeer->attachSlot(RPC_METHOD_NIIPP_WORK_STATUS, this, SLOT(receivedNIIPPStatus(QByteArray)));
 	//m_clientPeer->attachSlot(RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION, this, SLOT(receivedDbConfigurationSlot(QByteArray)));
 
 	//	connect( m_clientPeer, SIGNAL(connectedToServer()), SLOT(registerRoute()) );
@@ -244,6 +246,16 @@ void RpcFlakonClient::receivedWorkMode(QByteArray data)
 	int val;
 	ds >> val;
 	return;
+}
+
+void RpcFlakonClient::receivedNIIPPStatus(QByteArray data)
+{
+	m_receiverMutex.lock();
+
+	foreach (IRpcListener* listener, m_receiversList) {
+		listener->onMethodCalled(RPC_METHOD_NIIPP_WORK_STATUS, data);
+	}
+	m_receiverMutex.unlock();
 }
 
 void RpcFlakonClient::receivedDbConfigurationSlot(QByteArray data)

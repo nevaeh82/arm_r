@@ -34,6 +34,8 @@
 #define RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION			"rpcMethodConfigRequsetGetDBConfiguration"
 #define RPC_METHOD_CONFIG_ANSWER_DB_CONFIGURATION				"rpcMethodConfigAnswerDBConfiguration"
 
+#define RPC_METHOD_NIIPP_WORK_STATUS "rpcMethodNIIPPWorkStatus"
+
 ///server
 #define RPC_SLOT_SERVER_SEND_POINTS                 "rpc_slot_server_send_points"
 #define RPC_SLOT_SERVER_SEND_DETECTED_BANDWIDTH		"rpc_slot_server_send_detected_bandwidth"

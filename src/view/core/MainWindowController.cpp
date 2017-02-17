@@ -270,6 +270,12 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	connect(tabManager, SIGNAL(readyToStart(int)), this, SLOT(startTabManger(int)));
 	connect(m_listForm, SIGNAL(onClosing()), tabManager, SLOT(slotUpdateDBStationsLists()));
 
+	connect(tabManager, SIGNAL(signalNIIPPWorkStatus(QString,bool)),
+			m_view, SLOT(slotNIIPPStatus(QString, bool)));
+
+	connect(tabManager, SIGNAL(signalNIIPPWorkStatus(QString,bool)),
+			this, SLOT(slotNIIPPStatus(QString, bool)));
+
 	QAction* settingsAction = m_view->appendLocationSetupAction(id);
 	connect(settingsAction, SIGNAL(triggered(bool)), tabManager, SLOT(slotShowLocationSetup()));
 
@@ -343,6 +349,15 @@ void MainWindowController::onSetupLocationSettings()
 
 		manager->setCurrentOptions(msg, isPanorama, panoramaStart, panoramaEnd);
 	}
+}
+
+void MainWindowController::slotNIIPPStatus(QString, bool status)
+{
+//	if(status) {
+//		foreach (auto tab, m_mapTabManager.values()) {
+//			tab->setNIIPPAlarmMode();
+//		}
+//	}
 }
 
 void MainWindowController::startTabManger(int id)

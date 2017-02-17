@@ -116,6 +116,8 @@ public:
 	void initRpcConfig();
 	void startTab(SolverResultWidgetController* resultSolver, SolverErrorsWidgetController* errorSolver, SolverSetupWidgetController* setupSolver);
 
+	void setNIIPPAlarmMode();
+
 	int getChannelCount();
 
 	void setRpcFlakon(const quint16& port, const QString& host);
@@ -149,7 +151,7 @@ public:
 	void setControlPanelController(ICorrelationListener* controller);
 	void setControlPanelController(ControlPanelController *controller);
 
-	void setResponseCommonFreq(quint32 freq);private:
+	void setResponseCommonFreq(quint32 freq);
 	int readStationSettings(const QString &settingsFile);
 	void readRpcSettings();
 
@@ -197,6 +199,8 @@ signals:
 	void signalLocationChanged();
 
 	void onTitleUp(int, QString);
+
+	void signalNIIPPWorkStatus(QString, bool);
 
 protected slots:
 	void slotShowLists(QString station, double freq, double bandwidth);

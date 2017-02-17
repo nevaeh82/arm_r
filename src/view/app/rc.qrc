@@ -19,5 +19,6 @@
         <file>images/minus.png</file>
 		<file>images/swOn.png</file>
 		<file>images/swOff.png</file>
+		<file>images/alarm_clock.wav</file>
     </qresource>
 </RCC>

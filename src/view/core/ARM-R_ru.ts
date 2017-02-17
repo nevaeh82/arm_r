@@ -467,7 +467,12 @@
         <translation type="obsolete">Установить общую частоту</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelWidget.cpp" line="183"/>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="162"/>
+        <source>Moving aim founded!!! Freq: %1</source>
+        <translation>Обнаружена подвижная цель! Частота:%1</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="196"/>
         <source> mhz</source>
         <translation> МГц</translation>
     </message>
@@ -1147,72 +1152,72 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="106"/>
+        <location filename="MainWindow.ui" line="128"/>
         <source>Initialization...</source>
         <translation>Инициализация...</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="138"/>
+        <location filename="MainWindow.ui" line="160"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="145"/>
+        <location filename="MainWindow.ui" line="167"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="157"/>
+        <location filename="MainWindow.ui" line="179"/>
         <source>Server</source>
         <translation>Сервер</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="172"/>
+        <location filename="MainWindow.ui" line="194"/>
         <source>New</source>
         <translation>Новый пункт</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="177"/>
+        <location filename="MainWindow.ui" line="199"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="182"/>
+        <location filename="MainWindow.ui" line="204"/>
         <source>Atlant setup</source>
         <translation>Настройка Атланта</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="187"/>
+        <location filename="MainWindow.ui" line="209"/>
         <source>Lists</source>
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="192"/>
+        <location filename="MainWindow.ui" line="214"/>
         <source>SolverLogs</source>
         <translation>История расчетов</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="197"/>
+        <location filename="MainWindow.ui" line="219"/>
         <source>Restart Server</source>
         <translation>Перезапуск сервера</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="202"/>
+        <location filename="MainWindow.ui" line="224"/>
         <source>SolverErrors</source>
         <translation>Лог ошибок расчетов</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="207"/>
+        <location filename="MainWindow.ui" line="229"/>
         <source>SolverSetup</source>
         <translation>Настройки решателя</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="215"/>
+        <location filename="MainWindow.ui" line="237"/>
         <source>LocationSetup</source>
         <translation>Настройки координатометрии</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="220"/>
+        <location filename="MainWindow.ui" line="242"/>
         <source>Connections</source>
         <translation>Подключение серверов</translation>
     </message>
@@ -1222,14 +1227,24 @@
         <translation>Завируха АРМ-Р</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="45"/>
+        <location filename="MainWindow.cpp" line="50"/>
         <source>Location settings System #%1</source>
         <translation>Настройки координатометрии №%1</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="83"/>
+        <location filename="MainWindow.cpp" line="88"/>
         <source>Location settings System #%1 %2</source>
         <translation>Настройки координатометрии №%1 %2</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="106"/>
+        <source>Punkt </source>
+        <translation>Пункт </translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="106"/>
+        <source> flushing</source>
+        <translation>включено излучение!</translation>
     </message>
     <message>
         <source>Location settings System# %1</source>
@@ -1862,39 +1877,45 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="222"/>
+        <location filename="Tabs/TabManager.cpp" line="225"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="451"/>
-        <location filename="Tabs/TabManager.cpp" line="488"/>
-        <location filename="Tabs/TabManager.cpp" line="732"/>
+        <location filename="Tabs/TabManager.cpp" line="454"/>
+        <location filename="Tabs/TabManager.cpp" line="491"/>
+        <location filename="Tabs/TabManager.cpp" line="743"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="811"/>
+        <location filename="Tabs/TabManager.cpp" line="822"/>
         <source>Status: %1</source>
         <translation>Статус: %1</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="814"/>
+        <location filename="Tabs/TabManager.cpp" line="825"/>
         <source>Sucess</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="816"/>
+        <location filename="Tabs/TabManager.cpp" line="827"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="821"/>
+        <location filename="Tabs/TabManager.cpp" line="832"/>
         <source>Record Signal result</source>
         <translation>Результат записи сигнала</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="973"/>
+        <location filename="Tabs/TabManager.cpp" line="832"/>
+        <source>Record Signal result: 
+ %1</source>
+        <translation>Реультат записи сигнала: %1</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="984"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>

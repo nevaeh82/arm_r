@@ -29,32 +29,35 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 	m_coordinatesCounter->moveToThread(coordinateCounterThread);
 	coordinateCounterThread->start();
 
+	if(serverId == 1) {
+		m_pServer = new PServer(10240);
+		m_coordinatesCounter->registerReceiver(m_pServer);
 
-	m_pServer = new PServer(10240);
-	m_coordinatesCounter->registerReceiver(m_pServer);
+		QThread* pServerThread = new QThread;
+		connect(pServerThread, SIGNAL(started()), m_pServer, SLOT(startServer()));
+		connect(m_pServer, SIGNAL(signalFinished()), pServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), pServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), m_pServer, SLOT(deleteLater()));
+		connect(pServerThread, SIGNAL(finished()), pServerThread, SLOT(deleteLater()));
+		m_pServer->moveToThread(pServerThread);
+		pServerThread->start();
 
-	QThread* pServerThread = new QThread;
-	connect(pServerThread, SIGNAL(started()), m_pServer, SLOT(startServer()));
-	connect(m_pServer, SIGNAL(signalFinished()), pServerThread, SLOT(quit()));
-	connect(this, SIGNAL(threadTerminateSignal()), pServerThread, SLOT(quit()));
-	connect(this, SIGNAL(threadTerminateSignal()), m_pServer, SLOT(deleteLater()));
-	connect(pServerThread, SIGNAL(finished()), pServerThread, SLOT(deleteLater()));
-    m_pServer->moveToThread(pServerThread);
-    pServerThread->start();
+		QThread* clientServerThread = new QThread;
+		m_clientTcpServer = new ClientTcpServer;
+		m_coordinatesCounter->registerReceiver(m_clientTcpServer);
 
-	QThread* clientServerThread = new QThread;
-	m_clientTcpServer = new ClientTcpServer;
-	m_coordinatesCounter->registerReceiver(m_clientTcpServer);
-	m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
+		m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
+		connect(m_clientTcpServer, SIGNAL(signalNiippData(QString,bool)), this, SLOT(slotNiipData(QString,bool)));
 
-	connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
-	connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
-	connect(this, SIGNAL(threadTerminateSignal()), clientServerThread, SLOT(quit()));
-	connect(this, SIGNAL(threadTerminateSignal()), m_clientTcpServer, SLOT(deleteLater()));
-	connect(clientServerThread, SIGNAL(finished()), m_clientTcpServer, SLOT(stopServer()));
-	connect(clientServerThread, SIGNAL(finished()), clientServerThread, SLOT(deleteLater()));
-	m_clientTcpServer->moveToThread(clientServerThread);
-	clientServerThread->start();
+		connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
+		connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), clientServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), m_clientTcpServer, SLOT(deleteLater()));
+		connect(clientServerThread, SIGNAL(finished()), m_clientTcpServer, SLOT(stopServer()));
+		connect(clientServerThread, SIGNAL(finished()), clientServerThread, SLOT(deleteLater()));
+		m_clientTcpServer->moveToThread(clientServerThread);
+		clientServerThread->start();
+	}
 
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
 
@@ -553,6 +556,16 @@ void TcpManager::slotRpcClientConnected()
 void TcpManager::slotSendSolverStatus()
 {
 	m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, m_solverConnectionState);
+}
+
+void TcpManager::slotNiipData(QString title, bool on)
+{
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::WriteOnly);
+	stream << title;
+	stream << on;
+
+	m_rpcServer->call(RPC_METHOD_NIIPP_WORK_STATUS, data);
 }
 
 void TcpManager::onMethodCalled(const QString& method, const QVariant& argument)

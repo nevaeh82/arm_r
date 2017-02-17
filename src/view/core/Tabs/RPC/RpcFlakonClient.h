@@ -70,6 +70,7 @@ private slots:
 	void receivedDbConfigurationSlot(QByteArray data);
 	void receivedLocSystem(QByteArray data);
 	void receivedWorkMode(QByteArray data);
+	void receivedNIIPPStatus(QByteArray data);
 
 };
 

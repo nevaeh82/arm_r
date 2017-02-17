@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	init();
 
 	log_debug(QString("id-%1").arg((int)this->thread()->currentThreadId()));
+
+	ui->niippLabel->setVisible(false);
+	m_niippTimer = new QTimer(this);
+
+	connect(m_niippTimer, SIGNAL(timeout()), this, SLOT(slotHideNiippLabel()));
 }
 
 MainWindow::~MainWindow()
@@ -84,7 +89,25 @@ void MainWindow::updateLocationSetupAction(int id, QString text)
 	}
 }
 
+void MainWindow::slotHideNiippLabel()
+{
+	ui->niippLabel->setVisible(false);
+	m_niippTimer->stop();
+}
+
 void MainWindow::closeEvent(QCloseEvent *)
 {
 	emit onCloseSignal();
+}
+
+void MainWindow::slotNIIPPStatus(QString title, bool status)
+{
+	if(status) {
+		ui->niippLabel->setText(tr("Punkt ") + "\"" + title + "\" " + tr(" flushing") );
+		ui->niippLabel->setVisible(true);
+
+		m_niippTimer->start(30000);
+	} else {
+		ui->niippLabel->setVisible(false);
+	}
 }
