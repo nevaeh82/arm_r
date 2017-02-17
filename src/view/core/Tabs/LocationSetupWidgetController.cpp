@@ -386,6 +386,14 @@ void LocationSetupWidgetController::onMethodCalledSlot(QString method, QVariant 
 
 	} else if(method == RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE) {
 		emit solverConnectionState(data.toBool());
+	} else if(method == RPC_METHOD_NIIPP_WORK_STATUS) {
+		QDataStream dataStream(&data.toByteArray(), QIODevice::ReadOnly);
+		QString title;
+		bool status;
+		dataStream >> title;
+		dataStream >> status;
+
+		emit signalNIIPPWorkStatus(title, status);
 	}
 }
 

@@ -167,6 +167,8 @@ void ControlPanelController::setCentralFreqValueInternal(double freq)
 void ControlPanelController::slotSolverResult(QByteArray data)
 {
 	int quality = 0;
+	bool isMoving = false;
+	float movingFreq = 0;
 
 	if(data.isEmpty()) {
 		m_view->changeQualityStatus( 0 );
@@ -187,6 +189,11 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.dateTime = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).datetime();
 				res.freq = solPkt.trajectory(i).central_frequency();
 				res.state = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).state();
+				if(res.state == 1) {
+					isMoving = true;
+					movingFreq = res.freq;
+				}
+
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
 
@@ -203,6 +210,11 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.dateTime = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).datetime();
 				res.freq = solPkt.trajectory(i).central_frequency();
 				res.state = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).state();
+				if(res.state == 1) {
+					isMoving = true;
+					movingFreq = res.freq;
+				}
+
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
 
@@ -217,7 +229,7 @@ void ControlPanelController::slotSolverResult(QByteArray data)
             }
         }
 
-		m_view->changeQualityStatus( quality );
+		m_view->changeQualityStatus( quality, isMoving, movingFreq );
 //		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mEst;
 //		if( mEst.ParseFromArray(data, data.size()) ) {
 //			int test = mEst.quality();
@@ -307,6 +319,11 @@ void ControlPanelController::onBandWidthChangedSlot(int start, int end)
 {
 	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_START_PROPERTY, start);
 	m_dbManager->updatePropertyForAllObjects(DB_PANORAMA_END_PROPERTY, end);
+}
+
+void ControlPanelController::setManualMode()
+{
+	m_view->applyManualMode();
 }
 
 void ControlPanelController::slotManualMode()

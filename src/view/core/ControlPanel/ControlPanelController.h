@@ -140,6 +140,7 @@ public:
 	bool sleepMode() const;
 	void setSleepMode(bool);
 
+	void setManualMode();
 signals:
 	void signalSetComonFreq(double value);
 	void setCorrelationStatus(QString correlationStatus);

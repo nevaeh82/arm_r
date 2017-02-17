@@ -47,12 +47,16 @@ public slots:
 private slots:
 	void onRegisterNewConnection(uint n, ITcpServerClient*client);
 
+	void slotNiipDataIncome(QString, bool);
+
 private:
 	int getClientTcpPortValue();
 	SolverEncoder* m_encoder;
 
 signals:
 	void onDataSended(bool res);
+
+	void signalNiippData(QString, bool);
 };
 
 inline QDataStream& operator<<(QDataStream& out, const DataFromFlacon& object)

@@ -110,6 +110,8 @@ private slots:
 	void slotRpcClientConnected();
 	void slotSendSolverStatus();
 
+	void slotNiipData(QString title, bool on);
+
 };
 
 #endif // TCPMANAGER_H

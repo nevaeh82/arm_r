@@ -10,6 +10,10 @@ ClientTcpServer::ClientTcpServer(QObject* parent) :
 	this->registerReceiver(m_encoder);
 
 	connect(this, SIGNAL(newClientSignal(uint,ITcpServerClient*)), this, SLOT(onRegisterNewConnection(uint,ITcpServerClient*)));
+
+	connect(m_encoder, SIGNAL(nippDataIncome(QString, bool)), this, SIGNAL(signalNiippData(QString,bool)));
+
+	connect(m_encoder, SIGNAL(nippDataIncome(QString, bool)), this, SLOT(slotNiipDataIncome(QString,bool)));
 }
 
 ClientTcpServer::~ClientTcpServer()
@@ -33,7 +37,14 @@ void ClientTcpServer::onRegisterNewConnection(uint n, ITcpServerClient * client)
 
 //	QByteArray dataToSend = m_encoder->decodeRegister();
 
-//	client->writeData(dataToSend);
+	//	client->writeData(dataToSend);
+}
+
+void ClientTcpServer::slotNiipDataIncome(QString, bool status)
+{
+	if(status) {
+	//Todo maybe answer to NIIP
+	}
 }
 
 void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)

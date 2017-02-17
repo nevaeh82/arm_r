@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1536</width>
-    <height>65</height>
+    <height>88</height>
    </rect>
   </property>
   <property name="palette">
@@ -851,6 +851,26 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="0" column="3" colspan="21">
+      <widget class="QLabel" name="labelAlarm">
+       <property name="styleSheet">
+        <string notr="true">color: rgb(255, 0, 0);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="3">
+      <widget class="QCheckBox" name="sounOffCB">
+       <property name="text">
+        <string>Sound Off</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

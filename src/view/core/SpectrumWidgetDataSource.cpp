@@ -116,7 +116,11 @@ int SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 
 int SpectrumWidgetDataSource::findIndex(qreal startx)
 {
-	return m_listStartx.indexOf( startx );
+	int ind = m_listStartx.indexOf( startx );
+//	if(ind < 0) {
+//		ind = m_listStartx.length()-1;
+//	}
+	return ind;
 }
 
 bool SpectrumWidgetDataSource::startPanorama(bool start)
@@ -365,6 +369,28 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 	if(index < 0) {
 		emit onDrawComplete();
+
+
+		if(m_isPanoramaStart)
+		{
+			m_responseFreq = cf;
+			m_spectrumCounter++;
+			//m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, cf);
+		}
+		m_workFreq = cf;
+
+
+		if(m_isPanoramaStart)
+		{
+			if(m_spectrumCounter > 1)
+			{
+				m_currentFreq = m_responseFreq;
+				m_panoramaFreqControl->setChannelReady(m_currentFreq);
+				m_spectrumCounter = 0;
+			}
+			m_spectrumCounter++;
+		}
+
 		return;
 	}
 

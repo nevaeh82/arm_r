@@ -95,6 +95,9 @@ signals:
 
 	void solverConnectionState(bool);
 
+
+	void signalNIIPPWorkStatus(QString, bool);
+
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
 

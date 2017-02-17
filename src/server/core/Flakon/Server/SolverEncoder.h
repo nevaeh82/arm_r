@@ -40,7 +40,7 @@ private:
     quint8 crc(const QByteArray &data);
 
 signals:
-    void nippDataIncome(bool);
+	void nippDataIncome(QString, bool);
 };
 
 #endif; //SOLVERENCODER_H

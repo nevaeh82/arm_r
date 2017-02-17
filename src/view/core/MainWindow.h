@@ -26,15 +26,20 @@ public:
 	QAction *appendLocationSetupAction(int id);
 	void removeSetupAction(int id);
 
+public slots:
+	void slotNIIPPStatus(QString, bool);
 private:
 	Ui::MainWindow* ui;
 	QMap<int, QAction*> m_actionMap;
+
+	QTimer* m_niippTimer;
 
 private:
 	void init();
 
 private slots:
 	void updateLocationSetupAction(int id, QString text);
+	void slotHideNiippLabel();
 
 signals:
 	void signalShowLists();
