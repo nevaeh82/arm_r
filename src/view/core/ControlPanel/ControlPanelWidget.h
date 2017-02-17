@@ -44,7 +44,6 @@ public:
 	void changeCorrelationStatusActive(const bool isActive);
 
 	void changeQualityStatus(const int status, bool isMoving = false, float freq = 0);
-
 	void setStartFreq(int val);
 	void setfinishFreq(int val);
 	void setSystemMerge(bool state);
