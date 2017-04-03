@@ -87,7 +87,8 @@ void PServer::onMessageReceived(const quint32 type, const QString &deviceType, c
 
 	switch(type) {
 		case FLAKON_TCP_DEVICE:
-			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO)
+			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO ||
+				messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA)
 			{
 //				log_info(QString("This thread = 0x%1").arg( (int)QThread::currentThread(), 16 ));
 

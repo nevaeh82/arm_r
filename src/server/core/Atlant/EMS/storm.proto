@@ -113,6 +113,7 @@ message PositionAnswerMessage
 	 //качество
 	required double quality = 103;
 }
+option optimize_for = LITE_RUNTIME;
 
 // "STATUS_MESSAGE"
 message StatusMessage
