@@ -4,6 +4,8 @@
 
 #define SERVER_NAME "ZaviruhaRServer"
 
+//#include "ComReceiver/ComReceiverController.h"
+
 #define DEFAULT_RPC_PORT		24500
 
 

@@ -173,6 +173,7 @@ color: rgb(255, 0, 0);</string>
     <addaction name="actionSolverSetup"/>
     <addaction name="separator"/>
     <addaction name="actionLocationSetup"/>
+    <addaction name="actionPrm_via_com"/>
    </widget>
    <widget class="QMenu" name="menuServer">
     <property name="title">
@@ -240,6 +241,11 @@ color: rgb(255, 0, 0);</string>
   <action name="actionConnections">
    <property name="text">
     <string>Connections</string>
+   </property>
+  </action>
+  <action name="actionPrm_via_com">
+   <property name="text">
+    <string>Prm via com</string>
    </property>
   </action>
  </widget>

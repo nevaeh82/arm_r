@@ -6,11 +6,17 @@
 #include "MainWindow.h"
 #include "MainWindowController.h"
 
+#include "ComReceiver/ComReceiverController.h"
+#include "ComReceiver/ComReceiverView.h"
+
 int main(int argc, char *argv[])
 {
 	Logger().setupLogger("logs/ARM_R_view.log");
 
 	QApplication a(argc, argv);
+
+	HWND hwnd = GetConsoleWindow();
+	ShowWindow(hwnd, 0);
 
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
@@ -30,12 +36,22 @@ int main(int argc, char *argv[])
 	b = translatorIPP.load(":/GraphicsIpp/GraphicsIpp_ru.qm");
 	a.installTranslator(&translatorIPP);
 
-	MainWindow view;
+	if(argc == 1) {
+		MainWindow view;
 
-	MainWindowController controller;
-	controller.appendView(&view);
+		MainWindowController controller;
+		controller.appendView(&view);
 
-	view.show();
+		view.show();
+
+		return a.exec();
+	} else {
+		ComReceiverController controller;
+		controller.getView()->show();
+
+
+		return a.exec();
+	}
 
 	return a.exec();
 }

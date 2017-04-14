@@ -9,6 +9,7 @@ list(APPEND deps
 	QtSingleApplication
 	Solver
 	QWT
+	QSERIAL
 )
 
 string(REPLACE Core "" PROJECT_NAME_COV ${PROJECT_NAME})

@@ -1,6 +1,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "ComReceiver/ComReceiverController.h"
+#include "ComReceiver/ComReceiverView.h"
+
+
 #define SERVER_NAME "ARM_R_Server"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -74,6 +78,8 @@ void MainWindow::init()
 
 	connect(ui->actionConnections, SIGNAL(triggered()), this, SIGNAL(signalServerConnections()));
 
+	ComReceiverController* controller = new ComReceiverController(this);
+	connect(ui->actionPrm_via_com, SIGNAL(triggered(bool)), controller->getView(), SLOT(show()));
 }
 
 void MainWindow::updateLocationSetupAction(int id, QString text)
