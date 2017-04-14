@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ComReceiverView</class>
+ <widget class="QWidget" name="ComReceiverView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>391</width>
+    <height>686</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Remote Receiver&amp;Tranceiver</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="17" column="1">
+    <widget class="QLabel" name="lblTempVal">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="lblTemp">
+     <property name="text">
+      <string>Temperature:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <layout class="QVBoxLayout" name="verticalLayoutFreq"/>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBoxAddBoard">
+     <property name="title">
+      <string>Boards connection</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_9">
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="addBoardLe"/>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Availiable Boards:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="removeBoardPb">
+          <property name="text">
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="addBoardPb">
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QPushButton" name="pbKtrConnect">
+        <property name="text">
+         <string>Connect</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Board</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="sbDevice">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>12</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Device</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="4">
+       <widget class="QListWidget" name="addBoardListWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="4">
+       <widget class="IpAddressControl" name="ktrIpFrame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBoxCom">
+     <property name="title">
+      <string>COM connection</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QSpinBox" name="sbComPort">
+        <property name="suffix">
+         <string/>
+        </property>
+        <property name="prefix">
+         <string>COM</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pbComConnect">
+        <property name="text">
+         <string>Connect</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="16" column="1">
+    <layout class="QVBoxLayout" name="verticalLayoutFilter"/>
+   </item>
+   <item row="13" column="1">
+    <layout class="QVBoxLayout" name="verticalLayoutAtt"/>
+   </item>
+   <item row="23" column="0">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Answer from PD = Power value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="1">
+    <widget class="QSpinBox" name="pdAtt">
+     <property name="suffix">
+      <string> db</string>
+     </property>
+     <property name="maximum">
+      <number>60</number>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2">
+    <widget class="QPushButton" name="pbUpPrmFilter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2">
+    <widget class="QPushButton" name="pbUpPrmAtt">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1">
+    <widget class="QLineEdit" name="leAnswerAtt">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>170</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 0, 0, 150);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1">
+    <widget class="QComboBox" name="prmFilter">
+     <item>
+      <property name="text">
+       <string>140/70</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>140/30</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>140/18</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Connection state</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QSpinBox" name="prmAtt">
+     <property name="suffix">
+      <string> db</string>
+     </property>
+     <property name="maximum">
+      <number>60</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLabel" name="lblConnectState">
+     <property name="text">
+      <string>disconnected</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QLineEdit" name="leAnswerFreq">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>170</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 0, 0, 150);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Receivers PRM Control</string>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Attenuator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QRadioButton" name="radioButtonCom">
+       <property name="text">
+        <string>Com port</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonKtr">
+       <property name="text">
+        <string>Ktr Connection</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="1">
+    <widget class="QSpinBox" name="prmFreq">
+     <property name="suffix">
+      <string> mHz</string>
+     </property>
+     <property name="minimum">
+      <number>1000</number>
+     </property>
+     <property name="maximum">
+      <number>18000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="1">
+    <widget class="QSpinBox" name="pdFreq">
+     <property name="suffix">
+      <string> mhz</string>
+     </property>
+     <property name="prefix">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>5700</number>
+     </property>
+     <property name="maximum">
+      <number>5900</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" rowspan="2">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Attenuator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QPushButton" name="pbUpPrmFreq">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="1">
+    <widget class="QLineEdit" name="leAnswerFilter">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>170</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 0, 0, 150);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QCheckBox" name="isNewPrm">
+     <property name="text">
+      <string>is New prm</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="1">
+    <widget class="QLineEdit" name="leAnswerPDpower">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>170</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 0, 0, 150);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="2">
+    <widget class="QPushButton" name="pbPdFreq">
+     <property name="maximumSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="2">
+    <widget class="QPushButton" name="pbPdAtt">
+     <property name="maximumSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../app/rc.qrc">
+       <normaloff>:/images/ActionsListAdd.png</normaloff>:/images/ActionsListAdd.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="0" colspan="3">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Filter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="0">
+    <widget class="QLabel" name="lblInputNum">
+     <property name="text">
+      <string>Input number:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="1">
+    <widget class="QLabel" name="lblInputNumVal">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" rowspan="2">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>PD Control</string>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="1">
+    <layout class="QVBoxLayout" name="verticalLayoutPD"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IpAddressControl</class>
+   <extends>QFrame</extends>
+   <header>Common/IpAddressControl.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../app/rc.qrc"/>
+ </resources>
+ <connections/>
+</ui>

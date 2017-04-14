@@ -1,17 +1,22 @@
-#ifndef CONTROLPANELCONTROLLER_H
-#define CONTROLPANELCONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QSettings>
 #include <QTextCodec>
 #include <QMessageBox>
 #include <QTimer>
+#include <QThread>
+
+#include "QtSerialPort/QSerialPort"
 
 #include "Interfaces/IController.h"
 #include "Interfaces/IDbManager.h"
 #include "ControlPanelWidget.h"
 #include "Interfaces/IControlPanelController.h"
 #include "Interfaces/IControlPanelListener.h"
+
+#include "QxtNetwork/qxtsmtp.h"
+#include "QxtNetwork/qxtmailmessage.h"
 
 #include "DBStation/IDBStation.h"
 
@@ -21,6 +26,8 @@
 #include "ListWhiteDialog.h"
 #include "ListWhiteDialogController.h"
 #include "DBStation/ListsDialog.h"
+
+#include "smtp1/smtpclientthread.h"
 
 #include <QSettings>
 #include <QCoreApplication>
@@ -108,6 +115,9 @@ private:
 	bool checkSolverResult(int freq);
 	int findResultInList(solverResult res);
 
+	SmtpClientThread* m_smtpThread;
+	QThread* m_smtpQThread;
+
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
@@ -141,6 +151,8 @@ public:
 	void setSleepMode(bool);
 
 	void setManualMode();
+
+
 signals:
 	void signalSetComonFreq(double value);
 	void setCorrelationStatus(QString correlationStatus);
@@ -194,4 +206,3 @@ private slots:
 	void slotSolverResult(QByteArray data);
 };
 
-#endif // CONTROLPANELCONTROLLER_H

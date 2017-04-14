@@ -8,6 +8,9 @@
 
 #include "Rpc/RpcDefines.h"
 
+#include "smtp1/smtpclient.h"
+#include "smtp1/mimetext.h"
+
 #define TIMER_INTERVAL 5000
 #define TIMERCHECK_INTERVAL 5000
 #define TIMERCHECK_INTERVAL_DETECTED 2000
@@ -32,12 +35,28 @@ ControlPanelController::ControlPanelController(QObject *parent)
 
 	init();
 
+	m_smtpThread = new SmtpClientThread(0);
+	m_smtpQThread = new QThread();
+
+	connect(m_smtpQThread, SIGNAL(finished()), m_smtpQThread, SLOT(deleteLater()));
+
+	m_smtpThread->moveToThread(m_smtpQThread);
+	m_smtpQThread->start();
+
+	//connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
+	//connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
+//	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
+//	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
+
+
 	connect(this, SIGNAL(signalSetCentralFreq(double)), this, SLOT(setCentralFreqValueInternal(double)));
+
 }
 
 ControlPanelController::~ControlPanelController()
 {
-
+	delete m_smtpThread;
+	m_smtpQThread->deleteLater();
 }
 
 void ControlPanelController::init()
@@ -192,6 +211,8 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
 
+				m_smtpThread->sendMessage(QString("Found manual AIM: \n   freq %1 \n   state %2 \n   quality %3").arg(res.freq).arg(res.state).arg(res.quality) );
+
 				m_solverResultList.append( res );
 			}
 		}
@@ -212,6 +233,8 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
+
+				m_smtpThread->sendMessage(QString("Found auto AIM: \n   freq %1 \n   state %2 \n   quality %3").arg(res.freq).arg(res.state).arg(res.quality) );
 
 				m_solverResultList.append( res );
 			}
@@ -624,6 +647,8 @@ void ControlPanelController::slotUp1MHz()
 	//m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 
 	emit signalSetComonFreq(m_currentFreq);
+
+//	/sendMail();
 }
 
 void ControlPanelController::slotUp10MHz()
