@@ -489,7 +489,7 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 	}
 
 	QSqlQuery query( m_db );
-    query.prepare( "SELECT s.name, st.frequency, st.bandwidth, st.checked " \
+	query.prepare( "SELECT s.name, st.frequency, st.bandwidth, st.checked " \
 					"FROM stationData AS st " \
 					"INNER JOIN stationDevices as sdi on st.deviceID=sdi.id " \
 					"INNER JOIN station as s on s.id=sdi.stationID " \
@@ -508,11 +508,11 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 		data.stationName = query.value(0).toString();
 		data.frequency = query.value(1).toDouble();
 		data.bandwidth = query.value(2).toDouble();
-        data.isChecked = query.value(3).toBool();
+		data.isChecked = query.value(3).toBool();
 		list.append(data);
 	}
 
-    return true;
+	return true;
 }
 
 bool DBStationController::getReportCategory(const QString &category, QList<AllStationsReport> &listReport)
@@ -581,5 +581,131 @@ QStringList DBStationController::getCatalog(const QString& name)
 	}
 
 	return list;
+}
+
+//Thresholds
+
+bool DBStationController::setThresholdByFrequencyAndStation(const QString &station, const int frequency, const int threshold)
+{
+	if( !m_db.isOpen() ) {
+		return false;
+	}
+
+	QSqlQuery query( m_db );
+	QMap<int, int> list;
+	bool isRes = getThresholdByFrequencyAndStation(station, frequency, list);
+
+	if(isRes) {
+		bool res = false;
+		res = query.prepare( "UPDATE threshold " \
+							 "SET threshold=:thresholdVal " \
+							 "WHERE frequency=:freqVal AND station=:stationVal" );
+
+		QString err = query.lastError().text();
+
+		if(!res) {
+			return false;
+		}
+
+		VALIDATE_QUERY( query );
+
+		query.bindValue(":freqVal", frequency);
+		query.bindValue(":thresholdVal", threshold);
+		query.bindValue(":stationVal", station);
+		res = query.exec();
+		QString error = query.lastError().text();
+
+		if(!res) {
+			return false;
+		}
+		return true;
+	} /*else {
+
+		bool res = false;
+		res = query.prepare( "INSERT INTO threshold " \
+							 "VALUES (NULL, :freqVal, :thresholdVal, :stationVal);" );
+
+		if(!res) {
+			return false;
+		}
+
+		VALIDATE_QUERY( query );
+
+		query.bindValue(":freqVal", frequency);
+		query.bindValue(":thresholdVal", threshold);
+		query.bindValue(":stationVal", station);
+		res = query.exec();
+		QString error = query.lastError().text();
+
+		if(!res) {
+			return false;
+		}
+		return true;
+	}*/
+
+	return true;
+}
+
+bool DBStationController::getThresholdByFrequencyAndStation(const QString &station, const int frequency, QMap<int, int>& thresholdList)
+{
+	if( !m_db.isOpen() ) {
+		return false;
+	}
+
+	QSqlQuery query( m_db );
+	query.prepare( "SELECT frequency, threshold FROM threshold " \
+					"WHERE station=:stationVal" );
+
+	VALIDATE_QUERY( query );
+
+	query.bindValue(":freqVal", frequency);
+	query.bindValue(":stationVal", station);
+
+	bool result = query.exec();
+
+	QString qqq = query.executedQuery();
+	QMap<QString, QVariant> tmpMap = query.boundValues();
+
+	if(!result) {
+		return false;
+	}
+
+	QString error = query.lastError().text();
+
+	int tmp1 = query.size();
+
+	while( query.next() ) {
+		int frequency = query.value(0).toInt();
+		int value = query.value(1).toInt();
+		thresholdList.insert(frequency, value);
+	}
+
+
+	if(!thresholdList.contains(frequency)){
+
+		bool res = false;
+		res = query.prepare( "INSERT INTO threshold " \
+							 "VALUES (NULL, :freqVal, :thresholdVal, :stationVal);" );
+
+		if(!res) {
+			return false;
+		}
+
+		VALIDATE_QUERY( query );
+
+		query.bindValue(":freqVal", frequency);
+		query.bindValue(":thresholdVal", 0);
+		query.bindValue(":stationVal", station);
+		res = query.exec();
+		QString error = query.lastError().text();
+
+		if(!res) {
+			return false;
+		}
+
+		return true;
+	}
+
+	return true;
 }
 

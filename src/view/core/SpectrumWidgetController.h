@@ -86,7 +86,6 @@ private:
 
 	bool	m_peakVisible;
 
-	double	m_threshold;
 	int		m_rett;
 
 	QVector<QPointF> m_pointVector;
@@ -153,6 +152,8 @@ private:
 
 	float m_lastSpectrumVal;
 
+	QMap<int, int> m_thresholdList;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -216,6 +217,8 @@ public:
 
 	void clearSonogram();
 
+	void setCurrentWorkFrequency(const double cf);
+
 private:
 	void init();
 
@@ -250,6 +253,7 @@ signals:
 	void signalDataArrived(QString, QVariant);
 
 	void signalClearSonogram();
+	void onSetCurrentFrequency(double);
 
 public slots:
 
@@ -291,6 +295,8 @@ private slots:
 
 	void slotUpdateSelection();
 	void setZeroFrequencyInternal(double val);
+	void setCurrentFrequencyInternal(double val);
+
 	void onDataArrivedInternal(const QString &method, const QVariant &arg);
 
 	void onPlotReady();

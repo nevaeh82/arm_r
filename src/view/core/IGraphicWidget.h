@@ -15,6 +15,8 @@ class IGraphicWidget
 		virtual void setAlarm(bool) = 0;
 
 		virtual void clearSonogram() = 0;
+
+		virtual void setCurrentWorkFrequency(const double cf) = 0;
 };
 
 #endif // IGRAPHICWIDGET_H

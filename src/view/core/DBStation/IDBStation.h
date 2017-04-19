@@ -41,6 +41,9 @@ public:
 	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list) = 0;
 	virtual bool getReportCategory(const QString& category, QList<AllStationsReport>& listReport) = 0;
 
+	virtual bool setThresholdByFrequencyAndStation(const QString &station, const int frequency, const int threshold) = 0;
+	virtual bool getThresholdByFrequencyAndStation(const QString &station, const int frequency, QMap<int, int>& thresholdList) = 0;
+
 	/// Returns station names (stations catalog)
 	virtual QStringList getStationsCatalog() = 0;
 
