@@ -62,15 +62,15 @@ background-color: rgb(230, 230, 230);
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
         <widget class="QCheckBox" name="thresholdCB">
          <property name="text">
           <string>Threshold</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="sbThreshold">
          <property name="maximumSize">
           <size>
@@ -86,6 +86,13 @@ background-color: rgb(230, 230, 230);
          </property>
          <property name="maximum">
           <double>0.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QCheckBox" name="sbGlobalThreshold">
+         <property name="text">
+          <string>Global Threshold</string>
          </property>
         </widget>
        </item>

@@ -154,6 +154,8 @@ private:
 
 	QMap<int, int> m_thresholdList;
 
+	double m_globalThreshold;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -261,6 +263,7 @@ private slots:
 	void slotSetEnablePanorama(bool);
 	void slotAutoSearch(bool);
 	void slotSelectiontypeChanged(bool);
+	void slotGlobalThreshold(bool val);
 	void slotRequestData(bool);
 
 	void addToWhiteList();

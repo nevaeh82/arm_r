@@ -27,6 +27,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_sonogramReady = true;
 	m_sonogramTime = QTime::currentTime();
 
+	m_globalThreshold = 0;
+
 	m_lastSpectrumVal = 0;
 
 	m_selectionUpFlag = false;
@@ -586,7 +588,11 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		for(int i = 0; i < m_pointCount; i++)
 		{
 			double overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
-			m_threshold = m_thresholdList.value(10*qRound(overthreshold/10), 0);
+			if(m_view->isGlobalThreshold()) {
+				m_threshold = m_globalThreshold;
+			} else {
+				m_threshold = m_thresholdList.value(10*qRound(overthreshold/10), 0);
+			}
 
 			//listOverthreshold.append(overthreshold);
 
@@ -848,6 +854,13 @@ void SpectrumWidgetController::setZeroFrequencyInternal(double val)
 void SpectrumWidgetController::setCurrentFrequencyInternal(double val)
 {
 	m_current_frequency = val*TO_MHZ;
+
+	if(m_view->isThreshold() && m_view->isGlobalThreshold()) {
+		int freq = m_current_frequency/TO_MHZ;
+		for (int i=freq-10; i<=freq+10; i+=10) {
+			m_graphicsWidget->SetLabel(m_globalThreshold, "redLine", QString::number(i));
+		}
+	}
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)
@@ -945,7 +958,10 @@ void SpectrumWidgetController::init()
 
 	connect(m_view, SIGNAL(setPanoramaSignal(bool)), this, SLOT(slotSetEnablePanorama(bool)));
 	connect(m_view, SIGNAL(setAutoSearchSignal(bool)), this, SLOT(slotAutoSearch(bool)));
+
 	connect(m_view, SIGNAL(selectionTypeChangedSignal(bool)), this, SLOT(slotSelectiontypeChanged(bool)));
+	connect(m_view, SIGNAL(onGlobalThresholdToggled(bool)), this, SLOT(slotGlobalThreshold(bool)));
+
 	connect(m_view, SIGNAL(requestDataSignal(bool)), this, SLOT(slotRequestData(bool)));
 	connect(this, SIGNAL(signalSpectrumEnable(bool)), m_view, SLOT(slotEnableKM(bool)));
 
@@ -977,20 +993,29 @@ void SpectrumWidgetController::slotAutoSearch(bool state)
 void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
 {
 	if(state) {
-		QMap<int, int> thresholdList;
-		int cf = 10*qRound(m_current_frequency/(TO_MHZ*10));
-		int res = m_dbStationController->getThresholdByFrequencyAndStation(m_name, cf, thresholdList);
-
-		if(res && !thresholdList.isEmpty()) {
-			m_thresholdList.clear();
-			m_thresholdList = thresholdList;
-		}
-
-		foreach (int freq, thresholdList.keys()) {
-			m_graphicsWidget->SetLabel(thresholdList.value(freq, 0), "redLine", QString::number(freq));
-			if(freq == cf) {
-				m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+		if(m_view->isGlobalThreshold()) {
+			int freq = m_current_frequency/TO_MHZ;
+			for (int i=freq-10; i<=freq+10; i+=10) {
+				m_graphicsWidget->SetLabel(m_globalThreshold, "redLine", QString::number(i));
 			}
+			m_view->setThresholdValue(m_globalThreshold);
+		} else {
+			QMap<int, int> thresholdList;
+			int cf = 10*qRound(m_current_frequency/(TO_MHZ*10));
+			int res = m_dbStationController->getThresholdByFrequencyAndStation(m_name, cf, thresholdList);
+
+			if(res && !thresholdList.isEmpty()) {
+				m_thresholdList.clear();
+				m_thresholdList = thresholdList;
+			}
+
+			foreach (int freq, thresholdList.keys()) {
+				m_graphicsWidget->SetLabel(thresholdList.value(freq, 0), "redLine", QString::number(freq));
+				if(freq == cf) {
+					m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+				}
+			}
+
 		}
 	} else {
 		m_graphicsWidget->SetLabel(0, "resetRedLine");
@@ -1003,6 +1028,12 @@ void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
 	}
 
 	emit signalCurSelChanged(1);
+}
+
+void SpectrumWidgetController::slotGlobalThreshold(bool val)
+{
+	m_graphicsWidget->SetLabel(0, "resetRedLine");
+	slotSelectiontypeChanged(true);
 }
 
 void SpectrumWidgetController::slotRequestData(bool state)
@@ -1153,16 +1184,31 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 
 void SpectrumWidgetController::slotSelectionFinishedRedLine(double y)
 {
-	int cf = 10* qRound(m_current_frequency/(TO_MHZ*10));
-	bool res = m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf, y);
-	m_thresholdList.insert(cf, y);
+	if(m_view->isGlobalThreshold()) {
+		m_globalThreshold = y;
 
-	m_graphicsWidget->SetLabel(0, "resetRedLine");
-	foreach (int freq, m_thresholdList.keys()) {
-		m_graphicsWidget->SetLabel(m_thresholdList.value(freq, 0), "redLine", QString::number(freq));
-		if(freq == cf) {
-			m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+		if(m_view->isGlobalThreshold()) {
+			int freq = m_current_frequency/TO_MHZ;
+			for (int i=freq-10; i<=freq+10; i+=10) {
+				m_graphicsWidget->SetLabel(m_globalThreshold, "redLine", QString::number(i));
+			}
+			m_view->setThresholdValue(m_globalThreshold);
 		}
+
+	} else {
+
+		int cf = 10* qRound(m_current_frequency/(TO_MHZ*10));
+		bool res = m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf, y);
+		m_thresholdList.insert(cf, y);
+
+		m_graphicsWidget->SetLabel(0, "resetRedLine");
+		foreach (int freq, m_thresholdList.keys()) {
+			m_graphicsWidget->SetLabel(m_thresholdList.value(freq, 0), "redLine", QString::number(freq));
+			if(freq == cf) {
+				m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+			}
+		}
+
 	}
 }
 
