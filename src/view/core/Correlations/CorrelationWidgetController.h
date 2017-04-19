@@ -59,6 +59,8 @@ public:
 
 	void clearDopler();
 
+	virtual void setCurrentWorkFrequency(const double cf)  {}
+
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);

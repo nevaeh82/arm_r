@@ -54,6 +54,9 @@ public:
 	void setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg);
 
 	bool isSonogram();
+	bool isThreshold() const;
+
+	void setThresholdValue(const int);
 
 public slots:
 	void slotSetEnableSpactrum(bool state);
@@ -64,6 +67,7 @@ private slots:
 	void slotSetWorkMode(int mode, bool isOn);
 	void onSlotChangedViewPort(double start_hz, double start_Y, double end_hz, double end_Y);
 	void onZoomSonogram(double start_hz, double end_hz, bool replot = false);
+	void onThresholdToggled(bool);
 
 signals:
 	void signalEnableKM(bool state);
@@ -75,6 +79,8 @@ signals:
 
 	void setShowPeaksSignal(bool);
 	void setShowControlPRM(bool);
+
+	void signalManualThreshold(double);
 protected:
 	void paintEvent(QPaintEvent *);
 };

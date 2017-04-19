@@ -39,13 +39,12 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	m_prm300WidgetController = NULL;
 
-	m_current_frequency = 0;
+	m_current_frequency = 20*TO_MHZ;
 	m_autoSearch = false;
 
 	m_specStatus = true;
 
 	m_rett = -100;
-	m_threshold = -1000;
 
 	m_enableCorrelation = false;
 	m_bandwidth = 0;
@@ -81,6 +80,7 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 
 	connect(this, SIGNAL(onSetZeroFreq(double)), this, SLOT(setZeroFrequencyInternal(double)), Qt::QueuedConnection);
 	connect(this, SIGNAL(signalDataArrived(QString,QVariant)), this, SLOT(onDataArrivedInternal(QString,QVariant)), Qt::QueuedConnection);
+	connect(this, SIGNAL(onSetCurrentFrequency(double)), this, SLOT(setCurrentFrequencyInternal(double)), Qt::QueuedConnection);
 	connect(this, SIGNAL(signalClearSonogram()), this, SLOT(clearSonogramInternal()));
 
 	m_qwtVector = new QVector<QwtPoint3D>;
@@ -266,6 +266,11 @@ void SpectrumWidgetController::clearSonogram()
 	emit signalClearSonogram();
 }
 
+void SpectrumWidgetController::setCurrentWorkFrequency(const double cf)
+{
+	emit onSetCurrentFrequency(cf);
+}
+
 void SpectrumWidgetController::clearSonogramInternal()
 {
 	m_sonogramData.clear();
@@ -403,11 +408,11 @@ QWidget *SpectrumWidgetController::getWidget() const
 
 void SpectrumWidgetController::setSignalSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex)
 {
-	if(m_stopFlag == false)
-	{
-		emit onDrawComplete();
-		return;
-	}
+//	if(m_stopFlag == false)
+//	{
+//		emit onDrawComplete();
+//		return;
+//	}
 
 	m_mux.lock();
 	m_bandwidth = bandwidth;
@@ -470,10 +475,10 @@ void SpectrumWidgetController::setSonogramSetup(const QQueue<QList<double> >& so
 
 void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak_hold)
 {
-	if(m_stopFlag == false)
-	{
-		return;
-	}
+//	if(m_stopFlag == false)
+//	{
+//		return;
+//	}
 
     if(m_graphicsWidget->HasSelection()) {
         m_selectionUpFlag = true;
@@ -500,13 +505,13 @@ void SpectrumWidgetController::setFFTSetup(float* spectrum, float* spectrum_peak
 
 	//m_graphicsWidget->ZoomOutFull();
 
-	QVector<double> vecy;
-	QVector<double> vecx;
-	for(int i = 0; i < m_pointCount; i++)
-	{
-		vecx.append((double)i);
-		vecy.append((double)spectrum[i]);
-	}
+//	QVector<double> vecy;
+//	QVector<double> vecx;
+//	for(int i = 0; i < m_pointCount; i++)
+//	{
+//		vecx.append((double)i);
+//		vecy.append((double)spectrum[i]);
+//	}
 
 	m_initGraph = true;
 	m_mux.unlock();
@@ -562,9 +567,11 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	QList<OverthresholdBand> listOverthreshold;
 
-	if((m_threshold != -1000) && (m_rett == -100))
+	if(m_view->isThreshold())
 	{
 		QList<StationsFrequencyAndBandwith> list;
+
+		double m_threshold = 0;
 
 		if(m_controlPanelMode == 2)
 		{
@@ -579,7 +586,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		for(int i = 0; i < m_pointCount; i++)
 		{
 			double overthreshold = ((m_current_frequency / TO_MHZ) -10) + ((m_bandwidth / TO_MHZ)/m_pointCount)*i;
-
+			m_threshold = m_thresholdList.value(10*qRound(overthreshold/10), 0);
 
 			//listOverthreshold.append(overthreshold);
 
@@ -643,22 +650,23 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 		m_stopFlag = false;
 
 		m_sigDialog->setNewFreq(m_name, listOverthreshold);
+		m_sigDialog->show();
 
 		int result = m_sigDialog->exec();
 
 		listOverthreshold.clear();
 		m_rett = -100;
 
-		if(result == QDialog::Accepted){
-			setSpectrumShow(true);
-			m_stopFlag = true;
+//		if(result == QDialog::Accepted){
+//			setSpectrumShow(true);
+//			m_stopFlag = true;
 
-		}
-		else {
-			setSpectrumShow(false);
-			m_stopFlag = false;
-			return;
-		}
+//		}
+//		else {
+//			setSpectrumShow(false);
+//			m_stopFlag = false;
+//			return;
+//		}
 	}
 
 	//TODO: Write signals values over m_threshold. Task 6186
@@ -807,7 +815,7 @@ void SpectrumWidgetController::setZeroFrequency(double val)
 
 void SpectrumWidgetController::setZeroFrequencyInternal(double val)
 {
-	if(m_stopFlag == false)
+	if(/*m_stopFlag == false ||*/ val < 0)
 	{
 		return;
 	}
@@ -820,8 +828,7 @@ void SpectrumWidgetController::setZeroFrequencyInternal(double val)
 
 	m_dbManager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, val);
 
-	m_current_frequency = val*TO_MHZ;
-	double zeroFreq = m_current_frequency - /*m_bandwidth/2*/10000000;
+	double zeroFreq = val*TO_MHZ - /*m_bandwidth/2*/10000000;
 
 	//If not activated spectrum - laggy counting of zero frequency ???
 	if(m_graphicsWidget->isActivated()) {
@@ -836,6 +843,11 @@ void SpectrumWidgetController::setZeroFrequencyInternal(double val)
 
 	//	ret = m_dbStationController->getFrequencyAndBandwidthByCategory("White", list );
 	//	setDetectedAreas(1, list);
+}
+
+void SpectrumWidgetController::setCurrentFrequencyInternal(double val)
+{
+	m_current_frequency = val*TO_MHZ;
 }
 
 void SpectrumWidgetController::setVisible(const bool isVisible)
@@ -899,6 +911,7 @@ void SpectrumWidgetController::init()
 	//m_qwtCurve->attach(m_sonogramWidget);
 
 	m_graphicsWidget->SetZoomOutMaxOnDataSet(true);
+	m_graphicsWidget->SetAutoscaleY(true);
 	m_graphicsWidget->SetAlign(2);
 
 	//m_graphicsWidget->ZoomOutFull();
@@ -939,6 +952,8 @@ void SpectrumWidgetController::init()
 	connect(m_view, SIGNAL(setShowPeaksSignal(bool)), this, SLOT(slotShowPeaks(bool)));
 	connect(m_view, SIGNAL(setShowControlPRM(bool)), this, SLOT(slotShowControlPRM(bool)));
 
+	connect(m_view, SIGNAL(signalManualThreshold(double)), this, SLOT(slotSelectionFinishedRedLine(double)));
+
 	m_prm300WidgetController = new Prm300ControlWidgetController(m_view->getSpectrumName(), this);
 	m_prm300WidgetController->appendView(m_view->getPrm300Widget());
 
@@ -961,14 +976,33 @@ void SpectrumWidgetController::slotAutoSearch(bool state)
 
 void SpectrumWidgetController::slotSelectiontypeChanged(bool state)
 {
+	if(state) {
+		QMap<int, int> thresholdList;
+		int cf = 10*qRound(m_current_frequency/(TO_MHZ*10));
+		int res = m_dbStationController->getThresholdByFrequencyAndStation(m_name, cf, thresholdList);
+
+		if(res && !thresholdList.isEmpty()) {
+			m_thresholdList.clear();
+			m_thresholdList = thresholdList;
+		}
+
+		foreach (int freq, thresholdList.keys()) {
+			m_graphicsWidget->SetLabel(thresholdList.value(freq, 0), "redLine", QString::number(freq));
+			if(freq == cf) {
+				m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+			}
+		}
+	} else {
+		m_graphicsWidget->SetLabel(0, "resetRedLine");
+		m_thresholdList.clear();
+	}
+
 	if(state){
 		emit signalCurSelChanged(4);
 		return;
 	}
 
 	emit signalCurSelChanged(1);
-
-	m_threshold = -1000;
 }
 
 void SpectrumWidgetController::slotRequestData(bool state)
@@ -1119,8 +1153,17 @@ void SpectrumWidgetController::slotSelectionFinished(double x1, double y1, doubl
 
 void SpectrumWidgetController::slotSelectionFinishedRedLine(double y)
 {
-	m_threshold = y;
-	emit signalChoosedThreshold(y);
+	int cf = 10* qRound(m_current_frequency/(TO_MHZ*10));
+	bool res = m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf, y);
+	m_thresholdList.insert(cf, y);
+
+	m_graphicsWidget->SetLabel(0, "resetRedLine");
+	foreach (int freq, m_thresholdList.keys()) {
+		m_graphicsWidget->SetLabel(m_thresholdList.value(freq, 0), "redLine", QString::number(freq));
+		if(freq == cf) {
+			m_view->setThresholdValue(m_thresholdList.value(freq, 0));
+		}
+	}
 }
 
 void SpectrumWidgetController::slotIsShowContextMenu()

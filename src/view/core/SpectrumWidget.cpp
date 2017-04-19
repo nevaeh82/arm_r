@@ -16,7 +16,10 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(setAutoSearchSignal(bool)));
 	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SIGNAL(selectionTypeChangedSignal(bool)));
+	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SLOT(onThresholdToggled(bool)));
 	connect(ui->getSpectrumCB, SIGNAL(toggled(bool)), this, SIGNAL(requestDataSignal(bool)));
+
+	connect(ui->sbThreshold, SIGNAL(valueChanged(double)), this, SIGNAL(signalManualThreshold(double)));
 
 	connect(ui->maximumsCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowPeaksSignal(bool)));
 	connect(ui->prmControlCB, SIGNAL(clicked(bool)), this, SIGNAL(setShowControlPRM(bool)));
@@ -59,6 +62,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 //	ui->getSpectrumCB->setVisible(false);
 
 	connect(ui->cbSonogram, SIGNAL(clicked(bool)), m_plot, SLOT(setVisible(bool)));
+
+	ui->sbThreshold->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -170,6 +175,18 @@ bool SpectrumWidget::isSonogram()
 	return ui->cbSonogram->isChecked();
 }
 
+bool SpectrumWidget::isThreshold() const
+{
+	return ui->thresholdCB->isChecked();
+}
+
+void SpectrumWidget::setThresholdValue(const int val)
+{
+	ui->sbThreshold->blockSignals(true);
+	ui->sbThreshold->setValue(val);
+	ui->sbThreshold->blockSignals(false);
+}
+
 void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg)
 {
 }
@@ -233,6 +250,15 @@ void SpectrumWidget::onZoomSonogram(double start_hz, double end_hz, bool replot)
 
 	if(replot) {
 		m_plot->replot();
+	}
+}
+
+void SpectrumWidget::onThresholdToggled(bool val)
+{
+	if(val) {
+		ui->sbThreshold->setVisible(true);
+	} else {
+		ui->sbThreshold->setVisible(false);
 	}
 }
 

@@ -263,6 +263,7 @@ void SpectrumWidgetDataSource::setPanoramaFreqControl(PanoramaFreqControl* contr
 void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneShotData_LocationData& data)
 {
 	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
+		m_needSetupSpectrum = true;
 		emit onDrawComplete();
 		return;
 	}
@@ -337,6 +338,7 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		freq += stepFreq;
 	}
 
+	m_spectrumWidget->setCurrentWorkFrequency(cf);
 
 	if(!m_isPanoramaStart)
 	{

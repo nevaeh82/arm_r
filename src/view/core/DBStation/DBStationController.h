@@ -60,6 +60,9 @@ public:
 	virtual inline QStringList getCategoriesCatalog() { return getCatalog( "category" ); }
 	virtual inline QStringList getSignalTypesCatalog() { return getCatalog( "signalType" ); }
 
+	virtual bool setThresholdByFrequencyAndStation(const QString &station, const int frequency, const int threshold);
+	virtual bool getThresholdByFrequencyAndStation(const QString &station, const int frequency, QMap<int, int>& thresholdList);
+
 private:
 	QSqlDatabase m_db;
 protected:
