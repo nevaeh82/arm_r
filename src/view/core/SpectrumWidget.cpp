@@ -17,6 +17,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect(ui->autosearchCB, SIGNAL(toggled(bool)), this, SIGNAL(setAutoSearchSignal(bool)));
 	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SIGNAL(selectionTypeChangedSignal(bool)));
 	connect(ui->thresholdCB, SIGNAL(toggled(bool)), this, SLOT(onThresholdToggled(bool)));
+	connect(ui->sbGlobalThreshold, SIGNAL(toggled(bool)), this, SIGNAL(onGlobalThresholdToggled(bool)));
+
 	connect(ui->getSpectrumCB, SIGNAL(toggled(bool)), this, SIGNAL(requestDataSignal(bool)));
 
 	connect(ui->sbThreshold, SIGNAL(valueChanged(double)), this, SIGNAL(signalManualThreshold(double)));
@@ -64,6 +66,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect(ui->cbSonogram, SIGNAL(clicked(bool)), m_plot, SLOT(setVisible(bool)));
 
 	ui->sbThreshold->setVisible(false);
+	ui->sbGlobalThreshold->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -180,6 +183,11 @@ bool SpectrumWidget::isThreshold() const
 	return ui->thresholdCB->isChecked();
 }
 
+bool SpectrumWidget::isGlobalThreshold() const
+{
+	return ui->sbGlobalThreshold->isChecked();
+}
+
 void SpectrumWidget::setThresholdValue(const int val)
 {
 	ui->sbThreshold->blockSignals(true);
@@ -257,8 +265,10 @@ void SpectrumWidget::onThresholdToggled(bool val)
 {
 	if(val) {
 		ui->sbThreshold->setVisible(true);
+		ui->sbGlobalThreshold->setVisible(true);
 	} else {
 		ui->sbThreshold->setVisible(false);
+		ui->sbGlobalThreshold->setVisible(false);
 	}
 }
 

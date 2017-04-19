@@ -55,6 +55,7 @@ public:
 
 	bool isSonogram();
 	bool isThreshold() const;
+	bool isGlobalThreshold() const;
 
 	void setThresholdValue(const int);
 
@@ -81,6 +82,8 @@ signals:
 	void setShowControlPRM(bool);
 
 	void signalManualThreshold(double);
+	void onGlobalThresholdToggled(bool);
+
 protected:
 	void paintEvent(QPaintEvent *);
 };
