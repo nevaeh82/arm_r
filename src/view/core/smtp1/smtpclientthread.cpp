@@ -2,7 +2,10 @@
 
 #include "mimetext.h"
 
-#define MESSAGE_TIMEOUT 120000
+#include <QFile>
+#include <QCoreApplication>
+
+#define MESSAGE_TIMEOUT 60000
 #define MESSAGE_TIMER 60000
 
 SmtpClientThread::SmtpClientThread(QObject *parent)
@@ -60,8 +63,36 @@ int SmtpClientThread::sendMail()
 	EmailAddress sender("ZavTestMail@yandex.ru", "ARM_R");
 	message.setSender(&sender);
 
-	EmailAddress to("tastyreefer@gmail.com", "Paul");
-	message.addRecipient(&to);
+	{
+		//Read Mail adresses
+		QString mailFile = QCoreApplication::applicationDirPath();
+		mailFile.append("/Tabs/mail.ini");
+		QFile addresses(mailFile);
+		if(!addresses.open(QIODevice::ReadOnly)) {
+			m_elapsedTimer.restart();
+			m_messageBuffer.clear();
+
+			m_timer.start();
+			return -1;
+		}
+
+		QStringList addrList = QString(addresses.readAll()).split(",");
+
+		if(addrList.isEmpty()) {
+			m_elapsedTimer.restart();
+			m_messageBuffer.clear();
+
+			m_timer.start();
+			return -1;
+		}
+
+		foreach (QString addr, addrList) {
+			EmailAddress* to = new EmailAddress(addr, "Zaviruha");
+			message.addRecipient(to);
+		}
+	}
+
+
 //	EmailAddress to1("tastyreefer@yahoo.com", "Paul");
 //	message.addRecipient(&to1);
 //	EmailAddress to2("nevaeh.pavlov@gmail.com", "Andrey Pavlov");
@@ -87,26 +118,42 @@ int SmtpClientThread::sendMail()
 	if (!smtp.connectToHost()) {
 		qDebug() << "Failed to connect to host!" << endl;
 		m_timer.start();
+		m_elapsedTimer.restart();
+		m_messageBuffer.clear();
 		return -1;
 	}
 
 	if (!smtp.login()) {
 		qDebug() << "Failed to login!" << endl;
+		m_elapsedTimer.restart();
+		m_messageBuffer.clear();
+
+		m_timer.start();
 		return -2;
 	}
 
 	if (!smtp.sendMail(message)) {
 		qDebug() << "Failed to send mail!" << endl;
+		m_elapsedTimer.restart();
+		m_messageBuffer.clear();
+
 		m_timer.start();
 		return -3;
 	}
 
 	smtp.quit();
 
+
+	QList<EmailAddress*> addrList = message.getRecipients(MimeMessage::To);
+	foreach (EmailAddress* addr, addrList) {
+		delete addr;
+	}
 	// ....
 
 	m_elapsedTimer.restart();
 	m_messageBuffer.clear();
 
 	m_timer.start();
+
+	return 1;
 }

@@ -19,11 +19,8 @@ SignalDetectedDialog::SignalDetectedDialog(QWidget *parent) :
 	setWindowFlags(flags);
 	setWindowIcon(QIcon(":/images/icons/ListsDialog.png"));
 
-	audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-	mediaObject = new Phonon::MediaObject(this);
-	metaInformationResolver = new Phonon::MediaObject(this);
+	connect(btnCancel, SIGNAL(clicked(bool)), this, SIGNAL(onStopSpectrum()));
 
-	Phonon::createPath(mediaObject, audioOutput);
 }
 
 SignalDetectedDialog::~SignalDetectedDialog()
@@ -35,38 +32,22 @@ void SignalDetectedDialog::setFrequency(QString name, QList<double> freqs)
 {
 	ui->teDetected->clear();
 
-	Phonon::MediaSource source("./audio/alarm.mp3");
-
-	mediaObject->setCurrentSource(source);
-
-	mediaObject->play();
-
-
-
-//	Phonon::MediaObject *music =
-//		 Phonon::createPlayer(Phonon::MusicCategory,
-//							  Phonon::MediaSource("./audio/alarm.mp3"));
-//	 music->play();
+	//Phonon::MediaSource source("./audio/alarm.mp3");
 
 	ui->leName->setText(name);
 	foreach (double freq, freqs) {
 		QString value = QString("%1 MHz").arg(QString::number(freq, 'f', 4));
 		ui->teDetected->append(value);
 	}
-    //	ui->dspFreq->setValue(freq);
+
+	if(freqs.size() > 0) {
+		QSound::play("./audio/maximum.wav");
+	}
 }
 
 void SignalDetectedDialog::setNewFreq(QString name, QList<OverthresholdBand> list)
 {
     ui->teDetected->clear();
-
-    Phonon::MediaSource source("./audio/alarm.mp3");
-
-    mediaObject->setCurrentSource(source);
-
-    mediaObject->play();
-
-
 
 //	Phonon::MediaObject *music =
 //		 Phonon::createPlayer(Phonon::MusicCategory,
@@ -80,4 +61,8 @@ void SignalDetectedDialog::setNewFreq(QString name, QList<OverthresholdBand> lis
         QString value = QString("Freq = %1, Band = %2 MHz").arg(QString::number(middle, 'f', 4)).arg(QString::number(band, 'f', 4));
         ui->teDetected->append(value);
     }
+
+	if(list.size() > 0) {
+		QSound::play("./audio/maximum.wav");
+	}
 }
