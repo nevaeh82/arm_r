@@ -4,12 +4,9 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QList>
-#include <phonon/audiooutput.h>
-#include <phonon/seekslider.h>
-#include <phonon/mediaobject.h>
-#include <phonon/volumeslider.h>
-#include <phonon/backendcapabilities.h>
 #include "DBStation/DBFillTables.h"
+
+#include <QSound>
 
 namespace Ui {
 class SignalDetectedDialog;
@@ -28,10 +25,8 @@ public:
 private:
 	Ui::SignalDetectedDialog *ui;
 
-private:
-	Phonon::MediaObject *mediaObject;
-	Phonon::MediaObject *metaInformationResolver;
-	Phonon::AudioOutput *audioOutput;
+signals:
+	void onStopSpectrum();
 };
 
 #endif // SIGNALDETECTEDDIALOG_H

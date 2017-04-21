@@ -307,6 +307,8 @@ private slots:
 	void clearSonogramInternal();
 	void slotRecognizeSignal();
 	void slotRecordSignal();
+
+	void onSpectrumStop();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

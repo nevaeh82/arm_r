@@ -111,6 +111,7 @@ void SpectrumWidgetController::appendView(SpectrumWidget* view)
 {
 	m_view = view;
 	m_sigDialog = new SignalDetectedDialog(m_view);
+	connect(m_sigDialog, SIGNAL(onStopSpectrum()), this, SLOT(onSpectrumStop()));
 
 	init();
 }
@@ -652,7 +653,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 
 	if(!listOverthreshold.isEmpty())
 	{
-		setSpectrumShow(false);
+		//setSpectrumShow(false);
 		m_stopFlag = false;
 
 		m_sigDialog->setNewFreq(m_name, listOverthreshold);
@@ -676,29 +677,29 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 	}
 
 	//TODO: Write signals values over m_threshold. Task 6186
-	if(!m_overthreshold.isEmpty()) {
+//	if(!m_overthreshold.isEmpty()) {
 
-		setSpectrumShow(false);
-		m_stopFlag = false;
+//		setSpectrumShow(false);
+//		m_stopFlag = false;
 
-		m_sigDialog->setFrequency(m_name, m_overthreshold);
+//		m_sigDialog->setFrequency(m_name, m_overthreshold);
 
-		int result = m_sigDialog->exec();
+//		int result = m_sigDialog->exec();
 
-		m_overthreshold.clear();
-		m_rett = -100;
+//		m_overthreshold.clear();
+//		m_rett = -100;
 
-		if(result == QDialog::Accepted){
-			setSpectrumShow(true);
-			m_stopFlag = true;
+//		if(result == QDialog::Accepted){
+//			setSpectrumShow(true);
+//			m_stopFlag = true;
 
-		}
-		else {
-			setSpectrumShow(false);
-			m_stopFlag = false;
-			return;
-		}
-	}
+//		}
+//		else {
+//			setSpectrumShow(false);
+//			m_stopFlag = false;
+//			return;
+//		}
+//	}
 
 	m_graphicsWidget->PermanentDataSetup(spectrum, spectrum_peak_hold, minv, maxv);
 
@@ -1136,6 +1137,11 @@ void SpectrumWidgetController::recordSignal()
 void SpectrumWidgetController::slotRecordSignal()
 {
 	m_setupController->requestRecord(m_id);
+}
+
+void SpectrumWidgetController::onSpectrumStop()
+{
+	setSpectrumShow(false);
 }
 
 void SpectrumWidgetController::slotSelectionCleared()

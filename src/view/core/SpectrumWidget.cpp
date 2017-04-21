@@ -67,6 +67,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 
 	ui->sbThreshold->setVisible(false);
 	ui->sbGlobalThreshold->setVisible(false);
+
+	ui->maximumsCB->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()

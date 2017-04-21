@@ -173,7 +173,7 @@ void ControlPanelWidget::changeQualityStatus(const int status, bool isMoving, fl
 		alarmAimVisible(true);
 		ui->labelAlarm->setText(tr("Moving aim founded!!! Freq: %1").arg(freq));
 		if(!ui->sounOffCB->isChecked()) {
-			QSound::play("a.wav");
+			QSound::play("./audio/aim.wav");
 		}
 		m_alarmTimer->start(10000);
 	} else {
