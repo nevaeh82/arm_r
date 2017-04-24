@@ -163,7 +163,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.prepare("INSERT INTO stationData VALUES(NULL, " \
 				  "(SELECT id FROM stationDevices WHERE stationID=(SELECT id from station WHERE name=:station) AND port=:port), " \
 				  "(SELECT id FROM category WHERE name=:category), :frequency, :bandwidth, " \
-                  "(SELECT id FROM signalType WHERE name=:objectSignalType), :dateTime, :checked);");
+				  "(SELECT id FROM signalType WHERE name=:objectSignalType), :dateTime, :comment, :checked);");
 
 	VALIDATE_QUERY( query );
 
@@ -174,6 +174,7 @@ int DBStationController::addStationData(const StationData& data)
 	query.bindValue( ":bandwidth", data.bandwidth );
 	query.bindValue( ":signalType", data.signalType );
 	query.bindValue( ":dateTime", QDateTime::currentDateTime() );
+	query.bindValue( ":comment", data.comment );
     query.bindValue( ":checked", 1);
 	query.exec();
 
@@ -205,7 +206,7 @@ int DBStationController::updateStationData(const StationData& data)
 
 	QSqlQuery query( m_db );
 	query.prepare( "UPDATE stationData " \
-                   "SET bandwidth = :bandwidth, signalTypeID = :signalType, datetime = :datetime, checked = :checked " \
+				   "SET bandwidth = :bandwidth, signalTypeID = :signalType, datetime = :datetime, comment = :comment, checked = :checked " \
 				   "WHERE deviceID = :device AND categoryID = :category AND frequency = :frequency" );
 
 	VALIDATE_QUERY( query );
@@ -216,6 +217,7 @@ int DBStationController::updateStationData(const StationData& data)
 	query.bindValue( ":device", deviceID );
 	query.bindValue( ":category", categoryID );
 	query.bindValue( ":frequency", data.frequency );
+	query.bindValue( ":comment", data.comment );
     query.bindValue( ":checked", data.checked);
 	query.exec();
 
@@ -475,7 +477,8 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 		data.stationShortInfo.bandwidth = query.value(6).toDouble();
 		data.stationShortInfo.signalType = query.value(7).toString();
 		data.date = query.value(8).toDateTime();
-        data.stationShortInfo.checked = query.value(9).toBool();
+		data.stationShortInfo.comment = query.value(9).toString();
+		data.stationShortInfo.checked = query.value(10).toBool();
 		stationRecords.append(data);
 	}
 

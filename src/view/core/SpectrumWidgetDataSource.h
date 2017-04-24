@@ -64,8 +64,6 @@ private:
 	PanoramaFreqControl* m_panoramaFreqControl;
 	QTime m_sonogramTime;
 
-	QMutex m_timeMutex;
-
 	QTimer* m_sleepModeTimer;
 
 public:

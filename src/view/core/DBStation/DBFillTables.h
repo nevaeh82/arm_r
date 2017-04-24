@@ -13,6 +13,7 @@ typedef struct StationData
 	double frequency;
 	double bandwidth;
 	QString signalType;
+	QString comment;
     unsigned short checked;
 } StationData;
 
@@ -46,6 +47,24 @@ typedef struct StationsFrequencyAndBandwith
 	}
 
 }StationsFrequencyAndBandwith;
+
+inline QDataStream& operator<<(QDataStream& out, const StationsFrequencyAndBandwith& object)
+{
+	return out << object.bandwidth
+			   << object.frequency
+			   << object.isChecked
+			   << object.stationName;
+}
+
+inline QDataStream& operator>>(QDataStream& in, StationsFrequencyAndBandwith& object)
+{
+	in >> object.bandwidth
+	   >> object.frequency
+	   >> object.isChecked
+	   >> object.stationName;
+
+	return in;
+}
 
 /// bandwidth of overthreshold in station
 typedef struct OverthresholdBand

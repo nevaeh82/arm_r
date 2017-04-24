@@ -263,7 +263,6 @@ void SpectrumWidgetDataSource::setPanoramaFreqControl(PanoramaFreqControl* contr
 void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneShotData_LocationData& data)
 {
 	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
-		m_needSetupSpectrum = true;
 		emit onDrawComplete();
 		return;
 	}

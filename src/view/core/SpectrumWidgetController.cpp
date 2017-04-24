@@ -196,9 +196,9 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 
 		m_alarmMutex.lock();
 		if(m_alarm) {
-			emit onDrawComplete();
 			m_alarm = false;
 			m_alarmMutex.unlock();
+			emit onDrawComplete();
 			return;
 		}
 		m_alarm = false;
@@ -1062,6 +1062,7 @@ void SpectrumWidgetController::addToWhiteList()
 	data.frequency = (tmpSelection.end.x() + tmpSelection.start.x()) / 2;
 	data.bandwidth= (tmpSelection.end.x() - tmpSelection.start.x());
 	data.checked = 0;
+	data.comment = "";
 
 
 	StationData dataExist = m_dbStationController->
@@ -1095,6 +1096,7 @@ void SpectrumWidgetController::addToBlackList()
 	data.frequency = (tmpSelection.end.x() + tmpSelection.start.x()) / 2;
 	data.bandwidth= (tmpSelection.end.x() - tmpSelection.start.x());
 	data.checked = 0;
+	data.comment = "";
 
 	StationData dataExist = m_dbStationController->
 			getStationData( data.stationName, data.port, data.frequency, data.bandwidth );

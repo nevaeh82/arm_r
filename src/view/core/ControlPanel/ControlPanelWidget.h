@@ -74,6 +74,7 @@ signals:
 	void signalScanMode(int start, int finish);
 	void signalCheckMode();
 	void signalViewMode();
+	void signalViewAreaMode();
 
 	void signalDown1Mhz();
 	void signalDown10Mhz();

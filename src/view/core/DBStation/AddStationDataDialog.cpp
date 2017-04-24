@@ -106,6 +106,7 @@ void AddStationDataDialog::accept()
 	data.port = ui->sbPort->value();
 	data.category = ui->cbCategory->itemData( ui->cbCategory->currentIndex() ).toString();
 	data.signalType = ui->cbSignalType->currentText();
+	data.comment = ui->leMemo->text();
     unsigned short set = 0;
     if(ui->cbSet->isChecked())
     {

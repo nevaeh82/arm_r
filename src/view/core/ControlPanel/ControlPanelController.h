@@ -48,12 +48,16 @@ class ControlPanelController : public QObject, public IControlPanelController, p
 		int quality;
 		int state;
 		double freq;
+		double lon;
+		double lat;
 
 		void clear(){
 			dateTime = -1;
 			quality = -1;
 			state = -1;
 			freq = 0;
+			lon = 0;
+			lat = 0;
 		}
 
 		solverResult::solverResult()
@@ -92,7 +96,7 @@ private:
 	QList<StationsFrequencyAndBandwith>::Iterator m_itScanMode;
 
 	QList<int> m_IdDetetcted;
-	QList<int>::Iterator m_itDetected;
+	int m_itDetected;
 	bool m_workCheckList;
 
 	//solverResult m_solverResult;
@@ -114,10 +118,6 @@ private:
 
 	bool checkSolverResult(int freq);
 	int findResultInList(solverResult res);
-
-	SmtpClientThread* m_smtpThread;
-	QThread* m_smtpQThread;
-
 public:
 	explicit ControlPanelController(QObject *parent = 0);
 	virtual ~ControlPanelController();
@@ -186,6 +186,7 @@ private slots:
 	void slotScanMode(int start, int finish);
 	void slotCheckMode();
 	void slotViewMode();
+	void slotViewAreaMode();
 
 	void slotChangeFreq();
 	void slotCheckModeSetFreq();

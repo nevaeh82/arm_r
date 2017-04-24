@@ -14,6 +14,7 @@
 #define TIMER_INTERVAL 5000
 #define TIMERCHECK_INTERVAL 5000
 #define TIMERCHECK_INTERVAL_DETECTED 2000
+
 #define TIMERINTERVAL_KEY "ControlPanel"
 
 ControlPanelController::ControlPanelController(QObject *parent)
@@ -32,21 +33,14 @@ ControlPanelController::ControlPanelController(QObject *parent)
 	m_rpcFlakonClient = NULL;
 	m_mainStation = NULL;
 	m_listsDialog = NULL;
+	m_itDetected = -1;
 
 	init();
 
-	m_smtpThread = new SmtpClientThread(0);
-	m_smtpQThread = new QThread();
-
-	connect(m_smtpQThread, SIGNAL(finished()), m_smtpQThread, SLOT(deleteLater()));
-
-	m_smtpThread->moveToThread(m_smtpQThread);
-	m_smtpQThread->start();
-
 	//connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
 	//connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
-//	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
-//	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
+	//	connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
+	//	connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
 
 
 	connect(this, SIGNAL(signalSetCentralFreq(double)), this, SLOT(setCentralFreqValueInternal(double)));
@@ -55,8 +49,6 @@ ControlPanelController::ControlPanelController(QObject *parent)
 
 ControlPanelController::~ControlPanelController()
 {
-	delete m_smtpThread;
-	m_smtpQThread->deleteLater();
 }
 
 void ControlPanelController::init()
@@ -108,6 +100,7 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalScanMode(int,int)), this, SLOT(slotScanMode(int,int)));
 	connect(m_view, SIGNAL(signalCheckMode()), this, SLOT(slotCheckMode()));
 	connect(m_view, SIGNAL(signalViewMode()), this, SLOT(slotViewMode()));
+	connect(m_view, SIGNAL(signalViewAreaMode()), this, SLOT(slotViewAreaMode()));
 
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	connect(&m_timerCheck, SIGNAL(timeout()), this, SLOT(slotCheckModeSetFreq()));
@@ -211,7 +204,8 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
 
-				m_smtpThread->sendMessage(QString("Found manual AIM: \n   freq %1 \n   state %2 \n   quality %3").arg(res.freq).arg(res.state).arg(res.quality) );
+				res.lat = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).coordinates().lat();
+				res.lon = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).coordinates().lon();
 
 				m_solverResultList.append( res );
 			}
@@ -234,34 +228,36 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 				res.quality = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).quality();
 				quality |= res.quality;
 
-				m_smtpThread->sendMessage(QString("Found auto AIM: \n   freq %1 \n   state %2 \n   quality %3").arg(res.freq).arg(res.state).arg(res.quality) );
+				res.lat = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).coordinates().lat();
+				res.lon = solPkt.trajectory(i).motionestimate( solPkt.trajectory(i).motionestimate_size() - 1 ).coordinates().lon();
 
 				m_solverResultList.append( res );
 			}
 		}
 
-        if(pkt.datafromsolver().has_solverresponse()) {
-            if( pkt.datafromsolver().solverresponse().has_maxallowablerangessdv() ) {
-                float skoMax = pkt.datafromsolver().solverresponse().maxallowablerangessdv();
-                emit skoChanged(skoMax);
-            }
-        }
+		if(pkt.datafromsolver().has_solverresponse()) {
+			if( pkt.datafromsolver().solverresponse().has_maxallowablerangessdv() ) {
+				float skoMax = pkt.datafromsolver().solverresponse().maxallowablerangessdv();
+				emit skoChanged(skoMax);
+			}
+		}
 
 		m_view->changeQualityStatus( quality, isMoving, movingFreq );
-//		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mEst;
-//		if( mEst.ParseFromArray(data, data.size()) ) {
-//			int test = mEst.quality();
-//			m_view->changeQualityStatus( mEst.quality() );
 
-//			int freq = mEst.targetspeed_acc();
+		//		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mEst;
+		//		if( mEst.ParseFromArray(data, data.size()) ) {
+		//			int test = mEst.quality();
+		//			m_view->changeQualityStatus( mEst.quality() );
 
-//			//if(freq == m_currentFreq) {
-//				m_solverResult.dateTime = QDateTime::currentMSecsSinceEpoch();
-//				m_solverResult.quality = (int)mEst.quality();
-//				m_solverResult.state = (int)mEst.state();
-//				m_solverResult.freq = freq;
-//			//}
-//		}
+		//			int freq = mEst.targetspeed_acc();
+
+		//			//if(freq == m_currentFreq) {
+		//				m_solverResult.dateTime = QDateTime::currentMSecsSinceEpoch();
+		//				m_solverResult.quality = (int)mEst.quality();
+		//				m_solverResult.state = (int)mEst.state();
+		//				m_solverResult.freq = freq;
+		//			//}
+		//		}
 	}
 }
 
@@ -322,13 +318,7 @@ void ControlPanelController::updatePanorama(const bool enable, const double &sta
 
 void ControlPanelController::onCommonFrequencyChangedSlot(double value)
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
-
 	m_currentFreq = value;
-
-	//m_dbManager->updatePropertyForAllObjects(DB_FREQUENCY_PROPERTY, m_currentFreq);
 
 	emit signalSetComonFreq(m_currentFreq);
 }
@@ -388,7 +378,7 @@ void ControlPanelController::slotCheckMode()
 	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
 	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
 	m_itCheckMode = m_listOfFreqs.begin();
-	m_itDetected = m_IdDetetcted.begin();
+	m_itDetected = -1;
 
 	m_listsDialog->setWorkList(m_listOfFreqs);
 
@@ -400,30 +390,115 @@ void ControlPanelController::slotViewMode()
 {
 	slotCheckMode();
 	m_isFollowMode = true;
+}
 
-//	if(m_timerCheck.isActive())
-//		m_timerCheck.stop();
-//	if(m_timer.isActive())
-//		m_timer.stop();
+void ControlPanelController::slotViewAreaMode()
+{
+	if(m_timer.isActive()) {
+		m_timer.stop();
+	}
 
-//	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
-//	log_debug(QString("data for leading = %1").arg(m_listOfFreqs.count()));
-//	m_itCheckMode = m_listOfFreqs.begin();
-//	slotCheckModeSetFreq();
-//	m_timerCheck.start(m_timerCheckInterval);
+	if(m_timerCheck.isActive()) {
+		m_timerCheck.stop();
+	}
 
-//	QString ControlPanelSettingsPath = QCoreApplication::applicationDirPath();
-//	ControlPanelSettingsPath.append("./Scan/CheckTimer.ini");
-//	QSettings ControlPanelSettings( ControlPanelSettingsPath, QSettings::IniFormat );
+	m_isFollowMode = false;
+	m_listOfFreqs.clear();
+	m_IdDetetcted.clear();
 
-//	int interval = ControlPanelSettings.value("timer", 3000).toInt();
-//	m_timerCheck.start(interval);
+	m_listsDialog->clearDetectFreq();
+	m_listsDialog->clearWorkList();
+
+	m_listsDialog->getFrequencyAndBandwidthByWhiteAreas(m_listOfFreqs);
+	m_dbStation->getFrequencyAndBandwidthByCategory("Black", m_listOfFreqsBlack);
+
+	QList<StationsFrequencyAndBandwith> m_tmpList;
+
+	bool inwork = false;
+
+	foreach (StationsFrequencyAndBandwith dataBlack, m_listOfFreqsBlack) {
+
+		if(inwork) {
+			m_listOfFreqs.swap(m_tmpList);
+			m_tmpList.clear();
+		}
+
+		foreach (StationsFrequencyAndBandwith data, m_listOfFreqs) {
+
+			inwork = true;
+
+			QRectF rBlack( dataBlack.frequency - (dataBlack.bandwidth/2),
+						   0, dataBlack.bandwidth, 1 );
+
+			QRectF rDat( data.frequency - (data.bandwidth/2),
+						   0, data.bandwidth, 1 );
+
+			QPainterPath p1;
+			p1.addRect(rBlack);
+
+			QPainterPath p2;
+			p2.addRect(rDat);
+
+			if(rDat.contains(rBlack)) {
+				QRectF resultLeft(QPointF(rDat.x(), 0), QPointF(rBlack.x(), 1));
+				QRectF resultRight(QPointF(rBlack.x()+rBlack.width(), 0),
+								   QPointF(rDat.x()+rDat.width(), 1));
+				StationsFrequencyAndBandwith tmpData1;
+				StationsFrequencyAndBandwith tmpData2;
+
+				tmpData1.frequency = resultLeft.center().x();
+				tmpData1.bandwidth = resultLeft.width();
+				tmpData1.isChecked = true;
+				tmpData1.stationName = "";
+
+				tmpData2.frequency = resultRight.center().x();
+				tmpData2.bandwidth = resultRight.width();
+				tmpData2.isChecked = true;
+				tmpData2.stationName = "";
+
+				m_tmpList.append(tmpData1);
+				m_tmpList.append(tmpData2);
+				continue;
+			}
+
+
+			QPainterPath rsz = p2-p1;
+			QRectF result = rsz.boundingRect();
+			if(!result.isNull()) {
+				StationsFrequencyAndBandwith tmpData1;
+
+				tmpData1.frequency = result.center().x();
+				tmpData1.bandwidth = result.width();
+				tmpData1.isChecked = true;
+				tmpData1.stationName = "";
+
+				m_tmpList.append(tmpData1);
+			}
+
+		}
+	}
+
+	m_listOfFreqs.swap(m_tmpList);
+	m_tmpList.clear();
+
+	m_itCheckMode = m_listOfFreqs.begin();
+	m_itDetected = -1;
+
+	m_listsDialog->setWorkList(m_listOfFreqs);
+
+	slotCheckModeSetFreq();
+	m_timerCheck.start(m_timerCheckInterval);
+
+
+	m_isFollowMode = true;
 }
 
 void ControlPanelController::slotChangeFreq()
 {
 	if(m_currentFreq >= m_finishFreq)
 	{
+		m_currentFreq = m_startFreq;
+	} else if(m_currentFreq < m_startFreq) {
 		m_currentFreq = m_startFreq;
 	} else {
 		m_currentFreq += INTERVAL;
@@ -436,9 +511,9 @@ void ControlPanelController::slotChangeFreq()
 void ControlPanelController::checkSolverResult()
 {
 	//log_debug("Check >>> ");
-    if(!m_isFollowMode) {
-        return;
-    }
+	if(!m_isFollowMode) {
+		return;
+	}
 
 	double listFreq = (int)(*m_itCheckMode).frequency;
 
@@ -446,24 +521,21 @@ void ControlPanelController::checkSolverResult()
 		return;
 	}
 
-	m_IdDetetcted.clear();
+	//m_IdDetetcted.clear();
 	m_listsDialog->clearDetectFreq();
 	bool toRemove = true;
 
 	if(!m_solverResultList.isEmpty()) {
-		//m_listsDialog->clearDetectFreq();
 		foreach (solverResult res, m_solverResultList) {
 			int index = findResultInList(res);
 			if( index >= 0 && !m_IdDetetcted.contains(index) ) {
 				m_IdDetetcted.append(index);
 			}
 
-			int tVal = fabs(listFreq-res.freq);
 			if( fabs(listFreq-res.freq) < 2 ) {
 				toRemove = false;
 			}
 		}
-		//m_itDetected = m_IdDetetcted.begin();
 	}
 
 	if(toRemove) {
@@ -487,10 +559,10 @@ bool ControlPanelController::slotIncCheckMode()
 	if( !m_IdDetetcted.isEmpty() ) {
 		m_itDetected++;
 
-		if(m_itDetected == m_IdDetetcted.end()) {
-			//m_itDetected = m_IdDetetcted.begin();
+		if(m_itDetected >= m_IdDetetcted.size()) {
+			m_itDetected = -1;
 		} else {
-			return true;
+			return false;
 		}
 	}
 
@@ -526,9 +598,9 @@ void ControlPanelController::slotCheckModeSetFreq()
 		return;
 	}
 
-    //log_debug(QString("Detected list sz: %1  ").arg(m_IdDetetcted.size()));
+	//log_debug(QString("Detected list sz: %1  ").arg(m_IdDetetcted.size()));
 	for(int i = 0; i<m_IdDetetcted.size(); i++) {
-        //log_debug(QString("Detected list ind: %1  ").arg(m_IdDetetcted.at(i)));
+		//log_debug(QString("Detected list ind: %1  ").arg(m_IdDetetcted.at(i)));
 	}
 
 
@@ -536,11 +608,11 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 		if( !m_IdDetetcted.isEmpty() ) {
 
-			if(m_listOfFreqs.size() >= *m_itDetected ) {
-				freq = m_listOfFreqs.at( *m_itDetected ).frequency;
-				band = m_listOfFreqs.at( *m_itDetected ).bandwidth;
-                m_setupController->slotOnSetCommonFreq((freq), band);
-				m_listsDialog->setDetectPointer(m_IdDetetcted.indexOf(*m_itDetected));
+			if(m_listOfFreqs.size() > m_IdDetetcted.at(m_itDetected) ) {
+				freq = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).frequency;
+				band = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).bandwidth;
+				m_setupController->slotOnSetCommonFreq((freq), band);
+				m_listsDialog->setDetectPointer(m_itDetected);
 				m_workCheckList = false;
 				m_timerCheck.start(m_timerCheckIntervalDetected);
 			}
@@ -552,38 +624,24 @@ void ControlPanelController::slotCheckModeSetFreq()
 	}
 
 
-	if( !m_IdDetetcted.isEmpty() ) {
-		if (m_itDetected != m_IdDetetcted.end()) {
-			if( *m_itDetected < 0 ||
-				m_listOfFreqs.size()<= *m_itDetected ) {
-				m_itDetected = m_IdDetetcted.begin();
-			}
-			int indVal = *m_itDetected;
+//	if( !m_IdDetetcted.isEmpty() ) {
+//		if (m_itDetected >= m_IdDetetcted.size()) {
+//			m_itDetected = 0;
 
-			if( !m_IdDetetcted.contains(indVal) ) {
-				log_debug(QString("Not contains %1 goto begin").arg(indVal));
-				m_itDetected = m_IdDetetcted.begin();
-			}
-
-			freq = m_listOfFreqs.at( *m_itDetected ).frequency;
-			band = m_listOfFreqs.at( *m_itDetected ).bandwidth;
-            m_setupController->slotOnSetCommonFreq((freq), band);
-			m_listsDialog->setDetectPointer(m_IdDetetcted.indexOf(*m_itDetected));
-			m_workCheckList = false;
-			m_timerCheck.start(m_timerCheckIntervalDetected);
-			return;
-		} /*else {
-			int test = *m_itDetected;
-//			m_itDetected = m_IdDetetcted.begin();
-//			m_itDetected--;
-			int k = 0;
-		}*/
-	}
+//			freq = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).frequency;
+//			band = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).bandwidth;
+//			m_setupController->slotOnSetCommonFreq((freq), band);
+//			m_listsDialog->setDetectPointer(m_IdDetetcted.indexOf(m_IdDetetcted.at(m_itDetected)));
+//			m_workCheckList = false;
+//			m_timerCheck.start(m_timerCheckIntervalDetected);
+//			return;
+//		}
+//	}
 
 	freq = (*m_itCheckMode).frequency;
 	band = (*m_itCheckMode).bandwidth;
 
-    m_setupController->slotOnSetCommonFreq((freq), band);
+	m_setupController->slotOnSetCommonFreq((freq), band);
 	m_timerCheck.start(m_timerCheckInterval);
 	m_workCheckList = true;
 	m_listsDialog->setCheckPointer(m_listOfFreqs.indexOf(*m_itCheckMode));
@@ -591,9 +649,9 @@ void ControlPanelController::slotCheckModeSetFreq()
 
 void ControlPanelController::slotDown1MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq > MINIMUM_FREQ)
 	{
@@ -606,9 +664,9 @@ void ControlPanelController::slotDown1MHz()
 
 void ControlPanelController::slotDown10MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq > MINIMUM_FREQ + 10)
 	{
@@ -621,9 +679,9 @@ void ControlPanelController::slotDown10MHz()
 
 void ControlPanelController::slotDown100MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq > MINIMUM_FREQ + 100)
 	{
@@ -636,9 +694,9 @@ void ControlPanelController::slotDown100MHz()
 
 void ControlPanelController::slotUp1MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq < MAXIMUM_FREQ)
 	{
@@ -648,14 +706,14 @@ void ControlPanelController::slotUp1MHz()
 
 	emit signalSetComonFreq(m_currentFreq);
 
-//	/sendMail();
+	//	/sendMail();
 }
 
 void ControlPanelController::slotUp10MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq < MAXIMUM_FREQ + 10)
 	{
@@ -668,9 +726,9 @@ void ControlPanelController::slotUp10MHz()
 
 void ControlPanelController::slotUp100MHz()
 {
-//	if (NULL == m_dbManager) {
-//		return;
-//	}
+	//	if (NULL == m_dbManager) {
+	//		return;
+	//	}
 
 	if(m_currentFreq < MAXIMUM_FREQ + 100)
 	{
@@ -697,12 +755,12 @@ void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 
 	if(!m_solverResultList.isEmpty()) {
 
-//		int test = abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime);
+		//		int test = abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime);
 
-//		if(abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime) > 20000) {
-//			m_view->changeQualityStatus( 0 );
-//			return;
-//		}
+		//		if(abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime) > 20000) {
+		//			m_view->changeQualityStatus( 0 );
+		//			return;
+		//		}
 	}
 }
 

@@ -25,10 +25,20 @@ public:
 private:
 	QString m_messageBuffer;
 	QTime m_elapsedTimer;
-	QTimer m_timer;
+	QTimer* m_timer;
 
 	QMutex m_messageMutex;
 
+	bool m_isOn;
+
+	int sendLocalMail(const QString& messageMail);
+
 private slots:
 	int sendMail();
+	void letsSend();
+	void onStart();
+	void letsSendInternal();
+
+signals:
+	void onLetsSend();
 };
