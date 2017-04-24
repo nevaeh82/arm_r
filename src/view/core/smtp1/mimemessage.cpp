@@ -249,7 +249,7 @@ QString MimeMessage::toString()
 
     mime += "\r\n";
     mime += "MIME-Version: 1.0\r\n";
-	mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
+	mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString(Qt::TextDate));
 
     mime += content->toString();
     return mime;

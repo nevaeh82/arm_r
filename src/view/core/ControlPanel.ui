@@ -826,12 +826,17 @@
          </item>
          <item>
           <property name="text">
-           <string>Checking</string>
+           <string>Detecting</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Escorting</string>
+           <string>Searching</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Searching by areas</string>
           </property>
          </item>
         </widget>

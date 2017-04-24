@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QVariant>
-
+#include <QThread>
 #include <Rpc/RpcDefines.h>
 
 #include "Interfaces/IController.h"
 
+#include "smtp1/smtpclientthread.h"
 #include "SolverResultWidget.h"
 #include "Interfaces/IRpcListener.h"
 #include "RadiolocationInterface.h"
@@ -18,6 +19,35 @@ class SolverResultWidgetController : public QObject, public IController<SolverRe
 									 public IRpcListener
 {
 	Q_OBJECT
+
+
+	struct solverResultStruct
+	{
+		qint64 dateTime;
+		int quality;
+		int state;
+		double freq;
+		double lon;
+		double lat;
+
+		void clear(){
+			dateTime = -1;
+			quality = -1;
+			state = -1;
+			freq = 0;
+			lon = 0;
+			lat = 0;
+		}
+
+		solverResultStruct::solverResultStruct()
+		{
+			dateTime = -1;
+			quality = -1;
+			state = -1;
+			freq = 0;
+		}
+	};
+
 public:
 	explicit SolverResultWidgetController(QObject *parent = 0);
 	virtual ~SolverResultWidgetController();
@@ -25,6 +55,11 @@ public:
 
 private:
 	SolverResultWidget* m_view;
+
+	SmtpClientThread* m_smtpThread;
+	QThread* m_smtpQThread;
+
+	QTime m_elapsedMail;
 
 public:
 	void appendView(SolverResultWidget* view);
@@ -48,6 +83,9 @@ private:
 	void addResultToLog(const QByteArray &data);
 	void addResultToLog1(const QByteArray &data);
 
+	void parseForMail(const QByteArray& inData);
+
+	bool sendMail(const solverResultStruct &res);
 };
 
 #endif // SOLVERRESULTWIDGETCONTROLLER_H

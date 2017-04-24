@@ -31,10 +31,14 @@ public:
 	void setCheckPointer(int ind);
 	void setDetectPointer(int ind);
 
+	void getFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith> &list);
+
 private:
 	Ui::ListsDialog *ui;
 
-signals:
+	void setFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith> &list);
+	void getFrequencyAndBandwidthByWhiteAreasSave(QList<StationsFrequencyAndBandwith> &list);
+ signals:
 	void signalTypeList(int);
 	void signalAddClicked();
 	void signalDelete();
@@ -49,6 +53,12 @@ public slots:
 //	void slotClose();
 private slots:
     void on_tvLists_doubleClicked(const QModelIndex &index);
+
+	void slotAddClicked(int frequency1 = 30, int frequency2 = 30, int split = 1);
+	void slotRemoveWhiteArea();
+
+	void slotDelete();
+	void slotAddInternalWhiteAreaClicked(int frequency1, int frequency2, int split);
 };
 
 #endif // LISTSDIALOG_H
