@@ -537,7 +537,8 @@ void LocationSetupWidgetController::updatelocationSettings(QByteArray data)
 	if(msg.has_frequency())
 	{
 		int freq = msg.frequency();
-		m_locationMessage.set_central_frequency(freq);
+		slotOnSetCommonFreq((double)freq); //set central frequency and start and finish frequency!
+		//m_locationMessage.set_central_frequency(freq);
 	}
 	updateLocation(m_locationMessage);
 }

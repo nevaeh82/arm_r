@@ -23,7 +23,7 @@ QByteArray TcpRdsSettingsCoder::decode(const MessageSP message)
 
 	if( message->type() == TCP_CCPACKET_SEND_PROTO ) {
 
-	QSettings settings("./RDS_Settings.ini", QSettings::IniFormat, this);
+	QSettings settings("./RDS/RDS_Settings.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
 	msg.ParseFromArray( msgData.data(), msgData.size() );
@@ -89,7 +89,7 @@ QByteArray TcpRdsSettingsCoder::decode(const MessageSP message)
 
 QByteArray TcpRdsSettingsCoder::encode(int id)
 {
-	QSettings settings("./RDS_Settings.ini", QSettings::IniFormat, this);
+	QSettings settings("./RDS/RDS_Settings.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 
 	CommonParams::Parameters params;
