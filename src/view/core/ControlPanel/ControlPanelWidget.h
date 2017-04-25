@@ -13,6 +13,8 @@
 #include <QLabel>
 #include <QPainter>
 #include <QTimer>
+#include <QTime>
+#include <QSound>
 
 #include "RDSExchange.h"
 
@@ -33,6 +35,10 @@ private:
 	QString m_borderStyle;
 
 	QTimer* m_alarmTimer;
+
+	QSound* m_alarmSound;
+	QTime m_soundTime;
+
 protected:
 	void paintEvent(QPaintEvent *);
 
@@ -67,7 +73,7 @@ public:
 	bool sleepMode() const;
 
 
-    int getFreqSBValue();
+	int getFreqSBValue();
 
 	void applyManualMode();
 
@@ -78,10 +84,10 @@ signals:
 
 	void autoSearchCheckedSignal(bool isChecked);
 
-    void signalSetStartFreq(int);
-    void signalSetEndFreq(int);
-    void signalChangeMode(int);
-    void signalPanorama(bool);
+	void signalSetStartFreq(int);
+	void signalSetEndFreq(int);
+	void signalChangeMode(int);
+	void signalPanorama(bool);
 	void signalManualMode();
 	void signalScanMode(int start, int finish);
 	void signalCheckMode();

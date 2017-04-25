@@ -2,6 +2,7 @@
 #include "ui_ControlPanel.h"
 
 #include <QSound>
+#include <QTime>
 
 #define BORDER_NORMAL "rgb(49, 49, 49);"
 #define BORDER_ERROR "rgb(255, 0, 0);"
@@ -59,6 +60,9 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 
 	m_alarmTimer = new QTimer(this);
 	connect(m_alarmTimer, SIGNAL(timeout()), this, SLOT(slotAlarmTimeout()));
+
+	m_alarmSound = new QSound("./audio/aim.wav", this);
+	m_soundTime.start();
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -177,7 +181,10 @@ void ControlPanelWidget::changeQualityStatus(const int status, bool isMoving, fl
 		alarmAimVisible(true);
 		ui->labelAlarm->setText(tr("Moving aim founded!!! Freq: %1").arg(freq));
 		if(!ui->sounOffCB->isChecked()) {
-			QSound::play("./audio/aim.wav");
+			if(m_soundTime.elapsed() > 3000) {
+				m_alarmSound->play();
+				m_soundTime.restart();
+			}
 		}
 		m_alarmTimer->start(10000);
 	} else {

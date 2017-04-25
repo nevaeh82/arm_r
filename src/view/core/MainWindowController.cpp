@@ -24,6 +24,8 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_solverWidgetController = NULL;
 	m_solverSetupWidgetController = NULL;
 	m_solverErrorsWidgetController = NULL;
+
+	resetServer();
 }
 
 MainWindowController::~MainWindowController()
