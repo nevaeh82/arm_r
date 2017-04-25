@@ -159,7 +159,6 @@ color: rgb(255, 0, 0);</string>
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
@@ -173,6 +172,8 @@ color: rgb(255, 0, 0);</string>
     <addaction name="actionSolverSetup"/>
     <addaction name="separator"/>
     <addaction name="actionLocationSetup"/>
+    <addaction name="actionEmail_Alert_settings"/>
+    <addaction name="separator"/>
     <addaction name="actionPrm_via_com"/>
    </widget>
    <widget class="QMenu" name="menuServer">
@@ -246,6 +247,11 @@ color: rgb(255, 0, 0);</string>
   <action name="actionPrm_via_com">
    <property name="text">
     <string>Prm via com</string>
+   </property>
+  </action>
+  <action name="actionEmail_Alert_settings">
+   <property name="text">
+    <string>Email Alert settings</string>
    </property>
   </action>
  </widget>

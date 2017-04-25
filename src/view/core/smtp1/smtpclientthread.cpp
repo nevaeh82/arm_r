@@ -36,6 +36,34 @@ void SmtpClientThread::sendMessage(const QString &message)
 	m_messageMutex.unlock();
 }
 
+void SmtpClientThread::setLocalMailSettings(const MailSettings &settings)
+{
+	m_mailMutex.lock();
+	m_localMailSettings = settings;
+	m_mailMutex.unlock();
+}
+
+void SmtpClientThread::setRemoteMailSettings(const MailSettings &settings)
+{
+	m_mailMutex.lock();
+	m_remoteMailSettings = settings;
+	m_mailMutex.unlock();
+}
+
+void SmtpClientThread::setLocalMailList(const QStringList &mailList)
+{
+	m_mailMutex.lock();
+	m_localMailList = mailList;
+	m_mailMutex.unlock();
+}
+
+void SmtpClientThread::setRemoteMailList(const QStringList &mailList)
+{
+	m_mailMutex.lock();
+	m_remoteMailList = mailList;
+	m_mailMutex.unlock();
+}
+
 int SmtpClientThread::sendMail()
 {
 	m_messageMutex.lock();
@@ -50,14 +78,23 @@ int SmtpClientThread::sendMail()
 
 	// Code of sending ...
 
-	SmtpClient smtp("smtp.yandex.ru", 465, SmtpClient::SslConnection);
+	//SmtpClient smtp("smtp.yandex.ru", 465, SmtpClient::SslConnection);
+	m_mailMutex.lock();
+	SmtpClient smtp(m_remoteMailSettings.host,
+					m_remoteMailSettings.port,
+					SmtpClient::ConnectionType(m_remoteMailSettings.connetionType));
 
 	// We need to set the username (your email address) and password
 	// for smtp authentification.
 
-	smtp.setUser("ZavTestMail@yandex.ru");
-	smtp.setPassword("orange");
-	//smtp.setAuthMethod(SmtpClient::AuthLogin);
+//	smtp.setUser("ZavTestMail@yandex.ru");
+//	smtp.setPassword("orange");
+	//smtp.setAuthMethod(SmtpClient::AuthPlain);
+	smtp.setUser(m_remoteMailSettings.userName);
+	smtp.setPassword(m_remoteMailSettings.passwd);
+	smtp.setAuthMethod(SmtpClient::AuthMethod(m_remoteMailSettings.authType));
+
+	m_mailMutex.unlock();
 
 	// Now we create a MimeMessage object. This is the email.
 
@@ -68,15 +105,18 @@ int SmtpClientThread::sendMail()
 
 	{
 		//Read Mail adresses
-		QString mailFile = QCoreApplication::applicationDirPath();
-		mailFile.append("/Tabs/mail.ini");
-		QFile addresses(mailFile);
-		if(!addresses.open(QIODevice::ReadOnly)) {
-			m_elapsedTimer.restart();
-			return -1;
-		}
+//		QString mailFile = QCoreApplication::applicationDirPath();
+//		mailFile.append("/Tabs/mail.ini");
+//		QFile addresses(mailFile);
+//		if(!addresses.open(QIODevice::ReadOnly)) {
+//			m_elapsedTimer.restart();
+//			return -1;
+//		}
 
-		QStringList addrList = QString(addresses.readAll()).split(",");
+//		QStringList addrList = QString(addresses.readAll()).split(",");
+		m_mailMutex.lock();
+		QStringList addrList = m_remoteMailList;
+		m_mailMutex.unlock();
 
 		if(addrList.isEmpty()) {
 			m_elapsedTimer.restart();
@@ -88,12 +128,6 @@ int SmtpClientThread::sendMail()
 			message.addRecipient(to);
 		}
 	}
-
-
-//	EmailAddress to1("tastyreefer@yahoo.com", "Paul");
-//	message.addRecipient(&to1);
-//	EmailAddress to2("nevaeh.pavlov@gmail.com", "Andrey Pavlov");
-//	message.addRecipient(&to2);
 
 	message.setSubject("Zaviruha arm_r message!");
 
@@ -168,14 +202,25 @@ int SmtpClientThread::sendLocalMail(const QString &messageMail)
 {
 	// Code of sending ...
 
-	SmtpClient smtp("192.168.55.59", 25, SmtpClient::TcpConnection);
+	//SmtpClient smtp("192.168.55.59", 25, SmtpClient::TcpConnection);
+
+	m_mailMutex.lock();
+	SmtpClient smtp(m_localMailSettings.host,
+					m_localMailSettings.port,
+					SmtpClient::ConnectionType(m_localMailSettings.connetionType));
 
 	// We need to set the username (your email address) and password
 	// for smtp authentification.
 
-	smtp.setUser("alarm_od@crimea.local");
-	smtp.setPassword("nppntt2016");
-	smtp.setAuthMethod(SmtpClient::AuthLogin);
+//	smtp.setUser("alarm_od@crimea.local");
+//	smtp.setPassword("nppntt2016");
+//	smtp.setAuthMethod(SmtpClient::AuthLogin);
+
+	smtp.setUser(m_localMailSettings.userName);
+	smtp.setPassword(m_localMailSettings.passwd);
+	smtp.setAuthMethod(SmtpClient::AuthMethod(m_localMailSettings.authType));
+
+	m_mailMutex.unlock();
 
 	// Now we create a MimeMessage object. This is the email.
 
@@ -186,14 +231,18 @@ int SmtpClientThread::sendLocalMail(const QString &messageMail)
 
 	{
 		//Read Mail adresses
-		QString mailFile = QCoreApplication::applicationDirPath();
-		mailFile.append("/Tabs/localmail.ini");
-		QFile addresses(mailFile);
-		if(!addresses.open(QIODevice::ReadOnly)) {
-			return -1;
-		}
+//		QString mailFile = QCoreApplication::applicationDirPath();
+//		mailFile.append("/Tabs/localmail.ini");
+//		QFile addresses(mailFile);
+//		if(!addresses.open(QIODevice::ReadOnly)) {
+//			return -1;
+//		}
 
-		QStringList addrList = QString(addresses.readAll()).split(",");
+//		QStringList addrList = QString(addresses.readAll()).split(",");
+
+		m_mailMutex.lock();
+		QStringList addrList = m_localMailList;
+		m_mailMutex.unlock();
 
 		if(addrList.isEmpty()) {
 			return -1;

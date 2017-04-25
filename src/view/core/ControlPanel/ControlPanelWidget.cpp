@@ -47,9 +47,6 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	ui->solverQualityLB->setFixedSize(16, 16);
 	ui->solverQualityLB->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 
-//	ui->lblError->setVisible(false);
-	//ui->lblWarning->setVisible(false);
-
 	m_borderStyle = QString("QWidget#ControlPanelWidget{ \
 									background-color: rgb(230, 230, 230); \
 									border: 2px solid %1 \

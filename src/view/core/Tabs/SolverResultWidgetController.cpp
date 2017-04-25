@@ -13,9 +13,13 @@ SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
 
 	m_smtpThread = new SmtpClientThread(0);
 	m_smtpQThread = new QThread();
+	m_emailSettings = new EmailSettings(0);
+
+	slotEmailUpdate();
 
 	connect(m_smtpQThread, SIGNAL(finished()), m_smtpQThread, SLOT(deleteLater()));
 	connect(m_smtpQThread, SIGNAL(started()), m_smtpThread, SLOT(onStart()));
+	connect(m_emailSettings, SIGNAL(signalMailSettingsUpdate()), this, SLOT(slotEmailUpdate()));
 
 	m_smtpThread->moveToThread(m_smtpQThread);
 	m_smtpQThread->start();
@@ -115,10 +119,10 @@ void SolverResultWidgetController::addResultToLog1(const QByteArray& inData)
 	switch(quality)
 	{
 		case SolverProtocol::GOOD_QUALITY:
-			source = tr("Good quality");
+			source = tr(" Good quality ");
 			break;
 		case SolverProtocol::BAD_QUALITY:
-			source = tr("Bad quality");
+			source = tr(" Bad quality ");
 			break;
 		default:
 			break;
@@ -210,10 +214,21 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 	QString quality = "";
 
 	if(res.state == 1) {
+		if(!m_emailSettings->isMoving()) {
+			return true;
+		}
 		state = tr("Moving");
 	} else if(res.state == 2) {
+		if(!m_emailSettings->isStanding()) {
+			return true;
+		}
+
 		state = tr("Standing");
 	} else if(res.state == 3) {
+		if(!m_emailSettings->isUnknown()) {
+			return true;
+		}
+
 		state = tr("UNKNOWN");
 	}
 
@@ -226,7 +241,11 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 	}
 
 
-	m_smtpThread->sendMessage(tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n" );
+	if(m_emailSettings->isSend()) {
+
+		m_smtpThread->sendMessage(tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n" );
+
+	}
 
 	return true;
 }
@@ -243,7 +262,12 @@ void SolverResultWidgetController::onMethodCalledSlot(QString method, QVariant a
 //	else if( method == RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1 ) {
 //		addResultToLog1(argument.toByteArray());
 //		return;
-//	}
+	//	}
+}
+
+void SolverResultWidgetController::onEmailSettings()
+{
+	m_emailSettings->show();
 }
 
 QString SolverResultWidgetController::getSolverResultToString(const SolveResult &result)
@@ -286,4 +310,12 @@ QString SolverResultWidgetController::getSolverResultToString(const SolveResult 
 	}
 	return resultString;
 
+}
+
+void SolverResultWidgetController::slotEmailUpdate()
+{
+	m_smtpThread->setLocalMailList(m_emailSettings->localMailList());
+	m_smtpThread->setRemoteMailList(m_emailSettings->remoteMailList());
+	m_smtpThread->setLocalMailSettings(m_emailSettings->localMailSettings());
+	m_smtpThread->setRemoteMailSettings(m_emailSettings->remoteMailSettings());
 }

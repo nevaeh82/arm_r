@@ -52,6 +52,8 @@ signals:
 	void signalShowLocationSetup(int id);
 
 	void onCloseSignal();
+	void signalEmailSettings();
+
 protected:
 	void closeEvent(QCloseEvent *);
 };

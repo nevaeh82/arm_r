@@ -80,6 +80,8 @@ void MainWindow::init()
 
 	ComReceiverController* controller = new ComReceiverController(this);
 	connect(ui->actionPrm_via_com, SIGNAL(triggered(bool)), controller->getView(), SLOT(show()));
+
+	connect(ui->actionEmail_Alert_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalEmailSettings()));
 }
 
 void MainWindow::updateLocationSetupAction(int id, QString text)

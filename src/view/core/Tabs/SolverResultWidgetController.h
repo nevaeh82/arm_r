@@ -9,6 +9,8 @@
 #include "Interfaces/IController.h"
 
 #include "smtp1/smtpclientthread.h"
+#include "EmailSettings.h"
+
 #include "SolverResultWidget.h"
 #include "Interfaces/IRpcListener.h"
 #include "RadiolocationInterface.h"
@@ -59,6 +61,8 @@ private:
 	SmtpClientThread* m_smtpThread;
 	QThread* m_smtpQThread;
 
+	EmailSettings* m_emailSettings;
+
 	QTime m_elapsedMail;
 
 public:
@@ -77,7 +81,9 @@ signals:
 
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
+	void onEmailSettings();
 
+	void slotEmailUpdate();
 private:
 	QString getSolverResultToString(const SolveResult &result);
 	void addResultToLog(const QByteArray &data);
