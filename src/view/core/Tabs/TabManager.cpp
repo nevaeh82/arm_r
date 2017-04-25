@@ -59,7 +59,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	connect(m_tabWidgetZone, SIGNAL(currentChanged(int)), this, SLOT(changeCommonTabSlot(int)));
 
-	m_locationSetupController = new LocationSetupWidgetController(this);
+	m_locationSetupController = new LocationSetupWidgetController(m_id, this);
 	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_id, tabWidget);
 	m_locationSetupController->appendView(locationSetupWgt);
 
@@ -156,7 +156,7 @@ void TabManager::setupController()
 {
 	m_cpView = new ControlPanelWidget();
 
-	ControlPanelController* controlPanelController = new ControlPanelController(this);
+	ControlPanelController* controlPanelController = new ControlPanelController(m_id, this);
 	controlPanelController->setDbStationController(m_dbStationController);
 	controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
 	controlPanelController->appendView(m_cpView);
@@ -471,6 +471,8 @@ void TabManager::addStationTabs(QString platformName)
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
 
+//	m_rpcServer->call(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+	m_rpcFlakonClient->sendServerRequestSettings(m_id);
 	emit readyToStart(m_id);
 }
 
@@ -919,6 +921,17 @@ void TabManager::slotMethodCalled(const QString &method, const QVariant &argumen
 		dataStream >> dbConfig;
 
 		m_dbStationController->connectToDB(dbConfig);
+	} else if (method == RPC_SLOT_SERVER_SEND_SETTINGS) {
+		CommonParams::Parameters msg;
+		QByteArray data = argument.toByteArray();
+		msg.ParseFromArray( data.data(), data.size() );
+		if(msg.serverid() == m_id)
+		{
+			if(msg.has_mergesysctrl())
+			{
+				onSystemMerge(msg.mergesysctrl());
+			}
+		}
 	}
 }
 

@@ -65,6 +65,7 @@ private slots:
 	void setSolverSettingsSetup(quint64 client, QByteArray data);
 	void setRdsProtoSetup(quint64 client, QByteArray data);
     void slotSetCPPacketProtoSetup(quint64 client, QByteArray data);
+	void slotServerRequestSettings(quint64 client, int id);
 };
 
 

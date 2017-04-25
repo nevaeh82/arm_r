@@ -10,12 +10,13 @@
 #define MAXIMUM_FREQ 7000
 
 
-LocationSetupWidgetController::LocationSetupWidgetController(QObject* parent):
+LocationSetupWidgetController::LocationSetupWidgetController(int tabId, QObject* parent):
 	QObject(parent),
 	m_plotCounter(0),
 	m_incomePlotCounter(0),
 	m_isStartLocation(false),
-	m_sleepMode(false)
+	m_sleepMode(false),
+	m_tabId(tabId)
 {
 	m_view = NULL;
 	m_requestReady = true;
@@ -108,12 +109,13 @@ void LocationSetupWidgetController::setLocationState(bool state)
 		m_locationTimer.stop();
 	}
 
-    CommonParams::Parameters params;
-    params.set_spectrums(state);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_spectrums(state);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 bool LocationSetupWidgetController::getReceiveSpectrums() const
@@ -129,12 +131,13 @@ bool LocationSetupWidgetController::getReceiveDopler() const
 void LocationSetupWidgetController::setSleepMode(bool val)
 {
 	m_sleepMode = val;
-    CommonParams::Parameters params;
-    params.set_sleep(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_sleep(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
@@ -199,52 +202,57 @@ void LocationSetupWidgetController::slotWigdetSettingsChanged()
 
 void LocationSetupWidgetController::slotChangeMode(int val)
 {
-    CommonParams::Parameters params;
-    params.set_mode(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_mode(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotPanorama(bool val)
 {
-    CommonParams::Parameters params;
-    params.set_panorama(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_panorama(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetStartFreq(int val)
 {
-    CommonParams::Parameters params;
-    params.set_startfreq(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_startfreq(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetEndFreq(int val)
 {
-    CommonParams::Parameters params;
-    params.set_finishfreq(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_finishfreq(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSystemMerge(bool val)
 {
-    CommonParams::Parameters params;
-    params.set_mergesysctrl(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_mergesysctrl(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::requestLocation()
@@ -394,6 +402,9 @@ void LocationSetupWidgetController::onMethodCalledSlot(QString method, QVariant 
 		dataStream >> status;
 
 		emit signalNIIPPWorkStatus(title, status);
+	} else if (method == RPC_SLOT_SERVER_SEND_SETTINGS) {
+		QByteArray outData = data.toByteArray();
+		updatelocationSettings(outData);
 	}
 }
 
@@ -415,12 +426,13 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq)
 
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
-    CommonParams::Parameters params;
-    params.set_frequency(freq);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_frequency(freq);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double bandwidth)
@@ -464,12 +476,13 @@ void LocationSetupWidgetController::slotSetConvolution(bool val)
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
 
-    CommonParams::Parameters params;
-    params.set_convolution(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_convolution(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetDoppler(bool val)
@@ -478,12 +491,13 @@ void LocationSetupWidgetController::slotSetDoppler(bool val)
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
 
-    CommonParams::Parameters params;
-    params.set_doppler(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_doppler(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::slotSetHumps(bool val)
@@ -492,12 +506,13 @@ void LocationSetupWidgetController::slotSetHumps(bool val)
 	m_view->setLocationData(m_locationMessage);
 	emit onStateChanged();
 
-    CommonParams::Parameters params;
-    params.set_humps(val);
-    QByteArray outData;
-    outData.resize( params.ByteSize() );
-    params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	CommonParams::Parameters params;
+	params.set_serverid(m_tabId);
+	params.set_humps(val);
+	QByteArray outData;
+	outData.resize( params.ByteSize() );
+	params.SerializeToArray( outData.data(), outData.size() );
+	emit sendCPPacketData(outData);
 }
 
 void LocationSetupWidgetController::updateLocation(RdsProtobuf::ClientMessage_OneShot_Location msg)
@@ -505,6 +520,35 @@ void LocationSetupWidgetController::updateLocation(RdsProtobuf::ClientMessage_On
 	m_locationMessage = msg;
 	m_view->setLocationData(m_locationMessage);
 	emit signalSettingsChanged();
+}
+
+void LocationSetupWidgetController::updatelocationSettings(QByteArray data)
+{
+	CommonParams::Parameters msg;
+	msg.ParseFromArray( data.data(), data.size() );
+	if(msg.serverid() != m_tabId)
+	{
+		return;
+	}
+	if(msg.has_convolution())
+	{
+		m_locationMessage.set_convolution(msg.convolution());
+	}
+	if(msg.has_doppler())
+	{
+		m_locationMessage.set_doppler(msg.doppler());
+	}
+	if(msg.has_humps())
+	{
+		m_locationMessage.set_hump(msg.humps());
+	}
+	if(msg.has_frequency())
+	{
+		int freq = msg.frequency();
+		slotOnSetCommonFreq((double)freq); //set central frequency and start and finish frequency!
+		//m_locationMessage.set_central_frequency(freq);
+	}
+	updateLocation(m_locationMessage);
 }
 
 /// Plot ready management ///

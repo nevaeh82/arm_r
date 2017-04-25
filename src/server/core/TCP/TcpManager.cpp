@@ -235,6 +235,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 		if (routedServer != NULL) {
 			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotRpcClientConnected()));
+//			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotSendRpcClientSettings()));
 		}
 
 	} else if(type == SOLVER_CLIENT_DEVICE) {
@@ -568,8 +569,18 @@ void TcpManager::slotRpcClientConnected()
 	m_sendTimer.singleShot(5000, this, SLOT(slotSendSolverStatus()));
 }
 
+void TcpManager::slotSendRpcClientSettings(int id)
+{
+	QByteArray settings = m_rdsSettingsController->getSettings(id);
+	if(!settings.isEmpty())
+	{
+		m_rpcServer->call( RPC_SLOT_SERVER_SEND_SETTINGS, settings);
+	}
+}
+
 void TcpManager::slotSendSolverStatus()
 {
+
 	m_rpcServer->call( RPC_SLOT_SERVER_SEND_SOLVER_CONNECT_STATE, m_solverConnectionState);
 }
 
@@ -633,4 +644,10 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		MessageSP message(new Message<QByteArray>(CLIENT_TCP_SERVER_KTR_DATA, argument.toByteArray()));
 		m_clientTcpServer->onMessageReceived(CLIENT_TCP_SERVER, "", message );
 	}
+	else if( method == RPC_METHOD_SEND_SERVER_REQUEST_SETTINGS ) {
+		int id = argument.toInt();
+		slotSendRpcClientSettings(id);
+	}
+
+
 }

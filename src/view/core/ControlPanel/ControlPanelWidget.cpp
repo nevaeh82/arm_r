@@ -191,6 +191,33 @@ void ControlPanelWidget::alarmAimVisible(bool val)
 	ui->sounOffCB->setVisible(val);
 }
 
+void ControlPanelWidget::setStartFreq(int val)
+{
+	ui->startFreqSB->setValue(val);
+}
+
+void ControlPanelWidget::setfinishFreq(int val)
+{
+	ui->endFreqSB->setValue(val);
+}
+
+void ControlPanelWidget::setSystemMerge(bool state)
+{
+	ui->pbMerge->setChecked(state);
+}
+
+void ControlPanelWidget::setMode(int val)
+{
+	ui->cbMode->setCurrentIndex(val);
+	slotChangeMode(val);
+}
+
+void ControlPanelWidget::setPanorama(bool state)
+{
+	ui->panoramaCB->setChecked(state);
+	onSetPanorama(state);
+}
+
 void ControlPanelWidget::setReceiveSpectrums(bool val)
 {
 	ui->pbSpectrums->setChecked(val);
@@ -258,6 +285,7 @@ bool ControlPanelWidget::sleepMode() const
 void ControlPanelWidget::setSleepMode(bool val)
 {
     ui->cbSleepMode->setChecked(val);
+	emit onSleepMode(val);
 }
 
 int ControlPanelWidget::getFreqSBValue()

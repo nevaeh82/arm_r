@@ -12,16 +12,18 @@
 
 class TcpRdsSettingsCoder : public BaseTcpDeviceCoder
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    TcpRdsSettingsCoder(QObject* parent = NULL);
-    ~TcpRdsSettingsCoder();
+	TcpRdsSettingsCoder(QObject* parent = NULL);
+	~TcpRdsSettingsCoder();
 
 public:
-    virtual MessageSP encode(const QByteArray& data);
-    virtual QByteArray decode(const MessageSP message);
+	virtual MessageSP encode(const QByteArray& data);
+	virtual QByteArray decode(const MessageSP message);
 
-//    virtual QObject* asQObject();
+public:
+	QByteArray encode(int id);
+
 };
 
 #endif // TCPRDSSETTINGSCODER_H

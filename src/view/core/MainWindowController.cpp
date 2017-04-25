@@ -87,7 +87,7 @@ void MainWindowController::connectToServers()
 
 	QStringList childKeys = settings.childGroups();
 
-	resetServer();
+	//resetServer();
 	QString serverName = "./" + QString(SERVER_NAME);
 
 	foreach (const QString &childKey, childKeys)
