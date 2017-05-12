@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QTcpSocket>
 #include <QTimer>
 
@@ -15,13 +16,16 @@ public:
 	~ComPort();
 
 	QSerialPort* m_serialport;
+	bool isValidComPort();
 
 public:
 	void setComPort(QString addr);
+	QList<QString> getAllPorts();
 
 private slots:
 	 void onComConnect(QString addr);
 
+public:
 	void writeCommand(const QByteArray& data);
 	void writeCommand(char* data, int size);
 
@@ -30,4 +34,7 @@ signals:
 
 private:
 	void init();
+
+private:
+	bool m_validComPort;
 };

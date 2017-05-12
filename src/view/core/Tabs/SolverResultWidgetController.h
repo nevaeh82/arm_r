@@ -11,6 +11,8 @@
 #include "smtp1/smtpclientthread.h"
 #include "EmailSettings.h"
 
+#include "ComPort/SMSComPortController.h"
+
 #include "SolverResultWidget.h"
 #include "Interfaces/IRpcListener.h"
 #include "RadiolocationInterface.h"
@@ -62,6 +64,7 @@ private:
 	QThread* m_smtpQThread;
 
 	EmailSettings* m_emailSettings;
+	SMSComPortController* m_smsController;
 
 	QTime m_elapsedMail;
 
@@ -82,6 +85,7 @@ signals:
 private slots:
 	void onMethodCalledSlot(QString method, QVariant data);
 	void onEmailSettings();
+	void onSMSSettings();
 
 	void slotEmailUpdate();
 private:
@@ -92,6 +96,7 @@ private:
 	void parseForMail(const QByteArray& inData);
 
 	bool sendMail(const solverResultStruct &res);
+	QMap<double, QDateTime> m_FreqMap;
 };
 
 #endif // SOLVERRESULTWIDGETCONTROLLER_H

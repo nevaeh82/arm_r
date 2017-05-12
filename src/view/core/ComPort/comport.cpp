@@ -2,6 +2,7 @@
 
 ComPort::ComPort(QObject *parent) : QObject(parent)
 {
+	m_validComPort = false;
 	m_serialport = new QSerialPort(this);
 	connect(this, SIGNAL(signalSetComPort(QString)), this, SLOT(onComConnect(QString)));
 }
@@ -14,9 +15,26 @@ ComPort::~ComPort()
 	}
 }
 
+bool ComPort::isValidComPort()
+{
+	return m_validComPort;
+}
+
 void ComPort::setComPort(QString addr)
 {
 	emit signalSetComPort(addr);
+}
+
+QList<QString> ComPort::getAllPorts()
+{
+	QList<QString> list;
+	QList<QSerialPortInfo> ports = QSerialPortInfo::availablePorts();
+	QList<QSerialPortInfo>::iterator i;
+	for (i = ports.begin(); i != ports.end(); ++i)
+	{
+		list.append((*i).portName());
+	}
+	return list;
 }
 
 
@@ -33,8 +51,8 @@ void ComPort::onComConnect(QString addr)
 	m_serialport->setParity(QSerialPort::NoParity);
 	m_serialport->setFlowControl(QSerialPort::NoFlowControl);
 
-	bool b = m_serialport->open(QIODevice::ReadWrite);
-	if(b)
+	m_validComPort = m_serialport->open(QIODevice::ReadWrite);
+	if(m_validComPort)
 	{
 		init();
 	}
@@ -55,6 +73,6 @@ void ComPort::init()
 {
 	QString command = (tr("AT+CMGF=1 \r"));
 	writeCommand(command.toAscii().data());
-	command = (tr("AT+CMGS=\"89811431955\" \r GGG T\x1A"));
+	command = (tr("AT+CMGS=\"89811431955, 89816879903\" \r Hello!\x1A"));
 	writeCommand(command.toAscii().data());
 }
