@@ -4,11 +4,12 @@ SMSComPortController::SMSComPortController(QObject *parent) : QObject(parent)
 {
 	m_view = NULL;
 	m_comport = NULL;
+	m_listNumbersCurrentIndex = 0;
 	m_smsDialog = new SMSComPortDialog(0);
 	appendView(m_smsDialog);
 	connect(m_smsDialog, SIGNAL(signalClose()), this, SLOT(slotCloseUi()));
 	connect(m_smsDialog, SIGNAL(signalAccept()), this, SLOT(slotUpdateFromUi()));
-
+	connect(this, SIGNAL(signalSendNewMessage()), this, SLOT(slotSendSMS()));
 }
 
 SMSComPortController::~SMSComPortController()
@@ -19,6 +20,7 @@ SMSComPortController::~SMSComPortController()
 void SMSComPortController::init()
 {
 	m_comport = new ComPort(0);
+	connect(m_comport, SIGNAL(signalSent()), this, SLOT(slotSendSMS()));
 	QList<QString> list = m_comport->getAllPorts();
 	m_view->fillComPorts(list);
 	m_comport->setComPort(m_view->getComPortName());
@@ -47,16 +49,12 @@ QStringList SMSComPortController::getNumbers()
 
 void SMSComPortController::sendMessage(QString msg)
 {
-	QStringList listNumbers = m_view->getNumbers();
-	if(m_comport->isValidComPort())
-	{
-		for(QStringList::iterator it = listNumbers.begin(); it != listNumbers.end(); ++it)
-		{
-			QString No = (*it);
-			QString command = (tr("AT+CMGS=\"") + No + tr("\" \r ") + msg + tr("\x1A"));
-			m_comport->writeCommand(command.toAscii().data());
-		}
-	}
+	SMSMessage sms;
+	sms.currentIndexNumber = 0;
+	sms.msg = msg;
+	m_listMessages.append(sms);
+	m_listNumbers = m_view->getNumbers();
+	emit signalSendNewMessage();
 }
 
 void SMSComPortController::slotCloseUi()
@@ -70,4 +68,25 @@ void SMSComPortController::slotUpdateFromUi()
 	delete m_comport;
 	init();
 	sendMessage("Freq = 1999");
+}
+
+void SMSComPortController::slotSendSMS()
+{
+	if(m_listMessages.isEmpty())
+	{
+		return;
+	}
+	if(m_comport->isValidComPort())
+	{
+		SMSMessage &sms = m_listMessages.first();
+		if(sms.currentIndexNumber >= m_listNumbers.count())
+		{
+			m_listMessages.removeFirst();
+			emit signalSendNewMessage();
+			return;
+		}
+		QString No = m_listNumbers.at(sms.currentIndexNumber++);
+		QString command = (tr("AT+CMGS=\"") + No + tr("\" \r ") + sms.msg + tr("\x1A"));
+		m_comport->writeCommand(command.toAscii().data());
+	}
 }

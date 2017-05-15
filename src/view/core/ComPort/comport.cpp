@@ -2,9 +2,11 @@
 
 ComPort::ComPort(QObject *parent) : QObject(parent)
 {
+	m_markText = false;
 	m_validComPort = false;
 	m_serialport = new QSerialPort(this);
 	connect(this, SIGNAL(signalSetComPort(QString)), this, SLOT(onComConnect(QString)));
+	connect(m_serialport, SIGNAL(readyRead()), this, SLOT(onComRead()));
 }
 
 ComPort::~ComPort()
@@ -58,6 +60,12 @@ void ComPort::onComConnect(QString addr)
 	}
 }
 
+void ComPort::onComRead()
+{
+	QByteArray data = m_serialport->readAll();
+	comParseData(data);
+}
+
 void ComPort::writeCommand(const QByteArray &data)
 {
 	m_serialport->write(data);
@@ -75,4 +83,23 @@ void ComPort::init()
 	writeCommand(command.toAscii().data());
 	command = (tr("AT+CMGS=\"89811431955, 89816879903\" \r Hello!\x1A"));
 	writeCommand(command.toAscii().data());
+}
+
+void ComPort::comParseData(const QByteArray& data)
+{
+	QString text(data);
+	if(text.contains(">"))
+	{
+		m_markText = true;
+	}
+	else
+	{
+		if(m_markText && text.contains("OK"))
+		{
+			emit signalSent();
+		}
+		m_markText = false;
+	}
+
+	log_debug(text);
 }

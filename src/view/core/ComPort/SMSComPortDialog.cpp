@@ -3,12 +3,16 @@
 
 SMSComPortDialog::SMSComPortDialog(QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::SMSComPortDialog)
+	ui(new Ui::SMSComPortDialog),
+	m_currentComPortIndex(0)
 {
 	ui->setupUi(this);
 	connect(ui->tbtnOk, SIGNAL(pressed()), this, SLOT(slotAccept()));
-	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SIGNAL(signalClose));
 	connect(ui->tbtnOk, SIGNAL(pressed()), this, SIGNAL(signalAccept()));
+	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SIGNAL(signalClose()));
+	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SLOT(slotClose()));
+
+	ui->cb_com_name->setCurrentIndex(m_currentComPortIndex);
 }
 
 SMSComPortDialog::~SMSComPortDialog()
@@ -39,5 +43,11 @@ QString SMSComPortDialog::getComPortName()
 void SMSComPortDialog::slotAccept()
 {
 	m_currentComPort = ui->cb_com_name->currentText();
+	m_currentComPortIndex = ui->cb_com_name->currentIndex();
 	m_listNumbers = ui->leNumbers->text().split(",");
+}
+
+void SMSComPortDialog::slotClose()
+{
+
 }

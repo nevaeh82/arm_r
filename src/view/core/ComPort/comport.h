@@ -7,6 +7,7 @@
 #include <QTimer>
 
 #include <QObject>
+#include "Logger/Logger.h"
 
 class ComPort : public QObject
 {
@@ -24,6 +25,7 @@ public:
 
 private slots:
 	 void onComConnect(QString addr);
+	 void onComRead();
 
 public:
 	void writeCommand(const QByteArray& data);
@@ -31,9 +33,12 @@ public:
 
 signals:
 	void signalSetComPort(QString);
+	void signalSent();
 
 private:
-	void init();
+	void init();	
+	void comParseData(const QByteArray& data);
+	bool m_markText;
 
 private:
 	bool m_validComPort;
