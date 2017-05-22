@@ -62,6 +62,7 @@ private:
 
 	SmtpClientThread* m_smtpThread;
 	QThread* m_smtpQThread;
+	QThread* m_smsThread;
 
 	EmailSettings* m_emailSettings;
 	SMSComPortController* m_smsController;

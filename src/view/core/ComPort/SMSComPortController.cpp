@@ -61,6 +61,11 @@ void SMSComPortController::sendMessage(QString msg)
 	emit signalSendNewMessage();
 }
 
+void SMSComPortController::onStart()
+{
+
+}
+
 void SMSComPortController::slotCloseUi()
 {
 	m_view->close();

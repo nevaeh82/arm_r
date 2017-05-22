@@ -26,6 +26,7 @@ public:
 	void showDialog();
 	QStringList getNumbers();
 	void sendMessage(QString msg);
+	void onStart();
 
 private:
 	SMSComPortDialog* m_view;
