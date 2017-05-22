@@ -26,6 +26,9 @@ private:
 	QStringList m_listNumbers;
 	int m_currentComPortIndex;
 
+private:
+	void showEvent(QShowEvent *event);
+
 private slots:
 	void slotAccept();
 	void slotClose();

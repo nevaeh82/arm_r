@@ -40,6 +40,11 @@ QString SMSComPortDialog::getComPortName()
 	return m_currentComPort;
 }
 
+void SMSComPortDialog::showEvent(QShowEvent *event)
+{
+	ui->cb_com_name->setCurrentIndex(m_currentComPortIndex);
+}
+
 void SMSComPortDialog::slotAccept()
 {
 	m_currentComPort = ui->cb_com_name->currentText();

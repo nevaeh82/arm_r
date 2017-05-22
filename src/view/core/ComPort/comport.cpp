@@ -68,7 +68,9 @@ void ComPort::onComRead()
 
 void ComPort::writeCommand(const QByteArray &data)
 {
-	m_serialport->write(data);
+	quint64 bytes = m_serialport->write(data);
+	m_serialport->flush();
+	log_debug(QString::number(bytes));
 
 }
 
@@ -80,8 +82,6 @@ void ComPort::writeCommand(char *data, int size)
 void ComPort::init()
 {
 	QString command = (tr("AT+CMGF=1 \r"));
-	writeCommand(command.toAscii().data());
-	command = (tr("AT+CMGS=\"89811431955, 89816879903\" \r Hello!\x1A"));
 	writeCommand(command.toAscii().data());
 }
 

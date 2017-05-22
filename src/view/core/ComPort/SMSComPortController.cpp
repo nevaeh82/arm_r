@@ -24,7 +24,7 @@ SMSComPortController::~SMSComPortController()
 void SMSComPortController::init()
 {
 	m_comport = new ComPort(0);
-	connect(m_comport, SIGNAL(signalSent()), this, SLOT(slotSendSMS()));
+	connect(m_comport, SIGNAL(signalSent()), this, SLOT(slotSendSMByTimer()));
 	QList<QString> list = m_comport->getAllPorts();
 	m_view->fillComPorts(list);
 	m_comport->setComPort(m_view->getComPortName());
@@ -61,11 +61,6 @@ void SMSComPortController::sendMessage(QString msg)
 	emit signalSendNewMessage();
 }
 
-void SMSComPortController::send2()
-{
-	QTimer::singleShot(1000, this, SLOT(slotSendSMS2()));
-}
-
 void SMSComPortController::slotCloseUi()
 {
 	m_view->close();
@@ -76,7 +71,7 @@ void SMSComPortController::slotUpdateFromUi()
 	m_view->close();
 	delete m_comport;
 	init();
-	sendMessage("Freq = 1999");
+//	sendMessage("Freq = 1999");
 }
 
 void SMSComPortController::slotSendSMS()
@@ -91,46 +86,22 @@ void SMSComPortController::slotSendSMS()
 		SMSMessage &sms = m_listMessages.first();
 		if(sms.currentIndexNumber >= m_listNumbers.count())
 		{
-			command = (tr("AT+CMSD=0 \r"));
-			m_comport->writeCommand(command.toAscii().data());
 			m_listMessages.removeFirst();
 			emit signalSendNewMessage();
 			return;
 		}
 
-		int currentIndex = sms.currentIndexNumber;
-		QString No= m_listNumbers.at(currentIndex);
+		int currentIndex = sms.currentIndexNumber++;
+		QString No = m_listNumbers.at(currentIndex);
 
-		if(currentIndex == 0)
-		{
-			command = (tr("AT+CMSW=\"") + No + tr("\" \r ") + sms.msg + tr("\x1A"));
-			m_comport->writeCommand(command.toAscii().data());
-//			command = (tr("AT+CMSS=0, \"") + No + tr("\" \r"));
-//			m_comport->writeCommand(command.toAscii().data());
-			send2();
-		}
-		else
-		{
-			command = (tr("AT+CMSS=0, \"") + No + tr("\" \r"));
-			m_comport->writeCommand(command.toAscii().data());
-			sms.currentIndexNumber++;
-			slotSendSMByTimer();
-		}
+		command = (tr("AT+CMGS=\"") + No.trimmed() + tr("\" \r ") + sms.msg + tr("\x1A"));
+		m_comport->writeCommand(command.toAscii().data());
+		slotSendSMByTimer();
 	}
 }
 
-void SMSComPortController::slotSendSMS2()
-{
-	QString command;
-	SMSMessage &sms = m_listMessages.first();
-	QString No= m_listNumbers.at(sms.currentIndexNumber++);
-
-	command = (tr("AT+CMSS=0, \"") + No + tr("\" \r"));
-	m_comport->writeCommand(command.toAscii().data());
-	slotSendSMByTimer();
-}
 
 void SMSComPortController::slotSendSMByTimer()
 {
-	QTimer::singleShot(1000, this, SLOT(slotSendSMS()));
+	QTimer::singleShot(5000, this, SLOT(slotSendSMS()));
 }

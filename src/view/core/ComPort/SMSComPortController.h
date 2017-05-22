@@ -35,11 +35,6 @@ private:
 	int m_listNumbersCurrentIndex;
 	QList<SMSMessage> m_listMessages;
 
-private:
-	void send2();
-
-	//QTimer* m_timer;
-
 
 signals:
 	void signalSendNewMessage();
@@ -48,7 +43,6 @@ private slots:
 	void slotCloseUi();
 	void slotUpdateFromUi();
 	void slotSendSMS();
-	void slotSendSMS2();
 	void slotSendSMByTimer();;
 
 };
