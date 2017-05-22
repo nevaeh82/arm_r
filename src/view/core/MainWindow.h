@@ -53,6 +53,7 @@ signals:
 
 	void onCloseSignal();
 	void signalEmailSettings();
+	void signalSMSSettings();
 
 protected:
 	void closeEvent(QCloseEvent *);

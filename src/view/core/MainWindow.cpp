@@ -82,6 +82,7 @@ void MainWindow::init()
 	connect(ui->actionPrm_via_com, SIGNAL(triggered(bool)), controller->getView(), SLOT(show()));
 
 	connect(ui->actionEmail_Alert_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalEmailSettings()));
+	connect(ui->actionSMS_Alert_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalSMSSettings()));
 }
 
 void MainWindow::updateLocationSetupAction(int id, QString text)

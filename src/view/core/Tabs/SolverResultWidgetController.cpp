@@ -14,6 +14,10 @@ SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
 	m_smtpThread = new SmtpClientThread(0);
 	m_smtpQThread = new QThread();
 	m_emailSettings = new EmailSettings(0);
+	m_smsController = new SMSComPortController(this);
+    m_smsController->appendView(m_emailSettings->getSmsDialog());
+	m_smsThread = new QThread();
+
 
 	slotEmailUpdate();
 
@@ -21,10 +25,16 @@ SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
 	connect(m_smtpQThread, SIGNAL(started()), m_smtpThread, SLOT(onStart()));
 	connect(m_emailSettings, SIGNAL(signalMailSettingsUpdate()), this, SLOT(slotEmailUpdate()));
 
+	connect(m_smsThread, SIGNAL(finished()), m_smsThread, SLOT(deleteLater()));
+	connect(m_smsThread, SIGNAL(started()), m_smsController, SLOT(onStart()));
+
 	m_smtpThread->moveToThread(m_smtpQThread);
 	m_smtpQThread->start();
 
 	m_elapsedMail.start();
+
+	m_smsController->moveToThread(m_smsThread);
+	m_smsThread->start();
 }
 
 SolverResultWidgetController::~SolverResultWidgetController()
@@ -32,6 +42,10 @@ SolverResultWidgetController::~SolverResultWidgetController()
 	m_smtpQThread->quit();
 	delete m_smtpThread;
 	m_smtpQThread->deleteLater();
+
+	m_smsThread->quit();
+	delete m_smsController;
+	m_smsThread->deleteLater();
 
 	if(m_view != NULL)
 	{
@@ -211,6 +225,7 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 	}
 
 	QString state = "";
+    QString stateSms = "";
 	QString quality = "";
 
 	if(res.state == 1) {
@@ -218,18 +233,21 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 			return true;
 		}
 		state = tr("Moving");
+        stateSms = ("Moving");
 	} else if(res.state == 2) {
 		if(!m_emailSettings->isStanding()) {
 			return true;
 		}
 
 		state = tr("Standing");
+        stateSms = ("Standing");
 	} else if(res.state == 3) {
 		if(!m_emailSettings->isUnknown()) {
 			return true;
 		}
 
 		state = tr("UNKNOWN");
+        stateSms = ("UNKNOWN");
 	}
 
 	if(res.quality == 1) {
@@ -242,9 +260,27 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 
 
 	if(m_emailSettings->isSend()) {
+		QString message = tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n";
+        QString messageSms = QString("Found AIM: \x0A  freq %1 \x0A  state %2 \x0A  Lon: %3 \x0A  Lat: %4 \x0A  Time: %5").arg(res.freq).arg(stateSms).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
-		m_smtpThread->sendMessage(tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n" );
+		m_smtpThread->sendMessage(message);
 
+        if(!m_FreqMap.contains(res.freq))
+        {
+			m_FreqMap.insert(res.freq, QDateTime::currentDateTime());
+            m_smsController->sendMessage(messageSms);
+        }
+        else
+        {
+            QDateTime dtOld = m_FreqMap.value(res.freq);
+            QDateTime dt = QDateTime::currentDateTime();
+
+            quint64 diff = dtOld.msecsTo(dt);
+            if(diff > 1800000)		// 30 minute
+            {
+                m_FreqMap.remove(res.freq);
+            }
+        }
 	}
 
 	return true;
@@ -268,6 +304,11 @@ void SolverResultWidgetController::onMethodCalledSlot(QString method, QVariant a
 void SolverResultWidgetController::onEmailSettings()
 {
 	m_emailSettings->show();
+}
+
+void SolverResultWidgetController::onSMSSettings()
+{
+	m_smsController->showDialog();
 }
 
 QString SolverResultWidgetController::getSolverResultToString(const SolveResult &result)

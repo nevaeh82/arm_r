@@ -175,6 +175,7 @@ void MainWindowController::init()
 	//            m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 
 	connect(m_view, SIGNAL(signalEmailSettings()), m_solverWidgetController, SLOT(onEmailSettings()));
+	connect(m_view, SIGNAL(signalSMSSettings()), m_solverWidgetController, SLOT(onSMSSettings()));
 
 
 	serverStartedSlot();

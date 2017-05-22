@@ -173,6 +173,7 @@ color: rgb(255, 0, 0);</string>
     <addaction name="separator"/>
     <addaction name="actionLocationSetup"/>
     <addaction name="actionEmail_Alert_settings"/>
+    <addaction name="actionSMS_Alert_settings"/>
     <addaction name="separator"/>
     <addaction name="actionPrm_via_com"/>
    </widget>
@@ -252,6 +253,11 @@ color: rgb(255, 0, 0);</string>
   <action name="actionEmail_Alert_settings">
    <property name="text">
     <string>Email Alert settings</string>
+   </property>
+  </action>
+  <action name="actionSMS_Alert_settings">
+   <property name="text">
+    <string>SMS Alert settings</string>
    </property>
   </action>
  </widget>

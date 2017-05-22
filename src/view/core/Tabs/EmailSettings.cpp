@@ -19,7 +19,12 @@ EmailSettings::EmailSettings(QWidget *parent) :
 
 EmailSettings::~EmailSettings()
 {
-	delete ui;
+    delete ui;
+}
+
+SMSComPortDialog *EmailSettings::getSmsDialog()
+{
+    return ui->smsWidget;
 }
 
 void EmailSettings::init()
@@ -56,6 +61,8 @@ void EmailSettings::init()
 	m_remoteMailList = aSettingsRemote.value("Address/addressList").toString().split(",");
 
 	initView();
+
+    ui->smsWidget->slotClose();
 }
 
 void EmailSettings::saveSettings()
@@ -92,6 +99,8 @@ void EmailSettings::saveSettings()
 	aSettingsRemote.setValue("Address/addressList", ui->leRemoteMails->text());
 
 	init();
+
+    ui->smsWidget->slotAccept();
 
 	emit signalMailSettingsUpdate();
 }
