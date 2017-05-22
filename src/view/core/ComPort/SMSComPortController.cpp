@@ -3,9 +3,10 @@
 SMSComPortController::SMSComPortController(QObject *parent) : QObject(parent)
 {
 	m_view = NULL;
-	m_comport = NULL;
+	m_comport = new ComPort(0);;
 	m_listNumbersCurrentIndex = 0;
 	m_smsDialog = new SMSComPortDialog(0);
+	m_comPortName = "";
 //	m_timer = new QTimer();
 
 	appendView(m_smsDialog);
@@ -13,21 +14,26 @@ SMSComPortController::SMSComPortController(QObject *parent) : QObject(parent)
 	connect(m_smsDialog, SIGNAL(signalAccept()), this, SLOT(slotUpdateFromUi()));
 	connect(this, SIGNAL(signalSendNewMessage()), this, SLOT(slotSendSMByTimer()));
 
+	readSettings();
+
 	//connect(m_timer, SIGNAL(timeout()), this, SLOT(slotSendSMS()));
 }
 
 SMSComPortController::~SMSComPortController()
 {
+	saveSettings();
 	delete m_smsDialog;
 }
 
 void SMSComPortController::init()
 {
+	delete m_comport;
 	m_comport = new ComPort(0);
 	connect(m_comport, SIGNAL(signalSent()), this, SLOT(slotSendSMByTimer()));
 	QList<QString> list = m_comport->getAllPorts();
 	m_view->fillComPorts(list);
-	m_comport->setComPort(m_view->getComPortName());
+	m_comPortName = m_view->getComPortName();
+	m_comport->setComPort(m_comPortName);
 	if(m_comport->isValidComPort())
 	{
 		QString command = (tr("AT+CMGF=1 \r"));
@@ -66,17 +72,42 @@ void SMSComPortController::onStart()
 
 }
 
+void SMSComPortController::readSettings()
+{
+	QSettings aSettings("./Tabs/sms.ini", QSettings::IniFormat);
+	aSettings.setIniCodec("UTF-8");
+
+	m_comPortName=aSettings.value("comPortName").toString();
+	m_listNumbers = aSettings.value("numbers").toString().split(",");
+
+	QList<QString> list = m_comport->getAllPorts();
+	m_view->fillComPorts(list);
+
+	m_view->setComPortName(m_comPortName);
+	m_view->setListNumbers(m_listNumbers);
+
+}
+
+void SMSComPortController::saveSettings()
+{
+	QSettings aSettings("./Tabs/sms.ini", QSettings::IniFormat);
+	aSettings.setIniCodec("UTF-8");
+
+	aSettings.setValue("comPortName", m_view->getComPortName());
+	aSettings.setValue("numbers", m_view->getNumbers().join(","));
+}
+
 void SMSComPortController::slotCloseUi()
 {
 	m_view->close();
+	saveSettings();
 }
 
 void SMSComPortController::slotUpdateFromUi()
 {
 	m_view->close();
-	delete m_comport;
 	init();
-//	sendMessage("Freq = 1999");
+	saveSettings();
 }
 
 void SMSComPortController::slotSendSMS()

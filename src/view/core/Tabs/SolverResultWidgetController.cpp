@@ -44,7 +44,7 @@ SolverResultWidgetController::~SolverResultWidgetController()
 
 	m_smsThread->quit();
 	delete m_smsController;
-	m_smsController->deleteLater();
+	m_smsThread->deleteLater();
 
 	if(m_view != NULL)
 	{

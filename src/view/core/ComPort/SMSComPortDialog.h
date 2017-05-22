@@ -2,6 +2,7 @@
 #define SMSCOMPORTDIALOG_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
 class SMSComPortDialog;
@@ -19,6 +20,8 @@ public:
 	void fillComPorts(QList<QString> list);
 	QStringList getNumbers();
 	QString getComPortName();
+	void setComPortName(QString name);
+	void setListNumbers(QStringList numbers);
 
 private:
 	Ui::SMSComPortDialog *ui;

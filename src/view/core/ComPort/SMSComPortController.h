@@ -35,6 +35,11 @@ private:
 	QStringList m_listNumbers;
 	int m_listNumbersCurrentIndex;
 	QList<SMSMessage> m_listMessages;
+	QString m_comPortName;
+
+private:
+	void readSettings();
+	void saveSettings();
 
 
 signals:

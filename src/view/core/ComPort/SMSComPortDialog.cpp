@@ -40,6 +40,20 @@ QString SMSComPortDialog::getComPortName()
 	return m_currentComPort;
 }
 
+void SMSComPortDialog::setComPortName(QString name)
+{
+	m_currentComPort = name;
+	m_currentComPortIndex = ui->cb_com_name->findText(name);
+	ui->cb_com_name->setCurrentIndex(m_currentComPortIndex);
+}
+
+void SMSComPortDialog::setListNumbers(QStringList numbers)
+{
+	m_listNumbers = numbers;
+	QString ns = m_listNumbers.join(",");
+	ui->leNumbers->setText(ns);
+}
+
 void SMSComPortDialog::showEvent(QShowEvent *event)
 {
 	ui->cb_com_name->setCurrentIndex(m_currentComPortIndex);
