@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QSettings>
+#include "ComPort/SMSComPortDialog.h"
 
 namespace Ui {
 class EmailSettings;
@@ -38,6 +39,8 @@ public:
 
 	MailSettings remoteMailSettings() {return m_remoteSettings;}
 	MailSettings localMailSettings() {return m_localSettings;}
+
+    SMSComPortDialog* getSmsDialog();
 
 private:
 	Ui::EmailSettings *ui;

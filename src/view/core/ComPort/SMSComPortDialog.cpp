@@ -2,15 +2,15 @@
 #include "ui_SMSComPortDialog.h"
 
 SMSComPortDialog::SMSComPortDialog(QWidget *parent) :
-	QDialog(parent),
+    QWidget(parent),
 	ui(new Ui::SMSComPortDialog),
 	m_currentComPortIndex(0)
 {
 	ui->setupUi(this);
-	connect(ui->tbtnOk, SIGNAL(pressed()), this, SLOT(slotAccept()));
-	connect(ui->tbtnOk, SIGNAL(pressed()), this, SIGNAL(signalAccept()));
-	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SIGNAL(signalClose()));
-	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SLOT(slotClose()));
+//	connect(ui->tbtnOk, SIGNAL(pressed()), this, SLOT(slotAccept()));
+//	connect(ui->tbtnOk, SIGNAL(pressed()), this, SIGNAL(signalAccept()));
+//	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SIGNAL(signalClose()));
+//	connect(ui->tbtnCancel, SIGNAL(pressed()), this, SLOT(slotClose()));
 
 	ui->cb_com_name->setCurrentIndex(m_currentComPortIndex);
 }
@@ -64,9 +64,11 @@ void SMSComPortDialog::slotAccept()
 	m_currentComPort = ui->cb_com_name->currentText();
 	m_currentComPortIndex = ui->cb_com_name->currentIndex();
 	m_listNumbers = ui->leNumbers->text().split(",");
+
+    emit signalAccept();
 }
 
 void SMSComPortDialog::slotClose()
 {
-
+    emit signalClose();
 }

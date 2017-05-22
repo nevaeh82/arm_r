@@ -8,7 +8,7 @@ namespace Ui {
 class SMSComPortDialog;
 }
 
-class SMSComPortDialog : public QDialog
+class SMSComPortDialog : public QWidget
 {
 	Q_OBJECT
 
@@ -32,7 +32,7 @@ private:
 private:
 	void showEvent(QShowEvent *event);
 
-private slots:
+public slots:
 	void slotAccept();
 	void slotClose();
 

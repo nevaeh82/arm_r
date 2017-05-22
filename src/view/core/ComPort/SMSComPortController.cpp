@@ -5,16 +5,12 @@ SMSComPortController::SMSComPortController(QObject *parent) : QObject(parent)
 	m_view = NULL;
 	m_comport = new ComPort(0);;
 	m_listNumbersCurrentIndex = 0;
-	m_smsDialog = new SMSComPortDialog(0);
+    //m_smsDialog = new SMSComPortDialog(0);
 	m_comPortName = "";
 //	m_timer = new QTimer();
 
-	appendView(m_smsDialog);
-	connect(m_smsDialog, SIGNAL(signalClose()), this, SLOT(slotCloseUi()));
-	connect(m_smsDialog, SIGNAL(signalAccept()), this, SLOT(slotUpdateFromUi()));
+    //appendView(m_smsDialog)
 	connect(this, SIGNAL(signalSendNewMessage()), this, SLOT(slotSendSMByTimer()));
-
-	readSettings();
 
 	//connect(m_timer, SIGNAL(timeout()), this, SLOT(slotSendSMS()));
 }
@@ -44,12 +40,19 @@ void SMSComPortController::init()
 void SMSComPortController::appendView(SMSComPortDialog *view)
 {
 	m_view = view;
+    m_smsDialog = view;
+
+    connect(m_smsDialog, SIGNAL(signalClose()), this, SLOT(slotCloseUi()));
+    connect(m_smsDialog, SIGNAL(signalAccept()), this, SLOT(slotUpdateFromUi()));
+
+    readSettings();
+
 	init();
 }
 
 void SMSComPortController::showDialog()
 {
-	m_view->show();
+    //m_view->show();
 }
 
 QStringList SMSComPortController::getNumbers()
@@ -99,13 +102,13 @@ void SMSComPortController::saveSettings()
 
 void SMSComPortController::slotCloseUi()
 {
-	m_view->close();
-	saveSettings();
+//	m_view->close();
+//	saveSettings();
 }
 
 void SMSComPortController::slotUpdateFromUi()
 {
-	m_view->close();
+    //m_view->close();
 	init();
 	saveSettings();
 }
@@ -130,7 +133,7 @@ void SMSComPortController::slotSendSMS()
 		int currentIndex = sms.currentIndexNumber++;
 		QString No = m_listNumbers.at(currentIndex);
 
-		command = (tr("AT+CMGS=\"") + No.trimmed() + tr("\" \r ") + sms.msg + tr("\x1A"));
+        command = (tr("AT+CMGS=\"") + No.trimmed() + tr("\" \r ") + sms.msg + tr("\x1A"));
 		m_comport->writeCommand(command.toAscii().data());
 		slotSendSMByTimer();
 	}

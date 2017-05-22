@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>SMSComPortDialog</class>
- <widget class="QDialog" name="SMSComPortDialog">
+ <widget class="QWidget" name="SMSComPortDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>184</height>
+    <width>326</width>
+    <height>112</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,41 +50,10 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>41</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="3" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QToolButton" name="tbtnOk">
-       <property name="text">
-        <string>Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="tbtnCancel">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

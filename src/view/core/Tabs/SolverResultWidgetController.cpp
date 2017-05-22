@@ -15,6 +15,7 @@ SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
 	m_smtpQThread = new QThread();
 	m_emailSettings = new EmailSettings(0);
 	m_smsController = new SMSComPortController(this);
+    m_smsController->appendView(m_emailSettings->getSmsDialog());
 	m_smsThread = new QThread();
 
 
@@ -224,6 +225,7 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 	}
 
 	QString state = "";
+    QString stateSms = "";
 	QString quality = "";
 
 	if(res.state == 1) {
@@ -231,18 +233,21 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 			return true;
 		}
 		state = tr("Moving");
+        stateSms = ("Moving");
 	} else if(res.state == 2) {
 		if(!m_emailSettings->isStanding()) {
 			return true;
 		}
 
 		state = tr("Standing");
+        stateSms = ("Standing");
 	} else if(res.state == 3) {
 		if(!m_emailSettings->isUnknown()) {
 			return true;
 		}
 
 		state = tr("UNKNOWN");
+        stateSms = ("UNKNOWN");
 	}
 
 	if(res.quality == 1) {
@@ -256,25 +261,26 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 
 	if(m_emailSettings->isSend()) {
 		QString message = tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n";
+        QString messageSms = QString("Found AIM: \x0A  freq %1 \x0A  state %2 \x0A  Lon: %3 \x0A  Lat: %4 \x0A  Time: %5").arg(res.freq).arg(stateSms).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
 		m_smtpThread->sendMessage(message);
 
-		if(!m_FreqMap.contains(res.freq))
-		{
+        if(!m_FreqMap.contains(res.freq))
+        {
 			m_FreqMap.insert(res.freq, QDateTime::currentDateTime());
-			m_smsController->sendMessage(message);
-		}
-		else
-		{
-			QDateTime dtOld = m_FreqMap.value(res.freq);
-			QDateTime dt = QDateTime::currentDateTime();
+            m_smsController->sendMessage(messageSms);
+        }
+        else
+        {
+            QDateTime dtOld = m_FreqMap.value(res.freq);
+            QDateTime dt = QDateTime::currentDateTime();
 
-			quint64 diff = dtOld.msecsTo(dt);
-			if(diff > 1800000)		// 30 minute
-			{
-				m_FreqMap.remove(res.freq);
-			}
-		}
+            quint64 diff = dtOld.msecsTo(dt);
+            if(diff > 1800000)		// 30 minute
+            {
+                m_FreqMap.remove(res.freq);
+            }
+        }
 	}
 
 	return true;
