@@ -83,8 +83,9 @@ void PServer::onMessageReceived(const quint32 type, const QString &deviceType, c
 	QVariant data = QVariant( argument->data() );
 
 	switch(type) {
-        case CLIENT_TCP_SERVER:
-            if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA)
+		case FLAKON_TCP_DEVICE:
+			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO ||
+				messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA)
 			{
 				QByteArray dataSolver = data.toByteArray();
 
