@@ -101,5 +101,5 @@ void ComPort::comParseData(const QByteArray& data)
 		m_markText = false;
 	}
 
-	log_debug(text);
+    //log_debug(text);
 }
