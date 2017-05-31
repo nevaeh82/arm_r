@@ -16,8 +16,24 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="3" column="0">
-      <widget class="QListWidget" name="listView"/>
+     <item row="2" column="0" colspan="2">
+      <widget class="QTableWidget" name="tvWhiteAreas">
+       <column>
+        <property name="text">
+         <string>От</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>До</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Разделение</string>
+        </property>
+       </column>
+      </widget>
      </item>
      <item row="1" column="0" colspan="2">
       <widget class="QTableView" name="tvLists">
@@ -64,26 +80,9 @@
        </item>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QListWidget" name="workListView"/>
-     </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QTableWidget" name="tvWhiteAreas">
-       <column>
-        <property name="text">
-         <string>От</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>До</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Разделение</string>
-        </property>
-       </column>
+     <item row="3" column="0" colspan="2">
+      <widget class="QWidget" name="listWidget" native="true">
+       <layout class="QGridLayout" name="listLayout"/>
       </widget>
      </item>
     </layout>

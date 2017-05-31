@@ -125,8 +125,7 @@ int SpectrumWidgetDataSource::findIndex(qreal startx)
 
 bool SpectrumWidgetDataSource::startPanorama(bool start)
 {
-	if(start)
-	{
+    if(start) {
 		//if(m_spectrumWidget != NULL)
 			// m_spectrumWidget->setZeroFrequency(m_startFreq);
 
@@ -165,7 +164,6 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
         m_spectrumPeakHold = new float[m_pointCountWhole] ();
         m_needSetupSpectrum = true;
         clearPeak();
-
 	}
 }
 

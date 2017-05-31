@@ -41,7 +41,7 @@
 class ControlPanelController : public QObject, public IControlPanelController, public ICorrelationListener, public IRpcListener
 {
 	Q_OBJECT
-
+public:
 	struct solverResult
 	{
 		qint64 dateTime;
@@ -85,10 +85,12 @@ private:
 	double m_currentFreqFromPlot;
 
 	int m_timerInterval;
-	int m_timerCheckInterval;
+    int m_timerCheckInterval;
+    int m_timerCheckIntervalDopler;
 	int m_timerCheckIntervalDetected;
 
 	bool m_isFollowMode;
+    bool m_isDopplerSearch;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
@@ -112,6 +114,7 @@ private:
 
 	bool slotIncCheckMode();
 	void checkSolverResult();
+    void checkDopplerResult();
 
 	LocationSetupWidgetController* m_setupController;
 
@@ -119,8 +122,12 @@ private:
 
 	bool checkSolverResult(int freq);
 	int findResultInList(solverResult res);
+
+    QMultiMap<QString, double> m_dopplerMap;
+
+    QString m_title;
 public:
-	explicit ControlPanelController(int tabId, QObject *parent = 0);
+    explicit ControlPanelController(int tabId, QString title, QObject *parent = 0);
 	virtual ~ControlPanelController();
 
 	void appendView(ControlPanelWidget* view);
@@ -153,6 +160,10 @@ public:
 
 	void setManualMode();
 
+    QList<solverResult> getSolverResultList() const {return m_solverResultList;}
+
+    void setTitle(QString title) {m_title = title;}
+
 
 signals:
 	void signalSetComonFreq(double value);
@@ -168,6 +179,9 @@ signals:
     void skoChanged(float);
 
 	void signalReceiveSpectrums(bool);
+    void signalReadyToScreenShot();
+
+    void signalDopplerDetect(QString);
 
 public slots:
 
@@ -176,6 +190,7 @@ public slots:
 
 	void setSolverConnectState(bool);
 	void onSetSleepMode(bool);
+    void slotDopplerStatus(QString name, double doppler);
 
 
 private slots:
@@ -190,6 +205,7 @@ private slots:
 	void slotCheckMode();
 	void slotViewMode();
 	void slotViewAreaMode();
+    void slotViewAreaDopplerMode();
 
 	void slotChangeFreq();
 	void slotCheckModeSetFreq();

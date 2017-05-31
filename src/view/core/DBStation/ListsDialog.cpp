@@ -2,6 +2,7 @@
 #include "ui_ListsDialog.h"
 
 #include <QSpinBox>
+#include <QLabel>
 
 ListsDialog::ListsDialog(QWidget *parent) :
 	QDialog(parent),
@@ -25,8 +26,7 @@ ListsDialog::ListsDialog(QWidget *parent) :
     connect(ui->pbReport, SIGNAL(clicked()), this, SLOT(slotReportType()));
 	connect(ui->pbClose, SIGNAL(clicked(bool)), this, SIGNAL(onClosing()));
 
-	ui->listView->setVisible(false);
-	ui->workListView->setVisible(false);
+    ui->listWidget->setVisible(false);
 	ui->tvWhiteAreas->setVisible(false);
 
 	QByteArray outData;
@@ -64,34 +64,67 @@ QTableView *ListsDialog::getTableView()
 	return ui->tvLists;
 }
 
-void ListsDialog::addDetectFreq(double num, int index)
+void ListsDialog::addDetectFreq(double num, int index, int id)
 {
-	ui->listView->addItem(tr("index: %1  freq %2").arg(index).arg(QString::number(num)));
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
+    listViewStruct.listView->addItem(tr("index: %1  freq %2").arg(index).arg(QString::number(num)));
 }
 
-void ListsDialog::rmDetectFreq(double num)
+void ListsDialog::rmDetectFreq(double num, int id)
 {
-	QList<QListWidgetItem*> findLst = ui->listView->findItems(QString::number((int)num), Qt::MatchStartsWith);
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
+    QList<QListWidgetItem*> findLst = listViewStruct.listView->findItems(QString::number((int)num), Qt::MatchStartsWith);
 
 	foreach (QListWidgetItem* item, findLst) {
-			ui->listView->takeItem(ui->listView->row(item));
+            listViewStruct.listView->takeItem(listViewStruct.listView->row(item));
 	}
 }
 
-void ListsDialog::clearDetectFreq()
+void ListsDialog::clearDetectFreq(int id)
 {
-	int cnt = ui->listView->count();
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
+    int cnt = listViewStruct.listView->count();
 	for(int i = 0; i<cnt; i++) {
-		ui->listView->takeItem(0);
+        listViewStruct.listView->takeItem(0);
 	}
 }
 
-void ListsDialog::setWorkList(QList<StationsFrequencyAndBandwith> list)
+void ListsDialog::setWorkList(QList<StationsFrequencyAndBandwith> list, int id, QString title)
 {
+    if(!m_listViewMap.contains(id)) {
+        stListView listViewStruct;
+        QListWidget* listView = new QListWidget(this);
+        QListWidget* workListView = new QListWidget(this);
+        ui->listLayout->addWidget(new QLabel(QString("%1) ").arg(title)), id, 0);
+        ui->listLayout->addWidget(listView, id, 1);
+        ui->listLayout->addWidget(workListView, id, 2);
+        listViewStruct.listView = listView;
+        listViewStruct.workListView = workListView;
+
+        m_listViewMap.insert(id, listViewStruct);
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
 	int index = 0;
 	foreach (StationsFrequencyAndBandwith item, list) {
 		if(item.isChecked) {
-			ui->workListView->addItem(tr("%1| Freq: %2  bandwidth: %3").arg(index).
+            listViewStruct.workListView->addItem(tr("%1| Freq: %2  bandwidth: %3").arg(index).
 									  arg(item.frequency).arg(item.bandwidth));
 		}
 
@@ -99,43 +132,61 @@ void ListsDialog::setWorkList(QList<StationsFrequencyAndBandwith> list)
 	}
 }
 
-void ListsDialog::clearWorkList()
+void ListsDialog::clearWorkList(int id)
 {
-	int cnt = ui->workListView->count();
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
+    int cnt = listViewStruct.workListView->count();
 	for(int i = 0; i<cnt; i++) {
-		ui->workListView->takeItem(0);
+        listViewStruct.workListView->takeItem(0);
 	}
 }
 
-void ListsDialog::setCheckPointer(int ind)
+void ListsDialog::setCheckPointer(int ind, int id)
 {
-	for(int i = 0; i<ui->workListView->count(); i++) {
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
+
+    stListView listViewStruct = m_listViewMap.value(id);
+
+    for(int i = 0; i<listViewStruct.workListView->count(); i++) {
 
 //		QString tst1 = QString::number(ind);
 //		QString tst2 =  ui->workListView->item(i)->text().left(ui->workListView->item(i)->text().indexOf("|"));
 
-		if( ui->workListView->item(i)->text().left(ui->workListView->item(i)->text().indexOf("|")) == QString::number(ind) ) {
-			ui->workListView->item(i)->setBackgroundColor(Qt::green);
+        if( listViewStruct.workListView->item(i)->text().left(listViewStruct.workListView->item(i)->text().indexOf("|")) == QString::number(ind) ) {
+            listViewStruct.workListView->item(i)->setBackgroundColor(Qt::green);
 		} else {
-			ui->workListView->item(i)->setBackgroundColor(Qt::white);
+            listViewStruct.workListView->item(i)->setBackgroundColor(Qt::white);
 		}
 	}
 
-	for(int i = 0; i<ui->listView->count(); i++) {
-		ui->listView->item(i)->setBackgroundColor(Qt::white);
+    for(int i = 0; i<listViewStruct.listView->count(); i++) {
+        listViewStruct.listView->item(i)->setBackgroundColor(Qt::white);
 	}
 
 }
 
-void ListsDialog::setDetectPointer(int ind)
+void ListsDialog::setDetectPointer(int ind, int id)
 {
-	if( (ind-1) >= 0) {
-		ui->listView->item(ind-1)->setBackgroundColor(Qt::white);
-	}
-	ui->listView->item(ind)->setBackgroundColor(Qt::green);
+    if(!m_listViewMap.contains(id)) {
+        return;
+    }
 
-	for(int i = 0; i<ui->workListView->count(); i++) {
-		ui->workListView->item(i)->setBackgroundColor(Qt::white);
+    stListView listViewStruct = m_listViewMap.value(id);
+
+	if( (ind-1) >= 0) {
+        listViewStruct.listView->item(ind-1)->setBackgroundColor(Qt::white);
+	}
+    listViewStruct.listView->item(ind)->setBackgroundColor(Qt::green);
+
+    for(int i = 0; i<listViewStruct.workListView->count(); i++) {
+        listViewStruct.workListView->item(i)->setBackgroundColor(Qt::white);
 	}
 }
 
@@ -200,18 +251,15 @@ void ListsDialog::slotTypeList(int ind)
 {
 	if(ind >= 4) {
 		ui->tvLists->setVisible(false);
-		ui->listView->setVisible(true);
-		ui->workListView->setVisible(true);
+        ui->listWidget->setVisible(true);
 		ui->tvWhiteAreas->setVisible(false);
 	} else if(ind < 3) {
 		ui->tvLists->setVisible(true);
-		ui->listView->setVisible(false);
-		ui->workListView->setVisible(false);
+        ui->listWidget->setVisible(false);
 		ui->tvWhiteAreas->setVisible(false);
 	} else {
 		ui->tvLists->setVisible(false);
-		ui->listView->setVisible(false);
-		ui->workListView->setVisible(false);
+        ui->listWidget->setVisible(false);
 		ui->tvWhiteAreas->setVisible(true);
 	}
 }

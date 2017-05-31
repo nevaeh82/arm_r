@@ -137,7 +137,12 @@ void LocationSetupWidgetController::setSleepMode(bool val)
 	QByteArray outData;
 	outData.resize( params.ByteSize() );
 	params.SerializeToArray( outData.data(), outData.size() );
-	emit sendCPPacketData(outData);
+    emit sendCPPacketData(outData);
+}
+
+int LocationSetupWidgetController::currentFrequency() const
+{
+    return m_locationMessage.central_frequency();
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)

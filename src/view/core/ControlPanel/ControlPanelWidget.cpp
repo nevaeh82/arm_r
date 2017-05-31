@@ -147,6 +147,9 @@ void ControlPanelWidget::slotChangeMode(int index)
 	case 4:
 		emit signalViewAreaMode();
 		break;
+    case 5:
+        emit signalViewAreaDopplerMode();
+        break;
 	default:
 		break;
 	}

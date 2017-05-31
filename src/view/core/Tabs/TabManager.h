@@ -110,6 +110,8 @@ private:
 
 	Station* getStationByDevChannel(int dev, int channel);
 
+    bool m_isSystemMerge;
+
 public:
 	TabManager(int id, QTabWidget* tabWidget, QObject *parent = 0);
 	virtual ~TabManager();
@@ -158,6 +160,8 @@ public:
 	virtual void onMethodCalled(const QString& method, const QVariant& argument);
 
 	QTabWidget *getTabWidgetZone();
+
+    bool isSystemMerge() const {return m_isSystemMerge;}
 
 private slots:
 	void changeTabSlot(int index);

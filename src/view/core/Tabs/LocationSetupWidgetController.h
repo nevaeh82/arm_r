@@ -38,6 +38,8 @@ public:
 
 	void setSleepMode(bool);
 
+    int currentFrequency() const;
+
 private:
 	LocationSetupWidget* m_view;
 

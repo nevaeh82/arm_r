@@ -53,13 +53,16 @@ void CorrelationWidgetDataSource::onMethodCalled(const QString& method, const QV
 Q_DECLARE_METATYPE(float*)
 void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, const QVector<QPointF>& points, float veracity, double doppler)
 {
+    QString base = m_tabManager->getStationName(point1);//m_id);
+    QString second = m_tabManager->getStationName(point2);
+
+    emit dopplerStatus( QString("%1-%2").arg(base).arg(second), doppler );
+
 	if(m_corrGraphWgt && !m_corrGraphWgt->isGraphicVisible()) {
 		emit onDrawComplete();
 		return;
 	}
 
-	QString base = m_tabManager->getStationName(point1);//m_id);
-	QString second = m_tabManager->getStationName(point2);
 
 	float* spCorrelation = m_mapSpectrumCorelation;
 	float* peaksCorrelation = m_mapPeaksCorrelation;

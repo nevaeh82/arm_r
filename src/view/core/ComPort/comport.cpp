@@ -94,8 +94,7 @@ void ComPort::comParseData(const QByteArray& data)
 	}
 	else
 	{
-		if(m_markText && text.contains("OK"))
-		{
+        if(m_markText && text.contains("OK")) {
 			emit signalSent();
 		}
 		m_markText = false;

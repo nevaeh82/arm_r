@@ -262,6 +262,15 @@
     </message>
 </context>
 <context>
+    <name>ComPort</name>
+    <message>
+        <location filename="ComPort/comport.cpp" line="84"/>
+        <source>AT+CMGF=1 
+</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>ComReceiverView</name>
     <message>
         <location filename="ComReceiver/ComReceiverView.ui" line="14"/>
@@ -438,9 +447,15 @@
         <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="161"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="165"/>
         <source> MHz</source>
         <translation> МГц</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="567"/>
+        <source>Detect average Dopler:%1 on frequency:%2  on Correlation %3</source>
+        <translation>Среднее значение  Доплера: %1 на частоте: %2
+Корреляция %3</translation>
     </message>
     <message>
         <source>Moving</source>
@@ -557,9 +572,19 @@
         <translation>Решение: </translation>
     </message>
     <message>
+        <location filename="ControlPanel.ui" line="669"/>
+        <source>IRI marker</source>
+        <translation>Маркер ИРИ</translation>
+    </message>
+    <message>
         <location filename="ControlPanel.ui" line="791"/>
         <source>Merge system control</source>
         <translation>Объединять управление</translation>
+    </message>
+    <message>
+        <location filename="ControlPanel.ui" line="844"/>
+        <source>Searching by doppler</source>
+        <translation>Поиск по доплеру</translation>
     </message>
     <message>
         <location filename="ControlPanel.ui" line="655"/>
@@ -572,9 +597,8 @@
         <translation>Свертка</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="669"/>
         <source>Humps</source>
-        <translation>Автопоиск</translation>
+        <translation type="obsolete">Автопоиск</translation>
     </message>
     <message>
         <location filename="ControlPanel.ui" line="824"/>
@@ -602,17 +626,17 @@
         <translation type="obsolete">Сопровождение</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="847"/>
+        <location filename="ControlPanel.ui" line="852"/>
         <source>Work mode: </source>
         <translation>Режим работы: </translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="854"/>
+        <location filename="ControlPanel.ui" line="859"/>
         <source>Sleep mode</source>
         <translation>Режим &quot;Сон&quot;</translation>
     </message>
     <message>
-        <location filename="ControlPanel.ui" line="876"/>
+        <location filename="ControlPanel.ui" line="881"/>
         <source>Sound Off</source>
         <translation>Откл. Звук</translation>
     </message>
@@ -690,12 +714,12 @@
         <translation type="obsolete">Установить общую частоту</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelWidget.cpp" line="178"/>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="185"/>
         <source>Moving aim founded!!! Freq: %1</source>
         <translation>Обнаружена подвижная цель! Частота:%1</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelWidget.cpp" line="250"/>
+        <location filename="ControlPanel/ControlPanelWidget.cpp" line="260"/>
         <source> mhz</source>
         <translation> МГц</translation>
     </message>
@@ -848,12 +872,12 @@
         <translation>Настройки Email оповещений</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="20"/>
+        <location filename="Tabs/EmailSettings.ui" line="33"/>
         <source>Remote mails</source>
         <translation>Адреса удаленного сервера</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="27"/>
+        <location filename="Tabs/EmailSettings.ui" line="23"/>
         <source>Local mails</source>
         <translation>Адреса локального сервера</translation>
     </message>
@@ -863,108 +887,113 @@
         <translation>Отправлять Email оповещения</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="63"/>
+        <location filename="Tabs/EmailSettings.ui" line="203"/>
         <source>Remote Email settings</source>
         <translation>Настройки удаленного Email сервера</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="69"/>
-        <location filename="Tabs/EmailSettings.ui" line="187"/>
+        <location filename="Tabs/EmailSettings.ui" line="95"/>
+        <location filename="Tabs/EmailSettings.ui" line="209"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="86"/>
-        <location filename="Tabs/EmailSettings.ui" line="204"/>
+        <location filename="Tabs/EmailSettings.ui" line="112"/>
+        <location filename="Tabs/EmailSettings.ui" line="226"/>
         <source>User name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="93"/>
-        <location filename="Tabs/EmailSettings.ui" line="211"/>
+        <location filename="Tabs/EmailSettings.ui" line="119"/>
+        <location filename="Tabs/EmailSettings.ui" line="233"/>
         <source>Type</source>
         <translation>Тип соединения</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="101"/>
-        <location filename="Tabs/EmailSettings.ui" line="219"/>
+        <location filename="Tabs/EmailSettings.ui" line="127"/>
+        <location filename="Tabs/EmailSettings.ui" line="241"/>
         <source>TcpConnection</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="106"/>
-        <location filename="Tabs/EmailSettings.ui" line="224"/>
+        <location filename="Tabs/EmailSettings.ui" line="132"/>
+        <location filename="Tabs/EmailSettings.ui" line="246"/>
         <source>SslConnection</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="111"/>
-        <location filename="Tabs/EmailSettings.ui" line="229"/>
+        <location filename="Tabs/EmailSettings.ui" line="137"/>
+        <location filename="Tabs/EmailSettings.ui" line="251"/>
         <source>TlsConnection</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="119"/>
-        <location filename="Tabs/EmailSettings.ui" line="237"/>
+        <location filename="Tabs/EmailSettings.ui" line="145"/>
+        <location filename="Tabs/EmailSettings.ui" line="259"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="136"/>
-        <location filename="Tabs/EmailSettings.ui" line="254"/>
+        <location filename="Tabs/EmailSettings.ui" line="162"/>
+        <location filename="Tabs/EmailSettings.ui" line="276"/>
         <source>Host</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="143"/>
-        <location filename="Tabs/EmailSettings.ui" line="261"/>
+        <location filename="Tabs/EmailSettings.ui" line="169"/>
+        <location filename="Tabs/EmailSettings.ui" line="283"/>
         <source>Auth type</source>
         <translation>Тип аутентификации</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="151"/>
-        <location filename="Tabs/EmailSettings.ui" line="269"/>
+        <location filename="Tabs/EmailSettings.ui" line="177"/>
+        <location filename="Tabs/EmailSettings.ui" line="291"/>
         <source>Auth plain</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="156"/>
-        <location filename="Tabs/EmailSettings.ui" line="274"/>
+        <location filename="Tabs/EmailSettings.ui" line="182"/>
+        <location filename="Tabs/EmailSettings.ui" line="296"/>
         <source>Auth login</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="181"/>
+        <location filename="Tabs/EmailSettings.ui" line="377"/>
+        <source>Sms settings</source>
+        <translation>Настройки СМС</translation>
+    </message>
+    <message>
+        <location filename="Tabs/EmailSettings.ui" line="89"/>
         <source>Local Email settings</source>
         <translation>Настройки локального сервера</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="295"/>
+        <location filename="Tabs/EmailSettings.ui" line="50"/>
         <source>Alert types</source>
         <translation>Типы целей для оповещения</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="301"/>
+        <location filename="Tabs/EmailSettings.ui" line="56"/>
         <source>Unknown</source>
         <translation>Неизвестная</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="311"/>
+        <location filename="Tabs/EmailSettings.ui" line="66"/>
         <source>Moving</source>
         <translation>Подвижная</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="321"/>
+        <location filename="Tabs/EmailSettings.ui" line="76"/>
         <source>Standing</source>
         <translation>Стационарная</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="355"/>
+        <location filename="Tabs/EmailSettings.ui" line="342"/>
         <source>Ok</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="Tabs/EmailSettings.ui" line="368"/>
+        <location filename="Tabs/EmailSettings.ui" line="355"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>
@@ -1095,72 +1124,72 @@
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="42"/>
+        <location filename="DBStation/ListsDialog.ui" line="58"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="47"/>
+        <location filename="DBStation/ListsDialog.ui" line="63"/>
         <source>White</source>
         <translation>Белый</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="52"/>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
         <source>Black</source>
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="57"/>
+        <location filename="DBStation/ListsDialog.ui" line="73"/>
         <source>Whitelists</source>
         <translation>Диапазоны поиска</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="62"/>
+        <location filename="DBStation/ListsDialog.ui" line="78"/>
         <source>Detected</source>
         <translation>Обнаруженные</translation>
     </message>
     <message utf8="true">
-        <location filename="DBStation/ListsDialog.ui" line="74"/>
+        <location filename="DBStation/ListsDialog.ui" line="23"/>
         <source>От</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="DBStation/ListsDialog.ui" line="79"/>
+        <location filename="DBStation/ListsDialog.ui" line="28"/>
         <source>До</source>
         <translation></translation>
     </message>
     <message utf8="true">
-        <location filename="DBStation/ListsDialog.ui" line="84"/>
+        <location filename="DBStation/ListsDialog.ui" line="33"/>
         <source>Разделение</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="96"/>
+        <location filename="DBStation/ListsDialog.ui" line="95"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="103"/>
+        <location filename="DBStation/ListsDialog.ui" line="102"/>
         <source>Report</source>
         <translation>Отчет</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="123"/>
+        <location filename="DBStation/ListsDialog.ui" line="122"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="130"/>
+        <location filename="DBStation/ListsDialog.ui" line="129"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.cpp" line="69"/>
+        <location filename="DBStation/ListsDialog.cpp" line="75"/>
         <source>index: %1  freq %2</source>
         <translation>индекс: %1 частота %2</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.cpp" line="94"/>
+        <location filename="DBStation/ListsDialog.cpp" line="127"/>
         <source>%1| Freq: %2  bandwidth: %3</source>
         <translation>%1| Частота: %2  Ширина: %3</translation>
     </message>
@@ -1606,7 +1635,12 @@
     <message>
         <location filename="MainWindow.ui" line="254"/>
         <source>Email Alert settings</source>
-        <translation>Настройки Email оповещения</translation>
+        <translation>Настройки оповещений</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.ui" line="259"/>
+        <source>SMS Alert settings</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="MainWindow.cpp" line="18"/>
@@ -1619,17 +1653,17 @@
         <translation>Настройки координатометрии №%1</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="96"/>
+        <location filename="MainWindow.cpp" line="97"/>
         <source>Location settings System #%1 %2</source>
         <translation>Настройки координатометрии №%1 %2</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="114"/>
+        <location filename="MainWindow.cpp" line="115"/>
         <source>Punkt </source>
         <translation>Пункт </translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="114"/>
+        <location filename="MainWindow.cpp" line="115"/>
         <source> flushing</source>
         <translation>включено излучение!</translation>
     </message>
@@ -1641,17 +1675,17 @@
 <context>
     <name>MainWindowController</name>
     <message>
-        <location filename="MainWindowController.cpp" line="183"/>
+        <location filename="MainWindowController.cpp" line="186"/>
         <source>Unable to connect to server</source>
         <translation>Неудалось подключиться к серверу</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="183"/>
+        <location filename="MainWindowController.cpp" line="186"/>
         <source>Please try to restart application</source>
         <translation>Попробуйте перезапустить приложение</translation>
     </message>
     <message>
-        <location filename="MainWindowController.cpp" line="218"/>
+        <location filename="MainWindowController.cpp" line="221"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>
@@ -1796,6 +1830,80 @@
     </message>
 </context>
 <context>
+    <name>SMSComPortController</name>
+    <message>
+        <location filename="ComPort/SMSComPortController.cpp" line="37"/>
+        <source>AT+CMGF=1 
+</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortController.cpp" line="155"/>
+        <source>AT+CMGS=&quot;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortController.cpp" line="155"/>
+        <source>&quot; 
+ </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortController.cpp" line="155"/>
+        <source><byte value="x1a"/></source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>SMSComPortDialog</name>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="20"/>
+        <source>Alert types</source>
+        <translation>Типы целей для оповещения</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="26"/>
+        <source>Unknown</source>
+        <translation>Неизвестная</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="36"/>
+        <source>Moving</source>
+        <translation>Подвижная</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="46"/>
+        <source>Standing</source>
+        <translation>Стационарная</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="59"/>
+        <source>Delay send sms per frequency: </source>
+        <translation>Задержка между отправками смс
+о цели на ОДНОЙ частоте</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="66"/>
+        <source> min</source>
+        <translation>мин</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="81"/>
+        <source>Com Ports</source>
+        <translation>COM порты</translation>
+    </message>
+    <message>
+        <location filename="ComPort/SMSComPortDialog.ui" line="95"/>
+        <source>Number list</source>
+        <translation>Список телефонов</translation>
+    </message>
+</context>
+<context>
     <name>ServerConnectionSingleLineWidget</name>
     <message>
         <location filename="Tabs/ServerConnectionSingleLineWidget.ui" line="20"/>
@@ -1921,74 +2029,74 @@
 <context>
     <name>SolverResultWidgetController</name>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="83"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="97"/>
         <source>AUTO</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="86"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="100"/>
         <source>MANUAL</source>
         <translation>Ручное</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="89"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="103"/>
         <source>ALONE</source>
         <translation>Один отсчет</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="92"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="106"/>
         <source>HYPERBOLES</source>
         <translation>Гиперболы</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="122"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="136"/>
         <source> Good quality </source>
         <oldsource>Good quality</oldsource>
         <translation> Хорошее качество </translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="125"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="139"/>
         <source> Bad quality </source>
         <oldsource>Bad quality</oldsource>
         <translation> Плохое качество </translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="133"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="147"/>
         <source> Found solve </source>
         <translation> Найдено решение </translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="220"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="235"/>
         <source>Moving</source>
         <translation>Подвижная</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="226"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="242"/>
         <source>Standing</source>
         <translation>Стационарная</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="232"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="249"/>
         <source>UNKNOWN</source>
         <translation>Неизвестная</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="236"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="254"/>
         <source>Good</source>
         <translation>Хорошее</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="238"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="256"/>
         <source>Bad</source>
         <translation>Плохое</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="240"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="258"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="246"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="263"/>
         <source>Found AIM: 
    freq %1 
    state %2 
@@ -2005,52 +2113,52 @@
    Время: %6</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="279"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="337"/>
         <source>Successed solved</source>
         <translation>Найдено решение</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="282"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="340"/>
         <source>Some errors during solve</source>
         <translation>В ходе решения возникли ошибки</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="285"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="343"/>
         <source>Not enough data for solve</source>
         <translation>Недостаточно данных для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="288"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="346"/>
         <source>There is no solution</source>
         <translation>Решение не найдено</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="291"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="349"/>
         <source>No solve cause 2 trajectory</source>
         <translation>Решение не найдено из-за наличия 2 траекторий</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="294"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="352"/>
         <source>Not enough distances for solve</source>
         <translation>Недостаточные дистанции для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="297"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="355"/>
         <source>There is not enough accuracy for solve</source>
         <translation>Недостаточная точность для решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="300"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="358"/>
         <source>There is not enough input accuracy for solve</source>
         <translation>Низкая точность получаемого решения</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="303"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="361"/>
         <source>Solves data is out of range of resposible zone</source>
         <translation>Расчинтанные данные не попадают в зону ответственности</translation>
     </message>
     <message>
-        <location filename="Tabs/SolverResultWidgetController.cpp" line="306"/>
+        <location filename="Tabs/SolverResultWidgetController.cpp" line="364"/>
         <source>Coords is out of catching strobe</source>
         <translation>Расчитанные координаты не попадают в строб захвата</translation>
     </message>
@@ -2232,27 +2340,27 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="932"/>
+        <location filename="SpectrumWidgetController.cpp" line="933"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="935"/>
+        <location filename="SpectrumWidgetController.cpp" line="936"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="936"/>
+        <location filename="SpectrumWidgetController.cpp" line="937"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="937"/>
+        <location filename="SpectrumWidgetController.cpp" line="938"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="938"/>
+        <location filename="SpectrumWidgetController.cpp" line="939"/>
         <source>Record signal</source>
         <translation>Запись сигнала</translation>
     </message>
@@ -2318,39 +2426,45 @@
 <context>
     <name>TabManager</name>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="231"/>
+        <location filename="Tabs/TabManager.cpp" line="236"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="460"/>
-        <location filename="Tabs/TabManager.cpp" line="499"/>
-        <location filename="Tabs/TabManager.cpp" line="751"/>
+        <location filename="Tabs/TabManager.cpp" line="465"/>
+        <location filename="Tabs/TabManager.cpp" line="504"/>
+        <location filename="Tabs/TabManager.cpp" line="757"/>
         <source>Common</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="830"/>
+        <location filename="Tabs/TabManager.cpp" line="836"/>
         <source>Status: %1</source>
         <translation>Статус: %1</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="833"/>
+        <location filename="Tabs/TabManager.cpp" line="839"/>
         <source>Sucess</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="835"/>
+        <location filename="Tabs/TabManager.cpp" line="841"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="840"/>
+        <location filename="Tabs/TabManager.cpp" line="846"/>
         <source>Record Signal result</source>
         <translation>Результат записи сигнала</translation>
     </message>
     <message>
-        <location filename="Tabs/TabManager.cpp" line="1003"/>
+        <location filename="Tabs/TabManager.cpp" line="846"/>
+        <source>Record Signal result: 
+ %1</source>
+        <translation>Результат записи сигнала</translation>
+    </message>
+    <message>
+        <location filename="Tabs/TabManager.cpp" line="1011"/>
         <source>DataBase is not opened!</source>
         <translation>Не удалось открыть базу данных!</translation>
     </message>

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QObject>
+#include <QTime>
+
 #include "SMSComPortDialog.h"
 #include "Interfaces/ISMSComPortController.h"
 #include "ComPort/ComPort.h"
@@ -28,6 +30,8 @@ public:
 	void sendMessage(QString msg);
 	void onStart();
 
+    QTime m_initTime;
+
 private:
 	SMSComPortDialog* m_view;
 	ComPort* m_comport;
@@ -49,6 +53,6 @@ private slots:
 	void slotCloseUi();
 	void slotUpdateFromUi();
 	void slotSendSMS();
-	void slotSendSMByTimer();;
+    void slotSendSMByTimer();
 
 };

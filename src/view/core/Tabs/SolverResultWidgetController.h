@@ -89,6 +89,8 @@ private slots:
 	void onSMSSettings();
 
 	void slotEmailUpdate();
+
+    void slotDopplerMail(QString message);
 private:
 	QString getSolverResultToString(const SolveResult &result);
 	void addResultToLog(const QByteArray &data);

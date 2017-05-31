@@ -265,18 +265,35 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 
 		m_smtpThread->sendMessage(message);
 
-        if(!m_FreqMap.contains(res.freq))
-        {
+
+        //Go to send SMS
+
+        bool canSend = true;
+
+        if(res.state == 1) {
+            if(!m_emailSettings->getSmsDialog()->isMoving()) {
+                canSend = false;
+            }
+        } else if(res.state == 2) {
+            if(!m_emailSettings->getSmsDialog()->isStanding()) {
+                canSend = false;
+            }
+        } else if(res.state == 3) {
+            if(!m_emailSettings->getSmsDialog()->isUnknown()) {
+                canSend = false;
+            }
+        }
+
+        if(canSend && !m_FreqMap.contains(res.freq)) {
 			m_FreqMap.insert(res.freq, QDateTime::currentDateTime());
             m_smsController->sendMessage(messageSms);
         }
-        else
-        {
+        else {
             QDateTime dtOld = m_FreqMap.value(res.freq);
             QDateTime dt = QDateTime::currentDateTime();
 
             quint64 diff = dtOld.msecsTo(dt);
-            if(diff > 1800000)		// 30 minute
+            if(diff > m_emailSettings->getSmsDialog()->getDelay())
             {
                 m_FreqMap.remove(res.freq);
             }
@@ -358,5 +375,12 @@ void SolverResultWidgetController::slotEmailUpdate()
 	m_smtpThread->setLocalMailList(m_emailSettings->localMailList());
 	m_smtpThread->setRemoteMailList(m_emailSettings->remoteMailList());
 	m_smtpThread->setLocalMailSettings(m_emailSettings->localMailSettings());
-	m_smtpThread->setRemoteMailSettings(m_emailSettings->remoteMailSettings());
+    m_smtpThread->setRemoteMailSettings(m_emailSettings->remoteMailSettings());
+}
+
+void SolverResultWidgetController::slotDopplerMail(QString message)
+{
+    if(m_emailSettings->isSend()) {
+        m_smtpThread->sendMessage(message);
+    }
 }

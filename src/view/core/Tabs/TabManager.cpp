@@ -56,6 +56,8 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 {
 	m_tabWidget = new QTabWidget(tabWidget);
 
+    m_isSystemMerge = false;
+
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	connect(m_tabWidgetZone, SIGNAL(currentChanged(int)), this, SLOT(changeCommonTabSlot(int)));
 
@@ -131,6 +133,9 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 	connect( resultSolver, SIGNAL(solverResult(QByteArray)), m_panelController, SLOT(slotSolverResult(QByteArray)) );
 
 	m_solverSetup = setupSolver;
+
+    connect(m_panelController, SIGNAL(signalDopplerDetect(QString)),
+            resultSolver, SLOT(slotDopplerMail(QString)));
 }
 
 void TabManager::setRpcFlakon(const quint16& port, const QString& host)
@@ -156,7 +161,7 @@ void TabManager::setupController()
 {
 	m_cpView = new ControlPanelWidget();
 
-	ControlPanelController* controlPanelController = new ControlPanelController(m_id, this);
+    ControlPanelController* controlPanelController = new ControlPanelController(m_id, m_mainTitle, this);
 	controlPanelController->setDbStationController(m_dbStationController);
 	controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
 	controlPanelController->appendView(m_cpView);
@@ -736,6 +741,7 @@ void TabManager::readProto(const QByteArray& data)
 		m_locationSetupController->setDevicesState( sOptMsg );
 		m_mainTitle = QString::fromStdString(sOptMsg.title());
 		m_locationSetupController->getView()->setTitle(m_mainTitle);
+        m_panelController->setTitle(m_mainTitle);
 
 		emit onTitleUp(m_id, m_mainTitle);
 
@@ -967,6 +973,8 @@ void TabManager::slotAnalysisClose()
 
 void TabManager::onSystemMerge(bool val)
 {
+    m_isSystemMerge = val;
+
 	if(val) {
 		connect(m_panelController, SIGNAL(onStateChanged()), this, SIGNAL(signalLocationChanged()));
 		connect(m_locationSetupController, SIGNAL(onStateChanged()), this, SIGNAL(signalLocationChanged()));

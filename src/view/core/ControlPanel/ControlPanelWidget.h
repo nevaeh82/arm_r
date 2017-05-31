@@ -93,6 +93,7 @@ signals:
 	void signalCheckMode();
 	void signalViewMode();
 	void signalViewAreaMode();
+    void signalViewAreaDopplerMode();
 
 	void signalDown1Mhz();
 	void signalDown10Mhz();

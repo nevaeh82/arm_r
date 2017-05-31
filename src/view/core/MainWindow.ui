@@ -173,7 +173,6 @@ color: rgb(255, 0, 0);</string>
     <addaction name="separator"/>
     <addaction name="actionLocationSetup"/>
     <addaction name="actionEmail_Alert_settings"/>
-    <addaction name="actionSMS_Alert_settings"/>
     <addaction name="separator"/>
     <addaction name="actionPrm_via_com"/>
    </widget>

@@ -51,7 +51,42 @@ void SMSComPortDialog::setListNumbers(QStringList numbers)
 {
 	m_listNumbers = numbers;
 	QString ns = m_listNumbers.join(",");
-	ui->leNumbers->setText(ns);
+    ui->leNumbers->setText(ns);
+}
+
+int SMSComPortDialog::getDelay() const
+{
+    return ui->sbDelay->value()*60*1000; //msec
+}
+
+bool SMSComPortDialog::isStanding() const
+{
+    return ui->cbStanding->isChecked();
+}
+
+bool SMSComPortDialog::isMoving() const
+{
+    return ui->cbMoving->isChecked();
+}
+
+bool SMSComPortDialog::isUnknown() const
+{
+    return ui->cbUnknown->isChecked();
+}
+
+void SMSComPortDialog::setStanding(bool b)
+{
+    ui->cbStanding->setChecked(b);
+}
+
+void SMSComPortDialog::setMoving(bool b)
+{
+    ui->cbMoving->setChecked(b);
+}
+
+void SMSComPortDialog::setUnknown(bool b)
+{
+    ui->cbUnknown->setChecked(b);
 }
 
 void SMSComPortDialog::showEvent(QShowEvent *event)

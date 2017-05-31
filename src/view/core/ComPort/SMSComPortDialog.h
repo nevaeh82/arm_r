@@ -23,6 +23,16 @@ public:
 	void setComPortName(QString name);
 	void setListNumbers(QStringList numbers);
 
+    int getDelay() const;
+
+    bool isStanding() const;
+    bool isMoving() const;
+    bool isUnknown() const;
+
+    void setStanding(bool b);
+    void setMoving(bool b);
+    void setUnknown(bool b);
+
 private:
 	Ui::SMSComPortDialog *ui;
 	QString m_currentComPort;

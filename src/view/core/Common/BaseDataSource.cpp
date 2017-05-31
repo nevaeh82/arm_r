@@ -22,6 +22,8 @@ void BaseDataSource::setLocationController(LocationSetupWidgetController *contro
 void BaseDataSource::setControlPanelController(ControlPanelController *controller)
 {
 	m_panelController = controller;
+    connect(this, SIGNAL(dopplerStatus(QString,double)),
+            m_panelController, SLOT(slotDopplerStatus(QString,double)));
 }
 
 void BaseDataSource::onDataReceived(const QString &method, const QVariant& arg)

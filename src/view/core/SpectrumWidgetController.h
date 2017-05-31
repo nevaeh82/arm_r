@@ -156,6 +156,8 @@ private:
 
 	double m_globalThreshold;
 
+    QMap<double, QTime> m_screenShotMapTime;
+
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
 	virtual ~SpectrumWidgetController();
@@ -309,6 +311,8 @@ private slots:
 	void slotRecordSignal();
 
 	void onSpectrumStop();
+
+    void slotOnScreenShot();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

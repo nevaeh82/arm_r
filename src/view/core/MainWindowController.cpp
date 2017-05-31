@@ -355,6 +355,10 @@ void MainWindowController::onSetupLocationSettings()
 			continue;
 		}
 
+        if(!manager->isSystemMerge()) {
+            continue;
+        }
+
 		manager->setCurrentOptions(msg, isPanorama, panoramaStart, panoramaEnd);
 	}
 }

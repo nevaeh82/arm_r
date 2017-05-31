@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QPaintEngine>
 #include <QComboBox>
+#include <QDir>
 
 #include "ui_SpectrumWidget.h"
 
@@ -68,7 +69,8 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	ui->sbThreshold->setVisible(false);
 	ui->sbGlobalThreshold->setVisible(false);
 
-	ui->maximumsCB->setVisible(false);
+    ui->panoramaCB->setVisible(false);
+    //ui->maximumsCB->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -211,7 +213,30 @@ void SpectrumWidget::slotEnableKM(bool state)
 	/// not yet realazed signal
 	emit signalEnableKM(state);
 
-	ui->thresholdCB->setChecked(state);
+    ui->thresholdCB->setChecked(state);
+}
+
+void SpectrumWidget::screenshotSpectrum(double val)
+{
+    if(!isVisible()) {
+        return;
+    }
+
+    QPixmap px(ui->graphicsWidget->size());
+    px.fill(Qt::black);
+    ui->graphicsWidget->render(&px, QPoint(), px.rect());
+
+    QString path = QDir::toNativeSeparators(QApplication::applicationDirPath()) +
+                   QDir::separator() + "DetectedSpectrums" + QDir::separator() +
+                   QDateTime::currentDateTime().toString("dd_MM_yyyy") +  QDir::separator() +
+                   QDateTime::currentDateTime().toString("hh_mm AP");
+
+    QString name = path + QDir::separator() + ui->spectrumNameLB->text().trimmed() +
+                        QString("_%1_%2mhz.png").arg(QDateTime::currentDateTime().toString("hh_MM_ss")).arg(val);
+
+    QDir().mkpath(path);
+
+    bool result = px.save(name);
 }
 
 void SpectrumWidget::slotSetWorkMode(int mode, bool isOn)

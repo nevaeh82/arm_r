@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableView>
+#include <QListWidget>
 #include <Logger/Logger.h>
 
 #include "DBStation/DBFillTables.h"
@@ -15,21 +16,27 @@ class ListsDialog : public QDialog
 {
 	Q_OBJECT
 
+    struct stListView
+    {
+        QListWidget* listView;
+        QListWidget* workListView;
+    };
+
 public:
 	explicit ListsDialog(QWidget *parent = 0);
 	~ListsDialog();
 
 	QTableView* getTableView();
 
-	void addDetectFreq(double num, int index);
-	void rmDetectFreq(double num);
-	void clearDetectFreq();
+    void addDetectFreq(double num, int index, int id);
+    void rmDetectFreq(double num, int id);
+    void clearDetectFreq(int id);
 
-	void setWorkList(QList<StationsFrequencyAndBandwith> list);
-	void clearWorkList();
+    void setWorkList(QList<StationsFrequencyAndBandwith> list, int id, QString title);
+    void clearWorkList(int id);
 
-	void setCheckPointer(int ind);
-	void setDetectPointer(int ind);
+    void setCheckPointer(int ind, int id);
+    void setDetectPointer(int ind, int id);
 
 	void getFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith> &list);
 
@@ -38,6 +45,9 @@ private:
 
 	void setFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith> &list);
 	void getFrequencyAndBandwidthByWhiteAreasSave(QList<StationsFrequencyAndBandwith> &list);
+
+    QMap<int, stListView> m_listViewMap;
+
  signals:
 	void signalTypeList(int);
 	void signalAddClicked();

@@ -910,6 +910,7 @@ void SpectrumWidgetController::setDbStationController(DBStationController *contr
 void SpectrumWidgetController::setControlPanelController(ControlPanelController *controller)
 {
 	m_controlPanelController = controller;
+    connect(m_controlPanelController, SIGNAL(signalReadyToScreenShot()), this, SLOT(slotOnScreenShot()));
 }
 
 void SpectrumWidgetController::init()
@@ -1143,7 +1144,26 @@ void SpectrumWidgetController::slotRecordSignal()
 
 void SpectrumWidgetController::onSpectrumStop()
 {
-	setSpectrumShow(false);
+    setSpectrumShow(false);
+}
+
+void SpectrumWidgetController::slotOnScreenShot()
+{
+    QList<ControlPanelController::solverResult> lst = m_controlPanelController->getSolverResultList();
+    foreach (ControlPanelController::solverResult res, lst) {
+          if((m_current_frequency/TO_MHZ - res.freq) < 3) {
+              if( !m_screenShotMapTime.contains(res.freq) ) {
+                  m_screenShotMapTime.insert(res.freq, QTime::currentTime());
+                  m_view->screenshotSpectrum(res.freq);
+              } else {
+                  QTime sTime = m_screenShotMapTime.value(res.freq);
+                  if( sTime.msecsTo(QTime::currentTime()) > 60000 ) {
+                      m_view->screenshotSpectrum(res.freq);
+                      m_screenShotMapTime.insert(res.freq, QTime::currentTime());
+                  }
+              }
+          }
+    }
 }
 
 void SpectrumWidgetController::slotSelectionCleared()

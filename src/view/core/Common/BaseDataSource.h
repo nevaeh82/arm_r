@@ -34,6 +34,7 @@ protected:
 
 signals:
 	void onDrawComplete();
+    void dopplerStatus(QString name, double doppler);
 	
 public slots:
 	
