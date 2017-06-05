@@ -62,15 +62,15 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 
 	ui->autosearchCB->setVisible(false);
 	ui->panoramaCB->setVisible(false);
-//	ui->getSpectrumCB->setVisible(false);
+	//	ui->getSpectrumCB->setVisible(false);
 
 	connect(ui->cbSonogram, SIGNAL(clicked(bool)), m_plot, SLOT(setVisible(bool)));
 
 	ui->sbThreshold->setVisible(false);
 	ui->sbGlobalThreshold->setVisible(false);
 
-    ui->panoramaCB->setVisible(false);
-    //ui->maximumsCB->setVisible(false);
+	ui->panoramaCB->setVisible(false);
+	//ui->maximumsCB->setVisible(false);
 }
 
 SpectrumWidget::~SpectrumWidget()
@@ -213,30 +213,28 @@ void SpectrumWidget::slotEnableKM(bool state)
 	/// not yet realazed signal
 	emit signalEnableKM(state);
 
-    ui->thresholdCB->setChecked(state);
+	ui->thresholdCB->setChecked(state);
 }
 
 void SpectrumWidget::screenshotSpectrum(double val)
 {
-    if(!isVisible()) {
-        return;
-    }
+	QPixmap px(ui->graphicsWidget->size());
+	px.fill(Qt::black);
+	ui->graphicsWidget->render(&px, QPoint(), px.rect());
 
-    QPixmap px(ui->graphicsWidget->size());
-    px.fill(Qt::black);
-    ui->graphicsWidget->render(&px, QPoint(), px.rect());
+	QString path = QDir::toNativeSeparators(QApplication::applicationDirPath()) +
+			QDir::separator() + "DetectedSpectrums" + QDir::separator() +
+			QDateTime::currentDateTime().toString("dd_MM_yyyy") +  QDir::separator() +
+			QDateTime::currentDateTime().toString("hh_mm AP");
 
-    QString path = QDir::toNativeSeparators(QApplication::applicationDirPath()) +
-                   QDir::separator() + "DetectedSpectrums" + QDir::separator() +
-                   QDateTime::currentDateTime().toString("dd_MM_yyyy") +  QDir::separator() +
-                   QDateTime::currentDateTime().toString("hh_mm AP");
+	QString name = path + QDir::separator() + ui->spectrumNameLB->text().trimmed() +
+			QString("_%1_____%2mhz.png").arg(QDateTime::currentDateTime().toString("hh_MM_ss_zzz")).arg(val);
 
-    QString name = path + QDir::separator() + ui->spectrumNameLB->text().trimmed() +
-                        QString("_%1_%2mhz.png").arg(QDateTime::currentDateTime().toString("hh_MM_ss")).arg(val);
+	QDir().mkpath(path);
 
-    QDir().mkpath(path);
+	bool result = px.save(name);
 
-    bool result = px.save(name);
+//	/log_debug(QString("Screenshot!!! %1 %2 RESULT: %3").arg(px.width()).arg(px.height()).arg(result));
 }
 
 void SpectrumWidget::slotSetWorkMode(int mode, bool isOn)

@@ -7,14 +7,14 @@
 #define TO_HZ				1000000
 #define BANDWIDTH_SINGLE	20000000
 
-#define GPS_FREQUENCY       1575
+#define GPS_FREQUENCY		1575
 
 #define SLEEP_MODE_TIMEOUT 10000
+#define UP_TIMEOUT 1000
 
 SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObject *parent)
 	: BaseDataSource(parent)
 	, m_pointCountWhole(0)
-	, m_needSetup(0)
 	, m_currentFreq(0)
 	, m_endFreq(0)
 	, m_responseFreq(0)
@@ -48,6 +48,11 @@ SpectrumWidgetDataSource::SpectrumWidgetDataSource(IGraphicWidget *widget, QObje
 	m_sleepModeTimer->setInterval(SLEEP_MODE_TIMEOUT);
 	m_sleepModeTimer->setSingleShot(true);
 	connect(m_sleepModeTimer, SIGNAL(timeout()), SLOT(onSleepModeSlot()));
+
+	m_upTimer = new QTimer(this);
+	m_upTimer->setInterval(SLEEP_MODE_TIMEOUT);
+	m_upTimer->setSingleShot(true);
+	connect(m_upTimer, SIGNAL(timeout()), SLOT(onSleepModeSlot()));
 }
 
 SpectrumWidgetDataSource::~SpectrumWidgetDataSource()
@@ -80,7 +85,6 @@ int SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 	{
 		setBandwidth(bandwidth);
 		m_bandwidthSingleSample = bandwidth;
-		m_needSetup = true;
 	}
 
 	int index;
@@ -117,19 +121,19 @@ int SpectrumWidgetDataSource::dataProccess(QVector<QPointF>& vecFFT, bool)
 int SpectrumWidgetDataSource::findIndex(qreal startx)
 {
 	int ind = m_listStartx.indexOf( startx );
-//	if(ind < 0) {
-//		ind = m_listStartx.length()-1;
-//	}
+	//	if(ind < 0) {
+	//		ind = m_listStartx.length()-1;
+	//	}
 	return ind;
 }
 
 bool SpectrumWidgetDataSource::startPanorama(bool start)
 {
-    if(start) {
+	if(start) {
 		//if(m_spectrumWidget != NULL)
-			// m_spectrumWidget->setZeroFrequency(m_startFreq);
+		// m_spectrumWidget->setZeroFrequency(m_startFreq);
 
-			m_currentFreq = m_startFreq;
+		m_currentFreq = m_startFreq;
 
 		log_info(QString("Current frequency is %1").arg(m_currentFreq));
 		if(m_dbmanager != NULL) {
@@ -160,18 +164,18 @@ void SpectrumWidgetDataSource::setBandwidth(double bandwidth)
 		delete[] m_spectrum;
 		m_spectrum = new float[m_pointCountWhole] ();
 
-        delete[] m_spectrumPeakHold;
-        m_spectrumPeakHold = new float[m_pointCountWhole] ();
-        m_needSetupSpectrum = true;
-        clearPeak();
+		delete[] m_spectrumPeakHold;
+		m_spectrumPeakHold = new float[m_pointCountWhole] ();
+		m_needSetupSpectrum = true;
+		clearPeak();
 	}
 }
 
 void SpectrumWidgetDataSource::clearPeak()
 {
-    for(int i = 0; i<m_pointCountWhole; i++) {
-        m_spectrumPeakHold[i] = 0;
-    }
+	for(int i = 0; i<m_pointCountWhole; i++) {
+		m_spectrumPeakHold[i] = 0;
+	}
 }
 
 void SpectrumWidgetDataSource::setBandwidth1(int size)
@@ -190,7 +194,7 @@ void SpectrumWidgetDataSource::setPanorama(bool enabled, double start, double en
 
 	if (!m_isPanoramaStart){
 		startPanorama(enabled);
-        //log_debug("panorama stopped");
+		//log_debug("panorama stopped");
 		setBandwidth(m_bandwidthSingleSample);
 		return;
 	}
@@ -260,7 +264,10 @@ void SpectrumWidgetDataSource::setPanoramaFreqControl(PanoramaFreqControl* contr
 
 void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneShotData_LocationData& data)
 {
-	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum) {
+	qint32 cf = 0;
+	cf = data.central_frequency();
+
+	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum && cf == m_workFreq) {
 		emit onDrawComplete();
 		return;
 	}
@@ -268,11 +275,9 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	bool isComplex = true;
 	int id = -1;
 	int protoId = 0;
-	float cf = 0;
 	QVector<QPointF> vecFFT;
 	QList<QVariant> list;
 
-	cf = data.central_frequency();
 	m_workFreq = cf;
 
 	m_panelController->setCentralFreqValue(cf);
@@ -326,9 +331,9 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		double val = data.spectrum_plot(protoId).data(i);
 
 		//Just Test
-//		if(m_id == 1 && i > 1000 && i < 2000) {
-//			val = val1;
-//		}
+		//		if(m_id == 1 && i > 1000 && i < 2000) {
+		//			val = val1;
+		//		}
 
 		vecFFT.append( QPointF(freq*TO_KHZ, val) );
 
@@ -357,14 +362,14 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 
 	int index = dataProccess(vecFFT, isComplex);
 
-    int gpsFreq = data.central_frequency();
-    int gpsLevel = vecFFT.at(vecFFT.size()/2).y();
+	int gpsFreq = data.central_frequency();
+	int gpsLevel = vecFFT.at(vecFFT.size()/2).y();
 
-    if(gpsFreq == GPS_FREQUENCY) {
-        if( gpsLevel > 50 && m_id == 1 ) {
+	if(gpsFreq == GPS_FREQUENCY) {
+		if( gpsLevel > 50 && m_id == 1 ) {
 
-        }
-    }
+		}
+	}
 
 	if(index < 0) {
 		emit onDrawComplete();
@@ -457,7 +462,7 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 		}
 		m_spectrumCounter++;
 	}
-    return;
+	return;
 }
 
 void SpectrumWidgetDataSource::onMethodCalledSlot(QString method, QVariant data)
@@ -487,10 +492,15 @@ void SpectrumWidgetDataSource::onSleepModeSlot()
 	m_sleepModeProcess = true;
 }
 
+void SpectrumWidgetDataSource::onUpdateFlag()
+{
+	m_needSetupSpectrum = true;
+}
+
 void SpectrumWidgetDataSource::slotRepeatSetFrequency()
 {
 	if(m_dbmanager != NULL) {
-//		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
+		//		m_dbmanager->updatePropertyValue(m_name, DB_FREQUENCY_PROPERTY, m_currentFreq);
 	}
 }
 

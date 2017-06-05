@@ -24,8 +24,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbUp1MHz, SIGNAL(clicked()), this, SIGNAL(signalUp1Mhz()));
 	connect(ui->pbUp10MHz, SIGNAL(clicked()), this, SIGNAL(signalUp10Mhz()));
 	connect(ui->pbUp100MHz, SIGNAL(clicked()), this, SIGNAL(signalUp100Mhz()));
-    connect(ui->startFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetStartFreq(int)));
-    connect(ui->endFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetEndFreq(int)));
+	connect(ui->startFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetStartFreq(int)));
+	connect(ui->endFreqSB, SIGNAL(valueChanged(int)), this, SIGNAL(signalSetEndFreq(int)));
 
 	connect(ui->pbSpectrums, SIGNAL(clicked(bool)), this, SIGNAL(signalReceiveSpectrums(bool)));
 	connect(ui->pbConvolution, SIGNAL(clicked(bool)), this, SIGNAL(signalConvolution(bool)));
@@ -49,10 +49,10 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	ui->solverQualityLB->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 
 	m_borderStyle = QString("QWidget#ControlPanelWidget{ \
-									background-color: rgb(230, 230, 230); \
-									border: 2px solid %1 \
-									border-radius: 1; \
-									}" );
+							background-color: rgb(230, 230, 230); \
+							border: 2px solid %1 \
+							border-radius: 1; \
+							}" );
 
 	setStyleSheet(m_borderStyle.arg(BORDER_NORMAL));
 
@@ -63,6 +63,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 
 	m_alarmSound = new QSound("./audio/aim.wav", this);
 	m_soundTime.start();
+
+	showPanoramaControl(false);
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -78,19 +80,19 @@ void ControlPanelWidget::onSetCommonFrequencySlot()
 
 void ControlPanelWidget::onSetPanorama(bool on)
 {
-    emit signalPanorama(on);
+	emit signalPanorama(on);
 	emit onPanoramaEnable(on, ui->startFreqSB->value(), ui->endFreqSB->value());
 }
 
 void ControlPanelWidget::showError(QString str)
 {
 	if(str.isEmpty()) {
-//		ui->lblError->setVisible(false);
-//		ui->lblError->clear();
+		//		ui->lblError->setVisible(false);
+		//		ui->lblError->clear();
 		setStyleSheet(m_borderStyle.arg(BORDER_NORMAL));
 	} else {
-//		ui->lblError->setVisible(true);
-//		ui->lblError->setText(str);
+		//		ui->lblError->setVisible(true);
+		//		ui->lblError->setText(str);
 		setStyleSheet(m_borderStyle.arg(BORDER_ERROR));
 	}
 }
@@ -105,12 +107,12 @@ void ControlPanelWidget::showConfirm(QString)
 void ControlPanelWidget::showLocationError(QString str)
 {
 	if(str.isEmpty()) {
-//		ui->lblWarning->setVisible(false);
-//		ui->lblWarning->clear();
+		//		ui->lblWarning->setVisible(false);
+		//		ui->lblWarning->clear();
 		setStyleSheet(m_borderStyle.arg(BORDER_NORMAL));
 	} else {
-//		ui->lblWarning->setVisible(true);
-//		ui->lblWarning->setText(str);
+		//		ui->lblWarning->setVisible(true);
+		//		ui->lblWarning->setText(str);
 		setStyleSheet(m_borderStyle.arg(BORDER_WARNING));
 	}
 }
@@ -129,7 +131,7 @@ void ControlPanelWidget::applyManualMode()
 
 void ControlPanelWidget::slotChangeMode(int index)
 {
-    emit signalChangeMode(index);
+	emit signalChangeMode(index);
 	switch(index)
 	{
 	case 0:
@@ -147,9 +149,9 @@ void ControlPanelWidget::slotChangeMode(int index)
 	case 4:
 		emit signalViewAreaMode();
 		break;
-    case 5:
-        emit signalViewAreaDopplerMode();
-        break;
+	case 5:
+		emit signalViewAreaDopplerMode();
+		break;
 	default:
 		break;
 	}
@@ -188,6 +190,8 @@ void ControlPanelWidget::changeQualityStatus(const int status, bool isMoving, fl
 				m_alarmSound->play();
 				m_soundTime.restart();
 			}
+		} else {
+			m_alarmSound->stop();
 		}
 		m_alarmTimer->start(10000);
 	} else {
@@ -199,6 +203,13 @@ void ControlPanelWidget::alarmAimVisible(bool val)
 {
 	ui->labelAlarm->setVisible(val);
 	ui->sounOffCB->setVisible(val);
+}
+
+void ControlPanelWidget::showPanoramaControl(bool isOn)
+{
+	ui->panoramaCB->setVisible(isOn);
+	emit signalPanorama(false);
+	emit onPanoramaEnable(false, ui->startFreqSB->value(), ui->endFreqSB->value());
 }
 
 void ControlPanelWidget::setStartFreq(int val)
@@ -214,6 +225,7 @@ void ControlPanelWidget::setfinishFreq(int val)
 void ControlPanelWidget::setSystemMerge(bool state)
 {
 	ui->pbMerge->setChecked(state);
+	emit signalSystemMerge(state);
 }
 
 void ControlPanelWidget::setMode(int val)
@@ -294,13 +306,13 @@ bool ControlPanelWidget::sleepMode() const
 
 void ControlPanelWidget::setSleepMode(bool val)
 {
-    ui->cbSleepMode->setChecked(val);
+	ui->cbSleepMode->setChecked(val);
 	emit onSleepMode(val);
 }
 
 int ControlPanelWidget::getFreqSBValue()
 {
-    return ui->commonFreqSB->value();
+	return ui->commonFreqSB->value();
 }
 
 void ControlPanelWidget::paintEvent(QPaintEvent *) {

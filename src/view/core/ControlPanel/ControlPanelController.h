@@ -85,12 +85,12 @@ private:
 	double m_currentFreqFromPlot;
 
 	int m_timerInterval;
-    int m_timerCheckInterval;
-    int m_timerCheckIntervalDopler;
+	int m_timerCheckInterval;
+	int m_timerCheckIntervalDopler;
 	int m_timerCheckIntervalDetected;
 
 	bool m_isFollowMode;
-    bool m_isDopplerSearch;
+	bool m_isDopplerSearch;
 
 	QList<StationsFrequencyAndBandwith> m_listOfFreqs;
 	QList<StationsFrequencyAndBandwith>::Iterator m_itCheckMode;
@@ -114,7 +114,7 @@ private:
 
 	bool slotIncCheckMode();
 	void checkSolverResult();
-    void checkDopplerResult();
+	void checkDopplerResult();
 
 	LocationSetupWidgetController* m_setupController;
 
@@ -123,11 +123,14 @@ private:
 	bool checkSolverResult(int freq);
 	int findResultInList(solverResult res);
 
-    QMultiMap<QString, double> m_dopplerMap;
+	QMultiMap<QString, double> m_dopplerMap;
 
-    QString m_title;
+	QString m_title;
+
+	QTimer* m_solverResultListTimer;
+
 public:
-    explicit ControlPanelController(int tabId, QString title, QObject *parent = 0);
+	explicit ControlPanelController(int tabId, QString title, QObject *parent = 0);
 	virtual ~ControlPanelController();
 
 	void appendView(ControlPanelWidget* view);
@@ -160,9 +163,9 @@ public:
 
 	void setManualMode();
 
-    QList<solverResult> getSolverResultList() const {return m_solverResultList;}
+	QList<solverResult> getSolverResultList() const {return m_solverResultList;}
 
-    void setTitle(QString title) {m_title = title;}
+	void setTitle(QString title) {m_title = title;}
 
 
 signals:
@@ -176,12 +179,12 @@ signals:
 
 	void signalSystemMerge(bool);
 
-    void skoChanged(float);
+	void skoChanged(float);
 
 	void signalReceiveSpectrums(bool);
-    void signalReadyToScreenShot();
+	void signalReadyToScreenShot();
 
-    void signalDopplerDetect(QString);
+	void signalDopplerDetect(QString);
 
 public slots:
 
@@ -190,7 +193,7 @@ public slots:
 
 	void setSolverConnectState(bool);
 	void onSetSleepMode(bool);
-    void slotDopplerStatus(QString name, double doppler);
+	void slotDopplerStatus(QString name, double doppler);
 
 
 private slots:
@@ -205,7 +208,7 @@ private slots:
 	void slotCheckMode();
 	void slotViewMode();
 	void slotViewAreaMode();
-    void slotViewAreaDopplerMode();
+	void slotViewAreaDopplerMode();
 
 	void slotChangeFreq();
 	void slotCheckModeSetFreq();
@@ -224,5 +227,9 @@ private slots:
 	void setCentralFreqValueInternal(double freq);
 
 	void slotSolverResult(QByteArray data);
+
+	void onShowPanoramaControl(bool isOn);
+
+	void slotClearSolverResult();
 };
 

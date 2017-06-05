@@ -26,6 +26,8 @@ MainWindowController::MainWindowController(QObject *parent)
 	m_solverErrorsWidgetController = NULL;
 
 	resetServer();
+
+	m_recordSignalSettingsDialog = new RecordSignalSettings();
 }
 
 MainWindowController::~MainWindowController()
@@ -80,6 +82,8 @@ void MainWindowController::appendView(MainWindow *view)
 	connectToServers();
 
 	connect(m_view, SIGNAL(onCloseSignal()), qApp, SLOT(quit()));
+	connect(m_view, SIGNAL(signalShowRecordSettings()), m_recordSignalSettingsDialog, SLOT(show()));
+	connect(m_view, SIGNAL(signalShowRecordSettings()), m_recordSignalSettingsDialog, SLOT(init()));
 
 }
 
@@ -293,6 +297,7 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 
 	connect( tabManager, SIGNAL(signalLocationChanged()), this, SLOT(onSetupLocationSettings()) );
 	connect( tabManager, SIGNAL(onTitleUp(int, QString)), m_view, SLOT(updateLocationSetupAction(int, QString)) );
+	connect(m_view, SIGNAL(onShowPanoramaControl(bool)), tabManager, SIGNAL(signalShowPanoramaControl(bool)));
 }
 
 void MainWindowController::removeConnectionSlot(int id)
@@ -381,15 +386,6 @@ void MainWindowController::startTabManger(int id)
 
 void MainWindowController::resetServer()
 {
-	/// todo: Is that logic need in future?
-	//	QStringList serverPIDList;
-	//	bool searchResult;
-	//	searchResult = m_serverHandler->isProcessExist( m_serverHandler->getServicePath(), serverPIDList );
-
-	//	if( searchResult ) {
-	//		m_serverHandler->killProcessExist( serverPIDList );
-	//	}
-
 	QStringList param;
 	param.append("/F");
 	param.append("/IM");

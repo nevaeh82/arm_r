@@ -207,6 +207,8 @@ signals:
 
 	void signalNIIPPWorkStatus(QString, bool);
 
+	void signalShowPanoramaControl(bool);
+
 protected slots:
 	void slotShowLists(QString station, double freq, double bandwidth);
 

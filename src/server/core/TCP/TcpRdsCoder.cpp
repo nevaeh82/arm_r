@@ -16,9 +16,11 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	m_indexConv2(-1),
 	m_indexSpect(-1)
 {
-
+	m_readyToSend = true;
 	m_header.zone = zone;
 	m_header.typeRds = typeRDS;
+
+	m_readyToPushSpectrum = false;
 
 	m_residueLength = 0;
 	cnt = 0;
@@ -30,6 +32,11 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
 	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
 	m_upTime = settings.value("SpectrumUpTime/time", TIME_DEL).toInt();
+
+	m_dropFlagTimer = new QTimer(this);
+	connect(m_dropFlagTimer, SIGNAL(timeout()), this, SLOT(onDropFlag()));
+	m_dropFlagTimer->setInterval(5000);
+	m_dropFlagTimer->start();
 }
 
 TcpRdsCoder::~TcpRdsCoder()
@@ -88,30 +95,48 @@ QByteArray TcpRdsCoder::getMessage(const QByteArray& input)
 //Decode to send Message to RDS
 QByteArray TcpRdsCoder::decode(const MessageSP message)
 {
-	QString messageType = message->type();
 	QByteArray dataToSend;
 
-	Prm val;
-	QString name;
-
 	QByteArray msgData = message->data();
-	QDataStream stream(&msgData, QIODevice::ReadOnly);
 
 	RdsProtobuf::Packet msg;
 
 	if( message->type() == TCP_RDS_SEND_PROTO ) {
 		RdsProtobuf::Packet pkt = unpack(msgData);
+		return msgData;
+	}
+	else {
+		return QByteArray();
+	}
+
+	int size = msg.ByteSize();
+	dataToSend.resize(size);
+	msg.SerializeToArray(dataToSend.data(), dataToSend.size());
+
+	addPreambula(dataToSend);
+	return dataToSend;
+}
+
+//Decode to send Message to RDS
+QByteArray TcpRdsCoder::decodeWithCheckLocation(const MessageSP message, bool &isLocation)
+{
+	QByteArray dataToSend;
+	isLocation = false;
+
+	QByteArray msgData = message->data();
+
+	RdsProtobuf::Packet msg;
+
+	if( message->type() == TCP_RDS_SEND_PROTO ) {
+		RdsProtobuf::Packet pkt = unpack(msgData);
+
 		if( pkt.has_from_client() &&
 			pkt.from_client().has_one_shot() &&
 			pkt.from_client().one_shot().has_location() ) {
 
 			RdsProtobuf::ClientMessage_OneShot_Location loc = pkt.from_client().one_shot().location();
-			double rm = loc.range().start();
-			double rmm = loc.range().end();
 
-			double x = loc.central_frequency();
-
-			//log_debug("request");
+			isLocation = true;
 		}
 
 		return msgData;
@@ -125,8 +150,12 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 	msg.SerializeToArray(dataToSend.data(), dataToSend.size());
 
 	addPreambula(dataToSend);
-
 	return dataToSend;
+}
+
+void TcpRdsCoder::setReadyToPushSpectrums(bool val)
+{
+	m_readyToPushSpectrum = val;
 }
 
 void TcpRdsCoder::addPreambula(QByteArray& data)
@@ -160,10 +189,22 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 	RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
+	if(sMsg.has_current() || sMsg.has_one_shot_data()) {
+		m_dropFlagTimer->start();
+		m_readyToSend = true;
+	}
+
 	if(sMsg.has_current()) {
 		message = configureSys( data );
 	} else {
-		//log_debug(" incoming >>> ");
+		if(sMsg.has_one_shot_data()) {
+			//if(m_readyToPushSpectrum) {
+				message = configureLoc( data );
+			//}
+
+			return message;
+		}
+
 		message = configureLoc( data );
 	}
 
@@ -188,6 +229,16 @@ MessageSP TcpRdsCoder::configureLoc(const QByteArray& data)
 MessageSP TcpRdsCoder::configureSys(const QByteArray &data)
 {
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_SYSTEM, data));
+}
+
+void TcpRdsCoder::onDropFlag()
+{
+	m_readyToSend = true;
+}
+
+void TcpRdsCoder::onSetFlag()
+{
+	m_readyToSend = false;
 }
 
 MessageSP TcpRdsCoder::correlation(quint32 point1, quint32 point2, float timediff, float veracity, QVector<QPointF> points)

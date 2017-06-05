@@ -20,8 +20,8 @@
 
 ControlPanelController::ControlPanelController(int tabId, QString title, QObject *parent)
 	: QObject(parent),
-      m_tabId(tabId),
-      m_title(title)
+	  m_tabId(tabId),
+	  m_title(title)
 {
 	m_view = NULL;
 	m_dbManager = NULL;
@@ -29,7 +29,7 @@ ControlPanelController::ControlPanelController(int tabId, QString title, QObject
 	m_currentFreqFromPlot = 20;
 
 	m_workCheckList = false;
-    m_isDopplerSearch = false;
+	m_isDopplerSearch = false;
 
 	m_startFreq = 0;
 	m_finishFreq = 0;
@@ -43,12 +43,15 @@ ControlPanelController::ControlPanelController(int tabId, QString title, QObject
 
 	//connect(coordinateCounterThread, SIGNAL(started()), m_coordinatesCounter, SLOT(initSolver()));
 	//connect(m_coordinatesCounter, SIGNAL(signalFinished()), coordinateCounterThread, SLOT(quit()));
-    //connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
-    //connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
-
+	//connect(this, SIGNAL(threadTerminateSignal()), coordinateCounterThread, SLOT(quit()));
+	//connect(this, SIGNAL(threadTerminateSignal()), m_coordinatesCounter, SLOT(deleteLater()));
 
 	connect(this, SIGNAL(signalSetCentralFreq(double)), this, SLOT(setCentralFreqValueInternal(double)));
 
+	m_solverResultListTimer = new QTimer(this);
+	m_solverResultListTimer->setInterval(3000);
+	connect(m_solverResultListTimer, SIGNAL(timeout()), this, SLOT(slotClearSolverResult()));
+	m_solverResultListTimer->start();
 }
 
 ControlPanelController::~ControlPanelController()
@@ -67,7 +70,7 @@ void ControlPanelController::init()
 			timerSettings.beginGroup(/*childKeys.first()*/key);
 			m_timerInterval = timerSettings.value("timerInterval", TIMER_INTERVAL).toInt();
 			m_timerCheckInterval = timerSettings.value("timerCheckInterval", TIMERCHECK_INTERVAL).toInt();
-            m_timerCheckIntervalDopler = timerSettings.value("timerCheckIntervalDopler", TIMERCHECK_INTERVAL).toInt();
+			m_timerCheckIntervalDopler = timerSettings.value("timerCheckIntervalDopler", TIMERCHECK_INTERVAL).toInt();
 			m_timerCheckIntervalDetected = timerSettings.value("timerCheckIntervalDetected", TIMERCHECK_INTERVAL_DETECTED).toInt();
 			timerSettings.endGroup();
 			break;
@@ -113,7 +116,7 @@ void ControlPanelController::appendView(ControlPanelWidget *view)
 	connect(m_view, SIGNAL(signalCheckMode()), this, SLOT(slotCheckMode()));
 	connect(m_view, SIGNAL(signalViewMode()), this, SLOT(slotViewMode()));
 	connect(m_view, SIGNAL(signalViewAreaMode()), this, SLOT(slotViewAreaMode()));
-    connect(m_view, SIGNAL(signalViewAreaDopplerMode()), this, SLOT(slotViewAreaDopplerMode()));
+	connect(m_view, SIGNAL(signalViewAreaDopplerMode()), this, SLOT(slotViewAreaDopplerMode()));
 
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotChangeFreq()));
 	connect(&m_timerCheck, SIGNAL(timeout()), this, SLOT(slotCheckModeSetFreq()));
@@ -192,12 +195,14 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 
 	if(data.isEmpty()) {
 		m_view->changeQualityStatus( 0 );
+		m_solverResultList.clear();
 	} else {
 
 		SolverProtocol::Packet pkt;
 		pkt.ParseFromArray(data.data(), data.size());
 
 		m_solverResultList.clear();
+		m_solverResultListTimer->start();
 
 		SolverProtocol::Packet_DataFromSolver_SolverSolution solPkt;
 		if(pkt.datafromsolver().has_solution_manual_altitude()) {
@@ -273,13 +278,23 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 		//		}
 	}
 
-    emit signalReadyToScreenShot();
+	emit signalReadyToScreenShot();
+}
+
+void ControlPanelController::onShowPanoramaControl(bool isOn)
+{
+	m_view->showPanoramaControl(isOn);
+}
+
+void ControlPanelController::slotClearSolverResult()
+{
+	m_solverResultList.clear();
 }
 
 bool ControlPanelController::checkSolverResult(int freq)
 {
 	foreach (solverResult res, m_solverResultList) {
-		if(abs(res.freq -freq) < 2) {
+		if(abs(res.freq - freq) < 2) {
 			return true;
 		}
 	}
@@ -359,8 +374,8 @@ void ControlPanelController::slotManualMode()
 	}
 
 	m_solverResultList.clear();
-    m_listsDialog->clearDetectFreq(m_tabId);
-    m_listsDialog->clearWorkList(m_tabId);
+	m_listsDialog->clearDetectFreq(m_tabId);
+	m_listsDialog->clearWorkList(m_tabId);
 }
 
 void ControlPanelController::slotScanMode(int start, int finish)
@@ -369,7 +384,7 @@ void ControlPanelController::slotScanMode(int start, int finish)
 		m_timerCheck.stop();
 
 	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("Black", m_listOfFreqsBlack);
-    m_listsDialog->clearDetectFreq(m_tabId);
+	m_listsDialog->clearDetectFreq(m_tabId);
 
 	m_startFreq = start;
 	m_currentFreq = start;
@@ -384,19 +399,19 @@ void ControlPanelController::slotCheckMode()
 	}
 
 	m_isFollowMode = false;
-    m_isDopplerSearch = false;
+	m_isDopplerSearch = false;
 	m_listOfFreqs.clear();
 	m_IdDetetcted.clear();
 
-    m_listsDialog->clearDetectFreq(m_tabId);
-    m_listsDialog->clearWorkList(m_tabId);
+	m_listsDialog->clearDetectFreq(m_tabId);
+	m_listsDialog->clearWorkList(m_tabId);
 
 	bool err = m_dbStation->getFrequencyAndBandwidthByCategory("White", m_listOfFreqs);
 	log_debug(QString("data for check = %1").arg(m_listOfFreqs.count()));
 	m_itCheckMode = m_listOfFreqs.begin();
 	m_itDetected = -1;
 
-    m_listsDialog->setWorkList(m_listOfFreqs, m_tabId, m_title);
+	m_listsDialog->setWorkList(m_listOfFreqs, m_tabId, m_title);
 
 	slotCheckModeSetFreq();
 	m_timerCheck.start(m_timerCheckInterval);
@@ -406,14 +421,14 @@ void ControlPanelController::slotViewMode()
 {
 	slotCheckMode();
 	m_isFollowMode = true;
-    m_isDopplerSearch = false;
+	m_isDopplerSearch = false;
 }
 
 void ControlPanelController::slotViewAreaDopplerMode()
 {
-    slotViewAreaMode();
-    m_isDopplerSearch = true;
-    m_timerCheck.start(m_timerCheckIntervalDopler);
+	slotViewAreaMode();
+	m_isDopplerSearch = true;
+	m_timerCheck.start(m_timerCheckIntervalDopler);
 }
 
 void ControlPanelController::slotViewAreaMode()
@@ -427,13 +442,13 @@ void ControlPanelController::slotViewAreaMode()
 	}
 
 	m_isFollowMode = false;
-    m_isDopplerSearch = false;
+	m_isDopplerSearch = false;
 
 	m_listOfFreqs.clear();
 	m_IdDetetcted.clear();
 
-    m_listsDialog->clearDetectFreq(m_tabId);
-    m_listsDialog->clearWorkList(m_tabId);
+	m_listsDialog->clearDetectFreq(m_tabId);
+	m_listsDialog->clearWorkList(m_tabId);
 
 	m_listsDialog->getFrequencyAndBandwidthByWhiteAreas(m_listOfFreqs);
 	m_dbStation->getFrequencyAndBandwidthByCategory("Black", m_listOfFreqsBlack);
@@ -457,7 +472,7 @@ void ControlPanelController::slotViewAreaMode()
 						   0, dataBlack.bandwidth, 1 );
 
 			QRectF rDat( data.frequency - (data.bandwidth/2),
-						   0, data.bandwidth, 1 );
+						 0, data.bandwidth, 1 );
 
 			QPainterPath p1;
 			p1.addRect(rBlack);
@@ -504,15 +519,15 @@ void ControlPanelController::slotViewAreaMode()
 		}
 	}
 
-    if(!m_tmpList.isEmpty()) {
-        m_listOfFreqs.swap(m_tmpList);
-    }
+	if(!m_tmpList.isEmpty()) {
+		m_listOfFreqs.swap(m_tmpList);
+	}
 	m_tmpList.clear();
 
 	m_itCheckMode = m_listOfFreqs.begin();
 	m_itDetected = -1;
 
-    m_listsDialog->setWorkList(m_listOfFreqs, m_tabId, m_title);
+	m_listsDialog->setWorkList(m_listOfFreqs, m_tabId, m_title);
 
 	slotCheckModeSetFreq();
 	m_timerCheck.start(m_timerCheckInterval);
@@ -538,38 +553,38 @@ void ControlPanelController::slotChangeFreq()
 
 void ControlPanelController::checkDopplerResult()
 {
-    //log_debug("Check >>> ");
-    if(!m_isFollowMode) {
-        return;
-    }
+	//log_debug("Check >>> ");
+	if(!m_isFollowMode) {
+		return;
+	}
 
-    double listFreq = (int)(*m_itCheckMode).frequency;
-    int currentFreq = m_setupController->currentFrequency();
+	double listFreq = (int)(*m_itCheckMode).frequency;
+	int currentFreq = m_setupController->currentFrequency();
 
-    foreach (QString key, m_dopplerMap.keys()) {
-        QList<double> vals = m_dopplerMap.values();
-        int isMoving = true;
-        double averageDopler = 0;
-        for(int i = 0; i<vals.size()-1; i+=2) {
-            double val1 = vals.at(i);
-            double val2 = vals.at(i+1);
-            averageDopler += (val1+val2)/2;
-            averageDopler = averageDopler/2;
+	foreach (QString key, m_dopplerMap.keys()) {
+		QList<double> vals = m_dopplerMap.values();
+		int isMoving = true;
+		double averageDopler = 0;
+		for(int i = 0; i<vals.size()-1; i+=2) {
+			double val1 = vals.at(i);
+			double val2 = vals.at(i+1);
+			averageDopler += (val1+val2)/2;
+			averageDopler = averageDopler/2;
 
-            if( val1<10 && val2<10 ) {
-                isMoving = false;
-                break;
-            } else if(abs(val2-val1) > 5) {
-                isMoving = false;
-                break;  //Bad Values
-            }
-        }
+			if( val1<10 && val2<10 ) {
+				isMoving = false;
+				break;
+			} else if(abs(val2-val1) > 5) {
+				isMoving = false;
+				break;  //Bad Values
+			}
+		}
 
-        if(isMoving) {
-            emit signalDopplerDetect(tr("Detect average Dopler:%1 on frequency:%2  on Correlation %3")
-                                     .arg(averageDopler).arg(currentFreq).arg(key));
-        }
-    }
+		if(isMoving) {
+			emit signalDopplerDetect(tr("Detect average Dopler:%1 on frequency:%2  on Correlation %3")
+									 .arg(averageDopler).arg(currentFreq).arg(key));
+		}
+	}
 }
 
 void ControlPanelController::checkSolverResult()
@@ -586,7 +601,7 @@ void ControlPanelController::checkSolverResult()
 	}
 
 	//m_IdDetetcted.clear();
-    m_listsDialog->clearDetectFreq(m_tabId);
+	m_listsDialog->clearDetectFreq(m_tabId);
 	bool toRemove = true;
 
 	if(!m_solverResultList.isEmpty()) {
@@ -610,17 +625,17 @@ void ControlPanelController::checkSolverResult()
 	}
 
 	foreach (int index, m_IdDetetcted) {
-        m_listsDialog->addDetectFreq(m_listOfFreqs.at(index).frequency, index, m_tabId);
+		m_listsDialog->addDetectFreq(m_listOfFreqs.at(index).frequency, index, m_tabId);
 	}
 }
 
 bool ControlPanelController::slotIncCheckMode()
 {
-    if(m_isDopplerSearch) {
-        checkDopplerResult();
-    } else {
-        checkSolverResult();
-    }
+	if(m_isDopplerSearch) {
+		checkDopplerResult();
+	} else {
+		checkSolverResult();
+	}
 
 	m_solverResultList.clear();
 
@@ -680,7 +695,7 @@ void ControlPanelController::slotCheckModeSetFreq()
 				freq = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).frequency;
 				band = m_listOfFreqs.at( m_IdDetetcted.at(m_itDetected) ).bandwidth;
 				m_setupController->slotOnSetCommonFreq((freq), band);
-                m_listsDialog->setDetectPointer(m_itDetected, m_tabId);
+				m_listsDialog->setDetectPointer(m_itDetected, m_tabId);
 				m_workCheckList = false;
 				m_timerCheck.start(m_timerCheckIntervalDetected);
 			}
@@ -695,15 +710,15 @@ void ControlPanelController::slotCheckModeSetFreq()
 	band = (*m_itCheckMode).bandwidth;
 
 	m_setupController->slotOnSetCommonFreq((freq), band);
-    if(m_isDopplerSearch) {
-        m_timerCheck.start(m_timerCheckIntervalDopler);
-    } else {
-        m_timerCheck.start(m_timerCheckInterval);
-    }
+	if(m_isDopplerSearch) {
+		m_timerCheck.start(m_timerCheckIntervalDopler);
+	} else {
+		m_timerCheck.start(m_timerCheckInterval);
+	}
 
 
 	m_workCheckList = true;
-    m_listsDialog->setCheckPointer(m_listOfFreqs.indexOf(*m_itCheckMode), m_tabId);
+	m_listsDialog->setCheckPointer(m_listOfFreqs.indexOf(*m_itCheckMode), m_tabId);
 }
 
 void ControlPanelController::slotDown1MHz()
@@ -811,16 +826,6 @@ void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 		m_view->changeQualityStatus( 0 );
 		return;
 	}
-
-	if(!m_solverResultList.isEmpty()) {
-
-		//		int test = abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime);
-
-		//		if(abs(QDateTime::currentMSecsSinceEpoch() - m_solverResultList.at(0).dateTime) > 20000) {
-		//			m_view->changeQualityStatus( 0 );
-		//			return;
-		//		}
-	}
 }
 
 void ControlPanelController::setLocationSettings()
@@ -848,14 +853,14 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 		{
 			return;
 		}
-		if(msg.has_startfreq())
-		{
-			m_view->setStartFreq(msg.startfreq());
-		}
-		if(msg.has_finishfreq())
-		{
-			m_view->setStartFreq(msg.finishfreq());
-		}
+//		if(msg.has_startfreq())
+//		{
+//			m_view->setStartFreq(msg.startfreq());
+//		}
+//		if(msg.has_finishfreq())
+//		{
+//			m_view->setStartFreq(msg.finishfreq());
+//		}
 		if(msg.has_mergesysctrl())
 		{
 			m_view->setSystemMerge(msg.mergesysctrl());
@@ -864,18 +869,18 @@ void ControlPanelController::onMethodCalled(const QString &method, const QVarian
 		{
 			m_view->setMode(msg.mode());
 		}
-		if(msg.has_panorama())
-		{
-			m_view->setPanorama(msg.panorama());
-		}
-		if(msg.has_sleep())
-		{
-			m_view->setSleepMode(msg.sleep());
-		}
-		if(msg.has_spectrums())
-		{
-			m_view->setReceiveSpectrums(msg.spectrums());
-		}
+//		if(msg.has_panorama())
+//		{
+//			m_view->setPanorama(msg.panorama());
+//		}
+//		if(msg.has_sleep())
+//		{
+//			m_view->setSleepMode(msg.sleep());
+//		}
+//		if(msg.has_spectrums())
+//		{
+//			m_view->setReceiveSpectrums(msg.spectrums());
+//		}
 	}
 }
 
@@ -913,14 +918,14 @@ void ControlPanelController::setSleepMode(bool val)
 
 void ControlPanelController::onSetSleepMode(bool val)
 {
-    m_setupController->setSleepMode(val);
+	m_setupController->setSleepMode(val);
 }
 
 void ControlPanelController::slotDopplerStatus(QString name, double doppler)
 {
-    if(!_isnan(doppler)) {
-        m_dopplerMap.insertMulti(name, doppler);
-    }
+	if(!_isnan(doppler)) {
+		m_dopplerMap.insertMulti(name, doppler);
+	}
 }
 
 void ControlPanelController::setSolverConnectState(bool b)

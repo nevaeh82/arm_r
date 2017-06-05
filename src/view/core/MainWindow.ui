@@ -165,6 +165,13 @@ color: rgb(255, 0, 0);</string>
     <property name="title">
      <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuAdvanced">
+     <property name="title">
+      <string>Advanced</string>
+     </property>
+     <addaction name="actionShow_panorama"/>
+     <addaction name="actionRecord_signal_settings"/>
+    </widget>
     <addaction name="actionLists"/>
     <addaction name="separator"/>
     <addaction name="actionSolverLogs"/>
@@ -175,6 +182,7 @@ color: rgb(255, 0, 0);</string>
     <addaction name="actionEmail_Alert_settings"/>
     <addaction name="separator"/>
     <addaction name="actionPrm_via_com"/>
+    <addaction name="menuAdvanced"/>
    </widget>
    <widget class="QMenu" name="menuServer">
     <property name="title">
@@ -257,6 +265,19 @@ color: rgb(255, 0, 0);</string>
   <action name="actionSMS_Alert_settings">
    <property name="text">
     <string>SMS Alert settings</string>
+   </property>
+  </action>
+  <action name="actionShow_panorama">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show panorama</string>
+   </property>
+  </action>
+  <action name="actionRecord_signal_settings">
+   <property name="text">
+    <string>Record signal settings</string>
    </property>
   </action>
  </widget>

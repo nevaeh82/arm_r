@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <Logger/Logger.h>
+#include <QSplashScreen>
 
 #include "DBStationController.h"
 
@@ -485,7 +486,7 @@ bool DBStationController::getStationInfo(const QString& name, QList<StationDataF
 	return true;
 }
 
-bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &category, QList<StationsFrequencyAndBandwith> &list)
+bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &category, QList<StationsFrequencyAndBandwith> &list, bool withChecked)
 {
 	if( !m_db.isOpen() ) {
 		return false;
@@ -506,13 +507,18 @@ bool DBStationController::getFrequencyAndBandwidthByCategory(const QString &cate
 
 	VALIDATE_QUERY( query );
 
+	list.clear();
+
 	while(query.next()) {
 		StationsFrequencyAndBandwith data;
 		data.stationName = query.value(0).toString();
 		data.frequency = query.value(1).toDouble();
 		data.bandwidth = query.value(2).toDouble();
+		int tmp = query.value(3).toInt();
 		data.isChecked = query.value(3).toBool();
-		list.append(data);
+		if(data.isChecked || withChecked) {
+			list.append(data);
+		}
 	}
 
 	return true;

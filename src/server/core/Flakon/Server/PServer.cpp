@@ -16,18 +16,18 @@ PServer::PServer(int nPort, QObject* parent)
 	_id = -1;
 	_type = 1;
 
-    connect(this, SIGNAL(signalDataInternal(QByteArray)), this, SLOT(_slotGetData(QByteArray)));
+	connect(this, SIGNAL(signalDataInternal(QByteArray)), this, SLOT(_slotGetData(QByteArray)));
 }
 
 void PServer::startServer()
 {
-    int nPort = 10240;
+	int nPort = 10240;
 	tcpServer = new QTcpServer(this);
 	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(slotNewSocket()));
 	if (!tcpServer->listen(QHostAddress::Any, nPort) && server_status==0)
 	{
 		qDebug() <<  QObject::tr("Unable to start the server: %1.").arg(tcpServer->errorString());
-    } else {
+	} else {
 		server_status=1;
 		qDebug() << tcpServer->isListening() << "TCPSocket listen on port";
 	}
@@ -83,17 +83,18 @@ void PServer::onMessageReceived(const quint32 type, const QString &deviceType, c
 	QVariant data = QVariant( argument->data() );
 
 	switch(type) {
-		case FLAKON_TCP_DEVICE:
-			if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO ||
-				messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA)
-			{
-				QByteArray dataSolver = data.toByteArray();
+	case RDS_TCP_DEVICE:
+		if(messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_AUTO ||
+				messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA ||
+				messageType == TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1)
+		{
+			QByteArray dataSolver = data.toByteArray();
 
-                emit signalDataInternal(dataSolver);
-			}
-			break;
-		default:
-			break;
+			emit signalDataInternal(dataSolver);
+		}
+		break;
+	default:
+		break;
 	}
 
 }
@@ -136,85 +137,85 @@ void PServer::slotReadClient()
 void PServer::_slotGetData(QByteArray data)
 {
 
-    SolverProtocol::Packet solutionPacket;
+	SolverProtocol::Packet solutionPacket;
 
-    if( !solutionPacket.ParseFromArray(data.data(), data.size()) ) {
-        return;
-    }
+	if( !solutionPacket.ParseFromArray(data.data(), data.size()) ) {
+		return;
+	}
 
-    SolverProtocol::Packet_DataFromSolver_SolverSolution dPkt;
-    if(solutionPacket.datafromsolver().has_solution_automatic_altitude()) {
-        dPkt = solutionPacket.datafromsolver().solution_automatic_altitude();
-    } else if(solutionPacket.datafromsolver().has_solution_manual_altitude()) {
-        dPkt = solutionPacket.datafromsolver().solution_manual_altitude();
-    } else {
-        return;
-    }
+	SolverProtocol::Packet_DataFromSolver_SolverSolution dPkt;
+	if(solutionPacket.datafromsolver().has_solution_automatic_altitude()) {
+		dPkt = solutionPacket.datafromsolver().solution_automatic_altitude();
+	} else if(solutionPacket.datafromsolver().has_solution_manual_altitude()) {
+		dPkt = solutionPacket.datafromsolver().solution_manual_altitude();
+	} else {
+		return;
+	}
 
-    for(int i = 0; i<dPkt.trajectory_size(); i++) {
+	for(int i = 0; i<dPkt.trajectory_size(); i++) {
 
-        UAVPositionDataEnemy uav;
-        SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory tPkt = dPkt.trajectory(i);
-        SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mPkt =
-                            tPkt.motionestimate(tPkt.motionestimate_size()-1);
+		UAVPositionDataEnemy uav;
+		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory tPkt = dPkt.trajectory(i);
+		SolverProtocol::Packet_DataFromSolver_SolverSolution_Trajectory_MotionEstimate mPkt =
+				tPkt.motionestimate(tPkt.motionestimate_size()-1);
 
-        uav.latLon.setY( mPkt.coordinates().lon() );
-        uav.latLon.setX( mPkt.coordinates().lat() );
+		uav.latLon.setY( mPkt.coordinates().lon() );
+		uav.latLon.setX( mPkt.coordinates().lat() );
 
-        uav.latLonStdDev.setY( mPkt.coordinates_acc().lon_acc() );
-        uav.latLonStdDev.setX( mPkt.coordinates_acc().lat_acc() );
+		uav.latLonStdDev.setY( mPkt.coordinates_acc().lon_acc() );
+		uav.latLonStdDev.setX( mPkt.coordinates_acc().lat_acc() );
 
 
-        double sko1 = qSqrt(uav.latLonStdDev.x()*uav.latLonStdDev.x() + uav.latLonStdDev.y()*uav.latLonStdDev.y());
+		double sko1 = qSqrt(uav.latLonStdDev.x()*uav.latLonStdDev.x() + uav.latLonStdDev.y()*uav.latLonStdDev.y());
 
-        EMS::EagleMessage e_msg;
-        QString type = "POSITION_ANSWER_MESSAGE";
-        QDateTime dt(QDateTime::currentDateTime());
-        qint64 d = 0; //datetimer
-        QString name = "ARM_R";
-        QString label = "ARM_R1";
-        e_msg.set_type(type.toStdString().c_str(), type.size());
-        e_msg.set_sendername(name.toStdString().c_str(), name.size());
-        e_msg.set_datetime(d);
-        e_msg.add_label(label.toStdString().c_str(), label.size());
+		EMS::EagleMessage e_msg;
+		QString type = "POSITION_ANSWER_MESSAGE";
+		QDateTime dt(QDateTime::currentDateTime());
+		qint64 d = 0; //datetimer
+		QString name = "ARM_R";
+		QString label = "ARM_R1";
+		e_msg.set_type(type.toStdString().c_str(), type.size());
+		e_msg.set_sendername(name.toStdString().c_str(), name.size());
+		e_msg.set_datetime(d);
+		e_msg.add_label(label.toStdString().c_str(), label.size());
 
-        Storm::PositionAnswerMessage d_msg;
-        d_msg.set_requestid(50);
-        d_msg.set_sourceid(tPkt.central_frequency());
-        d_msg.set_datetime(0);
-        d_msg.set_longitude(uav.latLon.y());
-        d_msg.set_latitude(uav.latLon.x());
-        d_msg.set_quality(sko1);
+		Storm::PositionAnswerMessage d_msg;
+		d_msg.set_requestid(50);
+		d_msg.set_sourceid(tPkt.central_frequency());
+		d_msg.set_datetime(0);
+		d_msg.set_longitude(uav.latLon.y());
+		d_msg.set_latitude(uav.latLon.x());
+		d_msg.set_quality(sko1);
 
-        std::string inner = d_msg.SerializeAsString();
+		std::string inner = d_msg.SerializeAsString();
 
-        e_msg.set_innermessage(inner);
+		e_msg.set_innermessage(inner);
 
-        std::string message = e_msg.SerializeAsString();
+		std::string message = e_msg.SerializeAsString();
 
-        QByteArray ret;
+		QByteArray ret;
 
-        unsigned int size = message.size();
-        ret.append(reinterpret_cast<char *>(&size), sizeof(size));
-        ret.append(message.c_str(), message.size());
+		unsigned int size = message.size();
+		ret.append(reinterpret_cast<char *>(&size), sizeof(size));
+		ret.append(message.c_str(), message.size());
 
-        if (!SClients.isEmpty())
-        {
-            QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
-            while (i != SClients.constEnd())
-            {
-                QTcpSocket* clientSocket = i.value();
-                clientSocket->write(ret);
+		if (!SClients.isEmpty())
+		{
+			QMap<int,QTcpSocket *>::iterator i = SClients.constBegin();
+			while (i != SClients.constEnd())
+			{
+				QTcpSocket* clientSocket = i.value();
+				clientSocket->write(ret);
 
-                if ((clientSocket->bytesToWrite())>(100*1024*1024))
-                {
-                    QMap<int,QTcpSocket *>::iterator temp = i;
-                    ++i;
-                    SClients.erase(temp);
-                    continue;
-                }
-                ++i;
-            }
-        }
-    }
+				if ((clientSocket->bytesToWrite())>(100*1024*1024))
+				{
+					QMap<int,QTcpSocket *>::iterator temp = i;
+					++i;
+					SClients.erase(temp);
+					continue;
+				}
+				++i;
+			}
+		}
+	}
 }

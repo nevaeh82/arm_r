@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include <math.h>
+#include <Common/AutoMessageBox.h>
 
 #include "CommonSpectrumTabWidget.h"
 #include "TabSpectrumWidgetController.h"
@@ -56,7 +57,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 {
 	m_tabWidget = new QTabWidget(tabWidget);
 
-    m_isSystemMerge = false;
+	m_isSystemMerge = false;
 
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	connect(m_tabWidgetZone, SIGNAL(currentChanged(int)), this, SLOT(changeCommonTabSlot(int)));
@@ -68,7 +69,7 @@ TabManager::TabManager(int id, QTabWidget *tabWidget, QObject *parent)
 	m_panoramaFreqControl = new PanoramaFreqControl(this);
 
 	connect( m_locationSetupController, SIGNAL(sendRdsData(QByteArray)), this, SLOT( slotSendRdsData(QByteArray)) );
-    connect( m_locationSetupController, SIGNAL(sendCPPacketData(QByteArray)), this, SLOT( slotSendCPPacketData(QByteArray)) );
+	connect( m_locationSetupController, SIGNAL(sendCPPacketData(QByteArray)), this, SLOT( slotSendCPPacketData(QByteArray)) );
 
 	connect(this, SIGNAL(signalMethodCalled(QString,QVariant)), this, SLOT(slotMethodCalled(QString,QVariant)));
 
@@ -82,6 +83,8 @@ TabManager::~TabManager()
 	m_rpcConfigClient->stop();
 
 	m_rpcFlakonClient->deregisterReceiver(m_locationSetupController);
+
+	m_rpcFlakonClient->deregisterReceiver( m_panelController );
 
 	disconnect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(changeTabSlot(int)));
 	m_rpcClientThread->exit();
@@ -102,12 +105,12 @@ TabManager::~TabManager()
 
 void TabManager::slotSendRdsData(QByteArray data)
 {
-    m_rpcFlakonClient->sendRdsProto(data);
+	m_rpcFlakonClient->sendRdsProto(data);
 }
 
 void TabManager::slotSendCPPacketData(QByteArray data)
 {
-    m_rpcFlakonClient->sendCPPacketProto(data);
+	m_rpcFlakonClient->sendCPPacketProto(data);
 }
 
 void TabManager::slotShowLocationSetup()
@@ -127,6 +130,7 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 	m_rpcFlakonClient->registerReceiver(setupSolver);
 
 	m_rpcFlakonClient->registerReceiver( m_locationSetupController );
+	m_rpcFlakonClient->registerReceiver( m_panelController );
 
 	connect( setupSolver, SIGNAL(onSendSolverCommandSettings(QByteArray)), this, SLOT( slotSendSolverSetupCommand(QByteArray)) );
 	//connect( resultSolver, SIGNAL(solverResult(QByteArray)), this, SLOT(slotSolverResult(QByteArray)) );
@@ -134,8 +138,8 @@ void TabManager::startTab(SolverResultWidgetController *resultSolver, SolverErro
 
 	m_solverSetup = setupSolver;
 
-    connect(m_panelController, SIGNAL(signalDopplerDetect(QString)),
-            resultSolver, SLOT(slotDopplerMail(QString)));
+	connect(m_panelController, SIGNAL(signalDopplerDetect(QString)),
+			resultSolver, SLOT(slotDopplerMail(QString)));
 }
 
 void TabManager::setRpcFlakon(const quint16& port, const QString& host)
@@ -161,7 +165,7 @@ void TabManager::setupController()
 {
 	m_cpView = new ControlPanelWidget();
 
-    ControlPanelController* controlPanelController = new ControlPanelController(m_id, m_mainTitle, this);
+	ControlPanelController* controlPanelController = new ControlPanelController(m_id, m_mainTitle, this);
 	controlPanelController->setDbStationController(m_dbStationController);
 	controlPanelController->setRpcFlakonClient(m_rpcFlakonClient);
 	controlPanelController->appendView(m_cpView);
@@ -192,6 +196,7 @@ void TabManager::setupController()
 	connect(this, SIGNAL(signalLocationError(QString)), m_locationSetupController->getView(), SLOT(showLocationError(QString)));
 
 	connect(m_panelController, SIGNAL(signalSystemMerge(bool)), this, SLOT(onSystemMerge(bool)));
+	connect(this, SIGNAL(signalShowPanoramaControl(bool)), m_panelController, SLOT(onShowPanoramaControl(bool)));
 }
 
 void TabManager::addControlPanelWidget(ControlPanelWidget *cpWidget)
@@ -369,8 +374,8 @@ void TabManager::addStationTabs(QString platformName)
 
 	m_correlationControllers = new CorrelationControllersContainer(this);
 	m_correlationControllers->setLocationController(m_locationSetupController);
-    m_correlationControllers->setControlPanelController(m_panelController);
-    m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
+	m_correlationControllers->setControlPanelController(m_panelController);
+	m_correlationControllers->init( CalculateDelaysCount(m_stationsMap.count()), 1 ); //1 - is Indicator type
 	connect((CorrelationControllersContainer*)m_correlationControllers, SIGNAL(signalExpand()),
 			this, SLOT(slotExpandCorrelations()));
 
@@ -450,7 +455,7 @@ void TabManager::addStationTabs(QString platformName)
 
 		connect(tabController, SIGNAL(signalUpdateDBStationsLists()), this, SLOT(slotUpdateDBStationsLists()));
 
-		connect(tabController, SIGNAL(signalFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
+		//connect(tabController, SIGNAL(signalFreqChanged(int)), m_locationSetupController, SLOT(slotOnSetCommonFreq(int)));
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabController, SIGNAL(analysisChannelChanged(int)));
 		//connect(m_locationSetupController, SIGNAL(analysisChannelChanged(int)), tabSpectrumWidget, SIGNAL(onChangeAnalysisChannel(int)));
 
@@ -476,7 +481,7 @@ void TabManager::addStationTabs(QString platformName)
 	QString tabName = m_tabWidget->tabText(index);
 	m_tabWidgetsMap.insert(tabName, commonTabSpectrumWidget);
 
-//	m_rpcServer->call(RPC_METHOD_CONFIG_RDS_ANSWER, data);
+	//	m_rpcServer->call(RPC_METHOD_CONFIG_RDS_ANSWER, data);
 	m_rpcFlakonClient->sendServerRequestSettings(m_id);
 	emit readyToStart(m_id);
 }
@@ -741,7 +746,7 @@ void TabManager::readProto(const QByteArray& data)
 		m_locationSetupController->setDevicesState( sOptMsg );
 		m_mainTitle = QString::fromStdString(sOptMsg.title());
 		m_locationSetupController->getView()->setTitle(m_mainTitle);
-        m_panelController->setTitle(m_mainTitle);
+		m_panelController->setTitle(m_mainTitle);
 
 		emit onTitleUp(m_id, m_mainTitle);
 
@@ -843,7 +848,14 @@ void TabManager::readProto(const QByteArray& data)
 
 		status.append( QString("\r\n  %1").arg(QString::fromStdString(rPkt.error())) );
 
-		QMessageBox::warning( 0, tr("Record Signal result"), tr("Record Signal result: \r\n %1").arg( status ), QMessageBox::Ok );
+		AutoMessageBox msgBox;
+		msgBox.setText(tr("Record Signal result: \r\n %1").arg( status ));
+		msgBox.setIcon(QMessageBox::Warning);
+		msgBox.setStandardButtons(QMessageBox::Ok);
+		msgBox.setTimeoutClose(1); //Closes after three seconds
+		msgBox.exec();
+
+		//QMessageBox::warning( 0, tr("Record Signal result"), tr("Record Signal result: \r\n %1").arg( status ), QMessageBox::Ok );
 
 		m_panelController->setSpectrumReveive(true);
 		m_locationSetupController->setLocationState(true);
@@ -973,7 +985,7 @@ void TabManager::slotAnalysisClose()
 
 void TabManager::onSystemMerge(bool val)
 {
-    m_isSystemMerge = val;
+	m_isSystemMerge = val;
 
 	if(val) {
 		connect(m_panelController, SIGNAL(onStateChanged()), this, SIGNAL(signalLocationChanged()));

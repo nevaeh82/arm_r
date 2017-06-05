@@ -46,7 +46,7 @@ private:
 
 	QList<qreal>	m_listStartx;
 
-	float m_workFreq;
+	qint32 m_workFreq;
 
 	double m_currentFreq;
 	double m_startFreq;
@@ -65,6 +65,7 @@ private:
 	QTime m_sonogramTime;
 
 	QTimer* m_sleepModeTimer;
+	QTimer* m_upTimer;
 
 public:
 	explicit SpectrumWidgetDataSource(IGraphicWidget* widget, QObject *parent = 0);
@@ -91,6 +92,7 @@ private slots:
 	void slotRepeatSetFrequency();
 	void slotChangeFreq();
 	void onSleepModeSlot();
+	void onUpdateFlag();
 
 
 private:

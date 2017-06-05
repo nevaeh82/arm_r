@@ -63,7 +63,7 @@ public slots:
 	void slotSetEnableSpactrum(bool state);
 	void slotEnableKM(bool state);
 	void setNoSignal(bool);
-    void screenshotSpectrum(double val);
+	void screenshotSpectrum(double val);
 
 private slots:
 	void slotSetWorkMode(int mode, bool isOn);

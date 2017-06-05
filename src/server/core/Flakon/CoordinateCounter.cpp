@@ -13,12 +13,12 @@
 CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent) :
 	QObject(parent),
 	isInit(false),
-    m_main_point(0),
-    m_stationsShift(0)
+	m_main_point(0),
+	m_stationsShift(0)
 {
 	QDir dir;
 	dir.mkdir("./logs/SpecialLogs");
-    m_resTime.start();
+	m_resTime.start();
 
 	m_logManager = new LogManager("./logs/SpecialLogs/logDistances.log");
 	if(!m_logManager->isFileOpened()) {
@@ -58,7 +58,7 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 
 	connect(this, SIGNAL(signalSetCenterFrequency(double)), this, SLOT(slotSetCenterFrequency(double)));
 
-    connect(this, SIGNAL(signalSetShift(double)), this, SLOT(slotSetShift(double)));
+	connect(this, SIGNAL(signalSetShift(double)), this, SLOT(slotSetShift(double)));
 }
 
 CoordinateCounter::~CoordinateCounter()
@@ -77,9 +77,9 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 {
 	Q_UNUSED( device );
 
-    if(m_stationsShift < 0) {
-        return;
-    }
+	if(m_stationsShift < 0) {
+		return;
+	}
 
 	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
 		QByteArray protoData = argument->data();
@@ -103,9 +103,9 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		SolverProtocol::Packet solverPkt;
 
 		SolverProtocol::MeasurementsData* solverData =
-                solverPkt.mutable_datafromclient()->mutable_measurementsdata();
+				solverPkt.mutable_datafromclient()->mutable_measurementsdata();
 
-        bool b = false;
+		bool b = false;
 
 		foreach (RdsProtobuf::Convolution cnvMsg, location.convolution()) {
 			int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
@@ -122,15 +122,16 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 				data->set_dopler_sdv( cnvMsg.doppler_accuracy() );
 			}
 
-            b = true;
+			b = true;
 		}
 
 		solverData->set_central_frequency( (location.range().start() + location.range().end())/2 );
 		solverData->set_datetime( location.date_time() );
 
-        if(b) {
-            sendDataToClientTcpServer1(solverPkt);
-        }
+		if(b) {
+			sendDataToClientTcpServer1(solverPkt);
+			//log_debug("To Solver >>>>>>");
+		}
 	}
 }
 
@@ -168,17 +169,17 @@ void CoordinateCounter::onSolverBlaData(const QByteArray &data)
 {
 
 	//if( m_resTime.elapsed() > DELAY ) {
-//        SolverProtocol::Packet pkt;
-//        pkt.ParseFromArray(data.data(), data.size());
+	//        SolverProtocol::Packet pkt;
+	//        pkt.ParseFromArray(data.data(), data.size());
 
-        emit signal1BlaData( data );
-		//m_resTime.restart();
+	emit signal1BlaData( data );
+	//m_resTime.restart();
 	//}
 }
 
 void CoordinateCounter::onSolverWorkData(const QByteArray &data)
 {
-     emit signal1BlaData( data );
+	emit signal1BlaData( data );
 }
 
 void CoordinateCounter::onSolver1SetupAnswer(const QByteArray &data)
@@ -204,17 +205,17 @@ QObject* CoordinateCounter::asQObject()
 
 void CoordinateCounter::setCenterFrequency(const double& frequency)
 {
-    emit signalSetCenterFrequency(frequency);
+	emit signalSetCenterFrequency(frequency);
 }
 
 void CoordinateCounter::setShift(const double shift)
 {
-    emit signalSetShift(shift);
+	emit signalSetShift(shift);
 }
 
 void CoordinateCounter::setStationsShift(const int val)
 {
-    m_stationsShift = val;
+	m_stationsShift = val;
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -226,7 +227,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 	int sourceType = AUTO_HEIGH;
 	int aLastItem = aData.timeHMSMs.size() - 1;
 
-    if( result == SOLVED ) {
+	if( result == SOLVED ) {
 		QByteArray dataToSend;
 		QDataStream ds(&dataToSend, QIODevice::WriteOnly);
 
@@ -417,17 +418,17 @@ void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResu
 
 void CoordinateCounter::slotSolverBlaData( QByteArray data ) {
 
-         //log_debug("ON SEND BALDATA >>>>>>>>>!");
-         MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
-         foreach (ITcpListener* receiver, m_receiversList) {
-             receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
-         }
+	//log_debug("ON SEND BALDATA >>>>>>>>>!");
+	MessageSP message(new Message<QByteArray>(TCP_FLAKON_COORDINATES_COUNTER_ANSWER_BPLA_1, data));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(RDS_TCP_DEVICE, m_likeADeviceName, message);
+	}
 
-         //To NIIPP
-         MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, data));
-         foreach (ITcpListener* receiver, m_receiversList) {
-             receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
-         }
+	//To NIIPP
+	MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, data));
+	foreach (ITcpListener* receiver, m_receiversList) {
+		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
+	}
 }
 
 void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)
@@ -456,7 +457,7 @@ void CoordinateCounter::slotSolver1SetupAnswer(QByteArray data)
 
 void CoordinateCounter::slotErrorOccured(int error_type, QString str)
 {
-    //log_debug(QString("ERROR = %1").arg(error_type));
+	//log_debug(QString("ERROR = %1").arg(error_type));
 
 	QByteArray strBA;
 	QDataStream dataStream(&strBA, QIODevice::WriteOnly);
@@ -551,8 +552,8 @@ void CoordinateCounter::initSolver()
 
 	connect(this, SIGNAL(signal1ProtoData(int,QByteArray)), this, SLOT(slotSolver1ProtoData(int,QByteArray)));
 
-    connect(this, SIGNAL(signal1BlaData(QByteArray)),
-            this, SLOT(slotSolverBlaData(QByteArray)));
+	connect(this, SIGNAL(signal1BlaData(QByteArray)),
+			this, SLOT(slotSolverBlaData(QByteArray)));
 
 	connect(this, SIGNAL(signal1SetupAnswer(QByteArray)), this, SLOT(slotSolver1SetupAnswer(QByteArray)));
 
@@ -565,7 +566,7 @@ void CoordinateCounter::slotSetCenterFrequency(const double& frequency)
 
 void CoordinateCounter::slotSetShift(const double val)
 {
-   m_shift = val;
+	m_shift = val;
 }
 
 QList<UAVPositionDataEnemy> CoordinateCounter::encodeSolverData(

@@ -72,10 +72,17 @@ private:
 	QMap<int, QDateTime> m_mapSendAnalysisAbsTime;
 
 	int m_upTime;
+	bool m_readyToPushSpectrum;
+	bool m_readyToSend;
+
+	QTimer* m_dropFlagTimer;
 
 public:
 	explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent = NULL);
 	virtual ~TcpRdsCoder();
+
+	bool isSend() {return m_readyToSend;}
+	void onSetFlag();
 
 	// ITcpDeviceCoder interface
 public:
@@ -85,6 +92,9 @@ public:
 
 	void setCoordinatesCounter(CoordinateCounter* obj);
 
+	QByteArray decodeWithCheckLocation(const MessageSP message, bool &isLocation);
+
+	void setReadyToPushSpectrums(bool val = true);
 private:
 	MessageSP messageFromPreparedData(const QByteArray& data);
 	MessageSP pointers(int index, float cf, QVector<QPointF> vec);
@@ -97,6 +107,9 @@ private:
 
 	MessageSP configureLoc(const QByteArray &data);
 	MessageSP configureSys(const QByteArray &data);
+
+private slots:
+	void onDropFlag();
 
 signals:
 	void onChangeDevState(QMap<int, bool>);

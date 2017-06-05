@@ -137,12 +137,12 @@ void LocationSetupWidgetController::setSleepMode(bool val)
 	QByteArray outData;
 	outData.resize( params.ByteSize() );
 	params.SerializeToArray( outData.data(), outData.size() );
-    emit sendCPPacketData(outData);
+	emit sendCPPacketData(outData);
 }
 
 int LocationSetupWidgetController::currentFrequency() const
 {
-    return m_locationMessage.central_frequency();
+	return m_locationMessage.central_frequency();
 }
 
 void LocationSetupWidgetController::appendView(LocationSetupWidget *view)
@@ -176,8 +176,8 @@ void LocationSetupWidgetController::slotWigdetSettingsChanged()
 	RdsProtobuf::ClientMessage_OneShot_Location tmpMsg = m_view->getLocationData();
 
 	if( (tmpMsg.central_frequency() != m_locationMessage.central_frequency()) ||
-		(tmpMsg.range().start() != m_locationMessage.range().start()) ||
-		(tmpMsg.range().end() != m_locationMessage.range().end()) ) {
+			(tmpMsg.range().start() != m_locationMessage.range().start()) ||
+			(tmpMsg.range().end() != m_locationMessage.range().end()) ) {
 
 		int center = tmpMsg.central_frequency();
 		double start = tmpMsg.range().start();
@@ -202,7 +202,7 @@ void LocationSetupWidgetController::slotWigdetSettingsChanged()
 	emit signalSettingsChanged();
 	emit signalSelectionUpdate();
 
-    emit onStateChanged();
+	emit onStateChanged();
 }
 
 void LocationSetupWidgetController::slotChangeMode(int val)
@@ -266,17 +266,15 @@ void LocationSetupWidgetController::requestLocation()
 	createGetLocationStatus( pkt, m_locationMessage );
 	m_plotCounter = m_incomePlotCounter;
 
-//	logLoc.append( QString("duration %1 \n").arg( m_locationMessage.duration() ) );
-//	logLoc.append( QString("Central freq %1 \n").arg( m_locationMessage.central_frequency() ) );
-//	logLoc.append( QString("rangestart %1 \n").arg( m_locationMessage.range().start() ) );
-//	logLoc.append( QString("rangeend %1 \n").arg( m_locationMessage.range().end() ) );
-//	logLoc.append( QString("convol %1 \n").arg( m_locationMessage.convolution() ) );
-//	logLoc.append( QString("doppler %1 \n").arg( m_locationMessage.doppler() ) );
-//	logLoc.append( QString("convPlot %1 \n").arg( m_locationMessage.convolution_plot() ) );
-//	logLoc.append( QString("hump %1 \n").arg( m_locationMessage.hump() ) );
-//	logLoc.append( QString("average %1 \n").arg( m_locationMessage.averaging_frequency_band() ) );
-
-//	log_debug("Request ??? >>>>>>>>>>>>>>>>>>>>>>>>>> ");
+	//	logLoc.append( QString("duration %1 \n").arg( m_locationMessage.duration() ) );
+	//	logLoc.append( QString("Central freq %1 \n").arg( m_locationMessage.central_frequency() ) );
+	//	logLoc.append( QString("rangestart %1 \n").arg( m_locationMessage.range().start() ) );
+	//	logLoc.append( QString("rangeend %1 \n").arg( m_locationMessage.range().end() ) );
+	//	logLoc.append( QString("convol %1 \n").arg( m_locationMessage.convolution() ) );
+	//	logLoc.append( QString("doppler %1 \n").arg( m_locationMessage.doppler() ) );
+	//	logLoc.append( QString("convPlot %1 \n").arg( m_locationMessage.convolution_plot() ) );
+	//	logLoc.append( QString("hump %1 \n").arg( m_locationMessage.hump() ) );
+	//	logLoc.append( QString("average %1 \n").arg( m_locationMessage.averaging_frequency_band() ) );
 
 	m_requestReady = false;
 
@@ -299,11 +297,11 @@ void LocationSetupWidgetController::requestAnalysis(int channel)
 	emit sendRdsData( pack(pkt1) );
 
 	//Request any plot
-//	RdsProtobuf::Packet pkt;
-//	createGetLocationStatus( pkt, m_locationMessage );
-//	m_plotCounter = m_incomePlotCounter;
+	//	RdsProtobuf::Packet pkt;
+	//	createGetLocationStatus( pkt, m_locationMessage );
+	//	m_plotCounter = m_incomePlotCounter;
 
-//	emit sendRdsData( pack(pkt) );
+	//	emit sendRdsData( pack(pkt) );
 	requestLocation();
 }
 
@@ -454,10 +452,10 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double band
 		bandwidth = 20;
 	}
 
-    double start = (double)freq - bandwidth/2;
-    double end = (double)freq + bandwidth/2;
+	double start = (double)freq - bandwidth/2;
+	double end = (double)freq + bandwidth/2;
 
-    m_locationMessage.set_central_frequency( (int)(freq+0.5) );
+	m_locationMessage.set_central_frequency( (int)(freq+0.5) );
 	m_locationMessage.mutable_range()->set_start( (double)freq - bandwidth/2 );
 	m_locationMessage.mutable_range()->set_end( (double)freq + bandwidth/2 );
 
@@ -550,6 +548,11 @@ void LocationSetupWidgetController::updatelocationSettings(QByteArray data)
 	if(msg.has_frequency())
 	{
 		int freq = msg.frequency();
+
+		if(freq <= 20 && freq >= 7000) {
+			freq = 100;
+		}
+
 		slotOnSetCommonFreq((double)freq); //set central frequency and start and finish frequency!
 		//m_locationMessage.set_central_frequency(freq);
 	}

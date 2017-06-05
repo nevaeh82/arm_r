@@ -29,6 +29,8 @@
 
 #include "Tabs/ServerConnectionWidgetController.h"
 
+#include "Tabs/RecordSignalSettings.h"
+
 class MainWindowController : public QObject, public IController<MainWindow>//, public IRpcListener
 {
 	Q_OBJECT
@@ -58,6 +60,8 @@ private:
 	void connectToServers();
 
 	ListsDialogController* m_listController;
+
+	RecordSignalSettings* m_recordSignalSettingsDialog;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

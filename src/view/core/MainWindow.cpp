@@ -83,6 +83,9 @@ void MainWindow::init()
 
 	connect(ui->actionEmail_Alert_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalEmailSettings()));
 	connect(ui->actionSMS_Alert_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalSMSSettings()));
+
+	connect(ui->actionShow_panorama, SIGNAL(triggered(bool)), this, SIGNAL(onShowPanoramaControl(bool)));
+	connect(ui->actionRecord_signal_settings, SIGNAL(triggered(bool)), this, SIGNAL(signalShowRecordSettings()));
 }
 
 void MainWindow::updateLocationSetupAction(int id, QString text)

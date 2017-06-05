@@ -19,12 +19,12 @@ EmailSettings::EmailSettings(QWidget *parent) :
 
 EmailSettings::~EmailSettings()
 {
-    delete ui;
+	delete ui;
 }
 
 SMSComPortDialog *EmailSettings::getSmsDialog()
 {
-    return ui->smsWidget;
+	return ui->smsWidget;
 }
 
 void EmailSettings::init()
@@ -62,7 +62,7 @@ void EmailSettings::init()
 
 	initView();
 
-    ui->smsWidget->slotClose();
+	ui->smsWidget->slotClose();
 }
 
 void EmailSettings::saveSettings()
@@ -100,7 +100,7 @@ void EmailSettings::saveSettings()
 
 	init();
 
-    ui->smsWidget->slotAccept();
+	ui->smsWidget->slotAccept();
 
 	emit signalMailSettingsUpdate();
 }

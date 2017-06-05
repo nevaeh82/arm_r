@@ -38,7 +38,7 @@ public:
 	virtual StationData getStationData(const QString& stationName, int port, double frequency, double bandwidth = 0) = 0;
 
 	virtual bool getStationInfo(const QString& name, QList<StationDataFull>& stationRecords)	= 0;
-	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list) = 0;
+	virtual bool getFrequencyAndBandwidthByCategory(const QString& category, QList<StationsFrequencyAndBandwith>& list, bool withChecked = false) = 0;
 	virtual bool getReportCategory(const QString& category, QList<AllStationsReport>& listReport) = 0;
 
 	virtual bool setThresholdByFrequencyAndStation(const QString &station, const int frequency, const int threshold) = 0;

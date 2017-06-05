@@ -55,6 +55,10 @@ signals:
 	void signalEmailSettings();
 	void signalSMSSettings();
 
+	void onShowPanoramaControl(bool);
+
+	void signalShowRecordSettings();
+
 protected:
 	void closeEvent(QCloseEvent *);
 };

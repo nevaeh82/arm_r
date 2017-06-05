@@ -78,6 +78,8 @@ public:
 	void applyManualMode();
 
 	void alarmAimVisible(bool val);
+
+	void showPanoramaControl(bool isOn);
 signals:
 	void commonFreqChangedSignal(double value);
 	void onPanoramaEnable(bool, int, int);
@@ -93,7 +95,7 @@ signals:
 	void signalCheckMode();
 	void signalViewMode();
 	void signalViewAreaMode();
-    void signalViewAreaDopplerMode();
+	void signalViewAreaDopplerMode();
 
 	void signalDown1Mhz();
 	void signalDown10Mhz();

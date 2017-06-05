@@ -194,7 +194,7 @@ void RpcFlakonClientWrapper::sendRdsProtoSlot(QByteArray data)
 		return;
 	}
 
-    m_rpcClient->sendRdsProto( data );
+	m_rpcClient->sendRdsProto( data );
 }
 
 void RpcFlakonClientWrapper::slotCPPacketSlot(QByteArray data)
@@ -272,7 +272,7 @@ void RpcFlakonClientWrapper::sendSolverSetupSettings(const QByteArray &data)
 
 void RpcFlakonClientWrapper::sendRdsProto(const QByteArray &data)
 {
-    emit sendRdsProtoSignal( data );
+	emit sendRdsProtoSignal( data );
 }
 
 void RpcFlakonClientWrapper::sendCPPacketProto(const QByteArray &data)

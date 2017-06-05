@@ -156,7 +156,11 @@ private:
 
 	double m_globalThreshold;
 
-    QMap<double, QTime> m_screenShotMapTime;
+	QMap<double, QTime> m_screenShotMapTime;
+	QMap<double, QTime> m_recordMapTime;
+
+	bool m_isScreenShot;
+	bool m_isRecord;
 
 public:
 	explicit SpectrumWidgetController(QObject *parent = 0);
@@ -223,6 +227,8 @@ public:
 
 	void setCurrentWorkFrequency(const double cf);
 
+	void recordSignalById(int id);
+
 private:
 	void init();
 
@@ -237,6 +243,8 @@ private:
 
 
 	void setSonogramSetup(const QQueue<QList<double> >& sonogramData);
+
+	void readRecordSettings();
 
 signals:
 	void doubleClickedSignal(int);

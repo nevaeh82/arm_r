@@ -75,9 +75,9 @@ TcpManager::~TcpManager()
 	emit threadTerminateSignalForMapSolver();
 	m_mapCoordinateCounter.clear();
 
-    foreach (TcpDeviceController *controller, m_controllersMap) {
-        delete controller;
-    }
+	foreach (TcpDeviceController *controller, m_controllersMap) {
+		delete controller;
+	}
 }
 
 void TcpManager::addStationToFlakon(QString name, BaseTcpDeviceController* controller)
@@ -133,8 +133,8 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 	TcpDeviceController* controller = NULL;
 
-    // register controller as listener for RPC server
-    RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
+	// register controller as listener for RPC server
+	RpcRoutedServer *routedServer = dynamic_cast<RpcRoutedServer *>( m_rpcServer );
 
 	switch(type)
 	{
@@ -170,14 +170,14 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 		m_rdsController->setCoordinateCounter(m_coordinatesCounter);
 
-        m_rdsSettingsController = new TcpRDSSettingsController();
+		m_rdsSettingsController = new TcpRDSSettingsController();
 
-        log_debug(QString("Created TcpRDSSettingsController"));
-        m_rdsController->setTcpRdsSettingscontroller(m_rdsSettingsController);
-        m_rdsSettingsController->registerReceiver(this);
-        if (routedServer != NULL) {
-            routedServer->registerReceiver( (IRpcListener*) m_rdsSettingsController, m_rdsSettingsController->getRouteId() );
-        }
+		log_debug(QString("Created TcpRDSSettingsController"));
+		m_rdsController->setTcpRdsSettingscontroller(m_rdsSettingsController);
+		m_rdsSettingsController->registerReceiver(this);
+		if (routedServer != NULL) {
+			routedServer->registerReceiver( (IRpcListener*) m_rdsSettingsController, m_rdsSettingsController->getRouteId() );
+		}
 
 		break;
 	case SOLVER_CLIENT_DEVICE:
@@ -235,7 +235,7 @@ void TcpManager::addTcpDevice(const QString& deviceName, const int& type)
 
 		if (routedServer != NULL) {
 			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotRpcClientConnected()));
-//			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotSendRpcClientSettings()));
+			//			connect(routedServer, SIGNAL(onConnected()), this, SLOT(slotSendRpcClientSettings()));
 		}
 
 	} else if(type == SOLVER_CLIENT_DEVICE) {

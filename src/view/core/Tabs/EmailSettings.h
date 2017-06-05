@@ -40,7 +40,7 @@ public:
 	MailSettings remoteMailSettings() {return m_remoteSettings;}
 	MailSettings localMailSettings() {return m_localSettings;}
 
-    SMSComPortDialog* getSmsDialog();
+	SMSComPortDialog* getSmsDialog();
 
 private:
 	Ui::EmailSettings *ui;
