@@ -18,15 +18,15 @@ ARM_R_Srv::ARM_R_Srv(int serverId, QObject* parent) :
 	rpcSettingsManager->setIniFile("./Rpc/RpcServer.ini");
 
 	QString host = rpcSettingsManager->getRpcHost();
-    quint16 port = rpcSettingsManager->getRpcPort().toUShort() + m_serverId-1;
-    m_rpcServer->start(port, /*QHostAddress(host)*/QHostAddress::Any);
+	quint16 port = rpcSettingsManager->getRpcPort().toUShort() + m_serverId-1;
+	m_rpcServer->start(port, /*QHostAddress(host)*/QHostAddress::Any);
 
 	m_tcpServer = new TcpServerController(this);
 	m_tcpServer->createTcpServer();
 	m_tcpServer->createTcpServerCoder();
 	m_tcpServer->start(QHostAddress::Any, 6662);
 
-    m_tcpManager = new TcpManager(m_serverId);
+	m_tcpManager = new TcpManager(m_serverId);
 
 	QThread* tcpManagerThread = new QThread;
 	connect(tcpManagerThread, SIGNAL(finished()), m_tcpManager, SLOT(deleteLater()));

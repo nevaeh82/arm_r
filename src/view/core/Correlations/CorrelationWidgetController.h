@@ -34,6 +34,7 @@ private:
 	QQueue<double> m_dopplerList;
 	int m_doplerLim;
 
+	bool m_isReady;
 
 public:
 	explicit CorrelationWidgetController(int corType, QObject *parent = 0);
@@ -61,11 +62,16 @@ public:
 
 	virtual void setCurrentWorkFrequency(const double cf)  {}
 
+	bool isReady() {return m_isReady;}
+	void setReady(bool val) {m_isReady = val;}
+
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);
 
 	void clearDoplerInternal();
+	void slotPlotDrawComplete();
+
 private:
 	void setDataSetup(float *spectrum, float *spectrum_peak_hold, int PointCount, double bandwidth, bool isComplex, float sko);
 	void setData(float *spectrum, float *spectrum_peak_hold, float sko);

@@ -158,9 +158,6 @@ public:
 
 	void setListDialog(ListsDialog* dlg);
 
-	bool sleepMode() const;
-	void setSleepMode(bool);
-
 	void setManualMode();
 
 	QList<solverResult> getSolverResultList() const {return m_solverResultList;}

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1536</width>
-    <height>88</height>
+    <height>92</height>
    </rect>
   </property>
   <property name="palette">
@@ -132,13 +132,16 @@
       <number>6</number>
      </property>
      <property name="topMargin">
-      <number>6</number>
+      <number>3</number>
      </property>
      <property name="rightMargin">
       <number>6</number>
      </property>
      <property name="bottomMargin">
-      <number>6</number>
+      <number>3</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>10</number>
      </property>
      <item row="2" column="0">
       <widget class="QSpinBox" name="startFreqSB">
@@ -826,7 +829,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Detecting</string>
+           <string>Maintenance</string>
           </property>
          </item>
          <item>
@@ -853,10 +856,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="cbSleepMode">
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="cbMaitenance">
          <property name="text">
-          <string>Sleep mode</string>
+          <string>Сопровождать найденные</string>
          </property>
         </widget>
        </item>
@@ -864,6 +867,12 @@
      </item>
      <item row="0" column="3" colspan="21">
       <widget class="QLabel" name="labelAlarm">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="styleSheet">
         <string notr="true">color: rgb(255, 0, 0);</string>
        </property>

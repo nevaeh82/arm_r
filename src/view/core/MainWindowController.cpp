@@ -2,9 +2,12 @@
 
 #include "RdsPacket.pb.h"
 
-#define SERVER_NAME "ZaviruhaRServer"
-
 //#include "ComReceiver/ComReceiverController.h"
+
+
+#include <windows.h>
+#include <psapi.h>
+
 
 #define DEFAULT_RPC_PORT		24500
 
@@ -28,6 +31,10 @@ MainWindowController::MainWindowController(QObject *parent)
 	resetServer();
 
 	m_recordSignalSettingsDialog = new RecordSignalSettings();
+
+	m_memTimer = new QTimer(this);
+	connect(m_memTimer, SIGNAL(timeout()), this, SLOT(onCheckMemUsage()));
+	m_memTimer->start(60000);
 }
 
 MainWindowController::~MainWindowController()
@@ -117,6 +124,8 @@ void MainWindowController::connectToServers()
 			serverHandler = new SkyHobbit::Common::ServiceControl::ServiceHandler(serverName, args, NULL, this);
 			serverHandler->start(true);
 			m_serverHandlerList.append(serverHandler);
+
+			connect(serverHandler, SIGNAL(onProcessDead()), this, SLOT(onServerDead()));
 		}
 
 
@@ -202,13 +211,6 @@ void MainWindowController::serverStartedSlot()
 	loop.exec();
 	timer.stop();
 	log_debug("Sleeper is off");
-
-	//	m_rpcSettingsManager->setIniFile("./Tabs/RPC.ini");
-	//	QString host = m_rpcSettingsManager->getRpcHost();
-	//	quint16 port = m_rpcSettingsManager->getRpcPort().toUShort();
-
-	//	m_tabManager->setRpcConfig(port, host);
-
 }
 
 void MainWindowController::slotShowLists()
@@ -392,3 +394,29 @@ void MainWindowController::resetServer()
 	param.append("ZaviruhaRServer.exe");
 	QProcess::execute("taskkill", param);
 }
+
+void MainWindowController::onServerDead()
+{
+	QProcess p;
+	QString guiName = "./" + QString(GUI_NAME);
+	p.startDetached(guiName);
+	//p.waitForStarted(10000);
+
+	qApp->exit(0);
+}
+
+void MainWindowController::onCheckMemUsage()
+{
+	PROCESS_MEMORY_COUNTERS pmc;
+	PPROCESS_MEMORY_COUNTERS ppmc = &pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), ppmc, sizeof(pmc));
+	SIZE_T meMem = pmc.WorkingSetSize;
+
+	log_debug(QString("Ololo my memory is: %1").arg(meMem));
+
+	if(meMem > 1000000*600) {
+		log_debug("I wanna reboot )))");
+		onServerDead();
+	}
+}
+

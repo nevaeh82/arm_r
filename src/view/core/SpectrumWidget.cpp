@@ -67,6 +67,9 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WFlags flags):
 	connect(ui->cbSonogram, SIGNAL(clicked(bool)), m_plot, SLOT(setVisible(bool)));
 
 	ui->sbThreshold->setVisible(false);
+	ui->lblThreshold->setVisible(false);
+	ui->lblWidth->setVisible(false);
+	ui->sbThresholdWidth->setVisible(false);
 	ui->sbGlobalThreshold->setVisible(false);
 
 	ui->panoramaCB->setVisible(false);
@@ -199,6 +202,11 @@ void SpectrumWidget::setThresholdValue(const int val)
 	ui->sbThreshold->blockSignals(false);
 }
 
+int SpectrumWidget::getThresholdWidth() const
+{
+	return ui->sbThresholdWidth->value();
+}
+
 void SpectrumWidget::setAnalysisDetectedData(const RdsProtobuf::ServerMessage_OneShotData_AnalysisData &msg)
 {
 }
@@ -290,9 +298,15 @@ void SpectrumWidget::onThresholdToggled(bool val)
 {
 	if(val) {
 		ui->sbThreshold->setVisible(true);
+		ui->lblThreshold->setVisible(true);
+		ui->lblWidth->setVisible(true);
+		ui->sbThresholdWidth->setVisible(true);
 		ui->sbGlobalThreshold->setVisible(true);
 	} else {
 		ui->sbThreshold->setVisible(false);
+		ui->lblThreshold->setVisible(false);
+		ui->lblWidth->setVisible(false);
+		ui->sbThresholdWidth->setVisible(false);
 		ui->sbGlobalThreshold->setVisible(false);
 	}
 }

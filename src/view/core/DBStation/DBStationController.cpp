@@ -628,29 +628,7 @@ bool DBStationController::setThresholdByFrequencyAndStation(const QString &stati
 			return false;
 		}
 		return true;
-	} /*else {
-
-		bool res = false;
-		res = query.prepare( "INSERT INTO threshold " \
-							 "VALUES (NULL, :freqVal, :thresholdVal, :stationVal);" );
-
-		if(!res) {
-			return false;
-		}
-
-		VALIDATE_QUERY( query );
-
-		query.bindValue(":freqVal", frequency);
-		query.bindValue(":thresholdVal", threshold);
-		query.bindValue(":stationVal", station);
-		res = query.exec();
-		QString error = query.lastError().text();
-
-		if(!res) {
-			return false;
-		}
-		return true;
-	}*/
+	}
 
 	return true;
 }
@@ -667,7 +645,7 @@ bool DBStationController::getThresholdByFrequencyAndStation(const QString &stati
 
 	VALIDATE_QUERY( query );
 
-	query.bindValue(":freqVal", frequency);
+	//query.bindValue(":freqVal", frequency);
 	query.bindValue(":stationVal", station);
 
 	bool result = query.exec();

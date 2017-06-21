@@ -75,6 +75,7 @@ private:
 	double	m_bandwidth;
 	int		m_pointCount;
 	bool	m_isComplex;
+	bool m_isReady;
 
 	QMutex	m_mux;
 	bool	m_enableCorrelation;
@@ -229,6 +230,9 @@ public:
 
 	void recordSignalById(int id);
 
+	bool isReady() {return m_isReady;}
+	void setIsReady(bool val) {m_isReady = val;}
+
 private:
 	void init();
 
@@ -320,7 +324,9 @@ private slots:
 
 	void onSpectrumStop();
 
-    void slotOnScreenShot();
+	void slotOnScreenShot();
+
+	void slotPlotDrawComplete();
 };
 
 #endif // SPECTRUMWIDGETCONTROLLER_H

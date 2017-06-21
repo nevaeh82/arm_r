@@ -36,6 +36,7 @@ void EmailSettings::init()
 	m_isMoving = aSettings.value("Common/isMoving").toBool();
 	m_isStanding = aSettings.value("Common/isStanding").toBool();
 	m_isUnknown = aSettings.value("Common/isUnknown").toBool();
+	m_isDopler = aSettings.value("Common/isDopler").toBool();
 
 	m_localSettings.host = aSettings.value("Connection/host").toString();
 	m_localSettings.port = aSettings.value("Connection/port").toInt();
@@ -73,6 +74,7 @@ void EmailSettings::saveSettings()
 	aSettings.setValue("Common/isSend", ui->cbEnable->isChecked());
 	aSettings.setValue("Common/isMoving", ui->cbMoving->isChecked());
 	aSettings.setValue("Common/isStanding", ui->cbStanding->isChecked());
+	aSettings.setValue("Common/isDopler", ui->cbDopler->isChecked());
 	aSettings.setValue("Common/isUnknown", ui->cbUnknown->isChecked());
 
 	aSettings.setValue("Connection/host", ui->leRemoteHost_2->text());
@@ -111,6 +113,7 @@ void EmailSettings::initView()
 	ui->cbUnknown->setChecked(m_isUnknown);
 	ui->cbStanding->setChecked(m_isStanding);
 	ui->cbMoving->setChecked(m_isMoving);
+	ui->cbDopler->setChecked(m_isDopler);
 
 	ui->leRemoteHost_2->setText(m_localSettings.host);
 	ui->sbRemotePort_2->setValue(m_localSettings.port);

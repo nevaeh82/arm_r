@@ -73,17 +73,6 @@ void CorrelationWidgetDataSource::setCorData(quint32 point1, quint32 point2, con
 	qreal endx = points.at(points.size() - 1).x();
 	double bandwidth = endx - startx;
 
-
-	if( m_panelController->sleepMode() && !m_sleepModeProcess )
-	{
-		emit onDrawComplete();
-		if(!m_sleepModeTimer->isActive()) {
-			m_sleepModeTimer->start();
-		}
-		return;
-	}
-
-
 	if(bCor != bandwidth)
 	{
 		bCor = bandwidth;

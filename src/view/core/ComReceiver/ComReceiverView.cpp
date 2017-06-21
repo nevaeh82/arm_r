@@ -122,11 +122,11 @@ void ComReceiverView::setKtrConnectState(bool on)
 	if(!on) {
 		ui->pbComConnect->blockSignals(true);
 		ui->pbComConnect->setChecked(false);
-		ui->lblConnectState->setText("Ktr disconnected");
+		ui->lblConnectState->setText("KTP disconnected");
 		ui->pbKtrConnect->setText("Connect");
 		ui->pbComConnect->blockSignals(false);
 	} else {
-		ui->lblConnectState->setText("Ktr Connected");
+		ui->lblConnectState->setText("KTP Connected");
 		ui->pbKtrConnect->setText("DISConnect");
 	}
 }

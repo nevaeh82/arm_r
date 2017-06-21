@@ -76,6 +76,8 @@ int SmtpClientThread::sendMail()
 
 	m_elapsedTimer.restart();
 
+	log_debug("SENDING EMAIL!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 	// Code of sending ...
 
 	//SmtpClient smtp("smtp.yandex.ru", 465, SmtpClient::SslConnection);

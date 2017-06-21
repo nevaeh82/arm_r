@@ -112,12 +112,12 @@ private:
 		int alt;
 	};
 
-	LogManager* m_logManager;
-	LogManager* m_logManager1;
-	LogManager* m_logManager2;
-	LogManager* m_logManager3;
+//	LogManager* m_logManager;
+//	LogManager* m_logManager1;
+//	LogManager* m_logManager2;
+//	LogManager* m_logManager3;
 
-    QTime m_resTime;
+	QTime m_resTime;
 
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);

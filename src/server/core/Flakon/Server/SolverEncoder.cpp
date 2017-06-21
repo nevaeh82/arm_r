@@ -41,12 +41,20 @@ void SolverEncoder::onDataReceived(const QVariant& argument)
 		return;
 	}
 
-	QString devName = QString(dataList.at(1));
+	QTextCodec *codec = QTextCodec::codecForName("KOI8-R" );
+	QTextCodec *codec1 = QTextCodec::codecForName("KOI8-R");
+	QString devName;
+	QByteArray devNameRaw = dataList.at(1);
+	QByteArray res;
+	devName = codec1->toUnicode( devNameRaw );
+	res = codec->fromUnicode( devName );
+
+	//devName = QString(devNameRaw);
 	int inTst = QString(dataList.at(4).left(4)).toInt();
 
 	m_dataFromTcpSocket.clear();
 
-	emit nippDataIncome(devName, bool(inTst));
+	emit nippDataIncome(QString(devName), bool(inTst));
 }
 
 QByteArray SolverEncoder::encode(const QByteArray &data)
@@ -129,7 +137,8 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 			niippLst.append(QString::number( tPkt.central_frequency() ));
 
 			quint64 t = mPkt.datetime();
-			QDateTime dt = QDateTime::fromMSecsSinceEpoch(t);
+			//QDateTime dt = QDateTime::fromMSecsSinceEpoch(t);
+			QDateTime dt = QDateTime::currentDateTime();
 
 			niippLst.append( dt.date().toString("ddMMyy") );
 			niippLst.append( dt.time().toString("hhmmss") );

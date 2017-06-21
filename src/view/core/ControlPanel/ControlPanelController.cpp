@@ -49,7 +49,7 @@ ControlPanelController::ControlPanelController(int tabId, QString title, QObject
 	connect(this, SIGNAL(signalSetCentralFreq(double)), this, SLOT(setCentralFreqValueInternal(double)));
 
 	m_solverResultListTimer = new QTimer(this);
-	m_solverResultListTimer->setInterval(3000);
+	m_solverResultListTimer->setInterval(1000);
 	connect(m_solverResultListTimer, SIGNAL(timeout()), this, SLOT(slotClearSolverResult()));
 	m_solverResultListTimer->start();
 }
@@ -205,6 +205,7 @@ void ControlPanelController::slotSolverResult(QByteArray data)
 		m_solverResultListTimer->start();
 
 		SolverProtocol::Packet_DataFromSolver_SolverSolution solPkt;
+
 		if(pkt.datafromsolver().has_solution_manual_altitude()) {
 			solPkt = pkt.datafromsolver().solution_manual_altitude();
 
@@ -288,7 +289,8 @@ void ControlPanelController::onShowPanoramaControl(bool isOn)
 
 void ControlPanelController::slotClearSolverResult()
 {
-	m_solverResultList.clear();
+	//m_solverResultList.clear();
+	m_view->changeQualityStatus( 0 );
 }
 
 bool ControlPanelController::checkSolverResult(int freq)
@@ -426,6 +428,8 @@ void ControlPanelController::slotViewMode()
 
 void ControlPanelController::slotViewAreaDopplerMode()
 {
+	m_view->enableDopler();
+
 	slotViewAreaMode();
 	m_isDopplerSearch = true;
 	m_timerCheck.start(m_timerCheckIntervalDopler);
@@ -561,10 +565,12 @@ void ControlPanelController::checkDopplerResult()
 	double listFreq = (int)(*m_itCheckMode).frequency;
 	int currentFreq = m_setupController->currentFrequency();
 
-	foreach (QString key, m_dopplerMap.keys()) {
-		QList<double> vals = m_dopplerMap.values();
+	foreach (QString key, m_dopplerMap.uniqueKeys()) {
+		QList<double> vals = m_dopplerMap.values(key);
 		int isMoving = true;
 		double averageDopler = 0;
+		int falseCounter = 0;
+
 		for(int i = 0; i<vals.size()-1; i+=2) {
 			double val1 = vals.at(i);
 			double val2 = vals.at(i+1);
@@ -572,17 +578,29 @@ void ControlPanelController::checkDopplerResult()
 			averageDopler = averageDopler/2;
 
 			if( val1<10 && val2<10 ) {
-				isMoving = false;
-				break;
-			} else if(abs(val2-val1) > 5) {
-				isMoving = false;
-				break;  //Bad Values
+				falseCounter++;
 			}
 		}
 
+		//log_debug(QString("Doppler stat!  False cnt %1   all cnt %2").arg(falseCounter).arg(vals.size()));
+
+		double persentage = (double)falseCounter / (double)vals.size();
+
+		if(persentage < 0.2) {
+			isMoving = true;
+		} else {
+			isMoving = false;
+		}
+
+		//log_debug(QString("Doppler Perserntage!  %1   %2").arg(key).arg(QString::number( persentage, 'f', 6 )));
+
 		if(isMoving) {
-			emit signalDopplerDetect(tr("Detect average Dopler:%1 on frequency:%2  on Correlation %3")
+			emit signalDopplerDetect(tr("Detect average Dopler: %1 on frequency: %2    Correlation on channel:  %3")
 									 .arg(averageDopler).arg(currentFreq).arg(key));
+			m_view->setDoplerMessage(tr("Detect average Dopler: %1 on frequency: %2 mHz      Correlation:  %3")
+									 .arg(averageDopler).arg(currentFreq).arg(key));
+		} else {
+			m_view->setDoplerMessage("");
 		}
 	}
 }
@@ -710,7 +728,10 @@ void ControlPanelController::slotCheckModeSetFreq()
 	band = (*m_itCheckMode).bandwidth;
 
 	m_setupController->slotOnSetCommonFreq((freq), band);
-	if(m_isDopplerSearch) {
+
+	if(m_view->isMaitenance()) {
+		m_timerCheck.start(1000);
+	} else if(m_isDopplerSearch) {
 		m_timerCheck.start(m_timerCheckIntervalDopler);
 	} else {
 		m_timerCheck.start(m_timerCheckInterval);
@@ -822,10 +843,10 @@ void ControlPanelController::changeCorrelationStatusActive(bool isActive)
 {
 	m_view->changeCorrelationStatusActive(isActive);
 
-	if( m_solverResultList.isEmpty() ) {
-		m_view->changeQualityStatus( 0 );
-		return;
-	}
+//	if( m_solverResultList.isEmpty() ) {
+//		m_view->changeQualityStatus( 0 );
+//		return;
+//	}
 }
 
 void ControlPanelController::setLocationSettings()
@@ -905,17 +926,6 @@ void ControlPanelController::setListDialog(ListsDialog *dlg)
 	m_listsDialog = dlg;
 }
 
-bool ControlPanelController::sleepMode() const
-{
-	return m_view->sleepMode();
-}
-
-void ControlPanelController::setSleepMode(bool val)
-{
-	m_view->setSleepMode(val);
-	m_setupController->setSleepMode(val);
-}
-
 void ControlPanelController::onSetSleepMode(bool val)
 {
 	m_setupController->setSleepMode(val);
@@ -924,7 +934,9 @@ void ControlPanelController::onSetSleepMode(bool val)
 void ControlPanelController::slotDopplerStatus(QString name, double doppler)
 {
 	if(!_isnan(doppler)) {
+		//doppler = qrand()%20;
 		m_dopplerMap.insertMulti(name, doppler);
+		//log_debug(QString("insertDoppler %1 %2").arg(name).arg(doppler));
 	}
 }
 

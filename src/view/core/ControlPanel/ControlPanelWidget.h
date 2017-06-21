@@ -50,6 +50,7 @@ public:
 	void changeCorrelationStatusActive(const bool isActive);
 
 	void changeQualityStatus(const int status, bool isMoving = false, float freq = 0);
+	void setDoplerMessage(const QString& doplerMessage);
 	void setStartFreq(int val);
 	void setfinishFreq(int val);
 	void setSystemMerge(bool state);
@@ -58,7 +59,6 @@ public:
 
 	void setReceiveSpectrums(bool);
 	void setCentralFreqValue(double freq);
-	void setSleepMode(bool val);
 
 	void setLocationSettings(RdsProtobuf::ClientMessage_OneShot_Location msg);
 
@@ -70,9 +70,6 @@ public:
 
 	void setSolverConnectState(bool b);
 
-	bool sleepMode() const;
-
-
 	int getFreqSBValue();
 
 	void applyManualMode();
@@ -80,6 +77,10 @@ public:
 	void alarmAimVisible(bool val);
 
 	void showPanoramaControl(bool isOn);
+
+	void enableDopler();
+
+	bool isMaitenance() const;
 signals:
 	void commonFreqChangedSignal(double value);
 	void onPanoramaEnable(bool, int, int);
@@ -111,7 +112,7 @@ signals:
 
 	void signalSystemMerge(bool);
 
-	void onSleepMode(bool);
+	void signalSetMode(int);
 
 private slots:
 	void onSetCommonFrequencySlot();
@@ -126,6 +127,7 @@ private slots:
 
 	void slotAlarmTimeout();
 
+	void setModeInternal(int val);
 public slots:
 	void slotChangeCommonFreq(double value);
 

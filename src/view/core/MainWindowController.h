@@ -31,6 +31,9 @@
 
 #include "Tabs/RecordSignalSettings.h"
 
+#define SERVER_NAME "ZaviruhaRServer"
+#define GUI_NAME "ZaviruhaRView"
+
 class MainWindowController : public QObject, public IController<MainWindow>//, public IRpcListener
 {
 	Q_OBJECT
@@ -62,6 +65,8 @@ private:
 	ListsDialogController* m_listController;
 
 	RecordSignalSettings* m_recordSignalSettingsDialog;
+
+	QTimer* m_memTimer;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);
@@ -97,6 +102,8 @@ private slots:
 
 	void slotNIIPPStatus(QString, bool);
 
+	void onServerDead();
+	void onCheckMemUsage();
 };
 
 #endif // MAINWINDOWCONTROLLER_H

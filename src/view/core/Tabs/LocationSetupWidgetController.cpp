@@ -4,7 +4,7 @@
 #include "RDSExchange.h"
 #include "Logger/Logger.h"
 
-#define LOCATION_TIMER_INTERVAL 5000
+#define LOCATION_TIMER_INTERVAL 2000
 
 #define MINIMUM_FREQ 20
 #define MAXIMUM_FREQ 7000
@@ -40,6 +40,7 @@ LocationSetupWidgetController::LocationSetupWidgetController(int tabId, QObject*
 	m_locationTimer.setInterval(m_locationTimerInterval);
 
 	connect(&m_locationTimer, SIGNAL(timeout()), this, SLOT(requestLocation()));
+
 }
 
 LocationSetupWidgetController::~LocationSetupWidgetController()
@@ -438,7 +439,7 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq)
 	emit sendCPPacketData(outData);
 }
 
-void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double bandwidth)
+void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double bandwidth, bool forceEnable)
 {
 	if(freq < MINIMUM_FREQ) {
 		freq = MINIMUM_FREQ;
@@ -462,6 +463,10 @@ void LocationSetupWidgetController::slotOnSetCommonFreq(double freq, double band
 	m_view->setLocationData(m_locationMessage);
 
 	emit onStateChanged();
+
+	if(forceEnable) {
+		slotOnSendLocation();
+	}
 }
 
 void LocationSetupWidgetController::slotOnDeviceEnable(int id, bool enable) {
@@ -584,8 +589,13 @@ void LocationSetupWidgetController::slotPlotDrawCompleteInternal()
 		m_plotCounter = m_incomePlotCounter;
 
 		if(m_isStartLocation) {
-			requestLocation();
-			m_locationTimer.start();
+			m_sendCommandTimer.singleShot(100, this, SLOT(slotOnSendLocation()));
 		}
 	}
+}
+
+void LocationSetupWidgetController::slotOnSendLocation()
+{
+	requestLocation();
+	m_locationTimer.start();
 }

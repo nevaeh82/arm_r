@@ -2,6 +2,7 @@ project(ZaviruhaR)
 
 if(WIN32)
 	cmake_minimum_required(VERSION 3.0)
+	set(WIN32_PSAPI_LIBRARIES "psapi.lib")
 else()
 	cmake_minimum_required(VERSION 2.6.3)
 endif()

@@ -38,7 +38,7 @@ public:
 
 	void setSleepMode(bool);
 
-    int currentFrequency() const;
+	int currentFrequency() const;
 
 private:
 	LocationSetupWidget* m_view;
@@ -48,6 +48,7 @@ private:
 	RdsProtobuf::ClientMessage_OneShot_Record m_recordMessage;
 
 	QTimer m_locationTimer;
+	QTimer m_sendCommandTimer;
 	int m_plotCounter;
 	int m_incomePlotCounter;
 	bool m_isStartLocation;
@@ -77,7 +78,7 @@ public slots:
 	void requestRecord(int channel);
 
 	void slotOnSetCommonFreq(double freq);
-	void slotOnSetCommonFreq(double freq, double bandwidth);
+	void slotOnSetCommonFreq(double freq, double bandwidth, bool forceEnable = false);
 
 	void updateLocation(RdsProtobuf::ClientMessage_OneShot_Location msg);
 	void updatelocationSettings(QByteArray data);
@@ -126,5 +127,6 @@ private slots:
 
 	void onGetSystem();
 	void onRestartRds();
+	void slotOnSendLocation();
 };
 

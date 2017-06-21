@@ -29,6 +29,11 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 	m_coordinatesCounter->moveToThread(coordinateCounterThread);
 	coordinateCounterThread->start();
 
+		QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
+		settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+		int niippPort = settings.value("ClientTCPServer/Port", TCP_SERVER_PORT).toInt();
+		int sprutPort = settings.value("SprutTCPServer/Port", TCP_SERVER_PORT_1).toInt();
+
 	if(serverId == 1) {
 		m_pServer = new PServer(10240);
 		m_coordinatesCounter->registerReceiver(m_pServer);
@@ -43,11 +48,15 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 		pServerThread->start();
 
 		QThread* clientServerThread = new QThread;
-		m_clientTcpServer = new ClientTcpServer;
+		m_clientTcpServer = new ClientTcpServer(niippPort);
 		m_coordinatesCounter->registerReceiver(m_clientTcpServer);
+
+		QThread* sprutServerThread = new QThread;
+		m_sprutTcpServer = new ClientTcpServer(sprutPort, 1);
 
 		m_clientTcpServer->getSolverEncoder()->registerReceiver(m_coordinatesCounter);
 		connect(m_clientTcpServer, SIGNAL(signalNiippData(QString,bool)), this, SLOT(slotNiipData(QString,bool)));
+		connect(m_sprutTcpServer, SIGNAL(signalNiippData(QString,bool)), this, SLOT(slotNiipData(QString,bool)));
 
 		connect(clientServerThread, SIGNAL(started()), m_clientTcpServer, SLOT(startServer()));
 		connect(m_clientTcpServer, SIGNAL(destroyed()), clientServerThread, SLOT(quit()));
@@ -57,6 +66,16 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 		connect(clientServerThread, SIGNAL(finished()), clientServerThread, SLOT(deleteLater()));
 		m_clientTcpServer->moveToThread(clientServerThread);
 		clientServerThread->start();
+
+
+		connect(sprutServerThread, SIGNAL(started()), m_sprutTcpServer, SLOT(startServer()));
+		connect(m_sprutTcpServer, SIGNAL(destroyed()), sprutServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), sprutServerThread, SLOT(quit()));
+		connect(this, SIGNAL(threadTerminateSignal()), m_sprutTcpServer, SLOT(deleteLater()));
+		connect(sprutServerThread, SIGNAL(finished()), m_sprutTcpServer, SLOT(stopServer()));
+		connect(sprutServerThread, SIGNAL(finished()), sprutServerThread, SLOT(deleteLater()));
+		m_sprutTcpServer->moveToThread(sprutServerThread);
+		sprutServerThread->start();
 	}
 
 	connect(this, SIGNAL(onMethodCalledInternalSignal(QString,QVariant)), this, SLOT(onMethodCalledInternalSlot(QString,QVariant)));
@@ -64,6 +83,9 @@ TcpManager::TcpManager(int serverId, QObject* parent)
 	//Uncomment this if you want simulate sending bpla points from R to OD through RPC
 	//connect(&m_timer, SIGNAL(timeout()), this, SLOT(emulateBplaPoint()));
 	//m_timer.start(5);
+
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotPingARMOD()));
+	m_timer.start(5000);
 }
 
 TcpManager::~TcpManager()
@@ -339,7 +361,7 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 		return;
 	}
 
-	// sender = NULL;
+	//sender = NULL;
 
 	switch(deviceType) {
 	case RDS_TCP_DEVICE:
@@ -364,15 +386,9 @@ void TcpManager::onMessageReceived(const quint32 deviceType, const QString& devi
 			//log_debug("to RPC FLAKON_COORDINATE_COUNTER and RPC_SLOT_SERVER_SEND_CORRELATION");
 		} else if( messageType == TCP_RDS_ANSWER_LOCSYSTEM ) {
 			m_rpcServer->call(RPC_METHOD_CONFIG_RDS_ANSWER, data);
-			//				IRpcListener *sender1 = NULL;
-			//				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
-			//					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
 		}
 		else if( messageType == TCP_RDS_WORK_MODE ) {
 			m_rpcServer->call(RPC_METHOD_WORK_MODE, data);
-			//				IRpcListener *sender1 = NULL;
-			//				sender1 =(IRpcListener*)m_controllersMap.value("Флакон", NULL);
-			//					m_rpcServer->call( FLAKON_COORDINATE_COUNTER, data, sender1 );
 		}
 		else if (messageType == TCP_FLAKON_STATUS) {
 			m_rpcServer->call( RPC_SLOT_FLAKON_STATUS, data, sender );
@@ -553,6 +569,13 @@ void TcpManager::emulateBplaPoint(IRpcListener *sender)
 	m_rpcServer->call(RPC_SLOT_SERVER_SEND_BPLA_DEF, QVariant(data), sender);
 }
 
+void TcpManager::slotPingARMOD()
+{
+	if(m_rpcServer) {
+		m_rpcServer->call(RPC_SLOT_SERVER_SEND_MAP_PING, QByteArray("ololo"));
+	}
+}
+
 void TcpManager::slotSolverConnectionStatus(int status)
 {
 	if(status > 0) {
@@ -648,6 +671,4 @@ void TcpManager::onMethodCalledInternalSlot(const QString& method, const QVarian
 		int id = argument.toInt();
 		slotSendRpcClientSettings(id);
 	}
-
-
 }

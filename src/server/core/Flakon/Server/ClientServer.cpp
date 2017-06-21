@@ -2,18 +2,28 @@
 
 //Now goto use for NIIPP server
 
-ClientTcpServer::ClientTcpServer(QObject* parent) :
-	BaseTcpServer(parent)
+ClientTcpServer::ClientTcpServer(int port, int type, QObject* parent) :
+	BaseTcpServer(parent),
+	m_port(port),
+	m_type(type)
 {
-	m_encoder = new SolverEncoder(this);
+	if(type == 0) {
+		m_solverEncoder = new SolverEncoder(this);
+		m_encoder = m_solverEncoder;
+
+		connect(m_solverEncoder, SIGNAL(nippDataIncome(QString, bool)), this, SIGNAL(signalNiippData(QString,bool)));
+		connect(m_solverEncoder, SIGNAL(nippDataIncome(QString, bool)), this, SLOT(slotNiipDataIncome(QString,bool)));
+	} else {
+		m_solverEncoder = NULL;
+		m_sprutEncoder = new SprutEncoder(this);
+		m_encoder = m_sprutEncoder;
+
+		connect(m_sprutEncoder, SIGNAL(signalSprutIncome(QByteArray)), this, SLOT(slotSprutIncome(QByteArray)));
+	}
 
 	this->registerReceiver(m_encoder);
 
 	connect(this, SIGNAL(newClientSignal(uint,ITcpServerClient*)), this, SLOT(onRegisterNewConnection(uint,ITcpServerClient*)));
-
-	connect(m_encoder, SIGNAL(nippDataIncome(QString, bool)), this, SIGNAL(signalNiippData(QString,bool)));
-
-	connect(m_encoder, SIGNAL(nippDataIncome(QString, bool)), this, SLOT(slotNiipDataIncome(QString,bool)));
 }
 
 ClientTcpServer::~ClientTcpServer()
@@ -23,7 +33,7 @@ ClientTcpServer::~ClientTcpServer()
 
 void ClientTcpServer::startServer()
 {
-	start( QHostAddress::Any, getClientTcpPortValue() );
+	start( QHostAddress::Any, m_port );
 }
 
 void ClientTcpServer::stopServer()
@@ -58,13 +68,17 @@ void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString&
 	case CLIENT_TCP_SERVER:
 	{
 		if(messageType == CLIENT_TCP_SERVER_SOLVER_DATA) {
-			QByteArray dataToSend = m_encoder->decode(argument);
-			bool res = sendData( dataToSend );
-			emit onDataSended(res);
+			if(m_solverEncoder) {
+				QByteArray dataToSend = m_solverEncoder->decode(argument);
+				bool res = sendData( dataToSend );
+				emit onDataSended(res);
+			}
 		} else if(messageType == CLIENT_TCP_SERVER_KTR_DATA) {
-			QByteArray dataToSend = m_encoder->decode(argument);
-			bool res = sendData( dataToSend );
-			emit onDataSended(res);
+			if(m_solverEncoder) {
+				QByteArray dataToSend = m_solverEncoder->decode(argument);
+				bool res = sendData( dataToSend );
+				emit onDataSended(res);
+			}
 		}
 	}
 	break;
@@ -75,11 +89,45 @@ void ClientTcpServer::onMessageReceived(const quint32 deviceType, const QString&
 
 SolverEncoder* ClientTcpServer::getSolverEncoder()
 {
-	return m_encoder;
+	return m_solverEncoder;
 }
 
-int ClientTcpServer::getClientTcpPortValue() {
-	QSettings settings("./ARM_R.ini", QSettings::IniFormat, this);
-	settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-	return settings.value("ClientTCPServer/Port", TCP_SERVER_PORT).toInt();
+
+void ClientTcpServer::slotSprutIncome(QByteArray data)
+{
+	m_sprutBuffer.append(data);
+	QByteArray preambula;
+	preambula.append(0xAA);
+	preambula.append(0xBB);
+	preambula.append(0xCC);
+	preambula.append(0xDD);
+
+	if(m_sprutBuffer.size() < 6) {
+		return;
+	}
+
+	int index = m_sprutBuffer.indexOf(preambula);
+
+	if(index < 0) {
+		return;
+	}
+
+	if(m_sprutBuffer.size() > preambula.size() + 1) {
+		if(m_sprutBuffer.size() < (preambula.size() + 1 + (int)m_sprutBuffer.at(preambula.size() + 1)) ) {
+			return;
+		}
+	} else {
+		return;
+	}
+
+	m_sprutBuffer = m_sprutBuffer.right( m_sprutBuffer.length() - index - preambula.size() );
+
+	int size = (int)m_sprutBuffer.at(0);
+	int value = (int)m_sprutBuffer.at(1);
+
+	if(value == 1) {
+		emit signalNiippData("SPROUT", true);
+	} else {
+		emit signalNiippData("SPROUT", false);
+	}
 }

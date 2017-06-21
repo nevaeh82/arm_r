@@ -41,10 +41,8 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 	SolverProtocol::Packet_DataFromSolver solverPacket = packet.datafromsolver();
 
 	if( solverPacket.has_solution_manual_altitude() ||
-			solverPacket.has_solution_automatic_altitude() )
+		solverPacket.has_solution_automatic_altitude() )
 	{
-		SolverProtocol::Packet solutionPacket;
-		QByteArray blaRawData;
 
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onSolverBlaData(inputData);
@@ -60,16 +58,11 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 		anyPackage |= solverPacket.solution_manual_altitude().has_particles();
 		anyPackage |= solverPacket.solution_manual_altitude().has_singlemarks();
 		anyPackage |= solverPacket.solution_manual_altitude().has_positionlines();
-		if(solverPacket.solution_manual_altitude().has_positionlines()) {
-//			int sz = solverPacket.solution_manual_altitude().positionlines().positionline_size();
-//			int k = 0;
-//			k++;
-		}
 
 		if( size > 0 ) {
-            foreach (ISolverListener* listener, m_receiversList) {
-                listener->onSolver1ProtoData( 1, inputData );
-            }
+			foreach (ISolverListener* listener, m_receiversList) {
+				listener->onSolver1ProtoData( 1, inputData );
+			}
 		} else if( anyPackage ) {
 			foreach (ISolverListener* listener, m_receiversList) {
 				listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, QByteArray() );
@@ -86,27 +79,19 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 		messageRawData.resize(responsePacket.ByteSize());
 		responsePacket.SerializeToArray(messageRawData.data(), messageRawData.size());
 
-//		foreach (ISolverListener* listener, m_receiversList) {
-//			listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, messageRawData );
-//		}
-
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onSolverWorkData( messageRawData );
 		}
 
-        if(solverPacket.solverresponse().has_maxallowablerangessdv()) {
-        foreach (ISolverListener* listener, m_receiversList) {
-            listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, QByteArray() );
-        }
-        }
+		if(solverPacket.solverresponse().has_maxallowablerangessdv()) {
+			foreach (ISolverListener* listener, m_receiversList) {
+				listener->onSolver1ProtoData( (int)SolverProtocol::BAD_QUALITY, QByteArray() );
+			}
+		}
 	}
 
 	if( solverPacket.has_message() ) {
 		SolverProtocol::Packet messagePacket;
-
-//		foreach (ISolverListener* listener, m_receiversList) {
-//			listener->onErrorOccured( INTERNAL_ERROR, QString::fromStdString(solverPacket.message().message()) );
-//		}
 
 		createSolverPacketMessage(messagePacket, solverPacket.message());
 
@@ -114,22 +99,8 @@ void SolverEncoder1::readProtobuf(const QByteArray& inputData)
 		messageRawData.resize(messagePacket.ByteSize());
 		messagePacket.SerializeToArray(messageRawData.data(), messageRawData.size());
 
-		//		foreach (ISolverListener* listener, m_receiversList) {
-		//            listener->onSolver1ProtoData( (int)SolverProtocol::UNKNOWN_QUALITY, messageRawData );
-		//		}
-
 		SolverProtocol::Packet pkt;
 		pkt.ParseFromArray(messageRawData.data(), messageRawData.size());
-		QString tmp;
-//		if (isSolverMessageSolverMessage(pkt) ) {
-//			tmp = QString::fromStdString(pkt.datafromsolver().message().message());
-//			if(m_tmp!=tmp) {
-//				m_tmp = tmp;
-//			} else {
-//				int k = 0;
-//				k++;
-//			}
-//		}
 
 		foreach (ISolverListener* listener, m_receiversList) {
 			listener->onSolverWorkData( messageRawData );
@@ -167,18 +138,20 @@ MessageSP SolverEncoder1::encode(const QByteArray &data)
 		return MessageSP();
 	}
 
-	QString tmp;
-	SolverProtocol::Packet pkt;
-	pkt.ParseFromArray(dataToSend.data(), dataToSend.size());
-	if (isSolverMessageSolverMessage(pkt) ) {
-		tmp = QString::fromStdString(pkt.datafromsolver().message().message());
-		if(m_tmp!=tmp) {
-			m_tmp = tmp;
-		} else {
-			int k = 0;
-			k++;
-		}
-	}
+	//	QString tmp;
+	//	SolverProtocol::Packet pkt;
+	//	pkt.ParseFromArray(dataToSend.data(), dataToSend.size());
+	//	if (isSolverMessageSolverMessage(pkt) ) {
+	//		tmp = QString::fromStdString(pkt.datafromsolver().message().message());
+	//		if(m_tmp!=tmp) {
+	//			m_tmp = tmp;
+	//		} else {
+	//			int k = 0;
+	//			k++;
+	//		}
+	//	}
+
+	//	log_debug(QString("Olololo )))))))))))) %1").arg(m_dataFromTcpSocket.size()));
 
 	return MessageSP(new Message<QByteArray>(TCP_SOLVER_MESSAGE, dataToSend));
 }

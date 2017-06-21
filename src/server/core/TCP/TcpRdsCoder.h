@@ -77,8 +77,12 @@ private:
 
 	QTimer* m_dropFlagTimer;
 
+	QTime m_pushTime;
+
+	unsigned int m_serverId;
+
 public:
-	explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent = NULL);
+	explicit TcpRdsCoder(unsigned int zone, unsigned int typeRDS, unsigned int serverId, QObject* parent = NULL);
 	virtual ~TcpRdsCoder();
 
 	bool isSend() {return m_readyToSend;}
@@ -92,7 +96,7 @@ public:
 
 	void setCoordinatesCounter(CoordinateCounter* obj);
 
-	QByteArray decodeWithCheckLocation(const MessageSP message, bool &isLocation);
+	QByteArray decodeWithCheckLocation(const MessageSP message, bool &isLocation, bool &isNonStop);
 
 	void setReadyToPushSpectrums(bool val = true);
 private:
@@ -105,7 +109,7 @@ private:
 	void addPreambula(QByteArray& data);
 	QByteArray getMessage(const QByteArray& input);
 
-	MessageSP configureLoc(const QByteArray &data);
+	MessageSP configureLoc(const QByteArray &data, bool timeout);
 	MessageSP configureSys(const QByteArray &data);
 
 private slots:

@@ -161,7 +161,7 @@ public:
 
 	QTabWidget *getTabWidgetZone();
 
-    bool isSystemMerge() const {return m_isSystemMerge;}
+	bool isSystemMerge() const {return m_isSystemMerge;}
 
 private slots:
 	void changeTabSlot(int index);

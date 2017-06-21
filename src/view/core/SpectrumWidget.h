@@ -58,6 +58,7 @@ public:
 	bool isGlobalThreshold() const;
 
 	void setThresholdValue(const int);
+	int getThresholdWidth() const;
 
 public slots:
 	void slotSetEnableSpactrum(bool state);

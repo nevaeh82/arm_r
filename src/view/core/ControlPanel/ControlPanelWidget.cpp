@@ -35,9 +35,9 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	connect(ui->pbHumps, SIGNAL(clicked(bool)), this, SIGNAL(signalHumps(bool)));
 	connect(ui->pbHumps, SIGNAL(clicked(bool)), this, SIGNAL(autoSearchCheckedSignal(bool)));
 
-	connect(ui->cbSleepMode, SIGNAL(clicked(bool)), this, SIGNAL(onSleepMode(bool)));
-
 	connect(ui->pbMerge, SIGNAL(clicked(bool)), this, SIGNAL(signalSystemMerge(bool)));
+
+	connect(this, SIGNAL(signalSetMode(int)), this, SLOT(setModeInternal(int)), Qt::QueuedConnection);
 
 	m_pmRoundRed = new QPixmap(":/images/bullet_red.png");
 	m_pmRoundGreen = new QPixmap(":/images/bullet_green.png");
@@ -65,6 +65,8 @@ ControlPanelWidget::ControlPanelWidget(QWidget* parent):
 	m_soundTime.start();
 
 	showPanoramaControl(false);
+
+	ui->cbMaitenance->setVisible(false);
 }
 
 ControlPanelWidget::~ControlPanelWidget()
@@ -132,6 +134,9 @@ void ControlPanelWidget::applyManualMode()
 void ControlPanelWidget::slotChangeMode(int index)
 {
 	emit signalChangeMode(index);
+
+	ui->cbMaitenance->setVisible(false);
+
 	switch(index)
 	{
 	case 0:
@@ -141,6 +146,7 @@ void ControlPanelWidget::slotChangeMode(int index)
 		emit signalScanMode(ui->startFreqSB->value(), ui->endFreqSB->value());
 		break;
 	case 2:
+		ui->cbMaitenance->setVisible(true);
 		emit signalCheckMode();
 		break;
 	case 3:
@@ -195,13 +201,24 @@ void ControlPanelWidget::changeQualityStatus(const int status, bool isMoving, fl
 		}
 		m_alarmTimer->start(10000);
 	} else {
-		alarmAimVisible(false);
+		//alarmAimVisible(false);
+	}
+}
+
+void ControlPanelWidget::setDoplerMessage(const QString &doplerMessage)
+{
+	m_alarmTimer->start(10000);
+	if(!doplerMessage.isEmpty()) {
+		ui->labelAlarm->setText(ui->labelAlarm->text() + "   " + doplerMessage);
+	} else {
+		ui->labelAlarm->clear();
 	}
 }
 
 void ControlPanelWidget::alarmAimVisible(bool val)
 {
-	ui->labelAlarm->setVisible(val);
+	//ui->labelAlarm->setVisible(val);
+	ui->labelAlarm->clear();
 	ui->sounOffCB->setVisible(val);
 }
 
@@ -210,6 +227,23 @@ void ControlPanelWidget::showPanoramaControl(bool isOn)
 	ui->panoramaCB->setVisible(isOn);
 	emit signalPanorama(false);
 	emit onPanoramaEnable(false, ui->startFreqSB->value(), ui->endFreqSB->value());
+}
+
+void ControlPanelWidget::enableDopler()
+{
+blockSignals(true);
+	ui->pbDoppler->setChecked(true);
+blockSignals(false);
+emit signalDoppler(true);
+}
+
+bool ControlPanelWidget::isMaitenance() const
+{
+	if(ui->cbMaitenance->isVisible() && ui->cbMaitenance->isChecked()) {
+		return true;
+	}
+
+	return false;
 }
 
 void ControlPanelWidget::setStartFreq(int val)
@@ -230,6 +264,10 @@ void ControlPanelWidget::setSystemMerge(bool state)
 
 void ControlPanelWidget::setMode(int val)
 {
+	emit signalSetMode(val);
+}
+
+void ControlPanelWidget::setModeInternal(int val) {
 	ui->cbMode->setCurrentIndex(val);
 	slotChangeMode(val);
 }
@@ -269,6 +307,9 @@ void ControlPanelWidget::setLocationSettings(RdsProtobuf::ClientMessage_OneShot_
 
 void ControlPanelWidget::setCentralFreqValue(double freq)
 {
+	if(freq < 10 || freq > 10000) {
+		return;
+	}
 	ui->lblCurFreq->setText(QString::number(freq) + tr(" mhz"));
 }
 
@@ -297,17 +338,6 @@ void ControlPanelWidget::setSolverConnectState(bool b)
 	else {
 		ui->lblSolverState->setPixmap(m_pmRoundRed->scaled(16,16,Qt::KeepAspectRatio));
 	}
-}
-
-bool ControlPanelWidget::sleepMode() const
-{
-	return ui->cbSleepMode->isChecked();
-}
-
-void ControlPanelWidget::setSleepMode(bool val)
-{
-	ui->cbSleepMode->setChecked(val);
-	emit onSleepMode(val);
 }
 
 int ControlPanelWidget::getFreqSBValue()

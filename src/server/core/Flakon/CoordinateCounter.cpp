@@ -16,29 +16,29 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	m_main_point(0),
 	m_stationsShift(0)
 {
-	QDir dir;
-	dir.mkdir("./logs/SpecialLogs");
-	m_resTime.start();
+//	QDir dir;
+//	dir.mkdir("./logs/SpecialLogs");
+//	m_resTime.start();
 
-	m_logManager = new LogManager("./logs/SpecialLogs/logDistances.log");
-	if(!m_logManager->isFileOpened()) {
-		log_debug("error");
-	}
+//	m_logManager = new LogManager("./logs/SpecialLogs/logDistances.log");
+//	if(!m_logManager->isFileOpened()) {
+//		log_debug("error");
+//	}
 
-	m_logManager1 = new LogManager("./logs/SpecialLogs/logTrajMan.log");
-	if(!m_logManager1->isFileOpened()) {
-		log_debug("error");
-	}
+//	m_logManager1 = new LogManager("./logs/SpecialLogs/logTrajMan.log");
+//	if(!m_logManager1->isFileOpened()) {
+//		log_debug("error");
+//	}
 
-	m_logManager2 = new LogManager("./logs/SpecialLogs/logTrajAuto.log");
-	if(!m_logManager2->isFileOpened()) {
-		log_debug("error");
-	}
+//	m_logManager2 = new LogManager("./logs/SpecialLogs/logTrajAuto.log");
+//	if(!m_logManager2->isFileOpened()) {
+//		log_debug("error");
+//	}
 
-	m_logManager3 = new LogManager("./logs/SpecialLogs/logTrajOne.log");
-	if(!m_logManager3->isFileOpened()) {
-		log_debug("error");
-	}
+//	m_logManager3 = new LogManager("./logs/SpecialLogs/logTrajOne.log");
+//	if(!m_logManager3->isFileOpened()) {
+//		log_debug("error");
+//	}
 
 	m_solver = NULL;
 
@@ -67,10 +67,10 @@ CoordinateCounter::~CoordinateCounter()
 		delete m_solver;
 	}
 	emit signalFinished();
-	delete m_logManager;
-	delete m_logManager1;
-	delete m_logManager2;
-	delete m_logManager3;
+//	delete m_logManager;
+//	delete m_logManager1;
+//	delete m_logManager2;
+//	delete m_logManager3;
 }
 
 void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QString& device, const MessageSP argument)
@@ -81,7 +81,7 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		return;
 	}
 
-	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM ) {
+	if( argument->type() == TCP_RDS_ANSWER_LOCSYSTEM || argument->type() == TCP_RDS_ANSWER_LOCSYSTEM_TO ) {
 		QByteArray protoData = argument->data();
 
 		RdsProtobuf::Packet msg;
@@ -99,13 +99,21 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 
 		RdsProtobuf::ServerMessage_OneShotData_LocationData location = getServerLocationShot(sMsg);
 
-
 		SolverProtocol::Packet solverPkt;
 
 		SolverProtocol::MeasurementsData* solverData =
 				solverPkt.mutable_datafromclient()->mutable_measurementsdata();
 
 		bool b = false;
+
+		if(location.central_frequency() < 10 || location.central_frequency() > 10000) {
+			//log_debug(QString("!!!To solver bad freq!!!  msgsize %1   val: %2 ").arg(protoData.size()).arg(location.central_frequency()));
+			return;
+		}
+
+		if( !location.success() ) {
+			return;
+		}
 
 		foreach (RdsProtobuf::Convolution cnvMsg, location.convolution()) {
 			int firstInd = cnvMsg.first_detector_index() + m_stationsShift;
@@ -167,14 +175,7 @@ void CoordinateCounter::onSolver1ProtoData(const int &result, const QByteArray &
 
 void CoordinateCounter::onSolverBlaData(const QByteArray &data)
 {
-
-	//if( m_resTime.elapsed() > DELAY ) {
-	//        SolverProtocol::Packet pkt;
-	//        pkt.ParseFromArray(data.data(), data.size());
-
 	emit signal1BlaData( data );
-	//m_resTime.restart();
-	//}
 }
 
 void CoordinateCounter::onSolverWorkData(const QByteArray &data)
@@ -275,7 +276,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationAuto(const SolveResult &re
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-	m_logManager2->writeToFile(dataToFile);
+//	m_logManager2->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &result, const DataFromRadioLocation &aData)
@@ -336,7 +337,7 @@ void CoordinateCounter::slotCatchDataFromRadioLocationManual(const SolveResult &
 
 	QString dataToFile = aData.timeHMSMs.at(aLastItem).toString("hh:mm:ss:zzz") + " " + QString::number(aData.coordLatLon.at(aLastItem).x()) + " " + QString::number(aData.coordLatLon.at(aLastItem).y()) + " " + QString::number(aData.heigh.at(aLastItem)) + "\n";
 
-	m_logManager1->writeToFile(dataToFile);
+//	m_logManager1->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResult &result, const OneDataFromRadioLocation &aData_1, const OneDataFromRadioLocation &aData_2)
@@ -380,7 +381,7 @@ void CoordinateCounter::slotOneCatchDataFromRadioLocationManual(const SolveResul
 
 	QString dataToFile = aData_1.timeHMSMs.toString("hh:mm:ss:zzz") + " " + QString::number(aData_1.coordLatLon.x()) + " " + QString::number(aData_1.coordLatLon.y()) + " " + QString::number(aData_1.heigh) + " " +QString::number(aData_2.coordLatLon.x()) + " " + QString::number(aData_2.coordLatLon.y()) + " " + QString::number(aData_2.heigh) + "\n";
 
-	m_logManager3->writeToFile(dataToFile);
+//	m_logManager3->writeToFile(dataToFile);
 }
 
 void CoordinateCounter::slotCatchDataHyperbolesFromRadioLocation(const SolveResult &result, const HyperbolesFromRadioLocation &hyperb)
@@ -552,8 +553,7 @@ void CoordinateCounter::initSolver()
 
 	connect(this, SIGNAL(signal1ProtoData(int,QByteArray)), this, SLOT(slotSolver1ProtoData(int,QByteArray)));
 
-	connect(this, SIGNAL(signal1BlaData(QByteArray)),
-			this, SLOT(slotSolverBlaData(QByteArray)));
+	connect(this, SIGNAL(signal1BlaData(QByteArray)), this, SLOT(slotSolverBlaData(QByteArray)));
 
 	connect(this, SIGNAL(signal1SetupAnswer(QByteArray)), this, SLOT(slotSolver1SetupAnswer(QByteArray)));
 

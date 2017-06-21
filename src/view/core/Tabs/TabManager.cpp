@@ -779,12 +779,14 @@ void TabManager::readProto(const QByteArray& data)
 		}
 
 		ITabWidget* wgt = m_tabWidgetsMap.value(st->getName(), NULL);
+		//ITabSpectrum* spect = dynamic_cast<ITabSpectrum*>(wgt);
 
 		if(!wgt) {
 			return;
 		}
 
 		wgt->getSpectrumWidget()->setReceiverSettings( sRecPkt.settings() );
+		//spect->setIndicator(sRecPkt);
 	}
 
 	if( isSystemReceiverStatus(sPkt) ) {
@@ -810,6 +812,8 @@ void TabManager::readProto(const QByteArray& data)
 
 		wgt->getSpectrumWidget()->setReceiverStatus( sRecPkt.status() );
 		spect->setIndicator( sRecPkt.status() );
+
+		log_debug(QString("INDICATORS!!!! dev %1  channel %2    status %3   name %4").arg(dev).arg(channel).arg(sRecPkt.status()).arg(st->getName()));
 
 		m_locationSetupController->setChannelEnableState( dev, channel, sRecPkt.status() );
 	}

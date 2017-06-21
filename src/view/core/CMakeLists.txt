@@ -10,6 +10,7 @@ list(APPEND deps
 	Solver
 	QWT
 	QSERIAL
+	WIN32_PSAPI
 )
 
 string(REPLACE Core "" PROJECT_NAME_COV ${PROJECT_NAME})

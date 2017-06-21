@@ -14,6 +14,8 @@
 
 #include <Logger/Logger.h>
 
+#define SERVER_NAME "ZaviruhaRServer"
+
 typedef QVector<QPointF>         rpc_send_points_vector;
 
 HWND hwnd;
@@ -22,17 +24,6 @@ static LPTOP_LEVEL_EXCEPTION_FILTER g_prev = NULL;
 
 LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info)
 {
-	 //SymCleanup(GetCurrentProcess());
-
-//    MessageBoxA(hwnd,
-//                QObject::tr("Error").toStdString().c_str(),
-//                QObject::tr("Error").toStdString().c_str(),
-//                MB_APPLMODAL);
-
-	QProcess p;
-	p.start("a.bat");
-	p.waitForStarted(10000);
-
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
@@ -66,9 +57,6 @@ int main(int argc, char *argv[])
 	backtrace_register();
 
 	ARM_R_Application a(argc, argv);
-//	if( a.isRunning() ) {
-//		return 0;
-//	}
 
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));

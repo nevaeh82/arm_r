@@ -52,6 +52,8 @@ public:
 
 	virtual void setCurrentWorkFrequency(const double cf) {}
 
+	bool isReady() {return true;}
+
 private slots:
 	void onDataArrivedLS(const QString method, const QVariant arg);
 	void onVisible(const bool b);

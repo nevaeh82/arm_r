@@ -9,18 +9,22 @@
 
 #define TO_KHZ 1000
 #define TIME_DEL 1000
+#define PUSH_TIMEOUT 350
 
-TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* parent) :
+#define SERVER_ID_LOG_ENABLE 3
+
+TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, unsigned int serverId, QObject* parent) :
 	BaseTcpDeviceCoder(parent),
 	m_indexConv1(-1),
 	m_indexConv2(-1),
-	m_indexSpect(-1)
+	m_indexSpect(-1),
+	m_serverId(serverId)
 {
 	m_readyToSend = true;
 	m_header.zone = zone;
 	m_header.typeRds = typeRDS;
 
-	m_readyToPushSpectrum = false;
+	m_readyToPushSpectrum = true;
 
 	m_residueLength = 0;
 	cnt = 0;
@@ -37,6 +41,8 @@ TcpRdsCoder::TcpRdsCoder(unsigned int zone, unsigned int typeRDS, QObject* paren
 	connect(m_dropFlagTimer, SIGNAL(timeout()), this, SLOT(onDropFlag()));
 	m_dropFlagTimer->setInterval(5000);
 	m_dropFlagTimer->start();
+
+	m_pushTime = QTime::currentTime();
 }
 
 TcpRdsCoder::~TcpRdsCoder()
@@ -118,10 +124,11 @@ QByteArray TcpRdsCoder::decode(const MessageSP message)
 }
 
 //Decode to send Message to RDS
-QByteArray TcpRdsCoder::decodeWithCheckLocation(const MessageSP message, bool &isLocation)
+QByteArray TcpRdsCoder::decodeWithCheckLocation(const MessageSP message, bool &isLocation, bool &isNonStop)
 {
 	QByteArray dataToSend;
 	isLocation = false;
+	isNonStop = true;
 
 	QByteArray msgData = message->data();
 
@@ -129,6 +136,11 @@ QByteArray TcpRdsCoder::decodeWithCheckLocation(const MessageSP message, bool &i
 
 	if( message->type() == TCP_RDS_SEND_PROTO ) {
 		RdsProtobuf::Packet pkt = unpack(msgData);
+
+		if( pkt.has_from_client() &&
+			pkt.from_client().has_one_shot() ) {
+			isNonStop = false;
+		}
 
 		if( pkt.has_from_client() &&
 			pkt.from_client().has_one_shot() &&
@@ -189,23 +201,58 @@ MessageSP TcpRdsCoder::messageFromPreparedData(const QByteArray& data)
 
 	RdsProtobuf::ServerMessage sMsg = msg.from_server();
 
-	if(sMsg.has_current() || sMsg.has_one_shot_data()) {
-		m_dropFlagTimer->start();
-		m_readyToSend = true;
+//	if(sMsg.has_current()) {
+//		if(m_serverId == SERVER_ID_LOG_ENABLE)
+//			log_debug(QString(">>>>>>>> Current received  >> %1").arg(data.size()));
+//		m_dropFlagTimer->start();
+//		m_readyToSend = true;
+//	}
+
+	if( sMsg.has_one_shot_data()) {
+		if(m_serverId == SERVER_ID_LOG_ENABLE)
+//			log_debug(QString(">>>>>>>> One shot received  >> %1 %2 %3").arg(data.size()).arg(sMsg.one_shot_data().location_data().success())\
+//					  .arg(QString::fromStdString(sMsg.one_shot_data().location_data().error())));
+			m_dropFlagTimer->start();
+			m_readyToSend = true;
 	}
 
 	if(sMsg.has_current()) {
-		message = configureSys( data );
+		return configureSys( data );
+	} else if(sMsg.has_answer()) {
+		return configureLoc( data, false );
 	} else {
 		if(sMsg.has_one_shot_data()) {
-			//if(m_readyToPushSpectrum) {
-				message = configureLoc( data );
-			//}
+			if( !(sMsg.one_shot_data().has_analysis_data()) &&
+				!(sMsg.one_shot_data().has_record_data()) &&
+				m_readyToPushSpectrum &&
+				m_pushTime.elapsed() > m_upTime
+			) {
+				if(sMsg.one_shot_data().has_location_data()) {
+					if(!sMsg.one_shot_data().location_data().success()) {
+						return message; // Unsuccess message (
+					}
+				}
+
+				m_pushTime.restart();
+				setReadyToPushSpectrums(false);
+				return configureLoc(data, false);
+			} else {
+				bool b = true;
+
+				if( sMsg.one_shot_data().has_analysis_data() ||
+					sMsg.one_shot_data().has_record_data() ) {
+					b = false;
+				}
+
+//				if(m_serverId == SERVER_ID_LOG_ENABLE)
+//					log_debug("spectToALL >>>>>>>>>>>>>>");
+				return configureLoc(data, b);
+			}
 
 			return message;
 		}
 
-		message = configureLoc( data );
+		return configureLoc( data, false );
 	}
 
 	return message;
@@ -221,8 +268,12 @@ MessageSP TcpRdsCoder::pointers(int index, float cf, QVector<QPointF> vec)
 	return MessageSP(new Message<QByteArray>(TCP_FLAKON_ANSWER_FFT, ba));
 }
 
-MessageSP TcpRdsCoder::configureLoc(const QByteArray& data)
+MessageSP TcpRdsCoder::configureLoc(const QByteArray& data, bool timeout)
 {
+	if(timeout) {
+		return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM_TO, data));
+	}
+
 	return MessageSP(new Message<QByteArray>(TCP_RDS_ANSWER_LOCSYSTEM, data));
 }
 

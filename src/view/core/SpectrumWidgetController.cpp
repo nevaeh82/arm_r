@@ -27,6 +27,8 @@ SpectrumWidgetController::SpectrumWidgetController(QObject *parent) : QObject(pa
 	m_sonogramReady = true;
 	m_sonogramTime = QTime::currentTime();
 
+	m_isReady = true;
+
 	m_globalThreshold = 0;
 
 	m_lastSpectrumVal = 0;
@@ -197,6 +199,8 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 	if (RPC_SLOT_SERVER_SEND_POINTS == method) {
 		QList<QVariant> list = arg.toList();
 
+		setIsReady(false);
+
 		m_alarmMutex.lock();
 		if(m_alarm) {
 			m_alarm = false;
@@ -210,6 +214,7 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 		if(list.isEmpty()) {
 			//It is no signal)
 			slotSetStatus(false);
+			emit onDrawComplete();
 			return;
 		}
 
@@ -233,19 +238,14 @@ void SpectrumWidgetController::onDataArrivedInternal(const QString &method, cons
 
 			setSignalSetup(spectrum, spectrumPeakHold, pointCount, bandwidth, isComplex);
 		}
-		QTime cur1 = QTime::currentTime();
 
 		QRegion reg = m_view->visibleRegion();
 		if(reg.isEmpty() || reg.boundingRect().width() < 30
 				|| reg.boundingRect().height() < 30) {
-			// log_debug(QString("EMPTY REGION %1").arg(m_name));
 			emit onDrawComplete();
 		}
 
-		// log_debug(QString("REGION %1 %2 %3").arg(m_name).arg(reg.boundingRect().width()).arg(reg.boundingRect().height()));
-
 		slotSetStatus(true);
-		//m_graphicsWidget->ZoomOutFull();
 		updateDBAreas();
 
 		return;
@@ -339,6 +339,8 @@ void SpectrumWidgetController::setLocationSetupWidgetController(LocationSetupWid
 	m_setupController = controller;
 
 	connect(this, SIGNAL(onDrawComplete()), m_setupController, SLOT(slotPlotDrawComplete()));
+	connect(this, SIGNAL(onDrawComplete()), this, SLOT(slotPlotDrawComplete()));
+
 	connect(m_setupController, SIGNAL(signalSelectionUpdate()), this, SLOT(slotUpdateSelection()));
 }
 
@@ -604,7 +606,7 @@ void SpectrumWidgetController::setSignal(float *spectrum, float *spectrum_peak_h
 			if(m_view->isGlobalThreshold()) {
 				m_threshold = m_globalThreshold;
 			} else {
-				m_threshold = m_thresholdList.value(10*qRound(overthreshold/10), 0);
+				m_threshold = m_thresholdList.value(qRound(overthreshold), 0);
 			}
 
 			//listOverthreshold.append(overthreshold);
@@ -1206,6 +1208,11 @@ void SpectrumWidgetController::slotOnScreenShot()
 	}
 }
 
+void SpectrumWidgetController::slotPlotDrawComplete()
+{
+	m_isReady = true;
+}
+
 void SpectrumWidgetController::slotSelectionCleared()
 {
 }
@@ -1265,9 +1272,25 @@ void SpectrumWidgetController::slotSelectionFinishedRedLine(double y)
 
 	} else {
 
-		int cf = 10* qRound(m_current_frequency/(TO_MHZ*10));
-		bool res = m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf, y);
-		m_thresholdList.insert(cf, y);
+		int cf = qRound(m_current_frequency/(TO_MHZ));
+		int width = m_view->getThresholdWidth();
+
+		for(int i = 0; i<width; i+=2) {
+			if(i == 0) {
+				bool res = m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf, y);
+				m_thresholdList.insert(cf, y);
+			} else {
+				int cnt = i/2;
+				int cf1 = cf-cnt;
+				int cf2 = cf+cnt;
+
+				m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf1, y);
+				m_thresholdList.insert(cf1, y);
+
+				m_dbStationController->setThresholdByFrequencyAndStation(m_name, cf2, y);
+				m_thresholdList.insert(cf2, y);
+			}
+		}
 
 		m_graphicsWidget->SetLabel(0, "resetRedLine");
 		foreach (int freq, m_thresholdList.keys()) {

@@ -33,6 +33,7 @@ public:
 	bool isStanding() {return m_isStanding;}
 	bool isMoving() {return m_isMoving;}
 	bool isUnknown() {return m_isUnknown;}
+	bool isDopler() {return m_isDopler;}
 
 	QStringList remoteMailList() {return m_remoteMailList;}
 	QStringList localMailList() {return m_localMailList;}
@@ -55,6 +56,7 @@ private:
 	bool m_isStanding;
 	bool m_isUnknown;
 	bool m_isMoving;
+	bool m_isDopler;
 
 private slots:
 	void init();

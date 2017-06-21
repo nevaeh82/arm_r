@@ -267,6 +267,10 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	qint32 cf = 0;
 	cf = data.central_frequency();
 
+	if(cf < 10 || cf > 10000) {
+		return;
+	}
+
 	if(!m_spectrumWidget->isGraphicVisible() && !m_needSetupSpectrum && cf == m_workFreq) {
 		emit onDrawComplete();
 		return;
@@ -285,15 +289,6 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	if(cf != m_workFreq) {
 		m_sleepModeProcess = true;
 		m_sleepModeTimer->stop();
-	}
-
-	if( m_panelController->sleepMode() && !m_sleepModeProcess )
-	{
-		emit onDrawComplete();
-		if(!m_sleepModeTimer->isActive()) {
-			m_sleepModeTimer->start();
-		}
-		return;
 	}
 
 
@@ -326,7 +321,7 @@ void SpectrumWidgetDataSource::setupPoints(const RdsProtobuf::ServerMessage_OneS
 	double freq = data.spectrum_plot(protoId).axis_x_start();
 	double stepFreq = data.spectrum_plot(protoId).axis_x_step();
 
-	int val1 = -(qrand()%100);
+	//int val1 = -(qrand()%100);
 	for(int i = 0; i < data.spectrum_plot(protoId).data().size(); i++) {
 		double val = data.spectrum_plot(protoId).data(i);
 

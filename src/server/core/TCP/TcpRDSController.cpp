@@ -1,3 +1,5 @@
+#include <QProcess>
+
 #include <Logger/Logger.h>
 #include <Rpc/RpcDefines.h>
 #include <Info/Prm300Settings.h>
@@ -8,7 +10,8 @@ TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
 	TcpDeviceController(parent),
 	m_stationShift(0),
 	m_serverId(serverId),
-	m_tcpRdsSettingsController(NULL)
+	m_tcpRdsSettingsController(NULL),
+	m_incoming(true)
 {
 	m_tcpDeviceName = RDS_TCP_DEVICE;
 	log_debug(QString("Created %1").arg(m_tcpDeviceName));
@@ -21,6 +24,11 @@ TcpRDSController::TcpRDSController(int serverId, QObject* parent) :
 	connect(m_locationTimer, SIGNAL(timeout()), this, SLOT(sendLocation()));
 	m_locationTimer->setInterval(50);
 
+	m_rdsTimeout = new QTimer(this);
+	connect(m_rdsTimeout, SIGNAL(timeout()), this, SLOT(slotRdsTimeout()));
+	m_rdsTimeout->setInterval(60000*60);
+	m_rdsTimeout->start();
+
 	m_tcpSendTimer = new QTimer(this);
 
 	connect(this, SIGNAL(signalSendDataInternal(QByteArray)), this, SLOT(onSendDataInternal(QByteArray)));
@@ -30,7 +38,8 @@ TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, Q
 	TcpDeviceController(tcpDeviceName, parent),
 	m_stationShift(0),
 	m_serverId(serverId),
-	m_tcpRdsSettingsController(NULL)
+	m_tcpRdsSettingsController(NULL),
+	m_incoming(true)
 {
 	m_coordinateCounter = 0;
 	init();
@@ -39,6 +48,10 @@ TcpRDSController::TcpRDSController(int serverId, const QString& tcpDeviceName, Q
 	connect(m_locationTimer, SIGNAL(timeout()), this, SLOT(sendLocation()));
 	m_locationTimer->setInterval(50);
 
+	m_rdsTimeout = new QTimer(this);
+	connect(m_rdsTimeout, SIGNAL(timeout()), this, SLOT(slotRdsTimeout()));
+	m_rdsTimeout->setInterval(60000 * 60);
+	m_rdsTimeout->start();
 
 	m_tcpSendTimer = new QTimer(this);
 
@@ -72,7 +85,7 @@ void TcpRDSController::setTcpRdsSettingscontroller(TcpRDSSettingsController *con
 void TcpRDSController::createTcpDeviceCoder()
 {
 	log_debug("Creating TcpRDSCoder...");
-	TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, this);
+	TcpRdsCoder* coder = new TcpRdsCoder(m_flakonSettingStruct.zone,  m_flakonSettingStruct.typeRds, m_serverId, this);
 	m_tcpDeviceCoder = coder;
 
 	m_coder = coder;
@@ -191,6 +204,7 @@ bool TcpRDSController::writeToRds(const QByteArray &data)
 {
 	bool retVal = false;
 	//m_tcpClient->write(data);
+	//log_debug("WANNA Write to RDS ???");
 
 	if( m_coder->isSend() ) {
 
@@ -202,6 +216,7 @@ bool TcpRDSController::writeToRds(const QByteArray &data)
 			}
 		}
 
+		//log_debug("Write to RDS >>>>>>>>>");
 		m_tcpClient->write(data);
 		retVal = true;
 		m_coder->onSetFlag();
@@ -220,8 +235,11 @@ bool TcpRDSController::writeToRds(const QByteArray &data)
 
 void TcpRDSController::onForceWriteToRds()
 {
+	//log_debug(QString("WANNA force to RDS ??? %1").arg(m_messageBuffer.size()));
+
 	if( m_coder->isSend() ) {
 		if(!m_messageBuffer.isEmpty()) {
+			//log_debug("FORCE Write to RDS >>>>>>>>>");
 			m_tcpClient->write(m_messageBuffer.takeFirst());
 			m_coder->onSetFlag();
 		}
@@ -275,14 +293,17 @@ void TcpRDSController::onGetStations()
 
 void TcpRDSController::sendLocation()
 {
-	if(m_lastLocationMessageTime.msecsTo(QTime::currentTime()) > 2000) {
+	//log_debug("LocationLocationLocation");
+
+	if(m_lastLocationMessageTime.msecsTo(QTime::currentTime()) > 3000) {
+		//log_debug("LocationLocationLocation   3secs?  (");
 		return;
 	}
 
-	if(m_coder->isSend()) {
-		if( writeToRds(m_lastLocationMessage) ) {
-			m_coder->setReadyToPushSpectrums(false);
-		}
+	if(m_coder->isSend() || m_messageBuffer.size() < 2) {
+		writeToRds(m_lastLocationMessage);
+	} else {
+		//log_debug("LocationLocationLocation   not ready  (");
 	}
 
 }
@@ -290,6 +311,8 @@ void TcpRDSController::sendLocation()
 void TcpRDSController::onMethodCalled(const QString& method, const QVariant& argument)
 {
 	QByteArray data = argument.toByteArray();
+
+	m_incoming = true;
 
 	if (method == RPC_METHOD_SET_MAIN_STATION_CORRELATION) {
 		//requestStationCorellation(argument.toString());
@@ -370,21 +393,27 @@ void TcpRDSController::sendData(const MessageSP message)
 
 	//QByteArray decodedData = m_tcpDeviceCoder->decode(message);
 	bool isLocation;
-	QByteArray decodedData = m_coder->decodeWithCheckLocation(message, isLocation);
+	bool isNonStop;
+	QByteArray decodedData = m_coder->decodeWithCheckLocation(message, isLocation, isNonStop);
 
 	if (decodedData.size() <= 0) {
-		log_debug(QString("decodedData.size() <= 0 for %1").arg(m_tcpDeviceName));
+		//log_debug(QString("decodedData.size() <= 0 for %1").arg(m_tcpDeviceName));
 		return;
 	}
 
 	if (NULL == m_tcpClient) {
-		log_warning(QString("m_tcpClient is NULL"));
+		//log_warning(QString("m_tcpClient is NULL"));
 		return;
 	}
 
 	if(isLocation) {
 		m_coder->setReadyToPushSpectrums();
 		emit signalSendDataInternal(decodedData);
+	}
+
+	if(isNonStop) {
+		m_tcpClient->write(decodedData);
+		return;
 	}
 
 	writeToRds(decodedData);
@@ -396,4 +425,24 @@ void TcpRDSController::onSendDataInternal(QByteArray decodedData)
 	m_lastLocationMessageTime = QTime::currentTime();
 
 	m_locationTimer->start();
+}
+
+void TcpRDSController::slotRdsTimeout()
+{
+	log_debug("Check is GUI is ONLINE for an hour");
+
+	if(!m_incoming) {
+
+		log_debug("Killing!!!!!!!!!!!! Seems gui is failed or something as that");
+
+		QStringList param;
+		param.append("/F");
+		param.append("/IM");
+
+		param.append("ZaviruhaRServer.exe");
+		QProcess::execute("taskkill", param);
+
+	} else {
+		m_incoming = false;
+	}
 }

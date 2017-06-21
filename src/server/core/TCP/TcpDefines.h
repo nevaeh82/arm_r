@@ -51,6 +51,7 @@
 #define TCP_RDS_GET_SYSTEM								"tcpRDSGetSystem"
 #define TCP_RDS_ANSWER_SYSTEM								"tcpRDSAnswerSystem"
 #define TCP_RDS_ANSWER_LOCSYSTEM				"tcpRDSAnswerLocSystem"
+#define TCP_RDS_ANSWER_LOCSYSTEM_TO				"tcpRDSAnswerLocSystemTO"
 
 #define TCP_RDS_SET_STATUS								"tcpRDSSetStatus"
 #define TCP_RDS_TURN_STATUS								"tcpRDSTurnStatus"

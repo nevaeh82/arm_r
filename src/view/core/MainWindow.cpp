@@ -51,7 +51,7 @@ QAction* MainWindow::appendLocationSetupAction(int id)
 		ui->actionLocationSetup->setMenu( new QMenu(this) );
 	}
 
-	QAction* action = ui->actionLocationSetup->menu()->addAction(tr("Location settings System #%1").arg(id));
+	QAction* action = ui->actionLocationSetup->menu()->addAction(tr("System #%1").arg(id));
 	m_actionMap.insert(id, action);
 
 	return action;
@@ -114,7 +114,16 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::slotNIIPPStatus(QString title, bool status)
 {
-	if(status) {
+	if(title.contains("SPROUT")) {
+		if(status) {
+			ui->niippLabel->setText(tr("Sprout database alarm!"));
+			ui->niippLabel->setVisible(true);
+
+			m_niippTimer->start(30000);
+		} else {
+			ui->niippLabel->setVisible(false);
+		}
+	} else if(status) {
 		ui->niippLabel->setText(tr("Punkt ") + "\"" + title + "\" " + tr(" flushing") );
 		ui->niippLabel->setVisible(true);
 

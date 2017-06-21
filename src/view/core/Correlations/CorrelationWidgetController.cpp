@@ -13,6 +13,7 @@ CorrelationWidgetController::CorrelationWidgetController(int corType, QObject *p
 	, m_isComplex(0)
 	, m_type(corType)
 	, m_locationController(NULL)
+	, m_isReady(true)
 {
 	connect(this, SIGNAL(signalonDataArrivedLS(QString,QVariant)), this, SLOT(onDataArrivedLS(QString,QVariant)));
 	connect(this, SIGNAL(signalOnVisible(bool)), this, SLOT(onVisible(bool)));
@@ -47,6 +48,7 @@ void CorrelationWidgetController::setLocationController(LocationSetupWidgetContr
 
 	if(m_type != 1) {
 		connect(this, SIGNAL(onGraphReady()), m_locationController, SLOT(slotPlotDrawComplete()));
+		connect(this, SIGNAL(onGraphReady()), this, SLOT(slotPlotDrawComplete()));
 	}
 }
 
@@ -63,6 +65,11 @@ void CorrelationWidgetController::clearDopler()
 void CorrelationWidgetController::clearDoplerInternal()
 {
 	m_dopplerList.clear();
+}
+
+void CorrelationWidgetController::slotPlotDrawComplete()
+{
+	m_isReady = true;
 }
 
 void CorrelationWidgetController::onVisible(const bool b)
@@ -105,6 +112,8 @@ void CorrelationWidgetController::onDataArrivedLS(const QString method, const QV
 
 	float skoQuality = list.at(list.size() - 2).toFloat();
 	double doppler = list.at(list.size() - 1).toDouble();
+
+	m_isReady = false;
 
 	if (list.count() == 6){
 		setData(spectrum, spectrumPeakHold, skoQuality);

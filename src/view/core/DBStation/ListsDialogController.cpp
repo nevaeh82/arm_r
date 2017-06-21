@@ -18,7 +18,7 @@ ListsDialogController::ListsDialogController(IDBStation* stationDb, QObject* par
 	m_model->setHeaderData(5,Qt::Horizontal, tr("Frequency"));
 	m_model->setHeaderData(6,Qt::Horizontal, tr("Bandwidth"));
 	m_model->setHeaderData(7,Qt::Horizontal, tr("Signal Type"));
-    m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
+	m_model->setHeaderData(8,Qt::Horizontal, tr("Date"));
 	m_model->setHeaderData(9,Qt::Horizontal, tr("Comment"));
 	m_model->setHeaderData(10,Qt::Horizontal, tr("Checked"));
 
@@ -45,11 +45,11 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	m_view->setModel(m_proxyModel);
 	m_view->setSortingEnabled(true);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_view->hideColumn( 0 );
-//    m_view->setSelectionMode(QAbstractItemView::NoSelection);
+	m_view->hideColumn( 0 );
+	//    m_view->setSelectionMode(QAbstractItemView::NoSelection);
 
 
-//    m_view->setEditTriggers(QAbstractItemView::DoubleClicked);
+	//    m_view->setEditTriggers(QAbstractItemView::DoubleClicked);
 
 	adjustTableSize();
 
@@ -58,7 +58,7 @@ void ListsDialogController::appendView(ListsDialog *widget)
 	connect(widget, SIGNAL(signalDelete()), this, SLOT(deleteSelectedRecords()));
 	connect(widget, SIGNAL(finished(int)), this, SLOT(deleteLater()));
 	connect(widget, SIGNAL(signalReport(int)), this, SLOT(slotReport(int)));
-    connect(m_model, SIGNAL(updateSignal()), this, SLOT(update()));
+	connect(m_model, SIGNAL(updateSignal()), this, SLOT(update()));
 }
 
 void ListsDialogController::adjustTableSize()
@@ -94,16 +94,16 @@ void ListsDialogController::throwWordNfError()
 
 void ListsDialogController::update()
 {    
-    m_model->update();
-    m_proxyModel->clear();
-    m_proxyModel->setSourceModel(m_model);
-    refreshTable();
+	m_model->update();
+	m_proxyModel->clear();
+	m_proxyModel->setSourceModel(m_model);
+	refreshTable();
 }
 
 void ListsDialogController::refreshTable()
 {
-    m_view->hideColumn( 0 );
-    adjustTableSize();
+	m_view->hideColumn( 0 );
+	adjustTableSize();
 }
 
 void ListsDialogController::filter(int type)
@@ -135,20 +135,20 @@ void ListsDialogController::showAddDialog()
 	connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
 	connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
 
-    listAdd->show();
+	listAdd->show();
 }
 
 void ListsDialogController::showAddDialog(QString station, double center, double bandwidth)
 {
-    AddStationDataDialog* listAdd = new AddStationDataDialog(station, center, bandwidth, m_view);
-    AddStationDataDialogController* listAddController = new AddStationDataDialogController(m_stationDb, this);
+	AddStationDataDialog* listAdd = new AddStationDataDialog(station, center, bandwidth, m_view);
+	AddStationDataDialogController* listAddController = new AddStationDataDialogController(m_stationDb, this);
 
-    listAddController->appendView(listAdd);
+	listAddController->appendView(listAdd);
 
-    connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
-    connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
+	connect( listAdd, SIGNAL(finished(int)), listAdd, SLOT(deleteLater()) );
+	connect( listAdd, SIGNAL(finished(int)), listAddController, SLOT(deleteLater()) );
 
-    listAdd->show();
+	listAdd->show();
 }
 
 void ListsDialogController::deleteSelectedRecords()

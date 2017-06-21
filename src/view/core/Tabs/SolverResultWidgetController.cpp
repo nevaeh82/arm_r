@@ -15,7 +15,7 @@ SolverResultWidgetController::SolverResultWidgetController(QObject* parent):
 	m_smtpQThread = new QThread();
 	m_emailSettings = new EmailSettings(0);
 	m_smsController = new SMSComPortController(this);
-    m_smsController->appendView(m_emailSettings->getSmsDialog());
+	m_smsController->appendView(m_emailSettings->getSmsDialog());
 	m_smsThread = new QThread();
 
 
@@ -93,20 +93,20 @@ void SolverResultWidgetController::addResultToLog(const QByteArray& inData)
 
 	switch(sourceType)
 	{
-		case AUTO_HEIGH:
-			source = tr("AUTO");
-			break;
-		case MANUAL_HEIGH:
-			source = tr("MANUAL");
-			break;
-		case ONE_DATA:
-			source = tr("ALONE");
-			break;
-		case HYPERBOLES:
-			source = tr("HYPERBOLES");
-			break;
-		default:
-			break;
+	case AUTO_HEIGH:
+		source = tr("AUTO");
+		break;
+	case MANUAL_HEIGH:
+		source = tr("MANUAL");
+		break;
+	case ONE_DATA:
+		source = tr("ALONE");
+		break;
+	case HYPERBOLES:
+		source = tr("HYPERBOLES");
+		break;
+	default:
+		break;
 	}
 
 	QString log = source + " - " + getSolverResultToString(result);
@@ -132,14 +132,14 @@ void SolverResultWidgetController::addResultToLog1(const QByteArray& inData)
 
 	switch(quality)
 	{
-		case SolverProtocol::GOOD_QUALITY:
-			source = tr(" Good quality ");
-			break;
-		case SolverProtocol::BAD_QUALITY:
-			source = tr(" Bad quality ");
-			break;
-		default:
-			break;
+	case SolverProtocol::GOOD_QUALITY:
+		source = tr(" Good quality ");
+		break;
+	case SolverProtocol::BAD_QUALITY:
+		source = tr(" Bad quality ");
+		break;
+	default:
+		break;
 	}
 
 	QString log = source;
@@ -225,7 +225,7 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 	}
 
 	QString state = "";
-    QString stateSms = "";
+	QString stateSms = "";
 	QString quality = "";
 
 	if(res.state == 1) {
@@ -233,21 +233,21 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 			return true;
 		}
 		state = tr("Moving");
-        stateSms = ("Moving");
+		stateSms = ("Moving");
 	} else if(res.state == 2) {
 		if(!m_emailSettings->isStanding()) {
 			return true;
 		}
 
 		state = tr("Standing");
-        stateSms = ("Standing");
+		stateSms = ("Standing");
 	} else if(res.state == 3) {
 		if(!m_emailSettings->isUnknown()) {
 			return true;
 		}
 
 		state = tr("UNKNOWN");
-        stateSms = ("UNKNOWN");
+		stateSms = ("UNKNOWN");
 	}
 
 	if(res.quality == 1) {
@@ -261,43 +261,43 @@ bool SolverResultWidgetController::sendMail(const solverResultStruct &res)
 
 	if(m_emailSettings->isSend()) {
 		QString message = tr("Found AIM: \n   freq %1 \n   state %2 \n   quality %3 \n   Lon: %4 \n   Lat: %5 \n   Time: %6").arg(res.freq).arg(state).arg(quality).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString()) + "\n";
-        QString messageSms = QString("Found AIM: \x0A  freq %1 \x0A  state %2 \x0A  Lon: %3 \x0A  Lat: %4 \x0A  Time: %5").arg(res.freq).arg(stateSms).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
+		QString messageSms = QString("Found AIM: \x0A  freq %1 \x0A  state %2 \x0A  Lon: %3 \x0A  Lat: %4 \x0A  Time: %5").arg(res.freq).arg(stateSms).arg(res.lon).arg(res.lat).arg(QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
 		m_smtpThread->sendMessage(message);
 
 
-        //Go to send SMS
+		//Go to send SMS
 
-        bool canSend = true;
+		bool canSend = true;
 
-        if(res.state == 1) {
-            if(!m_emailSettings->getSmsDialog()->isMoving()) {
-                canSend = false;
-            }
-        } else if(res.state == 2) {
-            if(!m_emailSettings->getSmsDialog()->isStanding()) {
-                canSend = false;
-            }
-        } else if(res.state == 3) {
-            if(!m_emailSettings->getSmsDialog()->isUnknown()) {
-                canSend = false;
-            }
-        }
+		if(res.state == 1) {
+			if(!m_emailSettings->getSmsDialog()->isMoving()) {
+				canSend = false;
+			}
+		} else if(res.state == 2) {
+			if(!m_emailSettings->getSmsDialog()->isStanding()) {
+				canSend = false;
+			}
+		} else if(res.state == 3) {
+			if(!m_emailSettings->getSmsDialog()->isUnknown()) {
+				canSend = false;
+			}
+		}
 
-        if(canSend && !m_FreqMap.contains(res.freq)) {
+		if(canSend && !m_FreqMap.contains(res.freq)) {
 			m_FreqMap.insert(res.freq, QDateTime::currentDateTime());
-            m_smsController->sendMessage(messageSms);
-        }
-        else {
-            QDateTime dtOld = m_FreqMap.value(res.freq);
-            QDateTime dt = QDateTime::currentDateTime();
+			m_smsController->sendMessage(messageSms);
+		}
+		else {
+			QDateTime dtOld = m_FreqMap.value(res.freq);
+			QDateTime dt = QDateTime::currentDateTime();
 
-            quint64 diff = dtOld.msecsTo(dt);
-            if(diff > m_emailSettings->getSmsDialog()->getDelay())
-            {
-                m_FreqMap.remove(res.freq);
-            }
-        }
+			quint64 diff = dtOld.msecsTo(dt);
+			if(diff > m_emailSettings->getSmsDialog()->getDelay())
+			{
+				m_FreqMap.remove(res.freq);
+			}
+		}
 	}
 
 	return true;
@@ -312,9 +312,9 @@ void SolverResultWidgetController::onMethodCalledSlot(QString method, QVariant a
 		addResultToLog1(argument.toByteArray());
 		return;
 	}
-//	else if( method == RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1 ) {
-//		addResultToLog1(argument.toByteArray());
-//		return;
+	//	else if( method == RPC_SLOT_SERVER_SEND_ANSWER_RESULT_1 ) {
+	//		addResultToLog1(argument.toByteArray());
+	//		return;
 	//	}
 }
 
@@ -333,38 +333,38 @@ QString SolverResultWidgetController::getSolverResultToString(const SolveResult 
 	QString resultString;
 	switch(result)
 	{
-		case SOLVED:
-			resultString = tr("Successed solved");
-			break;
-		case ERROR_OCCURED:
-			resultString = tr("Some errors during solve");
-			break;
-		case NOT_ENOUGH_DATA:
-			resultString = tr("Not enough data for solve");
-			break;
-		case THERE_IS_NO_SOLUTION:
-			resultString = tr("There is no solution");
-			break;
-		case CANT_DETERMINE_REAL_TRAJECTORY:
-			resultString = tr("No solve cause 2 trajectory");
-			break;
-		case TOO_FEW_RANGES:
-			resultString = tr("Not enough distances for solve");
-			break;
-		case TOO_LOW_SOLUTION_ACCURACY:
-			resultString = tr("There is not enough accuracy for solve");
-			break;
-		case TOO_LOW_DATA_ACCURACY:
-			resultString = tr("There is not enough input accuracy for solve");
-			break;
-		case COORDS_DOES_NOT_HIT_IN_AREA:
-			resultString = tr("Solves data is out of range of resposible zone");
-			break;
-		case COORDS_DOES_NOT_HIT_IN_STROB:
-			resultString = tr("Coords is out of catching strobe");
-			break;
-		default:
-			break;
+	case SOLVED:
+		resultString = tr("Successed solved");
+		break;
+	case ERROR_OCCURED:
+		resultString = tr("Some errors during solve");
+		break;
+	case NOT_ENOUGH_DATA:
+		resultString = tr("Not enough data for solve");
+		break;
+	case THERE_IS_NO_SOLUTION:
+		resultString = tr("There is no solution");
+		break;
+	case CANT_DETERMINE_REAL_TRAJECTORY:
+		resultString = tr("No solve cause 2 trajectory");
+		break;
+	case TOO_FEW_RANGES:
+		resultString = tr("Not enough distances for solve");
+		break;
+	case TOO_LOW_SOLUTION_ACCURACY:
+		resultString = tr("There is not enough accuracy for solve");
+		break;
+	case TOO_LOW_DATA_ACCURACY:
+		resultString = tr("There is not enough input accuracy for solve");
+		break;
+	case COORDS_DOES_NOT_HIT_IN_AREA:
+		resultString = tr("Solves data is out of range of resposible zone");
+		break;
+	case COORDS_DOES_NOT_HIT_IN_STROB:
+		resultString = tr("Coords is out of catching strobe");
+		break;
+	default:
+		break;
 	}
 	return resultString;
 
@@ -375,12 +375,12 @@ void SolverResultWidgetController::slotEmailUpdate()
 	m_smtpThread->setLocalMailList(m_emailSettings->localMailList());
 	m_smtpThread->setRemoteMailList(m_emailSettings->remoteMailList());
 	m_smtpThread->setLocalMailSettings(m_emailSettings->localMailSettings());
-    m_smtpThread->setRemoteMailSettings(m_emailSettings->remoteMailSettings());
+	m_smtpThread->setRemoteMailSettings(m_emailSettings->remoteMailSettings());
 }
 
 void SolverResultWidgetController::slotDopplerMail(QString message)
 {
-    if(m_emailSettings->isSend()) {
-        m_smtpThread->sendMessage(message);
-    }
+	if(m_emailSettings->isSend() && m_emailSettings->isDopler()) {
+		m_smtpThread->sendMessage(message);
+	}
 }

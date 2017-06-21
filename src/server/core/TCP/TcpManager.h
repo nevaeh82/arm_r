@@ -65,6 +65,7 @@ private:
 	CoordinateCounter* m_coordinatesCounter;
 	PServer*		   m_pServer;
 	ClientTcpServer* m_clientTcpServer;
+	ClientTcpServer* m_sprutTcpServer;
 	SolverClient1* m_clientSolver;
 
 	QMap<float, CoordinateCounter* > m_mapCoordinateCounter;
@@ -105,6 +106,8 @@ signals:
 private slots:
 	void onMethodCalledInternalSlot(const QString &method, const QVariant &argument);
 	void emulateBplaPoint(IRpcListener* sender = NULL);
+
+	void slotPingARMOD();
 
 	void slotSolverConnectionStatus(int status);
 	void slotRpcClientConnected();

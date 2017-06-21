@@ -69,6 +69,9 @@ private:
 	bool writeToRds(const QByteArray& data);
 
 	QTimer* m_tcpSendTimer;
+	QTimer* m_rdsTimeout;
+
+	bool m_incoming;
 
 private slots:
 	void slotTcpConnectionStatus(int status);
@@ -78,6 +81,7 @@ private slots:
 	void onForceWriteToRds();
 
 	void onSendDataInternal(QByteArray decodedData);
+	void slotRdsTimeout();
 signals:
 	void outStationsList(QList<StationConfiguration> list);
 	void signalSendDataInternal(QByteArray);

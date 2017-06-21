@@ -44,6 +44,8 @@ RpcServer::RpcServer(QObject* parent) :
 
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_STATION_LIST, this, SLOT(requestGetStationListSlot(quint64,QString)));
 	m_serverPeer->attachSlot(RPC_METHOD_CONFIG_REQUEST_GET_DB_CONFIGURATION, this, SLOT(requestGetDbConfigurationSlot(quint64,QString)));
+
+	log_debug(QString("RPC ON >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 }
 
 RpcServer::~RpcServer()
@@ -77,7 +79,7 @@ void RpcServer::logConnectionError(QAbstractSocket::SocketError socketError)
 
 void RpcServer::logConnectionSuccess(quint64 client)
 {
-	log_debug(QString("Client %1 connected").arg(client));
+	log_debug(QString("Client %1 connected >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>").arg(client));
 }
 
 void RpcServer::logClientDisconected(quint64 client)
