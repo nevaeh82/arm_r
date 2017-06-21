@@ -1,4 +1,5 @@
 #include <QtGui/QApplication>
+#include <QtSingleApplication>
 #include <QTranslator>
 
 #include <Logger/Logger.h>
@@ -50,7 +51,11 @@ int main(int argc, char *argv[])
 {
 	Logger().setupLogger("logs/ARM_R_view.log");
 
-	QApplication a(argc, argv);
+	QtSingleApplication a(argc, argv);
+
+	if(a.isRunning()) {
+		return 0;
+	}
 
 	HWND hwnd = GetConsoleWindow();
 	ShowWindow(hwnd, 0);
