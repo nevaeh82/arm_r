@@ -28,6 +28,8 @@ ListsDialog::ListsDialog(QWidget *parent) :
 
 	connect(ui->tvWhiteAreas, SIGNAL(cellClicked(int,int)), this, SLOT(slotAreasCellClicked(int ,int)));
 
+	connect(this, SIGNAL(onClosing()), this, SLOT(saveAreasSettings()));
+
 	ui->listWidget->setVisible(false);
 	ui->tvWhiteAreas->setVisible(false);
 
@@ -48,18 +50,17 @@ ListsDialog::ListsDialog(QWidget *parent) :
 
 ListsDialog::~ListsDialog()
 {
-	QList<StationsFrequencyAndBandwith> m_stList;
-	getFrequencyAndBandwidthByWhiteAreasSave(m_stList);
+//	QList<StationsFrequencyAndBandwith> m_stList;
+//	getFrequencyAndBandwidthByWhiteAreasSave(m_stList);
 
-	QByteArray outData;
-	QDataStream stream(&outData, QIODevice::WriteOnly);
-	stream << m_stList;
+//	QByteArray outData;
+//	QDataStream stream(&outData, QIODevice::WriteOnly);
+//	stream << m_stList;
 
-	QFile f("./Tabs/whiteareacache.dat");
-	f.open(QIODevice::WriteOnly);
-	f.write(outData);
-	f.close();
-
+//	QFile f("./Tabs/whiteareacache.dat");
+//	f.open(QIODevice::WriteOnly);
+//	f.write(outData);
+//	f.close();
 	delete ui;
 }
 
@@ -233,6 +234,11 @@ void ListsDialog::getFrequencyAndBandwidthByWhiteAreasSave(QList<StationsFrequen
 {
 	for(int i = 0; i < ui->tvWhiteAreas->rowCount(); i++) {
 		QSpinBox* sb = (QSpinBox*)(ui->tvWhiteAreas->cellWidget(i, 0));
+
+		if(!sb) {
+			return;
+		}
+
 		int start = sb->value();
 		sb = (QSpinBox*)(ui->tvWhiteAreas->cellWidget(i, 1));
 		int end = sb->value();
@@ -248,9 +254,14 @@ void ListsDialog::getFrequencyAndBandwidthByWhiteAreasSave(QList<StationsFrequen
 	}
 }
 
-
 void ListsDialog::setFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith>& list)
 {
+	ui->tvWhiteAreas->clearContents();
+//	for(int i = 0; i<ui->tvWhiteAreas->rowCount(); i++) {
+//		ui->tvWhiteAreas->removeRow(0);
+//	}
+	ui->tvWhiteAreas->setRowCount(0);
+
 	foreach (StationsFrequencyAndBandwith val, list) {
 		slotAddInternalWhiteAreaClicked(val.frequency, val.bandwidth, val.stationName.toInt());
 	}
@@ -268,7 +279,7 @@ void ListsDialog::slotReportType()
 
 void ListsDialog::slotTypeList(int ind)
 {
-	if(ind >= 4) {
+	if(ind >= 5) {
 		ui->tvLists->setVisible(false);
 		ui->listWidget->setVisible(true);
 		ui->tvWhiteAreas->setVisible(false);
@@ -276,9 +287,15 @@ void ListsDialog::slotTypeList(int ind)
 		ui->tvLists->setVisible(true);
 		ui->listWidget->setVisible(false);
 		ui->tvWhiteAreas->setVisible(false);
-	} else {
+	} else if(ind == 3){
 		ui->tvLists->setVisible(false);
 		ui->listWidget->setVisible(false);
+		loadWhiteAreas();
+		ui->tvWhiteAreas->setVisible(true);
+	} else if(ind == 4){
+		ui->tvLists->setVisible(false);
+		ui->listWidget->setVisible(false);
+		loadWhiteDoplerAreas();
 		ui->tvWhiteAreas->setVisible(true);
 	}
 }
@@ -299,8 +316,9 @@ void ListsDialog::on_tvLists_doubleClicked(const QModelIndex &index)
 
 void ListsDialog::slotAddClicked(int frequency1, int frequency2, int split)
 {
-	if(ui->cbLists->currentIndex() == 3) {
+	if(ui->cbLists->currentIndex() == 3 || ui->cbLists->currentIndex() == 4) {
 		slotAddInternalWhiteAreaClicked(frequency1, frequency2, split);
+		saveAreasSettings();
 	} else {
 		emit signalAddClicked();
 	}
@@ -322,6 +340,10 @@ void ListsDialog::slotAddInternalWhiteAreaClicked(int frequency1, int frequency2
 	sb2->setMinimum(1);
 	sb2->setMaximum(6990);
 	sb2->setValue(split);
+
+	connect(sb, SIGNAL(editingFinished()), this, SLOT(saveAreasSettings()));
+	connect(sb1, SIGNAL(editingFinished()), this, SLOT(saveAreasSettings()));
+	connect(sb2, SIGNAL(editingFinished()), this, SLOT(saveAreasSettings()));
 
 	ui->tvWhiteAreas->setCellWidget(row, 0, sb);
 	ui->tvWhiteAreas->setCellWidget(row, 1, sb1);
@@ -358,9 +380,113 @@ void ListsDialog::slotRemoveWhiteArea()
 
 void ListsDialog::slotDelete()
 {
-	if(ui->cbLists->currentIndex() == 3) {
+	if(ui->cbLists->currentIndex() == 3 || ui->cbLists->currentIndex() == 4) {
 		slotRemoveWhiteArea();
+		saveAreasSettings();
 	} else {
 		emit signalDelete();
+	}
+}
+
+void ListsDialog::saveAreasSettings()
+{
+	if(ui->cbLists->currentIndex() == 3) {
+		QList<StationsFrequencyAndBandwith> m_stList;
+		getFrequencyAndBandwidthByWhiteAreasSave(m_stList);
+
+		QByteArray outData;
+		QDataStream stream(&outData, QIODevice::WriteOnly);
+		stream << m_stList;
+
+		QFile f("./Tabs/whiteareacache.dat");
+		f.open(QIODevice::WriteOnly);
+		f.write(outData);
+		f.close();
+	} else if(ui->cbLists->currentIndex() == 4){
+		QList<StationsFrequencyAndBandwith> m_stList;
+		getFrequencyAndBandwidthByWhiteAreasSave(m_stList);
+
+		QByteArray outData;
+		QDataStream stream(&outData, QIODevice::WriteOnly);
+		stream << m_stList;
+
+		QFile f("./Tabs/whiteareaDoplerCache.dat");
+		f.open(QIODevice::WriteOnly);
+		f.write(outData);
+		f.close();
+	}
+}
+
+QList<StationsFrequencyAndBandwith> ListsDialog::loadWhiteAreas()
+{
+	QByteArray outData;
+	QDataStream stream(&outData, QIODevice::ReadWrite);
+
+	QFile f("./Tabs/whiteareacache.dat");
+	f.open(QIODevice::ReadOnly);
+	outData = f.readAll();
+	f.close();
+
+	QList<StationsFrequencyAndBandwith> m_stList;
+	stream >> m_stList;
+	setFrequencyAndBandwidthByWhiteAreas(m_stList);
+
+	ui->tvWhiteAreas->setColumnWidth(3, 180);
+
+	return m_stList;
+}
+
+void ListsDialog::getFrequencyAndBandwidthByWhiteAreasIni(QList<StationsFrequencyAndBandwith> &list)
+{
+	QList<StationsFrequencyAndBandwith> listIn = loadWhiteAreas();
+	foreach (StationsFrequencyAndBandwith item, listIn) {
+		int start = item.frequency;
+		int end = item.bandwidth;
+		int band = item.stationName.toInt();
+
+		for(int j = 0; j<((end-start)/band); j++) {
+			StationsFrequencyAndBandwith item;
+			item.frequency = start+band*j;
+			item.isChecked = true;
+			item.bandwidth = band;
+			list.append(item);
+		}
+	}
+}
+
+QList<StationsFrequencyAndBandwith> ListsDialog::loadWhiteDoplerAreas()
+{
+	QByteArray outData;
+	QDataStream stream(&outData, QIODevice::ReadWrite);
+
+	QFile f("./Tabs/whiteareaDoplercache.dat");
+	f.open(QIODevice::ReadOnly);
+	outData = f.readAll();
+	f.close();
+
+	QList<StationsFrequencyAndBandwith> m_stList;
+	stream >> m_stList;
+	setFrequencyAndBandwidthByWhiteAreas(m_stList);
+
+	ui->tvWhiteAreas->setColumnWidth(3, 180);
+
+	return m_stList;
+}
+
+void ListsDialog::getFrequencyAndBandwidthByWhiteAreasDoplerIni(QList<StationsFrequencyAndBandwith> &list)
+{
+	QList<StationsFrequencyAndBandwith> listIn = loadWhiteDoplerAreas();
+	foreach (StationsFrequencyAndBandwith item, listIn) {
+		int start = item.frequency;
+		int end = item.bandwidth;
+		int band = item.stationName.toInt();
+
+		for(int j = 0; j<((end-start)/band); j++) {
+			StationsFrequencyAndBandwith item;
+			item.frequency = start+band*j;
+			item.isChecked = true;
+			item.bandwidth = band;
+			list.append(item);
+		}
 	}
 }

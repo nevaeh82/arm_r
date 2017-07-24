@@ -22,6 +22,7 @@ public:
 	~SmtpClientThread();
 
 	void sendMessage(const QString& message);
+	void sendDoplerMessage(const QString& message);
 
 	void setLocalMailSettings(const MailSettings& settings);
 	void setRemoteMailSettings(const MailSettings& settings);
@@ -31,6 +32,9 @@ public:
 
 private:
 	QString m_messageBuffer;
+	QString m_messageDoplerBuffer;
+
+
 	QTime m_elapsedTimer;
 	QTimer* m_timer;
 
@@ -48,7 +52,7 @@ private:
 	int sendLocalMail(const QString& messageMail);
 
 private slots:
-	int sendMail();
+	int sendMail(const QString &messageMail, bool isPermanentSend = false);
 	void letsSend();
 	void onStart();
 	void letsSendInternal();

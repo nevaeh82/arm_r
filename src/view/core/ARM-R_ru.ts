@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>AddStationDataDialog</name>
     <message>
@@ -449,19 +449,27 @@
         <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="169"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="172"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="598"/>
-        <source>Detect average Dopler: %1 on frequency: %2    Correlation on channel:  %3</source>
-        <translation>Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="601"/>
+        <source>Detect average Dopler: %1            (on frequency: %2    Correlation on channel:  %3)</source>
+        <translation>Среднее значение Доплера: %1                (на частоте: %2 мГц  Корреляция:   %3)</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="600"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="603"/>
+        <source>Detect average Dopler: %1            (on frequency: %2 mHz      Correlation:  %3)</source>
+        <translation>Среднее значение Доплера: %1                (на частоте: %2 мГц  Корреляция:   %3)</translation>
+    </message>
+    <message>
+        <source>Detect average Dopler: %1 on frequency: %2    Correlation on channel:  %3</source>
+        <translation type="vanished">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
+    </message>
+    <message>
         <source>Detect average Dopler: %1 on frequency: %2 mHz      Correlation:  %3</source>
-        <translation>Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
+        <translation type="vanished">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
     </message>
     <message>
         <source>Detect average Dopler:%1 on frequency:%2  on Correlation %3</source>
@@ -602,7 +610,7 @@
         <source>Searching by doppler</source>
         <translation>Поиск по доплеру</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="ControlPanel.ui" line="862"/>
         <source>Сопровождать найденные</source>
         <translation></translation>
@@ -1173,22 +1181,22 @@
         <source>Detected</source>
         <translation>Обнаруженные</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="DBStation/ListsDialog.ui" line="23"/>
         <source>От</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="DBStation/ListsDialog.ui" line="28"/>
         <source>До</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="DBStation/ListsDialog.ui" line="33"/>
         <source>Разделение</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="DBStation/ListsDialog.ui" line="38"/>
         <source>Выделить (для удаления)</source>
         <translation></translation>
@@ -2407,7 +2415,7 @@
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="SpectrumWidget.ui" line="252"/>
         <source>- Нет сигнала -</source>
         <translation></translation>

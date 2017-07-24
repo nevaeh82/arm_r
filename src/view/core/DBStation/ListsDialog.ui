@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>365</height>
+    <width>689</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,11 @@
        </attribute>
       </widget>
      </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QWidget" name="listWidget" native="true">
+       <layout class="QGridLayout" name="listLayout"/>
+      </widget>
+     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QComboBox" name="cbLists">
        <item>
@@ -80,14 +85,14 @@
        </item>
        <item>
         <property name="text">
+         <string>DoplerLists</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Detected</string>
         </property>
        </item>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QWidget" name="listWidget" native="true">
-       <layout class="QGridLayout" name="listLayout"/>
       </widget>
      </item>
     </layout>

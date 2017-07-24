@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
 	QtSingleApplication a(argc, argv);
 
-	if(a.isRunning()) {
-		return 0;
-	}
+//	if(a.isRunning()) {
+//		return 0;
+//	}
 
 	HWND hwnd = GetConsoleWindow();
 	ShowWindow(hwnd, 0);

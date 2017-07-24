@@ -256,6 +256,9 @@ color: rgb(255, 0, 0);</string>
    <property name="text">
     <string>Prm via com</string>
    </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionEmail_Alert_settings">
    <property name="text">

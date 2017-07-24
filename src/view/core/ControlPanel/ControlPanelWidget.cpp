@@ -209,10 +209,10 @@ void ControlPanelWidget::setDoplerMessage(const QString &doplerMessage)
 {
 	m_alarmTimer->start(10000);
 	if(!doplerMessage.isEmpty()) {
-		ui->labelAlarm->setText(ui->labelAlarm->text() + "   " + doplerMessage);
-	} else {
+		ui->labelAlarm->setText(ui->labelAlarm->text() + "\r\n" + doplerMessage);
+	} /*else {
 		ui->labelAlarm->clear();
-	}
+	}*/
 }
 
 void ControlPanelWidget::alarmAimVisible(bool val)
@@ -231,10 +231,10 @@ void ControlPanelWidget::showPanoramaControl(bool isOn)
 
 void ControlPanelWidget::enableDopler()
 {
-blockSignals(true);
+	blockSignals(true);
 	ui->pbDoppler->setChecked(true);
-blockSignals(false);
-emit signalDoppler(true);
+	blockSignals(false);
+	emit signalDoppler(true);
 }
 
 bool ControlPanelWidget::isMaitenance() const

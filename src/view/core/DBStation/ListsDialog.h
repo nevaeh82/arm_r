@@ -42,6 +42,9 @@ public:
 
 	void getFrequencyAndBandwidthByWhiteAreas(QList<StationsFrequencyAndBandwith> &list);
 
+	void getFrequencyAndBandwidthByWhiteAreasIni(QList<StationsFrequencyAndBandwith> &list);
+	void getFrequencyAndBandwidthByWhiteAreasDoplerIni(QList<StationsFrequencyAndBandwith> &list);
+
 private:
 	Ui::ListsDialog *ui;
 
@@ -49,6 +52,9 @@ private:
 	void getFrequencyAndBandwidthByWhiteAreasSave(QList<StationsFrequencyAndBandwith> &list);
 
 	QMap<int, stListView> m_listViewMap;
+
+	QList<StationsFrequencyAndBandwith> loadWhiteAreas();
+	QList<StationsFrequencyAndBandwith> loadWhiteDoplerAreas();
 
 signals:
 	void signalTypeList(int);
@@ -73,6 +79,7 @@ private slots:
 	void slotAddInternalWhiteAreaClicked(int frequency1, int frequency2, int split);
 
 	void slotAreasCellClicked(int row, int col);
+	void saveAreasSettings();
 };
 
 #endif // LISTSDIALOG_H

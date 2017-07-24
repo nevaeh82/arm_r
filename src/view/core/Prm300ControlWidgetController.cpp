@@ -100,7 +100,7 @@ void Prm300ControlWidgetController::slotSet()
 	RdsProtobuf::ReceiverSettings settings;
 	settings = m_view->getPrmParams();
 
-	createSetConfigureReceiver( pkt, m_platformId, m_stationId, settings );
+	createSetConfigureReceiver( pkt, m_platformId, m_channelId, settings );
 
 	m_rpcFlakonClient->sendRdsProto( pack(pkt) );
 }
@@ -113,7 +113,7 @@ void Prm300ControlWidgetController::slotEnableReceiver(bool val)
 
 	RdsProtobuf::Packet pkt;
 
-	createSetEnableReceiver( pkt, m_platformId, m_stationId, val );
+	createSetEnableReceiver( pkt, m_platformId, m_channelId, val );
 
 	m_rpcFlakonClient->sendRdsProto( pack(pkt) );
 }

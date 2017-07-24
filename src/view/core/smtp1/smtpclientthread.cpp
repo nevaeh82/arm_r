@@ -36,6 +36,16 @@ void SmtpClientThread::sendMessage(const QString &message)
 	m_messageMutex.unlock();
 }
 
+void SmtpClientThread::sendDoplerMessage(const QString &message)
+{
+	m_messageMutex.lock();
+
+	m_messageDoplerBuffer.append("\r\n");
+	m_messageDoplerBuffer.append(message);
+
+	m_messageMutex.unlock();
+}
+
 void SmtpClientThread::setLocalMailSettings(const MailSettings &settings)
 {
 	m_mailMutex.lock();
@@ -64,14 +74,18 @@ void SmtpClientThread::setRemoteMailList(const QStringList &mailList)
 	m_mailMutex.unlock();
 }
 
-int SmtpClientThread::sendMail()
+int SmtpClientThread::sendMail(const QString &messageMail, bool isPermanentSend)
 {
-	m_messageMutex.lock();
-	bool isEmpty = m_messageBuffer.isEmpty();
-	m_messageMutex.unlock();
+	bool isEmpty = messageMail.isEmpty();
 
-	if(isEmpty || m_elapsedTimer.elapsed() < MESSAGE_TIMEOUT) {
-		return -10;
+	if(!isPermanentSend) {
+		if(m_elapsedTimer.elapsed() < MESSAGE_TIMEOUT) {
+			return -10;
+		}
+	}
+
+	if(isEmpty) { //Check for permanent send
+		return -11;
 	}
 
 	m_elapsedTimer.restart();
@@ -106,16 +120,6 @@ int SmtpClientThread::sendMail()
 	message.setSender(&sender);
 
 	{
-		//Read Mail adresses
-//		QString mailFile = QCoreApplication::applicationDirPath();
-//		mailFile.append("/Tabs/mail.ini");
-//		QFile addresses(mailFile);
-//		if(!addresses.open(QIODevice::ReadOnly)) {
-//			m_elapsedTimer.restart();
-//			return -1;
-//		}
-
-//		QStringList addrList = QString(addresses.readAll()).split(",");
 		m_mailMutex.lock();
 		QStringList addrList = m_remoteMailList;
 		m_mailMutex.unlock();
@@ -138,9 +142,7 @@ int SmtpClientThread::sendMail()
 
 	MimeText text;
 
-	m_messageMutex.lock();
-	text.setText(m_messageBuffer);
-	m_messageMutex.unlock();
+	text.setText(messageMail);
 
 	// Now add it to the mail
 
@@ -190,9 +192,22 @@ void SmtpClientThread::letsSendInternal()
 		return;
 	}
 
-	if( sendMail() != -10 ) {
-		sendLocalMail(m_messageBuffer);
+	QString msg1;
+	QString msg2;
+
+	m_messageMutex.lock();
+	msg1 = m_messageBuffer;
+	msg2 = m_messageDoplerBuffer;
+	m_messageMutex.unlock();
+
+	if( sendMail(msg1) != -10 ) {
+		sendLocalMail(msg1);
+
+		sendMail(msg2, true);
+		sendLocalMail(msg2);
+
 		m_messageBuffer.clear();
+		m_messageDoplerBuffer.clear();
 	}
 }
 
@@ -205,6 +220,13 @@ int SmtpClientThread::sendLocalMail(const QString &messageMail)
 	// Code of sending ...
 
 	//SmtpClient smtp("192.168.55.59", 25, SmtpClient::TcpConnection);
+
+	bool isEmpty = messageMail.isEmpty();
+
+	if(isEmpty) {
+		return -1;
+	}
+
 
 	m_mailMutex.lock();
 	SmtpClient smtp(m_localMailSettings.host,

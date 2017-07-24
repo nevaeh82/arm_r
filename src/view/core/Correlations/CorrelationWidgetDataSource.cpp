@@ -195,7 +195,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 				doppler = convolution.doppler();
 			} else {
 				doppler = std::numeric_limits<double>::quiet_NaN();
-				log_debug("NO DOPPLER VALUE - IM SET NAN");
+				//log_debug("NO DOPPLER VALUE - IM SET NAN");
 			}
 
 			for( int k = 0; k<correlationPlot.data_size(); k++ ) {
@@ -203,7 +203,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 										correlationPlot.data(k) ) );
 			}
 
-			setCorData( m_id1, m_id2, points, veracity, doppler );
+			setCorData( m_id1, m_id2, points, veracity, doppler);
 			onCorrelationStateChanged(true);
 		}
 	}
@@ -211,7 +211,7 @@ void CorrelationWidgetDataSource::onMethodCalledSlot(QString method, QVariant da
 
 void CorrelationWidgetDataSource::onSleepModeSlot()
 {
-    m_sleepModeProcess = true;
+	m_sleepModeProcess = true;
 }
 
 void CorrelationWidgetDataSource::sendCommand(int)

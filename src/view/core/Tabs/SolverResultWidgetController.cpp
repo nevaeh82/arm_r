@@ -381,6 +381,6 @@ void SolverResultWidgetController::slotEmailUpdate()
 void SolverResultWidgetController::slotDopplerMail(QString message)
 {
 	if(m_emailSettings->isSend() && m_emailSettings->isDopler()) {
-		m_smtpThread->sendMessage(message);
+		m_smtpThread->sendDoplerMessage(message);
 	}
 }

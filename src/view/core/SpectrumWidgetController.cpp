@@ -149,6 +149,8 @@ void SpectrumWidgetController::setSpectrumName(const QString &name)
 	if(m_prm300WidgetController) {
 		m_prm300WidgetController->setName(m_name);
 		m_prm300WidgetController->setId(m_id);
+		m_prm300WidgetController->setChannel(m_channelId);
+		m_prm300WidgetController->setPlatform(m_platformId);
 	}
 }
 

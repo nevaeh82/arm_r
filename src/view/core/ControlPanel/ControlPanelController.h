@@ -88,6 +88,7 @@ private:
 	int m_timerCheckInterval;
 	int m_timerCheckIntervalDopler;
 	int m_timerCheckIntervalDetected;
+	int m_checkDoplerValue;
 
 	bool m_isFollowMode;
 	bool m_isDopplerSearch;
@@ -129,6 +130,10 @@ private:
 
 	QTimer* m_solverResultListTimer;
 
+	int m_lastCheckAreaIndex;
+	int m_lastCheckAreaIndexDopler;
+
+	void saveIndex();
 public:
 	explicit ControlPanelController(int tabId, QString title, QObject *parent = 0);
 	virtual ~ControlPanelController();
@@ -204,7 +209,7 @@ private slots:
 	void slotScanMode(int start, int finish);
 	void slotCheckMode();
 	void slotViewMode();
-	void slotViewAreaMode();
+	void onViewAreaMode();
 	void slotViewAreaDopplerMode();
 
 	void slotChangeFreq();
@@ -228,5 +233,6 @@ private slots:
 	void onShowPanoramaControl(bool isOn);
 
 	void slotClearSolverResult();
+	void slotViewAreaMode();
 };
 
