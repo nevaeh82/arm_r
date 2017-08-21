@@ -13,16 +13,38 @@ namespace Ui {
 class ListsDialog;
 }
 
+struct stListView
+{
+    QListWidget* listView;
+    QListWidget* workListView;
+    QLabel* lbl;
+
+    bool operator ==(const stListView st)
+    {
+        if(listView == st.listView &&
+           workListView == st.workListView &&
+           lbl == st.lbl) {
+            return true;
+        }
+
+        return false;
+    }
+};
+
+inline bool operator ==(const stListView st1, const stListView st2)
+{
+    if(st1.listView == st2.listView &&
+       st1.workListView == st2.workListView &&
+       st1.lbl == st2.lbl) {
+        return true;
+    }
+
+    return false;
+}
+
 class ListsDialog : public QDialog
 {
 	Q_OBJECT
-
-	struct stListView
-	{
-		QListWidget* listView;
-		QListWidget* workListView;
-		QLabel* lbl;
-	};
 
 public:
 	explicit ListsDialog(QWidget *parent = 0);
@@ -62,6 +84,7 @@ signals:
 	void signalDelete();
 	void signalReport(int);
 	void onClosing();
+    void onDetectAdd(int tab, int row);
 
 public slots:
 	void slotShow();
@@ -80,6 +103,8 @@ private slots:
 
 	void slotAreasCellClicked(int row, int col);
 	void saveAreasSettings();
+
+    void slotWorkListItemClick(QListWidgetItem*item);
 };
 
 #endif // LISTSDIALOG_H

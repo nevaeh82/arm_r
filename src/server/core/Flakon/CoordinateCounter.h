@@ -119,6 +119,8 @@ private:
 
 	QTime m_resTime;
 
+    QDateTime m_niippSendTime;
+
 public:
 	explicit CoordinateCounter(const QString& deviceName, QObject* parent = NULL);
 	virtual ~CoordinateCounter();

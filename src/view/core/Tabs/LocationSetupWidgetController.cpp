@@ -402,8 +402,8 @@ void LocationSetupWidgetController::onMethodCalledSlot(QString method, QVariant 
 		QDataStream dataStream(&data.toByteArray(), QIODevice::ReadOnly);
 		QString title;
 		bool status;
-		dataStream >> title;
-		dataStream >> status;
+        dataStream >> title;
+        dataStream >> status;
 
 		emit signalNIIPPWorkStatus(title, status);
 	} else if (method == RPC_SLOT_SERVER_SEND_SETTINGS) {

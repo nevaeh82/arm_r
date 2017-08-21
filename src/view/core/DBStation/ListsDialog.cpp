@@ -115,6 +115,10 @@ void ListsDialog::setWorkList(QList<StationsFrequencyAndBandwith> list, int id, 
 		stListView listViewStruct;
 		QListWidget* listView = new QListWidget(this);
 		QListWidget* workListView = new QListWidget(this);
+
+        connect(workListView, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+                this, SLOT(slotWorkListItemClick(QListWidgetItem*)));
+
 		QLabel* lbl = new QLabel(QString("%1) ").arg(title));
 		ui->listLayout->addWidget(lbl, id, 0);
 		ui->listLayout->addWidget(listView, id, 1);
@@ -414,7 +418,31 @@ void ListsDialog::saveAreasSettings()
 		f.open(QIODevice::WriteOnly);
 		f.write(outData);
 		f.close();
-	}
+    }
+}
+
+void ListsDialog::slotWorkListItemClick(QListWidgetItem *item)
+{
+    QObject* obj = sender();
+    QListWidget* wgt = dynamic_cast<QListWidget*>(obj);
+
+    if(wgt) {
+
+        int tabId = -1;
+        foreach (stListView st, m_listViewMap.values()) {
+            if(st.workListView == wgt) {
+
+                tabId = m_listViewMap.key(st);
+                break;
+            }
+        }
+
+        if(tabId >= 0) {
+            stListView listViewStruct = m_listViewMap.value(tabId);
+            int row = listViewStruct.workListView->row(item);
+            emit onDetectAdd(tabId, row);
+        }
+    }
 }
 
 QList<StationsFrequencyAndBandwith> ListsDialog::loadWhiteAreas()

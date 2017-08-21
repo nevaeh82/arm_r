@@ -124,7 +124,14 @@ void MainWindow::slotNIIPPStatus(QString title, bool status)
 			ui->niippLabel->setVisible(false);
 		}
 	} else if(status) {
-		ui->niippLabel->setText(tr("Punkt ") + "\"" + title + "\" " + tr(" flushing") );
+        QString trTitle = title;
+        log_debug(title);
+        if(title.contains("rm")) {
+            trTitle = tr("Armyansk");
+        } else {
+            trTitle = tr("Misovoe");
+        }
+        ui->niippLabel->setText(tr("Punkt ") + "\"" + trTitle + "\" " + tr(" Flushing") );
 		ui->niippLabel->setVisible(true);
 
 		m_niippTimer->start(30000);

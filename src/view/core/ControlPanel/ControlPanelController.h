@@ -234,5 +234,7 @@ private slots:
 
 	void slotClearSolverResult();
 	void slotViewAreaMode();
+
+    void slotDetectAdd(int tab, int row);
 };
 

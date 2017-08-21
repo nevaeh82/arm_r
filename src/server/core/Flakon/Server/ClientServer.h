@@ -7,6 +7,8 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <Tcp/BaseTcpServer.h>
 #include <Interfaces/Tcp/ITcpListener.h>
@@ -53,6 +55,8 @@ private slots:
 	void slotNiipDataIncome(QString, bool);
 
 	void slotSprutIncome(QByteArray data);
+
+    void onMessageReceivedInternal(int deviceType, QString device, MessageSP argument);
 private:
 	ITcpReceiver* m_encoder;
 	SolverEncoder* m_solverEncoder;
@@ -60,11 +64,14 @@ private:
 	int m_port;
 	int m_type;
 	QByteArray m_sprutBuffer;
+    QDateTime m_lastSend;
 
 signals:
 	void onDataSended(bool res);
 
 	void signalNiippData(QString, bool);
+
+    void signalMessageReceived(int type, QString device, MessageSP argument);
 };
 
 inline QDataStream& operator<<(QDataStream& out, const DataFromFlacon& object)

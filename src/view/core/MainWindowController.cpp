@@ -287,8 +287,8 @@ void MainWindowController::addedNewConnectionSlot(int id, QString Ip, quint16 po
 	connect(tabManager, SIGNAL(signalNIIPPWorkStatus(QString,bool)),
 			m_view, SLOT(slotNIIPPStatus(QString, bool)));
 
-	connect(tabManager, SIGNAL(signalNIIPPWorkStatus(QString,bool)),
-			this, SLOT(slotNIIPPStatus(QString, bool)));
+//	connect(tabManager, SIGNAL(signalNIIPPWorkStatus(QString,bool)),
+//			this, SLOT(slotNIIPPStatus(QString, bool)));
 
 	QAction* settingsAction = m_view->appendLocationSetupAction(id);
 	connect(settingsAction, SIGNAL(triggered(bool)), tabManager, SLOT(slotShowLocationSetup()));

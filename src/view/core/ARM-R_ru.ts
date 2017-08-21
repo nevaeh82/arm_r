@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>AddStationDataDialog</name>
     <message>
@@ -449,27 +449,27 @@
         <translation type="obsolete">Авто</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="172"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="174"/>
         <source> MHz</source>
         <translation> МГц</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="601"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="643"/>
         <source>Detect average Dopler: %1            (on frequency: %2    Correlation on channel:  %3)</source>
         <translation>Среднее значение Доплера: %1                (на частоте: %2 мГц  Корреляция:   %3)</translation>
     </message>
     <message>
-        <location filename="ControlPanel/ControlPanelController.cpp" line="603"/>
+        <location filename="ControlPanel/ControlPanelController.cpp" line="645"/>
         <source>Detect average Dopler: %1            (on frequency: %2 mHz      Correlation:  %3)</source>
         <translation>Среднее значение Доплера: %1                (на частоте: %2 мГц  Корреляция:   %3)</translation>
     </message>
     <message>
         <source>Detect average Dopler: %1 on frequency: %2    Correlation on channel:  %3</source>
-        <translation type="vanished">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
+        <translation type="obsolete">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
     </message>
     <message>
         <source>Detect average Dopler: %1 on frequency: %2 mHz      Correlation:  %3</source>
-        <translation type="vanished">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
+        <translation type="obsolete">Среднее значение Доплера: %1 на частоте: %2 мГц  Корреляция %3</translation>
     </message>
     <message>
         <source>Detect average Dopler:%1 on frequency:%2  on Correlation %3</source>
@@ -610,7 +610,7 @@
         <source>Searching by doppler</source>
         <translation>Поиск по доплеру</translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="ControlPanel.ui" line="862"/>
         <source>Сопровождать найденные</source>
         <translation></translation>
@@ -1157,77 +1157,82 @@
         <translation>Списки</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="63"/>
+        <location filename="DBStation/ListsDialog.ui" line="68"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="68"/>
+        <location filename="DBStation/ListsDialog.ui" line="73"/>
         <source>White</source>
         <translation>Белый</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="73"/>
+        <location filename="DBStation/ListsDialog.ui" line="78"/>
         <source>Black</source>
         <translation>Черный</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="78"/>
+        <location filename="DBStation/ListsDialog.ui" line="83"/>
         <source>Whitelists</source>
         <translation>Диапазоны поиска</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="83"/>
+        <location filename="DBStation/ListsDialog.ui" line="93"/>
         <source>Detected</source>
         <translation>Обнаруженные</translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="DBStation/ListsDialog.ui" line="23"/>
         <source>От</source>
         <translation></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="DBStation/ListsDialog.ui" line="28"/>
         <source>До</source>
         <translation></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="DBStation/ListsDialog.ui" line="33"/>
         <source>Разделение</source>
         <translation></translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="DBStation/ListsDialog.ui" line="38"/>
         <source>Выделить (для удаления)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="100"/>
+        <location filename="DBStation/ListsDialog.ui" line="88"/>
+        <source>DoplerLists</source>
+        <translation>Диапазоны поиска (Доплер)</translation>
+    </message>
+    <message>
+        <location filename="DBStation/ListsDialog.ui" line="105"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="107"/>
+        <location filename="DBStation/ListsDialog.ui" line="112"/>
         <source>Report</source>
         <translation>Отчет</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="127"/>
+        <location filename="DBStation/ListsDialog.ui" line="132"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.ui" line="134"/>
+        <location filename="DBStation/ListsDialog.ui" line="139"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.cpp" line="79"/>
+        <location filename="DBStation/ListsDialog.cpp" line="80"/>
         <source>index: %1  freq %2</source>
         <translation>индекс: %1 частота %2</translation>
     </message>
     <message>
-        <location filename="DBStation/ListsDialog.cpp" line="140"/>
+        <location filename="DBStation/ListsDialog.cpp" line="145"/>
         <source>%1| Freq: %2  bandwidth: %3</source>
         <translation>%1| Частота: %2  Ширина: %3</translation>
     </message>
@@ -1676,22 +1681,22 @@
         <translation>Управление ПРМ по COM\KTP</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="262"/>
+        <location filename="MainWindow.ui" line="265"/>
         <source>Email Alert settings</source>
         <translation>Настройки оповещений</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="267"/>
+        <location filename="MainWindow.ui" line="270"/>
         <source>SMS Alert settings</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="275"/>
+        <location filename="MainWindow.ui" line="278"/>
         <source>Show panorama</source>
         <translation>Включить панораму</translation>
     </message>
     <message>
-        <location filename="MainWindow.ui" line="280"/>
+        <location filename="MainWindow.ui" line="283"/>
         <source>Record signal settings</source>
         <translation>Скриншоты спектров и запись сигнала</translation>
     </message>
@@ -1720,14 +1725,24 @@
         <translation>База данных СПРУТ: Тревога!</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="127"/>
-        <source>Punkt </source>
-        <translation>Пункт </translation>
+        <location filename="MainWindow.cpp" line="129"/>
+        <source>Armyansk</source>
+        <translation>Армянск</translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="127"/>
-        <source> flushing</source>
-        <translation>включено излучение!</translation>
+        <location filename="MainWindow.cpp" line="131"/>
+        <source>Misovoe</source>
+        <translation>Мысовое</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="133"/>
+        <source> Flushing</source>
+        <translation>Включено излучение!</translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="133"/>
+        <source>Punkt </source>
+        <translation>Пункт </translation>
     </message>
     <message>
         <source>Location settings System# %1</source>
@@ -1894,22 +1909,22 @@
 <context>
     <name>RecordSignalSettings</name>
     <message>
-        <location filename="Tabs/RecordSignalSettings.ui" line="14"/>
+        <location filename="Tabs/recordsignalsettings.ui" line="14"/>
         <source>Form</source>
         <translation>Настройки скриншотов и записи</translation>
     </message>
     <message>
-        <location filename="Tabs/RecordSignalSettings.ui" line="20"/>
+        <location filename="Tabs/recordsignalsettings.ui" line="20"/>
         <source>Ok</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="Tabs/RecordSignalSettings.ui" line="53"/>
+        <location filename="Tabs/recordsignalsettings.ui" line="53"/>
         <source>Record signals on P-01</source>
         <translation>Включить запись сигнала на P-01</translation>
     </message>
     <message>
-        <location filename="Tabs/RecordSignalSettings.ui" line="60"/>
+        <location filename="Tabs/recordsignalsettings.ui" line="60"/>
         <source>Save screenshots</source>
         <translation>Включить сохранение скриншотов спектров</translation>
     </message>
@@ -2415,7 +2430,7 @@
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
-    <message>
+    <message utf8="true">
         <location filename="SpectrumWidget.ui" line="252"/>
         <source>- Нет сигнала -</source>
         <translation></translation>
@@ -2424,17 +2439,17 @@
 <context>
     <name>SpectrumWidgetController</name>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="166"/>
+        <location filename="SpectrumWidgetController.cpp" line="168"/>
         <source>File error</source>
         <translation>Ошибка в файле</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="166"/>
+        <location filename="SpectrumWidgetController.cpp" line="168"/>
         <source>Very small file or file not found</source>
         <translation>Файл не найден или его размер слишком мал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="517"/>
+        <location filename="SpectrumWidgetController.cpp" line="519"/>
         <source>Level</source>
         <translation>Уровень</translation>
     </message>
@@ -2447,27 +2462,27 @@
         <translation type="obsolete">Сигнал был распознан!</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="947"/>
+        <location filename="SpectrumWidgetController.cpp" line="949"/>
         <source>Hz</source>
         <translation>Гц</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="950"/>
+        <location filename="SpectrumWidgetController.cpp" line="952"/>
         <source>Add to white list</source>
         <translation>Добавить в белый список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="951"/>
+        <location filename="SpectrumWidgetController.cpp" line="953"/>
         <source>Add to black list</source>
         <translation>Добавить в черный список</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="952"/>
+        <location filename="SpectrumWidgetController.cpp" line="954"/>
         <source>Determine signal</source>
         <translation>Распознать сигнал</translation>
     </message>
     <message>
-        <location filename="SpectrumWidgetController.cpp" line="953"/>
+        <location filename="SpectrumWidgetController.cpp" line="955"/>
         <source>Record signal</source>
         <translation>Запись сигнала</translation>
     </message>

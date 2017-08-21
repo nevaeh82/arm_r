@@ -14,7 +14,8 @@ CoordinateCounter::CoordinateCounter(const QString& deviceName, QObject* parent)
 	QObject(parent),
 	isInit(false),
 	m_main_point(0),
-	m_stationsShift(0)
+    m_stationsShift(0),
+    m_niippSendTime(QDateTime::currentDateTime())
 {
 //	QDir dir;
 //	dir.mkdir("./logs/SpecialLogs");
@@ -137,9 +138,20 @@ void CoordinateCounter::onMessageReceived(const quint32 deviceType, const QStrin
 		solverData->set_datetime( location.date_time() );
 
 		if(b) {
-			sendDataToClientTcpServer1(solverPkt);
-			//log_debug("To Solver >>>>>>");
-		}
+            //To NIIPP
+            QByteArray freqBandwidth;
+            QDataStream st(&freqBandwidth, QIODevice::WriteOnly);
+            st << solverData->central_frequency();
+            st << (location.range().end() - location.range().start());
+
+            MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_FREQBANDWIDTH_NIIPP, freqBandwidth));
+            foreach (ITcpListener* receiver, m_receiversList) {
+                receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
+            }
+
+            sendDataToClientTcpServer1(solverPkt);
+            //log_debug("To Solver >>>>>>");
+        }
 	}
 }
 
@@ -426,10 +438,13 @@ void CoordinateCounter::slotSolverBlaData( QByteArray data ) {
 	}
 
 	//To NIIPP
-	MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA, data));
-	foreach (ITcpListener* receiver, m_receiversList) {
-		receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
-	}
+    //if(m_niippSendTime.msecsTo(QDateTime::currentDateTime()) > 999) {
+        MessageSP messageNiipp(new Message<QByteArray>(CLIENT_TCP_SERVER_SOLVER_DATA_NIIPP, data));
+        foreach (ITcpListener* receiver, m_receiversList) {
+            receiver->onMessageReceived(CLIENT_TCP_SERVER, m_likeADeviceName, messageNiipp);
+        }
+        m_niippSendTime = QDateTime::currentDateTime();
+    //}
 }
 
 void CoordinateCounter::slotSolver1ProtoData(int result, QByteArray data)

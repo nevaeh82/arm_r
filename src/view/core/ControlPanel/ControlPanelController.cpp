@@ -430,6 +430,7 @@ void ControlPanelController::slotViewMode()
 	m_isFollowMode = true;
 	m_isDopplerSearch = false;
 	slotCheckMode();
+    m_isFollowMode = true;
 }
 
 void ControlPanelController::slotViewAreaMode()
@@ -437,7 +438,7 @@ void ControlPanelController::slotViewAreaMode()
 	m_isFollowMode = true;
 	m_isDopplerSearch = false;
 	//m_lastCheckAreaIndex = 0;
-	onViewAreaMode();
+    onViewAreaMode();
 }
 
 void ControlPanelController::slotViewAreaDopplerMode()
@@ -587,6 +588,25 @@ void ControlPanelController::slotChangeFreq()
 	changeFrequency(m_currentFreq);
 }
 
+void ControlPanelController::slotDetectAdd(int tab, int row)
+{
+    if(!m_isFollowMode) {
+        return;
+    }
+
+    if(tab != m_tabId) {
+        return;
+    }
+
+    if(!m_IdDetetcted.contains(row)) {
+        m_IdDetetcted.append(row);
+        m_listsDialog->clearDetectFreq(m_tabId);
+        foreach (int index, m_IdDetetcted) {
+            m_listsDialog->addDetectFreq(m_listOfFreqs.at(index).frequency, index, m_tabId);
+        }
+    }
+}
+
 void ControlPanelController::checkDopplerResult()
 {
 	//log_debug("Check >>> ");
@@ -594,7 +614,7 @@ void ControlPanelController::checkDopplerResult()
 		return;
 	}
 
-	double listFreq = (int)(*m_itCheckMode).frequency;
+    //double listFreq = (int)(*m_itCheckMode).frequency;
 	int currentFreq = m_setupController->currentFrequency();
 
 	foreach (QString key, m_dopplerMap.uniqueKeys()) {
@@ -960,6 +980,7 @@ bool ControlPanelController::isPanorama(double &start, double &end)
 void ControlPanelController::setListDialog(ListsDialog *dlg)
 {
 	m_listsDialog = dlg;
+    connect(m_listsDialog, SIGNAL(onDetectAdd(int,int)), this, SLOT(slotDetectAdd(int, int)));
 }
 
 void ControlPanelController::onSetSleepMode(bool val)

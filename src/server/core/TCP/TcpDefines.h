@@ -86,7 +86,11 @@
 #define TCP_SOLVER_MESSAGE											"tcpSolverMessage"
 
 /// CLIENT_TCP_SERVER commands
-#define CLIENT_TCP_SERVER_SOLVER_DATA	"tcpClientSolverData"
+#define CLIENT_TCP_SERVER_SOLVER_DATA       "tcpClientSolverData"
+
+#define CLIENT_TCP_SERVER_SOLVER_DATA_NIIPP	"tcpClientSolverDataToNiip"
+#define CLIENT_TCP_SERVER_SOLVER_FREQBANDWIDTH_NIIPP "tcpClientSolverFREQBANDWIDTHToNiip"
+
 #define CLIENT_TCP_SERVER_KTR_DATA	"tcpClientKTRData"
 
 #define CLIENT_TCP_SERVER_BPLA_DATA		"tcpClientBPLAData"

@@ -7,6 +7,9 @@
 
 SolverEncoder::SolverEncoder(QObject* parent)
 {
+    m_pp1 = 0;
+    m_pp2 = 0;
+
 }
 
 SolverEncoder::~SolverEncoder()
@@ -17,6 +20,9 @@ void SolverEncoder::onDataReceived(const QVariant& argument)
 {
 	QByteArray inData = argument.toByteArray();
 	m_dataFromTcpSocket.append(inData);
+
+    QString devName;
+    devName = "Armyansk";
 
 	if( m_dataFromTcpSocket.indexOf("SPP") < 0 ) {
 		return;
@@ -34,22 +40,35 @@ void SolverEncoder::onDataReceived(const QVariant& argument)
 
 	QList<QByteArray> dataList = test.split(',');
 
-	if(dataList.size() < 5 ) {
+
+    if(dataList.size() < 5 ) {
 		m_dataFromTcpSocket.clear();
 		return;
 	} else if( dataList.at(4).size() < 4 ) {
 		return;
 	}
 
-	QTextCodec *codec = QTextCodec::codecForName("KOI8-R" );
-	QTextCodec *codec1 = QTextCodec::codecForName("KOI8-R");
-	QString devName;
 	QByteArray devNameRaw = dataList.at(1);
-	QByteArray res;
-	devName = codec1->toUnicode( devNameRaw );
-	res = codec->fromUnicode( devName );
+    int val = 0;
 
-	//devName = QString(devNameRaw);
+    if(devNameRaw.size() > 7) {
+
+        for(int i = 0; i<7; i++) {
+             val+= (int)devNameRaw.at(i);
+        }
+
+        if(val == -157) {
+            devName = "Armyansk";
+        } else {
+            devName = "Misovoe";
+        }
+    }
+
+    QFile f("spplog.txt");
+    f.open(QIODevice::Append);
+    f.write(QString("%1  %2  %3  %4").arg(QString(devNameRaw)).arg(devName).arg(val)
+            .arg(QDateTime::currentDateTime().toString()).toAscii());
+
 	int inTst = QString(dataList.at(4).left(4)).toInt();
 
 	m_dataFromTcpSocket.clear();
@@ -90,7 +109,7 @@ QByteArray SolverEncoder::encode(const QByteArray &data)
 QByteArray SolverEncoder::decode(const MessageSP message) {
 	QByteArray dataToSend;
 
-	if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA ) {
+    if( message->type() == CLIENT_TCP_SERVER_SOLVER_DATA_NIIPP ) {
 
 		QByteArray data = message->data();
 
@@ -154,6 +173,11 @@ QByteArray SolverEncoder::decode(const MessageSP message) {
 
 			niippLst.append( QString::number(acc) );
 
+            if(m_freqBandwidthMap.contains(tPkt.central_frequency())) {
+                niippLst.append(  QString::number(m_freqBandwidthMap.value(tPkt.central_frequency(), 10.0)) );
+            } else {
+                niippLst.append(QString::number(10.0));
+            }
 
 			message = niippLst.join(",");
 
@@ -269,7 +293,12 @@ QByteArray SolverEncoder::decodeRegister()
 
 	message.append("\\r\\n");
 
-	return message.toLocal8Bit();
+    return message.toLocal8Bit();
+}
+
+void SolverEncoder::setFreqBandwidth(double freq, double bandwidth)
+{
+    m_freqBandwidthMap.insert(freq, bandwidth);
 }
 
 void SolverEncoder::addPreambula(QByteArray& data)
