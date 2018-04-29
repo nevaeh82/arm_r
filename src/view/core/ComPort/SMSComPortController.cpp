@@ -155,6 +155,8 @@ void SMSComPortController::slotSendSMS()
         command = (tr("AT+CMGS=\"") + No.trimmed() + tr("\" \r ") + sms.msg + tr("\x1A"));
 		m_comport->writeCommand(command.toAscii().data());
 		slotSendSMByTimer();
+
+		//log_debug("I send sms!!! >>>>" + sms.msg);
 	}
 }
 

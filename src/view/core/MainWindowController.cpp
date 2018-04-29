@@ -2,6 +2,8 @@
 
 #include "RdsPacket.pb.h"
 
+
+
 //#include "ComReceiver/ComReceiverController.h"
 
 
@@ -150,6 +152,12 @@ void MainWindowController::init()
 	connect(m_view, SIGNAL(signalShowLists()), this, SLOT(slotShowLists()));
 
 	///
+	/// \brief solverWidget
+	///
+	///
+
+	npnd = new NetPingDetector(this);
+
 
 	SolverResultWidget* solverWidget = new SolverResultWidget(m_view);
 	m_solverWidgetController = new SolverResultWidgetController(this);
@@ -158,6 +166,8 @@ void MainWindowController::init()
 	SolverSetupWidget* solverSetupWidget = new SolverSetupWidget(m_view);
 	m_solverSetupWidgetController = new SolverSetupWidgetController(this);
 	m_solverSetupWidgetController->appendView(solverSetupWidget);
+
+	connect(npnd, SIGNAL(onSendAlarm(QString)), m_solverWidgetController, SLOT(sendToSmsController(QString)));
 
 	//	m_locationSetupController = new LocationSetupWidgetController(this);
 	//	LocationSetupWidget* locationSetupWgt = new LocationSetupWidget(m_view);

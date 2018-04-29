@@ -76,6 +76,12 @@ void SolverResultWidgetController::slotShowWidget()
 	}
 }
 
+void SolverResultWidgetController::sendToSmsController(QString msg)
+{
+	m_smsController->sendMessage(msg);
+	m_smtpThread->sendMessage(msg);
+}
+
 void SolverResultWidgetController::addResultToLog(const QByteArray& inData)
 {
 	QByteArray data = inData;

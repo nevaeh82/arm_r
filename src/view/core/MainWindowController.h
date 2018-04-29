@@ -31,6 +31,8 @@
 
 #include "Tabs/RecordSignalSettings.h"
 
+#include "Common/NetPingDetector.h"
+
 #define SERVER_NAME "ZaviruhaRServer"
 #define GUI_NAME "ZaviruhaRView"
 
@@ -67,6 +69,8 @@ private:
 	RecordSignalSettings* m_recordSignalSettingsDialog;
 
 	QTimer* m_memTimer;
+
+	NetPingDetector* npnd;
 
 public:
 	explicit MainWindowController(QObject *parent = 0);

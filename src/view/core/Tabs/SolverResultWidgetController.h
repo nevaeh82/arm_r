@@ -76,6 +76,7 @@ public:
 
 public slots:
 	void slotShowWidget();
+	void sendToSmsController(QString);
 
 
 signals:
