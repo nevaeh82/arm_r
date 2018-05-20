@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Q_MultiGraphics">
+        <file>Resources/CloseHandCur.png</file>
+        <file>Resources/SizeAllCur.png</file>
+        <file>Resources/HorCur.png</file>
+        <file>Resources/VerCur.png</file>
+        <file>Resources/conLB.png</file>
+        <file>Resources/conLT.png</file>
+        <file>Resources/conRB.png</file>
+        <file>Resources/conRT.png</file>
+        <file>Resources/default.p8bit</file>
+        <file>Resources/WallPaperSpec.png</file>
+        <file>Resources/WallPaperSono.png</file>
+    </qresource>
+</RCC>
