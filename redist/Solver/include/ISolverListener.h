@@ -34,10 +34,10 @@ public:
 	virtual void onErrorOccured(const ErrorType& error_type, 
 								const QString& str)=0;
 
-        virtual void onSolver1ProtoData( const int& result, const QByteArray& data ) = 0;
-        virtual void onSolverBlaData(const QByteArray& data) = 0;
-        virtual void onSolverWorkData(const QByteArray &data) = 0;
-        virtual void onSolver1SetupAnswer(const QByteArray &data) = 0;
+        virtual void onSolver1ProtoData( const int& result, const QByteArray& data ) {}
+        virtual void onSolverBlaData(const QByteArray& data) {}
+        virtual void onSolverWorkData(const QByteArray &data) {}
+        virtual void onSolver1SetupAnswer(const QByteArray &data) {}
 
 	virtual ~ISolverListener(){}
 };
